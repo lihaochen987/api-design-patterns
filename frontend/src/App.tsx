@@ -7,7 +7,7 @@ import axios from 'axios'
 function App() {
     const [count, setCount] = useState(0)
 
-    axios.get('https://localhost:44333/WeatherForecast')
+    axios.get('https://localhost:44333/Product')
         .then(function (response) {
             console.log(response);
         })
