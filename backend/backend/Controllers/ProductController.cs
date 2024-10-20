@@ -24,7 +24,8 @@ public class ProductController(ApplicationDbContext context, IMapper mapper) : C
     [HttpGet]
     public async Task<ActionResult<Product>> GetProduct([FromQuery] GetProductRequest request)
     {
-        var product = await context.Products.FindAsync(request.Id);
+        if (!long.TryParse(request.Id, out var id)) return BadRequest();
+        var product = await context.Products.FindAsync(id);
         return Ok(product);
     }
 
