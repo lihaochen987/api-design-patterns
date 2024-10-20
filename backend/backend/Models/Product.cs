@@ -15,8 +15,8 @@ public class Product
         ProductCategory = productCategory;
     }
 
-    public int ProductId { get; init; }
-    public string ProductName { get; init; }
-    public decimal ProductPrice { get; init; }
-    public ProductCategory ProductCategory { get; init; }
+    public int ProductId { get; private set; }
+    public string ProductName { get; private set; }
+    public decimal ProductPrice { get; private set; }
+    public ProductCategory ProductCategory { get; private set; }
 }
