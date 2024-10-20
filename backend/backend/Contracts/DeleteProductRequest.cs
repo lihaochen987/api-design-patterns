@@ -2,5 +2,5 @@ namespace backend.Contracts;
 
 public class DeleteProductRequest
 {
-    public string Id { get; set; } = "default";
+    public string Id { get; set; } = "";
 }

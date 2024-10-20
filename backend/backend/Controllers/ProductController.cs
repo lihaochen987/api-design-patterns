@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.Controllers;
 
 [ApiController]
-public class ProductController(ApplicationDbContext context, IMapper mapper) : ControllerBase
+public class ProductController(ApplicationDbContext context) : ControllerBase
 {
     [Route("/product")]
     [HttpPost]
     public async Task<ActionResult<Product>> CreateProduct([FromBody] CreateProductRequest request)
     {
-        var product = mapper.Map<Product>(request);
+        var product = Product.MapCreateRequestToProduct(request); 
         context.Products.Add(product);
         await context.SaveChangesAsync();
         return CreatedAtAction(nameof(GetProduct), new { id = product.ProductId }, product);
@@ -54,9 +54,7 @@ public class ProductController(ApplicationDbContext context, IMapper mapper) : C
         {
             return NotFound();
         }
-
-        mapper.Map(request, product);
-
+        
         await context.SaveChangesAsync();
         return Ok(product);
     }
