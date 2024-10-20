@@ -17,7 +17,7 @@ public class ProductController(ApplicationDbContext context) : ControllerBase
             return BadRequest(errorMessages);
         context.Products.Add(product);
         await context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetProduct), new { id = product.ProductId }, product);
+        return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
     }
 
     [Route("/product")]

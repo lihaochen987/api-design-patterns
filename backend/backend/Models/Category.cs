@@ -1,6 +1,6 @@
 namespace backend.Models;
 
-public enum ProductCategory
+public enum Category
 {
     DogFood,
     Toys,

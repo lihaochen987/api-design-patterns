@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using backend.Contracts;
 
 namespace backend.Models;
@@ -6,34 +7,38 @@ namespace backend.Models;
 public class Product
 {
     public Product(
-        int productId,
-        string productName,
-        decimal productPrice,
-        ProductCategory productCategory
+        int id,
+        string name,
+        decimal price,
+        Category category
     )
     {
-        ProductId = productId;
-        ProductName = productName;
-        ProductPrice = productPrice;
-        ProductCategory = productCategory;
+        Id = id;
+        Name = name;
+        Price = price;
+        Category = category;
     }
 
     public Product(
-        string productName,
-        decimal productPrice,
-        ProductCategory productCategory
+        string name,
+        decimal price,
+        Category category
     )
     {
-        ProductName = productName;
-        ProductPrice = productPrice;
-        ProductCategory = productCategory;
+        Name = name;
+        Price = price;
+        Category = category;
     }
 
-    public long ProductId { get; private set; }
+    [Column("ProductId")]
+    public long Id { get; private set; }
 
-    [MaxLength(100)] private string ProductName { get; set; }
-    public decimal ProductPrice { get; private set; }
-    public ProductCategory ProductCategory { get; private set; }
+    [Column("ProductName")]
+    [MaxLength(100)] public string Name { get; private set; }
+    [Column("ProductPrice")]
+    public decimal Price { get; private set; }
+    [Column("ProductCategory")]
+    public Category Category { get; private set; }
 
     /// <summary>
     /// I quite like having this TryParse method which maps and chains error messages to an actual product
@@ -50,7 +55,7 @@ public class Product
             errorMessages.Add("Product.ProductName", $"Product name is required. With value '{contract.ProductName}'.");
         if (!decimal.TryParse(contract.ProductPrice, out var productPrice))
             errorMessages.Add("Product.ProductPrice", $"Product price is invalid. With value {contract.ProductPrice}.");
-        if (!Enum.TryParse(contract.ProductCategory, out ProductCategory productCategory))
+        if (!Enum.TryParse(contract.ProductCategory, out Category productCategory))
             errorMessages.Add("Product.ProductCategory",
                 $"Product category is invalid with value {contract.ProductCategory}");
         if (errorMessages.Count != 0) return false;
@@ -64,8 +69,8 @@ public class Product
         out IDictionary<string, string> errorMessages)
     {
         if (!TryParse(contract, out var product, out errorMessages) || product == null) return;
-        ProductName = product.ProductName;
-        ProductPrice = product.ProductPrice;
-        ProductCategory = product.ProductCategory;
+        Name = product.Name;
+        Price = product.Price;
+        Category = product.Category;
     }
 }
