@@ -1,4 +1,3 @@
-using AutoMapper;
 using backend.Contracts;
 using backend.Database;
 using backend.Models;
@@ -14,7 +13,8 @@ public class ProductController(ApplicationDbContext context) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Product>> CreateProduct([FromBody] CreateProductRequest request)
     {
-        var product = Product.MapCreateRequestToProduct(request); 
+        if (!Product.TryParse(request, out var product, out var errorMessages) || product == null)
+            return BadRequest(errorMessages);
         context.Products.Add(product);
         await context.SaveChangesAsync();
         return CreatedAtAction(nameof(GetProduct), new { id = product.ProductId }, product);
@@ -54,7 +54,7 @@ public class ProductController(ApplicationDbContext context) : ControllerBase
         {
             return NotFound();
         }
-        
+
         await context.SaveChangesAsync();
         return Ok(product);
     }

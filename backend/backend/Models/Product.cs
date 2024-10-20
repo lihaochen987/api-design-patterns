@@ -5,7 +5,7 @@ namespace backend.Models;
 public class Product
 {
     public Product(
-        long productId,
+        int productId,
         string productName,
         decimal productPrice,
         ProductCategory productCategory
@@ -16,7 +16,7 @@ public class Product
         ProductPrice = productPrice;
         ProductCategory = productCategory;
     }
-    
+
     public Product(
         string productName,
         decimal productPrice,
@@ -33,15 +33,25 @@ public class Product
     public decimal ProductPrice { get; private set; }
     public ProductCategory ProductCategory { get; private set; }
 
-    public static Product MapCreateRequestToProduct(CreateProductRequest request)
+    /// <summary>
+    /// I quite like having this TryParse method which maps and chains error messages to an actual product
+    /// </summary>
+    public static bool TryParse(
+        ProductContract contract,
+        out Product? product,
+        out IList<string> errorMessages)
     {
-        if (string.IsNullOrWhiteSpace(request.ProductName))
-            throw new ArgumentException("Product name cannot be null or empty");
-        if (!decimal.TryParse(request.ProductPrice, out var productPrice))
-            throw new ArgumentException("Product price cannot be converted to decimal");
-        if (!Enum.TryParse(request.ProductCategory, out ProductCategory productCategory))
-            throw new ArgumentException("An invalid Product Category has been entered");
+        product = null;
+        errorMessages = [];
 
-        return new Product(request.ProductName, productPrice, productCategory);
+        if (string.IsNullOrWhiteSpace(contract.ProductName)) errorMessages.Add("Product name is required.");
+        if (!decimal.TryParse(contract.ProductPrice, out var productPrice))
+            errorMessages.Add("Product price is invalid.");
+        if (!Enum.TryParse(contract.ProductCategory, out ProductCategory productCategory))
+            errorMessages.Add("Product category is invalid.");
+        if (errorMessages.Count != 0) return false;
+
+        product = new Product(contract.ProductName, productPrice, productCategory);
+        return true;
     }
 }

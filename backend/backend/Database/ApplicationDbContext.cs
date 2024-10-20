@@ -16,12 +16,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         // Define primary field for product
         modelBuilder.Entity<Product>().HasKey(p => p.ProductId);
-        
+
         // Storing ProductCategory as a string
         modelBuilder.Entity<Product>()
             .Property(p => p.ProductCategory)
             .HasConversion<string>();
-        
+
         modelBuilder.Entity<Product>().HasData(
             new Product(1, "Dry Dog Food", 50m, ProductCategory.DogFood),
             new Product(2, "Wet Dog Food", 35m, ProductCategory.DogFood),
