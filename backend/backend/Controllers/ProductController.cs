@@ -44,9 +44,10 @@ public class ProductController(ApplicationDbContext context) : ControllerBase
         return Ok(response);
     }
 
+    // Todo: Actually implement partial Updates because it's hard
     [Route("/product")]
     [HttpPatch]
-    public async Task<ActionResult<Product>> UpdateProduct([FromQuery] int id, [FromBody] UpdateProductRequest request)
+    public async Task<ActionResult<Product>> UpdateProduct([FromQuery] long id, [FromBody] UpdateProductRequest request)
     {
         var product = await context.Products.FindAsync(id);
 

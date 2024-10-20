@@ -31,7 +31,7 @@ public class Product
 
     public long ProductId { get; private set; }
 
-    [MaxLength(100)] public string ProductName { get; private set; }
+    [MaxLength(100)] private string ProductName { get; set; }
     public decimal ProductPrice { get; private set; }
     public ProductCategory ProductCategory { get; private set; }
 
