@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
 public class ProductController(ApplicationDbContext context) : ControllerBase
 {
+    [Route("/product")]
     [HttpPost]
     public async Task<ActionResult<Product>> CreateProduct(CreateProductRequest request)
     {
@@ -23,10 +23,26 @@ public class ProductController(ApplicationDbContext context) : ControllerBase
         return CreatedAtAction(nameof(GetProduct), new { id = request.Resource.ProductId }, request.Resource);
     }
 
+    [Route("/product")]
     [HttpGet]
     public async Task<ActionResult<Product>> GetProduct([FromQuery] GetProductRequest request)
     {
         var product = await context.Products.FindAsync(request.Id);
         return Ok(product);
+    }
+
+    [Route("/products")]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
+        [FromQuery] ListProductsRequest request)
+    {
+        var products = await context.Products.ToListAsync();
+
+        var response = new ListProductsResponse
+        {
+            Results = products
+        };
+
+        return Ok(response);
     }
 }
