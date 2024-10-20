@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using backend.Contracts;
 
 namespace backend.Models;
@@ -29,7 +30,8 @@ public class Product
     }
 
     public long ProductId { get; private set; }
-    public string ProductName { get; private set; }
+
+    [MaxLength(100)] public string ProductName { get; private set; }
     public decimal ProductPrice { get; private set; }
     public ProductCategory ProductCategory { get; private set; }
 
@@ -39,31 +41,29 @@ public class Product
     public static bool TryParse(
         ProductContract contract,
         out Product? product,
-        out IList<string> errorMessages)
+        out IDictionary<string, string> errorMessages)
     {
         product = null;
-        errorMessages = [];
+        errorMessages = new Dictionary<string, string>();
 
-        if (string.IsNullOrWhiteSpace(contract.ProductName)) errorMessages.Add("Product name is required.");
+        if (string.IsNullOrWhiteSpace(contract.ProductName))
+            errorMessages.Add("Product.ProductName", $"Product name is required. With value '{contract.ProductName}'.");
         if (!decimal.TryParse(contract.ProductPrice, out var productPrice))
-            errorMessages.Add("Product price is invalid.");
+            errorMessages.Add("Product.ProductPrice", $"Product price is invalid. With value {contract.ProductPrice}.");
         if (!Enum.TryParse(contract.ProductCategory, out ProductCategory productCategory))
-            errorMessages.Add("Product category is invalid.");
+            errorMessages.Add("Product.ProductCategory",
+                $"Product category is invalid with value {contract.ProductCategory}");
         if (errorMessages.Count != 0) return false;
 
         product = new Product(contract.ProductName, productPrice, productCategory);
         return true;
     }
 
-    public void Replace(
+    public void UpdateProductDetails(
         ProductContract contract,
-        out IList<string> errorMessages)
+        out IDictionary<string, string> errorMessages)
     {
-        if (!TryParse(contract, out var product, out errorMessages) || product == null)
-        {
-            return;
-        }
-        
+        if (!TryParse(contract, out var product, out errorMessages) || product == null) return;
         ProductName = product.ProductName;
         ProductPrice = product.ProductPrice;
         ProductCategory = product.ProductCategory;

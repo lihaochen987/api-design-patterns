@@ -66,7 +66,7 @@ public class ProductController(ApplicationDbContext context) : ControllerBase
         var existingProduct = await context.Products.FindAsync(id);
         if (existingProduct == null) return NotFound();
 
-        existingProduct.Replace(request, out var errorMessages);
+        existingProduct.UpdateProductDetails(request, out var errorMessages);
 
         if (errorMessages.Any())
         {
