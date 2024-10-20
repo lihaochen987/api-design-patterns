@@ -54,4 +54,18 @@ public class Product
         product = new Product(contract.ProductName, productPrice, productCategory);
         return true;
     }
+
+    public void Replace(
+        ProductContract contract,
+        out IList<string> errorMessages)
+    {
+        if (!TryParse(contract, out var product, out errorMessages) || product == null)
+        {
+            return;
+        }
+        
+        ProductName = product.ProductName;
+        ProductPrice = product.ProductPrice;
+        ProductCategory = product.ProductCategory;
+    }
 }

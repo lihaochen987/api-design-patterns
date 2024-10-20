@@ -59,30 +59,24 @@ public class ProductController(ApplicationDbContext context) : ControllerBase
         return Ok(product);
     }
 
-    // [Route("/product")]
-    // [HttpPut]
-    // public async Task<ActionResult<Product>> ReplaceProduct([FromQuery] int id, [FromBody] ReplaceProductRequest request)
-    // {
-    //     if (request.Resource == null)
-    //     {
-    //         return BadRequest("Invalid product data.");
-    //     }
-    //
-    //     var existingProduct = await context.Products.FindAsync(request.Resource.ProductId);
-    //
-    //     if (existingProduct != null)
-    //     {
-    //         existingProduct.ProductName = request.Resource.ProductName;
-    //         existingProduct.ProductPrice = request.Resource.ProductPrice;
-    //         existingProduct.ProductCategory = request.Resource.ProductCategory;
-    //         await context.SaveChangesAsync();
-    //         return Ok(existingProduct);
-    //     }
-    //
-    //     context.Products.Add(request.Resource);
-    //     await context.SaveChangesAsync();
-    //     return CreatedAtAction(nameof(GetProduct), new { productId = request.Resource.ProductId }, request.Resource);
-    // }
+    [Route("/product")]
+    [HttpPut]
+    public async Task<ActionResult<Product>> ReplaceProduct([FromQuery] long id, [FromBody] ReplaceProductRequest request)
+    {
+        var existingProduct = await context.Products.FindAsync(id);
+        if (existingProduct == null) return NotFound();
+
+        existingProduct.Replace(request, out var errorMessages);
+
+        if (errorMessages.Any())
+        {
+            return BadRequest(new { Errors = errorMessages });
+        }
+
+        await context.SaveChangesAsync();
+    
+        return Ok(existingProduct);
+    }
 
     [Route("/product")]
     [HttpDelete]
