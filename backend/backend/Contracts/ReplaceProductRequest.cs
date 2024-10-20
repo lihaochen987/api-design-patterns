@@ -4,5 +4,7 @@ namespace backend.Contracts;
 
 public class ReplaceProductRequest
 {
-    public Product? Resource { get; init; }
+    public string ProductName { get; set; } = "default";
+    public string ProductPrice { get; set; } = "default";
+    public string ProductCategory { get; set; } = "default";
 }
