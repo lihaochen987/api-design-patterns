@@ -1,6 +1,4 @@
-using backend.Models;
-
-namespace backend.Contracts;
+namespace backend.Product.Contracts;
 
 public class ListProductsResponse
 {

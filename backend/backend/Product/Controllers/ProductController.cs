@@ -1,10 +1,9 @@
-using backend.Contracts;
 using backend.Database;
-using backend.Models;
+using backend.Product.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Controllers;
+namespace backend.Product.Controllers;
 
 [ApiController]
 public class ProductController(ApplicationDbContext context) : ControllerBase

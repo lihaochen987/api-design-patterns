@@ -1,4 +1,4 @@
-namespace backend.Contracts;
+namespace backend.Product.Contracts;
 
 public class DeleteProductRequest
 {

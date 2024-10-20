@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using backend.Contracts;
+using backend.Product.Contracts;
 
-namespace backend.Models;
+namespace backend.Product;
 
 public class Product
 {
