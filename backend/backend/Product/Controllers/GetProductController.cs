@@ -4,14 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Product.Controllers;
 
 [ApiController]
+[Route("/product")]
 public class GetProductController(ApplicationDbContext context) : ControllerBase
 {
-    [Route("/product")]
     [HttpGet]
-    public async Task<ActionResult<Product>> GetProduct([FromQuery] GetProductRequest request)
+    public async Task<ActionResult<GetProductResponse>> GetProduct([FromQuery] GetProductRequest request)
     {
         if (!long.TryParse(request.Id, out var id)) return BadRequest();
         var product = await context.Products.FindAsync(id);
-        return Ok(product);
+        if (product == null) return NotFound();
+
+        var response = ProductMapper.MapToGetProductResponse(product);
+        return Ok(response);
     }
 }

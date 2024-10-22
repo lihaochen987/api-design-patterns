@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Product.Controllers;
 
 [ApiController]
+[Route("/product")]
 public class DeleteProductController(ApplicationDbContext context) : ControllerBase
 {
-    [Route("/product")]
     [HttpDelete]
     public async Task<ActionResult> DeleteProduct([FromQuery] DeleteProductRequest request)
     {

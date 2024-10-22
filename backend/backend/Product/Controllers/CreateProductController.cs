@@ -4,16 +4,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Product.Controllers;
 
 [ApiController]
+[Route("/product")]
 public class CreateProductController(ApplicationDbContext context) : ControllerBase
 {
-    [Route("/product")]
     [HttpPost]
-    public async Task<ActionResult<Product>> CreateProduct([FromBody] CreateProductRequest request)
+    public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
-        if (!Product.TryParse(request, out var product, out var errorMessages) || product == null)
-            return BadRequest(errorMessages);
+        var product = ProductMapper.MapToDomain(request);
+        
         context.Products.Add(product);
         await context.SaveChangesAsync();
-        return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+
+        var response = ProductMapper.MapToCreateProductResponse(product);
+        return CreatedAtAction(
+            actionName: "GetProduct",
+            controllerName: "GetProduct",
+            new { id = product.Id },
+            response);
     }
 }

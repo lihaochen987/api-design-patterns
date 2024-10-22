@@ -8,21 +8,18 @@ public class ReplaceProductController(ApplicationDbContext context) : Controller
 {
     [Route("/product")]
     [HttpPut]
-    public async Task<ActionResult<Product>> ReplaceProduct([FromQuery] long id,
+    public async Task<ActionResult<ReplaceProductResponse>> ReplaceProduct(
+        [FromQuery] long id,
         [FromBody] ReplaceProductRequest request)
     {
+        var product = ProductMapper.MapToDomain(request);
+
         var existingProduct = await context.Products.FindAsync(id);
         if (existingProduct == null) return NotFound();
-
-        existingProduct.UpdateProductDetails(request, out var errorMessages);
-
-        if (errorMessages.Any())
-        {
-            return BadRequest(new { Errors = errorMessages });
-        }
-
+        existingProduct.Replace(product.Name, product.Price, product.Category);
         await context.SaveChangesAsync();
 
-        return Ok(existingProduct);
+        var response = ProductMapper.MapToReplaceProductResponse(existingProduct);
+        return Ok(response);
     }
 }

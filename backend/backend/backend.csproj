@@ -38,6 +38,18 @@
       <Compile Update="Product\Controllers\ReplaceProductRequest.cs">
         <DependentUpon>ReplaceProductController.cs</DependentUpon>
       </Compile>
+      <Compile Update="Product\Controllers\CreateProductResponse.cs">
+        <DependentUpon>CreateProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\GetProductResponse.cs">
+        <DependentUpon>GetProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\ReplaceProductResponse.cs">
+        <DependentUpon>ReplaceProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\UpdateProductResponse.cs">
+        <DependentUpon>UpdateProductController.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>
