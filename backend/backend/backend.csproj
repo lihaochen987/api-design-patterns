@@ -50,6 +50,15 @@
       <Compile Update="Product\Controllers\UpdateProductResponse.cs">
         <DependentUpon>UpdateProductController.cs</DependentUpon>
       </Compile>
+      <Compile Update="Product\Controllers\CreateProductExtensions.cs">
+        <DependentUpon>CreateProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\ReplaceProductExtensions.cs">
+        <DependentUpon>ReplaceProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\GetProductExtensions.cs">
+        <DependentUpon>GetProductController.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

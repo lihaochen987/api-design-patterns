@@ -12,14 +12,14 @@ public class ReplaceProductController(ApplicationDbContext context) : Controller
         [FromQuery] long id,
         [FromBody] ReplaceProductRequest request)
     {
-        var product = ProductMapper.MapToDomain(request);
+        var product = request.ToEntity();
 
         var existingProduct = await context.Products.FindAsync(id);
         if (existingProduct == null) return NotFound();
         existingProduct.Replace(product.Name, product.Price, product.Category);
         await context.SaveChangesAsync();
 
-        var response = ProductMapper.MapToReplaceProductResponse(existingProduct);
+        var response = product.ToReplaceProductResponse();
         return Ok(response);
     }
 }

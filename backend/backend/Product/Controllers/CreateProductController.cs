@@ -10,12 +10,12 @@ public class CreateProductController(ApplicationDbContext context) : ControllerB
     [HttpPost]
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
-        var product = ProductMapper.MapToDomain(request);
+        var product = request.ToEntity();
         
         context.Products.Add(product);
         await context.SaveChangesAsync();
 
-        var response = ProductMapper.MapToCreateProductResponse(product);
+        var response = product.ToCreateProductResponse();
         return CreatedAtAction(
             actionName: "GetProduct",
             controllerName: "GetProduct",

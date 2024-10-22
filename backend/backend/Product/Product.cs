@@ -13,6 +13,7 @@ public class Product
     )
     {
         Id = id;
+        EnforceInvariants(name, price, category);
         Name = name;
         Price = price;
         Category = category;
@@ -24,32 +25,39 @@ public class Product
         Category category
     )
     {
+        EnforceInvariants(name, price, category);
         Name = name;
         Price = price;
         Category = category;
     }
 
-    [Column("ProductId")]
-    public long Id { get; private set; }
+    [Column("ProductId")] public long Id { get; private set; }
 
     [Column("ProductName")]
-    [MaxLength(100)] public string Name { get; private set; }
-    [Column("ProductPrice")]
-    public decimal Price { get; private set; }
-    [Column("ProductCategory")]
-    public Category Category { get; private set; }
-    
+    [MaxLength(100)]
+    public string Name { get; private set; }
+
+    [Column("ProductPrice")] public decimal Price { get; private set; }
+    [Column("ProductCategory")] public Category Category { get; private set; }
+
     public void Replace(
-        string name, 
-        decimal price, 
+        string name,
+        decimal price,
         Category category)
     {
-        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Product name is required.");
-        if (price <= 0) throw new ArgumentException("Product price must be greater than zero.");
-        if (!Enum.IsDefined(typeof(Category), category)) throw new ArgumentException("Invalid category.");
-
+        EnforceInvariants(name, price, category);
         Name = name;
         Price = price;
         Category = category;
+    }
+
+    private static void EnforceInvariants(string name, decimal price, Category category)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Product name is required.");
+        if (price <= 0)
+            throw new ArgumentException("Product price must be greater than zero.");
+        if (!Enum.IsDefined(typeof(Category), category))
+            throw new ArgumentException("Invalid category for the Product.");
     }
 }

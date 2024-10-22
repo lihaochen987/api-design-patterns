@@ -14,7 +14,7 @@ public class GetProductController(ApplicationDbContext context) : ControllerBase
         var product = await context.Products.FindAsync(id);
         if (product == null) return NotFound();
 
-        var response = ProductMapper.MapToGetProductResponse(product);
+        var response = product.ToGetProductResponse();
         return Ok(response);
     }
 }
