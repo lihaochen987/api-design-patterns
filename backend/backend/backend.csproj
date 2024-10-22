@@ -16,4 +16,28 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Product\Controllers\CreateProductRequest.cs">
+        <DependentUpon>CreateProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\GetProductRequest.cs">
+        <DependentUpon>GetProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\ListProductsRequest.cs">
+        <DependentUpon>ListProductsController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\ListProductsResponse.cs">
+        <DependentUpon>ListProductsController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\UpdateProductRequest.cs">
+        <DependentUpon>UpdateProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\DeleteProductRequest.cs">
+        <DependentUpon>DeleteProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\Controllers\ReplaceProductRequest.cs">
+        <DependentUpon>ReplaceProductController.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

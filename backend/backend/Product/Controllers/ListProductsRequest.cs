@@ -1,4 +1,4 @@
-namespace backend.Product.Contracts;
+namespace backend.Product.Controllers;
 
 public class ListProductsRequest
 {

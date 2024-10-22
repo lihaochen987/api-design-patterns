@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using backend.Product.Contracts;
+using backend.Product.Controllers;
 
 namespace backend.Product;
 

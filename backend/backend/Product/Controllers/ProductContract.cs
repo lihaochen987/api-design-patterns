@@ -1,4 +1,4 @@
-namespace backend.Product.Contracts;
+namespace backend.Product.Controllers;
 
 /// <summary>
 /// This abstract class is quite good to have since a separate ProductDto object is used in each of the standard
