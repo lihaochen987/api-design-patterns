@@ -10,7 +10,7 @@ using Xunit;
 
 namespace backend.Product.Tests
 {
-    public class GetProductControllerTests: IDisposable
+    public class GetProductControllerTests : IDisposable
     {
         private readonly Fixture _fixture = new();
         private readonly GetProductController _controller;
@@ -30,6 +30,8 @@ namespace backend.Product.Tests
             _controller = new GetProductController(_dbContext);
         }
 
+        #region Maps and nested Interfaces
+
         [Fact]
         public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsWildcard()
         {
@@ -39,6 +41,29 @@ namespace backend.Product.Tests
 
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, ["*"])
+                .Create();
+
+            var actionResult = await _controller.GetProduct(product.Id, request);
+
+            actionResult.Result.ShouldNotBeNull();
+            actionResult.Result.ShouldBeOfType<OkObjectResult>();
+            var contentResult = actionResult.Result as OkObjectResult;
+            contentResult.ShouldNotBeNull();
+            var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
+            response.ShouldNotBeNull();
+            response.Name.ShouldBeEquivalentTo(product.Name);
+            response.Price.ShouldBeEquivalentTo(product.Price.ToString(CultureInfo.InvariantCulture));
+        }
+
+        [Fact]
+        public async Task GetProduct_DefaultsToWildCard_WhenFieldMaskIsNotMatched()
+        {
+            var product = _fixture.Create<Product>();
+            _dbContext.Products.Add(product);
+            await _dbContext.SaveChangesAsync();
+
+            var request = _fixture.Build<GetProductRequest>()
+                .With(r => r.FieldMask, ["UnmatchedField"])
                 .Create();
 
             var actionResult = await _controller.GetProduct(product.Id, request);
@@ -74,6 +99,10 @@ namespace backend.Product.Tests
             response!.Count.ShouldBeEquivalentTo(1);
         }
 
+        #endregion
+
+        #region Base controller tests
+
         [Fact]
         public async Task GetProduct_ReturnsNotFound_WhenProductDoesNotExist()
         {
@@ -85,6 +114,8 @@ namespace backend.Product.Tests
 
             result.Result.ShouldBeOfType<NotFoundResult>();
         }
+
+        #endregion
 
         public void Dispose()
         {

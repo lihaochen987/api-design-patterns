@@ -1,5 +1,4 @@
 using backend.Database;
-using backend.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -19,7 +18,7 @@ public class GetProductController(ApplicationDbContext context) : ControllerBase
 
         var response = product.ToGetProductResponse();
 
-        var contractResolver = new DynamicContractResolver(request.FieldMask);
+        var contractResolver = new ProductDynamicContractResolver(request.FieldMask);
         var jsonSettings = new JsonSerializerSettings
         {
             ContractResolver = contractResolver,
