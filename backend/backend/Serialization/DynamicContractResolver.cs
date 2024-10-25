@@ -2,7 +2,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace backend.Product.Controllers;
+namespace backend.Serialization;
 
 public class DynamicContractResolver : DefaultContractResolver
 {

@@ -1,11 +1,12 @@
 using backend.Database;
+using backend.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace backend.Product.Controllers;
 
 [ApiController]
-[Route("/product/{id}")]
+[Route("/product/{id:long}")]
 public class GetProductController(ApplicationDbContext context) : ControllerBase
 {
     [HttpGet]
@@ -15,9 +16,9 @@ public class GetProductController(ApplicationDbContext context) : ControllerBase
     {
         var product = await context.Products.FindAsync(id);
         if (product == null) return NotFound();
-        
+
         var response = product.ToGetProductResponse();
-        
+
         var contractResolver = new DynamicContractResolver(request.FieldMask);
         var jsonSettings = new JsonSerializerSettings
         {
@@ -26,6 +27,9 @@ public class GetProductController(ApplicationDbContext context) : ControllerBase
         };
 
         var json = JsonConvert.SerializeObject(response, jsonSettings);
-        return Content(json, "application/json");
+        return new OkObjectResult(json)
+        {
+            StatusCode = 200
+        };
     }
 }
