@@ -8,6 +8,7 @@ public static class GetProductExtensions
     {
         return new GetProductResponse
         {
+            Id = product.Id.ToString(),
             Name = product.Name,
             Price = product.Price.ToString(CultureInfo.InvariantCulture),
             Category = product.Category.ToString()
