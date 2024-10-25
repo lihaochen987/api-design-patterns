@@ -2,15 +2,15 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace backend.Product;
+namespace backend;
 
-public class ProductDynamicContractResolver : DefaultContractResolver
+public class DynamicContractResolver : DefaultContractResolver
 {
     private readonly HashSet<string> _fields;
     private readonly bool _globalWildcard;
     private readonly HashSet<string> _wildcards;
 
-    public ProductDynamicContractResolver(IEnumerable<string> fields)
+    public DynamicContractResolver(IEnumerable<string> fields)
     {
         _fields = [..fields.Select(f => f.ToLower())];
         _globalWildcard = _fields.Contains("*");

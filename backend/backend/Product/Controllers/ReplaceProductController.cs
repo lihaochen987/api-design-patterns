@@ -16,7 +16,7 @@ public class ReplaceProductController(ApplicationDbContext context) : Controller
 
         var existingProduct = await context.Products.FindAsync(id);
         if (existingProduct == null) return NotFound();
-        existingProduct.Replace(product.Name, product.Price, product.Category);
+        existingProduct.Replace(product.Name, product.Price, product.Category, product.Dimensions);
         await context.SaveChangesAsync();
 
         var response = product.ToReplaceProductResponse();

@@ -2,5 +2,5 @@ namespace backend.Product.Controllers;
 
 public class ListProductsResponse
 {
-    public IEnumerable<Product>? Results { get; set; }
+    public IEnumerable<DomainModels.Product>? Results { get; set; }
 }

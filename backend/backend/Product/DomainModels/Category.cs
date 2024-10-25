@@ -1,4 +1,4 @@
-namespace backend.Product;
+namespace backend.Product.DomainModels;
 
 public enum Category
 {

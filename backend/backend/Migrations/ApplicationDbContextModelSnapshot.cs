@@ -16,7 +16,7 @@ namespace backend.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
-            modelBuilder.Entity("backend.Models.Product", b =>
+            modelBuilder.Entity("backend.Product.DomainModels.Product", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,78 +41,37 @@ namespace backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+                });
 
-                    b.HasData(
-                        new
+            modelBuilder.Entity("backend.Product.DomainModels.Product", b =>
+                {
+                    b.OwnsOne("backend.Product.DomainModels.Dimensions", "Dimensions", b1 =>
                         {
-                            Id = 1L,
-                            Category = "DogFood",
-                            Name = "Dry Dog Food",
-                            Price = 50m
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Category = "DogFood",
-                            Name = "Wet Dog Food",
-                            Price = 35m
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Category = "DogFood",
-                            Name = "Dog Treats",
-                            Price = 10m
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            Category = "Toys",
-                            Name = "Chew Toy",
-                            Price = 15m
-                        },
-                        new
-                        {
-                            Id = 5L,
-                            Category = "Toys",
-                            Name = "Fetch Ball",
-                            Price = 8m
-                        },
-                        new
-                        {
-                            Id = 6L,
-                            Category = "CollarsAndLeashes",
-                            Name = "Dog Collar",
-                            Price = 12m
-                        },
-                        new
-                        {
-                            Id = 7L,
-                            Category = "CollarsAndLeashes",
-                            Name = "Dog Leash",
-                            Price = 20m
-                        },
-                        new
-                        {
-                            Id = 8L,
-                            Category = "GroomingAndHygiene",
-                            Name = "Dog Shampoo",
-                            Price = 10m
-                        },
-                        new
-                        {
-                            Id = 9L,
-                            Category = "GroomingAndHygiene",
-                            Name = "Dog Brush",
-                            Price = 7m
-                        },
-                        new
-                        {
-                            Id = 10L,
-                            Category = "Beds",
-                            Name = "Comfort Dog Bed",
-                            Price = 80m
+                            b1.Property<long>("ProductId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<decimal>("Height")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Height");
+
+                            b1.Property<decimal>("Length")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Length");
+
+                            b1.Property<decimal>("Width")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Width");
+
+                            b1.HasKey("ProductId");
+
+                            b1.ToTable("Products");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
                         });
+
+                    b.Navigation("Dimensions")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,31 +1,41 @@
 using System.Globalization;
+using backend.Product.Contracts;
+using backend.Product.DomainModels;
+using static backend.Parsers.ParseDecimalUtility;
+using static backend.Parsers.ParseEnumUtility;
 
 namespace backend.Product.Controllers;
 
 public static class CreateProductExtensions
 {
-    public static Product ToEntity(this CreateProductRequest request)
+    public static DomainModels.Product ToEntity(this CreateProductRequest request)
     {
-        if (!decimal.TryParse(request.Price, out var price))
-        {
-            throw new ArgumentException("Invalid product price");
-        }
+        // Product Fields
+        var price = ParseDecimal(request.Price, "Invalid product price");
+        var category = ParseEnum<Category>(request.Category, "Invalid product category");
 
-        if (!Enum.TryParse<Category>(request.Category, out var category))
-        {
-            throw new ArgumentException("Invalid product category");
-        }
+        // Dimensions Fields
+        var length = ParseDecimal(request.Dimensions.Length, "Invalid dimensions length");
+        var width = ParseDecimal(request.Dimensions.Width, "Invalid dimensions width");
+        var height = ParseDecimal(request.Dimensions.Height, "Invalid dimensions height");
 
-        return new Product(request.Name, price, category);
+        var dimensions = new Dimensions(length, width, height);
+        return new DomainModels.Product(request.Name, price, category, dimensions);
     }
 
-    public static CreateProductResponse ToCreateProductResponse(this Product product)
+    public static CreateProductResponse ToCreateProductResponse(this DomainModels.Product product)
     {
         return new CreateProductResponse
         {
             Name = product.Name,
             Price = product.Price.ToString(CultureInfo.InvariantCulture),
-            Category = product.Category.ToString()
+            Category = product.Category.ToString(),
+            Dimensions = new DimensionsContract
+            {
+                Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
+            }
         };
     }
 }

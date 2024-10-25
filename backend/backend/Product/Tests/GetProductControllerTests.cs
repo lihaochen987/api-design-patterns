@@ -35,7 +35,7 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsWildcard()
         {
-            var product = _fixture.Create<Product>();
+            var product = _fixture.Create<DomainModels.Product>();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
@@ -58,7 +58,7 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_DefaultsToWildCard_WhenFieldMaskIsNotMatched()
         {
-            var product = _fixture.Create<Product>();
+            var product = _fixture.Create<DomainModels.Product>();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
@@ -81,7 +81,7 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_ReturnsPartialProduct_WhenFieldMaskIsSpecified()
         {
-            var product = _fixture.Create<Product>();
+            var product = _fixture.Create<DomainModels.Product>();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
