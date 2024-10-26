@@ -8,20 +8,17 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Shouldly;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace backend.Product.Tests
 {
     public class GetProductControllerTests : IDisposable
     {
-        private readonly ITestOutputHelper _testOutputHelper;
         private readonly Fixture _fixture = new();
         private readonly GetProductController _controller;
         private readonly ApplicationDbContext _dbContext;
 
-        public GetProductControllerTests(ITestOutputHelper testOutputHelper)
+        public GetProductControllerTests()
         {
-            _testOutputHelper = testOutputHelper;
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseSqlite("app.db")
                 .Options;
@@ -34,7 +31,6 @@ namespace backend.Product.Tests
             _controller = new GetProductController(_dbContext);
         }
 
-        #region Maps and nested Interfaces
 
         [Fact]
         public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsWildcard()
@@ -54,32 +50,28 @@ namespace backend.Product.Tests
             var contentResult = actionResult.Result as OkObjectResult;
             contentResult.ShouldNotBeNull();
             var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-            response.ShouldNotBeNull();
-            response.Name.ShouldBeEquivalentTo(product.Name);
-            response.Price.ShouldBeEquivalentTo(product.Price.ToString(CultureInfo.InvariantCulture));
+            response.ShouldBeEquivalentTo(product.ToGetProductResponse());
         }
-        
+
         [Fact]
         public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsEmpty()
         {
             var product = _fixture.Create<DomainModels.Product>();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, [])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
             var contentResult = actionResult.Result as OkObjectResult;
             contentResult.ShouldNotBeNull();
             var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-            response.ShouldNotBeNull();
-            response.Name.ShouldBeEquivalentTo(product.Name);
-            response.Price.ShouldBeEquivalentTo(product.Price.ToString(CultureInfo.InvariantCulture));
+            response.ShouldBeEquivalentTo(product.ToGetProductResponse());
         }
 
         [Fact]
@@ -88,21 +80,42 @@ namespace backend.Product.Tests
             var product = _fixture.Create<DomainModels.Product>();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, ["UnmatchedField"])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
             var contentResult = actionResult.Result as OkObjectResult;
             contentResult.ShouldNotBeNull();
             var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-            response.ShouldNotBeNull();
-            response.Name.ShouldBeEquivalentTo(product.Name);
-            response.Price.ShouldBeEquivalentTo(product.Price.ToString(CultureInfo.InvariantCulture));
+            response.ShouldBeEquivalentTo(product.ToGetProductResponse());
+        }
+
+        [Fact]
+        public async Task GetProduct_ReturnsValidMasks_WhenInvalidMasksArePassed()
+        {
+            var product = _fixture.Create<DomainModels.Product>();
+            _dbContext.Products.Add(product);
+            await _dbContext.SaveChangesAsync();
+
+            var request = _fixture.Build<GetProductRequest>()
+                .With(r => r.FieldMask, ["UnmatchedField", "Price", "Name"])
+                .Create();
+
+            var actionResult = await _controller.GetProduct(product.Id, request);
+
+            actionResult.Result.ShouldNotBeNull();
+            actionResult.Result.ShouldBeOfType<OkObjectResult>();
+            var contentResult = actionResult.Result as OkObjectResult;
+            contentResult.ShouldNotBeNull();
+            var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(contentResult.Value!.ToString()!);
+            response!.Count.ShouldBeEquivalentTo(2);
+            response.ShouldContainKeyAndValue("Name", product.Name);
+            response.ShouldContainKeyAndValue("Price", product.Price.ToString(CultureInfo.InvariantCulture));
         }
 
         [Fact]
@@ -111,13 +124,13 @@ namespace backend.Product.Tests
             var product = _fixture.Create<DomainModels.Product>();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, ["name"])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
             var result = actionResult.Result as OkObjectResult;
@@ -125,46 +138,61 @@ namespace backend.Product.Tests
             response!.ShouldContainKey("Name");
             response!.Count.ShouldBeEquivalentTo(1);
         }
-        
+
         [Fact]
         public async Task GetProduct_ReturnsPartialProduct_WhenNestedFieldMaskIsSpecified()
         {
             var product = _fixture.Create<DomainModels.Product>();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, ["dimensions.width"])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
-            _testOutputHelper.WriteLine(actionResult.Result.ToString());
             var result = actionResult.Result as OkObjectResult;
             var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(result!.Value!.ToString()!);
             response!.ShouldContainKey("Dimensions");
             var dimensions = response!["Dimensions"] as JObject;
-            dimensions.ShouldNotBeNull();
-            dimensions.ShouldContainKey("Width");
+            dimensions!.ShouldContainKey("Width");
+            dimensions!.Count.ShouldBeEquivalentTo(1);
         }
 
-        #endregion
+        [Fact]
+        public async Task GetProduct_ReturnsAllFields_WhenPartialRequestIsMade()
+        {
+            var product = _fixture.Create<DomainModels.Product>();
+            _dbContext.Products.Add(product);
+            await _dbContext.SaveChangesAsync();
 
-        #region Base controller tests
+            var request = _fixture.Build<GetProductRequest>()
+                .With(r => r.FieldMask, ["dimensions.*"])
+                .Create();
+
+            var actionResult = await _controller.GetProduct(product.Id, request);
+
+            actionResult.Result.ShouldNotBeNull();
+            actionResult.Result.ShouldBeOfType<OkObjectResult>();
+            var result = actionResult.Result as OkObjectResult;
+            var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(result!.Value!.ToString()!);
+            response!.ShouldContainKey("Dimensions");
+            var dimensions = response!["Dimensions"] as JObject;
+            dimensions!.Count.ShouldBeEquivalentTo(3);
+        }
 
         [Fact]
         public async Task GetProduct_ReturnsNotFound_WhenProductDoesNotExist()
         {
             var request = _fixture.Create<GetProductRequest>();
-            
+
             var result = await _controller.GetProduct(999, request);
 
             result.Result.ShouldBeOfType<NotFoundResult>();
         }
-
-        #endregion
 
         public void Dispose()
         {

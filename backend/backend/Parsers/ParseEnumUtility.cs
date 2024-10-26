@@ -1,6 +1,6 @@
 namespace backend.Parsers;
 
-public class ParseEnumUtility
+public static class ParseEnumUtility
 {
     public static TEnum ParseEnum<TEnum>(string value, string errorMessage) where TEnum : struct
     {

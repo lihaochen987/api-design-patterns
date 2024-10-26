@@ -11,6 +11,7 @@ public partial class DynamicContractResolver : DefaultContractResolver
     private readonly bool _globalWildcard;
     private readonly HashSet<string> _availablePaths;
 
+    // Todo: Refactor this
     public DynamicContractResolver(IEnumerable<string> fields, object targetObject)
     {
         var enumerable = fields.ToList();
@@ -18,9 +19,17 @@ public partial class DynamicContractResolver : DefaultContractResolver
             ? [..enumerable.Select(f => f.ToLower())]
             : [];
         _globalWildcard = _fields.Contains("*") || _fields.Count == 0;
-        HashSet<string> wildcards = [.._fields.Where(f => f.EndsWith(".*")).Select(f => f.Split('.')[0])];
+        var wildcards = _fields.Where(f => f.EndsWith(".*")).Select(f => f.Split('.')[0]).ToList();
+        if (wildcards.Count != 0)
+        {
+            foreach (var wildcard in wildcards)
+            {
+                AddSubPropertiesToFields(wildcard, targetObject);
+            }
+        }
+
         _availablePaths = [..FieldMaskHelper.InferFieldMask(targetObject)];
-        _fields.RemoveWhere(f => !_availablePaths.Contains(f) && !wildcards.Contains(f.Split('.')[0]));
+        _fields.RemoveWhere(f => !_availablePaths.Contains(f));
     }
 
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
@@ -42,7 +51,6 @@ public partial class DynamicContractResolver : DefaultContractResolver
             return property;
         }
 
-        // Check if this property should be serialized based on nested matches
         if (member is PropertyInfo propertyInfo && IsComplexType(propertyInfo.PropertyType))
         {
             property.ShouldSerialize = _ => ShouldSerializeWithNestedMatch(propertyInfo, cleanedPropertyName);
@@ -53,11 +61,37 @@ public partial class DynamicContractResolver : DefaultContractResolver
         return property;
     }
 
+    private void AddSubPropertiesToFields(string rootProperty, object targetObject)
+    {
+        var camelCaseRootProperty = ToCamelCase(rootProperty);
+        var rootPropertyInfo =
+            targetObject.GetType().GetProperty(camelCaseRootProperty, BindingFlags.Public | BindingFlags.Instance);
+
+        if (rootPropertyInfo == null || !IsComplexType(rootPropertyInfo.PropertyType)) return;
+        var subProperties =
+            rootPropertyInfo.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        foreach (var subProperty in subProperties)
+        {
+            var subPropertyPath = $"{rootProperty}.{subProperty.Name.ToLower()}";
+            _fields.Add(subPropertyPath);
+        }
+    }
+
+    private static string ToCamelCase(string input)
+    {
+        if (string.IsNullOrEmpty(input) || char.IsUpper(input[0]))
+            return input;
+
+        return char.ToUpper(input[0]) + input.Substring(1);
+    }
+
     private bool ShouldSerializeWithNestedMatch(PropertyInfo propertyInfo, string parentPath)
     {
-        return propertyInfo.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Select(subProperty => $"{parentPath}.{subProperty.Name.ToLower()}").Any(subPropertyPath =>
-                _fields.Contains(subPropertyPath) && _availablePaths.Contains(subPropertyPath));
+        // Include sub-properties if they exist in _fields or match any path in _wildcards
+        return propertyInfo.PropertyType
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Select(subProperty => $"{parentPath}.{subProperty.Name.ToLower()}")
+            .Any(subPropertyPath => _fields.Contains(subPropertyPath));
     }
 
     private static bool IsComplexType(Type type)
