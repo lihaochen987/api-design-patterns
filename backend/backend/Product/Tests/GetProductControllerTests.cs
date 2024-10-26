@@ -105,26 +105,26 @@ namespace backend.Product.Tests
             response.Price.ShouldBeEquivalentTo(product.Price.ToString(CultureInfo.InvariantCulture));
         }
 
-        // [Fact]
-        // public async Task GetProduct_ReturnsPartialProduct_WhenFieldMaskIsSpecified()
-        // {
-        //     var product = _fixture.Create<DomainModels.Product>();
-        //     _dbContext.Products.Add(product);
-        //     await _dbContext.SaveChangesAsync();
-        //
-        //     var request = _fixture.Build<GetProductRequest>()
-        //         .With(r => r.FieldMask, ["name"])
-        //         .Create();
-        //
-        //     var actionResult = await _controller.GetProduct(product.Id, request);
-        //
-        //     actionResult.Result.ShouldNotBeNull();
-        //     actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        //     var result = actionResult.Result as OkObjectResult;
-        //     var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(result!.Value!.ToString()!);
-        //     response!.ShouldContainKey("Name");
-        //     response!.Count.ShouldBeEquivalentTo(1);
-        // }
+        [Fact]
+        public async Task GetProduct_ReturnsPartialProduct_WhenFieldMaskIsSpecified()
+        {
+            var product = _fixture.Create<DomainModels.Product>();
+            _dbContext.Products.Add(product);
+            await _dbContext.SaveChangesAsync();
+        
+            var request = _fixture.Build<GetProductRequest>()
+                .With(r => r.FieldMask, ["name"])
+                .Create();
+        
+            var actionResult = await _controller.GetProduct(product.Id, request);
+        
+            actionResult.Result.ShouldNotBeNull();
+            actionResult.Result.ShouldBeOfType<OkObjectResult>();
+            var result = actionResult.Result as OkObjectResult;
+            var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(result!.Value!.ToString()!);
+            response!.ShouldContainKey("Name");
+            response!.Count.ShouldBeEquivalentTo(1);
+        }
         
         [Fact]
         public async Task GetProduct_ReturnsPartialProduct_WhenNestedFieldMaskIsSpecified()

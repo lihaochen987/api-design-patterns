@@ -9,7 +9,6 @@ public partial class DynamicContractResolver : DefaultContractResolver
 {
     private readonly HashSet<string> _fields;
     private readonly bool _globalWildcard;
-    private readonly HashSet<string> _wildcards;
     private readonly HashSet<string> _availablePaths;
 
     public DynamicContractResolver(IEnumerable<string> fields, object targetObject)
@@ -19,9 +18,9 @@ public partial class DynamicContractResolver : DefaultContractResolver
             ? [..enumerable.Select(f => f.ToLower())]
             : [];
         _globalWildcard = _fields.Contains("*") || _fields.Count == 0;
-        _wildcards = [.._fields.Where(f => f.EndsWith(".*")).Select(f => f.Split('.')[0])];
+        HashSet<string> wildcards = [.._fields.Where(f => f.EndsWith(".*")).Select(f => f.Split('.')[0])];
         _availablePaths = [..FieldMaskHelper.InferFieldMask(targetObject)];
-        _fields.RemoveWhere(f => !_availablePaths.Contains(f) && !_wildcards.Contains(f.Split('.')[0]));
+        _fields.RemoveWhere(f => !_availablePaths.Contains(f) && !wildcards.Contains(f.Split('.')[0]));
     }
 
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
@@ -35,7 +34,7 @@ public partial class DynamicContractResolver : DefaultContractResolver
         }
 
         var propertyName = GetFullPropertyPath(member);
-        var cleanedPropertyName = CleanedPropertyName(propertyName);
+        var cleanedPropertyName = RemoveContractFromString().Replace(propertyName, "").Trim().ToLowerInvariant();
 
         if (_fields.Contains(cleanedPropertyName) && _availablePaths.Contains(cleanedPropertyName))
         {
@@ -46,7 +45,7 @@ public partial class DynamicContractResolver : DefaultContractResolver
         // Check if this property should be serialized based on nested matches
         if (member is PropertyInfo propertyInfo && IsComplexType(propertyInfo.PropertyType))
         {
-            property.ShouldSerialize = _ => ShouldSerializeWithNestedMatch(propertyInfo, propertyName);
+            property.ShouldSerialize = _ => ShouldSerializeWithNestedMatch(propertyInfo, cleanedPropertyName);
             return property;
         }
 
@@ -54,27 +53,16 @@ public partial class DynamicContractResolver : DefaultContractResolver
         return property;
     }
 
-    private static string RemoveResponseClass(string input)
-    {
-        return RemoveResponseFromString().Replace(input, "").Trim();
-    }
-
     private bool ShouldSerializeWithNestedMatch(PropertyInfo propertyInfo, string parentPath)
     {
         return propertyInfo.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Select(subProperty => CleanedPropertyName($"{parentPath}.{subProperty.Name.ToLower()}"))
-            .Select(RemoveResponseClass).Any(cleanedSubPath =>
-                _fields.Contains(cleanedSubPath) && _availablePaths.Contains(cleanedSubPath));
+            .Select(subProperty => $"{parentPath}.{subProperty.Name.ToLower()}").Any(subPropertyPath =>
+                _fields.Contains(subPropertyPath) && _availablePaths.Contains(subPropertyPath));
     }
 
     private static bool IsComplexType(Type type)
     {
         return !type.IsPrimitive && type != typeof(string) && !type.IsEnum;
-    }
-
-    private static string CleanedPropertyName(string propertyName)
-    {
-        return RemoveContractFromString().Replace(propertyName, "").Trim().ToLowerInvariant();
     }
 
     private static string GetFullPropertyPath(MemberInfo member)
@@ -88,7 +76,7 @@ public partial class DynamicContractResolver : DefaultContractResolver
             declaringType = declaringType.DeclaringType;
         }
 
-        return path;
+        return RemoveResponseFromString().Replace(path, "").Trim();
     }
 
     [GeneratedRegex(@"\b\w*response\.\b", RegexOptions.IgnoreCase, "en-NZ")]
