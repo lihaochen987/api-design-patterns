@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Product.Controllers;
 
 [ApiController]
+[Route("product")]
 public class UpdateProductController(ApplicationDbContext context) : ControllerBase
 {
     // Todo: Actually implement partial Updates because it's hard
-    [Route("/product")]
-    [HttpPatch]
+    [HttpPatch("{id:long}")]
     public async Task<ActionResult<UpdateProductResponse>> UpdateProduct(
-        [FromQuery] long id, 
+        [FromRoute] long id,
         [FromBody] UpdateProductRequest request)
     {
         var product = await context.Products.FindAsync(id);

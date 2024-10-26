@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Product.Controllers;
 
 [ApiController]
+[Route("product")]
+
 public class ReplaceProductController(ApplicationDbContext context) : ControllerBase
 {
-    [Route("/product")]
-    [HttpPut]
+    [HttpPut("{id:long}")]
     public async Task<ActionResult<ReplaceProductResponse>> ReplaceProduct(
-        [FromQuery] long id,
+        [FromRoute] long id,
         [FromBody] ReplaceProductRequest request)
     {
         var product = request.ToEntity();

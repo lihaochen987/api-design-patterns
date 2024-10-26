@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Product.Controllers;
 
 [ApiController]
-[Route("/product")]
+[Route("product")]
 public class CreateProductController(ApplicationDbContext context) : ControllerBase
 {
     [HttpPost]

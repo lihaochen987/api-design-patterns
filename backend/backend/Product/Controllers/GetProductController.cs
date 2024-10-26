@@ -5,10 +5,10 @@ using Newtonsoft.Json;
 namespace backend.Product.Controllers;
 
 [ApiController]
-[Route("/product/{id:long}")]
+[Route("product")]
 public class GetProductController(ApplicationDbContext context) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("{id:long}")]
     public async Task<ActionResult<GetProductResponse>> GetProduct(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)

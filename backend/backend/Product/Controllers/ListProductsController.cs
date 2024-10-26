@@ -7,7 +7,7 @@ namespace backend.Product.Controllers;
 [ApiController]
 public class ListProductsController(ApplicationDbContext context) : ControllerBase
 {
-    [Route("/products")]
+    [Route("products")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
