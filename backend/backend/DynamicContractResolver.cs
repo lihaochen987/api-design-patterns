@@ -11,7 +11,6 @@ public partial class DynamicContractResolver : DefaultContractResolver
     private readonly bool _globalWildcard;
     private readonly HashSet<string?> _availablePaths;
 
-    // Todo: Refactor this
     public DynamicContractResolver(
         IEnumerable<string> fields,
         object targetObject)
@@ -21,7 +20,10 @@ public partial class DynamicContractResolver : DefaultContractResolver
             ? [..enumerable.Select(f => f.ToLower())]
             : [];
         _globalWildcard = _fields.Contains("*") || _fields.Count == 0;
-        var wildcards = _fields.Where(f => f.EndsWith(".*")).Select(f => f.Split('.')[0]).ToList();
+        var wildcards = _fields
+            .Where(f => f.EndsWith(".*"))
+            .Select(f => f.Split('.')[0])
+            .ToList();
         if (wildcards.Count != 0)
         {
             foreach (var wildcard in wildcards)
@@ -47,7 +49,11 @@ public partial class DynamicContractResolver : DefaultContractResolver
         }
 
         var propertyName = GetFullPropertyPath(member);
-        var propertyNameWithoutPrefix = RemoveContractFromString().Replace(propertyName, "").Trim().ToLowerInvariant();
+        var propertyNameWithoutPrefix =
+            RemoveContractFromString()
+                .Replace(propertyName, "")
+                .Trim()
+                .ToLowerInvariant();
 
         if (_fields.Contains(propertyNameWithoutPrefix) && _availablePaths.Contains(propertyNameWithoutPrefix))
         {
@@ -73,7 +79,9 @@ public partial class DynamicContractResolver : DefaultContractResolver
     {
         var camelCaseRootProperty = ToCamelCase(rootProperty);
         var rootPropertyInfo =
-            targetObject.GetType().GetProperty(camelCaseRootProperty, BindingFlags.Public | BindingFlags.Instance);
+            targetObject
+                .GetType()
+                .GetProperty(camelCaseRootProperty, BindingFlags.Public | BindingFlags.Instance);
 
         if (rootPropertyInfo == null || !IsComplexType(rootPropertyInfo.PropertyType)) return existingFields;
 

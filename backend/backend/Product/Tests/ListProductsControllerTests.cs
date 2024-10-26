@@ -14,6 +14,7 @@ public class ListProductsControllerTests : IDisposable
     private readonly Fixture _fixture = new();
     private readonly ListProductsController _controller;
     private readonly ApplicationDbContext _dbContext;
+    private const int DefaultMaxPageSize = 10;
 
     public ListProductsControllerTests()
     {
@@ -47,7 +48,7 @@ public class ListProductsControllerTests : IDisposable
         var listProductsResponse = response.Value as ListProductsResponse;
         listProductsResponse!.Results.Count().ShouldBe(4);
     }
-    
+
     [Fact]
     public async Task ListProducts_ShouldReturnProductsAfterPageToken_WhenPageTokenProvided()
     {
@@ -57,15 +58,15 @@ public class ListProductsControllerTests : IDisposable
         var request = new ListProductsRequest { PageToken = "2", MaxPageSize = 2 };
 
         var result = await _controller.ListProducts(request);
-        
+
         result.Result.ShouldNotBeNull();
         result.Result.ShouldBeOfType<OkObjectResult>();
         var response = result.Result as OkObjectResult;
         response.ShouldNotBeNull();
         var listProductsResponse = response.Value as ListProductsResponse;
         listProductsResponse!.Results.Count().ShouldBe(2);
-        listProductsResponse.Results.First()!.Id.ShouldBe(3);
-        listProductsResponse.Results.Last()!.Id.ShouldBe(4);
+        listProductsResponse.Results.First()!.Id.ShouldBe("3");
+        listProductsResponse.Results.Last()!.Id.ShouldBe("4");
         listProductsResponse.NextPageToken.ShouldBeNull();
     }
 
@@ -87,7 +88,7 @@ public class ListProductsControllerTests : IDisposable
         listProductsResponse!.Results.Count().ShouldBe(2);
         listProductsResponse.NextPageToken.ShouldBeEquivalentTo("2");
     }
-    
+
     [Fact]
     public async Task ListProducts_ShouldUseDefaults_WhenPageTokenAndMaxPageSizeNotProvided()
     {
@@ -103,10 +104,10 @@ public class ListProductsControllerTests : IDisposable
         var response = result.Result as OkObjectResult;
         response.ShouldNotBeNull();
         var listProductsResponse = response.Value as ListProductsResponse;
-        listProductsResponse!.Results.Count().ShouldBe(10); // Default list value
-        listProductsResponse.NextPageToken.ShouldBeEquivalentTo("10");
+        listProductsResponse!.Results.Count().ShouldBe(DefaultMaxPageSize); 
+        listProductsResponse.NextPageToken.ShouldBeEquivalentTo(DefaultMaxPageSize.ToString());
     }
-    
+
     [Fact]
     public async Task ListProducts_ShouldReturnEmptyList_WhenNoProductsExist()
     {
@@ -121,6 +122,26 @@ public class ListProductsControllerTests : IDisposable
         var listProductsResponse = response.Value as ListProductsResponse;
         listProductsResponse!.Results.ShouldBeEmpty();
         listProductsResponse.NextPageToken.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task ListProducts_ShouldReturnCategoryAsString()
+    {
+        _dbContext.Products.AddRange(_fixture.CreateMany<DomainModels.Product>(20));
+        await _dbContext.SaveChangesAsync();
+
+        var request = new ListProductsRequest();
+
+        var result = await _controller.ListProducts(request);
+
+        result.Result.ShouldNotBeNull();
+        result.Result.ShouldBeOfType<OkObjectResult>();
+        var response = result.Result as OkObjectResult;
+        response.ShouldNotBeNull();
+        var listProductsResponse = response.Value as ListProductsResponse;
+        listProductsResponse!.Results.First()!.Category.ShouldBeOfType(typeof(string));
+        listProductsResponse.Results.Count().ShouldBe(DefaultMaxPageSize); 
+        listProductsResponse.NextPageToken.ShouldBeEquivalentTo(DefaultMaxPageSize.ToString());
     }
 
     public void Dispose()

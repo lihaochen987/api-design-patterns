@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Product.Controllers;
 
-//Todo: Refactor this
 [ApiController]
 public class ListProductsController(ApplicationDbContext context) : ControllerBase
 {
@@ -33,9 +32,14 @@ public class ListProductsController(ApplicationDbContext context) : ControllerBa
             products.RemoveAt(request.MaxPageSize);
         }
 
+        var productResponses = 
+            products
+            .Select(p => p.ToGetProductResponse())
+            .ToList();
+
         var response = new ListProductsResponse
         {
-            Results = products,
+            Results = productResponses,
             NextPageToken = nextPageToken
         };
 
