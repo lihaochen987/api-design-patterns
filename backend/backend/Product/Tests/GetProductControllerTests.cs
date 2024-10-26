@@ -82,28 +82,28 @@ namespace backend.Product.Tests
             response.Price.ShouldBeEquivalentTo(product.Price.ToString(CultureInfo.InvariantCulture));
         }
 
-        // [Fact]
-        // public async Task GetProduct_DefaultsToWildCard_WhenFieldMaskIsNotMatched()
-        // {
-        //     var product = _fixture.Create<DomainModels.Product>();
-        //     _dbContext.Products.Add(product);
-        //     await _dbContext.SaveChangesAsync();
-        //
-        //     var request = _fixture.Build<GetProductRequest>()
-        //         .With(r => r.FieldMask, ["UnmatchedField"])
-        //         .Create();
-        //
-        //     var actionResult = await _controller.GetProduct(product.Id, request);
-        //
-        //     actionResult.Result.ShouldNotBeNull();
-        //     actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        //     var contentResult = actionResult.Result as OkObjectResult;
-        //     contentResult.ShouldNotBeNull();
-        //     var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-        //     response.ShouldNotBeNull();
-        //     response.Name.ShouldBeEquivalentTo(product.Name);
-        //     response.Price.ShouldBeEquivalentTo(product.Price.ToString(CultureInfo.InvariantCulture));
-        // }
+        [Fact]
+        public async Task GetProduct_DefaultsToWildCard_WhenOnlyFieldMaskIsNotMatched()
+        {
+            var product = _fixture.Create<DomainModels.Product>();
+            _dbContext.Products.Add(product);
+            await _dbContext.SaveChangesAsync();
+        
+            var request = _fixture.Build<GetProductRequest>()
+                .With(r => r.FieldMask, ["UnmatchedField"])
+                .Create();
+        
+            var actionResult = await _controller.GetProduct(product.Id, request);
+        
+            actionResult.Result.ShouldNotBeNull();
+            actionResult.Result.ShouldBeOfType<OkObjectResult>();
+            var contentResult = actionResult.Result as OkObjectResult;
+            contentResult.ShouldNotBeNull();
+            var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
+            response.ShouldNotBeNull();
+            response.Name.ShouldBeEquivalentTo(product.Name);
+            response.Price.ShouldBeEquivalentTo(product.Price.ToString(CultureInfo.InvariantCulture));
+        }
 
         // [Fact]
         // public async Task GetProduct_ReturnsPartialProduct_WhenFieldMaskIsSpecified()
@@ -157,10 +157,8 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_ReturnsNotFound_WhenProductDoesNotExist()
         {
-            var request = _fixture.Build<GetProductRequest>()
-                .With(r => r.FieldMask, ["*"])
-                .Create();
-
+            var request = _fixture.Create<GetProductRequest>();
+            
             var result = await _controller.GetProduct(999, request);
 
             result.Result.ShouldBeOfType<NotFoundResult>();

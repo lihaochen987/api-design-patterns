@@ -5,7 +5,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace backend;
 
-public class DynamicContractResolver : DefaultContractResolver
+public partial class DynamicContractResolver : DefaultContractResolver
 {
     private readonly HashSet<string> _fields;
     private readonly bool _globalWildcard;
@@ -14,17 +14,21 @@ public class DynamicContractResolver : DefaultContractResolver
 
     public DynamicContractResolver(IEnumerable<string> fields, object targetObject)
     {
-        _fields = [..fields.Select(f => f.ToLower())];
+        var enumerable = fields.ToList();
+        _fields = enumerable.Count != 0
+            ? [..enumerable.Select(f => f.ToLower())]
+            : [];
         _globalWildcard = _fields.Contains("*") || _fields.Count == 0;
         _wildcards = [.._fields.Where(f => f.EndsWith(".*")).Select(f => f.Split('.')[0])];
         _availablePaths = [..FieldMaskHelper.InferFieldMask(targetObject)];
+        _fields.RemoveWhere(f => !_availablePaths.Contains(f) && !_wildcards.Contains(f.Split('.')[0]));
     }
 
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
     {
         var property = base.CreateProperty(member, memberSerialization);
 
-        if (_globalWildcard)
+        if (_globalWildcard || _fields.Count == 0)
         {
             property.ShouldSerialize = _ => true;
             return property;
@@ -49,48 +53,31 @@ public class DynamicContractResolver : DefaultContractResolver
         property.ShouldSerialize = _ => false;
         return property;
     }
-    
-    public static string RemoveGetProductResponse(string input)
-    {
-        // Use a case-insensitive regex to match "getproductresponse" anywhere in the string
-        var pattern = @"getproductresponse.";
-        var regex = new Regex(pattern, RegexOptions.IgnoreCase);
 
-        // Replace "getproductresponse" with an empty string if it exists
-        return regex.Replace(input, "").Trim();
+    private static string RemoveResponseClass(string input)
+    {
+        return RemoveResponseFromString().Replace(input, "").Trim();
     }
 
     private bool ShouldSerializeWithNestedMatch(PropertyInfo propertyInfo, string parentPath)
     {
-        // Iterate through each sub-property of the complex type
-        foreach (var subProperty in
-                 propertyInfo.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-        {
-            // Construct the full path of the sub-property
-            var subPath = CleanedPropertyName($"{parentPath}.{subProperty.Name.ToLower()}");
-            var cleanedSubPath = RemoveGetProductResponse(subPath);
-
-            // Check if the full path of this sub-property is in both _fields and _availablePaths
-            if (_fields.Contains(cleanedSubPath) && _availablePaths.Contains(cleanedSubPath))
-            {
-                return true; // Serialize the parent property if any sub-property matches
-            }
-        }
-
-        return false; // No matching sub-property found, do not serialize the parent property
+        return propertyInfo.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Select(subProperty => CleanedPropertyName($"{parentPath}.{subProperty.Name.ToLower()}"))
+            .Select(RemoveResponseClass).Any(cleanedSubPath =>
+                _fields.Contains(cleanedSubPath) && _availablePaths.Contains(cleanedSubPath));
     }
 
-    private bool IsComplexType(Type type)
+    private static bool IsComplexType(Type type)
     {
         return !type.IsPrimitive && type != typeof(string) && !type.IsEnum;
     }
 
-    private string CleanedPropertyName(string propertyName)
+    private static string CleanedPropertyName(string propertyName)
     {
-        return Regex.Replace(propertyName, "contract", "", RegexOptions.IgnoreCase).Trim().ToLowerInvariant();
+        return RemoveContractFromString().Replace(propertyName, "").Trim().ToLowerInvariant();
     }
 
-    private string GetFullPropertyPath(MemberInfo member)
+    private static string GetFullPropertyPath(MemberInfo member)
     {
         var path = member.Name;
         var declaringType = member.DeclaringType;
@@ -103,4 +90,10 @@ public class DynamicContractResolver : DefaultContractResolver
 
         return path;
     }
+
+    [GeneratedRegex(@"\b\w*response\.\b", RegexOptions.IgnoreCase, "en-NZ")]
+    private static partial Regex RemoveResponseFromString();
+
+    [GeneratedRegex("contract", RegexOptions.IgnoreCase, "en-NZ")]
+    private static partial Regex RemoveContractFromString();
 }
