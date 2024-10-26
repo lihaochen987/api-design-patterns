@@ -18,7 +18,7 @@ public class GetProductController(ApplicationDbContext context) : ControllerBase
 
         var response = product.ToGetProductResponse();
 
-        var contractResolver = new DynamicContractResolver(request.FieldMask);
+        var contractResolver = new DynamicContractResolver(request.FieldMask, product);
         var jsonSettings = new JsonSerializerSettings
         {
             ContractResolver = contractResolver,

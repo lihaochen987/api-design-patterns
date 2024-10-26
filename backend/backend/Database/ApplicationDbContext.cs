@@ -1,4 +1,3 @@
-using backend.Product;
 using backend.Product.DomainModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +35,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         // Uncomment the below to force a re-seed
         Products.RemoveRange(Products);
         SaveChanges();
-        
+
         if (Products.Any()) return;
         Products.AddRange(
             new Product.DomainModels.Product(1, "Dry Dog Food", 50m, Category.DogFood, new Dimensions(10m, 5m, 3m)),
