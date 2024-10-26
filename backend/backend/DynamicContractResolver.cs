@@ -9,10 +9,12 @@ public partial class DynamicContractResolver : DefaultContractResolver
 {
     private readonly HashSet<string> _fields;
     private readonly bool _globalWildcard;
-    private readonly HashSet<string> _availablePaths;
+    private readonly HashSet<string?> _availablePaths;
 
     // Todo: Refactor this
-    public DynamicContractResolver(IEnumerable<string> fields, object targetObject)
+    public DynamicContractResolver(
+        IEnumerable<string> fields,
+        object targetObject)
     {
         var enumerable = fields.ToList();
         _fields = enumerable.Count != 0
@@ -24,15 +26,17 @@ public partial class DynamicContractResolver : DefaultContractResolver
         {
             foreach (var wildcard in wildcards)
             {
-                AddSubPropertiesToFields(wildcard, targetObject);
+                _fields = AddSubPropertiesToFields(wildcard, targetObject, _fields);
             }
         }
 
-        _availablePaths = [..FieldMaskHelper.InferFieldMask(targetObject)];
+        _availablePaths = FieldMaskHelper.InferFieldMask(targetObject).ToHashSet();
         _fields.RemoveWhere(f => !_availablePaths.Contains(f));
     }
 
-    protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+    protected override JsonProperty CreateProperty(
+        MemberInfo member,
+        MemberSerialization memberSerialization)
     {
         var property = base.CreateProperty(member, memberSerialization);
 
@@ -43,9 +47,9 @@ public partial class DynamicContractResolver : DefaultContractResolver
         }
 
         var propertyName = GetFullPropertyPath(member);
-        var cleanedPropertyName = RemoveContractFromString().Replace(propertyName, "").Trim().ToLowerInvariant();
+        var propertyNameWithoutPrefix = RemoveContractFromString().Replace(propertyName, "").Trim().ToLowerInvariant();
 
-        if (_fields.Contains(cleanedPropertyName) && _availablePaths.Contains(cleanedPropertyName))
+        if (_fields.Contains(propertyNameWithoutPrefix) && _availablePaths.Contains(propertyNameWithoutPrefix))
         {
             property.ShouldSerialize = _ => true;
             return property;
@@ -53,7 +57,8 @@ public partial class DynamicContractResolver : DefaultContractResolver
 
         if (member is PropertyInfo propertyInfo && IsComplexType(propertyInfo.PropertyType))
         {
-            property.ShouldSerialize = _ => ShouldSerializeWithNestedMatch(propertyInfo, cleanedPropertyName);
+            property.ShouldSerialize = _ =>
+                ShouldSerializeWithNestedMatch(propertyInfo, propertyNameWithoutPrefix, _fields);
             return property;
         }
 
@@ -61,20 +66,26 @@ public partial class DynamicContractResolver : DefaultContractResolver
         return property;
     }
 
-    private void AddSubPropertiesToFields(string rootProperty, object targetObject)
+    private static HashSet<string> AddSubPropertiesToFields(
+        string rootProperty,
+        object targetObject,
+        HashSet<string> existingFields)
     {
         var camelCaseRootProperty = ToCamelCase(rootProperty);
         var rootPropertyInfo =
             targetObject.GetType().GetProperty(camelCaseRootProperty, BindingFlags.Public | BindingFlags.Instance);
 
-        if (rootPropertyInfo == null || !IsComplexType(rootPropertyInfo.PropertyType)) return;
-        var subProperties =
-            rootPropertyInfo.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        if (rootPropertyInfo == null || !IsComplexType(rootPropertyInfo.PropertyType)) return existingFields;
+
+        var subProperties = rootPropertyInfo.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var newFields = new HashSet<string>(existingFields);
         foreach (var subProperty in subProperties)
         {
             var subPropertyPath = $"{rootProperty}.{subProperty.Name.ToLower()}";
-            _fields.Add(subPropertyPath);
+            newFields.Add(subPropertyPath);
         }
+
+        return newFields;
     }
 
     private static string ToCamelCase(string input)
@@ -82,16 +93,18 @@ public partial class DynamicContractResolver : DefaultContractResolver
         if (string.IsNullOrEmpty(input) || char.IsUpper(input[0]))
             return input;
 
-        return char.ToUpper(input[0]) + input.Substring(1);
+        return char.ToUpper(input[0]) + input[1..];
     }
 
-    private bool ShouldSerializeWithNestedMatch(PropertyInfo propertyInfo, string parentPath)
+    private static bool ShouldSerializeWithNestedMatch(
+        PropertyInfo propertyInfo,
+        string parentPath,
+        HashSet<string> fields)
     {
-        // Include sub-properties if they exist in _fields or match any path in _wildcards
         return propertyInfo.PropertyType
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .Select(subProperty => $"{parentPath}.{subProperty.Name.ToLower()}")
-            .Any(subPropertyPath => _fields.Contains(subPropertyPath));
+            .Any(fields.Contains);
     }
 
     private static bool IsComplexType(Type type)

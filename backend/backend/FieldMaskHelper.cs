@@ -5,43 +5,78 @@ namespace backend;
 
 public static class FieldMaskHelper
 {
-    public static List<string> InferFieldMask(object resource)
+    public static List<string?> InferFieldMask(object resource)
     {
-        var availableFieldMasks = new List<string>();
+        var availableFieldMasks = new List<string?>();
         InferFieldMaskRecursive(resource, availableFieldMasks, null);
         return availableFieldMasks;
     }
 
-    private static void InferFieldMaskRecursive(object resource, List<string> fieldMask, string prefix)
+    private static void InferFieldMaskRecursive(
+        object resource,
+        List<string?> fieldMask,
+        string? prefix)
     {
-        if (resource == null) return;
-
         var type = resource.GetType();
         foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
             var propertyValue = property.GetValue(resource);
-            var propertyName = prefix != null ? $"{prefix}.{property.Name.ToLower()}" : property.Name.ToLower();
+            var propertyName = GeneratePropertyName(prefix, property.Name);
 
-            if (propertyValue != null && propertyValue is not string && propertyValue is IEnumerable nestedEnumerable)
+            if (propertyValue == null)
             {
-                // Handle collection of objects (e.g., List<Dimension> or arrays)
-                foreach (var nestedItem in nestedEnumerable)
-                {
-                    InferFieldMaskRecursive(nestedItem, fieldMask, propertyName);
-                    break; // Only infer once for collections
-                }
             }
-            else if (propertyValue != null && propertyValue.GetType().IsClass &&
-                     propertyValue.GetType() != typeof(string))
+            else if (IsCollection(propertyValue))
             {
-                // Recursively handle nested objects
-                fieldMask.Add(propertyName + ".*");
-                InferFieldMaskRecursive(propertyValue, fieldMask, propertyName);
+                HandleCollectionProperty(propertyValue, fieldMask, propertyName);
             }
-            else if (propertyValue != null) // Only add if property is not null
+            else if (IsNestedObject(propertyValue))
+            {
+                HandleNestedObject(propertyValue, fieldMask, propertyName);
+            }
+            else
             {
                 fieldMask.Add(propertyName);
             }
         }
+    }
+
+    private static string GeneratePropertyName(
+        string? prefix,
+        string propertyName)
+    {
+        return prefix != null ? $"{prefix}.{propertyName.ToLower()}" : propertyName.ToLower();
+    }
+
+    private static bool IsCollection(object? propertyValue)
+    {
+        return propertyValue != null && propertyValue is not string && propertyValue is IEnumerable;
+    }
+
+    private static bool IsNestedObject(object? propertyValue)
+    {
+        return propertyValue != null && propertyValue.GetType().IsClass && propertyValue.GetType() != typeof(string);
+    }
+
+    private static void HandleCollectionProperty(
+        object propertyValue,
+        List<string?> fieldMask,
+        string? propertyName)
+    {
+        if (propertyValue is not IEnumerable collection) return;
+        foreach (var item in collection)
+        {
+            InferFieldMaskRecursive(item, fieldMask, propertyName);
+            break; // Only infer once for collections
+        }
+    }
+
+    private static void HandleNestedObject(
+        object propertyValue,
+        List<string?> fieldMask,
+        string? propertyName)
+    {
+        fieldMask.Add(propertyName + ".*");
+        InferFieldMaskRecursive(propertyValue, fieldMask, propertyName);
     }
 }
