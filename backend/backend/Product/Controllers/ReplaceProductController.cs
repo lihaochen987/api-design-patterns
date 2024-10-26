@@ -5,7 +5,6 @@ namespace backend.Product.Controllers;
 
 [ApiController]
 [Route("product")]
-
 public class ReplaceProductController(ApplicationDbContext context) : ControllerBase
 {
     [HttpPut("{id:long}")]
