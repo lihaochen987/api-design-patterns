@@ -8,6 +8,7 @@ using Xunit;
 
 namespace backend.Product.Tests;
 
+[Collection("SequentialExecutionCollection")]
 public class ListProductsControllerTests : IDisposable
 {
     private readonly Fixture _fixture = new();
@@ -17,7 +18,7 @@ public class ListProductsControllerTests : IDisposable
     public ListProductsControllerTests()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseSqlite("app.db")
+            .UseSqlite($"Filename=:memory:{Guid.NewGuid()};Mode=Memory;Cache=Shared")
             .Options;
 
         var db = new ApplicationDbContext(options);
@@ -32,19 +33,38 @@ public class ListProductsControllerTests : IDisposable
     [Fact]
     public async Task ListProducts_ShouldReturnAllProducts_WhenNoPageTokenProvided()
     {
-        _dbContext.Products.AddRange(_fixture.CreateMany<DomainModels.Product>(20));
+        _dbContext.Products.AddRange(_fixture.CreateMany<DomainModels.Product>(4));
         await _dbContext.SaveChangesAsync();
-        
+
         var request = new ListProductsRequest { MaxPageSize = 4 };
 
         var result = await _controller.ListProducts(request);
-        
+
         result.Result.ShouldNotBeNull();
         result.Result.ShouldBeOfType<OkObjectResult>();
         var response = result.Result as OkObjectResult;
         response.ShouldNotBeNull();
         var listProductsResponse = response.Value as ListProductsResponse;
         listProductsResponse!.Results.Count().ShouldBe(4);
+    }
+
+    [Fact]
+    public async Task ListProducts_ShouldReturnNextPageToken_WhenMoreProductsExist()
+    {
+        _dbContext.Products.AddRange(_fixture.CreateMany<DomainModels.Product>(20));
+        await _dbContext.SaveChangesAsync();
+
+        var request = new ListProductsRequest { MaxPageSize = 2 };
+
+        var result = await _controller.ListProducts(request);
+
+        result.Result.ShouldNotBeNull();
+        result.Result.ShouldBeOfType<OkObjectResult>();
+        var response = result.Result as OkObjectResult;
+        response.ShouldNotBeNull();
+        var listProductsResponse = response.Value as ListProductsResponse;
+        listProductsResponse!.Results.Count().ShouldBe(2);
+        listProductsResponse.NextPageToken.ShouldBeEquivalentTo("2");
     }
 
     public void Dispose()

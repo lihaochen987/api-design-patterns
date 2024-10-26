@@ -11,6 +11,7 @@ using Xunit;
 
 namespace backend.Product.Tests
 {
+    [Collection("SequentialExecutionCollection")]
     public class GetProductControllerTests : IDisposable
     {
         private readonly Fixture _fixture = new();
@@ -20,7 +21,7 @@ namespace backend.Product.Tests
         public GetProductControllerTests()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlite("app.db")
+                .UseSqlite($"Filename=:memory:{Guid.NewGuid()};Mode=Memory;Cache=Shared")
                 .Options;
 
             var db = new ApplicationDbContext(options);
