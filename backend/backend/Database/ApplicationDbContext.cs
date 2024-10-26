@@ -51,7 +51,21 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 new Dimensions(8m, 4m, 2m)),
             new Product.DomainModels.Product(9, "Dog Brush", 7m, Category.GroomingAndHygiene,
                 new Dimensions(7m, 3m, 2m)),
-            new Product.DomainModels.Product(10, "Comfort Dog Bed", 80m, Category.Beds, new Dimensions(60m, 40m, 10m))
+            new Product.DomainModels.Product(10, "Comfort Dog Bed", 80m, Category.Beds, new Dimensions(60m, 40m, 10m)),
+            new Product.DomainModels.Product(11, "Rope Tug Toy", 9m, Category.Toys, new Dimensions(8m, 3m, 3m)),
+            new Product.DomainModels.Product(12, "Dog Bowl", 6m, Category.Feeders, new Dimensions(15m, 15m, 5m)),
+            new Product.DomainModels.Product(13, "Automatic Feeder", 45m, Category.Feeders,
+                new Dimensions(25m, 25m, 30m)),
+            new Product.DomainModels.Product(14, "Dog Carrier", 65m, Category.TravelAccessories,
+                new Dimensions(40m, 30m, 30m)),
+            new Product.DomainModels.Product(15, "Dog Raincoat", 18m, Category.Clothing, new Dimensions(20m, 10m, 2m)),
+            new Product.DomainModels.Product(16, "Dog Bandana", 5m, Category.Clothing, new Dimensions(20m, 20m, 0.2m)),
+            new Product.DomainModels.Product(17, "Training Pads", 25m, Category.GroomingAndHygiene,
+                new Dimensions(30m, 30m, 2m)),
+            new Product.DomainModels.Product(18, "Dental Chews", 15m, Category.DogFood, new Dimensions(10m, 5m, 1m)),
+            new Product.DomainModels.Product(19, "Cooling Mat", 35m, Category.Beds, new Dimensions(90m, 60m, 1m)),
+            new Product.DomainModels.Product(20, "Reflective Harness", 25m, Category.CollarsAndLeashes,
+                new Dimensions(20m, 5m, 1m))
         );
         SaveChanges();
     }

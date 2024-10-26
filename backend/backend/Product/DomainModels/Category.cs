@@ -6,5 +6,8 @@ public enum Category
     Toys,
     CollarsAndLeashes,
     GroomingAndHygiene,
-    Beds
+    Beds,
+    Feeders,
+    TravelAccessories,
+    Clothing
 }

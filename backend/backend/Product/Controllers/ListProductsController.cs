@@ -1,10 +1,10 @@
 using backend.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 namespace backend.Product.Controllers;
 
+//Todo: Refactor this
 [ApiController]
 public class ListProductsController(ApplicationDbContext context) : ControllerBase
 {

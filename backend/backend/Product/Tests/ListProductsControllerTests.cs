@@ -89,6 +89,25 @@ public class ListProductsControllerTests : IDisposable
     }
     
     [Fact]
+    public async Task ListProducts_ShouldUseDefaults_WhenPageTokenAndMaxPageSizeNotProvided()
+    {
+        _dbContext.Products.AddRange(_fixture.CreateMany<DomainModels.Product>(20));
+        await _dbContext.SaveChangesAsync();
+
+        var request = new ListProductsRequest();
+
+        var result = await _controller.ListProducts(request);
+
+        result.Result.ShouldNotBeNull();
+        result.Result.ShouldBeOfType<OkObjectResult>();
+        var response = result.Result as OkObjectResult;
+        response.ShouldNotBeNull();
+        var listProductsResponse = response.Value as ListProductsResponse;
+        listProductsResponse!.Results.Count().ShouldBe(10); // Default list value
+        listProductsResponse.NextPageToken.ShouldBeEquivalentTo("10");
+    }
+    
+    [Fact]
     public async Task ListProducts_ShouldReturnEmptyList_WhenNoProductsExist()
     {
         var request = new ListProductsRequest { MaxPageSize = 2 };
