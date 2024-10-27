@@ -176,6 +176,50 @@ public class ListProductsControllerTests : IDisposable
             .ShouldBeTrue();
     }
 
+    [Fact]
+    public async Task ListProducts_WithFilterAndPagination_ReturnsCorrectlyFilteredAndPaginatedResults()
+    {
+        var product = new DomainModels.Product(
+            2,
+            _fixture.Create<string>(),
+            15,
+            Category.Beds,
+            _fixture.Create<Dimensions>());
+        _dbContext.Products.AddRange(product);
+        await _dbContext.SaveChangesAsync();
+
+        var request = new ListProductsRequest
+        {
+            Filter = "Category == \"Beds\"",
+            MaxPageSize = 2,
+            PageToken = "1"
+        };
+
+        var result = await _controller.ListProducts(request);
+
+        result.Result.ShouldNotBeNull();
+        result.Result.ShouldBeOfType<OkObjectResult>();
+        var response = result.Result as OkObjectResult;
+        response.ShouldNotBeNull();
+        var listProductsResponse = response.Value as ListProductsResponse;
+        listProductsResponse!.Results.Count().ShouldBe(1);
+        listProductsResponse.Results
+            .All(p => p!.Category == product.Category.ToString())
+            .ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task ListProducts_WithInvalidFilter_ReturnsBadRequest()
+    {
+        var request = new ListProductsRequest
+        {
+            Filter = "InvalidFilter == \"NonExistent\"",
+            MaxPageSize = 10
+        };
+
+        await _controller.ListProducts(request).ShouldThrowAsync<ArgumentException>();
+    }
+
     public void Dispose()
     {
         _dbContext.Database.EnsureDeleted();
