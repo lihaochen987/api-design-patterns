@@ -6,7 +6,10 @@ namespace backend.Product.Controllers;
 
 [ApiController]
 [Route("product")]
-public class GetProductController(ApplicationDbContext context) : ControllerBase
+public class GetProductController(
+    ApplicationDbContext context,
+    FieldProcessor fieldProcessor)
+    : ControllerBase
 {
     [HttpGet("{id:long}")]
     public async Task<ActionResult<GetProductResponse>> GetProduct(
