@@ -29,22 +29,15 @@ public class ListProductsController(
 
         if (!string.IsNullOrEmpty(request.Filter))
         {
-            var parser = new CelParser<DomainModels.Product>();
-            var tokens = parser.Tokenize(request.Filter);
-
-            var filterExpression = parser.ParseFilter(tokens).Compile();
-            products = products.Where(filterExpression).ToList();
+            products = FilterProducts(products, request.Filter);
         }
+        
+        var paginatedProducts = PaginateProducts(
+            products, 
+            request.MaxPageSize, 
+            out var nextPageToken);
 
-        string? nextPageToken = null;
-        if (products.Count > request.MaxPageSize)
-        {
-            var lastProductInPage = products[request.MaxPageSize - 1];
-            nextPageToken = lastProductInPage.Id.ToString();
-            products.RemoveAt(request.MaxPageSize);
-        }
-
-        var productResponses = products.Select(p => p.ToGetProductResponse()).ToList();
+        var productResponses = paginatedProducts.Select(p => p.ToGetProductResponse()).ToList();
 
         var response = new ListProductsResponse
         {
@@ -53,5 +46,32 @@ public class ListProductsController(
         };
 
         return Ok(response);
+    }
+
+    private static List<DomainModels.Product> FilterProducts(
+        List<DomainModels.Product> existingProducts,
+        string celFilterExpression)
+    {
+        var parser = new CelParser<DomainModels.Product>();
+        var tokens = parser.Tokenize(celFilterExpression);
+
+        var filterExpression = parser.ParseFilter(tokens).Compile();
+        var newProducts = existingProducts.Where(filterExpression).ToList();
+        return newProducts;
+    }
+
+    private static List<DomainModels.Product> PaginateProducts(
+        List<DomainModels.Product> existingProducts, 
+        int maxPageSize, 
+        out string? nextPageToken)
+    {
+        if (existingProducts.Count <= maxPageSize)
+        {
+            nextPageToken = null;
+            return existingProducts;
+        }
+        var lastProductInPage = existingProducts[maxPageSize - 1];
+        nextPageToken = lastProductInPage.Id.ToString();
+        return existingProducts.Take(maxPageSize).ToList();
     }
 }
