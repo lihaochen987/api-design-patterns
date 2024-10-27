@@ -1,13 +1,13 @@
 using System.Text.RegularExpressions;
 
-namespace backend.Shared.Services;
+namespace backend.Shared.FieldMasks;
 
-public partial class RegexService : IRegexService
+public partial class FieldMaskPatternCleaner : IFieldMaskPatternCleaner
 {
     [GeneratedRegex(@"\b\w*response\.\b", RegexOptions.IgnoreCase, "en-NZ")]
     private static partial Regex RemoveResponseRegex();
 
-    public string RemoveHcLc(string input)
+    public string RemoveResponsePattern(string input)
     {
         return RemoveResponseRegex().Replace(input, "").Trim();
     }
@@ -15,7 +15,7 @@ public partial class RegexService : IRegexService
     [GeneratedRegex("contract", RegexOptions.IgnoreCase, "en-NZ")]
     private static partial Regex RemoveContractRegex();
 
-    public string RemoveContractFromString(string input)
+    public string RemoveContractPattern(string input)
     {
         return RemoveContractRegex().Replace(input, "").Trim();
     }

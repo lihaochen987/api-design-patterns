@@ -1,10 +1,10 @@
 using System.Reflection;
 
-namespace backend.Shared.Services;
+namespace backend.Shared.FieldMasks;
 
-public class PathService : IPathService
+public class FieldMaskPathBuilder : IFieldMaskPathBuilder
 {
-    public string GetPropertyPath(MemberInfo member)
+    public string BuildFullPath(MemberInfo member)
     {
         var path = member.Name;
         var declaringType = member.DeclaringType;

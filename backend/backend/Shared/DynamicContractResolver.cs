@@ -1,5 +1,5 @@
 using System.Reflection;
-using backend.Shared.Services;
+using backend.Shared.FieldMasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -8,13 +8,13 @@ namespace backend.Shared;
 public class DynamicContractResolver(
     IEnumerable<string> fields,
     object targetObject,
-    ISerializationService serializationService)
+    IFieldMaskSerializer fieldMaskSerializer)
     : DefaultContractResolver
 {
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
     {
         var property = base.CreateProperty(member, memberSerialization);
-        property.ShouldSerialize = _ => serializationService.ShouldSerializeJsonProperty(member, fields, targetObject);
+        property.ShouldSerialize = _ => fieldMaskSerializer.IsJsonPropertySerializable(member, fields, targetObject);
         return property;
     }
 }

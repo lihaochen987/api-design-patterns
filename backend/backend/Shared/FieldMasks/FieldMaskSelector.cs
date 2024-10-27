@@ -2,14 +2,14 @@ using System.Collections;
 using System.Reflection;
 using backend.Shared.Utility;
 
-namespace backend.Shared.Services;
+namespace backend.Shared.FieldMasks;
 
-public class FieldPreparationService(
+public class FieldMaskSelector(
     IReflectionUtility reflectionUtility,
-    IPathService pathService)
-    : IFieldPreparationService
+    IFieldMaskPathBuilder fieldMaskPathBuilder)
+    : IFieldMaskSelector
 {
-    public HashSet<string> PrepareFields(IEnumerable<string> fields, object targetObject)
+    public HashSet<string> ValidFields(IEnumerable<string> fields, object targetObject)
     {
         var fieldSet = new HashSet<string>(fields.Select(f => f.ToLower()));
         var globalWildcard = fieldSet.Contains("*") || fieldSet.Count == 0;
@@ -25,26 +25,26 @@ public class FieldPreparationService(
             fieldSet =
                 wildcards
                     .Aggregate(fieldSet,
-                        (current, wildcard) => AddSubPropertiesToFields(wildcard, targetObject, current));
+                        (current, wildcard) => ExpandWithNestedFields(wildcard, targetObject, current));
         }
 
-        var availablePaths = GetAllAvailableFilters(targetObject).ToHashSet();
+        var availablePaths = GetAvailableFieldPaths(targetObject).ToHashSet();
         fieldSet.RemoveWhere(f => !availablePaths.Contains(f));
 
         return fieldSet;
     }
 
-    public List<string?> GetAllAvailableFilters(object resource)
+    public List<string?> GetAvailableFieldPaths(object resource)
     {
         var availableFieldMasks = new List<string?>();
-        InferFieldMaskRecursive(resource, availableFieldMasks, null);
+        GatherNestedFieldMaskPaths(resource, availableFieldMasks, null);
         return availableFieldMasks;
     }
 
-    private HashSet<string> AddSubPropertiesToFields(
+    private HashSet<string> ExpandWithNestedFields(
         string rootProperty, object targetObject, HashSet<string> existingFields)
     {
-        var camelCaseRootProperty = ToCamelCase(rootProperty);
+        var camelCaseRootProperty = ConvertToCamelCase(rootProperty);
         var rootPropertyInfo = targetObject
             .GetType()
             .GetProperty(camelCaseRootProperty, BindingFlags.Public | BindingFlags.Instance);
@@ -63,7 +63,7 @@ public class FieldPreparationService(
         return newFields;
     }
 
-    private string ToCamelCase(string input)
+    private string ConvertToCamelCase(string input)
     {
         if (string.IsNullOrEmpty(input) || char.IsUpper(input[0]))
             return input;
@@ -72,7 +72,7 @@ public class FieldPreparationService(
     }
 
     // Todo: try and merge this with GetAllFields
-    private void InferFieldMaskRecursive(
+    private void GatherNestedFieldMaskPaths(
         object resource,
         List<string?> fieldMask,
         string? prefix)
@@ -81,7 +81,7 @@ public class FieldPreparationService(
         foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
             var propertyValue = property.GetValue(resource);
-            var propertyName = pathService.GeneratePropertyName(prefix, property.Name);
+            var propertyName = fieldMaskPathBuilder.GeneratePropertyName(prefix, property.Name);
 
             if (propertyValue == null)
             {
@@ -91,14 +91,14 @@ public class FieldPreparationService(
                 if (propertyValue is not IEnumerable collection) return;
                 foreach (var item in collection)
                 {
-                    InferFieldMaskRecursive(item, fieldMask, propertyName);
+                    GatherNestedFieldMaskPaths(item, fieldMask, propertyName);
                     break; // Only infer once for collections
                 }
             }
             else if (reflectionUtility.IsNestedObject(propertyValue))
             {
                 fieldMask.Add(propertyName + ".*");
-                InferFieldMaskRecursive(propertyValue, fieldMask, propertyName);
+                GatherNestedFieldMaskPaths(propertyValue, fieldMask, propertyName);
             }
             else
             {

@@ -2,7 +2,7 @@ using System.Globalization;
 using AutoFixture;
 using backend.Database;
 using backend.Product.Controllers;
-using backend.Shared.Services;
+using backend.Shared.FieldMasks;
 using backend.Shared.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Shouldly;
 using Xunit;
+using FieldMaskPatternCleaner = backend.Shared.FieldMasks.FieldMaskPatternCleaner;
 
 namespace backend.Product.Tests
 {
@@ -31,11 +32,11 @@ namespace backend.Product.Tests
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
             _dbContext = db;
-            ISerializationService serializationService = new SerializationService(
-                new FieldPreparationService(new ReflectionUtility(), new PathService()),
-                new PathService(), new RegexService());
+            IFieldMaskSerializer fieldMaskSerializer = new FieldMaskSerializer(
+                new FieldMaskSelector(new ReflectionUtility(), new FieldMaskPathBuilder()),
+                new FieldMaskPathBuilder(), new FieldMaskPatternCleaner());
 
-            _controller = new GetProductController(_dbContext, serializationService);
+            _controller = new GetProductController(_dbContext, fieldMaskSerializer);
         }
 
 

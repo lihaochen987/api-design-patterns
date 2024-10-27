@@ -1,8 +1,9 @@
 using backend.Database;
 using backend.Shared;
-using backend.Shared.Services;
+using backend.Shared.FieldMasks;
 using backend.Shared.Utility;
 using Microsoft.EntityFrameworkCore;
+using FieldMaskPatternCleaner = backend.Shared.FieldMasks.FieldMaskPatternCleaner;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,11 +27,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<DynamicContractResolver>();
 
 // Register interfaces
-builder.Services.AddTransient<ISerializationService, SerializationService>();
-builder.Services.AddSingleton<IPathService, PathService>();
-builder.Services.AddTransient<IFieldPreparationService, FieldPreparationService>();
+builder.Services.AddTransient<IFieldMaskSerializer, FieldMaskSerializer>();
+builder.Services.AddSingleton<IFieldMaskPathBuilder, FieldMaskPathBuilder>();
+builder.Services.AddTransient<IFieldMaskSelector, FieldMaskSelector>();
 builder.Services.AddTransient<IReflectionUtility, ReflectionUtility>();
-builder.Services.AddTransient<IRegexService, RegexService>();
+builder.Services.AddTransient<IFieldMaskPatternCleaner, FieldMaskPatternCleaner>();
 
 var app = builder.Build();
 
