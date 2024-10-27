@@ -29,8 +29,7 @@ namespace backend.Product.Tests
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
             _dbContext = db;
-            var fieldProcessor = new FieldProcessor();
-            _controller = new GetProductController(_dbContext, fieldProcessor);
+            _controller = new GetProductController(_dbContext);
         }
 
 

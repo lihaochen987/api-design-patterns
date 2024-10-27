@@ -21,7 +21,6 @@ builder.Services.AddSwaggerGen();
 // Register ApplicationDbContext with SQLite
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<FieldProcessor>();
 builder.Services.AddScoped<DynamicContractResolver>();
 
 var app = builder.Build();

@@ -7,8 +7,7 @@ namespace backend.Product.Controllers;
 [ApiController]
 [Route("product")]
 public class GetProductController(
-    ApplicationDbContext context,
-    FieldProcessor fieldProcessor)
+    ApplicationDbContext context)
     : ControllerBase
 {
     [HttpGet("{id:long}")]
@@ -21,7 +20,7 @@ public class GetProductController(
 
         var response = product.ToGetProductResponse();
 
-        var contractResolver = new DynamicContractResolver(request.FieldMask, product);
+        var contractResolver = new DynamicContractResolver(request.FieldMask, product, new FieldMask());
         var jsonSettings = new JsonSerializerSettings
         {
             ContractResolver = contractResolver,
