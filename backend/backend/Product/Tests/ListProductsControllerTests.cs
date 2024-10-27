@@ -1,6 +1,7 @@
 using AutoFixture;
 using backend.Database;
 using backend.Product.Controllers;
+using backend.Product.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
@@ -104,7 +105,7 @@ public class ListProductsControllerTests : IDisposable
         var response = result.Result as OkObjectResult;
         response.ShouldNotBeNull();
         var listProductsResponse = response.Value as ListProductsResponse;
-        listProductsResponse!.Results.Count().ShouldBe(DefaultMaxPageSize); 
+        listProductsResponse!.Results.Count().ShouldBe(DefaultMaxPageSize);
         listProductsResponse.NextPageToken.ShouldBeEquivalentTo(DefaultMaxPageSize.ToString());
     }
 
@@ -140,8 +141,39 @@ public class ListProductsControllerTests : IDisposable
         response.ShouldNotBeNull();
         var listProductsResponse = response.Value as ListProductsResponse;
         listProductsResponse!.Results.First()!.Category.ShouldBeOfType(typeof(string));
-        listProductsResponse.Results.Count().ShouldBe(DefaultMaxPageSize); 
+        listProductsResponse.Results.Count().ShouldBe(DefaultMaxPageSize);
         listProductsResponse.NextPageToken.ShouldBeEquivalentTo(DefaultMaxPageSize.ToString());
+    }
+
+    [Fact]
+    public async Task ListProducts_WithFilter_ReturnsFilteredResults()
+    {
+        var product = new DomainModels.Product(
+            1, 
+            _fixture.Create<string>(), 
+            15, 
+            Category.DogFood,
+            _fixture.Create<Dimensions>());
+        _dbContext.Products.AddRange(product);
+        await _dbContext.SaveChangesAsync();
+
+        var request = new ListProductsRequest
+        {
+            Filter = "Category == \"DogFood\" && Price < 20",
+            MaxPageSize = 10
+        };
+
+        var result = await _controller.ListProducts(request);
+
+        result.Result.ShouldNotBeNull();
+        result.Result.ShouldBeOfType<OkObjectResult>();
+        var response = result.Result as OkObjectResult;
+        response.ShouldNotBeNull();
+        var listProductsResponse = response.Value as ListProductsResponse;
+        listProductsResponse!.Results.Count().ShouldBe(1);
+        listProductsResponse.Results
+            .All(p => p!.Category == product.Category.ToString() && int.Parse(p.Price) < 20)
+            .ShouldBeTrue();
     }
 
     public void Dispose()
