@@ -9,20 +9,25 @@ public class FieldMaskSerializer(
     IFieldMaskPatternCleaner fieldMaskPatternCleaner)
     : IFieldMaskSerializer
 {
-    public bool IsJsonPropertySerializable(MemberInfo member, IEnumerable<string> fieldMask, object entityToSerialize)
+    // Todo: Break this down further
+    public bool IsJsonPropertySerializable(
+        MemberInfo member, 
+        IEnumerable<string> fieldMask, 
+        object entityToSerialize)
     {
-        var parsedFields = fieldMaskSelector.ValidFields(fieldMask, entityToSerialize);
+        var fields = fieldMaskSelector.ValidFields(fieldMask, entityToSerialize);
 
-        if (parsedFields.Contains("*") || parsedFields.Count == 0)
+        if (fields.Contains("*") || fields.Count == 0)
         {
             return true;
         }
 
+        // Todo: this is grotty
         var propertyName = fieldMaskPathBuilder.BuildFullPath(member);
         var propertyNameWithoutPrefix = fieldMaskPatternCleaner.RemoveContractPattern(
             fieldMaskPatternCleaner.RemoveResponsePattern(propertyName)).Trim().ToLowerInvariant();
 
-        if (parsedFields.Contains(propertyNameWithoutPrefix))
+        if (fields.Contains(propertyNameWithoutPrefix))
             return true;
 
         if (member is PropertyInfo propertyInfo && TypeHelper.IsComplexType(propertyInfo.PropertyType))
@@ -30,7 +35,7 @@ public class FieldMaskSerializer(
             return propertyInfo.PropertyType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Select(subProperty => $"{propertyNameWithoutPrefix}.{subProperty.Name.ToLower()}")
-                .Any(parsedFields.Contains);
+                .Any(fields.Contains);
         }
 
         return false;

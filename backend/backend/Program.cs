@@ -28,7 +28,7 @@ builder.Services.AddScoped<DynamicContractResolver>();
 
 // Register interfaces
 builder.Services.AddTransient<IFieldMaskSerializer, FieldMaskSerializer>();
-builder.Services.AddSingleton<IFieldMaskPathBuilder, FieldMaskPathBuilder>();
+builder.Services.AddTransient<IFieldMaskPathBuilder, FieldMaskPathBuilder>();
 builder.Services.AddTransient<IFieldMaskSelector, FieldMaskSelector>();
 builder.Services.AddTransient<IReflectionUtility, ReflectionUtility>();
 builder.Services.AddTransient<IFieldMaskPatternCleaner, FieldMaskPatternCleaner>();

@@ -32,9 +32,13 @@ namespace backend.Product.Tests
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
             _dbContext = db;
-            IFieldMaskSerializer fieldMaskSerializer = new FieldMaskSerializer(
-                new FieldMaskSelector(new ReflectionUtility(), new FieldMaskPathBuilder()),
-                new FieldMaskPathBuilder(), new FieldMaskPatternCleaner());
+            IFieldMaskSerializer fieldMaskSerializer =
+                new FieldMaskSerializer(
+                    new FieldMaskSelector
+                        (new FieldMaskPathResolver
+                            (new ReflectionUtility())),
+                    new FieldMaskPathBuilder(),
+                    new FieldMaskPatternCleaner());
 
             _controller = new GetProductController(_dbContext, fieldMaskSerializer);
         }

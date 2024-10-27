@@ -17,11 +17,4 @@ public class FieldMaskPathBuilder : IFieldMaskPathBuilder
 
         return path;
     }
-
-    public string GeneratePropertyName(
-        string? prefix,
-        string propertyName)
-    {
-        return prefix != null ? $"{prefix}.{propertyName.ToLower()}" : propertyName.ToLower();
-    }
 }

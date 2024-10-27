@@ -1,12 +1,10 @@
-using System.Collections;
 using System.Reflection;
 using backend.Shared.Utility;
 
 namespace backend.Shared.FieldMasks;
 
 public class FieldMaskSelector(
-    IReflectionUtility reflectionUtility,
-    IFieldMaskPathBuilder fieldMaskPathBuilder)
+    IFieldMaskPathResolver fieldMaskPathResolver)
     : IFieldMaskSelector
 {
     public HashSet<string> ValidFields(IEnumerable<string> fields, object targetObject)
@@ -28,21 +26,18 @@ public class FieldMaskSelector(
                         (current, wildcard) => ExpandWithNestedFields(wildcard, targetObject, current));
         }
 
-        var availablePaths = GetAvailableFieldPaths(targetObject).ToHashSet();
+        var availablePaths = fieldMaskPathResolver.GetAvailablePaths(targetObject).ToHashSet();
         fieldSet.RemoveWhere(f => !availablePaths.Contains(f));
 
         return fieldSet;
     }
 
-    public List<string?> GetAvailableFieldPaths(object resource)
-    {
-        var availableFieldMasks = new List<string?>();
-        GatherNestedFieldMaskPaths(resource, availableFieldMasks, null);
-        return availableFieldMasks;
-    }
-
+    
+    // Todo: Break this down further
     private HashSet<string> ExpandWithNestedFields(
-        string rootProperty, object targetObject, HashSet<string> existingFields)
+        string rootProperty, 
+        object targetObject, 
+        HashSet<string> existingFields)
     {
         var camelCaseRootProperty = ConvertToCamelCase(rootProperty);
         var rootPropertyInfo = targetObject
@@ -69,41 +64,5 @@ public class FieldMaskSelector(
             return input;
 
         return char.ToUpper(input[0]) + input[1..];
-    }
-
-    // Todo: try and merge this with GetAllFields
-    private void GatherNestedFieldMaskPaths(
-        object resource,
-        List<string?> fieldMask,
-        string? prefix)
-    {
-        var type = resource.GetType();
-        foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-        {
-            var propertyValue = property.GetValue(resource);
-            var propertyName = fieldMaskPathBuilder.GeneratePropertyName(prefix, property.Name);
-
-            if (propertyValue == null)
-            {
-            }
-            else if (reflectionUtility.IsCollection(propertyValue))
-            {
-                if (propertyValue is not IEnumerable collection) return;
-                foreach (var item in collection)
-                {
-                    GatherNestedFieldMaskPaths(item, fieldMask, propertyName);
-                    break; // Only infer once for collections
-                }
-            }
-            else if (reflectionUtility.IsNestedObject(propertyValue))
-            {
-                fieldMask.Add(propertyName + ".*");
-                GatherNestedFieldMaskPaths(propertyValue, fieldMask, propertyName);
-            }
-            else
-            {
-                fieldMask.Add(propertyName);
-            }
-        }
     }
 }

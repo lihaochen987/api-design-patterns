@@ -1,4 +1,4 @@
-namespace backend.Shared.Parsers.CelSpecParsing;
+namespace backend.Shared.CelSpecParser;
 
 public class CelOperators
 {

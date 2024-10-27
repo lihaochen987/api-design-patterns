@@ -71,6 +71,9 @@
       <Compile Update="Shared\Utility\ReflectionUtility.cs">
         <DependentUpon>IReflectionUtility.cs</DependentUpon>
       </Compile>
+      <Compile Update="Shared\FieldMasks\FieldMaskPathResolver.cs">
+        <DependentUpon>IFieldMaskPathResolver.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

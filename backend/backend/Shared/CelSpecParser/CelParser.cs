@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace backend.Shared.Parsers.CelSpecParsing;
+namespace backend.Shared.CelSpecParser;
 
 public class CelParser<T>
 {
