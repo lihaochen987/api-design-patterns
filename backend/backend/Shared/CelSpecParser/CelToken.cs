@@ -1,6 +1,6 @@
 namespace backend.Shared.CelSpecParser;
 
-public enum TokenType
+public enum CelTokenType
 {
     Field,
     Operator,
@@ -8,12 +8,12 @@ public enum TokenType
     Logical
 }
 
-public class Token
+public class CelToken
 {
-    public TokenType Type { get; set; }
+    public CelTokenType Type { get; set; }
     public string Value { get; set; }
 
-    public Token(TokenType type, string value)
+    public CelToken(CelTokenType type, string value)
     {
         Type = type;
         Value = value;

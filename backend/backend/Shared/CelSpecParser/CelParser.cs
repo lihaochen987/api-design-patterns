@@ -8,7 +8,7 @@ public class CelParser<T>
     private readonly ParameterExpression _parameter = Expression.Parameter(typeof(T), "x");
 
     // Todo: Refactor this.
-    public Expression<Func<T, bool>> ParseFilter(List<Token> tokens)
+    public Expression<Func<T, bool>> ParseFilter(List<CelToken> tokens)
     {
         Expression? expression = null;
 
@@ -16,7 +16,7 @@ public class CelParser<T>
         {
             var token = tokens[i];
 
-            if (token.Type == TokenType.Field)
+            if (token.Type == CelTokenType.Field)
             {
                 // Generate property expression and comparison value
                 var fieldExpression = GetFieldExpression(token, _parameter);
@@ -31,7 +31,7 @@ public class CelParser<T>
                     ? comparisonExpression
                     : Expression.AndAlso(expression, comparisonExpression);
             }
-            else if (token.Type == TokenType.Logical && expression != null)
+            else if (token.Type == CelTokenType.Logical && expression != null)
             {
                 var nextExpression = ParseFilter(tokens.Skip(i + 1).ToList());
                 expression = token.Value == "&&"
@@ -44,46 +44,46 @@ public class CelParser<T>
         return Expression.Lambda<Func<T, bool>>(expression ?? Expression.Constant(true), _parameter);
     }
 
-    public List<Token> Tokenize(string input)
+    public List<CelToken> Tokenize(string input)
     {
-        Dictionary<string, TokenType> operatorsDict = new()
+        Dictionary<string, CelTokenType> operatorsDict = new()
         {
-            { "==", TokenType.Operator },
-            { "!=", TokenType.Operator },
-            { "<", TokenType.Operator },
-            { ">", TokenType.Operator },
-            { "<=", TokenType.Operator },
-            { ">=", TokenType.Operator },
-            { "&&", TokenType.Logical },
-            { "||", TokenType.Logical }
+            { "==", CelTokenType.Operator },
+            { "!=", CelTokenType.Operator },
+            { "<", CelTokenType.Operator },
+            { ">", CelTokenType.Operator },
+            { "<=", CelTokenType.Operator },
+            { ">=", CelTokenType.Operator },
+            { "&&", CelTokenType.Logical },
+            { "||", CelTokenType.Logical }
         };
 
-        var tokens = new List<Token>();
+        var tokens = new List<CelToken>();
         var parts = input.Split(' ');
 
         foreach (var part in parts)
         {
             if (operatorsDict.TryGetValue(part, out var @operator))
-                tokens.Add(new Token(@operator, part));
+                tokens.Add(new CelToken(@operator, part));
             else if (part.StartsWith('\"') && part.EndsWith('\"'))
-                tokens.Add(new Token(TokenType.Value, part.Trim('"')));
+                tokens.Add(new CelToken(CelTokenType.Value, part.Trim('"')));
             else if (bool.TryParse(part, out _))
-                tokens.Add(new Token(TokenType.Value, part));
+                tokens.Add(new CelToken(CelTokenType.Value, part));
             else if (decimal.TryParse(part, out _))
-                tokens.Add(new Token(TokenType.Value, part));
+                tokens.Add(new CelToken(CelTokenType.Value, part));
             else
-                tokens.Add(new Token(TokenType.Field, part));
+                tokens.Add(new CelToken(CelTokenType.Field, part));
         }
 
         return tokens;
     }
 
-    private static Expression GetFieldExpression(Token fieldToken, ParameterExpression parameter)
+    private static Expression GetFieldExpression(CelToken fieldCelToken, ParameterExpression parameter)
     {
-        var property = typeof(T).GetProperty(fieldToken.Value,
+        var property = typeof(T).GetProperty(fieldCelToken.Value,
             BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
         if (property == null)
-            throw new ArgumentException($"Property '{fieldToken.Value}' does not exist on type '{typeof(T).Name}'");
+            throw new ArgumentException($"Property '{fieldCelToken.Value}' does not exist on type '{typeof(T).Name}'");
 
         var field = Expression.Property(parameter, property);
 
@@ -106,9 +106,9 @@ public class CelParser<T>
         };
     }
 
-    private static ConstantExpression ConvertTokenToExpression(Token valueToken, Type targetType)
+    private static ConstantExpression ConvertTokenToExpression(CelToken valueCelToken, Type targetType)
     {
-        object? value = valueToken.Value switch
+        object? value = valueCelToken.Value switch
         {
             var s when targetType == typeof(string) => s,
             var s when targetType == typeof(bool) && bool.TryParse(s, out var boolValue) => boolValue,
@@ -117,7 +117,7 @@ public class CelParser<T>
             var s when targetType.IsEnum && Enum.TryParse(targetType, s, ignoreCase: true, out var enumValue)
                 => enumValue.ToString(),
 
-            _ => throw new ArgumentException($"Cannot convert '{valueToken.Value}' to type '{targetType.Name}'")
+            _ => throw new ArgumentException($"Cannot convert '{valueCelToken.Value}' to type '{targetType.Name}'")
         };
 
         return Expression.Constant(value, targetType.IsEnum ? typeof(string) : targetType);
