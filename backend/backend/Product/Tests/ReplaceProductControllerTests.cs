@@ -59,7 +59,6 @@ public class ReplaceProductControllerTests
         response!.Value.ShouldBeOfType<ReplaceProductResponse>();
         var replaceProductResponse = response.Value as ReplaceProductResponse;
         replaceProductResponse.ShouldBeEquivalentTo(originalProduct.ToReplaceProductResponse());
-
         var updatedProduct = await _dbContext.Products.FindAsync(originalProduct.Id);
         updatedProduct.ShouldNotBeNull();
         updatedProduct.ShouldBeEquivalentTo(originalProduct);

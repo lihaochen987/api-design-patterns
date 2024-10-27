@@ -1,4 +1,4 @@
-namespace backend;
+namespace backend.Shared.Utility;
 
 public static class TypeHelper
 {

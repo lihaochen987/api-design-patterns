@@ -1,8 +1,7 @@
 using System.Globalization;
 using backend.Product.Contracts;
 using backend.Product.DomainModels;
-using static backend.Parsers.ParseDecimalUtility;
-using static backend.Parsers.ParseEnumUtility;
+using static backend.Shared.Parsers.TypeParser;
 
 namespace backend.Product.Controllers;
 

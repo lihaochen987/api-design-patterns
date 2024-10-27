@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace backend;
+namespace backend.Shared;
 
 [CollectionDefinition("SequentialExecutionCollection", DisableParallelization = true)]
 public class SequentialExecutionCollection

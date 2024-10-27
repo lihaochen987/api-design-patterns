@@ -1,9 +1,8 @@
 using AutoFixture;
 using backend.Database;
-using backend.Parsers;
-using backend.Parsers.CelSpecParsing;
 using backend.Product.Controllers;
 using backend.Product.DomainModels;
+using backend.Shared.Parsers.CelSpecParsing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;

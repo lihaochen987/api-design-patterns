@@ -1,4 +1,6 @@
 using backend.Database;
+using backend.Shared;
+using backend.Shared.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -7,7 +9,8 @@ namespace backend.Product.Controllers;
 [ApiController]
 [Route("product")]
 public class GetProductController(
-    ApplicationDbContext context)
+    ApplicationDbContext context,
+    ISerializationService serializationService)
     : ControllerBase
 {
     [HttpGet("{id:long}")]
@@ -20,7 +23,7 @@ public class GetProductController(
 
         var response = product.ToGetProductResponse();
 
-        var contractResolver = new DynamicContractResolver(request.FieldMask, product, new FieldMask());
+        var contractResolver = new DynamicContractResolver(request.FieldMask, product, serializationService);
         var jsonSettings = new JsonSerializerSettings
         {
             ContractResolver = contractResolver,

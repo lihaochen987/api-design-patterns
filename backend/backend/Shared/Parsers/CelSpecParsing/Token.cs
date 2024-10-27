@@ -1,4 +1,4 @@
-namespace backend.Parsers.CelSpecParsing;
+namespace backend.Shared.Parsers.CelSpecParsing;
 
 public enum TokenType
 {

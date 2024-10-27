@@ -1,5 +1,7 @@
-using backend;
 using backend.Database;
+using backend.Shared;
+using backend.Shared.Services;
+using backend.Shared.Utility;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +24,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<DynamicContractResolver>();
+
+// Register interfaces
+builder.Services.AddTransient<ISerializationService, SerializationService>();
+builder.Services.AddSingleton<IPathService, PathService>();
+builder.Services.AddTransient<IFieldPreparationService, FieldPreparationService>();
+builder.Services.AddTransient<IReflectionUtility, ReflectionUtility>();
+builder.Services.AddTransient<IRegexService, RegexService>();
 
 var app = builder.Build();
 

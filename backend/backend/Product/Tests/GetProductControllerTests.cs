@@ -2,6 +2,8 @@ using System.Globalization;
 using AutoFixture;
 using backend.Database;
 using backend.Product.Controllers;
+using backend.Shared.Services;
+using backend.Shared.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -29,7 +31,11 @@ namespace backend.Product.Tests
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
             _dbContext = db;
-            _controller = new GetProductController(_dbContext);
+            ISerializationService serializationService = new SerializationService(
+                new FieldPreparationService(new ReflectionUtility(), new PathService()),
+                new PathService(), new RegexService());
+
+            _controller = new GetProductController(_dbContext, serializationService);
         }
 
 

@@ -1,5 +1,5 @@
 using backend.Database;
-using backend.Parsers.CelSpecParsing;
+using backend.Shared.Parsers.CelSpecParsing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

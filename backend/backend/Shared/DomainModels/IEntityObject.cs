@@ -1,4 +1,4 @@
-namespace backend;
+namespace backend.Shared.DomainModels;
 
 public interface IEntityObject
 {
