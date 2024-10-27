@@ -1,4 +1,4 @@
-namespace backend.Shared.Parsers;
+namespace backend.Shared.Utilities;
 
 public static class TypeParser
 {

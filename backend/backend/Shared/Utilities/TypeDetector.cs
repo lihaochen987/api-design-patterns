@@ -1,6 +1,6 @@
-namespace backend.Shared.Utility;
+namespace backend.Shared.Utilities;
 
-public static class TypeHelper
+public static class TypeDetector
 {
     public static bool IsComplexType(Type type)
     {

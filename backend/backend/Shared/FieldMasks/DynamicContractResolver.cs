@@ -2,7 +2,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace backend.Shared;
+namespace backend.Shared.FieldMasks;
 
 public class DynamicContractResolver(
     IEnumerable<string> fields,

@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using backend.Shared.Utility;
+using backend.Shared.Utilities;
 
-namespace backend.Shared;
+namespace backend.Shared.FieldMasks;
 
 public partial class FieldMaskSerializer
 {
@@ -28,7 +28,7 @@ public partial class FieldMaskSerializer
         if (fields.Contains(propertyNameWithoutPrefix))
             return true;
 
-        if (member is PropertyInfo propertyInfo && TypeHelper.IsComplexType(propertyInfo.PropertyType))
+        if (member is PropertyInfo propertyInfo && TypeDetector.IsComplexType(propertyInfo.PropertyType))
         {
             return propertyInfo.PropertyType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
@@ -76,7 +76,7 @@ public partial class FieldMaskSerializer
             .GetType()
             .GetProperty(camelCaseRootProperty, BindingFlags.Public | BindingFlags.Instance);
 
-        if (rootPropertyInfo == null || !TypeHelper.IsComplexType(rootPropertyInfo.PropertyType))
+        if (rootPropertyInfo == null || !TypeDetector.IsComplexType(rootPropertyInfo.PropertyType))
             return existingFields;
 
         var subProperties = rootPropertyInfo.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);

@@ -1,6 +1,6 @@
 using backend.Database;
 using backend.Shared;
-using backend.Shared.Utility;
+using backend.Shared.FieldMasks;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
