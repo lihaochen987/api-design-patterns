@@ -1,6 +1,7 @@
 using AutoFixture;
 using backend.Database;
 using backend.Parsers;
+using backend.Parsers.CelSpecParsing;
 using backend.Product.Controllers;
 using backend.Product.DomainModels;
 using Microsoft.AspNetCore.Mvc;
