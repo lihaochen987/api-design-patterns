@@ -2,7 +2,6 @@ using AutoFixture;
 using backend.Database;
 using backend.Product.Controllers;
 using backend.Product.DomainModels;
-using backend.Shared.CelSpecParser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
@@ -30,8 +29,7 @@ public class ListProductsControllerTests : IDisposable
         db.Database.EnsureCreated();
         _dbContext = db;
 
-        var celOperators = new CelOperators();
-        _controller = new ListProductsController(_dbContext, celOperators);
+        _controller = new ListProductsController(_dbContext);
     }
 
     [Fact]

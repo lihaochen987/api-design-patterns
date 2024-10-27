@@ -7,8 +7,7 @@ namespace backend.Product.Controllers;
 
 [ApiController]
 public class ListProductsController(
-    ApplicationDbContext context,
-    CelOperators celOperators)
+    ApplicationDbContext context)
     : ControllerBase
 {
     [Route("products")]
@@ -30,9 +29,8 @@ public class ListProductsController(
 
         if (!string.IsNullOrEmpty(request.Filter))
         {
-            var tokenizer = new CelTokenizer();
-            var tokens = tokenizer.Tokenize(request.Filter, celOperators.CelOperatorsDict);
             var parser = new CelParser<DomainModels.Product>();
+            var tokens = parser.Tokenize(request.Filter);
 
             var filterExpression = parser.ParseFilter(tokens).Compile();
             products = products.Where(filterExpression).ToList();
