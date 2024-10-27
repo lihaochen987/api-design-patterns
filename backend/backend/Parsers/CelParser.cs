@@ -17,41 +17,18 @@ public class CelParser<T>
 
             if (token.Type == TokenType.Field)
             {
-                var property = typeof(T).GetProperty(token.Value,
-                    BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                if (property == null)
-                    throw new ArgumentException($"Property '{token.Value}' does not exist on type '{typeof(T).Name}'");
-
-                // Generate property expression
-                var field = Expression.Property(_parameter, property);
-                Expression fieldForComparison = field;
-
-                // If the property is an enum, convert to string for comparison (assuming database stores as string)
-                if (property.PropertyType.IsEnum)
-                {
-                    fieldForComparison = Expression.Call(field,
-                        property.PropertyType.GetMethod("ToString", Type.EmptyTypes)!);
-                }
-
-                var op = tokens[++i];
+                // Generate property expression and comparison value
+                var fieldExpression = GetFieldExpression(token);
+                var operatorToken = tokens[++i];
                 var valueToken = tokens[++i];
+                var comparisonValue = ConvertTokenToExpression(valueToken, fieldExpression.Type);
 
-                // Convert the token to the target type
-                Expression value = ConvertTokenToExpression(valueToken, property.PropertyType);
-
-                // Create comparison expression
-                Expression comparison = op.Value switch
-                {
-                    "==" => Expression.Equal(fieldForComparison, value),
-                    "!=" => Expression.NotEqual(fieldForComparison, value),
-                    "<" => Expression.LessThan(fieldForComparison, value),
-                    ">" => Expression.GreaterThan(fieldForComparison, value),
-                    "<=" => Expression.LessThanOrEqual(fieldForComparison, value),
-                    ">=" => Expression.GreaterThanOrEqual(fieldForComparison, value),
-                    _ => throw new NotSupportedException($"Operator {op.Value} is not supported")
-                };
-
-                expression = expression == null ? comparison : Expression.AndAlso(expression, comparison);
+                // Build comparison expression based on the operator
+                var comparisonExpression =
+                    BuildComparisonExpression(fieldExpression, operatorToken.Value, comparisonValue);
+                expression = expression == null
+                    ? comparisonExpression
+                    : Expression.AndAlso(expression, comparisonExpression);
             }
             else if (token.Type == TokenType.Logical && expression != null)
             {
@@ -64,6 +41,37 @@ public class CelParser<T>
         }
 
         return Expression.Lambda<Func<T, bool>>(expression ?? Expression.Constant(true), _parameter);
+    }
+
+    private Expression GetFieldExpression(Token fieldToken)
+    {
+        var property = typeof(T).GetProperty(fieldToken.Value,
+            BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+        if (property == null)
+            throw new ArgumentException($"Property '{fieldToken.Value}' does not exist on type '{typeof(T).Name}'");
+
+        // Create the property expression for the field
+        var field = Expression.Property(_parameter, property);
+
+        // If the property is an enum, call ToString() for database compatibility (assuming enums are stored as strings)
+        return property.PropertyType.IsEnum
+            ? Expression.Call(field, typeof(object).GetMethod("ToString", Type.EmptyTypes)!)
+            : field;
+    }
+
+
+    private Expression BuildComparisonExpression(Expression field, string op, Expression value)
+    {
+        return op switch
+        {
+            "==" => Expression.Equal(field, value),
+            "!=" => Expression.NotEqual(field, value),
+            "<" => Expression.LessThan(field, value),
+            ">" => Expression.GreaterThan(field, value),
+            "<=" => Expression.LessThanOrEqual(field, value),
+            ">=" => Expression.GreaterThanOrEqual(field, value),
+            _ => throw new NotSupportedException($"Operator {op} is not supported")
+        };
     }
 
     private static ConstantExpression ConvertTokenToExpression(Token valueToken, Type targetType)
@@ -80,7 +88,6 @@ public class CelParser<T>
             _ => throw new ArgumentException($"Cannot convert '{valueToken.Value}' to type '{targetType.Name}'")
         };
 
-        // Return a string constant for enums or the actual type for other properties
         return Expression.Constant(value, targetType.IsEnum ? typeof(string) : targetType);
     }
 }

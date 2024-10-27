@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.Product.Controllers;
 
 [ApiController]
-public class ListProductsController(ApplicationDbContext context) : ControllerBase
+public class ListProductsController(ApplicationDbContext context, CelOperators celOperators) : ControllerBase
 {
     [Route("products")]
     [HttpGet]
@@ -28,7 +28,7 @@ public class ListProductsController(ApplicationDbContext context) : ControllerBa
         if (!string.IsNullOrEmpty(request.Filter))
         {
             var tokenizer = new CelTokenizer();
-            var tokens = tokenizer.Tokenize(request.Filter);
+            var tokens = tokenizer.Tokenize(request.Filter, celOperators.CelOperatorsDict);
             var parser = new CelParser<DomainModels.Product>();
 
             var filterExpression = parser.ParseFilter(tokens).Compile();
@@ -40,7 +40,7 @@ public class ListProductsController(ApplicationDbContext context) : ControllerBa
         {
             var lastProductInPage = products[request.MaxPageSize - 1];
             nextPageToken = lastProductInPage.Id.ToString();
-            products.RemoveAt(request.MaxPageSize); 
+            products.RemoveAt(request.MaxPageSize);
         }
 
         var productResponses = products.Select(p => p.ToGetProductResponse()).ToList();

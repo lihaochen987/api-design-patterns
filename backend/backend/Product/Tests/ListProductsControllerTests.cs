@@ -1,5 +1,6 @@
 using AutoFixture;
 using backend.Database;
+using backend.Parsers;
 using backend.Product.Controllers;
 using backend.Product.DomainModels;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,8 @@ public class ListProductsControllerTests : IDisposable
         db.Database.EnsureCreated();
         _dbContext = db;
 
-        _controller = new ListProductsController(_dbContext);
+        var celOperators = new CelOperators();
+        _controller = new ListProductsController(_dbContext, celOperators);
     }
 
     [Fact]
@@ -149,9 +151,9 @@ public class ListProductsControllerTests : IDisposable
     public async Task ListProducts_WithFilter_ReturnsFilteredResults()
     {
         var product = new DomainModels.Product(
-            1, 
-            _fixture.Create<string>(), 
-            15, 
+            1,
+            _fixture.Create<string>(),
+            15,
             Category.DogFood,
             _fixture.Create<Dimensions>());
         _dbContext.Products.AddRange(product);
