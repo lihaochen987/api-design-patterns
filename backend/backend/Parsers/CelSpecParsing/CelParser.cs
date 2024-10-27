@@ -7,6 +7,7 @@ public class CelParser<T>
 {
     private readonly ParameterExpression _parameter = Expression.Parameter(typeof(T), "x");
 
+    // Todo: Refactor this.
     public Expression<Func<T, bool>> ParseFilter(List<Token> tokens)
     {
         Expression? expression = null;
@@ -18,7 +19,7 @@ public class CelParser<T>
             if (token.Type == TokenType.Field)
             {
                 // Generate property expression and comparison value
-                var fieldExpression = GetFieldExpression(token);
+                var fieldExpression = GetFieldExpression(token, _parameter);
                 var operatorToken = tokens[++i];
                 var valueToken = tokens[++i];
                 var comparisonValue = ConvertTokenToExpression(valueToken, fieldExpression.Type);
@@ -43,24 +44,21 @@ public class CelParser<T>
         return Expression.Lambda<Func<T, bool>>(expression ?? Expression.Constant(true), _parameter);
     }
 
-    private Expression GetFieldExpression(Token fieldToken)
+    private static Expression GetFieldExpression(Token fieldToken, ParameterExpression parameter)
     {
         var property = typeof(T).GetProperty(fieldToken.Value,
             BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
         if (property == null)
             throw new ArgumentException($"Property '{fieldToken.Value}' does not exist on type '{typeof(T).Name}'");
 
-        // Create the property expression for the field
-        var field = Expression.Property(_parameter, property);
+        var field = Expression.Property(parameter, property);
 
-        // If the property is an enum, call ToString() for database compatibility (assuming enums are stored as strings)
         return property.PropertyType.IsEnum
-            ? Expression.Call(field, typeof(object).GetMethod("ToString", Type.EmptyTypes)!)
+            ? Expression.Call(field, typeof(object).GetMethod("ToString", Type.EmptyTypes)!) // For Enum compatability
             : field;
     }
 
-
-    private Expression BuildComparisonExpression(Expression field, string op, Expression value)
+    private static BinaryExpression BuildComparisonExpression(Expression field, string op, Expression value)
     {
         return op switch
         {

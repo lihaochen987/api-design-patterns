@@ -1,5 +1,4 @@
 using backend.Database;
-using backend.Parsers;
 using backend.Parsers.CelSpecParsing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +6,10 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.Product.Controllers;
 
 [ApiController]
-public class ListProductsController(ApplicationDbContext context, CelOperators celOperators) : ControllerBase
+public class ListProductsController(
+    ApplicationDbContext context,
+    CelOperators celOperators)
+    : ControllerBase
 {
     [Route("products")]
     [HttpGet]
