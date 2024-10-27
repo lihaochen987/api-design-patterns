@@ -1,5 +1,4 @@
 using backend.Database;
-using backend.Shared;
 using backend.Shared.FieldMasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +21,6 @@ builder.Services.AddSwaggerGen();
 // Register ApplicationDbContext with SQLite
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<DynamicContractResolver>();
 
 var app = builder.Build();
 

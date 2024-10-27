@@ -14,18 +14,31 @@ public partial class FieldMaskSerializer
     {
         var fields = GetValidFields(fieldMask, entityToSerialize);
 
+        // Handle global wildcard or empty field mask as serializable
         if (fields.Contains("*") || fields.Count == 0)
         {
             return true;
         }
 
-        var propertyName = BuildFullPath(member);
-        var propertyNameWithoutPrefix =
-            RemoveRegex(propertyName, RemoveResponseRegex(), RemoveContractRegex()).ToLowerInvariant();
-
-        if (fields.Contains(propertyNameWithoutPrefix))
+        if (fields.Contains(member.Name.ToLowerInvariant()))
+        {
             return true;
+        }
 
+        var propertyName = BuildFullPath(member);
+        var propertyNameWithoutPrefix = RemoveRegex(
+            propertyName,
+            RemoveResponseRegex(),
+            RemoveContractRegex(),
+            RemoveRequestRegex()).ToLowerInvariant();
+
+        // Check if the exact property name exists in the field mask
+        if (fields.Contains(propertyNameWithoutPrefix))
+        {
+            return true;
+        }
+
+        // If the property is complex, check if any sub-properties are in the field mask
         if (member is PropertyInfo propertyInfo && TypeDetector.IsComplexType(propertyInfo.PropertyType))
         {
             return propertyInfo.PropertyType
@@ -37,7 +50,7 @@ public partial class FieldMaskSerializer
         return false;
     }
 
-    private static HashSet<string> GetValidFields(
+    public HashSet<string> GetValidFields(
         IEnumerable<string> fieldMask,
         object entityToSerialize)
     {
@@ -119,11 +132,14 @@ public partial class FieldMaskSerializer
     [GeneratedRegex(@"\b\w*response\.\b", RegexOptions.IgnoreCase, "en-NZ")]
     private static partial Regex RemoveResponseRegex();
 
+    [GeneratedRegex(@"\b\w*request\.\b", RegexOptions.IgnoreCase, "en-NZ")]
+    private static partial Regex RemoveRequestRegex();
+
     [GeneratedRegex("contract", RegexOptions.IgnoreCase, "en-NZ")]
     private static partial Regex RemoveContractRegex();
 
     private static string RemoveRegex(
-        string input, 
+        string input,
         params Regex[] patterns)
     {
         foreach (var pattern in patterns)

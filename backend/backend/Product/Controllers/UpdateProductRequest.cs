@@ -1,3 +1,5 @@
+using backend.Product.Contracts;
+
 namespace backend.Product.Controllers;
 
 public class UpdateProductRequest
@@ -5,5 +7,6 @@ public class UpdateProductRequest
     public string Name { get; set; } = "";
     public string Price { get; set; } = "";
     public string Category { get; set; } = "";
-    public IEnumerable<string> FieldMask { get; init; } = ["*"];
+    public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
+    public List<string> FieldMask { get; init; } = ["*"];
 }

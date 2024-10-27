@@ -65,7 +65,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new Product.DomainModels.Product(18, "Dental Chews", 15m, Category.DogFood, new Dimensions(10m, 5m, 1m)),
             new Product.DomainModels.Product(19, "Cooling Mat", 35m, Category.Beds, new Dimensions(90m, 60m, 1m)),
             new Product.DomainModels.Product(20, "Reflective Harness", 25m, Category.CollarsAndLeashes,
-                new Dimensions(20m, 5m, 1m))
+                new Dimensions(20m, 5m, 1m)),
+            new Product.DomainModels.Product(21, "Dry Dog Food", 50m, Category.DogFood, new Dimensions(10m, 5m, 3m)),
+            new Product.DomainModels.Product(22, "Wet Dog Food", 35m, Category.DogFood, new Dimensions(8m, 4m, 3m)),
+            new Product.DomainModels.Product(23, "Dog Treats", 10m, Category.DogFood, new Dimensions(5m, 3m, 1m))
         );
         SaveChanges();
     }
