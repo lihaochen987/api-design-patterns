@@ -7,23 +7,21 @@ namespace backend.Shared.FieldMasks;
 
 public partial class FieldMaskSerializer
 {
-    // Todo: Break this down further
     public bool IsJsonPropertySerializable(
         MemberInfo member,
         IEnumerable<string> fieldMask,
         object entityToSerialize)
     {
-        var fields = ValidFields(fieldMask, entityToSerialize);
+        var fields = GetValidFields(fieldMask, entityToSerialize);
 
         if (fields.Contains("*") || fields.Count == 0)
         {
             return true;
         }
 
-        // Todo: this is grotty
         var propertyName = BuildFullPath(member);
-        var propertyNameWithoutPrefix = RemoveContractPattern(
-            RemoveResponsePattern(propertyName)).Trim().ToLowerInvariant();
+        var propertyNameWithoutPrefix =
+            RemoveRegex(propertyName, RemoveResponseRegex(), RemoveContractRegex()).ToLowerInvariant();
 
         if (fields.Contains(propertyNameWithoutPrefix))
             return true;
@@ -39,9 +37,11 @@ public partial class FieldMaskSerializer
         return false;
     }
 
-    private HashSet<string> ValidFields(IEnumerable<string> fields, object targetObject)
+    private static HashSet<string> GetValidFields(
+        IEnumerable<string> fieldMask,
+        object entityToSerialize)
     {
-        var fieldSet = new HashSet<string>(fields.Select(f => f.ToLower()));
+        var fieldSet = new HashSet<string>(fieldMask.Select(f => f.ToLower()));
         var globalWildcard = fieldSet.Contains("*") || fieldSet.Count == 0;
 
         if (!globalWildcard)
@@ -55,32 +55,50 @@ public partial class FieldMaskSerializer
             fieldSet =
                 wildcards
                     .Aggregate(fieldSet,
-                        (current, wildcard) => ExpandWithNestedFields(wildcard, targetObject, current));
+                        (current, wildcard) => ExpandNestedFields(wildcard, entityToSerialize, current));
         }
 
-        var availablePaths = GetAvailablePaths(targetObject).ToHashSet();
+        var availablePaths = GetAllFieldPaths(entityToSerialize).ToHashSet();
         fieldSet.RemoveWhere(f => !availablePaths.Contains(f));
 
         return fieldSet;
     }
 
-
-    // Todo: Break this down further
-    private static HashSet<string> ExpandWithNestedFields(
+    private static HashSet<string> ExpandNestedFields(
         string rootProperty,
-        object targetObject,
+        object entityToSerialize,
         HashSet<string> existingFields)
     {
+        var rootPropertyInfo = GetComplexPropertyInfo(rootProperty, entityToSerialize);
+
+        return rootPropertyInfo == null
+            ? existingFields
+            : AddSubProperties(rootProperty, rootPropertyInfo, existingFields);
+    }
+
+    private static PropertyInfo? GetComplexPropertyInfo(
+        string rootProperty,
+        object entityToSerialize)
+    {
         var camelCaseRootProperty = ConvertToCamelCase(rootProperty);
-        var rootPropertyInfo = targetObject
+        var propertyInfo = entityToSerialize
             .GetType()
             .GetProperty(camelCaseRootProperty, BindingFlags.Public | BindingFlags.Instance);
 
-        if (rootPropertyInfo == null || !TypeDetector.IsComplexType(rootPropertyInfo.PropertyType))
-            return existingFields;
+        if (propertyInfo == null || !TypeDetector.IsComplexType(propertyInfo.PropertyType))
+            return null;
 
+        return propertyInfo;
+    }
+
+    private static HashSet<string> AddSubProperties(
+        string rootProperty,
+        PropertyInfo rootPropertyInfo,
+        HashSet<string> existingFields)
+    {
         var subProperties = rootPropertyInfo.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
         var newFields = new HashSet<string>(existingFields);
+
         foreach (var subProperty in subProperties)
         {
             var subPropertyPath = $"{rootProperty}.{subProperty.Name.ToLower()}";
@@ -101,23 +119,25 @@ public partial class FieldMaskSerializer
     [GeneratedRegex(@"\b\w*response\.\b", RegexOptions.IgnoreCase, "en-NZ")]
     private static partial Regex RemoveResponseRegex();
 
-    private static string RemoveResponsePattern(string input)
-    {
-        return RemoveResponseRegex().Replace(input, "").Trim();
-    }
-
     [GeneratedRegex("contract", RegexOptions.IgnoreCase, "en-NZ")]
     private static partial Regex RemoveContractRegex();
 
-    private static string RemoveContractPattern(string input)
+    private static string RemoveRegex(
+        string input, 
+        params Regex[] patterns)
     {
-        return RemoveContractRegex().Replace(input, "").Trim();
+        foreach (var pattern in patterns)
+        {
+            input = pattern.Replace(input, "").Trim();
+        }
+
+        return input;
     }
 
-    private List<string?> GetAvailablePaths(object resource)
+    private static List<string?> GetAllFieldPaths(object entityToSerialize)
     {
         var availableFieldMasks = new List<string?>();
-        GatherNestedPaths(resource, availableFieldMasks, null);
+        GatherNestedPaths(entityToSerialize, availableFieldMasks, null);
         return availableFieldMasks;
     }
 
@@ -136,7 +156,7 @@ public partial class FieldMaskSerializer
             if (propertyValue == null)
             {
             }
-            else if (IsCollection(propertyValue))
+            else if (IsCollection(propertyName))
             {
                 if (propertyValue is not IEnumerable collection) return;
                 foreach (var item in collection)
