@@ -1,13 +1,12 @@
-using System.Reflection;
-using System.Text.RegularExpressions;
 using backend.Database;
+using backend.Product.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Product.Controllers;
 
 [ApiController]
 [Route("product")]
-public partial class UpdateProductController(ApplicationDbContext context) : ControllerBase
+public class UpdateProductController(ApplicationDbContext context) : ControllerBase
 {
     // Todo: Actually implement partial Updates because it's hard
     [HttpPatch("{id:long}")]
@@ -22,98 +21,62 @@ public partial class UpdateProductController(ApplicationDbContext context) : Con
             return NotFound();
         }
 
-        // var fieldMaskSerializer = new FieldMaskSerializer();
-        // var validFields = fieldMaskSerializer.GetValidFields(request.FieldMask, product);
-        //
-        // // Apply each valid field update to the product
-        // foreach (var field in validFields)
-        // {
-        //     var productProperty = GetNestedProperty(product, field);
-        //     var requestProperty = GetNestedProperty(request, field);
-        //
-        //     if (productProperty == null || requestProperty == null) continue;
-        //     var newValue = requestProperty.GetValue(request);
-        //     if (newValue == null) continue;
-        //
-        //     // Handle type conversion for compatible types, e.g., string to decimal
-        //     if (productProperty.PropertyType != requestProperty.PropertyType)
-        //     {
-        //         var convertedValue = ConvertToPropertyType(newValue, productProperty.PropertyType);
-        //         if (convertedValue != null)
-        //         {
-        //             productProperty.SetValue(product, convertedValue);
-        //         }
-        //     }
-        //     else
-        //     {
-        //         productProperty.SetValue(product, newValue);
-        //     }
-        // }
+        var (name, price, category, dimensions) = GetUpdatedProductValues(request, product);
+        product.Replace(name, price, category, dimensions);
 
         await context.SaveChangesAsync();
 
         return Ok(product.ToUpdateProductResponse());
     }
-    
-    private static PropertyInfo? GetNestedProperty(object obj, string field)
+
+    private static (
+        string name,
+        decimal price,
+        Category category,
+        Dimensions dimensions)
+        GetUpdatedProductValues(
+            UpdateProductRequest request,
+            DomainModels.Product product)
     {
-        var parts = field.Split('.');
-        Type? type = obj.GetType();
-        PropertyInfo? property = null;
+        var name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
+                   && !string.IsNullOrEmpty(request.Name)
+            ? request.Name
+            : product.Name;
 
-        foreach (var part in parts)
-        {
-            property = type?.GetProperty(part, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-            if (property == null) return null;
-            type = property.PropertyType;
-        }
+        var price = request.FieldMask.Contains("price", StringComparer.OrdinalIgnoreCase)
+                    && decimal.TryParse(request.Price, out var parsedPrice)
+            ? parsedPrice
+            : product.Price;
 
-        return property;
+        var category = request.FieldMask.Contains("category", StringComparer.OrdinalIgnoreCase)
+                       && Enum.TryParse(request.Category, true, out Category parsedCategory)
+            ? parsedCategory
+            : product.Category;
+
+        var dimensions = GetUpdatedDimensionValues(request, product.Dimensions);
+
+        return (name, price, category, dimensions);
     }
 
-    private static object? GetNestedObject(object obj, string field)
+    private static Dimensions GetUpdatedDimensionValues(
+        UpdateProductRequest request,
+        Dimensions currentDimensions)
     {
-        var parts = field.Split('.');
-        foreach (var part in parts.SkipLast(1))
-        {
-            var property = obj.GetType().GetProperty(part, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-            if (property == null) return null;
-            obj = property.GetValue(obj);
-        }
-        return obj;
+        var length = request.FieldMask.Contains("dimensions.length", StringComparer.OrdinalIgnoreCase)
+                     && !string.IsNullOrEmpty(request.Dimensions.Length)
+            ? decimal.Parse(request.Dimensions.Length)
+            : currentDimensions.Length;
+
+        var width = request.FieldMask.Contains("dimensions.width", StringComparer.OrdinalIgnoreCase)
+                    && !string.IsNullOrEmpty(request.Dimensions.Width)
+            ? decimal.Parse(request.Dimensions.Width)
+            : currentDimensions.Width;
+
+        var height = request.FieldMask.Contains("dimensions.height", StringComparer.OrdinalIgnoreCase)
+                     && !string.IsNullOrEmpty(request.Dimensions.Height)
+            ? decimal.Parse(request.Dimensions.Height)
+            : currentDimensions.Height;
+
+        return new Dimensions(length, width, height);
     }
-
-    private static object? ConvertToPropertyType(object value, Type targetType)
-    {
-        try
-        {
-            // Convert string to decimal or other types if needed
-            if (targetType == typeof(decimal) && value is string stringValue &&
-                decimal.TryParse(stringValue, out var decimalValue))
-            {
-                return decimalValue;
-            }
-
-            if (targetType.IsEnum && value is string enumStringValue)
-            {
-                return Enum.Parse(targetType, enumStringValue, ignoreCase: true);
-            }
-
-            // Convert to target type using ChangeType for compatible types
-            return Convert.ChangeType(value, targetType);
-        }
-        catch
-        {
-            // Handle or log any conversion errors as needed
-            return null;
-        }
-    }
-
-    private bool IsComplexType(Type type)
-    {
-        return type.IsClass && type != typeof(string);
-    }
-
-    [GeneratedRegex(@"[^\d.-]")]
-    private static partial Regex MyRegex();
 }

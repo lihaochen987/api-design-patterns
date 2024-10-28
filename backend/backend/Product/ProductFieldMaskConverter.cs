@@ -27,7 +27,7 @@ public class ProductFieldMaskConverter(IList<string> fieldMask) : JsonConverter
             "dimensions.length"
         };
 
-        var expandedFields = new HashSet<string>();
+        var expandedFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         if (fieldMask.Contains("*") || !fieldMask.Any())
         {
@@ -57,8 +57,8 @@ public class ProductFieldMaskConverter(IList<string> fieldMask) : JsonConverter
     }
 
     public override void WriteJson(
-        JsonWriter writer, 
-        object? value, 
+        JsonWriter writer,
+        object? value,
         JsonSerializer serializer)
     {
         var jObject = new JObject();
@@ -76,14 +76,13 @@ public class ProductFieldMaskConverter(IList<string> fieldMask) : JsonConverter
     }
 
     private void AddPropertyToJObject(
-        JObject jObject, 
-        PropertyInfo property, 
-        object value, 
+        JObject jObject,
+        PropertyInfo property,
+        object value,
         JsonSerializer serializer)
     {
         var propertyPath = property.Name.ToLowerInvariant();
 
-        // Check if the property itself is serializable based on the field mask
         if (_expandedFieldMask.Contains(propertyPath))
         {
             var propValue = property.GetValue(value);
@@ -92,21 +91,21 @@ public class ProductFieldMaskConverter(IList<string> fieldMask) : JsonConverter
                 jObject.Add(property.Name, JToken.FromObject(propValue, serializer));
             }
         }
-        // If the property is complex, handle nested serialization
         else if (IsComplexType(property.PropertyType))
         {
-            var nestedObject = BuildNestedJObject(property, value, serializer);
-            if (nestedObject.HasValues) // Avoid empty objects
+            var nestedObject = BuildNestedJObject(property, value, serializer, _expandedFieldMask);
+            if (nestedObject.HasValues)
             {
                 jObject.Add(property.Name, nestedObject);
             }
         }
     }
 
-    private JObject BuildNestedJObject(
-        PropertyInfo property, 
-        object instance, 
-        JsonSerializer serializer)
+    private static JObject BuildNestedJObject(
+        PropertyInfo property,
+        object instance,
+        JsonSerializer serializer,
+        HashSet<string> expandedFieldMask)
     {
         var jObject = new JObject();
         var nestedInstance = property.GetValue(instance);
@@ -119,13 +118,11 @@ public class ProductFieldMaskConverter(IList<string> fieldMask) : JsonConverter
         foreach (var nestedProperty in nestedProperties)
         {
             var nestedPath = $"{property.Name.ToLowerInvariant()}.{nestedProperty.Name.ToLowerInvariant()}";
-            if (_expandedFieldMask.Contains(nestedPath))
+            if (!expandedFieldMask.Contains(nestedPath)) continue;
+            var nestedValue = nestedProperty.GetValue(nestedInstance);
+            if (nestedValue != null)
             {
-                var nestedValue = nestedProperty.GetValue(nestedInstance);
-                if (nestedValue != null)
-                {
-                    jObject.Add(nestedProperty.Name, JToken.FromObject(nestedValue, serializer));
-                }
+                jObject.Add(nestedProperty.Name, JToken.FromObject(nestedValue, serializer));
             }
         }
 
@@ -133,12 +130,12 @@ public class ProductFieldMaskConverter(IList<string> fieldMask) : JsonConverter
     }
 
     public override object ReadJson(
-        JsonReader reader, 
-        Type objectType, 
+        JsonReader reader,
+        Type objectType,
         object? existingValue,
         JsonSerializer serializer)
     {
-        throw new NotImplementedException("This converter is for write-only serialization.");
+        throw new NotImplementedException();
     }
 
     private static bool IsComplexType(Type type)
