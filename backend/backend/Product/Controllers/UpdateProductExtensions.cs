@@ -15,7 +15,7 @@ public static class UpdateProductExtensions
             Category = product.Category.ToString(),
             Dimensions = new DimensionsContract
             {
-                Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Length = product.Dimensions.Length.ToString(CultureInfo.InvariantCulture),
                 Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
                 Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }

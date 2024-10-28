@@ -1,4 +1,5 @@
 using backend.Database;
+using backend.Product.DomainModels;
 using backend.Shared.FieldMasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -22,14 +23,13 @@ public class GetProductController(
 
         var response = product.ToGetProductResponse();
 
-        var contractResolver = new DynamicContractResolver(request.FieldMask, product, new FieldMaskSerializer());
-        var jsonSettings = new JsonSerializerSettings
+        var settings = new JsonSerializerSettings
         {
-            ContractResolver = contractResolver,
-            Formatting = Formatting.Indented
+            Converters = new List<JsonConverter> { new ProductFieldMaskConverter(request.FieldMask) }
         };
 
-        var json = JsonConvert.SerializeObject(response, jsonSettings);
+        var json = JsonConvert.SerializeObject(response, settings);
+
         return new OkObjectResult(json)
         {
             StatusCode = 200

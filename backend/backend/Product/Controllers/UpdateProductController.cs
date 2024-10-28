@@ -23,60 +23,90 @@ public partial class UpdateProductController(ApplicationDbContext context) : Con
             return NotFound();
         }
 
-        ApplyFieldMaskUpdates(
-            request,
-            product,
-            request.FieldMask,
-            new FieldMaskSerializer());
+        var fieldMaskSerializer = new FieldMaskSerializer();
+        var validFields = fieldMaskSerializer.GetValidFields(request.FieldMask, product);
+
+        // Apply each valid field update to the product
+        foreach (var field in validFields)
+        {
+            var productProperty = GetNestedProperty(product, field);
+            var requestProperty = GetNestedProperty(request, field);
+
+            if (productProperty == null || requestProperty == null) continue;
+            var newValue = requestProperty.GetValue(request);
+            if (newValue == null) continue;
+
+            // Handle type conversion for compatible types, e.g., string to decimal
+            if (productProperty.PropertyType != requestProperty.PropertyType)
+            {
+                var convertedValue = ConvertToPropertyType(newValue, productProperty.PropertyType);
+                if (convertedValue != null)
+                {
+                    productProperty.SetValue(product, convertedValue);
+                }
+            }
+            else
+            {
+                productProperty.SetValue(product, newValue);
+            }
+        }
 
         await context.SaveChangesAsync();
 
         return Ok(product.ToUpdateProductResponse());
     }
-
-    private void ApplyFieldMaskUpdates(
-        object source,
-        object target,
-        List<string> fieldMask,
-        FieldMaskSerializer fieldMaskSerializer)
+    
+    private static PropertyInfo? GetNestedProperty(object obj, string field)
     {
-        var validFields = fieldMaskSerializer.GetValidFields(fieldMask, target);
+        var parts = field.Split('.');
+        Type? type = obj.GetType();
+        PropertyInfo? property = null;
 
-        ApplyProperties(source, target, validFields, fieldMaskSerializer);
+        foreach (var part in parts)
+        {
+            property = type?.GetProperty(part, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (property == null) return null;
+            type = property.PropertyType;
+        }
+
+        return property;
     }
 
-    private void ApplyProperties(object source, object target, HashSet<string> validFields,
-        FieldMaskSerializer fieldMaskSerializer, string? prefix = null)
+    private static object? GetNestedObject(object obj, string field)
     {
-        var entityType = target.GetType();
-
-        foreach (var property in entityType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        var parts = field.Split('.');
+        foreach (var part in parts.SkipLast(1))
         {
-            var propertyPath = prefix == null ? property.Name.ToLower() : $"{prefix}.{property.Name.ToLower()}";
+            var property = obj.GetType().GetProperty(part, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (property == null) return null;
+            obj = property.GetValue(obj);
+        }
+        return obj;
+    }
 
-            if (!validFields.Contains(propertyPath)) continue;
-
-            var sourceProperty = source.GetType().GetProperty(property.Name);
-            if (sourceProperty == null) continue;
-
-            var newValue = sourceProperty.GetValue(source);
-
-            if (newValue != null && fieldMaskSerializer.IsJsonPropertySerializable(property, validFields, target))
+    private static object? ConvertToPropertyType(object value, Type targetType)
+    {
+        try
+        {
+            // Convert string to decimal or other types if needed
+            if (targetType == typeof(decimal) && value is string stringValue &&
+                decimal.TryParse(stringValue, out var decimalValue))
             {
-                if (IsComplexType(property.PropertyType))
-                {
-                    var targetNestedProperty =
-                        property.GetValue(target) ?? Activator.CreateInstance(property.PropertyType);
-                    property.SetValue(target, targetNestedProperty);
-                    if (targetNestedProperty != null)
-                        ApplyProperties(newValue, targetNestedProperty, validFields, fieldMaskSerializer, propertyPath);
-                }
-                else
-                {
-                    var convertedValue = Convert.ChangeType(newValue, property.PropertyType);
-                    property.SetValue(target, convertedValue);
-                }
+                return decimalValue;
             }
+
+            if (targetType.IsEnum && value is string enumStringValue)
+            {
+                return Enum.Parse(targetType, enumStringValue, ignoreCase: true);
+            }
+
+            // Convert to target type using ChangeType for compatible types
+            return Convert.ChangeType(value, targetType);
+        }
+        catch
+        {
+            // Handle or log any conversion errors as needed
+            return null;
         }
     }
 
