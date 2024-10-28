@@ -32,7 +32,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public void Seed()
     {
-        // Uncomment the below to force a re-seed
+        // Should force a re-seed everytime.
         Products.RemoveRange(Products);
         SaveChanges();
 

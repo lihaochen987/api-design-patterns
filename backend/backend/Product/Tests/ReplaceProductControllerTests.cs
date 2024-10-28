@@ -12,7 +12,7 @@ using Xunit;
 namespace backend.Product.Tests;
 
 [Collection("SequentialExecutionCollection")]
-public class ReplaceProductControllerTests
+public class ReplaceProductControllerTests : IDisposable
 {
     private readonly Fixture _fixture = new();
     private readonly ReplaceProductController _controller;
@@ -21,12 +21,10 @@ public class ReplaceProductControllerTests
     public ReplaceProductControllerTests()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseSqlite($"Filename=:memory:{Guid.NewGuid()};Mode=Memory;Cache=Shared")
+            .UseSqlite($"Filename=:memory:{Guid.NewGuid()}")
             .Options;
 
         var db = new ApplicationDbContext(options);
-
-        db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
         _dbContext = db;
         _controller = new ReplaceProductController(_dbContext);
@@ -62,5 +60,12 @@ public class ReplaceProductControllerTests
         var updatedProduct = await _dbContext.Products.FindAsync(originalProduct.Id);
         updatedProduct.ShouldNotBeNull();
         updatedProduct.ShouldBeEquivalentTo(originalProduct);
+    }
+    
+    public void Dispose()
+    {
+        _dbContext.Database.EnsureDeleted();
+        _dbContext.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

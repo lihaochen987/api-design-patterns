@@ -9,7 +9,7 @@ using Xunit;
 namespace backend.Product.Tests;
 
 [Collection("SequentialExecutionCollection")]
-public class DeleteProductControllerTests
+public class DeleteProductControllerTests : IDisposable
 {
     private readonly Fixture _fixture = new();
     private readonly DeleteProductController _controller;
@@ -22,8 +22,6 @@ public class DeleteProductControllerTests
             .Options;
 
         var db = new ApplicationDbContext(options);
-
-        db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
         _dbContext = db;
         _controller = new DeleteProductController(_dbContext);
@@ -49,5 +47,12 @@ public class DeleteProductControllerTests
         var result = await _controller.DeleteProduct(999, new DeleteProductRequest());
 
         result.ShouldBeOfType<NotFoundResult>();
+    }
+
+    public void Dispose()
+    {
+        _dbContext.Database.EnsureDeleted();
+        _dbContext.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

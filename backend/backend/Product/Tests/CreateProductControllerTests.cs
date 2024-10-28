@@ -12,10 +12,11 @@ using Category = backend.Product.DomainModels.Category;
 namespace backend.Product.Tests;
 
 [Collection("SequentialExecutionCollection")]
-public class CreateProductControllerTests
+public class CreateProductControllerTests : IDisposable
 {
     private readonly Fixture _fixture = new();
     private readonly CreateProductController _controller;
+    private readonly ApplicationDbContext _dbContext;
 
     public CreateProductControllerTests()
     {
@@ -24,9 +25,8 @@ public class CreateProductControllerTests
             .Options;
 
         var db = new ApplicationDbContext(options);
-
-        db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
+        _dbContext = db;
         _controller = new CreateProductController(db);
     }
 
@@ -55,5 +55,12 @@ public class CreateProductControllerTests
         createdAtActionResult.ControllerName.ShouldBe("GetProduct");
         var actualResponse = createdAtActionResult.Value.ShouldBeOfType<CreateProductResponse>();
         actualResponse.ShouldBeEquivalentTo(expectedResponse);
+    }
+
+    public void Dispose()
+    {
+        _dbContext.Database.EnsureDeleted();
+        _dbContext.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

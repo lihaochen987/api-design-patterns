@@ -6,7 +6,6 @@ using backend.Product.Controllers;
 using backend.Product.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 
@@ -26,11 +25,8 @@ public class UpdateProductControllerTests
             .Options;
 
         var db = new ApplicationDbContext(options);
-
-        db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
         _dbContext = db;
-
         _controller = new UpdateProductController(_dbContext);
     }
 
@@ -107,7 +103,7 @@ public class UpdateProductControllerTests
         contentResult.ShouldNotBeNull();
         var response = contentResult.Value as UpdateProductResponse;
         response!.Name.ShouldBeEquivalentTo(request.Name);
-        response.Price.ShouldBe(request.Price);
+        response.Price.ShouldBeEquivalentTo(request.Price);
     }
 
     [Fact]

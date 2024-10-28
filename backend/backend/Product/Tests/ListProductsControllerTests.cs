@@ -24,8 +24,6 @@ public class ListProductsControllerTests : IDisposable
             .Options;
 
         var db = new ApplicationDbContext(options);
-
-        db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
         _dbContext = db;
 
