@@ -1,7 +1,7 @@
 using System.Globalization;
 using backend.Product.Contracts;
 using backend.Product.DomainModels;
-using static backend.Shared.Utilities.TypeParser;
+using static backend.Shared.TypeParser;
 
 namespace backend.Product.Controllers;
 
