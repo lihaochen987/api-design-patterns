@@ -1,6 +1,7 @@
 using backend.Database;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Product.Controllers;
 
@@ -11,6 +12,7 @@ public class GetProductController(
     : ControllerBase
 {
     [HttpGet("{id:long}")]
+    [SwaggerOperation(Summary = "Get a product", Tags = ["Products"])]
     public async Task<ActionResult<GetProductResponse>> GetProduct(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)

@@ -1,5 +1,6 @@
 using backend.Database;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Product.Controllers;
 
@@ -8,6 +9,7 @@ namespace backend.Product.Controllers;
 public class DeleteProductController(ApplicationDbContext context) : ControllerBase
 {
     [HttpDelete("{id:long}")]
+    [SwaggerOperation(Summary = "Delete a product", Tags = ["Products"])]
     public async Task<ActionResult> DeleteProduct(
         [FromRoute] long id,
         [FromQuery] DeleteProductRequest request)

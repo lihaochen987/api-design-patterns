@@ -2,16 +2,18 @@ using backend.Database;
 using backend.Shared.CelSpecParser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Product.Controllers;
 
+[Route("products")]
 [ApiController]
 public class ListProductsController(
     ApplicationDbContext context)
     : ControllerBase
 {
-    [Route("products")]
     [HttpGet]
+    [SwaggerOperation(Summary = "List products", Tags = ["Products"])]
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {

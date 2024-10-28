@@ -1,5 +1,6 @@
 using backend.Database;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Product.Controllers;
 
@@ -8,6 +9,7 @@ namespace backend.Product.Controllers;
 public class ReplaceProductController(ApplicationDbContext context) : ControllerBase
 {
     [HttpPut("{id:long}")]
+    [SwaggerOperation(Summary = "Replace a product", Tags = ["Products"])]
     public async Task<ActionResult<ReplaceProductResponse>> ReplaceProduct(
         [FromRoute] long id,
         [FromBody] ReplaceProductRequest request)

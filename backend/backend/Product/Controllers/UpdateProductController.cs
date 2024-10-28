@@ -1,6 +1,7 @@
 using backend.Database;
 using backend.Product.DomainModels;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Product.Controllers;
 
@@ -8,8 +9,8 @@ namespace backend.Product.Controllers;
 [Route("product")]
 public class UpdateProductController(ApplicationDbContext context) : ControllerBase
 {
-    // Todo: Actually implement partial Updates because it's hard
     [HttpPatch("{id:long}")]
+    [SwaggerOperation(Summary = "Update a product", Tags = ["Products"])]
     public async Task<ActionResult<UpdateProductResponse>> UpdateProduct(
         [FromRoute] long id,
         [FromBody] UpdateProductRequest request)
