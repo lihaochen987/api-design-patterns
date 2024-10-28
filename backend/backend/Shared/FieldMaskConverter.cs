@@ -1,4 +1,4 @@
-namespace backend.Product;
+namespace backend.Shared;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -7,26 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-public class ProductFieldMaskConverter(IList<string> fieldMask) : JsonConverter
+public class FieldMaskConverter(
+    IList<string> fieldMask,
+    HashSet<string> allFieldPaths)
+    : JsonConverter
 {
-    private readonly HashSet<string> _expandedFieldMask = ExpandFieldMask(fieldMask);
+    private readonly HashSet<string> _expandedFieldMask = ExpandFieldMask(fieldMask, allFieldPaths);
 
-    private static HashSet<string> ExpandFieldMask(IList<string> fieldMask)
+    private static HashSet<string> ExpandFieldMask(
+        IList<string> fieldMask, 
+        HashSet<string> allFieldPaths)
     {
-        // Define all possible field paths for Product, including nested fields
-        var allFieldPaths = new HashSet<string>
-        {
-            "*",
-            "id",
-            "name",
-            "price",
-            "category",
-            "dimensions.*",
-            "dimensions.width",
-            "dimensions.height",
-            "dimensions.length"
-        };
-
         var expandedFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         if (fieldMask.Contains("*") || !fieldMask.Any())

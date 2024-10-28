@@ -1,4 +1,5 @@
 using backend.Database;
+using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
@@ -24,7 +25,8 @@ public class GetProductController(
 
         var settings = new JsonSerializerSettings
         {
-            Converters = new List<JsonConverter> { new ProductFieldMaskConverter(request.FieldMask) }
+            Converters = new List<JsonConverter>
+                { new FieldMaskConverter(request.FieldMask, ProductMaskFieldPaths.AllFieldPaths) }
         };
 
         var json = JsonConvert.SerializeObject(response, settings);
