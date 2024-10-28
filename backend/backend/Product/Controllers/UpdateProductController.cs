@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Text.RegularExpressions;
 using backend.Database;
-using backend.Shared.FieldMasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Product.Controllers;
@@ -23,33 +22,33 @@ public partial class UpdateProductController(ApplicationDbContext context) : Con
             return NotFound();
         }
 
-        var fieldMaskSerializer = new FieldMaskSerializer();
-        var validFields = fieldMaskSerializer.GetValidFields(request.FieldMask, product);
-
-        // Apply each valid field update to the product
-        foreach (var field in validFields)
-        {
-            var productProperty = GetNestedProperty(product, field);
-            var requestProperty = GetNestedProperty(request, field);
-
-            if (productProperty == null || requestProperty == null) continue;
-            var newValue = requestProperty.GetValue(request);
-            if (newValue == null) continue;
-
-            // Handle type conversion for compatible types, e.g., string to decimal
-            if (productProperty.PropertyType != requestProperty.PropertyType)
-            {
-                var convertedValue = ConvertToPropertyType(newValue, productProperty.PropertyType);
-                if (convertedValue != null)
-                {
-                    productProperty.SetValue(product, convertedValue);
-                }
-            }
-            else
-            {
-                productProperty.SetValue(product, newValue);
-            }
-        }
+        // var fieldMaskSerializer = new FieldMaskSerializer();
+        // var validFields = fieldMaskSerializer.GetValidFields(request.FieldMask, product);
+        //
+        // // Apply each valid field update to the product
+        // foreach (var field in validFields)
+        // {
+        //     var productProperty = GetNestedProperty(product, field);
+        //     var requestProperty = GetNestedProperty(request, field);
+        //
+        //     if (productProperty == null || requestProperty == null) continue;
+        //     var newValue = requestProperty.GetValue(request);
+        //     if (newValue == null) continue;
+        //
+        //     // Handle type conversion for compatible types, e.g., string to decimal
+        //     if (productProperty.PropertyType != requestProperty.PropertyType)
+        //     {
+        //         var convertedValue = ConvertToPropertyType(newValue, productProperty.PropertyType);
+        //         if (convertedValue != null)
+        //         {
+        //             productProperty.SetValue(product, convertedValue);
+        //         }
+        //     }
+        //     else
+        //     {
+        //         productProperty.SetValue(product, newValue);
+        //     }
+        // }
 
         await context.SaveChangesAsync();
 

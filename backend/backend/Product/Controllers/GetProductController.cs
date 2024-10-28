@@ -1,9 +1,6 @@
 using backend.Database;
-using backend.Product.DomainModels;
-using backend.Shared.FieldMasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using FieldMaskSerializer = backend.Shared.FieldMasks.FieldMaskSerializer;
 
 namespace backend.Product.Controllers;
 
