@@ -1,13 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using backend.Shared;
 using backend.Shared.Interfaces;
 
 namespace backend.Product.DomainModels;
 
 public class Product : IEntityObject
 {
+    // ReSharper disable once UnusedMember.Local - [Justification]:Empty constructor is being used to keep EFCore happy
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private Product()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
     }
 
