@@ -26,7 +26,7 @@ public class GetProductController(
         var settings = new JsonSerializerSettings
         {
             Converters = new List<JsonConverter>
-                { new FieldMaskConverter(request.FieldMask, ProductMaskFieldPaths.AllFieldPaths) }
+                { new FieldMaskConverter(request.FieldMask, ProductFieldMaskConfiguration.AllFieldPaths) }
         };
 
         var json = JsonConvert.SerializeObject(response, settings);
