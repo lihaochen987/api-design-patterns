@@ -30,20 +30,15 @@ public class UpdateProductControllerTests
         var configuration = new ProductFieldMaskConfiguration();
         var extensions = new UpdateProductExtensions();
         _controller = new UpdateProductController(
-            _dbContext, 
-            configuration, 
+            _dbContext,
+            configuration,
             extensions);
     }
 
     [Fact]
     public async Task UpdateProduct_WithValidFieldMask_ShouldUpdateSpecifiedFields()
     {
-        var product = new DomainModels.Product(
-            2,
-            _fixture.Create<string>(),
-            _fixture.Create<decimal>(),
-            Category.Beds,
-            _fixture.Create<Dimensions>());
+        var product = new ProductTestDataBuilder().WithCategory(Category.Beds).Build();
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 

@@ -30,7 +30,7 @@ public class DeleteProductControllerTests : IDisposable
     [Fact]
     public async Task DeleteProduct_Should_ReturnNoContent_When_ProductExists()
     {
-        var product = _fixture.Create<DomainModels.Product>();
+        var product = new ProductTestDataBuilder().Build();
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 

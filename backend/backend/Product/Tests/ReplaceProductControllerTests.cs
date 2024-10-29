@@ -36,7 +36,7 @@ public class ReplaceProductControllerTests : IDisposable
     [Fact]
     public async Task ReplaceProduct_Should_ReturnOk_WithUpdatedProduct_When_ProductExists()
     {
-        var originalProduct = _fixture.Create<DomainModels.Product>();
+        var originalProduct = new ProductTestDataBuilder().Build();
         _dbContext.Products.Add(originalProduct);
         await _dbContext.SaveChangesAsync();
 

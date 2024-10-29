@@ -40,7 +40,7 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsWildcard()
         {
-            var product = _fixture.Create<DomainModels.Product>();
+            var product = new ProductTestDataBuilder().Build();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
@@ -61,7 +61,7 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsEmpty()
         {
-            var product = _fixture.Create<DomainModels.Product>();
+            var product = new ProductTestDataBuilder().Build();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
@@ -82,7 +82,7 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_DefaultsToWildCard_WhenOnlyFieldMaskIsNotMatched()
         {
-            var product = _fixture.Create<DomainModels.Product>();
+            var product = new ProductTestDataBuilder().Build();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
@@ -103,7 +103,7 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_ReturnsValidMasks_WhenInvalidMasksArePassed()
         {
-            var product = _fixture.Create<DomainModels.Product>();
+            var product = new ProductTestDataBuilder().Build();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
@@ -126,7 +126,7 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_ReturnsPartialProduct_WhenFieldMaskIsSpecified()
         {
-            var product = _fixture.Create<DomainModels.Product>();
+            var product = new ProductTestDataBuilder().Build();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
@@ -147,7 +147,7 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_ReturnsPartialProduct_WhenNestedFieldMaskIsSpecified()
         {
-            var product = _fixture.Create<DomainModels.Product>();
+            var product = new ProductTestDataBuilder().Build();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
@@ -170,7 +170,7 @@ namespace backend.Product.Tests
         [Fact]
         public async Task GetProduct_ReturnsAllFields_WhenPartialRequestIsMade()
         {
-            var product = _fixture.Create<DomainModels.Product>();
+            var product = new ProductTestDataBuilder().Build();
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
