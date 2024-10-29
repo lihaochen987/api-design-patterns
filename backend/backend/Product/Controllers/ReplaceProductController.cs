@@ -6,7 +6,10 @@ namespace backend.Product.Controllers;
 
 [ApiController]
 [Route("product")]
-public class ReplaceProductController(ApplicationDbContext context) : ControllerBase
+public class ReplaceProductController(
+    ApplicationDbContext context,
+    ReplaceProductExtensions extensions)
+    : ControllerBase
 {
     [HttpPut("{id:long}")]
     [SwaggerOperation(Summary = "Replace a product", Tags = ["Products"])]
@@ -14,14 +17,14 @@ public class ReplaceProductController(ApplicationDbContext context) : Controller
         [FromRoute] long id,
         [FromBody] ReplaceProductRequest request)
     {
-        var product = request.ToEntity();
+        var product = extensions.ToEntity(request);
 
         var existingProduct = await context.Products.FindAsync(id);
         if (existingProduct == null) return NotFound();
         existingProduct.Replace(product.Name, product.Price, product.Category, product.Dimensions);
         await context.SaveChangesAsync();
 
-        var response = product.ToReplaceProductResponse();
+        var response = extensions.ToReplaceProductResponse(product);
         return Ok(response);
     }
 }

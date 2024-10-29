@@ -12,9 +12,9 @@ using System.Collections.Generic;
 /// 2. Add parsing logic for GetUpdatedProductValues (partial updates)
 /// 3. Add the mapping in the extension methods (TBC on making this more generic and easier)
 /// </summary>
-public static class ProductFieldMaskConfiguration
+public class ProductFieldMaskConfiguration
 {
-    public static readonly HashSet<string> AllFieldPaths =
+    public readonly HashSet<string> AllFieldPaths =
     [
         "*",
         "id",
@@ -27,7 +27,7 @@ public static class ProductFieldMaskConfiguration
         "dimensions.length"
     ];
 
-    public static (
+    public(
         string name,
         decimal price,
         Category category,

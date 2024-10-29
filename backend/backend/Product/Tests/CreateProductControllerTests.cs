@@ -3,6 +3,7 @@ using AutoFixture;
 using backend.Database;
 using backend.Product.Contracts;
 using backend.Product.Controllers;
+using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
@@ -17,6 +18,7 @@ public class CreateProductControllerTests : IDisposable
     private readonly Fixture _fixture = new();
     private readonly CreateProductController _controller;
     private readonly ApplicationDbContext _dbContext;
+    private readonly CreateProductExtensions _extensions;
 
     public CreateProductControllerTests()
     {
@@ -27,7 +29,8 @@ public class CreateProductControllerTests : IDisposable
         var db = new ApplicationDbContext(options);
         db.Database.EnsureCreated();
         _dbContext = db;
-        _controller = new CreateProductController(db);
+        _extensions = new CreateProductExtensions(new TypeParser());
+        _controller = new CreateProductController(db, _extensions);
     }
 
     [Fact]
@@ -45,8 +48,8 @@ public class CreateProductControllerTests : IDisposable
                 Height = _fixture.Create<decimal>().ToString(CultureInfo.InvariantCulture)
             }
         };
-        var expectedProduct = request.ToEntity();
-        var expectedResponse = expectedProduct.ToCreateProductResponse();
+        var expectedProduct = _extensions.ToEntity(request);
+        var expectedResponse = _extensions.ToCreateProductResponse(expectedProduct);
 
         var result = await _controller.CreateProduct(request);
 

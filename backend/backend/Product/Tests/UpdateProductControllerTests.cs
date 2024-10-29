@@ -27,7 +27,8 @@ public class UpdateProductControllerTests
         var db = new ApplicationDbContext(options);
         db.Database.EnsureCreated();
         _dbContext = db;
-        _controller = new UpdateProductController(_dbContext);
+        var configuration = new ProductFieldMaskConfiguration();
+        _controller = new UpdateProductController(_dbContext, configuration);
     }
 
     [Fact]

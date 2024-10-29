@@ -4,6 +4,7 @@ using backend.Database;
 using backend.Product.Contracts;
 using backend.Product.Controllers;
 using backend.Product.DomainModels;
+using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
@@ -17,6 +18,7 @@ public class ReplaceProductControllerTests : IDisposable
     private readonly Fixture _fixture = new();
     private readonly ReplaceProductController _controller;
     private readonly ApplicationDbContext _dbContext;
+    private readonly ReplaceProductExtensions _extensions;
 
     public ReplaceProductControllerTests()
     {
@@ -27,7 +29,8 @@ public class ReplaceProductControllerTests : IDisposable
         var db = new ApplicationDbContext(options);
         db.Database.EnsureCreated();
         _dbContext = db;
-        _controller = new ReplaceProductController(_dbContext);
+        _extensions = new ReplaceProductExtensions(new TypeParser());
+        _controller = new ReplaceProductController(_dbContext, _extensions);
     }
 
     [Fact]
@@ -56,12 +59,12 @@ public class ReplaceProductControllerTests : IDisposable
         var response = result.Result as OkObjectResult;
         response!.Value.ShouldBeOfType<ReplaceProductResponse>();
         var replaceProductResponse = response.Value as ReplaceProductResponse;
-        replaceProductResponse.ShouldBeEquivalentTo(originalProduct.ToReplaceProductResponse());
+        replaceProductResponse.ShouldBeEquivalentTo(_extensions.ToReplaceProductResponse(originalProduct));
         var updatedProduct = await _dbContext.Products.FindAsync(originalProduct.Id);
         updatedProduct.ShouldNotBeNull();
         updatedProduct.ShouldBeEquivalentTo(originalProduct);
     }
-    
+
     public void Dispose()
     {
         _dbContext.Database.EnsureDeleted();

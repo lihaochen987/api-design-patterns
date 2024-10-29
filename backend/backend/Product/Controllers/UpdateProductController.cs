@@ -7,7 +7,10 @@ namespace backend.Product.Controllers;
 
 [ApiController]
 [Route("product")]
-public class UpdateProductController(ApplicationDbContext context) : ControllerBase
+public class UpdateProductController(
+    ApplicationDbContext context,
+    ProductFieldMaskConfiguration configuration) 
+    : ControllerBase
 {
     [HttpPatch("{id:long}")]
     [SwaggerOperation(Summary = "Update a product", Tags = ["Products"])]
@@ -22,7 +25,7 @@ public class UpdateProductController(ApplicationDbContext context) : ControllerB
             return NotFound();
         }
 
-        var (name, price, category, dimensions) = ProductFieldMaskConfiguration.GetUpdatedProductValues(request, product);
+        var (name, price, category, dimensions) = configuration.GetUpdatedProductValues(request, product);
         product.Replace(name, price, category, dimensions);
 
         await context.SaveChangesAsync();

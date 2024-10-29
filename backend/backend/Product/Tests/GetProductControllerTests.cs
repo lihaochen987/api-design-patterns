@@ -27,8 +27,9 @@ namespace backend.Product.Tests
             var db = new ApplicationDbContext(options);
             db.Database.EnsureCreated();
             _dbContext = db;
-
-            _controller = new GetProductController(_dbContext);
+            var configuration = new ProductFieldMaskConfiguration();
+            
+            _controller = new GetProductController(_dbContext, configuration);
         }
 
 

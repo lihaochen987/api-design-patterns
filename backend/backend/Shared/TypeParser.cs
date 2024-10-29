@@ -1,8 +1,8 @@
 namespace backend.Shared;
 
-public static class TypeParser
+public class TypeParser
 {
-    public static decimal ParseDecimal(string value, string errorMessage)
+    public decimal ParseDecimal(string value, string errorMessage)
     {
         if (!decimal.TryParse(value, out var result))
         {
@@ -12,7 +12,7 @@ public static class TypeParser
         return result;
     }
 
-    public static TEnum ParseEnum<TEnum>(string value, string errorMessage) where TEnum : struct
+    public TEnum ParseEnum<TEnum>(string value, string errorMessage) where TEnum : struct
     {
         if (!Enum.TryParse<TEnum>(value, out var result))
         {

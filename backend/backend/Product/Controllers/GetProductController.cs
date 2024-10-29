@@ -9,7 +9,8 @@ namespace backend.Product.Controllers;
 [ApiController]
 [Route("product")]
 public class GetProductController(
-    ApplicationDbContext context)
+    ApplicationDbContext context,
+    ProductFieldMaskConfiguration configuration)
     : ControllerBase
 {
     [HttpGet("{id:long}")]
@@ -26,7 +27,7 @@ public class GetProductController(
         var settings = new JsonSerializerSettings
         {
             Converters = new List<JsonConverter>
-                { new FieldMaskConverter(request.FieldMask, ProductFieldMaskConfiguration.AllFieldPaths) }
+                { new FieldMaskConverter(request.FieldMask, configuration.AllFieldPaths) }
         };
 
         var json = JsonConvert.SerializeObject(response, settings);
