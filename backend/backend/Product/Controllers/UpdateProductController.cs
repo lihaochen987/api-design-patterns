@@ -9,7 +9,8 @@ namespace backend.Product.Controllers;
 [Route("product")]
 public class UpdateProductController(
     ApplicationDbContext context,
-    ProductFieldMaskConfiguration configuration) 
+    ProductFieldMaskConfiguration configuration,
+    UpdateProductExtensions extensions)
     : ControllerBase
 {
     [HttpPatch("{id:long}")]
@@ -30,6 +31,6 @@ public class UpdateProductController(
 
         await context.SaveChangesAsync();
 
-        return Ok(product.ToUpdateProductResponse());
+        return Ok(extensions.ToUpdateProductResponse(product));
     }
 }

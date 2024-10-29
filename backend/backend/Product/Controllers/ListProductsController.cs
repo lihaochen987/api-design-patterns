@@ -9,7 +9,8 @@ namespace backend.Product.Controllers;
 [Route("products")]
 [ApiController]
 public class ListProductsController(
-    ApplicationDbContext context)
+    ApplicationDbContext context,
+    GetProductExtensions extensions)
     : ControllerBase
 {
     [HttpGet]
@@ -33,13 +34,13 @@ public class ListProductsController(
         {
             products = FilterProducts(products, request.Filter);
         }
-        
+
         var paginatedProducts = PaginateProducts(
-            products, 
-            request.MaxPageSize, 
+            products,
+            request.MaxPageSize,
             out var nextPageToken);
 
-        var productResponses = paginatedProducts.Select(p => p.ToGetProductResponse()).ToList();
+        var productResponses = paginatedProducts.Select(extensions.ToGetProductResponse).ToList();
 
         var response = new ListProductsResponse
         {
@@ -63,8 +64,8 @@ public class ListProductsController(
     }
 
     private static List<DomainModels.Product> PaginateProducts(
-        List<DomainModels.Product> existingProducts, 
-        int maxPageSize, 
+        List<DomainModels.Product> existingProducts,
+        int maxPageSize,
         out string? nextPageToken)
     {
         if (existingProducts.Count <= maxPageSize)
@@ -72,6 +73,7 @@ public class ListProductsController(
             nextPageToken = null;
             return existingProducts;
         }
+
         var lastProductInPage = existingProducts[maxPageSize - 1];
         nextPageToken = lastProductInPage.Id.ToString();
         return existingProducts.Take(maxPageSize).ToList();

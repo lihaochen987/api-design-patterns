@@ -26,8 +26,8 @@ public class ListProductsControllerTests : IDisposable
         var db = new ApplicationDbContext(options);
         db.Database.EnsureCreated();
         _dbContext = db;
-
-        _controller = new ListProductsController(_dbContext);
+        var extensions = new GetProductExtensions();
+        _controller = new ListProductsController(_dbContext, extensions);
     }
 
     [Fact]

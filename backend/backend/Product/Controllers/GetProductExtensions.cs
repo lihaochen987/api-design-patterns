@@ -3,9 +3,9 @@ using backend.Product.Contracts;
 
 namespace backend.Product.Controllers;
 
-public static class GetProductExtensions
+public class GetProductExtensions
 {
-    public static GetProductResponse ToGetProductResponse(this DomainModels.Product product)
+    public GetProductResponse ToGetProductResponse(DomainModels.Product product)
     {
         return new GetProductResponse
         {

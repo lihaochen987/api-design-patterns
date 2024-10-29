@@ -28,7 +28,11 @@ public class UpdateProductControllerTests
         db.Database.EnsureCreated();
         _dbContext = db;
         var configuration = new ProductFieldMaskConfiguration();
-        _controller = new UpdateProductController(_dbContext, configuration);
+        var extensions = new UpdateProductExtensions();
+        _controller = new UpdateProductController(
+            _dbContext, 
+            configuration, 
+            extensions);
     }
 
     [Fact]

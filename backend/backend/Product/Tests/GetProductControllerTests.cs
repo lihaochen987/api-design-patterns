@@ -17,6 +17,7 @@ namespace backend.Product.Tests
         private readonly Fixture _fixture = new();
         private readonly GetProductController _controller;
         private readonly ApplicationDbContext _dbContext;
+        private readonly GetProductExtensions _extensions;
 
         public GetProductControllerTests()
         {
@@ -28,8 +29,11 @@ namespace backend.Product.Tests
             db.Database.EnsureCreated();
             _dbContext = db;
             var configuration = new ProductFieldMaskConfiguration();
-            
-            _controller = new GetProductController(_dbContext, configuration);
+            _extensions = new GetProductExtensions();
+            _controller = new GetProductController(
+                _dbContext,
+                configuration,
+                _extensions);
         }
 
 
@@ -51,7 +55,7 @@ namespace backend.Product.Tests
             var contentResult = actionResult.Result as OkObjectResult;
             contentResult.ShouldNotBeNull();
             var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-            response.ShouldBeEquivalentTo(product.ToGetProductResponse());
+            response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
         }
 
         [Fact]
@@ -72,7 +76,7 @@ namespace backend.Product.Tests
             var contentResult = actionResult.Result as OkObjectResult;
             contentResult.ShouldNotBeNull();
             var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-            response.ShouldBeEquivalentTo(product.ToGetProductResponse());
+            response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
         }
 
         [Fact]
@@ -93,7 +97,7 @@ namespace backend.Product.Tests
             var contentResult = actionResult.Result as OkObjectResult;
             contentResult.ShouldNotBeNull();
             var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-            response.ShouldBeEquivalentTo(product.ToGetProductResponse());
+            response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
         }
 
         [Fact]

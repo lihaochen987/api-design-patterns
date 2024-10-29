@@ -10,7 +10,8 @@ namespace backend.Product.Controllers;
 [Route("product")]
 public class GetProductController(
     ApplicationDbContext context,
-    ProductFieldMaskConfiguration configuration)
+    ProductFieldMaskConfiguration configuration,
+    GetProductExtensions extensions)
     : ControllerBase
 {
     [HttpGet("{id:long}")]
@@ -22,7 +23,7 @@ public class GetProductController(
         var product = await context.Products.FindAsync(id);
         if (product == null) return NotFound();
 
-        var response = product.ToGetProductResponse();
+        var response = extensions.ToGetProductResponse(product);
 
         var settings = new JsonSerializerSettings
         {
