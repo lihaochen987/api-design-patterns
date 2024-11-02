@@ -78,8 +78,8 @@ public class CelParser<T>
         return tokens;
     }
 
-    private static Expression GetFieldExpression(
-        CelToken fieldCelToken, 
+    private static MemberExpression GetFieldExpression(
+        CelToken fieldCelToken,
         ParameterExpression lambdaParameter)
     {
         var property = typeof(T).GetProperty(fieldCelToken.Value,
@@ -88,45 +88,42 @@ public class CelParser<T>
             throw new ArgumentException($"Property '{fieldCelToken.Value}' does not exist on type '{typeof(T).Name}'");
 
         var field = Expression.Property(lambdaParameter, property);
-
-        return property.PropertyType.IsEnum
-            ? Expression.Call(field, typeof(object).GetMethod("ToString", Type.EmptyTypes)!) // For Enum compatability
-            : field;
+        return field;
     }
 
     private static BinaryExpression BuildComparisonExpression(
-        Expression filedExpression, 
-        string comparisonOperator, 
+        Expression fieldExpression,
+        string comparisonOperator,
         Expression comparisonValueExpression)
     {
         return comparisonOperator switch
         {
-            "==" => Expression.Equal(filedExpression, comparisonValueExpression),
-            "!=" => Expression.NotEqual(filedExpression, comparisonValueExpression),
-            "<" => Expression.LessThan(filedExpression, comparisonValueExpression),
-            ">" => Expression.GreaterThan(filedExpression, comparisonValueExpression),
-            "<=" => Expression.LessThanOrEqual(filedExpression, comparisonValueExpression),
-            ">=" => Expression.GreaterThanOrEqual(filedExpression, comparisonValueExpression),
+            "==" => Expression.Equal(fieldExpression, comparisonValueExpression),
+            "!=" => Expression.NotEqual(fieldExpression, comparisonValueExpression),
+            "<" => Expression.LessThan(fieldExpression, comparisonValueExpression),
+            ">" => Expression.GreaterThan(fieldExpression, comparisonValueExpression),
+            "<=" => Expression.LessThanOrEqual(fieldExpression, comparisonValueExpression),
+            ">=" => Expression.GreaterThanOrEqual(fieldExpression, comparisonValueExpression),
             _ => throw new NotSupportedException($"Operator {comparisonOperator} is not supported")
         };
     }
 
     private static ConstantExpression ConvertTokenToExpression(
-        CelToken valueCelToken, 
+        CelToken valueCelToken,
         Type destinationType)
     {
-        object? value = valueCelToken.Value switch
+        var value = valueCelToken.Value switch
         {
             var s when destinationType == typeof(string) => s,
             var s when destinationType == typeof(bool) && bool.TryParse(s, out var boolValue) => boolValue,
             var s when destinationType == typeof(decimal) && decimal.TryParse(s, out var decimalValue) => decimalValue,
             var s when destinationType == typeof(int) && int.TryParse(s, out var intValue) => intValue,
             var s when destinationType.IsEnum && Enum.TryParse(destinationType, s, ignoreCase: true, out var enumValue)
-                => enumValue.ToString(),
+                => enumValue,
 
             _ => throw new ArgumentException($"Cannot convert '{valueCelToken.Value}' to type '{destinationType.Name}'")
         };
 
-        return Expression.Constant(value, destinationType.IsEnum ? typeof(string) : destinationType);
+        return Expression.Constant(value, destinationType);
     }
 }
