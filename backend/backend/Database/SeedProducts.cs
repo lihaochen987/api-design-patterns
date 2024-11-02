@@ -1,0 +1,48 @@
+using backend.Product.DomainModels;
+
+namespace backend.Database;
+
+public static class SeedProducts
+{
+    public static void Initialize(ApplicationDbContext context)
+    {
+        context.Database.EnsureCreated();
+        if (context.Products.Any()) return;
+
+        context.Products.AddRange(
+            new Product.DomainModels.Product(1, "Dry Dog Food", 50m, Category.DogFood, new Dimensions(10m, 5m, 3m)),
+            new Product.DomainModels.Product(2, "Wet Dog Food", 35m, Category.DogFood, new Dimensions(8m, 4m, 3m)),
+            new Product.DomainModels.Product(3, "Dog Treats", 10m, Category.DogFood, new Dimensions(5m, 3m, 1m)),
+            new Product.DomainModels.Product(4, "Chew Toy", 15m, Category.Toys, new Dimensions(6m, 6m, 4m)),
+            new Product.DomainModels.Product(5, "Fetch Ball", 8m, Category.Toys, new Dimensions(4m, 4m, 4m)),
+            new Product.DomainModels.Product(6, "Dog Collar", 12m, Category.CollarsAndLeashes,
+                new Dimensions(5m, 1m, 0.5m)),
+            new Product.DomainModels.Product(7, "Dog Leash", 20m, Category.CollarsAndLeashes,
+                new Dimensions(120m, 2m, 0.5m)),
+            new Product.DomainModels.Product(8, "Dog Shampoo", 10m, Category.GroomingAndHygiene,
+                new Dimensions(8m, 4m, 2m)),
+            new Product.DomainModels.Product(9, "Dog Brush", 7m, Category.GroomingAndHygiene,
+                new Dimensions(7m, 3m, 2m)),
+            new Product.DomainModels.Product(10, "Comfort Dog Bed", 80m, Category.Beds, new Dimensions(60m, 40m, 10m)),
+            new Product.DomainModels.Product(11, "Rope Tug Toy", 9m, Category.Toys, new Dimensions(8m, 3m, 3m)),
+            new Product.DomainModels.Product(12, "Dog Bowl", 6m, Category.Feeders, new Dimensions(15m, 15m, 5m)),
+            new Product.DomainModels.Product(13, "Automatic Feeder", 45m, Category.Feeders,
+                new Dimensions(25m, 25m, 30m)),
+            new Product.DomainModels.Product(14, "Dog Carrier", 65m, Category.TravelAccessories,
+                new Dimensions(40m, 30m, 30m)),
+            new Product.DomainModels.Product(15, "Dog Raincoat", 18m, Category.Clothing, new Dimensions(20m, 10m, 2m)),
+            new Product.DomainModels.Product(16, "Dog Bandana", 5m, Category.Clothing, new Dimensions(20m, 20m, 0.2m)),
+            new Product.DomainModels.Product(17, "Training Pads", 25m, Category.GroomingAndHygiene,
+                new Dimensions(30m, 30m, 2m)),
+            new Product.DomainModels.Product(18, "Dental Chews", 15m, Category.DogFood, new Dimensions(10m, 5m, 1m)),
+            new Product.DomainModels.Product(19, "Cooling Mat", 35m, Category.Beds, new Dimensions(90m, 60m, 1m)),
+            new Product.DomainModels.Product(20, "Reflective Harness", 25m, Category.CollarsAndLeashes,
+                new Dimensions(20m, 5m, 1m)),
+            new Product.DomainModels.Product(21, "Dry Dog Food", 50m, Category.DogFood, new Dimensions(10m, 5m, 3m)),
+            new Product.DomainModels.Product(22, "Wet Dog Food", 35m, Category.DogFood, new Dimensions(8m, 4m, 3m)),
+            new Product.DomainModels.Product(23, "Dog Treats", 10m, Category.DogFood, new Dimensions(5m, 3m, 1m))
+        );
+
+        context.SaveChanges();
+    }
+}

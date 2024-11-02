@@ -3,6 +3,7 @@ using backend.Product;
 using backend.Product.Controllers;
 using backend.Shared;
 using Microsoft.EntityFrameworkCore;
+using SeedProducts = backend.Database.SeedProducts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,17 +42,15 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     try
     {
-        var pendingMigrations = context.Database.GetPendingMigrations();
-        if (pendingMigrations.Any())
-        {
-            context.Database.Migrate();
-        }
+        context.Database.Migrate();
+        SeedProducts.Initialize(context);
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"An error occurred while applying migrations: {ex.Message}");
+        Console.WriteLine($"An error occurred while migrating or seeding the database: {ex.Message}");
     }
 }
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
