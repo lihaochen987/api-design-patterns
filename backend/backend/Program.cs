@@ -1,4 +1,7 @@
 using backend.Database;
+using backend.Product;
+using backend.Product.Controllers;
+using backend.Shared;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,16 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
+
+// Inject shared classes
+builder.Services.AddTransient<TypeParser>();
+
+// Inject Product classes
+builder.Services.AddScoped<CreateProductExtensions>();
+builder.Services.AddTransient<GetProductExtensions>();
+builder.Services.AddScoped<ReplaceProductExtensions>();
+builder.Services.AddTransient<CreateProductExtensions>();
+builder.Services.AddTransient<ProductFieldMaskConfiguration>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
