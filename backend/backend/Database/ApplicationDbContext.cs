@@ -9,7 +9,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=app.db");
+        if (optionsBuilder.IsConfigured) return;
+        const string connectionString = "Host=postgres;Database=mydatabase;Username=myusername;Password=mypassword";
+        optionsBuilder.UseNpgsql(connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
