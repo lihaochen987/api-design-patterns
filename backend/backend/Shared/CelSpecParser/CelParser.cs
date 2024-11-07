@@ -3,6 +3,10 @@ using System.Reflection;
 
 namespace backend.Shared.CelSpecParser;
 
+/// <summary>
+/// CelParser takes in a filter string and translates it into a form that can be used to filter data.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class CelParser<T>
 {
     private readonly ParameterExpression _parameter = Expression.Parameter(typeof(T), "x");
@@ -44,6 +48,17 @@ public class CelParser<T>
         return Expression.Lambda<Func<T, bool>>(expression ?? Expression.Constant(true), _parameter);
     }
 
+    /// <summary>
+    /// Breaks the filter string into tokens (small meaningful parts)
+    /// </summary>
+    /// <param name="filterQuery">
+    /// "Category == DogFood && Price > 50"
+    /// </param>
+    /// <returns>
+    /// A list of CelTokens would be returned with their value and tagged with the respective type.
+    /// Category would be tagged as a Value Field
+    /// == would be tagged as an Operator Field
+    /// </returns>
     public List<CelToken> Tokenize(string filterQuery)
     {
         Dictionary<string, CelTokenType> operatorsDict = new()
@@ -91,6 +106,19 @@ public class CelParser<T>
         return field;
     }
 
+    /// <summary>
+    /// Creates a comparison based on the operator
+    /// </summary>
+    /// <param name="fieldExpression">
+    /// </param>
+    /// <param name="comparisonOperator">
+    /// </param>
+    /// <param name="comparisonValueExpression">
+    /// </param>
+    /// <returns>
+    /// </returns>
+    /// <exception cref="NotSupportedException">
+    /// </exception>
     private static BinaryExpression BuildComparisonExpression(
         Expression fieldExpression,
         string comparisonOperator,
@@ -108,6 +136,13 @@ public class CelParser<T>
         };
     }
 
+    /// <summary>
+    /// Converts the token to the right format
+    /// </summary>
+    /// <param name="valueCelToken"></param>
+    /// <param name="destinationType"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     private static ConstantExpression ConvertTokenToExpression(
         CelToken valueCelToken,
         Type destinationType)

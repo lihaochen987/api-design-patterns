@@ -12,7 +12,6 @@ namespace backend.Product.Tests;
 [Collection("SequentialExecutionCollection")]
 public class ListProductsControllerTests : IDisposable
 {
-    private readonly Fixture _fixture = new();
     private readonly ListProductsController _controller;
     private readonly ApplicationDbContext _dbContext;
     private const int DefaultMaxPageSize = 10;
@@ -200,7 +199,7 @@ public class ListProductsControllerTests : IDisposable
             .All(p => p!.Category == product.Category.ToString())
             .ShouldBeTrue();
     }
-    
+
     [Fact]
     public async Task ListProducts_WithFilterAndPagination_ReturnsCorrectResultsWhenScattered()
     {

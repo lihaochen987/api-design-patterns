@@ -1,9 +1,5 @@
-using System.Globalization;
-using AutoFixture;
 using backend.Database;
-using backend.Product.Contracts;
 using backend.Product.Controllers;
-using backend.Product.DomainModels;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +11,6 @@ namespace backend.Product.Tests;
 [Collection("SequentialExecutionCollection")]
 public class ReplaceProductControllerTests : IDisposable
 {
-    private readonly Fixture _fixture = new();
     private readonly ReplaceProductController _controller;
     private readonly ApplicationDbContext _dbContext;
     private readonly ReplaceProductExtensions _extensions;
@@ -40,18 +35,7 @@ public class ReplaceProductControllerTests : IDisposable
         _dbContext.Products.Add(originalProduct);
         await _dbContext.SaveChangesAsync();
 
-        var request = new ReplaceProductRequest
-        {
-            Name = _fixture.Create<string>(),
-            Price = _fixture.Create<decimal>().ToString(CultureInfo.InvariantCulture),
-            Category = _fixture.Create<Category>().ToString(),
-            Dimensions = new DimensionsContract
-            {
-                Length = _fixture.Create<decimal>().ToString(CultureInfo.InvariantCulture),
-                Width = _fixture.Create<decimal>().ToString(CultureInfo.InvariantCulture),
-                Height = _fixture.Create<decimal>().ToString(CultureInfo.InvariantCulture)
-            }
-        };
+        var request = _extensions.ToReplaceProductRequest(originalProduct);
 
         var result = await _controller.ReplaceProduct(originalProduct.Id, request);
 

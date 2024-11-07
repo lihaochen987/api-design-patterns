@@ -6,7 +6,7 @@ namespace backend.Product;
 using System.Collections.Generic;
 
 /// <summary>
-/// ProductMaskFiledPaths is a class which holds all the manual changes required for this API to work.
+/// ProductMaskFieldPaths is a class which holds all the manual changes required for this API to work.
 /// For instance when adding a new field or value object you would have to:
 /// 1. Add the new object to the AllFieldPaths (partial retrievals)
 /// 2. Add parsing logic for GetUpdatedProductValues (partial updates)

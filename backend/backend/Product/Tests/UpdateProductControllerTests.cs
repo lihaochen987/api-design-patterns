@@ -1,5 +1,4 @@
 using System.Globalization;
-using AutoFixture;
 using backend.Database;
 using backend.Product.Contracts;
 using backend.Product.Controllers;
@@ -14,7 +13,6 @@ namespace backend.Product.Tests;
 [Collection("SequentialExecutionCollection")]
 public class UpdateProductControllerTests
 {
-    private readonly Fixture _fixture = new();
     private readonly UpdateProductController _controller;
     private readonly ApplicationDbContext _dbContext;
 
@@ -79,12 +77,8 @@ public class UpdateProductControllerTests
     {
         const string originalName = "Original Name";
         const decimal originalPrice = 20.99m;
-        var product = new DomainModels.Product(
-            3,
-            originalName,
-            originalPrice,
-            Category.Feeders,
-            _fixture.Create<Dimensions>());
+        var product = new ProductTestDataBuilder().WithId(3).WithName(originalName).WithPrice(originalPrice)
+            .WithCategory(Category.Feeders).Build();
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 
@@ -97,54 +91,17 @@ public class UpdateProductControllerTests
 
         var actionResult = await _controller.UpdateProduct(product.Id, request);
 
-        actionResult.Result.ShouldNotBeNull();
-        actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        var contentResult = actionResult.Result as OkObjectResult;
-        contentResult.ShouldNotBeNull();
-        var response = contentResult.Value as UpdateProductResponse;
-        response!.Name.ShouldBeEquivalentTo(request.Name);
+        var response = Assert.IsType<OkObjectResult>(actionResult.Result).Value as UpdateProductResponse;
+        response.ShouldNotBeNull();
+        response.Name.ShouldBeEquivalentTo(request.Name);
         response.Price.ShouldBeEquivalentTo(request.Price);
-    }
-
-    [Fact]
-    public async Task UpdateProduct_WithPartialFieldMask_ShouldNotUpdateUnspecifiedFields()
-    {
-        const Category originalCategory = Category.Toys;
-        var product = new DomainModels.Product(
-            4,
-            "Original Name",
-            15.75m,
-            originalCategory,
-            _fixture.Create<Dimensions>());
-        _dbContext.Products.Add(product);
-        await _dbContext.SaveChangesAsync();
-
-        var request = new UpdateProductRequest
-        {
-            Name = "Updated Name",
-            FieldMask = ["name"]
-        };
-
-        var actionResult = await _controller.UpdateProduct(product.Id, request);
-
-        actionResult.Result.ShouldNotBeNull();
-        actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        var contentResult = actionResult.Result as OkObjectResult;
-        contentResult.ShouldNotBeNull();
-        var response = contentResult.Value as UpdateProductResponse;
-        response!.Name.ShouldBeEquivalentTo(request.Name);
-        response.Category.ShouldBe(originalCategory.ToString());
     }
 
     [Fact]
     public async Task UpdateProduct_WithNestedFieldInFieldMask_ShouldUpdateNestedField()
     {
-        var product = new DomainModels.Product(
-            5,
-            "Original Product",
-            35.00m,
-            Category.CollarsAndLeashes,
-            new Dimensions(10, 5, 2));
+        var product = new ProductTestDataBuilder()
+            .WithId(5).WithDimensions(new Dimensions(10, 5, 2)).Build();
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 

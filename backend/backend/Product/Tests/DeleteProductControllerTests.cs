@@ -11,7 +11,6 @@ namespace backend.Product.Tests;
 [Collection("SequentialExecutionCollection")]
 public class DeleteProductControllerTests : IDisposable
 {
-    private readonly Fixture _fixture = new();
     private readonly DeleteProductController _controller;
     private readonly ApplicationDbContext _dbContext;
 
