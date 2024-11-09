@@ -1,5 +1,5 @@
-using backend.Product.Controllers;
 using backend.Product.DomainModels;
+using backend.Product.ProductControllers;
 
 namespace backend.Product;
 
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 /// </summary>
 public class ProductFieldMaskConfiguration
 {
-    public readonly HashSet<string> AllFieldPaths =
+    public readonly HashSet<string> ProductFieldPaths =
     [
         "*",
         "id",

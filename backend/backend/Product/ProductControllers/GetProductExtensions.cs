@@ -1,13 +1,13 @@
 using System.Globalization;
 using backend.Product.Contracts;
 
-namespace backend.Product.Controllers;
+namespace backend.Product.ProductControllers;
 
-public class UpdateProductExtensions
+public class GetProductExtensions
 {
-    public UpdateProductResponse ToUpdateProductResponse(DomainModels.Product product)
+    public GetProductResponse ToGetProductResponse(DomainModels.Product product)
     {
-        return new UpdateProductResponse
+        return new GetProductResponse
         {
             Id = product.Id.ToString(),
             Name = product.Name,
@@ -15,7 +15,7 @@ public class UpdateProductExtensions
             Category = product.Category.ToString(),
             Dimensions = new DimensionsContract
             {
-                Length = product.Dimensions.Length.ToString(CultureInfo.InvariantCulture),
+                Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
                 Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
                 Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }

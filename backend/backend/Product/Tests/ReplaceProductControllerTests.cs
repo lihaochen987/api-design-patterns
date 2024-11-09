@@ -1,5 +1,5 @@
 using backend.Database;
-using backend.Product.Controllers;
+using backend.Product.ProductControllers;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,11 +1,12 @@
 using backend.Product.Contracts;
 
-namespace backend.Product.Controllers;
+namespace backend.Product.ProductControllers;
 
-public class ReplaceProductResponse
+public class UpdateProductRequest
 {
     public string Name { get; set; } = "";
     public string Price { get; set; } = "";
     public string Category { get; set; } = "";
     public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
+    public List<string> FieldMask { get; init; } = ["*"];
 }

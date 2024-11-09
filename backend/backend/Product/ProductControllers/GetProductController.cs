@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace backend.Product.Controllers;
+namespace backend.Product.ProductControllers;
 
 [ApiController]
 [Route("product")]
@@ -28,7 +28,7 @@ public class GetProductController(
         var settings = new JsonSerializerSettings
         {
             Converters = new List<JsonConverter>
-                { new FieldMaskConverter(request.FieldMask, configuration.AllFieldPaths) }
+                { new FieldMaskConverter(request.FieldMask, configuration.ProductFieldPaths) }
         };
 
         var json = JsonConvert.SerializeObject(response, settings);

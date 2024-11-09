@@ -2,7 +2,7 @@ using backend.Database;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace backend.Product.Controllers;
+namespace backend.Product.ProductControllers;
 
 [ApiController]
 [Route("product")]

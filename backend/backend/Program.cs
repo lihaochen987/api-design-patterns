@@ -1,6 +1,6 @@
 using backend.Database;
 using backend.Product;
-using backend.Product.Controllers;
+using backend.Product.ProductControllers;
 using backend.Shared;
 using Microsoft.EntityFrameworkCore;
 using SeedProducts = backend.Database.SeedProducts;

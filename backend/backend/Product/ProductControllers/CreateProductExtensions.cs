@@ -3,11 +3,11 @@ using backend.Product.Contracts;
 using backend.Product.DomainModels;
 using backend.Shared;
 
-namespace backend.Product.Controllers;
+namespace backend.Product.ProductControllers;
 
-public class ReplaceProductExtensions(TypeParser typeParser)
+public class CreateProductExtensions(TypeParser typeParser)
 {
-    public DomainModels.Product ToEntity(ReplaceProductRequest request)
+    public DomainModels.Product ToEntity(CreateProductRequest request)
     {
         // Product Fields
         var price = typeParser.ParseDecimal(request.Price, "Invalid product price");
@@ -22,9 +22,9 @@ public class ReplaceProductExtensions(TypeParser typeParser)
         return new DomainModels.Product(request.Name, price, category, dimensions);
     }
 
-    public ReplaceProductResponse ToReplaceProductResponse(DomainModels.Product product)
+    public CreateProductResponse ToCreateProductResponse(DomainModels.Product product)
     {
-        return new ReplaceProductResponse
+        return new CreateProductResponse
         {
             Name = product.Name,
             Price = product.Price.ToString(CultureInfo.InvariantCulture),
@@ -37,10 +37,10 @@ public class ReplaceProductExtensions(TypeParser typeParser)
             }
         };
     }
-    
-    public ReplaceProductRequest ToReplaceProductRequest(DomainModels.Product product)
+
+    public CreateProductRequest ToCreateProductRequest(DomainModels.Product product)
     {
-        return new ReplaceProductRequest
+        return new CreateProductRequest
         {
             Name = product.Name,
             Price = product.Price.ToString(CultureInfo.InvariantCulture),

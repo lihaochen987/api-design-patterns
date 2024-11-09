@@ -1,7 +1,6 @@
 using backend.Product.Contracts;
-using backend.Product.DomainModels;
 
-namespace backend.Product.Controllers;
+namespace backend.Product.ProductControllers;
 
 public class CreateProductResponse
 {

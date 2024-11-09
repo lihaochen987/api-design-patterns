@@ -1,8 +1,8 @@
 using System.Globalization;
 using backend.Database;
 using backend.Product.Contracts;
-using backend.Product.Controllers;
 using backend.Product.DomainModels;
+using backend.Product.ProductControllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;

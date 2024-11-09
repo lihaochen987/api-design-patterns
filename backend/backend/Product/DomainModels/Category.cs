@@ -2,7 +2,7 @@ namespace backend.Product.DomainModels;
 
 public enum Category
 {
-    DogFood,
+    PetFood,
     Toys,
     CollarsAndLeashes,
     GroomingAndHygiene,

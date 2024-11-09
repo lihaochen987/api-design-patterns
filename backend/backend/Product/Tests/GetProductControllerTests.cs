@@ -1,7 +1,7 @@
 using System.Globalization;
 using AutoFixture;
 using backend.Database;
-using backend.Product.Controllers;
+using backend.Product.ProductControllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;

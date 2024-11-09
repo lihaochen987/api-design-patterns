@@ -1,8 +1,8 @@
 using backend.Product.Contracts;
 
-namespace backend.Product.Controllers;
+namespace backend.Product.ProductControllers;
 
-public class UpdateProductResponse
+public class GetProductResponse
 {
     public string Id { get; set; } = "";
     public string Name { get; set; } = "";

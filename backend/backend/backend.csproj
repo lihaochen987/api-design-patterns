@@ -73,6 +73,51 @@
       <Compile Update="Product\Controllers\UpdateProductExtensions.cs">
         <DependentUpon>UpdateProductController.cs</DependentUpon>
       </Compile>
+      <Compile Update="Product\ProductControllers\CreateProductExtensions.cs">
+        <DependentUpon>CreateProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\CreateProductRequest.cs">
+        <DependentUpon>CreateProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\CreateProductResponse.cs">
+        <DependentUpon>CreateProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\DeleteProductRequest.cs">
+        <DependentUpon>DeleteProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\GetProductExtensions.cs">
+        <DependentUpon>GetProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\GetProductRequest.cs">
+        <DependentUpon>GetProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\GetProductResponse.cs">
+        <DependentUpon>GetProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\ListProductsRequest.cs">
+        <DependentUpon>ListProductsController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\ListProductsResponse.cs">
+        <DependentUpon>ListProductsController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\ReplaceProductExtensions.cs">
+        <DependentUpon>ReplaceProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\ReplaceProductRequest.cs">
+        <DependentUpon>ReplaceProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\ReplaceProductResponse.cs">
+        <DependentUpon>ReplaceProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\UpdateProductExtensions.cs">
+        <DependentUpon>UpdateProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\UpdateProductRequest.cs">
+        <DependentUpon>UpdateProductController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductControllers\UpdateProductResponse.cs">
+        <DependentUpon>UpdateProductController.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>

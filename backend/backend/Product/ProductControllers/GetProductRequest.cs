@@ -1,4 +1,4 @@
-namespace backend.Product.Controllers;
+namespace backend.Product.ProductControllers;
 
 public class GetProductRequest
 {

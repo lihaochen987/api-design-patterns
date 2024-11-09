@@ -10,9 +10,9 @@ public static class SeedProducts
         if (context.Products.Any()) return;
 
         context.Products.AddRange(
-            new Product.DomainModels.Product(1, "Dry Dog Food", 50m, Category.DogFood, new Dimensions(10m, 5m, 3m)),
-            new Product.DomainModels.Product(2, "Wet Dog Food", 35m, Category.DogFood, new Dimensions(8m, 4m, 3m)),
-            new Product.DomainModels.Product(3, "Dog Treats", 10m, Category.DogFood, new Dimensions(5m, 3m, 1m)),
+            new Product.DomainModels.Product(1, "Dry Dog Food", 50m, Category.PetFood, new Dimensions(10m, 5m, 3m)),
+            new Product.DomainModels.Product(2, "Wet Dog Food", 35m, Category.PetFood, new Dimensions(8m, 4m, 3m)),
+            new Product.DomainModels.Product(3, "Dog Treats", 10m, Category.PetFood, new Dimensions(5m, 3m, 1m)),
             new Product.DomainModels.Product(4, "Chew Toy", 15m, Category.Toys, new Dimensions(6m, 6m, 4m)),
             new Product.DomainModels.Product(5, "Fetch Ball", 8m, Category.Toys, new Dimensions(4m, 4m, 4m)),
             new Product.DomainModels.Product(6, "Dog Collar", 12m, Category.CollarsAndLeashes,
@@ -34,13 +34,13 @@ public static class SeedProducts
             new Product.DomainModels.Product(16, "Dog Bandana", 5m, Category.Clothing, new Dimensions(20m, 20m, 0.2m)),
             new Product.DomainModels.Product(17, "Training Pads", 25m, Category.GroomingAndHygiene,
                 new Dimensions(30m, 30m, 2m)),
-            new Product.DomainModels.Product(18, "Dental Chews", 15m, Category.DogFood, new Dimensions(10m, 5m, 1m)),
+            new Product.DomainModels.Product(18, "Dental Chews", 15m, Category.PetFood, new Dimensions(10m, 5m, 1m)),
             new Product.DomainModels.Product(19, "Cooling Mat", 35m, Category.Beds, new Dimensions(90m, 60m, 1m)),
             new Product.DomainModels.Product(20, "Reflective Harness", 25m, Category.CollarsAndLeashes,
                 new Dimensions(20m, 5m, 1m)),
-            new Product.DomainModels.Product(21, "Dry Dog Food", 50m, Category.DogFood, new Dimensions(10m, 5m, 3m)),
-            new Product.DomainModels.Product(22, "Wet Dog Food", 35m, Category.DogFood, new Dimensions(8m, 4m, 3m)),
-            new Product.DomainModels.Product(23, "Dog Treats", 10m, Category.DogFood, new Dimensions(5m, 3m, 1m))
+            new Product.DomainModels.Product(21, "Dry Dog Food", 50m, Category.PetFood, new Dimensions(10m, 5m, 3m)),
+            new Product.DomainModels.Product(22, "Wet Dog Food", 35m, Category.PetFood, new Dimensions(8m, 4m, 3m)),
+            new Product.DomainModels.Product(23, "Dog Treats", 10m, Category.PetFood, new Dimensions(5m, 3m, 1m))
         );
 
         context.SaveChanges();
