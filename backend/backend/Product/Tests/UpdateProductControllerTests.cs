@@ -15,6 +15,7 @@ public class UpdateProductControllerTests
 {
     private readonly UpdateProductController _controller;
     private readonly ApplicationDbContext _dbContext;
+    private readonly UpdateProductExtensions _extensions;
 
     public UpdateProductControllerTests()
     {
@@ -26,11 +27,35 @@ public class UpdateProductControllerTests
         db.Database.EnsureCreated();
         _dbContext = db;
         var configuration = new ProductFieldMaskConfiguration();
-        var extensions = new UpdateProductExtensions();
+        _extensions = new UpdateProductExtensions();
         _controller = new UpdateProductController(
             _dbContext,
             configuration,
-            extensions);
+            _extensions);
+    }
+
+    [Fact]
+    public async Task UpdateProduct_WithEmptyFieldMask_ShouldUpdateNoFields()
+    {
+        var product = new ProductTestDataBuilder().Build();
+        _dbContext.Products.Add(product);
+        await _dbContext.SaveChangesAsync();
+
+        var request = new UpdateProductRequest
+        {
+            Name = "Updated Name",
+            Price = "1.99M",
+            Category = "Toys"
+        };
+
+        var actionResult = await _controller.UpdateProduct(product.Id, request);
+
+        actionResult.Result.ShouldNotBeNull();
+        actionResult.Result.ShouldBeOfType<OkObjectResult>();
+        var contentResult = actionResult.Result as OkObjectResult;
+        contentResult.ShouldNotBeNull();
+        var response = contentResult.Value as UpdateProductResponse;
+        response.ShouldBeEquivalentTo(_extensions.ToUpdateProductResponse(product));
     }
 
     [Fact]
@@ -86,7 +111,8 @@ public class UpdateProductControllerTests
         {
             Name = "Updated Name",
             Price = "25.50",
-            FieldMask = ["name", "price"]
+            Category = "Toys",
+            FieldMask = ["name", "category"]
         };
 
         var actionResult = await _controller.UpdateProduct(product.Id, request);
@@ -94,7 +120,7 @@ public class UpdateProductControllerTests
         var response = Assert.IsType<OkObjectResult>(actionResult.Result).Value as UpdateProductResponse;
         response.ShouldNotBeNull();
         response.Name.ShouldBeEquivalentTo(request.Name);
-        response.Price.ShouldBeEquivalentTo(request.Price);
+        response.Category.ShouldBeEquivalentTo(request.Category);
     }
 
     [Fact]
