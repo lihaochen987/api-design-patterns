@@ -2,8 +2,8 @@ using backend.Database;
 using backend.Product;
 using backend.Product.ProductControllers;
 using backend.Shared;
+using DbUp;
 using Microsoft.EntityFrameworkCore;
-using SeedProducts = backend.Database.SeedProducts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,18 +39,24 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("DefaultConnection");
+
     try
     {
-        context.Database.Migrate();
-        SeedProducts.Initialize(context);
+        var migrationPath = Path.Combine(Directory.GetCurrentDirectory(), "UpScripts");
+        if (connectionString != null)
+        {
+            ApplyMigrations(connectionString, 5, 2000, migrationPath);
+        }
+
+        scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"An error occurred while migrating or seeding the database: {ex.Message}");
+        Console.WriteLine($"An error occurred while applying migrations or seeding the database: {ex.Message}");
     }
 }
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -68,3 +74,48 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+return;
+
+void ApplyMigrations(
+    string connectionString,
+    int retryCount,
+    int delayInSeconds,
+    string migrationPath)
+{
+    if (!Directory.Exists(migrationPath))
+    {
+        Console.WriteLine($"Migration path does not exist: {migrationPath}");
+        return;
+    }
+
+    for (var attempt = 1; attempt <= retryCount; attempt++)
+    {
+        try
+        {
+            var upgrader = DeployChanges.To
+                .PostgresqlDatabase(connectionString)
+                .WithScriptsFromFileSystem(migrationPath)
+                .LogToConsole()
+                .WithTransaction()
+                .Build();
+
+            var result = upgrader.PerformUpgrade();
+            if (!result.Successful) throw new Exception("Migration failed: " + result.Error);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("All migrations applied successfully.");
+            Console.ResetColor();
+            return;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Attempt {attempt} failed: {ex.Message}");
+            if (attempt == retryCount)
+            {
+                throw;
+            }
+
+            Console.WriteLine("Retrying in 2 seconds...");
+            Thread.Sleep(delayInSeconds);
+        }
+    }
+}

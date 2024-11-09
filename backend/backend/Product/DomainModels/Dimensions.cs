@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using backend.Shared.Interfaces;
 
 namespace backend.Product.DomainModels;
 
-public class Dimensions : IValueObject
+public class Dimensions
 {
     public Dimensions(
         decimal length,
@@ -16,9 +15,9 @@ public class Dimensions : IValueObject
         Height = height;
     }
 
-    [Column("ProductDimensionsLength")] public decimal Length { get; init; }
-    [Column("ProductDimensionsWidth")] public decimal Width { get; init; }
-    [Column("ProductDimensionsHeight")] public decimal Height { get; init; }
+    [Column("product_dimensions_length")] public decimal Length { get; init; }
+    [Column("product_dimensions_width")] public decimal Width { get; init; }
+    [Column("product_dimensions_height")] public decimal Height { get; init; }
 
     private static void EnforceInvariants(decimal length, decimal width, decimal height)
     {

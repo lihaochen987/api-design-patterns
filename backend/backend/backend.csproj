@@ -9,6 +9,8 @@
 
     <ItemGroup>
         <PackageReference Include="AutoFixture" Version="4.18.1" />
+        <PackageReference Include="dbup" Version="5.0.41" />
+        <PackageReference Include="dbup-postgresql" Version="5.0.40" />
         <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
           <PrivateAssets>all</PrivateAssets>
@@ -124,10 +126,6 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Migrations\" />
     </ItemGroup>
 
 </Project>

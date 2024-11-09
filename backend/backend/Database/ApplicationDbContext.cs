@@ -25,11 +25,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .Property(p => p.Category)
             .HasConversion<string>();
 
-        modelBuilder.Entity<Product.DomainModels.Product>().OwnsOne(p => p.Dimensions, d =>
-        {
-            d.Property(dim => dim.Length).HasColumnName("ProductionDimensionsLength");
-            d.Property(dim => dim.Width).HasColumnName("ProductDimensionsWidth");
-            d.Property(dim => dim.Height).HasColumnName("ProductDimensionsHeight");
-        });
+        modelBuilder.Entity<Product.DomainModels.Product>().OwnsOne(p => p.Dimensions);
     }
 }

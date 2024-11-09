@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using backend.Shared.Interfaces;
 
 namespace backend.Product.DomainModels;
 
-public class Product : IEntityObject
+[Table("products")]
+public class Product
 {
     // ReSharper disable once UnusedMember.Local - [Justification]:Empty constructor is being used to keep EFCore happy
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -43,15 +43,15 @@ public class Product : IEntityObject
         Dimensions = dimensions;
     }
 
-    [Column("ProductId")] public long Id { get; private set; }
+    [Column("product_id")] public long Id { get; private set; }
 
-    [Column("ProductName")]
+    [Column("product_name")]
     [MaxLength(100)]
     public string Name { get; private set; }
 
-    [Column("ProductPrice")] public decimal Price { get; private set; }
-    [Column("ProductCategory")] public Category Category { get; private set; }
-    [Column("ProductDimensions")] public Dimensions Dimensions { get; private set; }
+    [Column("product_price")] public decimal Price { get; private set; }
+    [Column("product_category")] public Category Category { get; private set; }
+    public Dimensions Dimensions { get; private set; }
 
     public void Replace(
         string name,
