@@ -2,6 +2,7 @@ using System.Globalization;
 using backend.Product.Contracts;
 using backend.Product.DomainModels;
 using backend.Shared;
+using ArgumentException = System.ArgumentException;
 
 namespace backend.Product.ProductControllers;
 
@@ -11,9 +12,10 @@ public class CreateProductExtensions(TypeParser typeParser)
     {
         // Product Fields
         var basePrice = typeParser.ParseDecimal(request.BasePrice, "Invalid base price");
-        var discountPercentage = typeParser.ParseDecimal(request.DiscountPercentage, "Invalid discount percentage");
+        if (!DiscountPercentage.TryParse(request.DiscountPercentage, out var discountPercentage) ||
+            discountPercentage is null)
+            throw new ArgumentException("Invalid discount percentage");
         var taxRate = typeParser.ParseDecimal(request.TaxRate, "Invalid tax rate");
-
         var category = typeParser.ParseEnum<Category>(request.Category, "Invalid product category");
 
         // Dimensions Fields
@@ -31,7 +33,7 @@ public class CreateProductExtensions(TypeParser typeParser)
         {
             Name = product.Name,
             BasePrice = product.BasePrice.ToString(CultureInfo.InvariantCulture),
-            DiscountPercentage = product.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+            DiscountPercentage = product.DiscountPercentage.ToString(),
             TaxRate = product.TaxRate.ToString(CultureInfo.InvariantCulture),
             Category = product.Category.ToString(),
             Dimensions = new DimensionsContract
@@ -49,7 +51,7 @@ public class CreateProductExtensions(TypeParser typeParser)
         {
             Name = product.Name,
             BasePrice = product.BasePrice.ToString(CultureInfo.InvariantCulture),
-            DiscountPercentage = product.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+            DiscountPercentage = product.DiscountPercentage.ToString(),
             TaxRate = product.TaxRate.ToString(CultureInfo.InvariantCulture),
             Category = product.Category.ToString(),
             Dimensions = new DimensionsContract

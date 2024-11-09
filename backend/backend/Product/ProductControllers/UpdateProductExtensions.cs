@@ -12,7 +12,7 @@ public class UpdateProductExtensions
             Id = product.Id.ToString(),
             Name = product.Name,
             BasePrice = product.BasePrice.ToString(CultureInfo.InvariantCulture),
-            DiscountPercentage = product.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+            DiscountPercentage = product.DiscountPercentage.ToString(),
             TaxRate = product.TaxRate.ToString(CultureInfo.InvariantCulture),
             Category = product.Category.ToString(),
             Dimensions = new DimensionsContract

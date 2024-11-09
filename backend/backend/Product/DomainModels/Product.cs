@@ -6,10 +6,7 @@ namespace backend.Product.DomainModels;
 [Table("products")]
 public class Product
 {
-    // ReSharper disable once UnusedMember.Local - [Justification]:Empty constructor is being used to keep EFCore happy
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private Product()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
     }
 
@@ -17,7 +14,7 @@ public class Product
         int id,
         string name,
         decimal basePrice,
-        decimal discountPercentage,
+        DiscountPercentage discountPercentage,
         decimal taxRate,
         Category category,
         Dimensions dimensions
@@ -27,12 +24,13 @@ public class Product
         EnforceInvariants(
             name,
             basePrice,
-            discountPercentage,
             taxRate,
             category,
             dimensions);
         Name = name;
         BasePrice = basePrice;
+        DiscountPercentage = discountPercentage;
+        TaxRate = taxRate;
         Category = category;
         Dimensions = dimensions;
     }
@@ -40,7 +38,7 @@ public class Product
     public Product(
         string name,
         decimal basePrice,
-        decimal discountPercentage,
+        DiscountPercentage discountPercentage,
         decimal taxRate,
         Category category,
         Dimensions dimensions
@@ -49,12 +47,13 @@ public class Product
         EnforceInvariants(
             name,
             basePrice,
-            discountPercentage,
             taxRate,
             category,
             dimensions);
         Name = name;
         BasePrice = basePrice;
+        DiscountPercentage = discountPercentage;
+        TaxRate = taxRate;
         Category = category;
         Dimensions = dimensions;
     }
@@ -68,17 +67,19 @@ public class Product
     [Column("product_base_price")] public decimal BasePrice { get; private set; }
 
     [Column("product_discount_percentage")]
-    public decimal DiscountPercentage { get; private set; }
+    public DiscountPercentage DiscountPercentage { get; private set; }
 
     [Column("product_tax_rate")] public decimal TaxRate { get; private set; }
+
     [Column("product_category")] public Category Category { get; private set; }
 
     [NotMapped] public decimal Price => CalculatePrice();
+
     public Dimensions Dimensions { get; private set; }
 
     private decimal CalculatePrice()
     {
-        var discountedPrice = BasePrice * (1 - DiscountPercentage / 100);
+        var discountedPrice = BasePrice * (1 - (decimal)DiscountPercentage / 100);
         var finalPrice = discountedPrice * (1 + TaxRate / 100);
         return finalPrice;
     }
@@ -86,7 +87,7 @@ public class Product
     public void Replace(
         string name,
         decimal basePrice,
-        decimal discountPercentage,
+        DiscountPercentage discountPercentage,
         decimal taxRate,
         Category category,
         Dimensions dimensions)
@@ -94,12 +95,13 @@ public class Product
         EnforceInvariants(
             name,
             basePrice,
-            discountPercentage,
             taxRate,
             category,
             dimensions);
         Name = name;
         BasePrice = basePrice;
+        DiscountPercentage = discountPercentage;
+        TaxRate = taxRate;
         Category = category;
         Dimensions = dimensions;
     }
@@ -107,7 +109,6 @@ public class Product
     private static void EnforceInvariants(
         string name,
         decimal basePrice,
-        decimal discountPercentage,
         decimal taxRate,
         Category category,
         Dimensions dimensions)
@@ -116,10 +117,8 @@ public class Product
             throw new ArgumentException("Product name is required.");
         if (basePrice <= 0)
             throw new ArgumentException("Product price must be greater than zero.");
-        if (discountPercentage is <= 0 or > 1)
-            throw new ArgumentException("Product discount percentage must be greater than zero and less than 100%");
-        if (taxRate is <= 0 or > 1)
-            throw new ArgumentException("Product tax rate must be greater than zero and less than 100%");
+        if (taxRate < 0 || taxRate > 100)
+            throw new ArgumentException("Product tax rate must be between 0 and 100%");
         if (!Enum.IsDefined(typeof(Category), category))
             throw new ArgumentException("Invalid category for the Product.");
         if (dimensions == null)

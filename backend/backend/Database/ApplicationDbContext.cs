@@ -11,6 +11,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<Product.DomainModels.Product>()
             .OwnsOne(p => p.Dimensions);
 
+        modelBuilder.Entity<Product.DomainModels.Product>()
+            .OwnsOne(p => p.DiscountPercentage);
+
         base.OnModelCreating(modelBuilder);
     }
 }
