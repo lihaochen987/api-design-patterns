@@ -156,7 +156,7 @@ public class ListProductsControllerTests : IDisposable
 
         var request = new ListProductsRequest
         {
-            Filter = "Category == \"DogFood\" && Price < 20",
+            Filter = "Category == \"PetFood\" && Price < 20",
             MaxPageSize = 10
         };
 
