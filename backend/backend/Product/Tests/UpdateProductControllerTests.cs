@@ -44,7 +44,7 @@ public class UpdateProductControllerTests
         var request = new UpdateProductRequest
         {
             Name = "Updated Name",
-            Price = "1.99M",
+            BasePrice = "1.99M",
             Category = "Toys"
         };
 
@@ -102,7 +102,7 @@ public class UpdateProductControllerTests
     {
         const string originalName = "Original Name";
         const decimal originalPrice = 20.99m;
-        var product = new ProductTestDataBuilder().WithId(3).WithName(originalName).WithPrice(originalPrice)
+        var product = new ProductTestDataBuilder().WithId(3).WithName(originalName).WithBasePrice(originalPrice)
             .WithCategory(Category.Feeders).Build();
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
@@ -110,7 +110,7 @@ public class UpdateProductControllerTests
         var request = new UpdateProductRequest
         {
             Name = "Updated Name",
-            Price = "25.50",
+            BasePrice = "25.50",
             Category = "Toys",
             FieldMask = ["name", "category"]
         };

@@ -120,24 +120,6 @@
       <Compile Update="Product\ProductControllers\UpdateProductResponse.cs">
         <DependentUpon>UpdateProductController.cs</DependentUpon>
       </Compile>
-      <Compile Update="Product\ProductReviewSummaryControllers\GetProductReviewSummaryExtensions.cs">
-        <DependentUpon>GetProductReviewSummaryController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductReviewSummaryControllers\GetProductReviewSummaryRequest.cs">
-        <DependentUpon>GetProductReviewSummaryController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductReviewSummaryControllers\GetProductReviewSummaryResponse.cs">
-        <DependentUpon>GetProductReviewSummaryController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductReviewSummaryControllers\UpdateProductReviewSummaryExtensions.cs">
-        <DependentUpon>UpdateProductReviewSummaryController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductReviewSummaryControllers\UpdateProductReviewSummaryRequest.cs">
-        <DependentUpon>UpdateProductReviewSummaryController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductReviewSummaryControllers\UpdateProductReviewSummaryResponse.cs">
-        <DependentUpon>UpdateProductReviewSummaryController.cs</DependentUpon>
-      </Compile>
     </ItemGroup>
 
     <ItemGroup>

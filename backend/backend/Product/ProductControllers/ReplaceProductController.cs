@@ -21,7 +21,8 @@ public class ReplaceProductController(
 
         var existingProduct = await context.Products.FindAsync(id);
         if (existingProduct == null) return NotFound();
-        existingProduct.Replace(product.Name, product.Price, product.Category, product.Dimensions);
+        existingProduct.Replace(product.Name, product.BasePrice, product.DiscountPercentage, product.TaxRate,
+            product.Category, product.Dimensions);
         await context.SaveChangesAsync();
 
         var response = extensions.ToReplaceProductResponse(product);

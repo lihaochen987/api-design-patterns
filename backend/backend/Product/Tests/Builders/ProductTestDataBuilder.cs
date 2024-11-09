@@ -1,5 +1,6 @@
 using AutoFixture;
 using backend.Product.DomainModels;
+using backend.Product.Tests.Builders;
 
 namespace backend.Product.Tests;
 
@@ -8,15 +9,21 @@ public class ProductTestDataBuilder
     private readonly Fixture _fixture;
     private int? _id;
     private string _name;
-    private decimal _price;
+    private decimal _basePrice;
+    private decimal _discountPercentage;
+    private decimal _taxRate;
     private Category _category;
     private Dimensions _dimensions;
 
     public ProductTestDataBuilder()
     {
         _fixture = new Fixture();
+        _fixture.Customizations.Add(new ProductPriceBuilder());
+
         _name = _fixture.Create<string>();
-        _price = _fixture.Create<decimal>();
+        _basePrice = _fixture.Create<decimal>();
+        _discountPercentage = _fixture.Create<decimal>();
+        _taxRate = _fixture.Create<decimal>();
         _category = _fixture.Create<Category>();
         _dimensions = _fixture.Create<Dimensions>();
     }
@@ -33,9 +40,21 @@ public class ProductTestDataBuilder
         return this;
     }
 
-    public ProductTestDataBuilder WithPrice(decimal price)
+    public ProductTestDataBuilder WithBasePrice(decimal price)
     {
-        _price = price;
+        _basePrice = price;
+        return this;
+    }
+
+    public ProductTestDataBuilder WithDiscountPercentage(decimal discountPercentage)
+    {
+        _discountPercentage = discountPercentage;
+        return this;
+    }
+
+    public ProductTestDataBuilder WithTaxRate(decimal taxRate)
+    {
+        _taxRate = taxRate;
         return this;
     }
 
@@ -56,7 +75,9 @@ public class ProductTestDataBuilder
         return new DomainModels.Product(
             _id ?? _fixture.Create<int>(),
             _name,
-            _price,
+            _basePrice,
+            _discountPercentage,
+            _taxRate,
             _category,
             _dimensions);
     }
@@ -67,7 +88,9 @@ public class ProductTestDataBuilder
             .Select(id => new ProductTestDataBuilder()
                 .WithId(id)
                 .WithName(_fixture.Create<string>())
-                .WithPrice(_fixture.Create<decimal>())
+                .WithBasePrice(_fixture.Create<decimal>())
+                .WithDiscountPercentage(_fixture.Create<decimal>())
+                .WithTaxRate(_fixture.Create<decimal>())
                 .WithCategory(_fixture.Create<Category>())
                 .WithDimensions(_fixture.Create<Dimensions>())
                 .Build())

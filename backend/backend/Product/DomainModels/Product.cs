@@ -16,29 +16,45 @@ public class Product
     public Product(
         int id,
         string name,
-        decimal price,
+        decimal basePrice,
+        decimal discountPercentage,
+        decimal taxRate,
         Category category,
         Dimensions dimensions
     )
     {
         Id = id;
-        EnforceInvariants(name, price, category, dimensions);
+        EnforceInvariants(
+            name,
+            basePrice,
+            discountPercentage,
+            taxRate,
+            category,
+            dimensions);
         Name = name;
-        Price = price;
+        BasePrice = basePrice;
         Category = category;
         Dimensions = dimensions;
     }
 
     public Product(
         string name,
-        decimal price,
+        decimal basePrice,
+        decimal discountPercentage,
+        decimal taxRate,
         Category category,
         Dimensions dimensions
     )
     {
-        EnforceInvariants(name, price, category, dimensions);
+        EnforceInvariants(
+            name,
+            basePrice,
+            discountPercentage,
+            taxRate,
+            category,
+            dimensions);
         Name = name;
-        Price = price;
+        BasePrice = basePrice;
         Category = category;
         Dimensions = dimensions;
     }
@@ -49,29 +65,61 @@ public class Product
     [MaxLength(100)]
     public string Name { get; private set; }
 
-    [Column("product_price")] public decimal Price { get; private set; }
+    [Column("product_base_price")] public decimal BasePrice { get; private set; }
+
+    [Column("product_discount_percentage")]
+    public decimal DiscountPercentage { get; private set; }
+
+    [Column("product_tax_rate")] public decimal TaxRate { get; private set; }
     [Column("product_category")] public Category Category { get; private set; }
+
+    [NotMapped] public decimal Price => CalculatePrice();
     public Dimensions Dimensions { get; private set; }
+
+    private decimal CalculatePrice()
+    {
+        var discountedPrice = BasePrice * (1 - DiscountPercentage / 100);
+        var finalPrice = discountedPrice * (1 + TaxRate / 100);
+        return finalPrice;
+    }
 
     public void Replace(
         string name,
-        decimal price,
+        decimal basePrice,
+        decimal discountPercentage,
+        decimal taxRate,
         Category category,
         Dimensions dimensions)
     {
-        EnforceInvariants(name, price, category, dimensions);
+        EnforceInvariants(
+            name,
+            basePrice,
+            discountPercentage,
+            taxRate,
+            category,
+            dimensions);
         Name = name;
-        Price = price;
+        BasePrice = basePrice;
         Category = category;
         Dimensions = dimensions;
     }
 
-    private static void EnforceInvariants(string name, decimal price, Category category, Dimensions dimensions)
+    private static void EnforceInvariants(
+        string name,
+        decimal basePrice,
+        decimal discountPercentage,
+        decimal taxRate,
+        Category category,
+        Dimensions dimensions)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Product name is required.");
-        if (price <= 0)
+        if (basePrice <= 0)
             throw new ArgumentException("Product price must be greater than zero.");
+        if (discountPercentage is <= 0 or > 1)
+            throw new ArgumentException("Product discount percentage must be greater than zero and less than 100%");
+        if (taxRate is <= 0 or > 1)
+            throw new ArgumentException("Product tax rate must be greater than zero and less than 100%");
         if (!Enum.IsDefined(typeof(Category), category))
             throw new ArgumentException("Invalid category for the Product.");
         if (dimensions == null)

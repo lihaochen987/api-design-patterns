@@ -6,7 +6,9 @@ public class UpdateProductResponse
 {
     public string Id { get; set; } = "";
     public string Name { get; set; } = "";
-    public string Price { get; set; } = "";
+    public string BasePrice { get; set; } = "";
+    public string DiscountPercentage { get; set; } = "";
+    public string TaxRate { get; set; } = "";
     public string Category { get; set; } = "";
     public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
 }

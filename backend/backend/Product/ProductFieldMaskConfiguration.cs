@@ -27,9 +27,11 @@ public class ProductFieldMaskConfiguration
         "dimensions.length"
     ];
 
-    public(
+    public (
         string name,
-        decimal price,
+        decimal basePrice,
+        decimal discountPercentage,
+        decimal taxRate,
         Category category,
         Dimensions dimensions)
         GetUpdatedProductValues(
@@ -41,10 +43,20 @@ public class ProductFieldMaskConfiguration
             ? request.Name
             : product.Name;
 
-        var price = request.FieldMask.Contains("price", StringComparer.OrdinalIgnoreCase)
-                    && decimal.TryParse(request.Price, out var parsedPrice)
-            ? parsedPrice
-            : product.Price;
+        var basePrice = request.FieldMask.Contains("price", StringComparer.OrdinalIgnoreCase)
+                        && decimal.TryParse(request.BasePrice, out var parsedBasePrice)
+            ? parsedBasePrice
+            : product.BasePrice;
+
+        var discountPercentage = request.FieldMask.Contains("price", StringComparer.OrdinalIgnoreCase)
+                                 && decimal.TryParse(request.BasePrice, out var parsedDiscountPercentage)
+            ? parsedDiscountPercentage
+            : product.BasePrice;
+
+        var taxRate = request.FieldMask.Contains("price", StringComparer.OrdinalIgnoreCase)
+                      && decimal.TryParse(request.BasePrice, out var parsedTaxRate)
+            ? parsedTaxRate
+            : product.BasePrice;
 
         var category = request.FieldMask.Contains("category", StringComparer.OrdinalIgnoreCase)
                        && Enum.TryParse(request.Category, true, out Category parsedCategory)
@@ -53,7 +65,7 @@ public class ProductFieldMaskConfiguration
 
         var dimensions = GetUpdatedDimensionValues(request, product.Dimensions);
 
-        return (name, price, category, dimensions);
+        return (name, basePrice, discountPercentage, taxRate, category, dimensions);
     }
 
     private static Dimensions GetUpdatedDimensionValues(

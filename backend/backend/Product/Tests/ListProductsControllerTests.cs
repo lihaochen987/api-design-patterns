@@ -150,7 +150,7 @@ public class ListProductsControllerTests : IDisposable
     [Fact]
     public async Task ListProducts_WithFilter_ReturnsFilteredResults()
     {
-        var product = new ProductTestDataBuilder().WithPrice(15).WithCategory(Category.PetFood).Build();
+        var product = new ProductTestDataBuilder().WithBasePrice(15).WithCategory(Category.PetFood).Build();
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 
@@ -176,7 +176,7 @@ public class ListProductsControllerTests : IDisposable
     [Fact]
     public async Task ListProducts_WithFilterAndPagination_ReturnsCorrectResults()
     {
-        var product = new ProductTestDataBuilder().WithId(2).WithPrice(15).WithCategory(Category.Beds).Build();
+        var product = new ProductTestDataBuilder().WithId(2).WithBasePrice(15).WithCategory(Category.Beds).Build();
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 

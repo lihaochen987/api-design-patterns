@@ -120,7 +120,7 @@ namespace backend.Product.Tests
             var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(contentResult.Value!.ToString()!);
             response!.Count.ShouldBeEquivalentTo(2);
             response.ShouldContainKeyAndValue("Name", product.Name);
-            response.ShouldContainKeyAndValue("Price", product.Price.ToString(CultureInfo.InvariantCulture));
+            response.ShouldContainKeyAndValue("Price", product.BasePrice.ToString(CultureInfo.InvariantCulture));
         }
 
         [Fact]

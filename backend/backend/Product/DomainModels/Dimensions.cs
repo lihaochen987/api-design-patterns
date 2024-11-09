@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Product.DomainModels;
 
-public class Dimensions
+public record Dimensions
 {
     public Dimensions(
         decimal length,
