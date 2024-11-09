@@ -1,8 +1,7 @@
 using AutoFixture;
 using backend.Product.DomainModels;
-using backend.Product.Tests.Builders;
 
-namespace backend.Product.Tests;
+namespace backend.Product.Tests.Builders;
 
 public class ProductTestDataBuilder
 {
@@ -82,6 +81,7 @@ public class ProductTestDataBuilder
             _dimensions);
     }
 
+    // Todo: Indicator to change this is not apparent, might need to fix somehow.
     public List<DomainModels.Product> CreateMany(int count, int startId = 1)
     {
         return Enumerable.Range(startId, count)

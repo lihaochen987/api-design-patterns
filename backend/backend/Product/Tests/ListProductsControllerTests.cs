@@ -1,7 +1,7 @@
-using AutoFixture;
 using backend.Database;
 using backend.Product.DomainModels;
 using backend.Product.ProductControllers;
+using backend.Product.Tests.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
