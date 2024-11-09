@@ -31,7 +31,7 @@ public class ProductFieldMaskConfiguration
         string name,
         decimal basePrice,
         DiscountPercentage discountPercentage,
-        decimal taxRate,
+        TaxRate taxRate,
         Category category,
         Dimensions dimensions)
         GetUpdatedProductValues(
@@ -49,14 +49,15 @@ public class ProductFieldMaskConfiguration
             : product.BasePrice;
 
         var discountPercentage = request.FieldMask.Contains("discountPercentage", StringComparer.OrdinalIgnoreCase)
-                                 && DiscountPercentage.TryParse(request.DiscountPercentage, out var parsedDiscountPercentage)
+                                 && DiscountPercentage.TryParse(request.DiscountPercentage,
+                                     out var parsedDiscountPercentage)
             ? parsedDiscountPercentage!
             : product.DiscountPercentage;
 
         var taxRate = request.FieldMask.Contains("taxRate", StringComparer.OrdinalIgnoreCase)
-                      && decimal.TryParse(request.BasePrice, out var parsedTaxRate)
-            ? parsedTaxRate
-            : product.BasePrice;
+                      && TaxRate.TryParse(request.TaxRate, out var parsedTaxRate)
+            ? parsedTaxRate!
+            : product.TaxRate;
 
         var category = request.FieldMask.Contains("category", StringComparer.OrdinalIgnoreCase)
                        && Enum.TryParse(request.Category, true, out Category parsedCategory)

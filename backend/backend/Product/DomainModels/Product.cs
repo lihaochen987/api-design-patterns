@@ -15,7 +15,7 @@ public class Product
         string name,
         decimal basePrice,
         DiscountPercentage discountPercentage,
-        decimal taxRate,
+        TaxRate taxRate,
         Category category,
         Dimensions dimensions
     )
@@ -24,7 +24,6 @@ public class Product
         EnforceInvariants(
             name,
             basePrice,
-            taxRate,
             category,
             dimensions);
         Name = name;
@@ -39,7 +38,7 @@ public class Product
         string name,
         decimal basePrice,
         DiscountPercentage discountPercentage,
-        decimal taxRate,
+        TaxRate taxRate,
         Category category,
         Dimensions dimensions
     )
@@ -47,7 +46,6 @@ public class Product
         EnforceInvariants(
             name,
             basePrice,
-            taxRate,
             category,
             dimensions);
         Name = name;
@@ -69,7 +67,7 @@ public class Product
     [Column("product_discount_percentage")]
     public DiscountPercentage DiscountPercentage { get; private set; }
 
-    [Column("product_tax_rate")] public decimal TaxRate { get; private set; }
+    [Column("product_tax_rate")] public TaxRate TaxRate { get; private set; }
 
     [Column("product_category")] public Category Category { get; private set; }
 
@@ -88,14 +86,13 @@ public class Product
         string name,
         decimal basePrice,
         DiscountPercentage discountPercentage,
-        decimal taxRate,
+        TaxRate taxRate,
         Category category,
         Dimensions dimensions)
     {
         EnforceInvariants(
             name,
             basePrice,
-            taxRate,
             category,
             dimensions);
         Name = name;
@@ -109,7 +106,6 @@ public class Product
     private static void EnforceInvariants(
         string name,
         decimal basePrice,
-        decimal taxRate,
         Category category,
         Dimensions dimensions)
     {
@@ -117,8 +113,6 @@ public class Product
             throw new ArgumentException("Product name is required.");
         if (basePrice <= 0)
             throw new ArgumentException("Product price must be greater than zero.");
-        if (taxRate < 0 || taxRate > 100)
-            throw new ArgumentException("Product tax rate must be between 0 and 100%");
         if (!Enum.IsDefined(typeof(Category), category))
             throw new ArgumentException("Invalid category for the Product.");
         if (dimensions == null)

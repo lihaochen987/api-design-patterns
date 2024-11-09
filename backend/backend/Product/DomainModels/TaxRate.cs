@@ -1,14 +1,14 @@
 namespace backend.Product.DomainModels;
 
-public record DiscountPercentage
+public record TaxRate
 {
     private readonly decimal _value;
 
-    private DiscountPercentage()
+    private TaxRate()
     {
     }
 
-    public DiscountPercentage(decimal value)
+    public TaxRate(decimal value)
     {
         if (value is < 0 or > 100)
             throw new ArgumentOutOfRangeException(nameof(value), "Discount percentage must be between 0 and 100.");
@@ -21,24 +21,24 @@ public record DiscountPercentage
         return candidate is >= 0 and <= 100;
     }
 
-    public static bool TryParse(string candidate, out DiscountPercentage? discountPercentage)
+    public static bool TryParse(string candidate, out TaxRate? taxRate)
     {
-        discountPercentage = null;
+        taxRate = null;
         if (!decimal.TryParse(candidate, out var result))
             return false;
 
         if (!IsValid(result))
             return false;
 
-        discountPercentage = new DiscountPercentage(result);
+        taxRate = new TaxRate(result);
         return true;
     }
 
-    public static implicit operator decimal(DiscountPercentage discountPercentage)
+    public static implicit operator decimal(TaxRate taxRate)
     {
-        return discountPercentage._value;
+        return taxRate._value;
     }
-
+    
     public override string ToString()
     {
         return $"{_value:0.##}";

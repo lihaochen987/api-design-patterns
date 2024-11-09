@@ -15,7 +15,9 @@ public class CreateProductExtensions(TypeParser typeParser)
         if (!DiscountPercentage.TryParse(request.DiscountPercentage, out var discountPercentage) ||
             discountPercentage is null)
             throw new ArgumentException("Invalid discount percentage");
-        var taxRate = typeParser.ParseDecimal(request.TaxRate, "Invalid tax rate");
+        if (!TaxRate.TryParse(request.TaxRate, out var taxRate) ||
+            taxRate is null)
+            throw new ArgumentException("Invalid tax rate");
         var category = typeParser.ParseEnum<Category>(request.Category, "Invalid product category");
 
         // Dimensions Fields
@@ -34,7 +36,7 @@ public class CreateProductExtensions(TypeParser typeParser)
             Name = product.Name,
             BasePrice = product.BasePrice.ToString(CultureInfo.InvariantCulture),
             DiscountPercentage = product.DiscountPercentage.ToString(),
-            TaxRate = product.TaxRate.ToString(CultureInfo.InvariantCulture),
+            TaxRate = product.TaxRate.ToString(),
             Category = product.Category.ToString(),
             Dimensions = new DimensionsContract
             {
@@ -52,7 +54,7 @@ public class CreateProductExtensions(TypeParser typeParser)
             Name = product.Name,
             BasePrice = product.BasePrice.ToString(CultureInfo.InvariantCulture),
             DiscountPercentage = product.DiscountPercentage.ToString(),
-            TaxRate = product.TaxRate.ToString(CultureInfo.InvariantCulture),
+            TaxRate = product.TaxRate.ToString(),
             Category = product.Category.ToString(),
             Dimensions = new DimensionsContract
             {

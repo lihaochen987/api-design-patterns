@@ -13,6 +13,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         modelBuilder.Entity<Product.DomainModels.Product>()
             .OwnsOne(p => p.DiscountPercentage);
+        modelBuilder.Entity<Product.DomainModels.Product>()
+            .OwnsOne(p => p.TaxRate);
 
         base.OnModelCreating(modelBuilder);
     }

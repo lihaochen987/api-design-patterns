@@ -10,17 +10,20 @@ public class ProductTestDataBuilder
     private string _name;
     private decimal _basePrice;
     private DiscountPercentage _discountPercentage;
-    private decimal _taxRate;
+    private TaxRate _taxRate;
     private Category _category;
     private Dimensions _dimensions;
 
     public ProductTestDataBuilder()
     {
         _fixture = new Fixture();
+        _fixture.Customizations.Add(new DiscountPercentageBuilder());
+        _fixture.Customizations.Add(new TaxRateBuilder());
+
         _name = _fixture.Create<string>();
         _basePrice = _fixture.Create<decimal>();
         _discountPercentage = _fixture.Create<DiscountPercentage>();
-        _taxRate = _fixture.Create<decimal>();
+        _taxRate = _fixture.Create<TaxRate>();
         _category = _fixture.Create<Category>();
         _dimensions = _fixture.Create<Dimensions>();
     }
@@ -49,7 +52,7 @@ public class ProductTestDataBuilder
         return this;
     }
 
-    public ProductTestDataBuilder WithTaxRate(decimal taxRate)
+    public ProductTestDataBuilder WithTaxRate(TaxRate taxRate)
     {
         _taxRate = taxRate;
         return this;
@@ -88,7 +91,7 @@ public class ProductTestDataBuilder
                 .WithName(_fixture.Create<string>())
                 .WithBasePrice(_fixture.Create<decimal>())
                 .WithDiscountPercentage(_fixture.Create<DiscountPercentage>())
-                .WithTaxRate(_fixture.Create<decimal>())
+                .WithTaxRate(_fixture.Create<TaxRate>())
                 .WithCategory(_fixture.Create<Category>())
                 .WithDimensions(_fixture.Create<Dimensions>())
                 .Build())

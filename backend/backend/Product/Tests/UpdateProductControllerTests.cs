@@ -12,7 +12,7 @@ using Xunit;
 namespace backend.Product.Tests;
 
 [Collection("SequentialExecutionCollection")]
-public class UpdateProductControllerTests
+public class UpdateProductControllerTests : IDisposable
 {
     private readonly UpdateProductController _controller;
     private readonly ApplicationDbContext _dbContext;
@@ -148,5 +148,12 @@ public class UpdateProductControllerTests
         response!.Dimensions.Length.ShouldBe(product.Dimensions.Length.ToString(CultureInfo.InvariantCulture));
         response.Dimensions.Width.ShouldBe(request.Dimensions.Width);
         response.Dimensions.Height.ShouldBe(request.Dimensions.Height);
+    }
+
+    public void Dispose()
+    {
+        _dbContext.Database.EnsureDeleted();
+        _dbContext.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
