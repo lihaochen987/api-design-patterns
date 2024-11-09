@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using backend.Shared;
 using backend.Shared.Interfaces;
 
 namespace backend.Product.DomainModels;

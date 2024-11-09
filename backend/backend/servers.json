@@ -1,0 +1,15 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Postgres",
+      "Group": "Servers",
+      "Port": 5432,
+      "Username": "myusername",
+      "Password": "mypassword",
+      "Host": "postgres",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "postgres",
+      "Comment": "Auto-configured PostgreSQL server. Usually would have this as servers.example.json and not commit it to your VCS, but should be fine for a demo project."
+    }
+  }
+}

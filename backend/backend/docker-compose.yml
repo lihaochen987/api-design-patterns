@@ -9,7 +9,6 @@
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-#      - ./DatabaseScripts:/docker-entrypoint-initdb.d
     networks:
       - app-network
 
@@ -37,6 +36,9 @@
       - "5050:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+      - ./servers.json:/pgadmin4/servers.json
+    depends_on:
+      - postgres
     networks:
       - app-network
 

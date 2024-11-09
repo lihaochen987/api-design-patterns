@@ -12,6 +12,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         if (optionsBuilder.IsConfigured) return;
         const string connectionString = "Host=postgres;Database=mydatabase;Username=myusername;Password=mypassword";
         optionsBuilder.UseNpgsql(connectionString);
+        optionsBuilder.UseSnakeCaseNamingConvention();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,9 +27,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         modelBuilder.Entity<Product.DomainModels.Product>().OwnsOne(p => p.Dimensions, d =>
         {
-            d.Property(dim => dim.Length).HasColumnName("Length");
-            d.Property(dim => dim.Width).HasColumnName("Width");
-            d.Property(dim => dim.Height).HasColumnName("Height");
+            d.Property(dim => dim.Length).HasColumnName("ProductionDimensionsLength");
+            d.Property(dim => dim.Width).HasColumnName("ProductDimensionsWidth");
+            d.Property(dim => dim.Height).HasColumnName("ProductDimensionsHeight");
         });
     }
 }
