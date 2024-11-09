@@ -15,5 +15,8 @@ $$
                 product_dimensions_height NUMERIC      NOT NULL
             );
         END IF;
+
+        ALTER TABLE products
+            OWNER TO myusername;
     END
 $$;
