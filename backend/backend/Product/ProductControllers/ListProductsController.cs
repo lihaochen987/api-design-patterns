@@ -21,7 +21,7 @@ public class ListProductsController(
     {
         var query = context.Products.AsQueryable();
 
-        if (!string.IsNullOrEmpty(request.PageToken) && int.TryParse(request.PageToken, out var lastSeenProductId))
+        if (!string.IsNullOrEmpty(request.PageToken) && long.TryParse(request.PageToken, out var lastSeenProductId))
         {
             query = query.Where(p => p.Id > lastSeenProductId);
         }
@@ -36,7 +36,7 @@ public class ListProductsController(
             .OrderBy(p => p.Id)
             .Take(request.MaxPageSize + 1)
             .ToListAsync();
-
+        
         var paginatedProducts = PaginateProducts(
             products,
             request.MaxPageSize,

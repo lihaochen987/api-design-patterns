@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace backend.Product.DomainModels;
 
 public record DiscountPercentage
 {
-    private readonly decimal _value;
+    [Column("product_discount_percentage")]
+    public decimal Value { get; private set; }
 
     private DiscountPercentage()
     {
@@ -13,7 +16,7 @@ public record DiscountPercentage
         if (value is < 0 or > 100)
             throw new ArgumentOutOfRangeException(nameof(value), "Discount percentage must be between 0 and 100.");
 
-        _value = value;
+        Value = value;
     }
 
     public static bool IsValid(decimal candidate)
@@ -36,11 +39,11 @@ public record DiscountPercentage
 
     public static implicit operator decimal(DiscountPercentage discountPercentage)
     {
-        return discountPercentage._value;
+        return discountPercentage.Value;
     }
 
     public override string ToString()
     {
-        return $"{_value:0.##}";
+        return $"{Value:0.##}";
     }
 }

@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace backend.Product.DomainModels;
 
 public record TaxRate
 {
-    private readonly decimal _value;
+    [Column("product_tax_rate")] public decimal Value { get; private set; }
 
     private TaxRate()
     {
@@ -13,7 +15,7 @@ public record TaxRate
         if (value is < 0 or > 100)
             throw new ArgumentOutOfRangeException(nameof(value), "Discount percentage must be between 0 and 100.");
 
-        _value = value;
+        Value = value;
     }
 
     public static bool IsValid(decimal candidate)
@@ -36,11 +38,11 @@ public record TaxRate
 
     public static implicit operator decimal(TaxRate taxRate)
     {
-        return taxRate._value;
+        return taxRate.Value;
     }
-    
+
     public override string ToString()
     {
-        return $"{_value:0.##}";
+        return $"{Value:0.##}";
     }
 }

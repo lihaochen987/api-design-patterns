@@ -11,7 +11,7 @@ public class Product
     }
 
     public Product(
-        int id,
+        long id,
         string name,
         decimal basePrice,
         DiscountPercentage discountPercentage,
@@ -67,7 +67,7 @@ public class Product
     [Column("product_discount_percentage")]
     public DiscountPercentage DiscountPercentage { get; private set; }
 
-    [Column("product_tax_rate")] public TaxRate TaxRate { get; private set; }
+    public TaxRate TaxRate { get; private set; }
 
     [Column("product_category")] public Category Category { get; private set; }
 
