@@ -169,7 +169,7 @@ public class ListProductsControllerTests : IDisposable
         var listProductsResponse = response.Value as ListProductsResponse;
         listProductsResponse!.Results.Count().ShouldBe(1);
         listProductsResponse.Results
-            .All(p => p!.Category == product.Category.ToString() && int.Parse(p.Price) < 20)
+            .All(p => p!.Category == product.Category.ToString() && decimal.Parse(p.Price) < 20)
             .ShouldBeTrue();
     }
 

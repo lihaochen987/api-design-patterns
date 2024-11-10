@@ -10,21 +10,25 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         modelBuilder.Entity<Product.DomainModels.Product>(entity =>
         {
+            // Convert to table
             entity.ToTable("products");
+
+            // Properties
             entity.Property(e => e.Id)
                 .HasColumnName("product_id");
             entity.Property(e => e.Name)
                 .HasColumnName("product_name");
             entity.Property(e => e.BasePrice)
                 .HasColumnName("product_base_price");
-            entity.OwnsOne(p => p.DiscountPercentage,
-                dp => { dp.Property(d => d.Value).HasColumnName("product_discount_percentage"); });
-            entity.OwnsOne(p => p.TaxRate,
-                tr => { tr.Property(t => t.Value).HasColumnName("product_tax_rate"); });
             entity.Property(e => e.Category)
                 .HasColumnName("product_category")
                 .HasConversion<string>();
 
+            // Relationships
+            entity.OwnsOne(p => p.DiscountPercentage,
+                dp => { dp.Property(d => d.Value).HasColumnName("product_discount_percentage"); });
+            entity.OwnsOne(p => p.TaxRate,
+                tr => { tr.Property(t => t.Value).HasColumnName("product_tax_rate"); });
             entity.OwnsOne(e => e.Dimensions, dimensions =>
             {
                 dimensions.Property(d => d.Length)
@@ -34,6 +38,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 dimensions.Property(d => d.Height)
                     .HasColumnName("product_dimensions_height");
             });
+
+            // Computed fields
+            entity.Property(e => e.Price)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
         });
 
         base.OnModelCreating(modelBuilder);

@@ -56,7 +56,13 @@ public class Product
     public DiscountPercentage DiscountPercentage { get; private set; }
     public TaxRate TaxRate { get; private set; }
     public Category Category { get; private set; }
-    public decimal Price => CalculatePrice();
+
+    public decimal Price
+    {
+        get => CalculatePrice();
+        init => _ = value;
+    }
+
     public Dimensions Dimensions { get; private set; }
 
     private decimal CalculatePrice()
