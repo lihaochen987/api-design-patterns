@@ -1,4 +1,5 @@
 using backend.Product.Database;
+using backend.Product.FieldMasks;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -25,9 +26,9 @@ public class UpdateProductController(
             return NotFound();
         }
 
-        var (name, basePrice, discountPercentage, taxRate, category, dimensions) =
+        var (name, category, dimensions) =
             configuration.GetUpdatedProductValues(request, product);
-        product.Replace(name, basePrice, discountPercentage, taxRate, category, dimensions);
+        product.Replace(name, category, dimensions);
 
         await context.SaveChangesAsync();
 

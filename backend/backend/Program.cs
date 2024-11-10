@@ -1,7 +1,9 @@
 using backend.Database;
 using backend.Product;
 using backend.Product.Database;
+using backend.Product.FieldMasks;
 using backend.Product.ProductControllers;
+using backend.Product.ProductPricingControllers;
 using backend.Shared;
 using DbUp;
 using Microsoft.EntityFrameworkCore;
@@ -21,11 +23,15 @@ builder.Services.AddCors(options =>
 builder.Services.AddTransient<TypeParser>();
 
 // Inject Product classes
+builder.Services.AddTransient<ProductFieldMaskConfiguration>();
+
 builder.Services.AddScoped<CreateProductExtensions>();
 builder.Services.AddTransient<GetProductExtensions>();
 builder.Services.AddScoped<ReplaceProductExtensions>();
-builder.Services.AddTransient<CreateProductExtensions>();
-builder.Services.AddTransient<ProductFieldMaskConfiguration>();
+builder.Services.AddScoped<UpdateProductExtensions>();
+
+builder.Services.AddTransient<GetProductPricingExtensions>();
+builder.Services.AddScoped<UpdateProductPricingExtensions>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -17,16 +17,9 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
                 .HasColumnName("product_id");
             entity.Property(e => e.Name)
                 .HasColumnName("product_name");
-            entity.Property(e => e.BasePrice)
-                .HasColumnName("product_base_price");
             entity.Property(e => e.Category)
                 .HasColumnName("product_category")
                 .HasConversion<string>();
-
-            entity.OwnsOne(p => p.DiscountPercentage,
-                dp => { dp.Property(d => d.Value).HasColumnName("product_discount_percentage"); });
-            entity.OwnsOne(p => p.TaxRate,
-                tr => { tr.Property(t => t.Value).HasColumnName("product_tax_rate"); });
             entity.OwnsOne(e => e.Dimensions, dimensions =>
             {
                 dimensions.Property(d => d.Length)
@@ -37,8 +30,8 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
                     .HasColumnName("product_dimensions_height");
             });
 
-            entity.Property(e => e.Price)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
+            // entity.Property(e => e.Price)
+            //     .UsePropertyAccessMode(PropertyAccessMode.Property);
         });
 
         modelBuilder.Entity<DomainModels.ProductPricing>(pricing =>

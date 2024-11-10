@@ -1,4 +1,5 @@
 using backend.Product.Database;
+using backend.Product.FieldMasks;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -7,7 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace backend.Product.ProductPricingControllers;
 
 [ApiController]
-[Microsoft.AspNetCore.Components.Route("product")]
+[Route("product")]
 public class GetProductPricingController(
     ProductDbContext context,
     ProductFieldMaskConfiguration configuration,
@@ -15,7 +16,7 @@ public class GetProductPricingController(
     : ControllerBase
 {
     [HttpGet("{id:long}/pricing")]
-    [SwaggerOperation(Summary = "Get a product", Tags = ["Products, ProductPricing"])]
+    [SwaggerOperation(Summary = "Get a product pricing", Tags = ["Products, ProductPricing"])]
     public async Task<ActionResult<GetProductPricingResponse>> GetProductPricing(
         [FromRoute] long id,
         [FromQuery] GetProductPricingRequest request)
@@ -28,7 +29,7 @@ public class GetProductPricingController(
         var settings = new JsonSerializerSettings
         {
             Converters = new List<JsonConverter>
-                { new FieldMaskConverter(request.FieldMask, configuration.ProductFieldPaths) }
+                { new FieldMaskConverter(request.FieldMask, configuration.ProductPricingFieldPaths) }
         };
 
         var json = JsonConvert.SerializeObject(response, settings);

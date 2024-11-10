@@ -2,9 +2,7 @@ using backend.Product.DomainModels;
 using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
 
-namespace backend.Product;
-
-using System.Collections.Generic;
+namespace backend.Product.FieldMasks;
 
 /// <summary>
 /// ProductMaskFieldPaths is a class which holds all the manual changes required for this API to work.
@@ -20,31 +18,27 @@ public class ProductFieldMaskConfiguration
         "*",
         "id",
         "name",
-        "price",
         "category",
         "dimensions.*",
         "dimensions.width",
         "dimensions.height",
         "dimensions.length",
-        "pricing.basePrice",
-        "pricing.discountPercentage",
-        "pricing.taxRate"
+        "pricing.baseprice",
+        "pricing.discountpercentage",
+        "pricing.taxrate"
     ];
 
     public readonly HashSet<string> ProductPricingFieldPaths =
     [
         "*",
         "id",
-        "basePrice",
-        "discountPercentage",
-        "taxRate"
+        "baseprice",
+        "discountpercentage",
+        "taxrate"
     ];
 
     public (
         string name,
-        decimal basePrice,
-        DiscountPercentage discountPercentage,
-        TaxRate taxRate,
         Category category,
         Dimensions dimensions)
         GetUpdatedProductValues(
@@ -56,22 +50,6 @@ public class ProductFieldMaskConfiguration
             ? request.Name
             : product.Name;
 
-        var basePrice = request.FieldMask.Contains("basePrice", StringComparer.OrdinalIgnoreCase)
-                        && decimal.TryParse(request.BasePrice, out var parsedBasePrice)
-            ? parsedBasePrice
-            : product.BasePrice;
-
-        var discountPercentage = request.FieldMask.Contains("discountPercentage", StringComparer.OrdinalIgnoreCase)
-                                 && DiscountPercentage.TryParse(request.DiscountPercentage,
-                                     out var parsedDiscountPercentage)
-            ? parsedDiscountPercentage!
-            : product.DiscountPercentage;
-
-        var taxRate = request.FieldMask.Contains("taxRate", StringComparer.OrdinalIgnoreCase)
-                      && TaxRate.TryParse(request.TaxRate, out var parsedTaxRate)
-            ? parsedTaxRate!
-            : product.TaxRate;
-
         var category = request.FieldMask.Contains("category", StringComparer.OrdinalIgnoreCase)
                        && Enum.TryParse(request.Category, true, out Category parsedCategory)
             ? parsedCategory
@@ -79,7 +57,7 @@ public class ProductFieldMaskConfiguration
 
         var dimensions = GetUpdatedDimensionValues(request, product.Dimensions);
 
-        return (name, basePrice, discountPercentage, taxRate, category, dimensions);
+        return (name, category, dimensions);
     }
 
     public (
@@ -90,18 +68,18 @@ public class ProductFieldMaskConfiguration
             UpdateProductPricingRequest request,
             ProductPricing product)
     {
-        var basePrice = request.FieldMask.Contains("price", StringComparer.OrdinalIgnoreCase)
+        var basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase)
                         && decimal.TryParse(request.BasePrice, out var parsedBasePrice)
             ? parsedBasePrice
             : product.BasePrice;
 
-        var discountPercentage = request.FieldMask.Contains("discountPercentage", StringComparer.OrdinalIgnoreCase)
+        var discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
                                  && DiscountPercentage.TryParse(request.DiscountPercentage,
                                      out var parsedDiscountPercentage)
             ? parsedDiscountPercentage!
             : product.DiscountPercentage;
 
-        var taxRate = request.FieldMask.Contains("taxRate", StringComparer.OrdinalIgnoreCase)
+        var taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
                       && TaxRate.TryParse(request.TaxRate, out var parsedTaxRate)
             ? parsedTaxRate!
             : product.TaxRate;

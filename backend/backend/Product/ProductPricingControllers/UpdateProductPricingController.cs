@@ -1,4 +1,5 @@
 using backend.Product.Database;
+using backend.Product.FieldMasks;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -9,10 +10,11 @@ namespace backend.Product.ProductPricingControllers;
 public class UpdateProductPricingController(
     ProductDbContext context,
     ProductFieldMaskConfiguration configuration,
-    UpdateProductPricingExtensions extensions) : ControllerBase
+    UpdateProductPricingExtensions extensions) 
+    : ControllerBase
 {
     [HttpPatch("{id:long}/pricing")]
-    [SwaggerOperation(Summary = "Update a product", Tags = ["Products"])]
+    [SwaggerOperation(Summary = "Update a product pricing", Tags = ["Products, ProductPricing"])]
     public async Task<ActionResult<UpdateProductPricingResponse>> UpdateProductPricing(
         [FromRoute] long id,
         [FromBody] UpdateProductPricingRequest request)

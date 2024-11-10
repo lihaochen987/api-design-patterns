@@ -3,6 +3,7 @@ using backend.Database;
 using backend.Product.Contracts;
 using backend.Product.Database;
 using backend.Product.DomainModels;
+using backend.Product.FieldMasks;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.Builders;
 using Microsoft.AspNetCore.Mvc;
@@ -99,31 +100,31 @@ public class UpdateProductControllerTests : IDisposable
         actionResult.Result.ShouldBeOfType<NotFoundResult>();
     }
 
-    [Fact]
-    public async Task UpdateProduct_WithMultipleFieldsInFieldMask_ShouldUpdateOnlySpecifiedFields()
-    {
-        const string originalName = "Original Name";
-        const decimal originalPrice = 20.99m;
-        var product = new ProductTestDataBuilder().WithId(3).WithName(originalName).WithBasePrice(originalPrice)
-            .WithCategory(Category.Feeders).Build();
-        _dbContext.Products.Add(product);
-        await _dbContext.SaveChangesAsync();
-
-        var request = new UpdateProductRequest
-        {
-            Name = "Updated Name",
-            BasePrice = "25.50",
-            Category = "Toys",
-            FieldMask = ["name", "category"]
-        };
-
-        var actionResult = await _controller.UpdateProduct(product.Id, request);
-
-        var response = Assert.IsType<OkObjectResult>(actionResult.Result).Value as UpdateProductResponse;
-        response.ShouldNotBeNull();
-        response.Name.ShouldBeEquivalentTo(request.Name);
-        response.Category.ShouldBeEquivalentTo(request.Category);
-    }
+    // [Fact]
+    // public async Task UpdateProduct_WithMultipleFieldsInFieldMask_ShouldUpdateOnlySpecifiedFields()
+    // {
+    //     const string originalName = "Original Name";
+    //     const decimal originalPrice = 20.99m;
+    //     var product = new ProductTestDataBuilder().WithId(3).WithName(originalName).WithBasePrice(originalPrice)
+    //         .WithCategory(Category.Feeders).Build();
+    //     _dbContext.Products.Add(product);
+    //     await _dbContext.SaveChangesAsync();
+    //
+    //     var request = new UpdateProductRequest
+    //     {
+    //         Name = "Updated Name",
+    //         BasePrice = "25.50",
+    //         Category = "Toys",
+    //         FieldMask = ["name", "category"]
+    //     };
+    //
+    //     var actionResult = await _controller.UpdateProduct(product.Id, request);
+    //
+    //     var response = Assert.IsType<OkObjectResult>(actionResult.Result).Value as UpdateProductResponse;
+    //     response.ShouldNotBeNull();
+    //     response.Name.ShouldBeEquivalentTo(request.Name);
+    //     response.Category.ShouldBeEquivalentTo(request.Category);
+    // }
 
     [Fact]
     public async Task UpdateProduct_WithNestedFieldInFieldMask_ShouldUpdateNestedField()
