@@ -5,6 +5,7 @@ namespace backend.Product.Database;
 public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbContext(options)
 {
     public DbSet<DomainModels.Product> Products { get; set; }
+    public DbSet<DomainModels.ProductPricing> ProductPricing { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -38,6 +39,27 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
 
             entity.Property(e => e.Price)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
+        });
+
+        modelBuilder.Entity<DomainModels.ProductPricing>(pricing =>
+        {
+            pricing.ToTable("product_pricing");
+
+            pricing.Property(p => p.Id)
+                .HasColumnName("product_id");
+
+            pricing.Property(p => p.BasePrice)
+                .HasColumnName("product_base_price");
+
+            pricing.OwnsOne(p => p.DiscountPercentage,
+                dp => { dp.Property(d => d.Value).HasColumnName("product_discount_percentage"); });
+
+            pricing.OwnsOne(p => p.TaxRate, tr => { tr.Property(t => t.Value).HasColumnName("product_tax_rate"); });
+
+            pricing.HasOne<DomainModels.Product>()
+                .WithOne()
+                .HasForeignKey<DomainModels.ProductPricing>(p => p.Id)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         base.OnModelCreating(modelBuilder);

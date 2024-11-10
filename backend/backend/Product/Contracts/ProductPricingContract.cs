@@ -1,9 +1,8 @@
-namespace backend.Product.ProductPricingControllers;
+namespace backend.Product.Contracts;
 
-public class UpdateProductPricingRequest
+public class ProductPricingContract
 {
     public string BasePrice { get; set; } = "";
     public string DiscountPercentage { get; set; } = "";
     public string TaxRate { get; set; } = "";
-    public List<string> FieldMask { get; init; } = ["*"];
 }

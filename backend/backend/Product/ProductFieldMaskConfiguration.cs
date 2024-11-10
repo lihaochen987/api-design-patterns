@@ -1,5 +1,6 @@
 using backend.Product.DomainModels;
 using backend.Product.ProductControllers;
+using backend.Product.ProductPricingControllers;
 
 namespace backend.Product;
 
@@ -24,7 +25,19 @@ public class ProductFieldMaskConfiguration
         "dimensions.*",
         "dimensions.width",
         "dimensions.height",
-        "dimensions.length"
+        "dimensions.length",
+        "pricing.basePrice",
+        "pricing.discountPercentage",
+        "pricing.taxRate"
+    ];
+
+    public readonly HashSet<string> ProductPricingFieldPaths =
+    [
+        "*",
+        "id",
+        "basePrice",
+        "discountPercentage",
+        "taxRate"
     ];
 
     public (
@@ -43,7 +56,7 @@ public class ProductFieldMaskConfiguration
             ? request.Name
             : product.Name;
 
-        var basePrice = request.FieldMask.Contains("price", StringComparer.OrdinalIgnoreCase)
+        var basePrice = request.FieldMask.Contains("basePrice", StringComparer.OrdinalIgnoreCase)
                         && decimal.TryParse(request.BasePrice, out var parsedBasePrice)
             ? parsedBasePrice
             : product.BasePrice;
@@ -67,6 +80,33 @@ public class ProductFieldMaskConfiguration
         var dimensions = GetUpdatedDimensionValues(request, product.Dimensions);
 
         return (name, basePrice, discountPercentage, taxRate, category, dimensions);
+    }
+
+    public (
+        decimal basePrice,
+        DiscountPercentage discountPercentage,
+        TaxRate taxRate)
+        GetUpdatedProductPricingValues(
+            UpdateProductPricingRequest request,
+            ProductPricing product)
+    {
+        var basePrice = request.FieldMask.Contains("price", StringComparer.OrdinalIgnoreCase)
+                        && decimal.TryParse(request.BasePrice, out var parsedBasePrice)
+            ? parsedBasePrice
+            : product.BasePrice;
+
+        var discountPercentage = request.FieldMask.Contains("discountPercentage", StringComparer.OrdinalIgnoreCase)
+                                 && DiscountPercentage.TryParse(request.DiscountPercentage,
+                                     out var parsedDiscountPercentage)
+            ? parsedDiscountPercentage!
+            : product.DiscountPercentage;
+
+        var taxRate = request.FieldMask.Contains("taxRate", StringComparer.OrdinalIgnoreCase)
+                      && TaxRate.TryParse(request.TaxRate, out var parsedTaxRate)
+            ? parsedTaxRate!
+            : product.TaxRate;
+
+        return (basePrice, discountPercentage, taxRate);
     }
 
     private static Dimensions GetUpdatedDimensionValues(
