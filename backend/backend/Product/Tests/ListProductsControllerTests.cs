@@ -1,4 +1,5 @@
 using backend.Database;
+using backend.Product.Database;
 using backend.Product.DomainModels;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.Builders;
@@ -13,16 +14,16 @@ namespace backend.Product.Tests;
 public class ListProductsControllerTests : IDisposable
 {
     private readonly ListProductsController _controller;
-    private readonly ApplicationDbContext _dbContext;
+    private readonly ProductDbContext _dbContext;
     private const int DefaultMaxPageSize = 10;
 
     public ListProductsControllerTests()
     {
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+        var options = new DbContextOptionsBuilder<ProductDbContext>()
             .UseNpgsql("Host=localhost;Database=mytestdatabase;Username=myusername;Password=mypassword")
             .Options;
 
-        var db = new ApplicationDbContext(options);
+        var db = new ProductDbContext(options);
         db.Database.EnsureCreated();
         _dbContext = db;
         var extensions = new GetProductExtensions();
@@ -150,7 +151,7 @@ public class ListProductsControllerTests : IDisposable
     [Fact]
     public async Task ListProducts_WithFilter_ReturnsFilteredResults()
     {
-        var product = new ProductTestDataBuilder().WithBasePrice(15).WithCategory(Category.PetFood).Build();
+        var product = new ProductTestDataBuilder().WithPriceLessThan(20).Build();
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 
@@ -162,15 +163,14 @@ public class ListProductsControllerTests : IDisposable
 
         var result = await _controller.ListProducts(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
         var response = result.Result as OkObjectResult;
         response.ShouldNotBeNull();
         var listProductsResponse = response.Value as ListProductsResponse;
-        listProductsResponse!.Results.Count().ShouldBe(1);
-        listProductsResponse.Results
-            .All(p => p!.Category == product.Category.ToString() && decimal.Parse(p.Price) < 20)
-            .ShouldBeTrue();
+        listProductsResponse.ShouldNotBeNull();
+        listProductsResponse.Results.ShouldHaveSingleItem()
+            .ShouldSatisfyAllConditions(
+                p => p!.Category.ShouldBe(product.Category.ToString()),
+                p => decimal.Parse(p!.Price).ShouldBeLessThan(20));
     }
 
     [Fact]

@@ -1,4 +1,4 @@
-using backend.Database;
+using backend.Product.Database;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -7,7 +7,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class UpdateProductController(
-    ApplicationDbContext context,
+    ProductDbContext context,
     ProductFieldMaskConfiguration configuration,
     UpdateProductExtensions extensions)
     : ControllerBase

@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using backend.Database;
+using backend.Product.Database;
 using backend.Shared.CelSpecParser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ namespace backend.Product.ProductControllers;
 [Route("products")]
 [ApiController]
 public class ListProductsController(
-    ApplicationDbContext context,
+    ProductDbContext context,
     GetProductExtensions extensions)
     : ControllerBase
 {
@@ -36,7 +36,7 @@ public class ListProductsController(
             .OrderBy(p => p.Id)
             .Take(request.MaxPageSize + 1)
             .ToListAsync();
-        
+
         var paginatedProducts = PaginateProducts(
             products,
             request.MaxPageSize,

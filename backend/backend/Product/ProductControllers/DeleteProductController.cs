@@ -1,4 +1,4 @@
-using backend.Database;
+using backend.Product.Database;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -6,7 +6,7 @@ namespace backend.Product.ProductControllers;
 
 [ApiController]
 [Route("product")]
-public class DeleteProductController(ApplicationDbContext context) : ControllerBase
+public class DeleteProductController(ProductDbContext context) : ControllerBase
 {
     [HttpDelete("{id:long}")]
     [SwaggerOperation(Summary = "Delete a product", Tags = ["Products"])]

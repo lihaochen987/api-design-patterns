@@ -1,6 +1,7 @@
 using System.Globalization;
 using AutoFixture;
 using backend.Database;
+using backend.Product.Database;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.Builders;
 using Microsoft.AspNetCore.Mvc;
@@ -17,16 +18,16 @@ namespace backend.Product.Tests
     {
         private readonly Fixture _fixture = new();
         private readonly GetProductController _controller;
-        private readonly ApplicationDbContext _dbContext;
+        private readonly ProductDbContext _dbContext;
         private readonly GetProductExtensions _extensions;
 
         public GetProductControllerTests()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            var options = new DbContextOptionsBuilder<ProductDbContext>()
                 .UseNpgsql("Host=localhost;Database=mytestdatabase;Username=myusername;Password=mypassword")
                 .Options;
 
-            var db = new ApplicationDbContext(options);
+            var db = new ProductDbContext(options);
             db.Database.EnsureCreated();
             _dbContext = db;
             var configuration = new ProductFieldMaskConfiguration();

@@ -1,4 +1,4 @@
-using backend.Database;
+using backend.Product.Database;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -9,7 +9,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class GetProductController(
-    ApplicationDbContext context,
+    ProductDbContext context,
     ProductFieldMaskConfiguration configuration,
     GetProductExtensions extensions)
     : ControllerBase

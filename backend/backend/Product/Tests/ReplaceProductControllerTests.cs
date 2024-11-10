@@ -1,4 +1,5 @@
 using backend.Database;
+using backend.Product.Database;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.Builders;
 using backend.Shared;
@@ -13,16 +14,16 @@ namespace backend.Product.Tests;
 public class ReplaceProductControllerTests : IDisposable
 {
     private readonly ReplaceProductController _controller;
-    private readonly ApplicationDbContext _dbContext;
+    private readonly ProductDbContext _dbContext;
     private readonly ReplaceProductExtensions _extensions;
 
     public ReplaceProductControllerTests()
     {
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+        var options = new DbContextOptionsBuilder<ProductDbContext>()
             .UseNpgsql("Host=localhost;Database=mytestdatabase;Username=myusername;Password=mypassword")
             .Options;
 
-        var db = new ApplicationDbContext(options);
+        var db = new ProductDbContext(options);
         db.Database.EnsureCreated();
         _dbContext = db;
         _extensions = new ReplaceProductExtensions(new TypeParser());

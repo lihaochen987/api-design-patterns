@@ -40,9 +40,9 @@ public class ProductTestDataBuilder
         return this;
     }
 
-    public ProductTestDataBuilder WithBasePrice(decimal price)
+    public ProductTestDataBuilder WithBasePrice(decimal basePrice)
     {
-        _basePrice = price;
+        _basePrice = basePrice;
         return this;
     }
 
@@ -67,6 +67,17 @@ public class ProductTestDataBuilder
     public ProductTestDataBuilder WithDimensions(Dimensions dimensions)
     {
         _dimensions = dimensions;
+        return this;
+    }
+
+    public ProductTestDataBuilder WithPriceLessThan(decimal maxPrice)
+    {
+        _discountPercentage = new DiscountPercentage(10);
+        _taxRate = new TaxRate(5);
+
+        // Calculate required base price to ensure final price is below maxPrice
+        _basePrice = maxPrice / ((1 - (decimal)_discountPercentage / 100) * (1 + (decimal)_taxRate / 100)) - 1m;
+
         return this;
     }
 

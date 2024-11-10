@@ -1,5 +1,6 @@
 using backend.Database;
 using backend.Product;
+using backend.Product.Database;
 using backend.Product.ProductControllers;
 using backend.Shared;
 using DbUp;
@@ -31,9 +32,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => { c.EnableAnnotations(); });
 
-// Register ApplicationDbContext with SQLite
+// Register ApplicationDbContext with PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ProductDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 var app = builder.Build();
 
@@ -51,6 +55,7 @@ using (var scope = app.Services.CreateScope())
         }
 
         scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        scope.ServiceProvider.GetRequiredService<ProductDbContext>();
     }
     catch (Exception ex)
     {
