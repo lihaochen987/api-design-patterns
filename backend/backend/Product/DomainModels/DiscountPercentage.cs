@@ -1,10 +1,7 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace backend.Product.DomainModels;
 
 public record DiscountPercentage
 {
-    [Column("product_discount_percentage")]
     public decimal Value { get; private set; }
 
     private DiscountPercentage()

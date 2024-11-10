@@ -1,9 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace backend.Product.DomainModels;
 
-[Table("products")]
 public class Product
 {
     private Product()
@@ -56,30 +52,20 @@ public class Product
         Dimensions = dimensions;
     }
 
-    [Column("product_id")] public long Id { get; private set; }
-
-    [Column("product_name")]
-    [MaxLength(100)]
+    public long Id { get; private set; }
     public string Name { get; private set; }
-
-    [Column("product_base_price")] public decimal BasePrice { get; private set; }
-
-    [Column("product_discount_percentage")]
+    public decimal BasePrice { get; private set; }
     public DiscountPercentage DiscountPercentage { get; private set; }
-
     public TaxRate TaxRate { get; private set; }
-
-    [Column("product_category")] public Category Category { get; private set; }
-
-    [NotMapped] public decimal Price => CalculatePrice();
-
+    public Category Category { get; private set; }
+    public decimal Price => CalculatePrice();
     public Dimensions Dimensions { get; private set; }
 
     private decimal CalculatePrice()
     {
         var discountedPrice = BasePrice * (1 - (decimal)DiscountPercentage / 100);
         var finalPrice = discountedPrice * (1 + TaxRate / 100);
-        return finalPrice;
+        return Math.Round(finalPrice, 2);
     }
 
     public void Replace(

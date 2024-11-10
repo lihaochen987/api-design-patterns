@@ -1,10 +1,8 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace backend.Product.DomainModels;
 
 public record TaxRate
 {
-    [Column("product_tax_rate")] public decimal Value { get; private set; }
+    public decimal Value { get; private set; }
 
     private TaxRate()
     {

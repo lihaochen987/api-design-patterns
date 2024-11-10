@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace backend.Product.DomainModels;
 
 public record Dimensions
@@ -15,9 +13,9 @@ public record Dimensions
         Height = height;
     }
 
-    [Column("product_dimensions_length")] public decimal Length { get; init; }
-    [Column("product_dimensions_width")] public decimal Width { get; init; }
-    [Column("product_dimensions_height")] public decimal Height { get; init; }
+    public decimal Length { get; init; }
+    public decimal Width { get; init; }
+    public decimal Height { get; init; }
 
     private static void EnforceInvariants(decimal length, decimal width, decimal height)
     {

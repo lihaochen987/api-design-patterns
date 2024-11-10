@@ -120,6 +120,24 @@
       <Compile Update="Product\ProductControllers\UpdateProductResponse.cs">
         <DependentUpon>UpdateProductController.cs</DependentUpon>
       </Compile>
+      <Compile Update="Product\ProductPricingControllers\GetProductPricingExtensions.cs">
+        <DependentUpon>GetProductPricingController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductPricingControllers\GetProductPricingRequest.cs">
+        <DependentUpon>GetProductPricingController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductPricingControllers\GetProductPricingResponse.cs">
+        <DependentUpon>GetProductPricingController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductPricingControllers\UpdateProductPricingExtensions.cs">
+        <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductPricingControllers\UpdateProductPricingRequest.cs">
+        <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Product\ProductPricingControllers\UpdateProductPricingResponse.cs">
+        <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
