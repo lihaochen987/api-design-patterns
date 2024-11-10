@@ -173,32 +173,32 @@ public class ListProductsControllerTests : IDisposable
     //             p => decimal.Parse(p!.Price).ShouldBeLessThan(20));
     // }
 
-    // [Fact]
-    // public async Task ListProducts_WithFilterAndPagination_ReturnsCorrectResults()
-    // {
-    //     var product = new ProductTestDataBuilder().WithId(2).WithBasePrice(15).WithCategory(Category.Beds).Build();
-    //     _dbContext.Products.Add(product);
-    //     await _dbContext.SaveChangesAsync();
-    //
-    //     var request = new ListProductsRequest
-    //     {
-    //         Filter = "Category == \"Beds\"",
-    //         MaxPageSize = 2,
-    //         PageToken = "1"
-    //     };
-    //
-    //     var result = await _controller.ListProducts(request);
-    //
-    //     result.Result.ShouldNotBeNull();
-    //     result.Result.ShouldBeOfType<OkObjectResult>();
-    //     var response = result.Result as OkObjectResult;
-    //     response.ShouldNotBeNull();
-    //     var listProductsResponse = response.Value as ListProductsResponse;
-    //     listProductsResponse!.Results.Count().ShouldBe(1);
-    //     listProductsResponse.Results
-    //         .All(p => p!.Category == product.Category.ToString())
-    //         .ShouldBeTrue();
-    // }
+    [Fact]
+    public async Task ListProducts_WithFilterAndPagination_ReturnsCorrectResults()
+    {
+        var product = new ProductTestDataBuilder().WithId(2).WithCategory(Category.Beds).Build();
+        _dbContext.Products.Add(product);
+        await _dbContext.SaveChangesAsync();
+
+        var request = new ListProductsRequest
+        {
+            Filter = "Category == \"Beds\"",
+            MaxPageSize = 2,
+            PageToken = "1"
+        };
+
+        var result = await _controller.ListProducts(request);
+
+        result.Result.ShouldNotBeNull();
+        result.Result.ShouldBeOfType<OkObjectResult>();
+        var response = result.Result as OkObjectResult;
+        response.ShouldNotBeNull();
+        var listProductsResponse = response.Value as ListProductsResponse;
+        listProductsResponse!.Results.Count().ShouldBe(1);
+        listProductsResponse.Results
+            .All(p => p!.Category == product.Category.ToString())
+            .ShouldBeTrue();
+    }
 
     [Fact]
     public async Task ListProducts_WithFilterAndPagination_ReturnsCorrectResultsWhenScattered()

@@ -24,12 +24,12 @@ builder.Services.AddTransient<TypeParser>();
 
 // Inject Product classes
 builder.Services.AddTransient<ProductFieldMaskConfiguration>();
-
 builder.Services.AddScoped<CreateProductExtensions>();
 builder.Services.AddTransient<GetProductExtensions>();
 builder.Services.AddScoped<ReplaceProductExtensions>();
 builder.Services.AddScoped<UpdateProductExtensions>();
 
+builder.Services.AddTransient<ProductPricingFieldMaskConfiguration>();
 builder.Services.AddTransient<GetProductPricingExtensions>();
 builder.Services.AddScoped<UpdateProductPricingExtensions>();
 

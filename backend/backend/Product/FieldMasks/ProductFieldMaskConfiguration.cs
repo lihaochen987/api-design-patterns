@@ -1,6 +1,5 @@
 using backend.Product.DomainModels;
 using backend.Product.ProductControllers;
-using backend.Product.ProductPricingControllers;
 
 namespace backend.Product.FieldMasks;
 
@@ -28,15 +27,6 @@ public class ProductFieldMaskConfiguration
         "pricing.taxrate"
     ];
 
-    public readonly HashSet<string> ProductPricingFieldPaths =
-    [
-        "*",
-        "id",
-        "baseprice",
-        "discountpercentage",
-        "taxrate"
-    ];
-
     public (
         string name,
         Category category,
@@ -58,33 +48,6 @@ public class ProductFieldMaskConfiguration
         var dimensions = GetUpdatedDimensionValues(request, product.Dimensions);
 
         return (name, category, dimensions);
-    }
-
-    public (
-        decimal basePrice,
-        DiscountPercentage discountPercentage,
-        TaxRate taxRate)
-        GetUpdatedProductPricingValues(
-            UpdateProductPricingRequest request,
-            ProductPricing product)
-    {
-        var basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase)
-                        && decimal.TryParse(request.BasePrice, out var parsedBasePrice)
-            ? parsedBasePrice
-            : product.BasePrice;
-
-        var discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
-                                 && DiscountPercentage.TryParse(request.DiscountPercentage,
-                                     out var parsedDiscountPercentage)
-            ? parsedDiscountPercentage!
-            : product.DiscountPercentage;
-
-        var taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
-                      && TaxRate.TryParse(request.TaxRate, out var parsedTaxRate)
-            ? parsedTaxRate!
-            : product.TaxRate;
-
-        return (basePrice, discountPercentage, taxRate);
     }
 
     private static Dimensions GetUpdatedDimensionValues(

@@ -11,7 +11,7 @@ namespace backend.Product.ProductPricingControllers;
 [Route("product")]
 public class GetProductPricingController(
     ProductDbContext context,
-    ProductFieldMaskConfiguration configuration,
+    ProductPricingFieldMaskConfiguration configuration,
     GetProductPricingExtensions extensions)
     : ControllerBase
 {
