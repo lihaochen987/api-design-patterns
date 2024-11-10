@@ -20,8 +20,7 @@ public class Product
         EnforceInvariants(
             name,
             basePrice,
-            category,
-            dimensions);
+            category);
         Name = name;
         BasePrice = basePrice;
         DiscountPercentage = discountPercentage;
@@ -42,8 +41,7 @@ public class Product
         EnforceInvariants(
             name,
             basePrice,
-            category,
-            dimensions);
+            category);
         Name = name;
         BasePrice = basePrice;
         DiscountPercentage = discountPercentage;
@@ -79,8 +77,7 @@ public class Product
         EnforceInvariants(
             name,
             basePrice,
-            category,
-            dimensions);
+            category);
         Name = name;
         BasePrice = basePrice;
         DiscountPercentage = discountPercentage;
@@ -92,8 +89,7 @@ public class Product
     private static void EnforceInvariants(
         string name,
         decimal basePrice,
-        Category category,
-        Dimensions dimensions)
+        Category category)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Product name is required.");
@@ -101,7 +97,5 @@ public class Product
             throw new ArgumentException("Product price must be greater than zero.");
         if (!Enum.IsDefined(typeof(Category), category))
             throw new ArgumentException("Invalid category for the Product.");
-        if (dimensions == null)
-            throw new ArgumentException("Dimensions are required.");
     }
 }
