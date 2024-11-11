@@ -2,6 +2,21 @@ namespace backend.Product.DomainModels;
 
 public record ProductPricing
 {
+    private ProductPricing()
+    {
+    }
+
+    public ProductPricing(
+        decimal basePrice,
+        decimal discountPercentage,
+        decimal taxRate)
+    {
+        EnforceInvariants(basePrice);
+        BasePrice = basePrice;
+        DiscountPercentage = new DiscountPercentage(discountPercentage);
+        TaxRate = new TaxRate(taxRate);
+    }
+
     public long Id { get; set; }
     public decimal BasePrice { get; private set; }
     public DiscountPercentage DiscountPercentage { get; private set; }

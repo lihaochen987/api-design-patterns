@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace backend.Product.DomainModels;
 
 public class Product
@@ -9,6 +11,7 @@ public class Product
     public Product(
         long id,
         string name,
+        ProductPricing pricing,
         Category category,
         Dimensions dimensions
     )
@@ -18,12 +21,14 @@ public class Product
             name,
             category);
         Name = name;
+        Pricing = pricing;
         Category = category;
         Dimensions = dimensions;
     }
 
     public Product(
         string name,
+        ProductPricing pricing,
         Category category,
         Dimensions dimensions
     )
@@ -32,6 +37,7 @@ public class Product
             name,
             category);
         Name = name;
+        Pricing = pricing;
         Category = category;
         Dimensions = dimensions;
     }
@@ -39,24 +45,26 @@ public class Product
     public long Id { get; private set; }
     public string Name { get; private set; }
     public Category Category { get; private set; }
+    public ProductPricing Pricing { get; private set; }
 
-    // public decimal Price
-    // {
-    //     get => CalculatePrice();
-    //     init => _ = value;
-    // }
+    public decimal Price
+    {
+        get => CalculatePrice();
+        init => _ = value;
+    }
 
     public Dimensions Dimensions { get; private set; }
 
-    // private decimal CalculatePrice()
-    // {
-    //     var discountedPrice = BasePrice * (1 - (decimal)DiscountPercentage / 100);
-    //     var finalPrice = discountedPrice * (1 + TaxRate / 100);
-    //     return Math.Round(finalPrice, 2);
-    // }
+    private decimal CalculatePrice()
+    {
+        var discountedPrice = Pricing.BasePrice * (1 - (decimal)Pricing.DiscountPercentage / 100);
+        var finalPrice = discountedPrice * (1 + Pricing.TaxRate / 100);
+        return Math.Round(finalPrice, 2);
+    }
 
     public void Replace(
         string name,
+        ProductPricing pricing,
         Category category,
         Dimensions dimensions)
     {
@@ -64,6 +72,7 @@ public class Product
             name,
             category);
         Name = name;
+        Pricing = pricing;
         Category = category;
         Dimensions = dimensions;
     }

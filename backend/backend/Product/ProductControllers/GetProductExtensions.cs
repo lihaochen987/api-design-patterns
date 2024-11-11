@@ -12,6 +12,7 @@ public class GetProductExtensions
             Id = product.Id.ToString(),
             Name = product.Name,
             Category = product.Category.ToString(),
+            Price = product.Price.ToString(CultureInfo.InvariantCulture),
             Dimensions = new DimensionsContract
             {
                 Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),

@@ -2,6 +2,7 @@ using backend.Product.Database;
 using backend.Product.FieldMasks;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -21,7 +22,9 @@ public class GetProductController(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)
     {
-        var product = await context.Products.FindAsync(id);
+        var product = await context.Products
+            .Include(p => p.Pricing)
+            .FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
 
         var response = extensions.ToGetProductResponse(product);

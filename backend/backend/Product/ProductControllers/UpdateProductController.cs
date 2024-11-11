@@ -26,9 +26,9 @@ public class UpdateProductController(
             return NotFound();
         }
 
-        var (name, category, dimensions) =
+        var (name, pricing, category, dimensions) =
             configuration.GetUpdatedProductValues(request, product);
-        product.Replace(name, category, dimensions);
+        product.Replace(name, pricing, category, dimensions);
 
         await context.SaveChangesAsync();
 

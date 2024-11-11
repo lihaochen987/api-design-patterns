@@ -30,8 +30,8 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
                     .HasColumnName("product_dimensions_height");
             });
 
-            // entity.Property(e => e.Price)
-            //     .UsePropertyAccessMode(PropertyAccessMode.Property);
+            // Calculated fields
+            entity.Ignore(e => e.Price);
         });
 
         modelBuilder.Entity<DomainModels.ProductPricing>(pricing =>
@@ -50,7 +50,7 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
             pricing.OwnsOne(p => p.TaxRate, tr => { tr.Property(t => t.Value).HasColumnName("product_tax_rate"); });
 
             pricing.HasOne<DomainModels.Product>()
-                .WithOne()
+                .WithOne(p => p.Pricing) 
                 .HasForeignKey<DomainModels.ProductPricing>(p => p.Id)
                 .OnDelete(DeleteBehavior.Cascade);
         });

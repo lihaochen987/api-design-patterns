@@ -10,13 +10,16 @@ public class CreateProductExtensions(TypeParser typeParser)
 {
     public DomainModels.Product ToEntity(CreateProductRequest request)
     {
-        // Product Fields
-        if (!DiscountPercentage.TryParse(request.DiscountPercentage, out var discountPercentage) ||
+        // ProductPricing fields
+        if (!DiscountPercentage.TryParse(request.Pricing.DiscountPercentage, out var discountPercentage) ||
             discountPercentage is null)
             throw new ArgumentException("Invalid discount percentage");
-        if (!TaxRate.TryParse(request.TaxRate, out var taxRate) ||
+        if (!TaxRate.TryParse(request.Pricing.TaxRate, out var taxRate) ||
             taxRate is null)
             throw new ArgumentException("Invalid tax rate");
+        var basePrice = typeParser.ParseDecimal(request.Pricing.BasePrice, "Invalid BasePrice");
+
+        // Product fields
         var category = typeParser.ParseEnum<Category>(request.Category, "Invalid product category");
 
         // Dimensions Fields
@@ -25,7 +28,8 @@ public class CreateProductExtensions(TypeParser typeParser)
         var height = typeParser.ParseDecimal(request.Dimensions.Height, "Invalid dimensions height");
 
         var dimensions = new Dimensions(length, width, height);
-        return new DomainModels.Product(request.Name, category, dimensions);
+        var pricing = new ProductPricing(basePrice, discountPercentage, taxRate);
+        return new DomainModels.Product(request.Name, pricing, category, dimensions);
     }
 
     public CreateProductResponse ToCreateProductResponse(DomainModels.Product product)
@@ -34,6 +38,12 @@ public class CreateProductExtensions(TypeParser typeParser)
         {
             Name = product.Name,
             Category = product.Category.ToString(),
+            Pricing = new ProductPricingContract
+            {
+                BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+                DiscountPercentage = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+                TaxRate = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+            },
             Dimensions = new DimensionsContract
             {
                 Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
@@ -49,6 +59,12 @@ public class CreateProductExtensions(TypeParser typeParser)
         {
             Name = product.Name,
             Category = product.Category.ToString(),
+            Pricing = new ProductPricingContract
+            {
+                BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(),
+                TaxRate = product.Pricing.TaxRate.ToString()
+            },
             Dimensions = new DimensionsContract
             {
                 Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),

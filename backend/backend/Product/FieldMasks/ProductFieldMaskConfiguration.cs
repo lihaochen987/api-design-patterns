@@ -18,17 +18,16 @@ public class ProductFieldMaskConfiguration
         "id",
         "name",
         "category",
+        "price",
         "dimensions.*",
         "dimensions.width",
         "dimensions.height",
         "dimensions.length",
-        "pricing.baseprice",
-        "pricing.discountpercentage",
-        "pricing.taxrate"
     ];
 
     public (
         string name,
+        ProductPricing pricing,
         Category category,
         Dimensions dimensions)
         GetUpdatedProductValues(
@@ -46,8 +45,9 @@ public class ProductFieldMaskConfiguration
             : product.Category;
 
         var dimensions = GetUpdatedDimensionValues(request, product.Dimensions);
+        var pricing = GetUpdatedProductPricingValues(request, product.Pricing);
 
-        return (name, category, dimensions);
+        return (name, pricing, category, dimensions);
     }
 
     private static Dimensions GetUpdatedDimensionValues(
@@ -70,5 +70,29 @@ public class ProductFieldMaskConfiguration
             : currentDimensions.Height;
 
         return new Dimensions(length, width, height);
+    }
+
+    private static ProductPricing
+        GetUpdatedProductPricingValues(
+            UpdateProductRequest request,
+            ProductPricing product)
+    {
+        var basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase)
+                        && decimal.TryParse(request.BasePrice, out var parsedBasePrice)
+            ? parsedBasePrice
+            : product.BasePrice;
+
+        var discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
+                                 && DiscountPercentage.TryParse(request.DiscountPercentage,
+                                     out var parsedDiscountPercentage)
+            ? parsedDiscountPercentage!
+            : product.DiscountPercentage;
+
+        var taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
+                      && TaxRate.TryParse(request.TaxRate, out var parsedTaxRate)
+            ? parsedTaxRate!
+            : product.TaxRate;
+
+        return new ProductPricing(basePrice, discountPercentage, taxRate);
     }
 }

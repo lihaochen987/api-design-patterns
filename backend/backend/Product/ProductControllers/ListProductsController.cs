@@ -19,7 +19,9 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        var query = context.Products.AsQueryable();
+        var query = context.Products
+            .Include(p => p.Pricing) 
+            .AsQueryable();
 
         if (!string.IsNullOrEmpty(request.PageToken) && long.TryParse(request.PageToken, out var lastSeenProductId))
         {
