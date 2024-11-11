@@ -148,30 +148,30 @@ public class ListProductsControllerTests : IDisposable
         listProductsResponse.NextPageToken.ShouldBeEquivalentTo(DefaultMaxPageSize.ToString());
     }
 
-    // [Fact]
-    // public async Task ListProducts_WithFilter_ReturnsFilteredResults()
-    // {
-    //     var product = new ProductTestDataBuilder().WithPriceLessThan(20).Build();
-    //     _dbContext.Products.Add(product);
-    //     await _dbContext.SaveChangesAsync();
-    //
-    //     var request = new ListProductsRequest
-    //     {
-    //         Filter = "Category == \"PetFood\" && Price < 20",
-    //         MaxPageSize = 10
-    //     };
-    //
-    //     var result = await _controller.ListProducts(request);
-    //
-    //     var response = result.Result as OkObjectResult;
-    //     response.ShouldNotBeNull();
-    //     var listProductsResponse = response.Value as ListProductsResponse;
-    //     listProductsResponse.ShouldNotBeNull();
-    //     listProductsResponse.Results.ShouldHaveSingleItem()
-    //         .ShouldSatisfyAllConditions(
-    //             p => p!.Category.ShouldBe(product.Category.ToString()),
-    //             p => decimal.Parse(p!.Price).ShouldBeLessThan(20));
-    // }
+    [Fact]
+    public async Task ListProducts_WithFilter_ReturnsFilteredResults()
+    {
+        var product = new ProductTestDataBuilder().WithPriceLessThan(20).Build();
+        _dbContext.Products.Add(product);
+        await _dbContext.SaveChangesAsync();
+    
+        var request = new ListProductsRequest
+        {
+            Filter = "Category == \"PetFood\" && Price < 20",
+            MaxPageSize = 10
+        };
+    
+        var result = await _controller.ListProducts(request);
+    
+        var response = result.Result as OkObjectResult;
+        response.ShouldNotBeNull();
+        var listProductsResponse = response.Value as ListProductsResponse;
+        listProductsResponse.ShouldNotBeNull();
+        listProductsResponse.Results.ShouldHaveSingleItem()
+            .ShouldSatisfyAllConditions(
+                p => p!.Category.ShouldBe(product.Category.ToString()),
+                p => decimal.Parse(p!.Price).ShouldBeLessThan(20));
+    }
 
     [Fact]
     public async Task ListProducts_WithFilterAndPagination_ReturnsCorrectResults()

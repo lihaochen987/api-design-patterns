@@ -56,7 +56,7 @@ public class ProductTestDataBuilder
     public ProductTestDataBuilder WithPriceLessThan(decimal maxPrice)
     {
         // Hardcode discount percentage to 10 and taxRate to 5 and then calculate an appropriate BasePrice
-        var basePrice = maxPrice / ((1 - (decimal)10 / 100) * (1 + (decimal)5 / 100)) - 1m;
+        var basePrice = maxPrice / ((1 - (decimal)10 / 100) * (1 + (decimal)5 / 100)) - 2m;
         _pricing = new ProductPricing(basePrice, 5, 10);
 
         return this;

@@ -1,6 +1,5 @@
 using System.Globalization;
 using AutoFixture;
-using backend.Database;
 using backend.Product.Database;
 using backend.Product.FieldMasks;
 using backend.Product.ProductControllers;

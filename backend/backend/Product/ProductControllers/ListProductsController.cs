@@ -34,6 +34,7 @@ public class ListProductsController(
             query = query.Where(filterExpression);
         }
 
+        // Todo: somehow fix this :sad:
         var products = await query
             .OrderBy(p => p.Id)
             .Take(request.MaxPageSize + 1)
