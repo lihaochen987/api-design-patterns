@@ -14,7 +14,12 @@ public class TypeParser
 
     public TEnum ParseEnum<TEnum>(string value, string errorMessage) where TEnum : struct
     {
-        if (!Enum.TryParse<TEnum>(value, out var result))
+        if (!typeof(TEnum).IsEnum)
+        {
+            throw new ArgumentException($"{typeof(TEnum).Name} is not a valid enum type");
+        }
+
+        if (!Enum.TryParse(value, ignoreCase: true, out TEnum result))
         {
             throw new ArgumentException(errorMessage);
         }

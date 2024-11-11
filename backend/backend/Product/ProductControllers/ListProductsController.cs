@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using backend.Product.Database;
+using backend.Shared;
 using backend.Shared.CelSpecParser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ public class ListProductsController(
         [FromQuery] ListProductsRequest request)
     {
         var query = context.Products
-            .Include(p => p.Pricing) 
+            .Include(p => p.Pricing)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(request.PageToken) && long.TryParse(request.PageToken, out var lastSeenProductId))
@@ -58,7 +59,7 @@ public class ListProductsController(
 
     private static Expression<Func<DomainModels.Product, bool>> BuildFilterExpression(string filter)
     {
-        var parser = new CelParser<DomainModels.Product>();
+        var parser = new CelParser<DomainModels.Product>(new TypeParser());
         var tokens = parser.Tokenize(filter);
         return parser.ParseFilter(tokens);
     }
