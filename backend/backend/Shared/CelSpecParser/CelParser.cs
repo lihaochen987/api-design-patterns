@@ -97,13 +97,23 @@ public class CelParser<T>
         CelToken fieldCelToken,
         ParameterExpression lambdaParameter)
     {
-        var property = typeof(T).GetProperty(fieldCelToken.Value,
-            BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-        if (property == null)
-            throw new ArgumentException($"Property '{fieldCelToken.Value}' does not exist on type '{typeof(T).Name}'");
+        var propertyPath = fieldCelToken.Value.Split('.');
 
-        var field = Expression.Property(lambdaParameter, property);
-        return field;
+        Expression currentExpression = lambdaParameter;
+
+        foreach (var propertyName in propertyPath)
+        {
+            var propertyInfo = currentExpression.Type.GetProperty(propertyName,
+                BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+            if (propertyInfo == null)
+                throw new ArgumentException(
+                    $"Property '{propertyName}' does not exist on type '{currentExpression.Type.Name}'");
+
+            currentExpression = Expression.Property(currentExpression, propertyInfo);
+        }
+
+        return (MemberExpression)currentExpression;
     }
 
     /// <summary>

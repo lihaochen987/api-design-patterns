@@ -149,20 +149,20 @@ public class ListProductsControllerTests : IDisposable
     }
 
     [Fact]
-    public async Task ListProducts_WithFilter_ReturnsFilteredResults()
+    public async Task ListProducts_WithCalculatedFieldFilter_ReturnsFilteredResults()
     {
         var product = new ProductTestDataBuilder().WithPriceLessThan(20).Build();
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
-    
+
         var request = new ListProductsRequest
         {
             Filter = "Category == \"PetFood\" && Price < 20",
             MaxPageSize = 10
         };
-    
+
         var result = await _controller.ListProducts(request);
-    
+
         var response = result.Result as OkObjectResult;
         response.ShouldNotBeNull();
         var listProductsResponse = response.Value as ListProductsResponse;
@@ -171,6 +171,55 @@ public class ListProductsControllerTests : IDisposable
             .ShouldSatisfyAllConditions(
                 p => p!.Category.ShouldBe(product.Category.ToString()),
                 p => decimal.Parse(p!.Price).ShouldBeLessThan(20));
+    }
+
+    [Fact]
+    public async Task ListProducts_WithNestedFieldFilter_ReturnsFilteredResults()
+    {
+        var product = new ProductTestDataBuilder().WithDimensions(new Dimensions(5, 1, 30)).Build();
+        _dbContext.Products.Add(product);
+        await _dbContext.SaveChangesAsync();
+
+        var request = new ListProductsRequest
+        {
+            Filter = "Dimensions.Length == 5 && Dimensions.Width < 20",
+            MaxPageSize = 10
+        };
+
+        var result = await _controller.ListProducts(request);
+
+        var response = result.Result as OkObjectResult;
+        response.ShouldNotBeNull();
+        var listProductsResponse = response.Value as ListProductsResponse;
+        listProductsResponse.ShouldNotBeNull();
+        listProductsResponse.Results.ShouldHaveSingleItem()
+            .ShouldSatisfyAllConditions(
+                p => int.Parse(p!.Dimensions.Length).ShouldBeLessThan(5),
+                p => int.Parse(p!.Dimensions.Width).ShouldBeLessThan(20));
+    }
+
+    [Fact]
+    public async Task ListProducts_WithSpacedFieldFilter_ReturnsFilteredResults()
+    {
+        var product = new ProductTestDataBuilder().WithName("Chew Toy").Build();
+        _dbContext.Products.Add(product);
+        await _dbContext.SaveChangesAsync();
+
+        var request = new ListProductsRequest
+        {
+            Filter = "Category == \"Chew Toy\"",
+            MaxPageSize = 10
+        };
+
+        var result = await _controller.ListProducts(request);
+
+        var response = result.Result as OkObjectResult;
+        response.ShouldNotBeNull();
+        var listProductsResponse = response.Value as ListProductsResponse;
+        listProductsResponse.ShouldNotBeNull();
+        listProductsResponse.Results.ShouldHaveSingleItem()
+            .ShouldSatisfyAllConditions(
+                p => p!.Name.ShouldBe(product.Name));
     }
 
     [Fact]
