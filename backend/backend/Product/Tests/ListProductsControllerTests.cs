@@ -1,4 +1,3 @@
-using backend.Database;
 using backend.Product.Database;
 using backend.Product.DomainModels;
 using backend.Product.ProductControllers;
@@ -207,7 +206,7 @@ public class ListProductsControllerTests : IDisposable
 
         var request = new ListProductsRequest
         {
-            Filter = "Category == \"Chew Toy\"",
+            Filter = "Name == \"Chew Toy\"",
             MaxPageSize = 10
         };
 

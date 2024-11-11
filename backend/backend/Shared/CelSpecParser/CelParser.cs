@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace backend.Shared.CelSpecParser;
 
@@ -7,11 +8,10 @@ namespace backend.Shared.CelSpecParser;
 /// CelParser takes in a filter string and translates it into a form that can be used to filter data.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class CelParser<T>
+public partial class CelParser<T>
 {
     private readonly ParameterExpression _parameter = Expression.Parameter(typeof(T), "x");
 
-    // Todo: Refactor this.
     public Expression<Func<T, bool>> ParseFilter(List<CelToken> filterTokens)
     {
         Expression? expression = null;
@@ -74,20 +74,33 @@ public class CelParser<T>
         };
 
         var tokens = new List<CelToken>();
-        var parts = filterQuery.Split(' ');
 
-        foreach (var part in parts)
+        var regex = QuotedStringOrWord();
+
+        foreach (Match match in regex.Matches(filterQuery))
         {
+            var part = match.Value;
+
             if (operatorsDict.TryGetValue(part, out var @operator))
+            {
                 tokens.Add(new CelToken(@operator, part));
+            }
             else if (part.StartsWith('\"') && part.EndsWith('\"'))
+            {
                 tokens.Add(new CelToken(CelTokenType.Value, part.Trim('"')));
+            }
             else if (bool.TryParse(part, out _))
+            {
                 tokens.Add(new CelToken(CelTokenType.Value, part));
+            }
             else if (decimal.TryParse(part, out _))
+            {
                 tokens.Add(new CelToken(CelTokenType.Value, part));
+            }
             else
+            {
                 tokens.Add(new CelToken(CelTokenType.Field, part));
+            }
         }
 
         return tokens;
@@ -171,4 +184,7 @@ public class CelParser<T>
 
         return Expression.Constant(value, destinationType);
     }
+
+    [GeneratedRegex("\"[^\"]+\"|\\S+")]
+    private static partial Regex QuotedStringOrWord();
 }
