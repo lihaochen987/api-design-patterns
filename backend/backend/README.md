@@ -10,23 +10,6 @@
 6. DELETE the field masks
 7. REFACTOR the remaining stuff
 
-## Refactoring the remaining stuff
-
-1.You want to ignore calculated fields with `entity.Ignore(e => e.Field);`
-
-2.If you're referencing a subset table, you need to establish the relationship with the code below:
-
-```C#
-            pricing.HasOne<DomainModels.Product>()
-                .WithOne(p => p.Pricing) 
-                .HasForeignKey<DomainModels.ProductPricing>(p => p.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-```
-
-and include the below in the `GET` and `LIST` standard methods:
-
-```C#
-        var product = await context.Products
-            .Include(p => p.Pricing)
-            .FirstOrDefaultAsync(p => p.Id == id);
-```
+## Database Integration
+- Essentially this repository works by calling `Views` from the database, rather than stored procedures. Each view is paired with the respective `trg_delete_from_products_view` and `trg_update_products_view` respectively.
+- 

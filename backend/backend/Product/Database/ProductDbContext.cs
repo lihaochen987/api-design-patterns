@@ -43,10 +43,8 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
 
             entity.OwnsOne(e => e.Pricing, pricing =>
             {
-                // product_id FK
-                pricing.WithOwner().HasForeignKey("product_id");
-                pricing.Property(e => e.Id)
-                    .HasColumnName("product_id");
+                // Links product_id to pricing
+                pricing.WithOwner();
                 
                 // product_base_price
                 pricing.Property(p => p.BasePrice)

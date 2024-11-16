@@ -1,5 +1,4 @@
 using System.Globalization;
-using backend.Database;
 using backend.Product.Contracts;
 using backend.Product.Database;
 using backend.Product.DomainModels;
@@ -47,7 +46,7 @@ public class UpdateProductControllerTests : IDisposable
         var request = new UpdateProductRequest
         {
             Name = "Updated Name",
-            BasePrice = "1.99M",
+            Pricing = new ProductPricingContract { BasePrice = "1.99" },
             Category = "Toys"
         };
 
@@ -112,9 +111,9 @@ public class UpdateProductControllerTests : IDisposable
         var request = new UpdateProductRequest
         {
             Name = "Updated Name",
-            BasePrice = "25.50",
+            Pricing = new ProductPricingContract { BasePrice = "25.50", DiscountPercentage = "50"},
             Category = "Toys",
-            FieldMask = ["name", "category"]
+            FieldMask = ["name", "category", "discountpercentage"]
         };
 
         var actionResult = await _controller.UpdateProduct(product.Id, request);
@@ -123,6 +122,7 @@ public class UpdateProductControllerTests : IDisposable
         response.ShouldNotBeNull();
         response.Name.ShouldBeEquivalentTo(request.Name);
         response.Category.ShouldBeEquivalentTo(request.Category);
+        response.Pricing.DiscountPercentage.ShouldBeEquivalentTo(request.Pricing.DiscountPercentage);
     }
 
     [Fact]

@@ -22,15 +22,13 @@ public class GetProductPricingController(
         [FromRoute] long id,
         [FromQuery] GetProductPricingRequest request)
     {
-        var productPricing = await context.Products
-            .AsNoTracking()
-            .Where(p => p.Id == id)
-            .Select(p => p.Pricing)
-            .FirstOrDefaultAsync();
-        
-        if (productPricing == null) return NotFound();
+        var product = await context.Products
+            .Include(p => p.Pricing)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
-        var response = extensions.ToGetProductPricingResponse(productPricing);
+        if (product == null) return NotFound();
+
+        var response = extensions.ToGetProductPricingResponse(product.Pricing, product.Id);
 
         var settings = new JsonSerializerSettings
         {

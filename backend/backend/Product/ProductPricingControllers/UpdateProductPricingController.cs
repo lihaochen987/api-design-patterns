@@ -20,23 +20,21 @@ public class UpdateProductPricingController(
         [FromRoute] long id,
         [FromBody] UpdateProductPricingRequest request)
     {
-        var productPricing = await context.Products
-            .AsNoTracking()
-            .Where(p => p.Id == id)
-            .Select(p => p.Pricing)
-            .FirstOrDefaultAsync();
+        var product = await context.Products
+            .Include(p => p.Pricing)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
-        if (productPricing == null)
+        if (product == null)
         {
             return NotFound();
         }
 
         var (basePrice, discountPercentage, taxRate) =
-            configuration.GetUpdatedProductPricingValues(request, productPricing);
-        productPricing.Replace(basePrice, discountPercentage, taxRate);
+            configuration.GetUpdatedProductPricingValues(request, product.Pricing);
+        product.UpdatePricing(basePrice, discountPercentage, taxRate);
 
         await context.SaveChangesAsync();
 
-        return Ok(extensions.ToUpdateProductPricingResponse(productPricing));
+        return Ok(extensions.ToUpdateProductPricingResponse(product.Pricing, product.Id));
     }
 }

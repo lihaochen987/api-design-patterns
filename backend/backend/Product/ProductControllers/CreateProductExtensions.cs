@@ -41,8 +41,8 @@ public class CreateProductExtensions(TypeParser typeParser)
             Pricing = new ProductPricingContract
             {
                 BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                DiscountPercentage = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                TaxRate = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(),
+                TaxRate = product.Pricing.TaxRate.ToString()
             },
             Dimensions = new DimensionsContract
             {

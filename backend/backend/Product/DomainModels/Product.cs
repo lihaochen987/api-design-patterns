@@ -102,6 +102,14 @@ public class Product
         Dimensions = dimensions;
     }
 
+    public void UpdatePricing(
+        decimal basePrice,
+        decimal discountPercentage,
+        decimal taxRate)
+    {
+        Pricing = new ProductPricing(basePrice, discountPercentage, taxRate);
+    }
+
     private static void EnforceInvariants(
         string name,
         Category category)
