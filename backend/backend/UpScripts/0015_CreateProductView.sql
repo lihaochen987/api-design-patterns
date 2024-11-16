@@ -1,7 +1,7 @@
 DO
 $$
     BEGIN
-        CREATE OR REPLACE VIEW product_view AS
+        CREATE OR REPLACE VIEW products_view AS
         SELECT p.product_id,
                p.product_name,
                p.product_dimensions_length,
