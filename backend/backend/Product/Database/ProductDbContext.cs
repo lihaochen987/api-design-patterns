@@ -52,7 +52,7 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
 
                 // product_discount_percentage
                 pricing.Property(p => p.DiscountPercentage)
-                    .HasColumnName("product_discount_percent");
+                    .HasColumnName("product_discount_percentage");
                 
                 // product_tax_rate
                 pricing.Property(p => p.TaxRate)
