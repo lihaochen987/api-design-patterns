@@ -11,11 +11,9 @@ public class CreateProductExtensions(TypeParser typeParser)
     public DomainModels.Product ToEntity(CreateProductRequest request)
     {
         // ProductPricing fields
-        if (!DiscountPercentage.TryParse(request.Pricing.DiscountPercentage, out var discountPercentage) ||
-            discountPercentage is null)
+        if (!decimal.TryParse(request.Pricing.DiscountPercentage, out var discountPercentage))
             throw new ArgumentException("Invalid discount percentage");
-        if (!TaxRate.TryParse(request.Pricing.TaxRate, out var taxRate) ||
-            taxRate is null)
+        if (!decimal.TryParse(request.Pricing.TaxRate, out var taxRate))
             throw new ArgumentException("Invalid tax rate");
         var basePrice = typeParser.ParseDecimal(request.Pricing.BasePrice, "Invalid BasePrice");
 
@@ -41,8 +39,8 @@ public class CreateProductExtensions(TypeParser typeParser)
             Pricing = new ProductPricingContract
             {
                 BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(),
-                TaxRate = product.Pricing.TaxRate.ToString()
+                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+                TaxRate = product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
             },
             Dimensions = new DimensionsContract
             {
@@ -62,8 +60,8 @@ public class CreateProductExtensions(TypeParser typeParser)
             Pricing = new ProductPricingContract
             {
                 BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(),
-                TaxRate = product.Pricing.TaxRate.ToString()
+                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+                TaxRate = product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
             },
             Dimensions = new DimensionsContract
             {

@@ -51,11 +51,12 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
                     .HasColumnName("product_base_price");
 
                 // product_discount_percentage
-                pricing.OwnsOne(p => p.DiscountPercentage,
-                    dp => { dp.Property(d => d.Value).HasColumnName("product_discount_percentage"); });
-
+                pricing.Property(p => p.DiscountPercentage)
+                    .HasColumnName("product_discount_percent");
+                
                 // product_tax_rate
-                pricing.OwnsOne(p => p.TaxRate, tr => { tr.Property(t => t.Value).HasColumnName("product_tax_rate"); });
+                pricing.Property(p => p.TaxRate)
+                    .HasColumnName("product_tax_rate");
             });
             
             // product_price

@@ -23,8 +23,8 @@ public class ProductPricingFieldMaskConfiguration
 
     public (
         decimal basePrice,
-        DiscountPercentage discountPercentage,
-        TaxRate taxRate)
+        decimal discountPercentage,
+        decimal taxRate)
         GetUpdatedProductPricingValues(
             UpdateProductPricingRequest request,
             Pricing product)
@@ -35,13 +35,13 @@ public class ProductPricingFieldMaskConfiguration
             : product.BasePrice;
 
         var discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
-                                 && DiscountPercentage.TryParse(request.DiscountPercentage,
+                                 && decimal.TryParse(request.DiscountPercentage,
                                      out var parsedDiscountPercentage)
             ? parsedDiscountPercentage!
             : product.DiscountPercentage;
 
         var taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
-                      && TaxRate.TryParse(request.TaxRate, out var parsedTaxRate)
+                      && decimal.TryParse(request.TaxRate, out var parsedTaxRate)
             ? parsedTaxRate!
             : product.TaxRate;
 

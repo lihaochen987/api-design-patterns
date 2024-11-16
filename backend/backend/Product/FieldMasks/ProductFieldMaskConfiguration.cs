@@ -83,13 +83,13 @@ public class ProductFieldMaskConfiguration
             : product.BasePrice;
 
         var discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
-                                 && DiscountPercentage.TryParse(request.Pricing.DiscountPercentage,
+                                 && decimal.TryParse(request.Pricing.DiscountPercentage,
                                      out var parsedDiscountPercentage)
             ? parsedDiscountPercentage!
             : product.DiscountPercentage;
 
         var taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
-                      && TaxRate.TryParse(request.Pricing.TaxRate, out var parsedTaxRate)
+                      && decimal.TryParse(request.Pricing.TaxRate, out var parsedTaxRate)
             ? parsedTaxRate!
             : product.TaxRate;
 
