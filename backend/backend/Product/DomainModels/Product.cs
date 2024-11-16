@@ -10,7 +10,6 @@ public class Product
         long id,
         string name,
         Pricing pricing,
-        decimal price,
         Category category,
         Dimensions dimensions
     )
@@ -21,43 +20,6 @@ public class Product
             category);
         Name = name;
         Pricing = pricing;
-        Price = price;
-        Category = category;
-        Dimensions = dimensions;
-    }
-
-    public Product(
-        long id,
-        string name,
-        Pricing pricing,
-        Category category,
-        Dimensions dimensions
-    )
-    {
-        Id = id;
-        EnforceInvariants(
-            name,
-            category);
-        Name = name;
-        Pricing = pricing;
-        Category = category;
-        Dimensions = dimensions;
-    }
-
-    public Product(
-        string name,
-        Pricing pricing,
-        decimal price,
-        Category category,
-        Dimensions dimensions
-    )
-    {
-        EnforceInvariants(
-            name,
-            category);
-        Name = name;
-        Pricing = pricing;
-        Price = price;
         Category = category;
         Dimensions = dimensions;
     }
