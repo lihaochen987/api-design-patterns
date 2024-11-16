@@ -10,6 +10,7 @@ public class Product
         long id,
         string name,
         ProductPricing pricing,
+        decimal price,
         Category category,
         Dimensions dimensions
     )
@@ -20,6 +21,43 @@ public class Product
             category);
         Name = name;
         Pricing = pricing;
+        Price = price;
+        Category = category;
+        Dimensions = dimensions;
+    }
+
+    public Product(
+        long id,
+        string name,
+        ProductPricing pricing,
+        Category category,
+        Dimensions dimensions
+    )
+    {
+        Id = id;
+        EnforceInvariants(
+            name,
+            category);
+        Name = name;
+        Pricing = pricing;
+        Category = category;
+        Dimensions = dimensions;
+    }
+
+    public Product(
+        string name,
+        ProductPricing pricing,
+        decimal price,
+        Category category,
+        Dimensions dimensions
+    )
+    {
+        EnforceInvariants(
+            name,
+            category);
+        Name = name;
+        Pricing = pricing;
+        Price = price;
         Category = category;
         Dimensions = dimensions;
     }
@@ -45,20 +83,9 @@ public class Product
     public Category Category { get; private set; }
     public ProductPricing Pricing { get; private set; }
 
-    public decimal Price
-    {
-        get => CalculatePrice();
-        init => _ = value;
-    }
+    public decimal Price { get; private set; }
 
     public Dimensions Dimensions { get; private set; }
-
-    private decimal CalculatePrice()
-    {
-        var discountedPrice = Pricing.BasePrice * (1 - (decimal)Pricing.DiscountPercentage / 100);
-        var finalPrice = discountedPrice * (1 + Pricing.TaxRate / 100);
-        return Math.Round(finalPrice, 2);
-    }
 
     public void Replace(
         string name,

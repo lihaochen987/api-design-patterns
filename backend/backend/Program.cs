@@ -30,8 +30,8 @@ builder.Services.AddScoped<ReplaceProductExtensions>();
 builder.Services.AddScoped<UpdateProductExtensions>();
 
 builder.Services.AddTransient<ProductPricingFieldMaskConfiguration>();
-builder.Services.AddTransient<GetProductPricingExtensions>();
-builder.Services.AddScoped<UpdateProductPricingExtensions>();
+// builder.Services.AddTransient<GetProductPricingExtensions>();
+// builder.Services.AddScoped<UpdateProductPricingExtensions>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

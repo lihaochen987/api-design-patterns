@@ -23,7 +23,6 @@ public class GetProductController(
         [FromQuery] GetProductRequest request)
     {
         var product = await context.Products
-            .Include(p => p.Pricing)
             .FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
 

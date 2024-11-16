@@ -17,7 +17,6 @@ public record ProductPricing
         TaxRate = new TaxRate(taxRate);
     }
 
-    public long Id { get; set; }
     public decimal BasePrice { get; private set; }
     public DiscountPercentage DiscountPercentage { get; private set; }
     public TaxRate TaxRate { get; private set; }
