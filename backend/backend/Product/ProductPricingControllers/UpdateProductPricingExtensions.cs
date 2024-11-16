@@ -5,14 +5,14 @@ namespace backend.Product.ProductPricingControllers;
 
 public class UpdateProductPricingExtensions
 {
-    public UpdateProductPricingResponse ToUpdateProductPricingResponse(ProductPricing productPricing, long productId)
+    public UpdateProductPricingResponse ToUpdateProductPricingResponse(Pricing pricing, long productId)
     {
         return new UpdateProductPricingResponse
         {
             Id = productId.ToString(),
-            BasePrice = productPricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-            DiscountPercentage = productPricing.DiscountPercentage.ToString(),
-            TaxRate = productPricing.TaxRate.ToString()
+            BasePrice = pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+            DiscountPercentage = pricing.DiscountPercentage.ToString(),
+            TaxRate = pricing.TaxRate.ToString()
         };
     }
 }

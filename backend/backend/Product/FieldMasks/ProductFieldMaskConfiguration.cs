@@ -27,7 +27,7 @@ public class ProductFieldMaskConfiguration
 
     public (
         string name,
-        ProductPricing pricing,
+        Pricing pricing,
         Category category,
         Dimensions dimensions)
         GetUpdatedProductValues(
@@ -72,10 +72,10 @@ public class ProductFieldMaskConfiguration
         return new Dimensions(length, width, height);
     }
 
-    private static ProductPricing
+    private static Pricing
         GetUpdatedProductPricingValues(
             UpdateProductRequest request,
-            ProductPricing product)
+            Pricing product)
     {
         var basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase)
                         && decimal.TryParse(request.Pricing.BasePrice, out var parsedBasePrice)
@@ -93,6 +93,6 @@ public class ProductFieldMaskConfiguration
             ? parsedTaxRate!
             : product.TaxRate;
 
-        return new ProductPricing(basePrice, discountPercentage, taxRate);
+        return new Pricing(basePrice, discountPercentage, taxRate);
     }
 }

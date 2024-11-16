@@ -9,7 +9,7 @@ public class Product
     public Product(
         long id,
         string name,
-        ProductPricing pricing,
+        Pricing pricing,
         decimal price,
         Category category,
         Dimensions dimensions
@@ -29,7 +29,7 @@ public class Product
     public Product(
         long id,
         string name,
-        ProductPricing pricing,
+        Pricing pricing,
         Category category,
         Dimensions dimensions
     )
@@ -46,7 +46,7 @@ public class Product
 
     public Product(
         string name,
-        ProductPricing pricing,
+        Pricing pricing,
         decimal price,
         Category category,
         Dimensions dimensions
@@ -64,7 +64,7 @@ public class Product
 
     public Product(
         string name,
-        ProductPricing pricing,
+        Pricing pricing,
         Category category,
         Dimensions dimensions
     )
@@ -81,7 +81,7 @@ public class Product
     public long Id { get; private set; }
     public string Name { get; private set; }
     public Category Category { get; private set; }
-    public ProductPricing Pricing { get; private set; }
+    public Pricing Pricing { get; private set; }
 
     public decimal Price { get; private set; }
 
@@ -89,7 +89,7 @@ public class Product
 
     public void Replace(
         string name,
-        ProductPricing pricing,
+        Pricing pricing,
         Category category,
         Dimensions dimensions)
     {
@@ -107,7 +107,7 @@ public class Product
         decimal discountPercentage,
         decimal taxRate)
     {
-        Pricing = new ProductPricing(basePrice, discountPercentage, taxRate);
+        Pricing = new Pricing(basePrice, discountPercentage, taxRate);
     }
 
     private static void EnforceInvariants(

@@ -12,4 +12,3 @@
 
 ## Database Integration
 - Essentially this repository works by calling `Views` from the database, rather than stored procedures. Each view is paired with the respective `trg_delete_from_products_view` and `trg_update_products_view` respectively.
-- 

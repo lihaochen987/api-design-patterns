@@ -27,7 +27,7 @@ public class ReplaceProductExtensions(TypeParser typeParser)
         var height = typeParser.ParseDecimal(request.Dimensions.Height, "Invalid dimensions height");
 
         var dimensions = new Dimensions(length, width, height);
-        var pricing = new ProductPricing(basePrice, discountPercentage, taxRate);
+        var pricing = new Pricing(basePrice, discountPercentage, taxRate);
         return new DomainModels.Product(request.Name, pricing, category, dimensions);
     }
 

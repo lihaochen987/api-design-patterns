@@ -27,7 +27,7 @@ public class ProductPricingFieldMaskConfiguration
         TaxRate taxRate)
         GetUpdatedProductPricingValues(
             UpdateProductPricingRequest request,
-            ProductPricing product)
+            Pricing product)
     {
         var basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase)
                         && decimal.TryParse(request.BasePrice, out var parsedBasePrice)

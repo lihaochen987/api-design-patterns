@@ -103,7 +103,7 @@ public class UpdateProductControllerTests : IDisposable
     public async Task UpdateProduct_WithMultipleFieldsInFieldMask_ShouldUpdateOnlySpecifiedFields()
     {
         var product = new ProductTestDataBuilder().WithId(3).WithName("Original Name")
-            .WithPricing(new ProductPricing(20.99m, 5m, 3m))
+            .WithPricing(new Pricing(20.99m, 5m, 3m))
             .WithCategory(Category.Feeders).Build();
         _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();

@@ -1,12 +1,12 @@
 namespace backend.Product.DomainModels;
 
-public record ProductPricing
+public record Pricing
 {
-    private ProductPricing()
+    private Pricing()
     {
     }
 
-    public ProductPricing(
+    public Pricing(
         decimal basePrice,
         decimal discountPercentage,
         decimal taxRate)
