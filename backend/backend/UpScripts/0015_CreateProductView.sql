@@ -8,9 +8,6 @@ $$
                p.product_dimensions_width,
                p.product_dimensions_height,
                c.product_category_name,
-               p.product_base_price,
-               p.product_discount_percentage,
-               p.product_tax_rate,
                ROUND(
                        (p.product_base_price * (1 - p.product_discount_percentage / 100)) *
                        (1 + p.product_tax_rate / 100),

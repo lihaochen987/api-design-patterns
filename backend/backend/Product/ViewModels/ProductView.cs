@@ -6,7 +6,6 @@ public class ProductView
 {
     public long Id { get; set; }
     public string Name { get; set; }
-    public Pricing Pricing { get; set; }
     public decimal Price { get; set; }
     public Category Category { get; set; }
     public Dimensions Dimensions { get; set; }
