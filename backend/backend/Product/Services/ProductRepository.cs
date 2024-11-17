@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using backend.Product.Contracts;
 using backend.Product.Database;
+using backend.Product.ProductControllers;
 using backend.Product.ViewModels;
 using backend.Shared;
 using backend.Shared.CelSpecParser;
@@ -14,6 +15,11 @@ public class ProductRepository(ProductDbContext context) : IProductRepository
     {
         return await context.Set<ProductView>()
             .FirstOrDefaultAsync(p => p.Id == id);
+    }
+    
+    public async Task<DomainModels.Product?> GetProductByIdAsync(long id)
+    {
+        return await context.Products.FirstOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task<ProductListResult<ProductView>> ListProductsAsync(
@@ -46,6 +52,24 @@ public class ProductRepository(ProductDbContext context) : IProductRepository
             Items = paginatedProducts,
             NextPageToken = nextPageToken
         };
+    }
+
+    public async Task CreateProductAsync(DomainModels.Product product)
+    {
+        context.Products.Add(product);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task DeleteProductAsync(DomainModels.Product product)
+    {
+        context.Products.Remove(product);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task ReplaceProductAsync(DomainModels.Product product)
+    {
+        product.Replace(product.Name, product.Pricing, product.Category, product.Dimensions);
+        await context.SaveChangesAsync();
     }
 
     private static Expression<Func<ProductView, bool>> BuildFilterExpression(string filter)

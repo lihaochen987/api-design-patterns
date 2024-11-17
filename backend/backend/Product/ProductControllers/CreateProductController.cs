@@ -1,4 +1,5 @@
 using backend.Product.Database;
+using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -7,7 +8,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class CreateProductController(
-    ProductDbContext context,
+    IProductRepository productRepository,
     CreateProductExtensions extensions)
     : ControllerBase
 {
@@ -16,9 +17,7 @@ public class CreateProductController(
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
         var product = extensions.ToEntity(request);
-
-        context.Products.Add(product);
-        await context.SaveChangesAsync();
+        await productRepository.CreateProductAsync(product);
 
         var response = extensions.ToCreateProductResponse(product);
         return CreatedAtAction(

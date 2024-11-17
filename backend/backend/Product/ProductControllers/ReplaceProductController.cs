@@ -1,4 +1,5 @@
 using backend.Product.Database;
+using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -7,7 +8,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class ReplaceProductController(
-    ProductDbContext context,
+    IProductRepository productRepository,
     ReplaceProductExtensions extensions)
     : ControllerBase
 {
@@ -19,10 +20,10 @@ public class ReplaceProductController(
     {
         var product = extensions.ToEntity(request);
 
-        var existingProduct = await context.Products.FindAsync(id);
+        var existingProduct = await productRepository.GetProductByIdAsync(id);
         if (existingProduct == null) return NotFound();
-        existingProduct.Replace(product.Name, product.Pricing, product.Category, product.Dimensions);
-        await context.SaveChangesAsync();
+
+        await productRepository.ReplaceProductAsync(existingProduct);
 
         var response = extensions.ToReplaceProductResponse(product);
         return Ok(response);
