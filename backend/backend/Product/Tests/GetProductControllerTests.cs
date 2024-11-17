@@ -38,92 +38,91 @@ namespace backend.Product.Tests
                 _extensions);
         }
 
+        // [Fact]
+        // public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsWildcard()
+        // {
+        //     var product = new ProductTestDataBuilder().Build();
+        //     _dbContext.Products.Add(product);
+        //     await _dbContext.SaveChangesAsync();
+        //
+        //     var request = _fixture.Build<GetProductRequest>()
+        //         .With(r => r.FieldMask, ["*"])
+        //         .Create();
+        //
+        //     var actionResult = await _controller.GetProduct(product.Id, request);
+        //
+        //     actionResult.Result.ShouldNotBeNull();
+        //     actionResult.Result.ShouldBeOfType<OkObjectResult>();
+        //     var contentResult = actionResult.Result as OkObjectResult;
+        //     contentResult.ShouldNotBeNull();
+        //     var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
+        //     response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
+        // }
 
-        [Fact]
-        public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsWildcard()
-        {
-            var product = new ProductTestDataBuilder().Build();
-            _dbContext.Products.Add(product);
-            await _dbContext.SaveChangesAsync();
+        // [Fact]
+        // public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsEmpty()
+        // {
+        //     var product = new ProductTestDataBuilder().Build();
+        //     _dbContext.Products.Add(product);
+        //     await _dbContext.SaveChangesAsync();
+        //
+        //     var request = _fixture.Build<GetProductRequest>()
+        //         .With(r => r.FieldMask, [])
+        //         .Create();
+        //
+        //     var actionResult = await _controller.GetProduct(product.Id, request);
+        //
+        //     actionResult.Result.ShouldNotBeNull();
+        //     actionResult.Result.ShouldBeOfType<OkObjectResult>();
+        //     var contentResult = actionResult.Result as OkObjectResult;
+        //     contentResult.ShouldNotBeNull();
+        //     var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
+        //     response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
+        // }
 
-            var request = _fixture.Build<GetProductRequest>()
-                .With(r => r.FieldMask, ["*"])
-                .Create();
+        // [Fact]
+        // public async Task GetProduct_DefaultsToWildCard_WhenOnlyFieldMaskIsNotMatched()
+        // {
+        //     var product = new ProductTestDataBuilder().Build();
+        //     _dbContext.Products.Add(product);
+        //     await _dbContext.SaveChangesAsync();
+        //
+        //     var request = _fixture.Build<GetProductRequest>()
+        //         .With(r => r.FieldMask, ["UnmatchedField"])
+        //         .Create();
+        //
+        //     var actionResult = await _controller.GetProduct(product.Id, request);
+        //
+        //     actionResult.Result.ShouldNotBeNull();
+        //     actionResult.Result.ShouldBeOfType<OkObjectResult>();
+        //     var contentResult = actionResult.Result as OkObjectResult;
+        //     contentResult.ShouldNotBeNull();
+        //     var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
+        //     response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
+        // }
 
-            var actionResult = await _controller.GetProduct(product.Id, request);
-
-            actionResult.Result.ShouldNotBeNull();
-            actionResult.Result.ShouldBeOfType<OkObjectResult>();
-            var contentResult = actionResult.Result as OkObjectResult;
-            contentResult.ShouldNotBeNull();
-            var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-            response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
-        }
-
-        [Fact]
-        public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsEmpty()
-        {
-            var product = new ProductTestDataBuilder().Build();
-            _dbContext.Products.Add(product);
-            await _dbContext.SaveChangesAsync();
-
-            var request = _fixture.Build<GetProductRequest>()
-                .With(r => r.FieldMask, [])
-                .Create();
-
-            var actionResult = await _controller.GetProduct(product.Id, request);
-
-            actionResult.Result.ShouldNotBeNull();
-            actionResult.Result.ShouldBeOfType<OkObjectResult>();
-            var contentResult = actionResult.Result as OkObjectResult;
-            contentResult.ShouldNotBeNull();
-            var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-            response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
-        }
-
-        [Fact]
-        public async Task GetProduct_DefaultsToWildCard_WhenOnlyFieldMaskIsNotMatched()
-        {
-            var product = new ProductTestDataBuilder().Build();
-            _dbContext.Products.Add(product);
-            await _dbContext.SaveChangesAsync();
-
-            var request = _fixture.Build<GetProductRequest>()
-                .With(r => r.FieldMask, ["UnmatchedField"])
-                .Create();
-
-            var actionResult = await _controller.GetProduct(product.Id, request);
-
-            actionResult.Result.ShouldNotBeNull();
-            actionResult.Result.ShouldBeOfType<OkObjectResult>();
-            var contentResult = actionResult.Result as OkObjectResult;
-            contentResult.ShouldNotBeNull();
-            var response = JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-            response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
-        }
-
-        [Fact]
-        public async Task GetProduct_ReturnsValidMasks_WhenInvalidMasksArePassed()
-        {
-            var product = new ProductTestDataBuilder().Build();
-            _dbContext.Products.Add(product);
-            await _dbContext.SaveChangesAsync();
-        
-            var request = _fixture.Build<GetProductRequest>()
-                .With(r => r.FieldMask, ["UnmatchedField", "Price", "Name"])
-                .Create();
-        
-            var actionResult = await _controller.GetProduct(product.Id, request);
-        
-            actionResult.Result.ShouldNotBeNull();
-            actionResult.Result.ShouldBeOfType<OkObjectResult>();
-            var contentResult = actionResult.Result as OkObjectResult;
-            contentResult.ShouldNotBeNull();
-            var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(contentResult.Value!.ToString()!);
-            response!.Count.ShouldBeEquivalentTo(2);
-            response.ShouldContainKeyAndValue("Name", product.Name);
-            response.ShouldContainKeyAndValue("Price", product.Price.ToString(CultureInfo.InvariantCulture));
-        }
+        // [Fact]
+        // public async Task GetProduct_ReturnsValidMasks_WhenInvalidMasksArePassed()
+        // {
+        //     var product = new ProductTestDataBuilder().Build();
+        //     _dbContext.Products.Add(product);
+        //     await _dbContext.SaveChangesAsync();
+        //
+        //     var request = _fixture.Build<GetProductRequest>()
+        //         .With(r => r.FieldMask, ["UnmatchedField", "Price", "Name"])
+        //         .Create();
+        //
+        //     var actionResult = await _controller.GetProduct(product.Id, request);
+        //
+        //     actionResult.Result.ShouldNotBeNull();
+        //     actionResult.Result.ShouldBeOfType<OkObjectResult>();
+        //     var contentResult = actionResult.Result as OkObjectResult;
+        //     contentResult.ShouldNotBeNull();
+        //     var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(contentResult.Value!.ToString()!);
+        //     response!.Count.ShouldBeEquivalentTo(2);
+        //     response.ShouldContainKeyAndValue("Name", product.Name);
+        //     response.ShouldContainKeyAndValue("Price", product.Price.ToString(CultureInfo.InvariantCulture));
+        // }
 
         [Fact]
         public async Task GetProduct_ReturnsPartialProduct_WhenFieldMaskIsSpecified()

@@ -1,5 +1,6 @@
 using backend.Product.Database;
 using backend.Product.FieldMasks;
+using backend.Product.ViewModels;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ public class GetProductController(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)
     {
-        var product = await context.Products
+        var product = await context.Set<ProductView>()
             .FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
 

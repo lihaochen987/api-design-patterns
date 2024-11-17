@@ -44,9 +44,6 @@ public class Product
     public string Name { get; private set; }
     public Category Category { get; private set; }
     public Pricing Pricing { get; private set; }
-
-    public decimal Price { get; private set; }
-
     public Dimensions Dimensions { get; private set; }
 
     public void Replace(

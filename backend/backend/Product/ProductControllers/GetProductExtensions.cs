@@ -1,11 +1,12 @@
 using System.Globalization;
 using backend.Product.Contracts;
+using backend.Product.ViewModels;
 
 namespace backend.Product.ProductControllers;
 
 public class GetProductExtensions
 {
-    public GetProductResponse ToGetProductResponse(DomainModels.Product product)
+    public GetProductResponse ToGetProductResponse(ProductView product)
     {
         return new GetProductResponse
         {
@@ -15,7 +16,7 @@ public class GetProductExtensions
             Price = product.Price.ToString(CultureInfo.InvariantCulture),
             Dimensions = new DimensionsContract
             {
-                Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Length = product.Dimensions.Length.ToString(CultureInfo.InvariantCulture),
                 Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
                 Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }

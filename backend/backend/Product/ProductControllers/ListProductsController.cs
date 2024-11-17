@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using backend.Product.Database;
+using backend.Product.ViewModels;
 using backend.Shared;
 using backend.Shared.CelSpecParser;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +21,7 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        var query = context.Products
-            .AsQueryable();
+        var query = context.Set<ProductView>().AsQueryable();
 
         if (!string.IsNullOrEmpty(request.PageToken) && long.TryParse(request.PageToken, out var lastSeenProductId))
         {
@@ -55,15 +55,15 @@ public class ListProductsController(
         return Ok(response);
     }
 
-    private static Expression<Func<DomainModels.Product, bool>> BuildFilterExpression(string filter)
+    private static Expression<Func<ProductView, bool>> BuildFilterExpression(string filter)
     {
-        var parser = new CelParser<DomainModels.Product>(new TypeParser());
+        var parser = new CelParser<ProductView>(new TypeParser());
         var tokens = parser.Tokenize(filter);
         return parser.ParseFilter(tokens);
     }
 
-    private static List<DomainModels.Product> PaginateProducts(
-        List<DomainModels.Product> existingProducts,
+    private static List<ProductView> PaginateProducts(
+        List<ProductView> existingProducts,
         int maxPageSize,
         out string? nextPageToken)
     {
