@@ -1,9 +1,7 @@
-using backend.Product.Database;
 using backend.Product.FieldMasks;
-using backend.Product.ViewModels;
+using backend.Product.Services;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -12,7 +10,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class GetProductController(
-    ProductDbContext context,
+    IProductRepository productRepository,
     ProductFieldMaskConfiguration configuration,
     GetProductExtensions extensions)
     : ControllerBase
@@ -23,8 +21,7 @@ public class GetProductController(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)
     {
-        var product = await context.Set<ProductView>()
-            .FirstOrDefaultAsync(p => p.Id == id);
+        var product = await productRepository.GetProductViewByIdAsync(id);
         if (product == null) return NotFound();
 
         var response = extensions.ToGetProductResponse(product);
