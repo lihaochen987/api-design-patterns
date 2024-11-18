@@ -7,7 +7,7 @@ namespace backend.Product.ProductControllers;
 [Route("products")]
 [ApiController]
 public class ListProductsController(
-    IProductRepository productRepository,
+    IProductViewRepository productViewRepository,
     GetProductExtensions extensions)
     : ControllerBase
 {
@@ -16,7 +16,7 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        var products = await productRepository.ListProductsAsync(
+        var products = await productViewRepository.ListProductsAsync(
             request.PageToken,
             request.Filter,
             request.MaxPageSize);

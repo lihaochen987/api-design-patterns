@@ -20,7 +20,7 @@ public class ReplaceProductController(
     {
         var product = extensions.ToEntity(request);
 
-        var existingProduct = await productRepository.GetProductByIdAsync(id);
+        var existingProduct = await productRepository.GetProductAsync(id);
         if (existingProduct == null) return NotFound();
 
         await productRepository.ReplaceProductAsync(existingProduct);

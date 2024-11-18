@@ -10,7 +10,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class GetProductController(
-    IProductRepository productRepository,
+    IProductViewRepository productViewRepository,
     ProductFieldMaskConfiguration configuration,
     GetProductExtensions extensions)
     : ControllerBase
@@ -21,7 +21,7 @@ public class GetProductController(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)
     {
-        var product = await productRepository.GetProductViewByIdAsync(id);
+        var product = await productViewRepository.GetProductView(id);
         if (product == null) return NotFound();
 
         var response = extensions.ToGetProductResponse(product);
