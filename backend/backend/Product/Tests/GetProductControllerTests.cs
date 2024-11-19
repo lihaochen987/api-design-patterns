@@ -12,13 +12,12 @@ using Xunit;
 
 namespace backend.Product.Tests
 {
-    [Collection("SequentialExecutionCollection")]
     public class GetProductControllerTests
     {
         private readonly Fixture _fixture = new();
         private readonly GetProductController _controller;
         private readonly GetProductExtensions _extensions;
-        private readonly ProductViewRepositoryFake _productRepository = new();
+        private readonly ProductViewRepositoryFake _productRepository = [];
 
         public GetProductControllerTests()
         {
@@ -35,14 +34,13 @@ namespace backend.Product.Tests
         {
             var product = new ProductViewTestDataBuilder().Build();
             _productRepository.Add(product);
-            _productRepository.IsDirty = false;
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, ["*"])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
             var contentResult = actionResult.Result as OkObjectResult;
@@ -56,14 +54,13 @@ namespace backend.Product.Tests
         {
             var product = new ProductViewTestDataBuilder().Build();
             _productRepository.Add(product);
-            _productRepository.IsDirty = false;
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, [])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
             var contentResult = actionResult.Result as OkObjectResult;
@@ -77,14 +74,13 @@ namespace backend.Product.Tests
         {
             var product = new ProductViewTestDataBuilder().Build();
             _productRepository.Add(product);
-            _productRepository.IsDirty = false;
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, ["UnmatchedField"])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
             var contentResult = actionResult.Result as OkObjectResult;
@@ -98,14 +94,13 @@ namespace backend.Product.Tests
         {
             var product = new ProductViewTestDataBuilder().Build();
             _productRepository.Add(product);
-            _productRepository.IsDirty = false;
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, ["UnmatchedField", "Price", "Name"])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
             var contentResult = actionResult.Result as OkObjectResult;
@@ -121,14 +116,13 @@ namespace backend.Product.Tests
         {
             var product = new ProductViewTestDataBuilder().Build();
             _productRepository.Add(product);
-            _productRepository.IsDirty = false;
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, ["name"])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
             var result = actionResult.Result as OkObjectResult;
@@ -142,14 +136,13 @@ namespace backend.Product.Tests
         {
             var product = new ProductViewTestDataBuilder().Build();
             _productRepository.Add(product);
-            _productRepository.IsDirty = false;
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, ["dimensions.width"])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
             var result = actionResult.Result as OkObjectResult;
@@ -165,14 +158,13 @@ namespace backend.Product.Tests
         {
             var product = new ProductViewTestDataBuilder().Build();
             _productRepository.Add(product);
-            _productRepository.IsDirty = false;
-        
+
             var request = _fixture.Build<GetProductRequest>()
                 .With(r => r.FieldMask, ["dimensions.*"])
                 .Create();
-        
+
             var actionResult = await _controller.GetProduct(product.Id, request);
-        
+
             actionResult.Result.ShouldNotBeNull();
             actionResult.Result.ShouldBeOfType<OkObjectResult>();
             var result = actionResult.Result as OkObjectResult;

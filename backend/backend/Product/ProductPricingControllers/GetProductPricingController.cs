@@ -1,5 +1,6 @@
 using backend.Product.Database;
 using backend.Product.FieldMasks;
+using backend.Product.Services;
 using backend.Product.ViewModels;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ namespace backend.Product.ProductPricingControllers;
 [ApiController]
 [Route("product")]
 public class GetProductPricingController(
-    ProductDbContext context,
+    IProductPricingRepository productRepository,
     ProductPricingFieldMaskConfiguration configuration,
     GetProductPricingExtensions extensions)
     : ControllerBase
@@ -23,8 +24,7 @@ public class GetProductPricingController(
         [FromRoute] long id,
         [FromQuery] GetProductPricingRequest request)
     {
-        var product = await context.Set<ProductPricingView>()
-            .FirstOrDefaultAsync(p => p.Id == id);
+        var product = await productRepository.GetProductPricingAsync(id);
 
         if (product == null) return NotFound();
 

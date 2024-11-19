@@ -51,13 +51,12 @@ public class ProductViewTestDataBuilder
 
     public ProductView Build()
     {
-        return new ProductView
-        {
-            Id = _id ?? _fixture.Create<int>(),
-            Name = _name,
-            Price = _price,
-            Category = _category,
-            Dimensions = _dimensions
-        };
+        return new ProductView(
+            _id ?? _fixture.Create<int>(),
+            _name,
+            _price,
+            _category,
+            _dimensions
+        );
     }
 }

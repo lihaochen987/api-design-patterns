@@ -1,5 +1,6 @@
 using backend.Product.Database;
 using backend.Product.FieldMasks;
+using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
@@ -9,7 +10,7 @@ namespace backend.Product.ProductPricingControllers;
 [ApiController]
 [Route("product")]
 public class UpdateProductPricingController(
-    ProductDbContext context,
+    IProductRepository productRepository,
     ProductPricingFieldMaskConfiguration configuration,
     UpdateProductPricingExtensions extensions)
     : ControllerBase
@@ -20,21 +21,19 @@ public class UpdateProductPricingController(
         [FromRoute] long id,
         [FromBody] UpdateProductPricingRequest request)
     {
-        var product = await context.Products
-            .Include(p => p.Pricing)
-            .FirstOrDefaultAsync(p => p.Id == id);
+        var productPricing = await productRepository.GetProductAsync(id);
 
-        if (product == null)
+        if (productPricing == null)
         {
             return NotFound();
         }
 
         var (basePrice, discountPercentage, taxRate) =
-            configuration.GetUpdatedProductPricingValues(request, product.Pricing);
-        product.UpdatePricing(basePrice, discountPercentage, taxRate);
+            configuration.GetUpdatedProductPricingValues(request, productPricing.Pricing);
+        productPricing.UpdatePricing(basePrice, discountPercentage, taxRate);
 
-        await context.SaveChangesAsync();
+        await productRepository.ReplaceProductAsync(productPricing);
 
-        return Ok(extensions.ToUpdateProductPricingResponse(product.Pricing, product.Id));
+        return Ok(extensions.ToUpdateProductPricingResponse(productPricing.Pricing, productPricing.Id));
     }
 }

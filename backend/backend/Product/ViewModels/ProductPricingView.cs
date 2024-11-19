@@ -2,8 +2,8 @@ using backend.Product.DomainModels;
 
 namespace backend.Product.ViewModels;
 
-public class ProductPricingView
+public class ProductPricingView(long id, Pricing pricing)
 {
-    public long Id { get; set; }
-    public Pricing Pricing { get; set; }
+    public long Id { get; init; } = id;
+    public Pricing Pricing { get; init; } = pricing;
 }

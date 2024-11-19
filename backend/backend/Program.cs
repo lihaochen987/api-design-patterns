@@ -36,6 +36,7 @@ builder.Services.AddScoped<UpdateProductPricingExtensions>();
 // Inject Product services
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductViewRepository, ProductViewRepository>();
+builder.Services.AddScoped<IProductPricingRepository, ProductPricingRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

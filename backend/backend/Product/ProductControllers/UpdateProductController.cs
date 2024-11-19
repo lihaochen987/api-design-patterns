@@ -1,5 +1,6 @@
 using backend.Product.Database;
 using backend.Product.FieldMasks;
+using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -8,7 +9,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class UpdateProductController(
-    ProductDbContext context,
+    IProductRepository repository,
     ProductFieldMaskConfiguration configuration,
     UpdateProductExtensions extensions)
     : ControllerBase
@@ -19,7 +20,7 @@ public class UpdateProductController(
         [FromRoute] long id,
         [FromBody] UpdateProductRequest request)
     {
-        var product = await context.Products.FindAsync(id);
+        var product = await repository.GetProductAsync(id);
 
         if (product == null)
         {
@@ -30,7 +31,7 @@ public class UpdateProductController(
             configuration.GetUpdatedProductValues(request, product);
         product.Replace(name, pricing, category, dimensions);
 
-        await context.SaveChangesAsync();
+        await repository.ReplaceProductAsync(product);
 
         return Ok(extensions.ToUpdateProductResponse(product));
     }

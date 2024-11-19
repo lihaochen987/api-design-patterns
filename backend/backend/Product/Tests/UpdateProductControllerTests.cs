@@ -1,37 +1,28 @@
 using System.Globalization;
 using backend.Product.Contracts;
-using backend.Product.Database;
 using backend.Product.DomainModels;
 using backend.Product.FieldMasks;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.Builders;
+using backend.Product.Tests.Fakes;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using Xunit;
 
 namespace backend.Product.Tests;
 
-[Collection("SequentialExecutionCollection")]
-public class UpdateProductControllerTests : IDisposable
+public class UpdateProductControllerTests
 {
     private readonly UpdateProductController _controller;
-    private readonly ProductDbContext _dbContext;
     private readonly UpdateProductExtensions _extensions;
+    private readonly ProductRepositoryFake _productRepository = [];
 
     public UpdateProductControllerTests()
     {
-        var options = new DbContextOptionsBuilder<ProductDbContext>()
-            .UseNpgsql("Host=localhost;Database=mytestdatabase;Username=myusername;Password=mypassword")
-            .Options;
-
-        var db = new ProductDbContext(options);
-        db.Database.EnsureCreated();
-        _dbContext = db;
         var configuration = new ProductFieldMaskConfiguration();
         _extensions = new UpdateProductExtensions();
         _controller = new UpdateProductController(
-            _dbContext,
+            _productRepository,
             configuration,
             _extensions);
     }
@@ -40,8 +31,8 @@ public class UpdateProductControllerTests : IDisposable
     public async Task UpdateProduct_WithEmptyFieldMask_ShouldUpdateNoFields()
     {
         var product = new ProductTestDataBuilder().Build();
-        _dbContext.Products.Add(product);
-        await _dbContext.SaveChangesAsync();
+        _productRepository.Add(product);
+        _productRepository.IsDirty = false;
 
         var request = new UpdateProductRequest
         {
@@ -58,14 +49,15 @@ public class UpdateProductControllerTests : IDisposable
         contentResult.ShouldNotBeNull();
         var response = contentResult.Value as UpdateProductResponse;
         response.ShouldBeEquivalentTo(_extensions.ToUpdateProductResponse(product));
+        _productRepository.IsDirty.ShouldBeEquivalentTo(true);
     }
 
     [Fact]
     public async Task UpdateProduct_WithValidFieldMask_ShouldUpdateSpecifiedFields()
     {
         var product = new ProductTestDataBuilder().WithCategory(Category.Beds).Build();
-        _dbContext.Products.Add(product);
-        await _dbContext.SaveChangesAsync();
+        _productRepository.Add(product);
+        _productRepository.IsDirty = false;
 
         var request = new UpdateProductRequest
         {
@@ -81,6 +73,7 @@ public class UpdateProductControllerTests : IDisposable
         contentResult.ShouldNotBeNull();
         var response = contentResult.Value as UpdateProductResponse;
         response!.Name.ShouldBeEquivalentTo(request.Name);
+        _productRepository.IsDirty.ShouldBeEquivalentTo(true);
     }
 
     [Fact]
@@ -105,13 +98,13 @@ public class UpdateProductControllerTests : IDisposable
         var product = new ProductTestDataBuilder().WithId(3).WithName("Original Name")
             .WithPricing(new Pricing(20.99m, 5m, 3m))
             .WithCategory(Category.Feeders).Build();
-        _dbContext.Products.Add(product);
-        await _dbContext.SaveChangesAsync();
+        _productRepository.Add(product);
+        _productRepository.IsDirty = false;
 
         var request = new UpdateProductRequest
         {
             Name = "Updated Name",
-            Pricing = new ProductPricingContract { BasePrice = "25.50", DiscountPercentage = "50"},
+            Pricing = new ProductPricingContract { BasePrice = "25.50", DiscountPercentage = "50" },
             Category = "Toys",
             FieldMask = ["name", "category", "discountpercentage"]
         };
@@ -123,6 +116,7 @@ public class UpdateProductControllerTests : IDisposable
         response.Name.ShouldBeEquivalentTo(request.Name);
         response.Category.ShouldBeEquivalentTo(request.Category);
         response.Pricing.DiscountPercentage.ShouldBeEquivalentTo(request.Pricing.DiscountPercentage);
+        _productRepository.IsDirty.ShouldBeEquivalentTo(true);
     }
 
     [Fact]
@@ -130,8 +124,8 @@ public class UpdateProductControllerTests : IDisposable
     {
         var product = new ProductTestDataBuilder()
             .WithId(5).WithDimensions(new Dimensions(10, 5, 2)).Build();
-        _dbContext.Products.Add(product);
-        await _dbContext.SaveChangesAsync();
+        _productRepository.Add(product);
+        _productRepository.IsDirty = false;
 
         var request = new UpdateProductRequest
         {
@@ -149,12 +143,6 @@ public class UpdateProductControllerTests : IDisposable
         response!.Dimensions.Length.ShouldBe(product.Dimensions.Length.ToString(CultureInfo.InvariantCulture));
         response.Dimensions.Width.ShouldBe(request.Dimensions.Width);
         response.Dimensions.Height.ShouldBe(request.Dimensions.Height);
-    }
-
-    public void Dispose()
-    {
-        _dbContext.Database.EnsureDeleted();
-        _dbContext.Dispose();
-        GC.SuppressFinalize(this);
+        _productRepository.IsDirty.ShouldBeEquivalentTo(true);
     }
 }

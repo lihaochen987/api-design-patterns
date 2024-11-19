@@ -1,53 +1,39 @@
-// using backend.Product.Database;
-// using backend.Product.ProductControllers;
-// using backend.Product.Tests.Builders;
-// using backend.Shared;
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.EntityFrameworkCore;
-// using Shouldly;
-// using Xunit;
-//
-// namespace backend.Product.Tests;
-//
-// [Collection("SequentialExecutionCollection")]
-// public class CreateProductControllerTests : IDisposable
-// {
-//     private readonly CreateProductController _controller;
-//     private readonly ProductDbContext _dbContext;
-//     private readonly CreateProductExtensions _extensions;
-//
-//     public CreateProductControllerTests()
-//     {
-//         var options = new DbContextOptionsBuilder<ProductDbContext>()
-//             .UseNpgsql("Host=localhost;Database=mytestdatabase;Username=myusername;Password=mypassword")
-//             .Options;
-//
-//         _dbContext = new ProductDbContext(options);
-//         _dbContext.Database.EnsureCreated();
-//         _extensions = new CreateProductExtensions(new TypeParser());
-//         _controller = new CreateProductController(_dbContext, _extensions);
-//     }
-//
-//     [Fact]
-//     public async Task CreateProduct_Should_AddProduct_And_ReturnCreatedAtActionResult()
-//     {
-//         var product = new ProductTestDataBuilder().Build();
-//         var request = _extensions.ToCreateProductRequest(product);
-//         var expectedResponse = _extensions.ToCreateProductResponse(product);
-//
-//         var result = await _controller.CreateProduct(request);
-//
-//         var createdAtActionResult = result.Result.ShouldBeOfType<CreatedAtActionResult>();
-//         createdAtActionResult.ActionName.ShouldBe("GetProduct");
-//         createdAtActionResult.ControllerName.ShouldBe("GetProduct");
-//         var actualResponse = createdAtActionResult.Value.ShouldBeOfType<CreateProductResponse>();
-//         actualResponse.ShouldBeEquivalentTo(expectedResponse);
-//     }
-//
-//     public void Dispose()
-//     {
-//         _dbContext.Database.EnsureDeleted();
-//         _dbContext.Dispose();
-//         GC.SuppressFinalize(this);
-//     }
-// }
+using backend.Product.ProductControllers;
+using backend.Product.Tests.Builders;
+using backend.Product.Tests.Fakes;
+using backend.Shared;
+using Microsoft.AspNetCore.Mvc;
+using Shouldly;
+using Xunit;
+
+namespace backend.Product.Tests;
+
+public class CreateProductControllerTests
+{
+    private readonly CreateProductController _controller;
+    private readonly ProductRepositoryFake _productRepository = [];
+    private readonly CreateProductExtensions _extensions;
+
+    public CreateProductControllerTests()
+    {
+        _extensions = new CreateProductExtensions(new TypeParser());
+        _controller = new CreateProductController(_productRepository, _extensions);
+    }
+
+    [Fact]
+    public async Task CreateProduct_Should_AddProduct_And_ReturnCreatedAtActionResult()
+    {
+        var product = new ProductTestDataBuilder().Build();
+        var request = _extensions.ToCreateProductRequest(product);
+        var expectedResponse = _extensions.ToCreateProductResponse(product);
+        _productRepository.Add(product);
+
+        var result = await _controller.CreateProduct(request);
+
+        var createdAtActionResult = result.Result.ShouldBeOfType<CreatedAtActionResult>();
+        createdAtActionResult.ActionName.ShouldBe("GetProduct");
+        createdAtActionResult.ControllerName.ShouldBe("GetProduct");
+        var actualResponse = createdAtActionResult.Value.ShouldBeOfType<CreateProductResponse>();
+        actualResponse.ShouldBeEquivalentTo(expectedResponse);
+    }
+}
