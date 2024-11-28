@@ -1,11 +1,9 @@
 using AutoFixture;
 using backend.Product.FieldMasks;
 using backend.Product.ProductPricingControllers;
-using backend.Product.Services;
 using backend.Product.Tests.Builders;
 using backend.Product.Tests.Fakes;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 
