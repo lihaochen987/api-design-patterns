@@ -62,6 +62,7 @@ public class UpdateProductControllerTests
         var request = new UpdateProductRequest
         {
             Name = "Updated Name",
+            Pricing = new ProductPricingContract { BasePrice = "1.99" },
             FieldMask = ["name"]
         };
 

@@ -1,8 +1,6 @@
-using backend.Product.Database;
 using backend.Product.FieldMasks;
 using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Product.ProductPricingControllers;
