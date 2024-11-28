@@ -34,17 +34,3 @@ $$
 
     END
 $$;
-
-CREATE OR REPLACE FUNCTION prevent_delete()
-    RETURNS TRIGGER AS
-$$
-BEGIN
-    RAISE EXCEPTION 'Deletion is not allowed on this table';
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER prevent_product_pricing_delete_trigger
-    BEFORE DELETE
-    ON product_pricing
-    FOR EACH ROW
-EXECUTE FUNCTION prevent_delete();
