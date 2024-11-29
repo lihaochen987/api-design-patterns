@@ -8,7 +8,7 @@ namespace backend.Product.ProductControllers;
 
 public class CreateProductExtensions(TypeParser typeParser)
 {
-    public DomainModels.Product ToEntity(CreateProductRequest request)
+    public DomainModels.BaseProduct ToEntity(CreateProductRequest request)
     {
         // ProductPricing fields
         if (!decimal.TryParse(request.Pricing.DiscountPercentage, out var discountPercentage))
@@ -27,47 +27,47 @@ public class CreateProductExtensions(TypeParser typeParser)
 
         var dimensions = new Dimensions(length, width, height);
         var pricing = new Pricing(basePrice, discountPercentage, taxRate);
-        return new DomainModels.Product(request.Name, pricing, category, dimensions);
+        return new DomainModels.BaseProduct(request.Name, pricing, category, dimensions);
     }
 
-    public CreateProductResponse ToCreateProductResponse(DomainModels.Product product)
+    public CreateProductResponse ToCreateProductResponse(DomainModels.BaseProduct baseProduct)
     {
         return new CreateProductResponse
         {
-            Name = product.Name,
-            Category = product.Category.ToString(),
+            Name = baseProduct.Name,
+            Category = baseProduct.Category.ToString(),
             Pricing = new ProductPricingContract
             {
-                BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
-                TaxRate = product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
+                BasePrice = baseProduct.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+                DiscountPercentage = baseProduct.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+                TaxRate = baseProduct.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
             },
             Dimensions = new DimensionsContract
             {
-                Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
+                Length = baseProduct.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Width = baseProduct.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Height = baseProduct.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }
         };
     }
 
-    public CreateProductRequest ToCreateProductRequest(DomainModels.Product product)
+    public CreateProductRequest ToCreateProductRequest(DomainModels.BaseProduct baseProduct)
     {
         return new CreateProductRequest
         {
-            Name = product.Name,
-            Category = product.Category.ToString(),
+            Name = baseProduct.Name,
+            Category = baseProduct.Category.ToString(),
             Pricing = new ProductPricingContract
             {
-                BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
-                TaxRate = product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
+                BasePrice = baseProduct.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+                DiscountPercentage = baseProduct.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+                TaxRate = baseProduct.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
             },
             Dimensions = new DimensionsContract
             {
-                Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
+                Length = baseProduct.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Width = baseProduct.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Height = baseProduct.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }
         };
     }

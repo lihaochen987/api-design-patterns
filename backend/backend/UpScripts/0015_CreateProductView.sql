@@ -4,9 +4,9 @@ $$
         CREATE OR REPLACE VIEW products_view AS
         SELECT p.product_id,
                p.product_name,
-               p.product_dimensions_length,
-               p.product_dimensions_width,
-               p.product_dimensions_height,
+               p.product_dimensions_length_cm,
+               p.product_dimensions_width_cm,
+               p.product_dimensions_height_cm,
                c.product_category_name,
                ROUND(
                        (p.product_base_price * (1 - p.product_discount_percentage / 100)) *

@@ -3,7 +3,7 @@ DO
 $$
     BEGIN
         INSERT INTO products (product_name, product_price, product_category,
-                              product_dimensions_length, product_dimensions_width, product_dimensions_height)
+                              product_dimensions_length_cm, product_dimensions_width_cm, product_dimensions_height_cm)
         VALUES ('Dry Dog Food', 50.00, 'PetFood', 10.0, 5.0, 3.0),
                ('Wet Dog Food', 35.00, 'PetFood', 8.0, 4.0, 3.0),
                ('Dog Treats', 10.00, 'PetFood', 5.0, 3.0, 1.0),

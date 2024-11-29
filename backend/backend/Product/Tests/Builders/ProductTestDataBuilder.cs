@@ -63,9 +63,9 @@ public class ProductTestDataBuilder
         return this;
     }
 
-    public DomainModels.Product Build()
+    public DomainModels.BaseProduct Build()
     {
-        return new DomainModels.Product(
+        return new DomainModels.BaseProduct(
             _id ?? _fixture.Create<int>(),
             _name,
             _pricing,
@@ -74,7 +74,7 @@ public class ProductTestDataBuilder
     }
 
     // Todo: Indicator to change this is not apparent, might need to fix somehow.
-    public List<DomainModels.Product> CreateMany(int count, int startId = 1)
+    public List<DomainModels.BaseProduct> CreateMany(int count, int startId = 1)
     {
         return Enumerable.Range(startId, count)
             .Select(id => new ProductTestDataBuilder()

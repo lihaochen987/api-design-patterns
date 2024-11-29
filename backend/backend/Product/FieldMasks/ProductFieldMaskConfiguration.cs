@@ -32,20 +32,20 @@ public class ProductFieldMaskConfiguration
         Dimensions dimensions)
         GetUpdatedProductValues(
             UpdateProductRequest request,
-            DomainModels.Product product)
+            DomainModels.BaseProduct baseProduct)
     {
         var name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
                    && !string.IsNullOrEmpty(request.Name)
             ? request.Name
-            : product.Name;
+            : baseProduct.Name;
 
         var category = request.FieldMask.Contains("category", StringComparer.OrdinalIgnoreCase)
                        && Enum.TryParse(request.Category, true, out Category parsedCategory)
             ? parsedCategory
-            : product.Category;
+            : baseProduct.Category;
 
-        var dimensions = GetUpdatedDimensionValues(request, product.Dimensions);
-        var pricing = GetUpdatedProductPricingValues(request, product.Pricing);
+        var dimensions = GetUpdatedDimensionValues(request, baseProduct.Dimensions);
+        var pricing = GetUpdatedProductPricingValues(request, baseProduct.Pricing);
 
         return (name, pricing, category, dimensions);
     }

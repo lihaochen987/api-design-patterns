@@ -5,7 +5,7 @@ namespace backend.Product.Database;
 
 public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbContext(options)
 {
-    public DbSet<DomainModels.Product> Products { get; init; }
+    public DbSet<DomainModels.BaseProduct> Products { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,15 +26,15 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
             {
                 // product_dimensions_length
                 dimensions.Property(d => d.Length)
-                    .HasColumnName("product_dimensions_length");
+                    .HasColumnName("product_dimensions_length_cm");
 
                 // product_dimensions.width
                 dimensions.Property(d => d.Width)
-                    .HasColumnName("product_dimensions_width");
+                    .HasColumnName("product_dimensions_width_cm");
 
                 // product_dimensions_height
                 dimensions.Property(d => d.Height)
-                    .HasColumnName("product_dimensions_height");
+                    .HasColumnName("product_dimensions_height_cm");
             });
 
             // product_category_name
@@ -76,7 +76,7 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
         });
 
 
-        modelBuilder.Entity<DomainModels.Product>(entity =>
+        modelBuilder.Entity<DomainModels.BaseProduct>(entity =>
         {
             entity.ToTable("products");
 
@@ -93,15 +93,15 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
             {
                 // product_dimensions_length
                 dimensions.Property(d => d.Length)
-                    .HasColumnName("product_dimensions_length");
+                    .HasColumnName("product_dimensions_length_cm");
 
                 // product_dimensions.width
                 dimensions.Property(d => d.Width)
-                    .HasColumnName("product_dimensions_width");
+                    .HasColumnName("product_dimensions_width_cm");
 
                 // product_dimensions_height
                 dimensions.Property(d => d.Height)
-                    .HasColumnName("product_dimensions_height");
+                    .HasColumnName("product_dimensions_height_cm");
             });
 
             // product_category

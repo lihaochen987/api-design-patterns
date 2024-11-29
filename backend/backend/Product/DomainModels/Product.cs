@@ -1,12 +1,12 @@
 namespace backend.Product.DomainModels;
 
-public class Product
+public abstract class Product
 {
-    private Product()
+    protected Product()
     {
     }
 
-    public Product(
+    protected Product(
         long id,
         string name,
         Pricing pricing,
@@ -24,7 +24,7 @@ public class Product
         Dimensions = dimensions;
     }
 
-    public Product(
+    protected Product(
         string name,
         Pricing pricing,
         Category category,
