@@ -8,7 +8,7 @@ namespace backend.Product.ProductControllers;
 
 public class CreateProductExtensions(TypeParser typeParser)
 {
-    public DomainModels.BaseProduct ToEntity(CreateProductRequest request)
+    public BaseProduct ToEntity(CreateProductRequest request)
     {
         // ProductPricing fields
         if (!decimal.TryParse(request.Pricing.DiscountPercentage, out var discountPercentage))

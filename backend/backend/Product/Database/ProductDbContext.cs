@@ -45,6 +45,27 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
             // product_price
             entity.Property(p => p.Price)
                 .HasColumnName("product_price");
+
+            // Additional pet food-specific columns
+            entity.Property(p => p.AgeGroup)
+                .HasColumnName("product_pet_food_age_group")
+                .HasConversion<string>();
+
+            entity.Property(p => p.BreedSize)
+                .HasColumnName("product_pet_food_breed_size")
+                .HasConversion<string>();
+
+            entity.Property(p => p.Ingredients)
+                .HasColumnName("product_pet_foods_ingredients");
+
+            entity.Property(p => p.NutritionalInfo)
+                .HasColumnName("product_pet_foods_nutritional_info");
+
+            entity.Property(p => p.StorageInstructions)
+                .HasColumnName("product_pet_foods_storage_instructions");
+
+            entity.Property(p => p.WeightKg)
+                .HasColumnName("product_pet_foods_weight_kg");
         });
 
         modelBuilder.Entity<ProductPricingView>(entity =>

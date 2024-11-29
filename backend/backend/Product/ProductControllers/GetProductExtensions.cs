@@ -19,7 +19,13 @@ public class GetProductExtensions
                 Length = product.Dimensions.Length.ToString(CultureInfo.InvariantCulture),
                 Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
                 Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
-            }
+            },
+            AgeGroup = product.AgeGroup.HasValue ? product.AgeGroup.ToString() : null,
+            BreedSize = product.BreedSize.HasValue ? product.BreedSize.ToString() : null,
+            Ingredients = product.Ingredients,
+            NutritionalInfo = product.NutritionalInfo,
+            StorageInstructions = product.StorageInstructions,
+            WeightKg = product.WeightKg.HasValue ? product.WeightKg.ToString() : null
         };
     }
 }

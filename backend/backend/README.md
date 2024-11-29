@@ -49,13 +49,11 @@ The other patterns mentioned, but not yet implemented from the book include:
 
 ## Development Flow
 
-1. CREATE the UpScripts
-2. MODIFY the DbContext
-3. APPEND to the domain models
-4. UPDATE the field masks
-5. DELETE the old fields
-6. DELETE the field masks
-7. REFACTOR the remaining stuff
+1. CREATE and DESIGN the Database via UpScripts
+2. MODIFY the View or Domain model
+3. MODIFY the DbContext
+4. UPDATE the relevant extension controller methods
+5. ADD the field masks
 
 ## Database Integration
 

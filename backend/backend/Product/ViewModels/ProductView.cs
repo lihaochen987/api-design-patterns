@@ -27,4 +27,11 @@ public class ProductView
     public decimal Price { get; init; }
     public Category Category { get; init; }
     public Dimensions Dimensions { get; init; }
+
+    public AgeGroup? AgeGroup { get; init; }
+    public BreedSize? BreedSize { get; init; }
+    public string? Ingredients { get; init; }
+    public string? NutritionalInfo { get; init; }
+    public string? StorageInstructions { get; init; }
+    public decimal? WeightKg { get; init; }
 }

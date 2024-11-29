@@ -7,7 +7,7 @@ namespace backend.Product.ProductControllers;
 
 public class ReplaceProductExtensions(TypeParser typeParser)
 {
-    public DomainModels.BaseProduct ToEntity(ReplaceProductRequest request)
+    public BaseProduct ToEntity(ReplaceProductRequest request)
     {
         // ProductPricing fields
         if (!decimal.TryParse(request.Pricing.DiscountPercentage, out var discountPercentage))
@@ -29,7 +29,7 @@ public class ReplaceProductExtensions(TypeParser typeParser)
         return new DomainModels.BaseProduct(request.Name, pricing, category, dimensions);
     }
 
-    public ReplaceProductResponse ToReplaceProductResponse(DomainModels.BaseProduct baseProduct)
+    public ReplaceProductResponse ToReplaceProductResponse(BaseProduct baseProduct)
     {
         return new ReplaceProductResponse
         {
@@ -50,7 +50,7 @@ public class ReplaceProductExtensions(TypeParser typeParser)
         };
     }
 
-    public ReplaceProductRequest ToReplaceProductRequest(DomainModels.BaseProduct baseProduct)
+    public ReplaceProductRequest ToReplaceProductRequest(BaseProduct baseProduct)
     {
         return new ReplaceProductRequest
         {
