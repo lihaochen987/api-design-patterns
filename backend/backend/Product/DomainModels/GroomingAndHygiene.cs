@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 
@@ -29,9 +30,9 @@ public class GroomingAndHygiene : Product
 
     public bool IsNatural { get; private set; }
     public bool IsHypoallergenic { get; private set; }
-    public string UsageInstructions { get; private set; }
+    [MaxLength(300)] public string UsageInstructions { get; private set; }
     public bool IsCrueltyFree { get; private set; }
-    public string SafetyWarnings { get; private set; }
+    [MaxLength(300)] public string SafetyWarnings { get; private set; }
 
     public void UpdateGroomingAndHygieneDetails(
         bool isNatural,

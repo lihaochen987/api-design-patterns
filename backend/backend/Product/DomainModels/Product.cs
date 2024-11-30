@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 
@@ -44,9 +45,13 @@ public abstract class Product
     }
 
     public long Id { get; private set; }
-    public string Name { get; private set; }
+
+    [MaxLength(100)] public string Name { get; private set; }
+
     public Category Category { get; private set; }
+
     public Pricing Pricing { get; private set; }
+
     public Dimensions Dimensions { get; private set; }
 
     public void Replace(

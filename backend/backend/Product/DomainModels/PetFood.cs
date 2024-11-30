@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 
@@ -33,9 +34,9 @@ public class PetFood : Product
 
     public AgeGroup AgeGroup { get; private set; }
     public BreedSize BreedSize { get; private set; }
-    public string Ingredients { get; private set; }
+    [MaxLength(300)] public string Ingredients { get; private set; }
     public Dictionary<string, object> NutritionalInfo { get; private set; }
-    public string StorageInstructions { get; private set; }
+    [MaxLength(300)] public string StorageInstructions { get; private set; }
     public decimal WeightKg { get; private set; }
 
     public void UpdatePetFoodDetails(
