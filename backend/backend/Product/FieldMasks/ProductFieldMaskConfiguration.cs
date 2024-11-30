@@ -23,6 +23,12 @@ public class ProductFieldMaskConfiguration
         "dimensions.width",
         "dimensions.height",
         "dimensions.length",
+        "agegroup",
+        "breedsize",
+        "nutritionalinfo",
+        "ingredients",
+        "weightkg",
+        "storageinstructions"
     ];
 
     public (
