@@ -7,7 +7,7 @@ namespace backend.Product.ProductControllers;
 
 public class ReplaceProductExtensions(TypeParser typeParser)
 {
-    public BaseProduct ToEntity(ReplaceProductRequest request)
+    public DomainModels.Product ToEntity(ReplaceProductRequest request)
     {
         // ProductPricing fields
         if (!decimal.TryParse(request.Pricing.DiscountPercentage, out var discountPercentage))
@@ -26,6 +26,37 @@ public class ReplaceProductExtensions(TypeParser typeParser)
 
         var dimensions = new Dimensions(length, width, height);
         var pricing = new Pricing(basePrice, discountPercentage, taxRate);
+
+        // PetFood
+        if (category == Category.PetFood)
+        {
+            var ageGroup = typeParser.ParseEnum<AgeGroup>(request.AgeGroup, "Invalid age group");
+            var breedSize = typeParser.ParseEnum<BreedSize>(request.BreedSize, "Invalid breed size");
+            var weight = typeParser.ParseDecimal(request.WeightKg, "Invalid weight");
+            var ingredients = string.IsNullOrWhiteSpace(request.Ingredients)
+                ? throw new ArgumentException("Ingredients cannot be null or whitespace.")
+                : request.Ingredients;
+            if (request.NutritionalInfo == null)
+            {
+                throw new ArgumentException("Nutritional info cannot be null.");
+            }
+
+            var storageInstructions = string.IsNullOrWhiteSpace(request.StorageInstructions)
+                ? throw new ArgumentException("Storage instructions cannot be null or whitespace.")
+                : request.StorageInstructions;
+
+            return new PetFood(
+                request.Name,
+                pricing,
+                dimensions,
+                ageGroup,
+                breedSize,
+                ingredients,
+                request.NutritionalInfo,
+                storageInstructions,
+                weight);
+        }
+
         return new BaseProduct(request.Name, pricing, category, dimensions);
     }
 
@@ -55,7 +86,7 @@ public class ReplaceProductExtensions(TypeParser typeParser)
             response.BreedSize = petFood.BreedSize.ToString();
             response.Ingredients = petFood.Ingredients;
             response.NutritionalInfo =
-                typeParser.ParseDictionaryToString(petFood.NutritionalInfo, "Invalid nutritional info.");
+                typeParser.ParseDictionaryToString(petFood.NutritionalInfo, "Invalid nutritional info");
             response.StorageInstructions = petFood.StorageInstructions;
             response.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
         }
@@ -65,7 +96,7 @@ public class ReplaceProductExtensions(TypeParser typeParser)
 
     public ReplaceProductRequest ToReplaceProductRequest(DomainModels.Product product)
     {
-        return new ReplaceProductRequest
+        var request = new ReplaceProductRequest
         {
             Name = product.Name,
             Category = product.Category.ToString(),
@@ -82,5 +113,17 @@ public class ReplaceProductExtensions(TypeParser typeParser)
                 Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }
         };
+        
+        if (product is PetFood petFood)
+        {
+            request.AgeGroup = petFood.AgeGroup.ToString();
+            request.BreedSize = petFood.BreedSize.ToString();
+            request.Ingredients = petFood.Ingredients;
+            request.NutritionalInfo = petFood.NutritionalInfo;
+            request.StorageInstructions = petFood.StorageInstructions;
+            request.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
+        }
+
+        return request;
     }
 }

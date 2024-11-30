@@ -98,7 +98,7 @@ public class CreateProductExtensions(TypeParser typeParser)
 
     public CreateProductRequest ToCreateProductRequest(DomainModels.Product product)
     {
-        var response = new CreateProductRequest
+        var request = new CreateProductRequest
         {
             Name = product.Name,
             Category = product.Category.ToString(),
@@ -118,14 +118,14 @@ public class CreateProductExtensions(TypeParser typeParser)
 
         if (product is PetFood petFood)
         {
-            response.AgeGroup = petFood.AgeGroup.ToString();
-            response.BreedSize = petFood.BreedSize.ToString();
-            response.Ingredients = petFood.Ingredients;
-            response.NutritionalInfo = petFood.NutritionalInfo;
-            response.StorageInstructions = petFood.StorageInstructions;
-            response.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
+            request.AgeGroup = petFood.AgeGroup.ToString();
+            request.BreedSize = petFood.BreedSize.ToString();
+            request.Ingredients = petFood.Ingredients;
+            request.NutritionalInfo = petFood.NutritionalInfo;
+            request.StorageInstructions = petFood.StorageInstructions;
+            request.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
         }
 
-        return response;
+        return request;
     }
 }

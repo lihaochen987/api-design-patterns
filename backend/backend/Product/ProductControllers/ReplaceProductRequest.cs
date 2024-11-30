@@ -15,7 +15,7 @@ public class ReplaceProductRequest
     public string? AgeGroup { get; set; }
     public string? BreedSize { get; set; }
     public string? Ingredients { get; set; }
-    public string? NutritionalInfo { get; set; }
+    public Dictionary<string, object>? NutritionalInfo { get; set; }
     public string? StorageInstructions { get; set; }
     public string? WeightKg { get; set; }
 }
