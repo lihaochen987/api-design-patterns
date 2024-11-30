@@ -39,6 +39,15 @@ public class UpdateProductExtensions(TypeParser typeParser)
             response.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
         }
 
+        if (product is GroomingAndHygiene groomingAndHygiene)
+        {
+            response.IsNatural = groomingAndHygiene.IsNatural;
+            response.IsHypoAllergenic = groomingAndHygiene.IsHypoallergenic;
+            response.UsageInstructions = groomingAndHygiene.UsageInstructions;
+            response.IsCrueltyFree = groomingAndHygiene.IsCrueltyFree;
+            response.SafetyWarnings = groomingAndHygiene.SafetyWarnings;
+        }
+
         return response;
     }
 }

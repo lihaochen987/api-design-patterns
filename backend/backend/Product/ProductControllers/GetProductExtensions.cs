@@ -28,7 +28,12 @@ public class GetProductExtensions(TypeParser typeParser)
                 ? typeParser.ParseDictionaryToString(product.NutritionalInfo, "Invalid nutritional info")
                 : null,
             StorageInstructions = product.StorageInstructions,
-            WeightKg = product.WeightKg.HasValue ? product.WeightKg.ToString() : null
+            WeightKg = product.WeightKg.HasValue ? product.WeightKg.ToString() : null,
+            IsNatural = product.IsNatural,
+            IsHypoAllergenic = product.IsHypoallergenic,
+            UsageInstructions = product.UsageInstructions,
+            IsCrueltyFree = product.IsCrueltyFree,
+            SafetyWarnings = product.SafetyWarnings
         };
     }
 }

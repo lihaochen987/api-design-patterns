@@ -28,7 +28,12 @@ public class ProductFieldMaskConfiguration
         "nutritionalinfo",
         "ingredients",
         "weightkg",
-        "storageinstructions"
+        "storageinstructions",
+        "isnatural",
+        "ishypoallergenic",
+        "usageinstructions",
+        "iscrueltyfree",
+        "safetywarnings"
     ];
 
     public (
@@ -79,6 +84,45 @@ public class ProductFieldMaskConfiguration
     }
 
     public (
+        bool isNatural,
+        bool isHypoAllergenic,
+        string usageInstructions,
+        bool isCrueltyFree,
+        string safetyWarnings
+        ) GetUpdatedGroomingAndHygieneValues(
+            UpdateProductRequest request,
+            GroomingAndHygiene groomingAndHygiene)
+    {
+        var isNatural = request.FieldMask.Contains("isnatural", StringComparer.OrdinalIgnoreCase) &&
+                        request.IsNatural.HasValue
+            ? request.IsNatural.Value
+            : groomingAndHygiene.IsNatural;
+
+        var isHypoAllergenic = request.FieldMask.Contains("ishypoallergenic", StringComparer.OrdinalIgnoreCase) &&
+                               request.IsHypoAllergenic.HasValue
+            ? request.IsHypoAllergenic.Value
+            : groomingAndHygiene.IsHypoallergenic;
+
+        var usageInstructions = request.FieldMask.Contains("usageinstructions", StringComparer.OrdinalIgnoreCase)
+                                && !string.IsNullOrEmpty(request.UsageInstructions)
+            ? request.UsageInstructions
+            : groomingAndHygiene.UsageInstructions;
+
+        var isCrueltyFree = request.FieldMask.Contains("iscrueltyfree", StringComparer.OrdinalIgnoreCase) &&
+                            request.IsCrueltyFree.HasValue
+            ? request.IsCrueltyFree.Value
+            : groomingAndHygiene.IsCrueltyFree;
+
+        var safetyWarnings = request.FieldMask.Contains("safetywarnings", StringComparer.OrdinalIgnoreCase)
+                             && !string.IsNullOrEmpty(request.SafetyWarnings)
+            ? request.SafetyWarnings
+            : groomingAndHygiene.SafetyWarnings;
+
+        return (isNatural, isHypoAllergenic, usageInstructions, isCrueltyFree, safetyWarnings);
+    }
+
+
+    public (
         AgeGroup ageGroup,
         BreedSize breedSize,
         string ingredients,
@@ -90,12 +134,12 @@ public class ProductFieldMaskConfiguration
             PetFood petFood)
     {
         var ageGroup = request.FieldMask.Contains("agegroup", StringComparer.OrdinalIgnoreCase)
-                       && Enum.TryParse(request.Category, true, out AgeGroup parsedAgeGroup)
+                       && Enum.TryParse(request.AgeGroup, true, out AgeGroup parsedAgeGroup)
             ? parsedAgeGroup
             : petFood.AgeGroup;
 
         var breedSize = request.FieldMask.Contains("breedsize", StringComparer.OrdinalIgnoreCase)
-                        && Enum.TryParse(request.Category, true, out BreedSize parsedBreedSize)
+                        && Enum.TryParse(request.BreedSize, true, out BreedSize parsedBreedSize)
             ? parsedBreedSize
             : petFood.BreedSize;
 

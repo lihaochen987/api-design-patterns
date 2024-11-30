@@ -19,5 +19,10 @@ public class UpdateProductRequest
     public Dictionary<string, object>? NutritionalInfo { get; set; }
     public string? StorageInstructions { get; set; }
     public string? WeightKg { get; set; }
+    public bool? IsNatural { get; set; }
+    public bool? IsHypoAllergenic { get; set; }
+    public string? UsageInstructions { get; set; }
+    public bool? IsCrueltyFree { get; set; }
+    public string? SafetyWarnings { get; set; }
     public List<string> FieldMask { get; init; } = ["*"];
 }

@@ -40,6 +40,16 @@ public class UpdateProductController(
                 weightKg);
         }
 
+        if (product is GroomingAndHygiene groomingAndHygiene)
+        {
+            var (isNatural, isHypoAllergenic, usageInstructions, isCrueltyFree, safetyWarnings) =
+                configuration.GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
+
+            groomingAndHygiene.UpdateGroomingAndHygieneDetails(isNatural, isHypoAllergenic, usageInstructions,
+                isCrueltyFree,
+                safetyWarnings);
+        }
+
         await repository.ReplaceProductAsync(product);
 
         return Ok(extensions.ToUpdateProductResponse(product));
