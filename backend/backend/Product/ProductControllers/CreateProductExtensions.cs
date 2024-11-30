@@ -13,10 +13,9 @@ public class CreateProductExtensions(TypeParser typeParser)
     public DomainModels.Product ToEntity(CreateProductRequest request)
     {
         // ProductPricing fields
-        if (!decimal.TryParse(request.Pricing.DiscountPercentage, out var discountPercentage))
-            throw new ArgumentException("Invalid discount percentage");
-        if (!decimal.TryParse(request.Pricing.TaxRate, out var taxRate))
-            throw new ArgumentException("Invalid tax rate");
+        var discountPercentage =
+            typeParser.ParseDecimal(request.Pricing.DiscountPercentage, "Invalid discount percentage");
+        var taxRate = typeParser.ParseDecimal(request.Pricing.TaxRate, "Invalid tax rate");
         var basePrice = typeParser.ParseDecimal(request.Pricing.BasePrice, "Invalid BasePrice");
 
         // Product fields
@@ -154,6 +153,7 @@ public class CreateProductExtensions(TypeParser typeParser)
             request.StorageInstructions = petFood.StorageInstructions;
             request.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
         }
+
         if (product is GroomingAndHygiene groomingAndHygiene)
         {
             request.IsNatural = groomingAndHygiene.IsNatural;
