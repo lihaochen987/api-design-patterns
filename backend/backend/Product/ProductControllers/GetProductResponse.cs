@@ -1,14 +1,15 @@
+using System.ComponentModel.DataAnnotations;
 using backend.Product.Contracts;
 
 namespace backend.Product.ProductControllers;
 
 public class GetProductResponse
 {
-    public string Id { get; set; } = "";
-    public string Name { get; set; } = "";
-    public string Price { get; set; } = "";
-    public string Category { get; set; } = "";
-    public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
+    [Required] public string Id { get; set; } = "";
+    [Required] public string Name { get; set; } = "";
+    [Required] public string Price { get; set; } = "";
+    [Required] public string Category { get; set; } = "";
+    [Required] public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
     public string? AgeGroup { get; set; }
     public string? BreedSize { get; set; }
     public string? Ingredients { get; set; }

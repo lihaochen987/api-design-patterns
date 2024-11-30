@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace backend.Product.ProductControllers;
 
 public class ListProductsResponse
 {
-    public IEnumerable<GetProductResponse?> Results { get; set; } = [];
-    public string? NextPageToken { get; set; }
+    [Required] public IEnumerable<GetProductResponse?> Results { get; set; } = [];
+    [Required] public string? NextPageToken { get; set; }
 }

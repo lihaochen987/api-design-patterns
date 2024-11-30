@@ -1,17 +1,19 @@
+using System.ComponentModel.DataAnnotations;
 using backend.Product.Contracts;
 
 namespace backend.Product.ProductControllers;
 
 public class UpdateProductResponse
 {
-    public string Id { get; set; } = "";
-    public string Name { get; set; } = "";
+    [Required] public string Id { get; set; } = "";
+    [Required] public string Name { get; set; } = "";
 
+    [Required]
     public ProductPricingContract Pricing { get; set; } =
         new() { BasePrice = "", DiscountPercentage = "", TaxRate = "" };
 
-    public string Category { get; set; } = "";
-    public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
+    [Required] public string Category { get; set; } = "";
+    [Required] public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
 
     public string? AgeGroup { get; set; }
     public string? BreedSize { get; set; }
