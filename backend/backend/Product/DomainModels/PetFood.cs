@@ -7,29 +7,6 @@ public class PetFood : Product
     }
 
     public PetFood(
-        long id,
-        string name,
-        Pricing pricing,
-        Dimensions dimensions,
-        AgeGroup ageGroup,
-        BreedSize breedSize,
-        string ingredients,
-        Dictionary<string, object> nutritionalInfo,
-        string storageInstructions,
-        decimal weightKg)
-        : base(id, name, pricing, Category.PetFood, dimensions)
-    {
-        AgeGroup = ageGroup;
-        BreedSize = breedSize;
-        Ingredients = ingredients;
-        NutritionalInfo = nutritionalInfo;
-        StorageInstructions = storageInstructions;
-        WeightKg = weightKg;
-
-        EnforcePetFoodInvariants(weightKg);
-    }
-
-    public PetFood(
         string name,
         Pricing pricing,
         Dimensions dimensions,

@@ -24,7 +24,9 @@ public class GetProductExtensions(TypeParser typeParser)
             AgeGroup = product.AgeGroup.HasValue ? product.AgeGroup.ToString() : null,
             BreedSize = product.BreedSize.HasValue ? product.BreedSize.ToString() : null,
             Ingredients = product.Ingredients,
-            NutritionalInfo = typeParser.ParseDictionaryToString(product.NutritionalInfo, "Invalid nutritional info"),
+            NutritionalInfo = product.NutritionalInfo is { Count: > 1 }
+                ? typeParser.ParseDictionaryToString(product.NutritionalInfo, "Invalid nutritional info")
+                : null,
             StorageInstructions = product.StorageInstructions,
             WeightKg = product.WeightKg.HasValue ? product.WeightKg.ToString() : null
         };

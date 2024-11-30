@@ -51,7 +51,7 @@ The other patterns mentioned, but not yet implemented from the book include:
 
 1. CREATE and DESIGN the Database via UpScripts
 2. MODIFY the View
-3. MODIFY the Domain Model
+3. MODIFY the Domain Model (ChatGPT it from the SQL script lol)
 4. MODIFY the DbContext
 5. CHECK Delete standard method still works
 6. MODIFY Create and Replace standard methods

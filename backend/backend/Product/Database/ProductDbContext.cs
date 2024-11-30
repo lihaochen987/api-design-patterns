@@ -61,7 +61,11 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
                 .HasColumnName("product_pet_foods_ingredients");
 
             entity.Property(p => p.NutritionalInfo)
-                .HasColumnName("product_pet_foods_nutritional_info");
+                .HasColumnName("product_pet_foods_nutritional_info")
+                .HasColumnType("jsonb")
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, new JsonSerializerOptions { WriteIndented = false }),
+                    v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, new JsonSerializerOptions())!);
 
             entity.Property(p => p.StorageInstructions)
                 .HasColumnName("product_pet_foods_storage_instructions");

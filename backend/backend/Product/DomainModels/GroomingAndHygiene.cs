@@ -7,25 +7,6 @@ public class GroomingAndHygiene : Product
     }
 
     public GroomingAndHygiene(
-        long id,
-        string name,
-        Pricing pricing,
-        Dimensions dimensions,
-        bool isNatural,
-        bool isHypoallergenic,
-        string usageInstructions,
-        bool isCrueltyFree,
-        string safetyWarnings)
-        : base(id, name, pricing, Category.GroomingAndHygiene, dimensions)
-    {
-        IsNatural = isNatural;
-        IsHypoallergenic = isHypoallergenic;
-        UsageInstructions = usageInstructions;
-        IsCrueltyFree = isCrueltyFree;
-        SafetyWarnings = safetyWarnings;
-    }
-
-    public GroomingAndHygiene(
         string name,
         Pricing pricing,
         Dimensions dimensions,

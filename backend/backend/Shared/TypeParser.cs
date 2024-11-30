@@ -55,11 +55,6 @@ public class TypeParser
 
     public string ParseDictionaryToString(Dictionary<string, object>? dictionary, string errorMessage)
     {
-        if (dictionary == null || dictionary.Count == 0)
-        {
-            throw new ArgumentException(errorMessage);
-        }
-
         try
         {
             return JsonSerializer.Serialize(dictionary);
