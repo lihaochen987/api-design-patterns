@@ -1,13 +1,15 @@
 using System.Globalization;
 using backend.Product.Contracts;
+using backend.Product.DomainModels;
+using backend.Shared;
 
 namespace backend.Product.ProductControllers;
 
-public class UpdateProductExtensions
+public class UpdateProductExtensions(TypeParser typeParser)
 {
     public UpdateProductResponse ToUpdateProductResponse(DomainModels.Product product)
     {
-        return new UpdateProductResponse
+        var response = new UpdateProductResponse
         {
             Id = product.Id.ToString(),
             Name = product.Name,
@@ -25,5 +27,18 @@ public class UpdateProductExtensions
                 Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }
         };
+
+        if (product is PetFood petFood)
+        {
+            response.AgeGroup = petFood.AgeGroup.ToString();
+            response.BreedSize = petFood.BreedSize.ToString();
+            response.Ingredients = petFood.Ingredients;
+            response.NutritionalInfo =
+                typeParser.ParseDictionaryToString(petFood.NutritionalInfo, "Invalid nutritional info");
+            response.StorageInstructions = petFood.StorageInstructions;
+            response.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
+        }
+
+        return response;
     }
 }

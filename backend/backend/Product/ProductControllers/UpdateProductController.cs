@@ -1,3 +1,4 @@
+using backend.Product.DomainModels;
 using backend.Product.FieldMasks;
 using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,15 @@ public class UpdateProductController(
         var (name, pricing, category, dimensions) =
             configuration.GetUpdatedProductValues(request, product);
         product.Replace(name, pricing, category, dimensions);
+
+        if (product is PetFood petFood)
+        {
+            var (ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions, weightKg) =
+                configuration.GetUpdatedPetFoodValues(request, petFood);
+
+            petFood.UpdatePetFoodDetails(ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions,
+                weightKg);
+        }
 
         await repository.ReplaceProductAsync(product);
 

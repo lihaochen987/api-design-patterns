@@ -5,6 +5,7 @@ using backend.Product.FieldMasks;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.Builders;
 using backend.Product.Tests.Fakes;
+using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
@@ -20,7 +21,7 @@ public class UpdateProductControllerTests
     public UpdateProductControllerTests()
     {
         var configuration = new ProductFieldMaskConfiguration();
-        _extensions = new UpdateProductExtensions();
+        _extensions = new UpdateProductExtensions(new TypeParser());
         _controller = new UpdateProductController(
             _productRepository,
             configuration,

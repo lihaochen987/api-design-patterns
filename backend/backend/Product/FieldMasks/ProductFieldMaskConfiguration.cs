@@ -78,6 +78,50 @@ public class ProductFieldMaskConfiguration
         return new Dimensions(length, width, height);
     }
 
+    public (
+        AgeGroup ageGroup,
+        BreedSize breedSize,
+        string ingredients,
+        Dictionary<string, object> nutritionalInfo,
+        string storageInstructions,
+        decimal weightKg)
+        GetUpdatedPetFoodValues(
+            UpdateProductRequest request,
+            PetFood petFood)
+    {
+        var ageGroup = request.FieldMask.Contains("agegroup", StringComparer.OrdinalIgnoreCase)
+                       && Enum.TryParse(request.Category, true, out AgeGroup parsedAgeGroup)
+            ? parsedAgeGroup
+            : petFood.AgeGroup;
+
+        var breedSize = request.FieldMask.Contains("breedsize", StringComparer.OrdinalIgnoreCase)
+                        && Enum.TryParse(request.Category, true, out BreedSize parsedBreedSize)
+            ? parsedBreedSize
+            : petFood.BreedSize;
+
+        var ingredients = request.FieldMask.Contains("ingredients", StringComparer.OrdinalIgnoreCase)
+                          && !string.IsNullOrEmpty(request.Ingredients)
+            ? request.Ingredients
+            : petFood.Ingredients;
+
+        var nutritionalInfo = request.FieldMask.Contains("nutritionalinfo", StringComparer.OrdinalIgnoreCase)
+                              && request.NutritionalInfo is { } parsedNutritionalInfo
+            ? parsedNutritionalInfo
+            : petFood.NutritionalInfo;
+
+        var storageInstructions = request.FieldMask.Contains("storageinstructions", StringComparer.OrdinalIgnoreCase)
+                                  && !string.IsNullOrEmpty(request.StorageInstructions)
+            ? request.StorageInstructions
+            : petFood.StorageInstructions;
+
+        var weight = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase)
+                     && !string.IsNullOrEmpty(request.WeightKg)
+            ? decimal.Parse(request.WeightKg)
+            : petFood.WeightKg;
+
+        return (ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions, weight);
+    }
+
     private static Pricing
         GetUpdatedProductPricingValues(
             UpdateProductRequest request,
