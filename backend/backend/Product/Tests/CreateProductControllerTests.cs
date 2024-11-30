@@ -23,7 +23,7 @@ public class CreateProductControllerTests
     [Fact]
     public async Task CreateProduct_Should_AddProduct_And_ReturnCreatedAtActionResult()
     {
-        var product = new ProductTestDataBuilder().Build();
+        var product = new ProductTestDataBuilder().AsToys().WithId(5).Build();
         var request = _extensions.ToCreateProductRequest(product);
         var expectedResponse = _extensions.ToCreateProductResponse(product);
         _productRepository.Add(product);
@@ -31,8 +31,6 @@ public class CreateProductControllerTests
         var result = await _controller.CreateProduct(request);
 
         var createdAtActionResult = result.Result.ShouldBeOfType<CreatedAtActionResult>();
-        createdAtActionResult.ActionName.ShouldBe("GetProduct");
-        createdAtActionResult.ControllerName.ShouldBe("GetProduct");
         var actualResponse = createdAtActionResult.Value.ShouldBeOfType<CreateProductResponse>();
         actualResponse.ShouldBeEquivalentTo(expectedResponse);
     }

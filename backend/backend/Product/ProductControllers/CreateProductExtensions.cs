@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.Json;
 using backend.Product.Contracts;
 using backend.Product.DomainModels;
 using backend.Shared;
@@ -8,7 +9,7 @@ namespace backend.Product.ProductControllers;
 
 public class CreateProductExtensions(TypeParser typeParser)
 {
-    public BaseProduct ToEntity(CreateProductRequest request)
+    public DomainModels.Product ToEntity(CreateProductRequest request)
     {
         // ProductPricing fields
         if (!decimal.TryParse(request.Pricing.DiscountPercentage, out var discountPercentage))
@@ -27,48 +28,104 @@ public class CreateProductExtensions(TypeParser typeParser)
 
         var dimensions = new Dimensions(length, width, height);
         var pricing = new Pricing(basePrice, discountPercentage, taxRate);
-        return new DomainModels.BaseProduct(request.Name, pricing, category, dimensions);
+
+        // PetFood
+        if (category == Category.PetFood)
+        {
+            var ageGroup = typeParser.ParseEnum<AgeGroup>(request.AgeGroup, "Invalid age group");
+            var breedSize = typeParser.ParseEnum<BreedSize>(request.BreedSize, "Invalid breed size");
+            var weight = typeParser.ParseDecimal(request.WeightKg, "Invalid weight");
+            var ingredients = string.IsNullOrWhiteSpace(request.Ingredients)
+                ? throw new ArgumentException("Ingredients cannot be null or whitespace.")
+                : request.Ingredients;
+            if (request.NutritionalInfo == null)
+            {
+                throw new ArgumentException("Nutritional info cannot be null.");
+            }
+
+            var storageInstructions = string.IsNullOrWhiteSpace(request.StorageInstructions)
+                ? throw new ArgumentException("Storage instructions cannot be null or whitespace.")
+                : request.StorageInstructions;
+
+            return new PetFood(
+                request.Name,
+                pricing,
+                dimensions,
+                ageGroup,
+                breedSize,
+                ingredients,
+                request.NutritionalInfo,
+                storageInstructions,
+                weight);
+        }
+
+        return new BaseProduct(request.Name, pricing, category, dimensions);
     }
 
-    public CreateProductResponse ToCreateProductResponse(DomainModels.BaseProduct baseProduct)
+    public CreateProductResponse ToCreateProductResponse(DomainModels.Product product)
     {
-        return new CreateProductResponse
+        var response = new CreateProductResponse
         {
-            Name = baseProduct.Name,
-            Category = baseProduct.Category.ToString(),
+            Name = product.Name,
+            Category = product.Category.ToString(),
             Pricing = new ProductPricingContract
             {
-                BasePrice = baseProduct.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                DiscountPercentage = baseProduct.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
-                TaxRate = baseProduct.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
+                BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+                TaxRate = product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
             },
             Dimensions = new DimensionsContract
             {
-                Length = baseProduct.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Width = baseProduct.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Height = baseProduct.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
-            }
+                Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
+            },
         };
+
+        if (product is PetFood petFood)
+        {
+            response.AgeGroup = petFood.AgeGroup.ToString();
+            response.BreedSize = petFood.BreedSize.ToString();
+            response.Ingredients = petFood.Ingredients;
+            response.NutritionalInfo =
+                typeParser.ParseDictionaryToString(petFood.NutritionalInfo, "Invalid nutritional info");
+            response.StorageInstructions = petFood.StorageInstructions;
+            response.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
+        }
+
+        return response;
     }
 
-    public CreateProductRequest ToCreateProductRequest(DomainModels.BaseProduct baseProduct)
+    public CreateProductRequest ToCreateProductRequest(DomainModels.Product product)
     {
-        return new CreateProductRequest
+        var response = new CreateProductRequest
         {
-            Name = baseProduct.Name,
-            Category = baseProduct.Category.ToString(),
+            Name = product.Name,
+            Category = product.Category.ToString(),
             Pricing = new ProductPricingContract
             {
-                BasePrice = baseProduct.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                DiscountPercentage = baseProduct.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
-                TaxRate = baseProduct.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
+                BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+                TaxRate = product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
             },
             Dimensions = new DimensionsContract
             {
-                Length = baseProduct.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Width = baseProduct.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Height = baseProduct.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
+                Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }
         };
+
+        if (product is PetFood petFood)
+        {
+            response.AgeGroup = petFood.AgeGroup.ToString();
+            response.BreedSize = petFood.BreedSize.ToString();
+            response.Ingredients = petFood.Ingredients;
+            response.NutritionalInfo = petFood.NutritionalInfo;
+            response.StorageInstructions = petFood.StorageInstructions;
+            response.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
+        }
+
+        return response;
     }
 }

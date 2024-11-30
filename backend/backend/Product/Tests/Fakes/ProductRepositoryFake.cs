@@ -3,35 +3,35 @@ using backend.Product.Services;
 
 namespace backend.Product.Tests.Fakes;
 
-public class ProductRepositoryFake : Collection<DomainModels.BaseProduct>, IProductRepository
+public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductRepository
 {
     public bool IsDirty { get; set; }
 
-    public Task<DomainModels.BaseProduct?> GetProductAsync(long id)
+    public Task<DomainModels.Product?> GetProductAsync(long id)
     {
         var product = this.FirstOrDefault(p => p.Id == id);
         return Task.FromResult(product);
     }
 
-    public Task CreateProductAsync(DomainModels.BaseProduct baseProduct)
+    public Task CreateProductAsync(DomainModels.Product product)
     {
-        Add(baseProduct);
+        Add(product);
         IsDirty = true;
         return Task.CompletedTask;
     }
 
-    public Task DeleteProductAsync(DomainModels.BaseProduct baseProduct)
+    public Task DeleteProductAsync(DomainModels.Product product)
     {
-        Remove(baseProduct);
+        Remove(product);
         IsDirty = true;
         return Task.CompletedTask;
     }
 
-    public Task ReplaceProductAsync(DomainModels.BaseProduct baseProduct)
+    public Task ReplaceProductAsync(DomainModels.Product product)
     {
-        var index = IndexOf(item: this.FirstOrDefault(p => p.Id == baseProduct.Id) ??
+        var index = IndexOf(item: this.FirstOrDefault(p => p.Id == product.Id) ??
                                   throw new InvalidOperationException());
-        this[index] = baseProduct;
+        this[index] = product;
         IsDirty = true;
 
         return Task.CompletedTask;

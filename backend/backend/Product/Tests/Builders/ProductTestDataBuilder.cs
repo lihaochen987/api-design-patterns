@@ -11,6 +11,12 @@ public class ProductTestDataBuilder
     private Pricing _pricing;
     private Category _category;
     private Dimensions _dimensions;
+    private AgeGroup _ageGroup;
+    private BreedSize _breedSize;
+    private string _ingredients;
+    private Dictionary<string, object> _nutritionalInfo;
+    private string _storageInstructions;
+    private decimal _weightKg;
 
     public ProductTestDataBuilder()
     {
@@ -22,6 +28,25 @@ public class ProductTestDataBuilder
         _category = _fixture.Create<Category>();
         _dimensions = _fixture.Create<Dimensions>();
         _pricing = _fixture.Create<Pricing>();
+
+        _ageGroup = _fixture.Create<AgeGroup>();
+        _breedSize = _fixture.Create<BreedSize>();
+        _ingredients = _fixture.Create<string>();
+        _nutritionalInfo = _fixture.Create<Dictionary<string, object>>();
+        _storageInstructions = _fixture.Create<string>();
+        _weightKg = _fixture.Create<decimal>();
+    }
+
+    public ProductTestDataBuilder AsToys()
+    {
+        _category = Category.Toys;
+        return this;
+    }
+
+    public ProductTestDataBuilder AsPetFood()
+    {
+        _category = Category.PetFood;
+        return this;
     }
 
     public ProductTestDataBuilder WithId(int id)
@@ -63,27 +88,27 @@ public class ProductTestDataBuilder
         return this;
     }
 
-    public DomainModels.BaseProduct Build()
+    public DomainModels.Product Build()
     {
-        return new DomainModels.BaseProduct(
+        if (_category == Category.PetFood)
+        {
+            return new PetFood(
+                _name,
+                _pricing,
+                _dimensions,
+                _ageGroup,
+                _breedSize,
+                _ingredients,
+                _nutritionalInfo,
+                _storageInstructions,
+                _weightKg);
+        }
+
+        return new BaseProduct(
             _id ?? _fixture.Create<int>(),
             _name,
             _pricing,
             _category,
             _dimensions);
-    }
-
-    // Todo: Indicator to change this is not apparent, might need to fix somehow.
-    public List<DomainModels.BaseProduct> CreateMany(int count, int startId = 1)
-    {
-        return Enumerable.Range(startId, count)
-            .Select(id => new ProductTestDataBuilder()
-                .WithId(id)
-                .WithName(_fixture.Create<string>())
-                .WithPricing(_fixture.Create<Pricing>())
-                .WithCategory(_fixture.Create<Category>())
-                .WithDimensions(_fixture.Create<Dimensions>())
-                .Build())
-            .ToList();
     }
 }

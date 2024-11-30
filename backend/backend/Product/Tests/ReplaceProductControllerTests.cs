@@ -23,7 +23,7 @@ public class ReplaceProductControllerTests
     [Fact]
     public async Task ReplaceProduct_Should_ReturnOk_WithUpdatedProduct_When_ProductExists()
     {
-        var originalProduct = new ProductTestDataBuilder().Build();
+        var originalProduct = new ProductTestDataBuilder().AsToys().Build();
         _productRepository.Add(originalProduct);
         _productRepository.IsDirty = false;
 

@@ -2,15 +2,19 @@ namespace backend.Product.DomainModels;
 
 public class PetFood : Product
 {
+    private PetFood()
+    {
+    }
+
     public PetFood(
         long id,
         string name,
         Pricing pricing,
         Dimensions dimensions,
-        string ageGroup,
-        string breedSize,
+        AgeGroup ageGroup,
+        BreedSize breedSize,
         string ingredients,
-        string nutritionalInfo,
+        Dictionary<string, object> nutritionalInfo,
         string storageInstructions,
         decimal weightKg)
         : base(id, name, pricing, Category.PetFood, dimensions)
@@ -22,17 +26,17 @@ public class PetFood : Product
         StorageInstructions = storageInstructions;
         WeightKg = weightKg;
 
-        EnforcePetFoodInvariants(ageGroup, breedSize, weightKg);
+        EnforcePetFoodInvariants(weightKg);
     }
 
     public PetFood(
         string name,
         Pricing pricing,
         Dimensions dimensions,
-        string ageGroup,
-        string breedSize,
+        AgeGroup ageGroup,
+        BreedSize breedSize,
         string ingredients,
-        string nutritionalInfo,
+        Dictionary<string, object> nutritionalInfo,
         string storageInstructions,
         decimal weightKg)
         : base(name, pricing, Category.PetFood, dimensions)
@@ -44,25 +48,25 @@ public class PetFood : Product
         StorageInstructions = storageInstructions;
         WeightKg = weightKg;
 
-        EnforcePetFoodInvariants(ageGroup, breedSize, weightKg);
+        EnforcePetFoodInvariants(weightKg);
     }
 
-    public string AgeGroup { get; private set; }
-    public string BreedSize { get; private set; }
+    public AgeGroup AgeGroup { get; private set; }
+    public BreedSize BreedSize { get; private set; }
     public string Ingredients { get; private set; }
-    public string NutritionalInfo { get; private set; }
+    public Dictionary<string, object> NutritionalInfo { get; private set; }
     public string StorageInstructions { get; private set; }
     public decimal WeightKg { get; private set; }
 
     public void UpdatePetFoodDetails(
-        string ageGroup,
-        string breedSize,
+        AgeGroup ageGroup,
+        BreedSize breedSize,
         string ingredients,
-        string nutritionalInfo,
+        Dictionary<string, object> nutritionalInfo,
         string storageInstructions,
         decimal weightKg)
     {
-        EnforcePetFoodInvariants(ageGroup, breedSize, weightKg);
+        EnforcePetFoodInvariants(weightKg);
 
         AgeGroup = ageGroup;
         BreedSize = breedSize;
@@ -72,12 +76,8 @@ public class PetFood : Product
         WeightKg = weightKg;
     }
 
-    private static void EnforcePetFoodInvariants(string ageGroup, string breedSize, decimal weightKg)
+    private static void EnforcePetFoodInvariants(decimal weightKg)
     {
-        if (string.IsNullOrWhiteSpace(ageGroup))
-            throw new ArgumentException("Age group is required for pet food.");
-        if (string.IsNullOrWhiteSpace(breedSize))
-            throw new ArgumentException("Breed size is required for pet food.");
         if (weightKg <= 0)
             throw new ArgumentException("Weight must be greater than zero.");
     }

@@ -32,7 +32,7 @@ public class ProductFieldMaskConfiguration
         Dimensions dimensions)
         GetUpdatedProductValues(
             UpdateProductRequest request,
-            DomainModels.BaseProduct baseProduct)
+            DomainModels.Product baseProduct)
     {
         var name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
                    && !string.IsNullOrEmpty(request.Name)

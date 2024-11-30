@@ -5,24 +5,24 @@ namespace backend.Product.ProductControllers;
 
 public class UpdateProductExtensions
 {
-    public UpdateProductResponse ToUpdateProductResponse(DomainModels.BaseProduct baseProduct)
+    public UpdateProductResponse ToUpdateProductResponse(DomainModels.Product product)
     {
         return new UpdateProductResponse
         {
-            Id = baseProduct.Id.ToString(),
-            Name = baseProduct.Name,
-            Category = baseProduct.Category.ToString(),
+            Id = product.Id.ToString(),
+            Name = product.Name,
+            Category = product.Category.ToString(),
             Pricing = new ProductPricingContract
             {
-                BasePrice = baseProduct.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                DiscountPercentage = baseProduct.Pricing.DiscountPercentage.ToString(),
-                TaxRate = baseProduct.Pricing.TaxRate.ToString()
+                BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
+                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+                TaxRate = product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
             },
             Dimensions = new DimensionsContract
             {
-                Length = baseProduct.Dimensions.Length.ToString(CultureInfo.InvariantCulture),
-                Width = baseProduct.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Height = baseProduct.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
+                Length = product.Dimensions.Length.ToString(CultureInfo.InvariantCulture),
+                Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
+                Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }
         };
     }

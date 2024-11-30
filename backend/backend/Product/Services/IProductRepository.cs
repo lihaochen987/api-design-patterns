@@ -2,8 +2,8 @@ namespace backend.Product.Services;
 
 public interface IProductRepository
 {
-    Task<DomainModels.BaseProduct?> GetProductAsync(long id);
-    Task CreateProductAsync(DomainModels.BaseProduct baseProduct);
-    Task DeleteProductAsync(DomainModels.BaseProduct baseProduct);
-    Task ReplaceProductAsync(DomainModels.BaseProduct baseProduct);
+    Task<DomainModels.Product?> GetProductAsync(long id);
+    Task CreateProductAsync(DomainModels.Product product);
+    Task DeleteProductAsync(DomainModels.Product product);
+    Task ReplaceProductAsync(DomainModels.Product product);
 }

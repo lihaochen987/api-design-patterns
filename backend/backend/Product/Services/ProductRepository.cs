@@ -5,26 +5,26 @@ namespace backend.Product.Services;
 
 public class ProductRepository(ProductDbContext context) : IProductRepository
 {
-    public async Task<DomainModels.BaseProduct?> GetProductAsync(long id)
+    public async Task<DomainModels.Product?> GetProductAsync(long id)
     {
         return await context.Products.FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task CreateProductAsync(DomainModels.BaseProduct baseProduct)
+    public async Task CreateProductAsync(DomainModels.Product product)
     {
-        context.Products.Add(baseProduct);
+        context.Products.Add(product);
         await context.SaveChangesAsync();
     }
 
-    public async Task DeleteProductAsync(DomainModels.BaseProduct baseProduct)
+    public async Task DeleteProductAsync(DomainModels.Product product)
     {
-        context.Products.Remove(baseProduct);
+        context.Products.Remove(product);
         await context.SaveChangesAsync();
     }
 
-    public async Task ReplaceProductAsync(DomainModels.BaseProduct baseProduct)
+    public async Task ReplaceProductAsync(DomainModels.Product product)
     {
-        baseProduct.Replace(baseProduct.Name, baseProduct.Pricing, baseProduct.Category, baseProduct.Dimensions);
+        product.Replace(product.Name, product.Pricing, product.Category, product.Dimensions);
         await context.SaveChangesAsync();
     }
 }
