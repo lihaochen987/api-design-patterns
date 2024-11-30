@@ -2,7 +2,7 @@ namespace backend.Product.DomainModels;
 
 public enum AgeGroup
 {
-    Puppy,
-    Adult,
-    Senior
+    Puppy = 1,
+    Adult = 2,
+    Senior = 3
 }

@@ -48,7 +48,8 @@ $$
                 product_pet_foods_nutritional_info     jsonb,
                 product_pet_foods_ingredients          text    NOT NULL,
                 product_pet_foods_weight_kg            numeric NOT NULL,
-                product_pet_foods_storage_instructions text
+                product_pet_foods_storage_instructions text,
+                UNIQUE (product_id)
             );
         END IF;
 

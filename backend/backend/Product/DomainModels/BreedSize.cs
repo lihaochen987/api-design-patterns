@@ -2,7 +2,7 @@ namespace backend.Product.DomainModels;
 
 public enum BreedSize
 {
-    Small,
-    Medium,
-    Large
+    Small = 1,
+    Medium = 2,
+    Large = 3
 }

@@ -50,12 +50,13 @@ The other patterns mentioned, but not yet implemented from the book include:
 ## Development Flow
 
 1. CREATE and DESIGN the Database via UpScripts
-2. MODIFY the View or Domain model
-3. MODIFY the DbContext
-4. UPDATE the relevant extension controller methods
-5. ADD the field masks
+2. MODIFY the View
+3. MODIFY the Domain Model
+4. MODIFY the DbContext
+5. CHECK Delete standard method still works
+6. MODIFY Create and Replace standard methods
+7. MODIFY List, Get and Update standard methods along with field masks
 
-## Database Integration
+## Note to self
 
-- Essentially this repository works by calling `Views` from the database, rather than stored procedures. Each view is
-  paired with the respective `trg_delete_from_products_view` and `trg_update_products_view` respectively.
+- 3 hours to create product_pet_foods in the table and modify all the standard method endpoints (excluding unit tests).
