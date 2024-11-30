@@ -1,5 +1,6 @@
 using AutoFixture.Kernel;
 using backend.Product.DomainModels;
+using backend.Product.DomainModels.ValueObjects;
 
 namespace backend.Product.Tests.Builders;
 

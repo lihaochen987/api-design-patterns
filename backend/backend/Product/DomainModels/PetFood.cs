@@ -1,3 +1,6 @@
+using backend.Product.DomainModels.Enums;
+using backend.Product.DomainModels.ValueObjects;
+
 namespace backend.Product.DomainModels;
 
 public class PetFood : Product

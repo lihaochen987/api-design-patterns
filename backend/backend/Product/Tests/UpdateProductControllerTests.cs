@@ -1,6 +1,8 @@
 using System.Globalization;
 using backend.Product.Contracts;
 using backend.Product.DomainModels;
+using backend.Product.DomainModels.Enums;
+using backend.Product.DomainModels.ValueObjects;
 using backend.Product.FieldMasks;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.Builders;

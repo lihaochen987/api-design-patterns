@@ -1,3 +1,5 @@
+using backend.Product.DomainModels.ValueObjects;
+
 namespace backend.Product.FieldMasks;
 
 using DomainModels;

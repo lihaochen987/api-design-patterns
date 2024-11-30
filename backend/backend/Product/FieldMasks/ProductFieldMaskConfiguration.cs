@@ -1,4 +1,6 @@
 using backend.Product.DomainModels;
+using backend.Product.DomainModels.Enums;
+using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 
 namespace backend.Product.FieldMasks;
