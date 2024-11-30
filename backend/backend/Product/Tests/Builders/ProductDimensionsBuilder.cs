@@ -1,5 +1,4 @@
 using AutoFixture.Kernel;
-using backend.Product.DomainModels;
 using backend.Product.DomainModels.ValueObjects;
 
 namespace backend.Product.Tests.Builders;
@@ -9,7 +8,9 @@ public class ProductDimensionsBuilder : ISpecimenBuilder
     public object Create(object request, ISpecimenContext context)
     {
         if (request is not Type type || type != typeof(Dimensions))
+        {
             return new NoSpecimen();
+        }
 
         decimal length, width, height;
 

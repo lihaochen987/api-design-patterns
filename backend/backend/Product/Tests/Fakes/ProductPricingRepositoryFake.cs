@@ -8,7 +8,7 @@ public class ProductPricingRepositoryFake : Collection<ProductPricingView>, IPro
 {
     public Task<ProductPricingView?> GetProductPricingAsync(long id)
     {
-        var productPricingView = this.FirstOrDefault(p => p.Id == id);
+        ProductPricingView? productPricingView = this.FirstOrDefault(p => p.Id == id);
         return Task.FromResult(productPricingView);
     }
 }

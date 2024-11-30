@@ -72,18 +72,21 @@ public abstract class Product
     public void UpdatePricing(
         decimal basePrice,
         decimal discountPercentage,
-        decimal taxRate)
-    {
+        decimal taxRate) =>
         Pricing = new Pricing(basePrice, discountPercentage, taxRate);
-    }
 
     private static void EnforceInvariants(
         string name,
         Category category)
     {
         if (string.IsNullOrWhiteSpace(name))
+        {
             throw new ArgumentException("Product name is required.");
+        }
+
         if (!Enum.IsDefined(typeof(Category), category))
+        {
             throw new ArgumentException("Invalid category for the Product.");
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using backend.Database;
 using backend.Product.Database;
 using backend.Product.FieldMasks;
@@ -6,9 +7,10 @@ using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Shared;
 using DbUp;
+using DbUp.Engine;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddCors(options =>
@@ -42,7 +44,7 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.DefaultIgnoreCondition =
-            System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+            JsonIgnoreCondition.WhenWritingNull;
     });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -60,16 +62,16 @@ builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+using (IServiceScope scope = app.Services.CreateScope())
 {
-    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-    var connectionString = configuration.GetConnectionString("DefaultConnection");
+    IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    string? connectionString = configuration.GetConnectionString("DefaultConnection");
 
     try
     {
-        var migrationPath = Path.Combine(Directory.GetCurrentDirectory(), "UpScripts");
+        string migrationPath = Path.Combine(Directory.GetCurrentDirectory(), "UpScripts");
         if (connectionString != null)
         {
             ApplyMigrations(connectionString, 5, 2000, migrationPath);
@@ -114,19 +116,23 @@ void ApplyMigrations(
         return;
     }
 
-    for (var attempt = 1; attempt <= retryCount; attempt++)
+    for (int attempt = 1; attempt <= retryCount; attempt++)
     {
         try
         {
-            var upgrader = DeployChanges.To
+            UpgradeEngine? upgrader = DeployChanges.To
                 .PostgresqlDatabase(connectionString)
                 .WithScriptsFromFileSystem(migrationPath)
                 .LogToConsole()
                 .WithTransaction()
                 .Build();
 
-            var result = upgrader.PerformUpgrade();
-            if (!result.Successful) throw new Exception("Migration failed: " + result.Error);
+            DatabaseUpgradeResult? result = upgrader.PerformUpgrade();
+            if (!result.Successful)
+            {
+                throw new Exception("Migration failed: " + result.Error);
+            }
+
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("All migrations applied successfully.");
             Console.ResetColor();

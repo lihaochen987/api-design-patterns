@@ -1,11 +1,8 @@
-namespace backend.Shared;
-
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+
+namespace backend.Shared;
 
 public class FieldMaskConverter(
     IList<string> fieldMask,
@@ -15,22 +12,22 @@ public class FieldMaskConverter(
     private readonly HashSet<string> _expandedFieldMask = ExpandFieldMask(fieldMask, allFieldPaths);
 
     private static HashSet<string> ExpandFieldMask(
-        IList<string> fieldMask, 
+        IList<string> fieldMask,
         HashSet<string> allFieldPaths)
     {
-        var expandedFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        HashSet<string> expandedFields = new(StringComparer.OrdinalIgnoreCase);
 
         if (fieldMask.Contains("*") || !fieldMask.Any())
         {
             return allFieldPaths;
         }
 
-        foreach (var field in fieldMask.Select(f => f.ToLowerInvariant()))
+        foreach (string field in fieldMask.Select(f => f.ToLowerInvariant()))
         {
             if (field.EndsWith(".*"))
             {
                 // The prefix would remove the .* at the end of the property
-                var prefix = field[..^2];
+                string prefix = field[..^2];
                 expandedFields.UnionWith(allFieldPaths.Where(p => p.StartsWith(prefix + ".")));
             }
             else if (allFieldPaths.Contains(field))
@@ -42,22 +39,19 @@ public class FieldMaskConverter(
         return expandedFields.Count == 0 ? allFieldPaths : expandedFields;
     }
 
-    public override bool CanConvert(Type objectType)
-    {
-        return objectType.IsClass && objectType != typeof(string);
-    }
+    public override bool CanConvert(Type objectType) => objectType.IsClass && objectType != typeof(string);
 
     public override void WriteJson(
         JsonWriter writer,
         object? value,
         JsonSerializer serializer)
     {
-        var jObject = new JObject();
+        JObject jObject = new();
         if (value != null)
         {
-            var properties = value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] properties = value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-            foreach (var property in properties)
+            foreach (PropertyInfo property in properties)
             {
                 AddPropertyToJObject(jObject, property, value, serializer);
             }
@@ -72,11 +66,11 @@ public class FieldMaskConverter(
         object value,
         JsonSerializer serializer)
     {
-        var propertyPath = property.Name.ToLowerInvariant();
+        string propertyPath = property.Name.ToLowerInvariant();
 
         if (_expandedFieldMask.Contains(propertyPath))
         {
-            var propValue = property.GetValue(value);
+            object? propValue = property.GetValue(value);
             if (propValue != null)
             {
                 jObject.Add(property.Name, JToken.FromObject(propValue, serializer));
@@ -84,7 +78,7 @@ public class FieldMaskConverter(
         }
         else if (IsComplexType(property.PropertyType))
         {
-            var nestedObject = BuildNestedJObject(property, value, serializer, _expandedFieldMask);
+            JObject nestedObject = BuildNestedJObject(property, value, serializer, _expandedFieldMask);
             if (nestedObject.HasValues)
             {
                 jObject.Add(property.Name, nestedObject);
@@ -98,19 +92,26 @@ public class FieldMaskConverter(
         JsonSerializer serializer,
         HashSet<string> expandedFieldMask)
     {
-        var jObject = new JObject();
-        var nestedInstance = property.GetValue(instance);
+        JObject jObject = new();
+        object? nestedInstance = property.GetValue(instance);
 
         if (nestedInstance == null)
-            return jObject;
-
-        var nestedProperties = property.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-        foreach (var nestedProperty in nestedProperties)
         {
-            var nestedPath = $"{property.Name.ToLowerInvariant()}.{nestedProperty.Name.ToLowerInvariant()}";
-            if (!expandedFieldMask.Contains(nestedPath)) continue;
-            var nestedValue = nestedProperty.GetValue(nestedInstance);
+            return jObject;
+        }
+
+        PropertyInfo[] nestedProperties =
+            property.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach (PropertyInfo nestedProperty in nestedProperties)
+        {
+            string nestedPath = $"{property.Name.ToLowerInvariant()}.{nestedProperty.Name.ToLowerInvariant()}";
+            if (!expandedFieldMask.Contains(nestedPath))
+            {
+                continue;
+            }
+
+            object? nestedValue = nestedProperty.GetValue(nestedInstance);
             if (nestedValue != null)
             {
                 jObject.Add(nestedProperty.Name, JToken.FromObject(nestedValue, serializer));
@@ -124,13 +125,8 @@ public class FieldMaskConverter(
         JsonReader reader,
         Type objectType,
         object? existingValue,
-        JsonSerializer serializer)
-    {
+        JsonSerializer serializer) =>
         throw new NotImplementedException();
-    }
 
-    private static bool IsComplexType(Type type)
-    {
-        return type.IsClass && type != typeof(string);
-    }
+    private static bool IsComplexType(Type type) => type.IsClass && type != typeof(string);
 }

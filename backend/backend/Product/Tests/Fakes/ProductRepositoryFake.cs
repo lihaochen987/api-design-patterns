@@ -9,7 +9,7 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
 
     public Task<DomainModels.Product?> GetProductAsync(long id)
     {
-        var product = this.FirstOrDefault(p => p.Id == id);
+        DomainModels.Product? product = this.FirstOrDefault(p => p.Id == id);
         return Task.FromResult(product);
     }
 
@@ -29,8 +29,8 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
 
     public Task ReplaceProductAsync(DomainModels.Product product)
     {
-        var index = IndexOf(item: this.FirstOrDefault(p => p.Id == product.Id) ??
-                                  throw new InvalidOperationException());
+        int index = IndexOf(this.FirstOrDefault(p => p.Id == product.Id) ??
+                            throw new InvalidOperationException());
         this[index] = product;
         IsDirty = true;
 

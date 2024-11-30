@@ -9,7 +9,7 @@ public class UpdateProductExtensions(TypeParser typeParser)
 {
     public UpdateProductResponse ToUpdateProductResponse(DomainModels.Product product)
     {
-        var response = new UpdateProductResponse
+        UpdateProductResponse response = new()
         {
             Id = product.Id.ToString(),
             Name = product.Name,

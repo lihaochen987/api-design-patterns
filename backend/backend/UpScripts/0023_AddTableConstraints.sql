@@ -5,7 +5,8 @@ CREATE OR REPLACE FUNCTION alter_column_type(
     p_column_name TEXT,
     p_column_type TEXT
 )
-    RETURNS VOID AS $$
+    RETURNS VOID AS
+$$
 DECLARE
     max_length INTEGER;
 BEGIN
@@ -13,21 +14,19 @@ BEGIN
     max_length := NULLIF(regexp_replace(p_column_type, '[^0-9]', '', 'g'), '')::INTEGER;
 
     -- Check if the column already has the desired type
-    IF EXISTS (
-        SELECT 1
-        FROM information_schema.columns
-        WHERE table_name = p_table_name
-          AND column_name = p_column_name
-          AND data_type = 'character varying'
-          AND character_maximum_length = max_length
-    ) THEN
+    IF EXISTS (SELECT 1
+               FROM information_schema.columns
+               WHERE table_name = p_table_name
+                 AND column_name = p_column_name
+                 AND data_type = 'character varying'
+                 AND character_maximum_length = max_length) THEN
         RAISE NOTICE 'Column "%s.%s" is already %s.', p_table_name, p_column_name, p_column_type;
     ELSE
         EXECUTE format(
-                'ALTER TABLE %I ALTER COLUMN %I TYPE %s;',
-                p_table_name,
-                p_column_name,
-                p_column_type
+            'ALTER TABLE %I ALTER COLUMN %I TYPE %s;',
+            p_table_name,
+            p_column_name,
+            p_column_type
                 );
         RAISE NOTICE 'Column "%s.%s" has been altered to %s.', p_table_name, p_column_name, p_column_type;
     END IF;

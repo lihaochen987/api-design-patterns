@@ -1,19 +1,19 @@
 {
-  "name": "Gentle Shampoo",
-  "pricing": {
-    "basePrice": "19.99",
-    "discountPercentage": "10",
-    "taxRate": "5"
-  },
-  "category": "GroomingAndHygiene",
-  "dimensions": {
-    "length": "20.0",
-    "width": "15.0",
-    "height": "10.0"
-  },
-  "isNatural": true,
-  "isHypoallergenic": true,
-  "usageInstructions": "Apply a small amount to wet hair, lather, and rinse thoroughly.",
-  "isCrueltyFree": true,
-  "safetyWarnings": "Avoid contact with eyes. Keep out of reach of children."
+    "name": "Gentle Shampoo",
+    "pricing": {
+        "basePrice": "19.99",
+        "discountPercentage": "10",
+        "taxRate": "5"
+    },
+    "category": "GroomingAndHygiene",
+    "dimensions": {
+        "length": "20.0",
+        "width": "15.0",
+        "height": "10.0"
+    },
+    "isNatural": true,
+    "isHypoallergenic": true,
+    "usageInstructions": "Apply a small amount to wet hair, lather, and rinse thoroughly.",
+    "isCrueltyFree": true,
+    "safetyWarnings": "Avoid contact with eyes. Keep out of reach of children."
 }

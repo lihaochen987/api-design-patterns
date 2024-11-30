@@ -11,12 +11,10 @@ public class ProductViewRepositoryFake : Collection<ProductView>, IProductViewRe
 
     public Task<ProductView?> GetProductView(long id)
     {
-        var productView = this.FirstOrDefault(p => p.Id == id);
+        ProductView? productView = this.FirstOrDefault(p => p.Id == id);
         return Task.FromResult(productView);
     }
 
-    public Task<ProductListResult<ProductView>> ListProductsAsync(string? pageToken, string? filter, int maxPageSize)
-    {
+    public Task<ProductListResult<ProductView>> ListProductsAsync(string? pageToken, string? filter, int maxPageSize) =>
         throw new NotImplementedException();
-    }
 }

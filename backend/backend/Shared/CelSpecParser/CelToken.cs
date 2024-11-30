@@ -10,12 +10,12 @@ public enum CelTokenType
 
 public class CelToken
 {
-    public CelTokenType Type { get; set; }
-    public string Value { get; set; }
-
     public CelToken(CelTokenType type, string value)
     {
         Type = type;
         Value = value;
     }
+
+    public CelTokenType Type { get; set; }
+    public string Value { get; set; }
 }

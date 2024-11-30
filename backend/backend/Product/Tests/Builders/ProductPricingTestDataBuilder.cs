@@ -1,5 +1,4 @@
 using AutoFixture;
-using backend.Product.DomainModels;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ViewModels;
 
@@ -32,8 +31,5 @@ public class ProductPricingTestDataBuilder
         return this;
     }
 
-    public ProductPricingView Build()
-    {
-        return new ProductPricingView { Id = _id, Pricing = _pricing };
-    }
+    public ProductPricingView Build() => new() { Id = _id, Pricing = _pricing };
 }

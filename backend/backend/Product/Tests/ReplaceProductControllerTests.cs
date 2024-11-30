@@ -23,20 +23,20 @@ public class ReplaceProductControllerTests
     [Fact]
     public async Task ReplaceProduct_Should_ReturnOk_WithUpdatedProduct_When_ProductExists()
     {
-        var originalProduct = new ProductTestDataBuilder().AsToys().Build();
+        DomainModels.Product originalProduct = new ProductTestDataBuilder().AsToys().Build();
         _productRepository.Add(originalProduct);
         _productRepository.IsDirty = false;
 
-        var request = _extensions.ToReplaceProductRequest(originalProduct);
+        ReplaceProductRequest request = _extensions.ToReplaceProductRequest(originalProduct);
 
-        var result = await _controller.ReplaceProduct(originalProduct.Id, request);
+        ActionResult<ReplaceProductResponse> result = await _controller.ReplaceProduct(originalProduct.Id, request);
 
         result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = result.Result as OkObjectResult;
+        OkObjectResult? response = result.Result as OkObjectResult;
         response!.Value.ShouldBeOfType<ReplaceProductResponse>();
-        var replaceProductResponse = response.Value as ReplaceProductResponse;
+        ReplaceProductResponse? replaceProductResponse = response.Value as ReplaceProductResponse;
         replaceProductResponse.ShouldBeEquivalentTo(_extensions.ToReplaceProductResponse(originalProduct));
-        var updatedProduct = await _productRepository.GetProductAsync(originalProduct.Id);
+        DomainModels.Product? updatedProduct = await _productRepository.GetProductAsync(originalProduct.Id);
         updatedProduct.ShouldNotBeNull();
         updatedProduct.ShouldBeEquivalentTo(originalProduct);
         _productRepository.IsDirty.ShouldBeEquivalentTo(true);

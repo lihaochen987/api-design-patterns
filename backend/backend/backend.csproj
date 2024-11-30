@@ -1,150 +1,150 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="AutoFixture" Version="4.18.1" />
-        <PackageReference Include="dbup" Version="5.0.41" />
-        <PackageReference Include="dbup-postgresql" Version="5.0.40" />
-        <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
-        <PackageReference Include="Shouldly" Version="4.2.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0" />
-        <PackageReference Include="xunit" Version="2.9.2" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.18.1"/>
+    <PackageReference Include="dbup" Version="5.0.41"/>
+    <PackageReference Include="dbup-postgresql" Version="5.0.40"/>
+    <PackageReference Include="EFCore.NamingConventions" Version="8.0.3"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10"/>
+    <PackageReference Include="Shouldly" Version="4.2.1"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0"/>
+    <PackageReference Include="xunit" Version="2.9.2"/>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
-    <ItemGroup>
-      <Compile Update="Product\Controllers\CreateProductRequest.cs">
-        <DependentUpon>CreateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\GetProductRequest.cs">
-        <DependentUpon>GetProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\ListProductsRequest.cs">
-        <DependentUpon>ListProductsController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\ListProductsResponse.cs">
-        <DependentUpon>ListProductsController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\UpdateProductRequest.cs">
-        <DependentUpon>UpdateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\DeleteProductRequest.cs">
-        <DependentUpon>DeleteProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\ReplaceProductRequest.cs">
-        <DependentUpon>ReplaceProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\CreateProductResponse.cs">
-        <DependentUpon>CreateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\GetProductResponse.cs">
-        <DependentUpon>GetProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\ReplaceProductResponse.cs">
-        <DependentUpon>ReplaceProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\UpdateProductResponse.cs">
-        <DependentUpon>UpdateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\CreateProductExtensions.cs">
-        <DependentUpon>CreateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\ReplaceProductExtensions.cs">
-        <DependentUpon>ReplaceProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\GetProductExtensions.cs">
-        <DependentUpon>GetProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\Controllers\UpdateProductExtensions.cs">
-        <DependentUpon>UpdateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\CreateProductExtensions.cs">
-        <DependentUpon>CreateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\CreateProductRequest.cs">
-        <DependentUpon>CreateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\CreateProductResponse.cs">
-        <DependentUpon>CreateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\DeleteProductRequest.cs">
-        <DependentUpon>DeleteProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\GetProductExtensions.cs">
-        <DependentUpon>GetProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\GetProductRequest.cs">
-        <DependentUpon>GetProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\GetProductResponse.cs">
-        <DependentUpon>GetProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\ListProductsRequest.cs">
-        <DependentUpon>ListProductsController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\ListProductsResponse.cs">
-        <DependentUpon>ListProductsController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\ReplaceProductExtensions.cs">
-        <DependentUpon>ReplaceProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\ReplaceProductRequest.cs">
-        <DependentUpon>ReplaceProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\ReplaceProductResponse.cs">
-        <DependentUpon>ReplaceProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\UpdateProductExtensions.cs">
-        <DependentUpon>UpdateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\UpdateProductRequest.cs">
-        <DependentUpon>UpdateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductControllers\UpdateProductResponse.cs">
-        <DependentUpon>UpdateProductController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductPricingControllers\GetProductPricingExtensions.cs">
-        <DependentUpon>GetProductPricingController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductPricingControllers\GetProductPricingRequest.cs">
-        <DependentUpon>GetProductPricingController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductPricingControllers\GetProductPricingResponse.cs">
-        <DependentUpon>GetProductPricingController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductPricingControllers\UpdateProductPricingExtensions.cs">
-        <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductPricingControllers\UpdateProductPricingRequest.cs">
-        <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Product\ProductPricingControllers\UpdateProductPricingResponse.cs">
-        <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
-      </Compile>
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Product\Controllers\CreateProductRequest.cs">
+      <DependentUpon>CreateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\GetProductRequest.cs">
+      <DependentUpon>GetProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\ListProductsRequest.cs">
+      <DependentUpon>ListProductsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\ListProductsResponse.cs">
+      <DependentUpon>ListProductsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\UpdateProductRequest.cs">
+      <DependentUpon>UpdateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\DeleteProductRequest.cs">
+      <DependentUpon>DeleteProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\ReplaceProductRequest.cs">
+      <DependentUpon>ReplaceProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\CreateProductResponse.cs">
+      <DependentUpon>CreateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\GetProductResponse.cs">
+      <DependentUpon>GetProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\ReplaceProductResponse.cs">
+      <DependentUpon>ReplaceProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\UpdateProductResponse.cs">
+      <DependentUpon>UpdateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\CreateProductExtensions.cs">
+      <DependentUpon>CreateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\ReplaceProductExtensions.cs">
+      <DependentUpon>ReplaceProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\GetProductExtensions.cs">
+      <DependentUpon>GetProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\UpdateProductExtensions.cs">
+      <DependentUpon>UpdateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\CreateProductExtensions.cs">
+      <DependentUpon>CreateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\CreateProductRequest.cs">
+      <DependentUpon>CreateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\CreateProductResponse.cs">
+      <DependentUpon>CreateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\DeleteProductRequest.cs">
+      <DependentUpon>DeleteProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\GetProductExtensions.cs">
+      <DependentUpon>GetProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\GetProductRequest.cs">
+      <DependentUpon>GetProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\GetProductResponse.cs">
+      <DependentUpon>GetProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\ListProductsRequest.cs">
+      <DependentUpon>ListProductsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\ListProductsResponse.cs">
+      <DependentUpon>ListProductsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\ReplaceProductExtensions.cs">
+      <DependentUpon>ReplaceProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\ReplaceProductRequest.cs">
+      <DependentUpon>ReplaceProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\ReplaceProductResponse.cs">
+      <DependentUpon>ReplaceProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\UpdateProductExtensions.cs">
+      <DependentUpon>UpdateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\UpdateProductRequest.cs">
+      <DependentUpon>UpdateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\UpdateProductResponse.cs">
+      <DependentUpon>UpdateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductPricingControllers\GetProductPricingExtensions.cs">
+      <DependentUpon>GetProductPricingController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductPricingControllers\GetProductPricingRequest.cs">
+      <DependentUpon>GetProductPricingController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductPricingControllers\GetProductPricingResponse.cs">
+      <DependentUpon>GetProductPricingController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductPricingControllers\UpdateProductPricingExtensions.cs">
+      <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductPricingControllers\UpdateProductPricingRequest.cs">
+      <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductPricingControllers\UpdateProductPricingResponse.cs">
+      <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
+  </ItemGroup>
 
 </Project>

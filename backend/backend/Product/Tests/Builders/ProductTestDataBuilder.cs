@@ -8,17 +8,17 @@ namespace backend.Product.Tests.Builders;
 public class ProductTestDataBuilder
 {
     private readonly Fixture _fixture;
-    private int? _id;
-    private string _name;
-    private Pricing _pricing;
+    private readonly AgeGroup _ageGroup;
+    private readonly BreedSize _breedSize;
     private Category _category;
     private Dimensions _dimensions;
-    private AgeGroup _ageGroup;
-    private BreedSize _breedSize;
-    private string _ingredients;
-    private Dictionary<string, object> _nutritionalInfo;
-    private string _storageInstructions;
-    private decimal _weightKg;
+    private int? _id;
+    private readonly string _ingredients;
+    private string _name;
+    private readonly Dictionary<string, object> _nutritionalInfo;
+    private Pricing _pricing;
+    private readonly string _storageInstructions;
+    private readonly decimal _weightKg;
 
     public ProductTestDataBuilder()
     {
@@ -84,7 +84,7 @@ public class ProductTestDataBuilder
     public ProductTestDataBuilder WithPriceLessThan(decimal maxPrice)
     {
         // Hardcode discount percentage to 10 and taxRate to 5 and then calculate an appropriate BasePrice
-        var basePrice = maxPrice / ((1 - (decimal)10 / 100) * (1 + (decimal)5 / 100)) - 2m;
+        decimal basePrice = maxPrice / ((1 - (decimal)10 / 100) * (1 + (decimal)5 / 100)) - 2m;
         _pricing = new Pricing(basePrice, 5, 10);
 
         return this;

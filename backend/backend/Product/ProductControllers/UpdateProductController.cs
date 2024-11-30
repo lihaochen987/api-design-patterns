@@ -1,4 +1,6 @@
 using backend.Product.DomainModels;
+using backend.Product.DomainModels.Enums;
+using backend.Product.DomainModels.ValueObjects;
 using backend.Product.FieldMasks;
 using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,20 +22,21 @@ public class UpdateProductController(
         [FromRoute] long id,
         [FromBody] UpdateProductRequest request)
     {
-        var product = await repository.GetProductAsync(id);
+        DomainModels.Product? product = await repository.GetProductAsync(id);
 
         if (product == null)
         {
             return NotFound();
         }
 
-        var (name, pricing, category, dimensions) =
+        (string name, Pricing pricing, Category category, Dimensions dimensions) =
             configuration.GetUpdatedProductValues(request, product);
         product.Replace(name, pricing, category, dimensions);
 
         if (product is PetFood petFood)
         {
-            var (ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions, weightKg) =
+            (AgeGroup ageGroup, BreedSize breedSize, string ingredients, Dictionary<string, object> nutritionalInfo,
+                    string storageInstructions, decimal weightKg) =
                 configuration.GetUpdatedPetFoodValues(request, petFood);
 
             petFood.UpdatePetFoodDetails(ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions,
@@ -42,7 +45,8 @@ public class UpdateProductController(
 
         if (product is GroomingAndHygiene groomingAndHygiene)
         {
-            var (isNatural, isHypoAllergenic, usageInstructions, isCrueltyFree, safetyWarnings) =
+            (bool isNatural, bool isHypoAllergenic, string usageInstructions, bool isCrueltyFree,
+                    string safetyWarnings) =
                 configuration.GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
 
             groomingAndHygiene.UpdateGroomingAndHygieneDetails(isNatural, isHypoAllergenic, usageInstructions,

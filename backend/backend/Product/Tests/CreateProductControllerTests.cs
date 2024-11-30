@@ -11,8 +11,8 @@ namespace backend.Product.Tests;
 public class CreateProductControllerTests
 {
     private readonly CreateProductController _controller;
-    private readonly ProductRepositoryFake _productRepository = [];
     private readonly CreateProductExtensions _extensions;
+    private readonly ProductRepositoryFake _productRepository = [];
 
     public CreateProductControllerTests()
     {
@@ -23,15 +23,15 @@ public class CreateProductControllerTests
     [Fact]
     public async Task CreateProduct_Should_AddProduct_And_ReturnCreatedAtActionResult()
     {
-        var product = new ProductTestDataBuilder().AsToys().WithId(5).Build();
-        var request = _extensions.ToCreateProductRequest(product);
-        var expectedResponse = _extensions.ToCreateProductResponse(product);
+        DomainModels.Product product = new ProductTestDataBuilder().AsToys().WithId(5).Build();
+        CreateProductRequest request = _extensions.ToCreateProductRequest(product);
+        CreateProductResponse expectedResponse = _extensions.ToCreateProductResponse(product);
         _productRepository.Add(product);
 
-        var result = await _controller.CreateProduct(request);
+        ActionResult<CreateProductResponse> result = await _controller.CreateProduct(request);
 
-        var createdAtActionResult = result.Result.ShouldBeOfType<CreatedAtActionResult>();
-        var actualResponse = createdAtActionResult.Value.ShouldBeOfType<CreateProductResponse>();
+        CreatedAtActionResult createdAtActionResult = result.Result.ShouldBeOfType<CreatedAtActionResult>();
+        CreateProductResponse actualResponse = createdAtActionResult.Value.ShouldBeOfType<CreateProductResponse>();
         actualResponse.ShouldBeEquivalentTo(expectedResponse);
     }
 }

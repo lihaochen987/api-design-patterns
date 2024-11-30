@@ -6,11 +6,11 @@ using backend.Product.ProductControllers;
 namespace backend.Product.FieldMasks;
 
 /// <summary>
-/// ProductMaskFieldPaths is a class which holds all the manual changes required for this API to work.
-/// For instance when adding a new field or value object you would have to:
-/// 1. Add the new object to the AllFieldPaths (partial retrievals)
-/// 2. Add parsing logic for GetUpdatedProductValues (partial updates)
-/// 3. Add the mapping in the extension methods (TBC on making this more generic and easier)
+///     ProductMaskFieldPaths is a class which holds all the manual changes required for this API to work.
+///     For instance when adding a new field or value object you would have to:
+///     1. Add the new object to the AllFieldPaths (partial retrievals)
+///     2. Add parsing logic for GetUpdatedProductValues (partial updates)
+///     3. Add the mapping in the extension methods (TBC on making this more generic and easier)
 /// </summary>
 public class ProductFieldMaskConfiguration
 {
@@ -47,18 +47,18 @@ public class ProductFieldMaskConfiguration
             UpdateProductRequest request,
             DomainModels.Product baseProduct)
     {
-        var name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
-                   && !string.IsNullOrEmpty(request.Name)
+        string name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
+                      && !string.IsNullOrEmpty(request.Name)
             ? request.Name
             : baseProduct.Name;
 
-        var category = request.FieldMask.Contains("category", StringComparer.OrdinalIgnoreCase)
-                       && Enum.TryParse(request.Category, true, out Category parsedCategory)
+        Category category = request.FieldMask.Contains("category", StringComparer.OrdinalIgnoreCase)
+                            && Enum.TryParse(request.Category, true, out Category parsedCategory)
             ? parsedCategory
             : baseProduct.Category;
 
-        var dimensions = GetUpdatedDimensionValues(request, baseProduct.Dimensions);
-        var pricing = GetUpdatedProductPricingValues(request, baseProduct.Pricing);
+        Dimensions dimensions = GetUpdatedDimensionValues(request, baseProduct.Dimensions);
+        Pricing pricing = GetUpdatedProductPricingValues(request, baseProduct.Pricing);
 
         return (name, pricing, category, dimensions);
     }
@@ -67,18 +67,18 @@ public class ProductFieldMaskConfiguration
         UpdateProductRequest request,
         Dimensions currentDimensions)
     {
-        var length = request.FieldMask.Contains("dimensions.length", StringComparer.OrdinalIgnoreCase)
-                     && !string.IsNullOrEmpty(request.Dimensions.Length)
+        decimal length = request.FieldMask.Contains("dimensions.length", StringComparer.OrdinalIgnoreCase)
+                         && !string.IsNullOrEmpty(request.Dimensions.Length)
             ? decimal.Parse(request.Dimensions.Length)
             : currentDimensions.Length;
 
-        var width = request.FieldMask.Contains("dimensions.width", StringComparer.OrdinalIgnoreCase)
-                    && !string.IsNullOrEmpty(request.Dimensions.Width)
+        decimal width = request.FieldMask.Contains("dimensions.width", StringComparer.OrdinalIgnoreCase)
+                        && !string.IsNullOrEmpty(request.Dimensions.Width)
             ? decimal.Parse(request.Dimensions.Width)
             : currentDimensions.Width;
 
-        var height = request.FieldMask.Contains("dimensions.height", StringComparer.OrdinalIgnoreCase)
-                     && !string.IsNullOrEmpty(request.Dimensions.Height)
+        decimal height = request.FieldMask.Contains("dimensions.height", StringComparer.OrdinalIgnoreCase)
+                         && !string.IsNullOrEmpty(request.Dimensions.Height)
             ? decimal.Parse(request.Dimensions.Height)
             : currentDimensions.Height;
 
@@ -95,28 +95,28 @@ public class ProductFieldMaskConfiguration
             UpdateProductRequest request,
             GroomingAndHygiene groomingAndHygiene)
     {
-        var isNatural = request.FieldMask.Contains("isnatural", StringComparer.OrdinalIgnoreCase) &&
-                        request.IsNatural.HasValue
+        bool isNatural = request.FieldMask.Contains("isnatural", StringComparer.OrdinalIgnoreCase) &&
+                         request.IsNatural.HasValue
             ? request.IsNatural.Value
             : groomingAndHygiene.IsNatural;
 
-        var isHypoAllergenic = request.FieldMask.Contains("ishypoallergenic", StringComparer.OrdinalIgnoreCase) &&
-                               request.IsHypoAllergenic.HasValue
+        bool isHypoAllergenic = request.FieldMask.Contains("ishypoallergenic", StringComparer.OrdinalIgnoreCase) &&
+                                request.IsHypoAllergenic.HasValue
             ? request.IsHypoAllergenic.Value
             : groomingAndHygiene.IsHypoallergenic;
 
-        var usageInstructions = request.FieldMask.Contains("usageinstructions", StringComparer.OrdinalIgnoreCase)
-                                && !string.IsNullOrEmpty(request.UsageInstructions)
+        string? usageInstructions = request.FieldMask.Contains("usageinstructions", StringComparer.OrdinalIgnoreCase)
+                                    && !string.IsNullOrEmpty(request.UsageInstructions)
             ? request.UsageInstructions
             : groomingAndHygiene.UsageInstructions;
 
-        var isCrueltyFree = request.FieldMask.Contains("iscrueltyfree", StringComparer.OrdinalIgnoreCase) &&
-                            request.IsCrueltyFree.HasValue
+        bool isCrueltyFree = request.FieldMask.Contains("iscrueltyfree", StringComparer.OrdinalIgnoreCase) &&
+                             request.IsCrueltyFree.HasValue
             ? request.IsCrueltyFree.Value
             : groomingAndHygiene.IsCrueltyFree;
 
-        var safetyWarnings = request.FieldMask.Contains("safetywarnings", StringComparer.OrdinalIgnoreCase)
-                             && !string.IsNullOrEmpty(request.SafetyWarnings)
+        string? safetyWarnings = request.FieldMask.Contains("safetywarnings", StringComparer.OrdinalIgnoreCase)
+                                 && !string.IsNullOrEmpty(request.SafetyWarnings)
             ? request.SafetyWarnings
             : groomingAndHygiene.SafetyWarnings;
 
@@ -135,33 +135,35 @@ public class ProductFieldMaskConfiguration
             UpdateProductRequest request,
             PetFood petFood)
     {
-        var ageGroup = request.FieldMask.Contains("agegroup", StringComparer.OrdinalIgnoreCase)
-                       && Enum.TryParse(request.AgeGroup, true, out AgeGroup parsedAgeGroup)
+        AgeGroup ageGroup = request.FieldMask.Contains("agegroup", StringComparer.OrdinalIgnoreCase)
+                            && Enum.TryParse(request.AgeGroup, true, out AgeGroup parsedAgeGroup)
             ? parsedAgeGroup
             : petFood.AgeGroup;
 
-        var breedSize = request.FieldMask.Contains("breedsize", StringComparer.OrdinalIgnoreCase)
-                        && Enum.TryParse(request.BreedSize, true, out BreedSize parsedBreedSize)
+        BreedSize breedSize = request.FieldMask.Contains("breedsize", StringComparer.OrdinalIgnoreCase)
+                              && Enum.TryParse(request.BreedSize, true, out BreedSize parsedBreedSize)
             ? parsedBreedSize
             : petFood.BreedSize;
 
-        var ingredients = request.FieldMask.Contains("ingredients", StringComparer.OrdinalIgnoreCase)
-                          && !string.IsNullOrEmpty(request.Ingredients)
+        string? ingredients = request.FieldMask.Contains("ingredients", StringComparer.OrdinalIgnoreCase)
+                              && !string.IsNullOrEmpty(request.Ingredients)
             ? request.Ingredients
             : petFood.Ingredients;
 
-        var nutritionalInfo = request.FieldMask.Contains("nutritionalinfo", StringComparer.OrdinalIgnoreCase)
-                              && request.NutritionalInfo is { } parsedNutritionalInfo
-            ? parsedNutritionalInfo
-            : petFood.NutritionalInfo;
+        Dictionary<string, object> nutritionalInfo =
+            request.FieldMask.Contains("nutritionalinfo", StringComparer.OrdinalIgnoreCase)
+            && request.NutritionalInfo is { } parsedNutritionalInfo
+                ? parsedNutritionalInfo
+                : petFood.NutritionalInfo;
 
-        var storageInstructions = request.FieldMask.Contains("storageinstructions", StringComparer.OrdinalIgnoreCase)
-                                  && !string.IsNullOrEmpty(request.StorageInstructions)
-            ? request.StorageInstructions
-            : petFood.StorageInstructions;
+        string? storageInstructions =
+            request.FieldMask.Contains("storageinstructions", StringComparer.OrdinalIgnoreCase)
+            && !string.IsNullOrEmpty(request.StorageInstructions)
+                ? request.StorageInstructions
+                : petFood.StorageInstructions;
 
-        var weight = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase)
-                     && !string.IsNullOrEmpty(request.WeightKg)
+        decimal weight = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase)
+                         && !string.IsNullOrEmpty(request.WeightKg)
             ? decimal.Parse(request.WeightKg)
             : petFood.WeightKg;
 
@@ -173,19 +175,19 @@ public class ProductFieldMaskConfiguration
             UpdateProductRequest request,
             Pricing product)
     {
-        var basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase)
-                        && decimal.TryParse(request.Pricing.BasePrice, out var parsedBasePrice)
+        decimal basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase)
+                            && decimal.TryParse(request.Pricing.BasePrice, out decimal parsedBasePrice)
             ? parsedBasePrice
             : product.BasePrice;
 
-        var discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
-                                 && decimal.TryParse(request.Pricing.DiscountPercentage,
-                                     out var parsedDiscountPercentage)
+        decimal discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
+                                     && decimal.TryParse(request.Pricing.DiscountPercentage,
+                                         out decimal parsedDiscountPercentage)
             ? parsedDiscountPercentage!
             : product.DiscountPercentage;
 
-        var taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
-                      && decimal.TryParse(request.Pricing.TaxRate, out var parsedTaxRate)
+        decimal taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
+                          && decimal.TryParse(request.Pricing.TaxRate, out decimal parsedTaxRate)
             ? parsedTaxRate!
             : product.TaxRate;
 

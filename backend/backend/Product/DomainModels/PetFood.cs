@@ -60,6 +60,8 @@ public class PetFood : Product
     private static void EnforcePetFoodInvariants(decimal weightKg)
     {
         if (weightKg <= 0)
+        {
             throw new ArgumentException("Weight must be greater than zero.");
+        }
     }
 }

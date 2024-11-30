@@ -17,14 +17,17 @@ public class ReplaceProductController(
         [FromRoute] long id,
         [FromBody] ReplaceProductRequest request)
     {
-        var product = extensions.ToEntity(request);
+        DomainModels.Product product = extensions.ToEntity(request);
 
-        var existingProduct = await productRepository.GetProductAsync(id);
-        if (existingProduct == null) return NotFound();
+        DomainModels.Product? existingProduct = await productRepository.GetProductAsync(id);
+        if (existingProduct == null)
+        {
+            return NotFound();
+        }
 
         await productRepository.ReplaceProductAsync(existingProduct);
 
-        var response = extensions.ToReplaceProductResponse(product);
+        ReplaceProductResponse response = extensions.ToReplaceProductResponse(product);
         return Ok(response);
     }
 }

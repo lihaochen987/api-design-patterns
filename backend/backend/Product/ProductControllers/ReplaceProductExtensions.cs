@@ -12,30 +12,36 @@ public class ReplaceProductExtensions(TypeParser typeParser)
     public DomainModels.Product ToEntity(ReplaceProductRequest request)
     {
         // ProductPricing fields
-        if (!decimal.TryParse(request.Pricing.DiscountPercentage, out var discountPercentage))
+        if (!decimal.TryParse(request.Pricing.DiscountPercentage, out decimal discountPercentage))
+        {
             throw new ArgumentException("Invalid discount percentage");
-        if (!decimal.TryParse(request.Pricing.TaxRate, out var taxRate))
+        }
+
+        if (!decimal.TryParse(request.Pricing.TaxRate, out decimal taxRate))
+        {
             throw new ArgumentException("Invalid tax rate");
-        var basePrice = typeParser.ParseDecimal(request.Pricing.BasePrice, "Invalid BasePrice");
+        }
+
+        decimal basePrice = typeParser.ParseDecimal(request.Pricing.BasePrice, "Invalid BasePrice");
 
         // Product fields
-        var category = typeParser.ParseEnum<Category>(request.Category, "Invalid product category");
+        Category category = typeParser.ParseEnum<Category>(request.Category, "Invalid product category");
 
         // Dimensions Fields
-        var length = typeParser.ParseDecimal(request.Dimensions.Length, "Invalid dimensions length");
-        var width = typeParser.ParseDecimal(request.Dimensions.Width, "Invalid dimensions width");
-        var height = typeParser.ParseDecimal(request.Dimensions.Height, "Invalid dimensions height");
+        decimal length = typeParser.ParseDecimal(request.Dimensions.Length, "Invalid dimensions length");
+        decimal width = typeParser.ParseDecimal(request.Dimensions.Width, "Invalid dimensions width");
+        decimal height = typeParser.ParseDecimal(request.Dimensions.Height, "Invalid dimensions height");
 
-        var dimensions = new Dimensions(length, width, height);
-        var pricing = new Pricing(basePrice, discountPercentage, taxRate);
+        Dimensions dimensions = new(length, width, height);
+        Pricing pricing = new(basePrice, discountPercentage, taxRate);
 
         // PetFood
         if (category == Category.PetFood)
         {
-            var ageGroup = typeParser.ParseEnum<AgeGroup>(request.AgeGroup, "Invalid age group");
-            var breedSize = typeParser.ParseEnum<BreedSize>(request.BreedSize, "Invalid breed size");
-            var weight = typeParser.ParseDecimal(request.WeightKg, "Invalid weight");
-            var ingredients = string.IsNullOrWhiteSpace(request.Ingredients)
+            AgeGroup ageGroup = typeParser.ParseEnum<AgeGroup>(request.AgeGroup, "Invalid age group");
+            BreedSize breedSize = typeParser.ParseEnum<BreedSize>(request.BreedSize, "Invalid breed size");
+            decimal weight = typeParser.ParseDecimal(request.WeightKg, "Invalid weight");
+            string? ingredients = string.IsNullOrWhiteSpace(request.Ingredients)
                 ? throw new ArgumentException("Ingredients cannot be null or whitespace.")
                 : request.Ingredients;
             if (request.NutritionalInfo == null)
@@ -43,7 +49,7 @@ public class ReplaceProductExtensions(TypeParser typeParser)
                 throw new ArgumentException("Nutritional info cannot be null.");
             }
 
-            var storageInstructions = string.IsNullOrWhiteSpace(request.StorageInstructions)
+            string? storageInstructions = string.IsNullOrWhiteSpace(request.StorageInstructions)
                 ? throw new ArgumentException("Storage instructions cannot be null or whitespace.")
                 : request.StorageInstructions;
 
@@ -61,11 +67,11 @@ public class ReplaceProductExtensions(TypeParser typeParser)
 
         if (category == Category.GroomingAndHygiene)
         {
-            var isNatural = typeParser.ParseBool(request.IsNatural, "Invalid IsNatural boolean");
-            var isHypoAllergenic = typeParser.ParseBool(request.IsHypoAllergenic, "Invalid IsHypoAllergenic boolean");
-            var isCrueltyFree = typeParser.ParseBool(request.IsCrueltyFree, "Invalid IsCrueltyFree boolean");
-            var usageInstructions = typeParser.ParseString(request.UsageInstructions, "Invalid Usage Instructions");
-            var safetyWarnings = typeParser.ParseString(request.SafetyWarnings, "Invalid Safety Warnings");
+            bool isNatural = typeParser.ParseBool(request.IsNatural, "Invalid IsNatural boolean");
+            bool isHypoAllergenic = typeParser.ParseBool(request.IsHypoAllergenic, "Invalid IsHypoAllergenic boolean");
+            bool isCrueltyFree = typeParser.ParseBool(request.IsCrueltyFree, "Invalid IsCrueltyFree boolean");
+            string usageInstructions = typeParser.ParseString(request.UsageInstructions, "Invalid Usage Instructions");
+            string safetyWarnings = typeParser.ParseString(request.SafetyWarnings, "Invalid Safety Warnings");
 
             return new GroomingAndHygiene(
                 request.Name,
@@ -83,7 +89,7 @@ public class ReplaceProductExtensions(TypeParser typeParser)
 
     public ReplaceProductResponse ToReplaceProductResponse(DomainModels.Product product)
     {
-        var response = new ReplaceProductResponse
+        ReplaceProductResponse response = new()
         {
             Name = product.Name,
             Category = product.Category.ToString(),
@@ -126,7 +132,7 @@ public class ReplaceProductExtensions(TypeParser typeParser)
 
     public ReplaceProductRequest ToReplaceProductRequest(DomainModels.Product product)
     {
-        var request = new ReplaceProductRequest
+        ReplaceProductRequest request = new()
         {
             Name = product.Name,
             Category = product.Category.ToString(),

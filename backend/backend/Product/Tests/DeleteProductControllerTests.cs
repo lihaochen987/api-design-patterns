@@ -12,28 +12,25 @@ public class DeleteProductControllerTests
     private readonly DeleteProductController _controller;
     private readonly ProductRepositoryFake _productRepository = [];
 
-    public DeleteProductControllerTests()
-    {
-        _controller = new DeleteProductController(_productRepository);
-    }
+    public DeleteProductControllerTests() => _controller = new DeleteProductController(_productRepository);
 
     [Fact]
     public async Task DeleteProduct_Should_ReturnNoContent_When_ProductExists()
     {
-        var product = new ProductTestDataBuilder().Build();
+        DomainModels.Product product = new ProductTestDataBuilder().Build();
         _productRepository.Add(product);
 
-        var result = await _controller.DeleteProduct(product.Id, new DeleteProductRequest());
+        ActionResult result = await _controller.DeleteProduct(product.Id, new DeleteProductRequest());
 
         result.ShouldBeOfType<NoContentResult>();
-        var deletedProduct = await _productRepository.GetProductAsync(product.Id);
+        DomainModels.Product? deletedProduct = await _productRepository.GetProductAsync(product.Id);
         deletedProduct.ShouldBeNull();
     }
 
     [Fact]
     public async Task DeleteProduct_Should_ReturnNotFound_When_ProductDoesNotExist()
     {
-        var result = await _controller.DeleteProduct(999, new DeleteProductRequest());
+        ActionResult result = await _controller.DeleteProduct(999, new DeleteProductRequest());
 
         result.ShouldBeOfType<NotFoundResult>();
     }

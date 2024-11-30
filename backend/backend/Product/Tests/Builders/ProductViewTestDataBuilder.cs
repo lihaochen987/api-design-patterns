@@ -1,5 +1,4 @@
 using AutoFixture;
-using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ViewModels;
@@ -9,17 +8,17 @@ namespace backend.Product.Tests.Builders;
 public class ProductViewTestDataBuilder
 {
     private readonly Fixture _fixture;
-    private int? _id;
-    private string _name;
-    private decimal _price;
+    private readonly AgeGroup _ageGroup;
+    private readonly BreedSize _breedSize;
     private Category _category;
     private Dimensions _dimensions;
-    private AgeGroup _ageGroup;
-    private BreedSize _breedSize;
-    private string _ingredients;
-    private Dictionary<string, object> _nutritionalInfo;
-    private string _storageInstructions;
-    private decimal _weightKg;
+    private int? _id;
+    private readonly string _ingredients;
+    private string _name;
+    private readonly Dictionary<string, object> _nutritionalInfo;
+    private readonly decimal _price;
+    private readonly string _storageInstructions;
+    private readonly decimal _weightKg;
 
     public ProductViewTestDataBuilder()
     {
@@ -63,9 +62,8 @@ public class ProductViewTestDataBuilder
         return this;
     }
 
-    public ProductView Build()
-    {
-        return new ProductView
+    public ProductView Build() =>
+        new()
         {
             Id = _id ?? _fixture.Create<int>(),
             Name = _name,
@@ -79,5 +77,4 @@ public class ProductViewTestDataBuilder
             StorageInstructions = _storageInstructions,
             WeightKg = _weightKg
         };
-    }
 }

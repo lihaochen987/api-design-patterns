@@ -1,4 +1,6 @@
+using backend.Product.Contracts;
 using backend.Product.Services;
+using backend.Product.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -16,18 +18,14 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        var products = await productViewRepository.ListProductsAsync(
+        ProductListResult<ProductView> products = await productViewRepository.ListProductsAsync(
             request.PageToken,
             request.Filter,
             request.MaxPageSize);
 
-        var productResponses = products.Items.Select(extensions.ToGetProductResponse).ToList();
+        List<GetProductResponse> productResponses = products.Items.Select(extensions.ToGetProductResponse).ToList();
 
-        var response = new ListProductsResponse
-        {
-            Results = productResponses,
-            NextPageToken = products.NextPageToken
-        };
+        ListProductsResponse response = new() { Results = productResponses, NextPageToken = products.NextPageToken };
 
         return Ok(response);
     }

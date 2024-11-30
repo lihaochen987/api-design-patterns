@@ -8,7 +8,7 @@ public class ProductPricingRepository(ProductDbContext context) : IProductPricin
 {
     public async Task<ProductPricingView?> GetProductPricingAsync(long id)
     {
-        var product = await context.Set<ProductPricingView>()
+        ProductPricingView? product = await context.Set<ProductPricingView>()
             .FirstOrDefaultAsync(p => p.Id == id);
         return product;
     }

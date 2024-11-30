@@ -1,10 +1,8 @@
-using backend.Product.Database;
 using backend.Product.FieldMasks;
 using backend.Product.Services;
 using backend.Product.ViewModels;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -24,23 +22,25 @@ public class GetProductPricingController(
         [FromRoute] long id,
         [FromQuery] GetProductPricingRequest request)
     {
-        var product = await productRepository.GetProductPricingAsync(id);
+        ProductPricingView? product = await productRepository.GetProductPricingAsync(id);
 
-        if (product == null) return NotFound();
+        if (product == null)
+        {
+            return NotFound();
+        }
 
-        var response = extensions.ToGetProductPricingResponse(product.Pricing, product.Id);
+        GetProductPricingResponse response = extensions.ToGetProductPricingResponse(product.Pricing, product.Id);
 
-        var settings = new JsonSerializerSettings
+        JsonSerializerSettings settings = new()
         {
             Converters = new List<JsonConverter>
-                { new FieldMaskConverter(request.FieldMask, configuration.ProductPricingFieldPaths) }
+            {
+                new FieldMaskConverter(request.FieldMask, configuration.ProductPricingFieldPaths)
+            }
         };
 
-        var json = JsonConvert.SerializeObject(response, settings);
+        string json = JsonConvert.SerializeObject(response, settings);
 
-        return new OkObjectResult(json)
-        {
-            StatusCode = 200
-        };
+        return new OkObjectResult(json) { StatusCode = 200 };
     }
 }

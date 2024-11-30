@@ -11,14 +11,14 @@ namespace backend.Product.Tests;
 
 public class UpdateProductPricingControllerTests
 {
-    private readonly Fixture _fixture = new();
     private readonly UpdateProductPricingController _controller;
-    private readonly ProductRepositoryFake _productRepository = [];
     private readonly UpdateProductPricingExtensions _extensions;
+    private readonly Fixture _fixture = new();
+    private readonly ProductRepositoryFake _productRepository = [];
 
     public UpdateProductPricingControllerTests()
     {
-        var configuration = new ProductPricingFieldMaskConfiguration();
+        ProductPricingFieldMaskConfiguration configuration = new();
         _extensions = new UpdateProductPricingExtensions();
         _controller = new UpdateProductPricingController(
             _productRepository,
@@ -29,10 +29,10 @@ public class UpdateProductPricingControllerTests
     [Fact]
     public async Task UpdateProductPricing_ReturnsNotFound_WhenProductDoesNotExist()
     {
-        var id = _fixture.Create<long>();
-        var request = _fixture.Create<UpdateProductPricingRequest>();
+        long id = _fixture.Create<long>();
+        UpdateProductPricingRequest? request = _fixture.Create<UpdateProductPricingRequest>();
 
-        var actionResult = await _controller.UpdateProductPricing(id, request);
+        ActionResult<UpdateProductPricingResponse> actionResult = await _controller.UpdateProductPricing(id, request);
 
         actionResult.Result.ShouldBeOfType<NotFoundResult>();
     }
@@ -40,11 +40,11 @@ public class UpdateProductPricingControllerTests
     [Fact]
     public async Task UpdateProductPricing_UpdatesPricing_WhenProductExists()
     {
-        var product = new ProductTestDataBuilder().Build();
+        DomainModels.Product product = new ProductTestDataBuilder().Build();
         _productRepository.Add(product);
         _productRepository.IsDirty = false;
 
-        var request = new UpdateProductPricingRequest
+        UpdateProductPricingRequest request = new()
         {
             BasePrice = "99.99",
             DiscountPercentage = "10",
@@ -52,13 +52,14 @@ public class UpdateProductPricingControllerTests
             FieldMask = ["baseprice", "discountpercentage", "taxrate"]
         };
 
-        var actionResult = await _controller.UpdateProductPricing(product.Id, request);
+        ActionResult<UpdateProductPricingResponse> actionResult =
+            await _controller.UpdateProductPricing(product.Id, request);
 
         actionResult.Result.ShouldNotBeNull();
         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        var contentResult = actionResult.Result as OkObjectResult;
+        OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
         contentResult.ShouldNotBeNull();
-        var response = contentResult.Value as UpdateProductPricingResponse;
+        UpdateProductPricingResponse? response = contentResult.Value as UpdateProductPricingResponse;
         response.ShouldBeEquivalentTo(_extensions.ToUpdateProductPricingResponse(product.Pricing, product.Id));
         _productRepository.IsDirty.ShouldBeEquivalentTo(true);
     }

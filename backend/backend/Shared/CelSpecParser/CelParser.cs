@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace backend.Shared.CelSpecParser;
 
 /// <summary>
-/// CelParser takes in a filter string and translates it into a form that can be used to filter data.
+///     CelParser takes in a filter string and translates it into a form that can be used to filter data.
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public partial class CelParser<T>(TypeParser typeParser)
@@ -16,9 +16,9 @@ public partial class CelParser<T>(TypeParser typeParser)
     {
         Expression? expression = null;
 
-        for (var i = 0; i < filterTokens.Count; i++)
+        for (int i = 0; i < filterTokens.Count; i++)
         {
-            var currentToken = filterTokens[i];
+            CelToken currentToken = filterTokens[i];
 
             if (currentToken.Type == CelTokenType.Field)
             {
@@ -40,12 +40,13 @@ public partial class CelParser<T>(TypeParser typeParser)
         Expression? existingExpression,
         ParameterExpression parameter)
     {
-        var fieldExpression = GetFieldExpression(filterTokens[index], parameter);
-        var operatorToken = filterTokens[++index];
-        var valueToken = filterTokens[++index];
-        var comparisonValue = ConvertTokenToExpression(valueToken, fieldExpression.Type);
+        MemberExpression fieldExpression = GetFieldExpression(filterTokens[index], parameter);
+        CelToken operatorToken = filterTokens[++index];
+        CelToken valueToken = filterTokens[++index];
+        ConstantExpression comparisonValue = ConvertTokenToExpression(valueToken, fieldExpression.Type);
 
-        var comparisonExpression = BuildComparisonExpression(fieldExpression, operatorToken.Value, comparisonValue);
+        BinaryExpression comparisonExpression =
+            BuildComparisonExpression(fieldExpression, operatorToken.Value, comparisonValue);
         return existingExpression == null
             ? comparisonExpression
             : Expression.AndAlso(existingExpression, comparisonExpression);
@@ -57,22 +58,22 @@ public partial class CelParser<T>(TypeParser typeParser)
         Expression existingExpression,
         string logicalOperator)
     {
-        var nextExpression = ParseFilter(filterTokens.Skip(index + 1).ToList());
+        Expression<Func<T, bool>> nextExpression = ParseFilter(filterTokens.Skip(index + 1).ToList());
         return logicalOperator == "&&"
             ? Expression.AndAlso(existingExpression, nextExpression.Body)
             : Expression.OrElse(existingExpression, nextExpression.Body);
     }
 
     /// <summary>
-    /// Breaks the filter string into tokens (small meaningful parts)
+    ///     Breaks the filter string into tokens (small meaningful parts)
     /// </summary>
     /// <param name="filterQuery">
-    /// "Category == DogFood && Price > 50"
+    ///     "Category == DogFood && Price > 50"
     /// </param>
     /// <returns>
-    /// A list of CelTokens would be returned with their value and tagged with the respective type.
-    /// Category would be tagged as a Value Field
-    /// == would be tagged as an Operator Field
+    ///     A list of CelTokens would be returned with their value and tagged with the respective type.
+    ///     Category would be tagged as a Value Field
+    ///     == would be tagged as an Operator Field
     /// </returns>
     public List<CelToken> Tokenize(string filterQuery)
     {
@@ -88,22 +89,28 @@ public partial class CelParser<T>(TypeParser typeParser)
             { "||", CelTokenType.Logical }
         };
 
-        var tokens = new List<CelToken>();
+        List<CelToken> tokens = new();
 
-        var regex = QuotedStringOrWord();
+        Regex regex = QuotedStringOrWord();
 
 
         foreach (Match match in regex.Matches(filterQuery))
         {
-            var part = match.Value;
+            string part = match.Value;
 
-            if (TryGetOperatorToken(part, operatorsDict, out var operatorToken))
+            if (TryGetOperatorToken(part, operatorsDict, out CelToken? operatorToken))
             {
-                if (operatorToken != null) tokens.Add(operatorToken);
+                if (operatorToken != null)
+                {
+                    tokens.Add(operatorToken);
+                }
             }
-            else if (TryGetValueToken(part, out var valueToken))
+            else if (TryGetValueToken(part, out CelToken? valueToken))
             {
-                if (valueToken != null) tokens.Add(valueToken);
+                if (valueToken != null)
+                {
+                    tokens.Add(valueToken);
+                }
             }
             else
             {
@@ -119,7 +126,7 @@ public partial class CelParser<T>(TypeParser typeParser)
         Dictionary<string, CelTokenType> operatorsDict,
         out CelToken? token)
     {
-        if (operatorsDict.TryGetValue(part, out var @operator))
+        if (operatorsDict.TryGetValue(part, out CelTokenType @operator))
         {
             token = new CelToken(@operator, part);
             return true;
@@ -159,18 +166,20 @@ public partial class CelParser<T>(TypeParser typeParser)
         CelToken fieldCelToken,
         ParameterExpression lambdaParameter)
     {
-        var propertyPath = fieldCelToken.Value.Split('.');
+        string[] propertyPath = fieldCelToken.Value.Split('.');
 
         Expression currentExpression = lambdaParameter;
 
-        foreach (var propertyName in propertyPath)
+        foreach (string propertyName in propertyPath)
         {
-            var propertyInfo = currentExpression.Type.GetProperty(propertyName,
+            PropertyInfo? propertyInfo = currentExpression.Type.GetProperty(propertyName,
                 BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
 
             if (propertyInfo == null)
+            {
                 throw new ArgumentException(
                     $"Property '{propertyName}' does not exist on type '{currentExpression.Type.Name}'");
+            }
 
             currentExpression = Expression.Property(currentExpression, propertyInfo);
         }
@@ -179,7 +188,7 @@ public partial class CelParser<T>(TypeParser typeParser)
     }
 
     /// <summary>
-    /// Creates a comparison based on the operator
+    ///     Creates a comparison based on the operator
     /// </summary>
     /// <param name="fieldExpression">
     /// </param>
@@ -194,9 +203,8 @@ public partial class CelParser<T>(TypeParser typeParser)
     private static BinaryExpression BuildComparisonExpression(
         Expression fieldExpression,
         string comparisonOperator,
-        Expression comparisonValueExpression)
-    {
-        return comparisonOperator switch
+        Expression comparisonValueExpression) =>
+        comparisonOperator switch
         {
             "==" => Expression.Equal(fieldExpression, comparisonValueExpression),
             "!=" => Expression.NotEqual(fieldExpression, comparisonValueExpression),
@@ -206,10 +214,9 @@ public partial class CelParser<T>(TypeParser typeParser)
             ">=" => Expression.GreaterThanOrEqual(fieldExpression, comparisonValueExpression),
             _ => throw new NotSupportedException($"Operator {comparisonOperator} is not supported")
         };
-    }
 
     /// <summary>
-    /// Converts the token to the right format
+    ///     Converts the token to the right format
     /// </summary>
     /// <param name="valueCelToken"></param>
     /// <param name="destinationType"></param>
@@ -219,7 +226,7 @@ public partial class CelParser<T>(TypeParser typeParser)
         CelToken valueCelToken,
         Type destinationType)
     {
-        var value = destinationType switch
+        object value = destinationType switch
         {
             { } t when t == typeof(string) => ConvertToString(valueCelToken.Value),
             { } t when t == typeof(bool) => ConvertToBool(valueCelToken.Value),
@@ -235,13 +242,13 @@ public partial class CelParser<T>(TypeParser typeParser)
     private static string ConvertToString(string value) => value;
 
     private static object ConvertToBool(string value) =>
-        bool.TryParse(value, out var boolValue) ? boolValue : throw new ArgumentException("Invalid boolean value");
+        bool.TryParse(value, out bool boolValue) ? boolValue : throw new ArgumentException("Invalid boolean value");
 
     private static object ConvertToInt(string value) =>
-        int.TryParse(value, out var intValue) ? intValue : throw new ArgumentException("Invalid integer value");
+        int.TryParse(value, out int intValue) ? intValue : throw new ArgumentException("Invalid integer value");
 
     private static object ConvertToEnum(Type enumType, string value) =>
-        Enum.TryParse(enumType, value, ignoreCase: true, out var enumValue)
+        Enum.TryParse(enumType, value, true, out object? enumValue)
             ? enumValue
             : throw new ArgumentException("Invalid enum value");
 

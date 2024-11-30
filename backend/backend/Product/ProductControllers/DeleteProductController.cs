@@ -14,7 +14,7 @@ public class DeleteProductController(IProductRepository productRepository) : Con
         [FromRoute] long id,
         [FromQuery] DeleteProductRequest request)
     {
-        var product = await productRepository.GetProductAsync(id);
+        DomainModels.Product? product = await productRepository.GetProductAsync(id);
         if (product == null)
         {
             return NotFound();

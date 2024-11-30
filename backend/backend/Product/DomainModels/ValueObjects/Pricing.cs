@@ -27,10 +27,18 @@ public record Pricing
         decimal taxRate)
     {
         if (basePrice <= 0)
+        {
             throw new ArgumentException("Product price must be greater than zero.");
+        }
+
         if (discountPercentage is < 0 or > 100)
+        {
             throw new ArgumentException("Discount percentage must be between 0 and 100.");
+        }
+
         if (taxRate is < 0 or > 100)
+        {
             throw new ArgumentException("Tax rate must be between 0 and 100.");
+        }
     }
 }

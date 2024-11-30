@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 
@@ -7,10 +5,6 @@ namespace backend.Product.ViewModels;
 
 public class ProductView
 {
-    public ProductView()
-    {
-    }
-
     public long Id { get; init; }
     public string Name { get; init; }
     public decimal Price { get; init; }

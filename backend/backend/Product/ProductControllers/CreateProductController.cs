@@ -15,13 +15,13 @@ public class CreateProductController(
     [SwaggerOperation(Summary = "Create a product", Tags = ["Products"])]
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
-        var product = extensions.ToEntity(request);
+        DomainModels.Product product = extensions.ToEntity(request);
         await productRepository.CreateProductAsync(product);
 
-        var response = extensions.ToCreateProductResponse(product);
+        CreateProductResponse response = extensions.ToCreateProductResponse(product);
         return CreatedAtAction(
-            actionName: "GetProduct",
-            controllerName: "GetProduct",
+            "GetProduct",
+            "GetProduct",
             new { id = product.Id },
             response);
     }

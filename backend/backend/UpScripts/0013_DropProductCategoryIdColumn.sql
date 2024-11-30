@@ -3,7 +3,7 @@ $$
     BEGIN
         ALTER TABLE products
             DROP COLUMN product_category;
-        
+
         ALTER TABLE products
             RENAME product_category_id TO product_category;
 

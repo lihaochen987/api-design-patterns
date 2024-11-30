@@ -9,9 +9,9 @@ $$
                p.product_dimensions_height_cm,
                c.product_category_name,
                ROUND(
-                       (p.product_base_price * (1 - p.product_discount_percentage / 100)) *
-                       (1 + p.product_tax_rate / 100),
-                       2
+                   (p.product_base_price * (1 - p.product_discount_percentage / 100)) *
+                   (1 + p.product_tax_rate / 100),
+                   2
                ) AS product_price,
                ppfag.product_pet_food_age_group,
                ppfbs.product_pet_food_breed_size,

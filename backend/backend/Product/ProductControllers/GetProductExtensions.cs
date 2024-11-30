@@ -7,9 +7,8 @@ namespace backend.Product.ProductControllers;
 
 public class GetProductExtensions(TypeParser typeParser)
 {
-    public GetProductResponse ToGetProductResponse(ProductView product)
-    {
-        return new GetProductResponse
+    public GetProductResponse ToGetProductResponse(ProductView product) =>
+        new()
         {
             Id = product.Id.ToString(),
             Name = product.Name,
@@ -35,5 +34,4 @@ public class GetProductExtensions(TypeParser typeParser)
             IsCrueltyFree = product.IsCrueltyFree,
             SafetyWarnings = product.SafetyWarnings
         };
-    }
 }

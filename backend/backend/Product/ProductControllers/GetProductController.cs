@@ -1,5 +1,6 @@
 using backend.Product.FieldMasks;
 using backend.Product.Services;
+using backend.Product.ViewModels;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -21,22 +22,24 @@ public class GetProductController(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)
     {
-        var product = await productViewRepository.GetProductView(id);
-        if (product == null) return NotFound();
+        ProductView? product = await productViewRepository.GetProductView(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
 
-        var response = extensions.ToGetProductResponse(product);
+        GetProductResponse response = extensions.ToGetProductResponse(product);
 
-        var settings = new JsonSerializerSettings
+        JsonSerializerSettings settings = new()
         {
             Converters = new List<JsonConverter>
-                { new FieldMaskConverter(request.FieldMask, configuration.ProductFieldPaths) }
+            {
+                new FieldMaskConverter(request.FieldMask, configuration.ProductFieldPaths)
+            }
         };
 
-        var json = JsonConvert.SerializeObject(response, settings);
+        string json = JsonConvert.SerializeObject(response, settings);
 
-        return new OkObjectResult(json)
-        {
-            StatusCode = 200
-        };
+        return new OkObjectResult(json) { StatusCode = 200 };
     }
 }

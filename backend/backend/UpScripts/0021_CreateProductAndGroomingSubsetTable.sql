@@ -29,6 +29,6 @@ VALUES (8, true, true, 'Apply a small amount to wet coat, lather, and rinse thor
         'Avoid contact with eyes.'),
        (9, false, true, 'Use daily for brushing teeth. Gently apply to teeth and gums.', true,
         'Do not allow pet to swallow large amounts.')
-        ,
+    ,
        (17, true, false, 'Brush gently from roots to tips to detangle and remove loose fur.', false,
         'Keep away from heat sources.');
