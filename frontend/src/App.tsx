@@ -3,13 +3,17 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import axios from 'axios'
+import {components} from "../types";
+
+type getProductResponse = components["schemas"]["GetProductResponse"];
 
 function App() {
     const [count, setCount] = useState(0)
 
-    axios.get('https://localhost:44333/Product')
+    axios.get(`http://localhost:8080/Product/${1}`)
         .then(function (response) {
-            console.log(response);
+            const getProductResponse: getProductResponse = response.data;
+            console.log(getProductResponse);
         })
         .catch(function (error) {
             console.log(error);
