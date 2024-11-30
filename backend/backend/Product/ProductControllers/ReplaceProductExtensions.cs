@@ -57,6 +57,25 @@ public class ReplaceProductExtensions(TypeParser typeParser)
                 weight);
         }
 
+        if (category == Category.GroomingAndHygiene)
+        {
+            var isNatural = typeParser.ParseBool(request.IsNatural, "Invalid IsNatural boolean");
+            var isHypoAllergenic = typeParser.ParseBool(request.IsHypoAllergenic, "Invalid IsHypoAllergenic boolean");
+            var isCrueltyFree = typeParser.ParseBool(request.IsCrueltyFree, "Invalid IsCrueltyFree boolean");
+            var usageInstructions = typeParser.ParseString(request.UsageInstructions, "Invalid Usage Instructions");
+            var safetyWarnings = typeParser.ParseString(request.SafetyWarnings, "Invalid Safety Warnings");
+
+            return new GroomingAndHygiene(
+                request.Name,
+                pricing,
+                dimensions,
+                isNatural,
+                isHypoAllergenic,
+                usageInstructions,
+                isCrueltyFree,
+                safetyWarnings);
+        }
+
         return new BaseProduct(request.Name, pricing, category, dimensions);
     }
 
@@ -91,6 +110,15 @@ public class ReplaceProductExtensions(TypeParser typeParser)
             response.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
         }
 
+        if (product is GroomingAndHygiene groomingAndHygiene)
+        {
+            response.IsNatural = groomingAndHygiene.IsNatural;
+            response.IsHypoAllergenic = groomingAndHygiene.IsHypoallergenic;
+            response.UsageInstructions = groomingAndHygiene.UsageInstructions;
+            response.IsCrueltyFree = groomingAndHygiene.IsCrueltyFree;
+            response.SafetyWarnings = groomingAndHygiene.SafetyWarnings;
+        }
+
         return response;
     }
 
@@ -113,7 +141,7 @@ public class ReplaceProductExtensions(TypeParser typeParser)
                 Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }
         };
-        
+
         if (product is PetFood petFood)
         {
             request.AgeGroup = petFood.AgeGroup.ToString();
@@ -122,6 +150,15 @@ public class ReplaceProductExtensions(TypeParser typeParser)
             request.NutritionalInfo = petFood.NutritionalInfo;
             request.StorageInstructions = petFood.StorageInstructions;
             request.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
+        }
+
+        if (product is GroomingAndHygiene groomingAndHygiene)
+        {
+            request.IsNatural = groomingAndHygiene.IsNatural;
+            request.IsHypoAllergenic = groomingAndHygiene.IsHypoallergenic;
+            request.UsageInstructions = groomingAndHygiene.UsageInstructions;
+            request.IsCrueltyFree = groomingAndHygiene.IsCrueltyFree;
+            request.SafetyWarnings = groomingAndHygiene.SafetyWarnings;
         }
 
         return request;

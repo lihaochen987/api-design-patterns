@@ -29,30 +29,6 @@ public class TypeParser
         return result;
     }
 
-    public Dictionary<string, object> ParseStringToDictionary(string? value, string errorMessage)
-    {
-        var jsonString = JsonSerializer.Serialize(value);
-        if (string.IsNullOrWhiteSpace(jsonString))
-        {
-            throw new ArgumentException(errorMessage);
-        }
-
-        try
-        {
-            var result = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
-            if (result == null)
-            {
-                throw new ArgumentException(errorMessage);
-            }
-
-            return result;
-        }
-        catch (JsonException)
-        {
-            throw new ArgumentException(errorMessage);
-        }
-    }
-
     public string ParseDictionaryToString(Dictionary<string, object>? dictionary, string errorMessage)
     {
         try
@@ -63,5 +39,23 @@ public class TypeParser
         {
             throw new ArgumentException(errorMessage);
         }
+    }
+
+    public bool ParseBool(bool? boolValue, string errorMessage)
+    {
+        if (!bool.TryParse(boolValue.ToString(), out var boolResult))
+        {
+            throw new ArgumentException(errorMessage);
+        }
+
+        return boolResult;
+    }
+
+    public string ParseString(string? value, string errorMessage)
+    {
+        var stringValue = string.IsNullOrWhiteSpace(value)
+            ? throw new ArgumentException(errorMessage)
+            : value;
+        return stringValue;
     }
 }

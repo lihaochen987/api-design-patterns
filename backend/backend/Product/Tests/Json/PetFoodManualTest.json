@@ -1,0 +1,23 @@
+{
+  "name": "Premium Dog Food",
+  "pricing": {
+    "basePrice": "19.99",
+    "discountPercentage": "10",
+    "taxRate": "5"
+  },
+  "category": "PetFood",
+  "dimensions": {
+    "length": "30.0",
+    "width": "15.0",
+    "height": "10.0"
+  },
+  "ageGroup": "Adult",
+  "breedSize": "Large",
+  "ingredients": "Chicken, Rice",
+  "nutritionalInfo": {
+    "proteinContent": "High",
+    "fatContent": "Low"
+  },
+  "storageInstructions": "Store in a cool, dry place",
+  "weightKg": "2.5"
+}
