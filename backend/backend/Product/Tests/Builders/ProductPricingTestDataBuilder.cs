@@ -7,7 +7,7 @@ namespace backend.Product.Tests.Builders;
 public class ProductPricingTestDataBuilder
 {
     private readonly Fixture _fixture;
-    private int? _id;
+    private int _id;
     private Pricing _pricing;
 
     public ProductPricingTestDataBuilder()
@@ -33,6 +33,6 @@ public class ProductPricingTestDataBuilder
 
     public ProductPricingView Build()
     {
-        return new ProductPricingView(_fixture.Create<int>(), _pricing);
+        return new ProductPricingView { Id = _id, Pricing = _pricing };
     }
 }

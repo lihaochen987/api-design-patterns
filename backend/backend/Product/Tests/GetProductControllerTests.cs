@@ -4,6 +4,7 @@ using backend.Product.FieldMasks;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.Builders;
 using backend.Product.Tests.Fakes;
+using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -22,7 +23,7 @@ namespace backend.Product.Tests
         public GetProductControllerTests()
         {
             var configuration = new ProductFieldMaskConfiguration();
-            _extensions = new GetProductExtensions();
+            _extensions = new GetProductExtensions(new TypeParser());
             _controller = new GetProductController(
                 _productRepository,
                 configuration,

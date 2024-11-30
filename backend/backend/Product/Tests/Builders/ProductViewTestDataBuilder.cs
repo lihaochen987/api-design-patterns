@@ -12,6 +12,12 @@ public class ProductViewTestDataBuilder
     private decimal _price;
     private Category _category;
     private Dimensions _dimensions;
+    private AgeGroup _ageGroup;
+    private BreedSize _breedSize;
+    private string _ingredients;
+    private Dictionary<string, object> _nutritionalInfo;
+    private string _storageInstructions;
+    private decimal _weightKg;
 
     public ProductViewTestDataBuilder()
     {
@@ -23,6 +29,12 @@ public class ProductViewTestDataBuilder
         _category = _fixture.Create<Category>();
         _dimensions = _fixture.Create<Dimensions>();
         _price = _fixture.Create<long>();
+        _ageGroup = _fixture.Create<AgeGroup>();
+        _breedSize = _fixture.Create<BreedSize>();
+        _ingredients = _fixture.Create<string>();
+        _nutritionalInfo = _fixture.Create<Dictionary<string, object>>();
+        _storageInstructions = _fixture.Create<string>();
+        _weightKg = _fixture.Create<decimal>();
     }
 
     public ProductViewTestDataBuilder WithId(int id)
@@ -51,12 +63,19 @@ public class ProductViewTestDataBuilder
 
     public ProductView Build()
     {
-        return new ProductView(
-            _id ?? _fixture.Create<int>(),
-            _name,
-            _price,
-            _category,
-            _dimensions
-        );
+        return new ProductView
+        {
+            Id = _id ?? _fixture.Create<int>(),
+            Name = _name,
+            Price = _price,
+            Category = _category,
+            Dimensions = _dimensions,
+            AgeGroup = _ageGroup,
+            BreedSize = _breedSize,
+            Ingredients = _ingredients,
+            NutritionalInfo = _nutritionalInfo,
+            StorageInstructions = _storageInstructions,
+            WeightKg = _weightKg
+        };
     }
 }

@@ -1,10 +1,11 @@
 using System.Globalization;
 using backend.Product.Contracts;
 using backend.Product.ViewModels;
+using backend.Shared;
 
 namespace backend.Product.ProductControllers;
 
-public class GetProductExtensions
+public class GetProductExtensions(TypeParser typeParser)
 {
     public GetProductResponse ToGetProductResponse(ProductView product)
     {
@@ -23,7 +24,7 @@ public class GetProductExtensions
             AgeGroup = product.AgeGroup.HasValue ? product.AgeGroup.ToString() : null,
             BreedSize = product.BreedSize.HasValue ? product.BreedSize.ToString() : null,
             Ingredients = product.Ingredients,
-            NutritionalInfo = product.NutritionalInfo,
+            NutritionalInfo = typeParser.ParseDictionaryToString(product.NutritionalInfo, "Invalid nutritional info"),
             StorageInstructions = product.StorageInstructions,
             WeightKg = product.WeightKg.HasValue ? product.WeightKg.ToString() : null
         };

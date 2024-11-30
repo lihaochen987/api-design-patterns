@@ -53,7 +53,7 @@ public class TypeParser
         }
     }
 
-    public string ParseDictionaryToString(Dictionary<string, object> dictionary, string errorMessage)
+    public string ParseDictionaryToString(Dictionary<string, object>? dictionary, string errorMessage)
     {
         if (dictionary == null || dictionary.Count == 0)
         {
