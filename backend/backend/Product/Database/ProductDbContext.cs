@@ -48,7 +48,7 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
             entity.Property(p => p.Price)
                 .HasColumnName("product_price");
 
-            // Additional pet food-specific columns
+            // PetFood columns
             entity.Property(p => p.AgeGroup)
                 .HasColumnName("product_pet_food_age_group")
                 .HasConversion<string>();
@@ -68,6 +68,22 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
 
             entity.Property(p => p.WeightKg)
                 .HasColumnName("product_pet_foods_weight_kg");
+
+            // Grooming and Hygiene columns
+            entity.Property(p => p.IsNatural)
+                .HasColumnName("product_grooming_and_hygiene_is_natural");
+
+            entity.Property(p => p.IsHypoallergenic)
+                .HasColumnName("product_grooming_and_hygiene_is_hypoallergenic");
+
+            entity.Property(p => p.UsageInstructions)
+                .HasColumnName("product_grooming_and_hygiene_usage_instructions");
+
+            entity.Property(p => p.IsCrueltyFree)
+                .HasColumnName("product_grooming_and_hygiene_is_cruelty_free");
+
+            entity.Property(p => p.SafetyWarnings)
+                .HasColumnName("product_grooming_and_hygiene_safety_warnings");
         });
 
         modelBuilder.Entity<ProductPricingView>(entity =>
@@ -146,6 +162,31 @@ public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbCo
                     v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, new JsonSerializerOptions())!);
             entity.Property(p => p.StorageInstructions).HasColumnName("product_pet_foods_storage_instructions");
             entity.Property(p => p.WeightKg).HasColumnName("product_pet_foods_weight_kg");
+        });
+
+        modelBuilder.Entity<GroomingAndHygiene>(entity =>
+        {
+            entity.ToTable("product_grooming_and_hygiene");
+
+            entity.HasOne<DomainModels.Product>()
+                .WithOne()
+                .HasForeignKey<GroomingAndHygiene>(p => p.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.Property(p => p.IsNatural)
+                .HasColumnName("product_grooming_and_hygiene_is_natural");
+
+            entity.Property(p => p.IsHypoallergenic)
+                .HasColumnName("product_grooming_and_hygiene_is_hypoallergenic");
+
+            entity.Property(p => p.UsageInstructions)
+                .HasColumnName("product_grooming_and_hygiene_usage_instructions");
+
+            entity.Property(p => p.IsCrueltyFree)
+                .HasColumnName("product_grooming_and_hygiene_is_cruelty_free");
+
+            entity.Property(p => p.SafetyWarnings)
+                .HasColumnName("product_grooming_and_hygiene_safety_warnings");
         });
 
         base.OnModelCreating(modelBuilder);
