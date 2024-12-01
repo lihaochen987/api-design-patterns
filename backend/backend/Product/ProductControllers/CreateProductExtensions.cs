@@ -1,5 +1,3 @@
-using System.Globalization;
-using backend.Product.Contracts;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
@@ -79,58 +77,5 @@ public class CreateProductExtensions(TypeParser typeParser)
         }
 
         return new BaseProduct(request.Name, pricing, category, dimensions);
-    }
-
-    public CreateProductResponse ToCreateProductResponse(DomainModels.Product product)
-    {
-        CreateProductResponse response = new()
-        {
-            Name = product.Name,
-            Category = product.Category.ToString(),
-            Pricing = new ProductPricingContract
-            {
-                BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
-                TaxRate = product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
-            },
-            Dimensions = new DimensionsContract
-            {
-                Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
-            }
-        };
-        return response;
-    }
-
-    public CreatePetFoodResponse ToCreatePetFoodResponse(DomainModels.Product product)
-    {
-        PetFood petFood = (PetFood)product;
-        return new CreatePetFoodResponse
-        {
-            GetProductResponse = ToCreateProductResponse(product),
-            AgeGroup = petFood.AgeGroup.ToString(),
-            BreedSize = petFood.BreedSize.ToString(),
-            Ingredients = petFood.Ingredients,
-            NutritionalInfo = petFood.NutritionalInfo is { Count: > 1 }
-                ? typeParser.ParseDictionaryToString(petFood.NutritionalInfo, "Invalid nutritional info")
-                : null,
-            StorageInstructions = petFood.StorageInstructions,
-            WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture)
-        };
-    }
-
-    public CreateGroomingAndHygieneResponse ToCreateGroomingAndHygieneResponse(DomainModels.Product product)
-    {
-        GroomingAndHygiene groomingAndHygiene = (GroomingAndHygiene)product;
-        return new CreateGroomingAndHygieneResponse
-        {
-            GetProductResponse = ToCreateProductResponse(product),
-            IsNatural = groomingAndHygiene.IsNatural,
-            IsHypoAllergenic = groomingAndHygiene.IsHypoallergenic,
-            UsageInstructions = groomingAndHygiene.UsageInstructions,
-            IsCrueltyFree = groomingAndHygiene.IsCrueltyFree,
-            SafetyWarnings = groomingAndHygiene.SafetyWarnings
-        };
     }
 }

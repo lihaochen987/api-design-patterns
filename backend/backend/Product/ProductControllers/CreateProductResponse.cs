@@ -16,23 +16,21 @@ public class CreateProductResponse
     [Required] public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
 }
 
-public class CreateGroomingAndHygieneResponse
+public class CreateGroomingAndHygieneResponse : CreateProductResponse
 {
-    [Required] public required CreateProductResponse GetProductResponse { get; set; }
-    [Required] public bool? IsNatural { get; set; }
-    [Required] public bool? IsHypoAllergenic { get; set; }
-    [Required] public string? UsageInstructions { get; set; }
-    [Required] public bool? IsCrueltyFree { get; set; }
-    [Required] public string? SafetyWarnings { get; set; }
+    [Required] public bool IsNatural { get; init; }
+    [Required] public bool IsHypoAllergenic { get; init; }
+    [Required] public string UsageInstructions { get; init; } = "";
+    [Required] public bool IsCrueltyFree { get; init; }
+    [Required] public string SafetyWarnings { get; init; } = "";
 }
 
-public class CreatePetFoodResponse
+public class CreatePetFoodResponse : CreateProductResponse
 {
-    [Required] public required CreateProductResponse GetProductResponse { get; set; }
-    [Required] public string? AgeGroup { get; set; }
-    [Required] public string? BreedSize { get; set; }
-    [Required] public string? Ingredients { get; set; }
-    [Required] public string? NutritionalInfo { get; set; }
-    [Required] public string? StorageInstructions { get; set; }
-    [Required] public string? WeightKg { get; set; }
+    [Required] public string AgeGroup { get; init; } = "";
+    [Required] public string BreedSize { get; init; } = "";
+    [Required] public string Ingredients { get; init; } = "";
+    [Required] public string NutritionalInfo { get; init; } = "";
+    [Required] public string StorageInstructions { get; init; } = "";
+    [Required] public string WeightKg { get; init; } = "";
 }

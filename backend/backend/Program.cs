@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using backend.Database;
 using backend.Product.Database;
 using backend.Product.FieldMasks;
@@ -27,9 +28,10 @@ builder.Services.AddTransient<TypeParser>();
 // Inject Product classes
 builder.Services.AddTransient<ProductFieldMaskConfiguration>();
 builder.Services.AddScoped<CreateProductExtensions>();
+builder.Services.AddAutoMapper(typeof(CreateProductMappingProfile));
 builder.Services.AddAutoMapper(typeof(GetProductMappingProfile));
 builder.Services.AddScoped<ReplaceProductExtensions>();
-builder.Services.AddScoped<UpdateProductExtensions>();
+builder.Services.AddAutoMapper(typeof(UpdateProductMappingProfile));
 
 builder.Services.AddTransient<ProductPricingFieldMaskConfiguration>();
 builder.Services.AddTransient<GetProductPricingExtensions>();

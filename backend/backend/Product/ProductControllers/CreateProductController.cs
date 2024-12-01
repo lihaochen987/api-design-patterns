@@ -1,3 +1,4 @@
+using AutoMapper;
 using backend.Product.DomainModels.Enums;
 using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,8 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class CreateProductController(
     IProductRepository productRepository,
-    CreateProductExtensions extensions)
+    CreateProductExtensions extensions,
+    IMapper mapper)
     : ControllerBase
 {
     [HttpPost]
@@ -21,9 +23,9 @@ public class CreateProductController(
 
         object response = product.Category switch
         {
-            Category.PetFood => extensions.ToCreatePetFoodResponse(product),
-            Category.GroomingAndHygiene => extensions.ToCreateGroomingAndHygieneResponse(product),
-            _ => extensions.ToCreateProductResponse(product)
+            Category.PetFood => mapper.Map<CreatePetFoodResponse>(product),
+            Category.GroomingAndHygiene => mapper.Map<CreateGroomingAndHygieneResponse>(product),
+            _ => mapper.Map<CreateProductResponse>(product)
         };
 
         return CreatedAtAction(

@@ -113,9 +113,6 @@
     <Compile Update="Product\ProductControllers\ReplaceProductResponse.cs">
       <DependentUpon>ReplaceProductController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\ProductControllers\UpdateProductExtensions.cs">
-      <DependentUpon>UpdateProductController.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\ProductControllers\UpdateProductRequest.cs">
       <DependentUpon>UpdateProductController.cs</DependentUpon>
     </Compile>
@@ -139,6 +136,15 @@
     </Compile>
     <Compile Update="Product\ProductPricingControllers\UpdateProductPricingResponse.cs">
       <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\CreateProductMappingProfile.cs">
+      <DependentUpon>CreateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\UpdateProductMappingProfile.cs">
+      <DependentUpon>UpdateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\ReplaceProductMappingProfile.cs">
+      <DependentUpon>ReplaceProductController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

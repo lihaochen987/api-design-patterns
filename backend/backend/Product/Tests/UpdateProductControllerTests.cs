@@ -1,4 +1,5 @@
 using System.Globalization;
+using AutoMapper;
 using backend.Product.Contracts;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
@@ -6,7 +7,6 @@ using backend.Product.FieldMasks;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.Builders;
 using backend.Product.Tests.Fakes;
-using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
@@ -16,17 +16,18 @@ namespace backend.Product.Tests;
 public class UpdateProductControllerTests
 {
     private readonly UpdateProductController _controller;
-    private readonly UpdateProductExtensions _extensions;
+    private readonly IMapper _mapper;
     private readonly ProductRepositoryFake _productRepository = [];
 
     public UpdateProductControllerTests()
     {
+        var mapperConfiguration = new MapperConfiguration(cfg => { cfg.AddProfile<UpdateProductMappingProfile>(); });
+        _mapper = mapperConfiguration.CreateMapper();
         ProductFieldMaskConfiguration configuration = new();
-        _extensions = new UpdateProductExtensions(new TypeParser());
         _controller = new UpdateProductController(
             _productRepository,
             configuration,
-            _extensions);
+            _mapper);
     }
 
     [Fact]
@@ -48,7 +49,7 @@ public class UpdateProductControllerTests
         OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
         contentResult.ShouldNotBeNull();
         UpdateProductResponse? response = contentResult.Value as UpdateProductResponse;
-        response.ShouldBeEquivalentTo(_extensions.ToUpdateProductResponse(product));
+        response.ShouldBeEquivalentTo(_mapper.Map<UpdateProductResponse>(product));
         _productRepository.IsDirty.ShouldBeEquivalentTo(true);
     }
 

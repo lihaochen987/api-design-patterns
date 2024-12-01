@@ -1,3 +1,5 @@
+using AutoMapper;
+using backend.Product.DomainModels.Enums;
 using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -8,7 +10,8 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class ReplaceProductController(
     IProductRepository productRepository,
-    ReplaceProductExtensions extensions)
+    ReplaceProductExtensions extensions,
+    IMapper mapper)
     : ControllerBase
 {
     [HttpPut("{id:long}")]
@@ -26,8 +29,13 @@ public class ReplaceProductController(
         }
 
         await productRepository.ReplaceProductAsync(existingProduct);
+        object response = product.Category switch
+        {
+            Category.PetFood => mapper.Map<ReplacePetFoodResponse>(product),
+            Category.GroomingAndHygiene => mapper.Map<ReplaceGroomingAndHygieneResponse>(product),
+            _ => mapper.Map<ReplacePetFoodResponse>(product)
+        };
 
-        ReplaceProductResponse response = extensions.ToReplaceProductResponse(product);
         return Ok(response);
     }
 }

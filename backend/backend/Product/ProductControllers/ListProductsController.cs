@@ -1,5 +1,6 @@
 using AutoMapper;
 using backend.Product.Contracts;
+using backend.Product.DomainModels.Enums;
 using backend.Product.Services;
 using backend.Product.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,12 @@ public class ListProductsController(
             request.Filter,
             request.MaxPageSize);
 
-        List<GetProductResponse> productResponses = products.Items.Select(mapper.Map<GetProductResponse>).ToList();
+        IEnumerable<object> productResponses = products.Items.Select(product => product.Category switch
+        {
+            Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
+            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
+            _ => mapper.Map<GetProductResponse>(product)
+        }).ToList();
 
         ListProductsResponse response = new() { Results = productResponses, NextPageToken = products.NextPageToken };
 

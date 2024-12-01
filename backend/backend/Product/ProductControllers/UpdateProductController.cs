@@ -1,3 +1,4 @@
+using AutoMapper;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
@@ -13,7 +14,7 @@ namespace backend.Product.ProductControllers;
 public class UpdateProductController(
     IProductRepository repository,
     ProductFieldMaskConfiguration configuration,
-    UpdateProductExtensions extensions)
+    IMapper mapper)
     : ControllerBase
 {
     [HttpPatch("{id:long}")]
@@ -33,29 +34,32 @@ public class UpdateProductController(
             configuration.GetUpdatedProductValues(request, product);
         product.Replace(name, pricing, category, dimensions);
 
-        if (product is PetFood petFood)
+        switch (product)
         {
-            (AgeGroup ageGroup, BreedSize breedSize, string ingredients, Dictionary<string, object> nutritionalInfo,
-                    string storageInstructions, decimal weightKg) =
-                configuration.GetUpdatedPetFoodValues(request, petFood);
+            case PetFood petFood:
+                (AgeGroup ageGroup, BreedSize breedSize, string ingredients, Dictionary<string, object> nutritionalInfo,
+                        string storageInstructions, decimal weightKg) =
+                    configuration.GetUpdatedPetFoodValues(request, petFood);
 
-            petFood.UpdatePetFoodDetails(ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions,
-                weightKg);
+                petFood.UpdatePetFoodDetails(ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions,
+                    weightKg);
+                await repository.ReplaceProductAsync(product);
+                return Ok(mapper.Map<UpdatePetFoodResponse>(product));
+
+            case GroomingAndHygiene groomingAndHygiene:
+                (bool isNatural, bool isHypoAllergenic, string usageInstructions, bool isCrueltyFree,
+                        string safetyWarnings) =
+                    configuration.GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
+
+                groomingAndHygiene.UpdateGroomingAndHygieneDetails(isNatural, isHypoAllergenic, usageInstructions,
+                    isCrueltyFree,
+                    safetyWarnings);
+                await repository.ReplaceProductAsync(product);
+                return Ok(mapper.Map<UpdateGroomingAndHygieneResponse>(product));
+
+            default:
+                await repository.ReplaceProductAsync(product);
+                return Ok(mapper.Map<UpdateProductResponse>(product));
         }
-
-        if (product is GroomingAndHygiene groomingAndHygiene)
-        {
-            (bool isNatural, bool isHypoAllergenic, string usageInstructions, bool isCrueltyFree,
-                    string safetyWarnings) =
-                configuration.GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
-
-            groomingAndHygiene.UpdateGroomingAndHygieneDetails(isNatural, isHypoAllergenic, usageInstructions,
-                isCrueltyFree,
-                safetyWarnings);
-        }
-
-        await repository.ReplaceProductAsync(product);
-
-        return Ok(extensions.ToUpdateProductResponse(product));
     }
 }
