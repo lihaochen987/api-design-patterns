@@ -44,6 +44,7 @@ builder.Services.AddScoped<IProductViewRepository, ProductViewRepository>();
 builder.Services.AddScoped<IProductPricingRepository, ProductPricingRepository>();
 
 // Inject Product Services
+builder.Services.AddScoped<IProductApplicationService, ProductApplicationService>();
 builder.Services.AddScoped<IProductViewApplicationService, ProductViewApplicationService>();
 
 builder.Services.AddControllers()

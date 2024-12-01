@@ -1,6 +1,5 @@
 using AutoMapper;
-using backend.Product.DomainModels.Enums;
-using backend.Product.InfrastructureLayer;
+using backend.Product.ApplicationLayer;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -9,9 +8,8 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class CreateProductController(
-    IProductRepository productRepository,
-    CreateProductExtensions extensions,
-    IMapper mapper)
+    IProductApplicationService applicationService,
+    CreateProductExtensions extensions)
     : ControllerBase
 {
     [HttpPost]
@@ -21,14 +19,9 @@ public class CreateProductController(
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
         DomainModels.Product product = extensions.ToEntity(request);
-        await productRepository.CreateProductAsync(product);
 
-        object response = product.Category switch
-        {
-            Category.PetFood => mapper.Map<CreatePetFoodResponse>(product),
-            Category.GroomingAndHygiene => mapper.Map<CreateGroomingAndHygieneResponse>(product),
-            _ => mapper.Map<CreateProductResponse>(product)
-        };
+        long productId = await applicationService.CreateProductAsync(product);
+        var response = applicationService.GetProductAsync(productId);
 
         return CreatedAtAction(
             "GetProduct",

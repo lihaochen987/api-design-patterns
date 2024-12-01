@@ -1,6 +1,8 @@
 using System.Globalization;
 using AutoMapper;
 using backend.Product.Contracts;
+using backend.Product.DomainModels;
+using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 
 namespace backend.Product.ProductControllers;
@@ -9,9 +11,12 @@ public class GetProductMappingProfile : Profile
 {
     public GetProductMappingProfile()
     {
+        // Response mappings
         CreateMap<ProductView, GetProductResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price.ToString(CultureInfo.InvariantCulture)))
+            .ForMember(dest => dest.Category,
+                opt => opt.MapFrom(src => src.Category.ToString()))
             .ForMember(dest => dest.Dimensions,
                 opt => opt.MapFrom(src => new DimensionsContract
                 {
@@ -28,7 +33,7 @@ public class GetProductMappingProfile : Profile
                 opt => opt.MapFrom(src => src.BreedSize.ToString()))
             .ForMember(dest => dest.NutritionalInfo,
                 opt => opt.MapFrom(src =>
-                    src.NutritionalInfo != null && src.NutritionalInfo.Count > 1 ? "Parsed Info" : null));
+                    src.NutritionalInfo));
 
         CreateMap<ProductView, GetGroomingAndHygieneResponse>()
             .IncludeBase<ProductView, GetProductResponse>()

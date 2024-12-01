@@ -4,6 +4,6 @@ namespace backend.Product.ProductControllers;
 
 public class ListProductsResponse
 {
-    [Required] public IEnumerable<object?> Results { get; set; } = [];
-    [Required] public string? NextPageToken { get; set; }
+    [Required] public IEnumerable<object?> Results { get; init; } = [];
+    [Required] public string? NextPageToken { get; init; }
 }

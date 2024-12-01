@@ -9,6 +9,7 @@ namespace backend.Product.ProductControllers;
 [SwaggerSubType(typeof(CreateGroomingAndHygieneResponse))]
 public class CreateProductResponse
 {
+    [Required] public string Id { get; init; } = "";
     [Required] public string Name { get; init; } = "";
 
     [Required]

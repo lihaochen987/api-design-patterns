@@ -1,0 +1,51 @@
+// Licensed to the.NET Foundation under one or more agreements.
+// The.NET Foundation licenses this file to you under the MIT license.
+
+using AutoMapper;
+using backend.Product.DomainModels.Enums;
+using backend.Product.InfrastructureLayer;
+using backend.Product.ProductControllers;
+
+namespace backend.Product.ApplicationLayer;
+
+public class ProductApplicationService(
+    IProductRepository repository,
+    IMapper mapper)
+    : IProductApplicationService
+{
+    public async Task<GetProductResponse?> GetProductAsync(long id)
+    {
+        // Prepare
+        var product = await repository.GetProductAsync(id);
+
+        // Todo find better way to return this.
+        if (product == null)
+        {
+            return null;
+        }
+
+        // Execute
+        GetProductResponse response = product.Category switch
+        {
+            Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
+            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
+            _ => mapper.Map<GetProductResponse>(product)
+        };
+
+        // Apply
+        return response;
+    }
+
+    public async Task<long> CreateProductAsync(DomainModels.Product product)
+    {
+        // Apply
+        await repository.CreateProductAsync(product);
+        return product.Id;
+    }
+
+    public async Task DeleteProductAsync(long id)
+    {
+        // Apply
+        await repository.DeleteProductAsync(id);
+    }
+}

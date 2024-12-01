@@ -1,4 +1,6 @@
 using AutoMapper;
+using backend.Product.Contracts;
+using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
@@ -27,7 +29,7 @@ public class ProductViewApplicationService(
         }
 
         // Execute
-        object response = product.Category switch
+        GetProductResponse response = product.Category switch
         {
             Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
             Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
@@ -41,6 +43,30 @@ public class ProductViewApplicationService(
             }
         };
         string json = JsonConvert.SerializeObject(response, settings);
+
+        // Apply
         return json;
+    }
+
+    public async Task<ListProductsResponse> ListProductsAsync(ListProductsRequest request)
+    {
+        // Prepare
+        ProductListResult<ProductView> products = await repository.ListProductsAsync(
+            request.PageToken,
+            request.Filter,
+            request.MaxPageSize);
+
+        // Execute
+        IEnumerable<GetProductResponse> productResponses = products.Items.Select(product => product.Category switch
+        {
+            Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
+            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
+            _ => mapper.Map<GetProductResponse>(product)
+        }).ToList();
+
+        ListProductsResponse response = new() { Results = productResponses, NextPageToken = products.NextPageToken };
+
+        // Apply
+        return response;
     }
 }
