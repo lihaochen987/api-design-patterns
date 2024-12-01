@@ -9,15 +9,15 @@ namespace backend.Product.ProductControllers;
 [SwaggerSubType(typeof(CreateGroomingAndHygieneResponse))]
 public class CreateProductResponse
 {
-    [Required] public string Name { get; set; } = "";
+    [Required] public string Name { get; init; } = "";
 
     [Required]
-    public ProductPricingContract Pricing { get; set; } =
+    public ProductPricingContract Pricing { get; init; } =
         new() { BasePrice = "", DiscountPercentage = "", TaxRate = "" };
 
-    [Required] public string Category { get; set; } = "";
+    [Required] public string Category { get; init; } = "";
 
-    [Required] public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
+    [Required] public DimensionsContract Dimensions { get; init; } = new() { Length = "", Width = "", Height = "" };
 }
 
 public class CreateGroomingAndHygieneResponse : CreateProductResponse
