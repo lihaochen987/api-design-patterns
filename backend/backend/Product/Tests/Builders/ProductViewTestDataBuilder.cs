@@ -1,7 +1,7 @@
 using AutoFixture;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
-using backend.Product.ViewModels;
+using backend.Product.DomainModels.Views;
 
 namespace backend.Product.Tests.Builders;
 

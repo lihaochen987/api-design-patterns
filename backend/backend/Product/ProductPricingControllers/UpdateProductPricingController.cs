@@ -1,4 +1,4 @@
-using backend.Product.FieldMasks;
+using backend.Product.InfrastructureLayer;
 using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

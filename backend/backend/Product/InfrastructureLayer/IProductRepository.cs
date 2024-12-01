@@ -1,4 +1,4 @@
-namespace backend.Product.Services;
+namespace backend.Product.InfrastructureLayer;
 
 public interface IProductRepository
 {

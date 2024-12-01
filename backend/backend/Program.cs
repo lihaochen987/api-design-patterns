@@ -1,8 +1,9 @@
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using backend.Database;
-using backend.Product.Database;
-using backend.Product.FieldMasks;
+using backend.Product.ApplicationLayer;
+using backend.Product.InfrastructureLayer;
+using backend.Product.InfrastructureLayer.Database;
 using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
@@ -37,10 +38,13 @@ builder.Services.AddTransient<ProductPricingFieldMaskConfiguration>();
 builder.Services.AddTransient<GetProductPricingExtensions>();
 builder.Services.AddScoped<UpdateProductPricingExtensions>();
 
-// Inject Product services
+// Inject Product Infrastructure
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductViewRepository, ProductViewRepository>();
 builder.Services.AddScoped<IProductPricingRepository, ProductPricingRepository>();
+
+// Inject Product Services
+builder.Services.AddScoped<IProductViewApplicationService, ProductViewApplicationService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

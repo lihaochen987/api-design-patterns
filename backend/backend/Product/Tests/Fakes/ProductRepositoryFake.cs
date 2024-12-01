@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using backend.Product.Services;
+using backend.Product.InfrastructureLayer;
 
 namespace backend.Product.Tests.Fakes;
 

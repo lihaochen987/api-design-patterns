@@ -3,7 +3,7 @@ using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 
-namespace backend.Product.FieldMasks;
+namespace backend.Product.Services;
 
 /// <summary>
 ///     ProductMaskFieldPaths is a class which holds all the manual changes required for this API to work.

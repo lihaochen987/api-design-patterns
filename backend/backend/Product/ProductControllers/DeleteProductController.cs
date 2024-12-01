@@ -1,4 +1,4 @@
-using backend.Product.Services;
+using backend.Product.InfrastructureLayer;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

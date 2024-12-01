@@ -3,8 +3,8 @@ using AutoMapper;
 using backend.Product.Contracts;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
-using backend.Product.FieldMasks;
 using backend.Product.ProductControllers;
+using backend.Product.Services;
 using backend.Product.Tests.Builders;
 using backend.Product.Tests.Fakes;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,10 @@ public class UpdateProductControllerTests
 
     public UpdateProductControllerTests()
     {
-        var mapperConfiguration = new MapperConfiguration(cfg => { cfg.AddProfile<UpdateProductMappingProfile>(); });
+        MapperConfiguration? mapperConfiguration = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<UpdateProductMappingProfile>();
+        });
         _mapper = mapperConfiguration.CreateMapper();
         ProductFieldMaskConfiguration configuration = new();
         _controller = new UpdateProductController(

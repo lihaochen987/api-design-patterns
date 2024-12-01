@@ -2,7 +2,6 @@ using System.Globalization;
 using AutoMapper;
 using backend.Product.Contracts;
 using backend.Product.DomainModels;
-using backend.Product.ViewModels;
 
 namespace backend.Product.ProductControllers;
 

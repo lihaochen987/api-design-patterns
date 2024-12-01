@@ -1,6 +1,6 @@
-using backend.Product.ViewModels;
+using backend.Product.DomainModels.Views;
 
-namespace backend.Product.Services;
+namespace backend.Product.InfrastructureLayer;
 
 public interface IProductPricingRepository
 {

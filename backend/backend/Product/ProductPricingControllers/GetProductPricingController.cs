@@ -1,6 +1,6 @@
-using backend.Product.FieldMasks;
+using backend.Product.DomainModels.Views;
+using backend.Product.InfrastructureLayer;
 using backend.Product.Services;
-using backend.Product.ViewModels;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

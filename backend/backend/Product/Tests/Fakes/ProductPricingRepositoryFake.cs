@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
-using backend.Product.Services;
-using backend.Product.ViewModels;
+using backend.Product.DomainModels.Views;
+using backend.Product.InfrastructureLayer;
 
 namespace backend.Product.Tests.Fakes;
 

@@ -1,7 +1,7 @@
-using backend.Product.Database;
+using backend.Product.InfrastructureLayer.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Product.Services;
+namespace backend.Product.InfrastructureLayer;
 
 public class ProductRepository(ProductDbContext context) : IProductRepository
 {

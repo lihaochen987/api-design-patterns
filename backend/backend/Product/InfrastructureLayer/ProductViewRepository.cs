@@ -1,12 +1,12 @@
 using System.Linq.Expressions;
 using backend.Product.Contracts;
-using backend.Product.Database;
-using backend.Product.ViewModels;
+using backend.Product.DomainModels.Views;
+using backend.Product.InfrastructureLayer.Database;
 using backend.Shared;
 using backend.Shared.CelSpecParser;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Product.Services;
+namespace backend.Product.InfrastructureLayer;
 
 public class ProductViewRepository(ProductDbContext context) : IProductViewRepository
 {

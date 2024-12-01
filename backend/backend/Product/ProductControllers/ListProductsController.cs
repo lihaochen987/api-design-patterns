@@ -1,8 +1,8 @@
 using AutoMapper;
 using backend.Product.Contracts;
 using backend.Product.DomainModels.Enums;
-using backend.Product.Services;
-using backend.Product.ViewModels;
+using backend.Product.DomainModels.Views;
+using backend.Product.InfrastructureLayer;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

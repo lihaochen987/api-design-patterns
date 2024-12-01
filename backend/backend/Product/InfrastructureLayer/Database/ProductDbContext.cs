@@ -1,9 +1,9 @@
 using System.Text.Json;
 using backend.Product.DomainModels;
-using backend.Product.ViewModels;
+using backend.Product.DomainModels.Views;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Product.Database;
+namespace backend.Product.InfrastructureLayer.Database;
 
 public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbContext(options)
 {
