@@ -19,6 +19,8 @@ public class UpdateProductController(
 {
     [HttpPatch("{id:long}")]
     [SwaggerOperation(Summary = "Update a product", Tags = ["Products"])]
+    [ProducesResponseType(typeof(UpdateProductResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UpdateProductResponse>> UpdateProduct(
         [FromRoute] long id,
         [FromBody] UpdateProductRequest request)

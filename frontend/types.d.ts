@@ -40,6 +40,17 @@ export interface paths {
                         "text/json": components["schemas"]["CreateProductResponse"];
                     };
                 };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
             };
         };
         delete?: never;
@@ -75,9 +86,20 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["GetProductResponse"];
-                        "application/json": components["schemas"]["GetProductResponse"];
-                        "text/json": components["schemas"]["GetProductResponse"];
+                        "text/plain": components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"];
+                        "application/json": components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"];
+                        "text/json": components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
@@ -111,6 +133,17 @@ export interface paths {
                         "text/json": components["schemas"]["ReplaceProductResponse"];
                     };
                 };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
             };
         };
         post?: never;
@@ -128,8 +161,8 @@ export interface paths {
             };
             requestBody?: never;
             responses: {
-                /** @description OK */
-                200: {
+                /** @description No Content */
+                204: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -166,6 +199,17 @@ export interface paths {
                         "text/plain": components["schemas"]["UpdateProductResponse"];
                         "application/json": components["schemas"]["UpdateProductResponse"];
                         "text/json": components["schemas"]["UpdateProductResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
                     };
                 };
             };
@@ -272,9 +316,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ListProductsResponse"][];
-                        "application/json": components["schemas"]["ListProductsResponse"][];
-                        "text/json": components["schemas"]["ListProductsResponse"][];
+                        "text/plain": components["schemas"]["ListProductsResponse"];
+                        "application/json": components["schemas"]["ListProductsResponse"];
+                        "text/json": components["schemas"]["ListProductsResponse"];
                     };
                 };
             };
@@ -292,10 +336,10 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         CreateProductRequest: {
-            name?: string | null;
-            pricing?: components["schemas"]["ProductPricingContract"];
-            category?: string | null;
-            dimensions?: components["schemas"]["DimensionsContract"];
+            name: string;
+            pricing: components["schemas"]["ProductPricingContract"];
+            category: string;
+            dimensions: components["schemas"]["DimensionsContract"];
             ageGroup?: string | null;
             breedSize?: string | null;
             ingredients?: string | null;
@@ -311,66 +355,69 @@ export interface components {
             safetyWarnings?: string | null;
         };
         CreateProductResponse: {
-            name?: string | null;
-            pricing?: components["schemas"]["ProductPricingContract"];
-            category?: string | null;
-            dimensions?: components["schemas"]["DimensionsContract"];
-            ageGroup?: string | null;
-            breedSize?: string | null;
-            ingredients?: string | null;
-            nutritionalInfo?: string | null;
-            storageInstructions?: string | null;
-            weightKg?: string | null;
-            isNatural?: boolean | null;
-            isHypoAllergenic?: boolean | null;
-            usageInstructions?: string | null;
-            isCrueltyFree?: boolean | null;
-            safetyWarnings?: string | null;
+            name: string;
+            pricing: components["schemas"]["ProductPricingContract"];
+            category: string;
+            dimensions: components["schemas"]["DimensionsContract"];
         };
         DeleteProductRequest: Record<string, never>;
         DimensionsContract: {
-            length?: string | null;
-            width?: string | null;
-            height?: string | null;
+            length: string;
+            width: string;
+            height: string;
         };
+        GetGroomingAndHygieneResponse: {
+            isNatural: boolean;
+            isHypoAllergenic: boolean;
+            usageInstructions: string;
+            isCrueltyFree: boolean;
+            safetyWarnings: string;
+        } & components["schemas"]["GetProductResponse"];
+        GetPetFoodResponse: {
+            ageGroup: string;
+            breedSize: string;
+            ingredients: string;
+            nutritionalInfo: string;
+            storageInstructions: string;
+            weightKg: string;
+        } & components["schemas"]["GetProductResponse"];
         GetProductPricingResponse: {
-            id?: string | null;
-            basePrice?: string | null;
-            discountPercentage?: string | null;
-            taxRate?: string | null;
+            id: string;
+            basePrice: string;
+            discountPercentage: string;
+            taxRate: string;
         };
         GetProductResponse: {
-            id?: string | null;
-            name?: string | null;
-            price?: string | null;
-            category?: string | null;
-            dimensions?: components["schemas"]["DimensionsContract"];
-            ageGroup?: string | null;
-            breedSize?: string | null;
-            ingredients?: string | null;
-            nutritionalInfo?: string | null;
-            storageInstructions?: string | null;
-            weightKg?: string | null;
-            isNatural?: boolean | null;
-            isHypoAllergenic?: boolean | null;
-            usageInstructions?: string | null;
-            isCrueltyFree?: boolean | null;
-            safetyWarnings?: string | null;
+            id: string;
+            name: string;
+            price: string;
+            category: string;
+            dimensions: components["schemas"]["DimensionsContract"];
         };
         ListProductsResponse: {
-            results?: components["schemas"]["GetProductResponse"][] | null;
-            nextPageToken?: string | null;
+            results: unknown[];
+            nextPageToken: string;
+        };
+        ProblemDetails: {
+            type?: string | null;
+            title?: string | null;
+            /** Format: int32 */
+            status?: number | null;
+            detail?: string | null;
+            instance?: string | null;
+        } & {
+            [key: string]: unknown;
         };
         ProductPricingContract: {
-            basePrice?: string | null;
-            discountPercentage?: string | null;
-            taxRate?: string | null;
+            basePrice: string;
+            discountPercentage: string;
+            taxRate: string;
         };
         ReplaceProductRequest: {
-            name?: string | null;
-            pricing?: components["schemas"]["ProductPricingContract"];
-            category?: string | null;
-            dimensions?: components["schemas"]["DimensionsContract"];
+            name: string;
+            pricing: components["schemas"]["ProductPricingContract"];
+            category: string;
+            dimensions: components["schemas"]["DimensionsContract"];
             ageGroup?: string | null;
             breedSize?: string | null;
             ingredients?: string | null;
@@ -386,21 +433,10 @@ export interface components {
             safetyWarnings?: string | null;
         };
         ReplaceProductResponse: {
-            name?: string | null;
-            pricing?: components["schemas"]["ProductPricingContract"];
-            category?: string | null;
-            dimensions?: components["schemas"]["DimensionsContract"];
-            ageGroup?: string | null;
-            breedSize?: string | null;
-            ingredients?: string | null;
-            nutritionalInfo?: string | null;
-            storageInstructions?: string | null;
-            weightKg?: string | null;
-            isNatural?: boolean | null;
-            isHypoAllergenic?: boolean | null;
-            usageInstructions?: string | null;
-            isCrueltyFree?: boolean | null;
-            safetyWarnings?: string | null;
+            name: string;
+            pricing: components["schemas"]["ProductPricingContract"];
+            category: string;
+            dimensions: components["schemas"]["DimensionsContract"];
         };
         UpdateProductPricingRequest: {
             basePrice?: string | null;
@@ -409,10 +445,10 @@ export interface components {
             fieldMask?: string[] | null;
         };
         UpdateProductPricingResponse: {
-            id?: string | null;
-            basePrice?: string | null;
-            discountPercentage?: string | null;
-            taxRate?: string | null;
+            id: string;
+            basePrice: string;
+            discountPercentage: string;
+            taxRate: string;
         };
         UpdateProductRequest: {
             name?: string | null;
@@ -435,22 +471,11 @@ export interface components {
             fieldMask?: string[] | null;
         };
         UpdateProductResponse: {
-            id?: string | null;
-            name?: string | null;
-            pricing?: components["schemas"]["ProductPricingContract"];
-            category?: string | null;
-            dimensions?: components["schemas"]["DimensionsContract"];
-            ageGroup?: string | null;
-            breedSize?: string | null;
-            ingredients?: string | null;
-            nutritionalInfo?: string | null;
-            storageInstructions?: string | null;
-            weightKg?: string | null;
-            isNatural?: boolean | null;
-            isHypoAllergenic?: boolean | null;
-            usageInstructions?: string | null;
-            isCrueltyFree?: boolean | null;
-            safetyWarnings?: string | null;
+            id: string;
+            name: string;
+            pricing: components["schemas"]["ProductPricingContract"];
+            category: string;
+            dimensions: components["schemas"]["DimensionsContract"];
         };
     };
     responses: never;

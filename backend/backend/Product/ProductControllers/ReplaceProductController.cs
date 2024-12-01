@@ -17,6 +17,8 @@ public class ReplaceProductController(
 {
     [HttpPut("{id:long}")]
     [SwaggerOperation(Summary = "Replace a product", Tags = ["Products"])]
+    [ProducesResponseType(typeof(ReplaceProductResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ReplaceProductResponse>> ReplaceProduct(
         [FromRoute] long id,
         [FromBody] ReplaceProductRequest request)

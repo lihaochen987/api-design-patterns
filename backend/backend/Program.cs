@@ -53,8 +53,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
-    c.UseAllOfToExtendReferenceSchemas();
-    c.CustomSchemaIds(type => type.FullName);
+    c.UseOneOfForPolymorphism();
+    c.SelectSubTypesUsing(baseType =>
+    {
+        if (baseType == typeof(GetProductResponse))
+        {
+            return [typeof(GetPetFoodResponse), typeof(GetGroomingAndHygieneResponse)];
+        }
+
+        return [];
+    });
 });
 
 // Register ApplicationDbContext with PostgreSQL

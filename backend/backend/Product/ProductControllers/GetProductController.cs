@@ -20,6 +20,8 @@ public class GetProductController(
 {
     [HttpGet("{id:long}")]
     [SwaggerOperation(Summary = "Get a product", Tags = ["Products"])]
+    [ProducesResponseType(typeof(GetProductResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GetProductResponse>> GetProduct(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)

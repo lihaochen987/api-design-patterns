@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace backend.Product.Contracts;
 
 public class ProductListResult<T>
 {
-    public List<T> Items { get; init; } = [];
-    public string? NextPageToken { get; init; }
+    [Required] public List<T> Items { get; init; } = [];
+    [Required] public string? NextPageToken { get; init; }
 }

@@ -16,6 +16,8 @@ public class CreateProductController(
 {
     [HttpPost]
     [SwaggerOperation(Summary = "Create a product", Tags = ["Products"])]
+    [ProducesResponseType(typeof(CreateProductResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
         DomainModels.Product product = extensions.ToEntity(request);

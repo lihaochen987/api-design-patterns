@@ -1,8 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using backend.Product.Contracts;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Product.ProductControllers;
 
+[SwaggerDiscriminator("category")]
+[SwaggerSubType(typeof(UpdatePetFoodResponse))]
+[SwaggerSubType(typeof(UpdateGroomingAndHygieneResponse))]
 public class UpdateProductResponse
 {
     [Required] public string Id { get; set; } = "";

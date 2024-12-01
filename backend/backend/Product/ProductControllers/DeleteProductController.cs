@@ -10,6 +10,7 @@ public class DeleteProductController(IProductRepository productRepository) : Con
 {
     [HttpDelete("{id:long}")]
     [SwaggerOperation(Summary = "Delete a product", Tags = ["Products"])]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> DeleteProduct(
         [FromRoute] long id,
         [FromQuery] DeleteProductRequest request)

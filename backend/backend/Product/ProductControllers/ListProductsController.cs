@@ -17,6 +17,7 @@ public class ListProductsController(
 {
     [HttpGet]
     [SwaggerOperation(Summary = "List products", Tags = ["Products"])]
+    [ProducesResponseType(typeof(ListProductsResponse), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
