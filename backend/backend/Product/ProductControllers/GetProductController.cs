@@ -1,3 +1,5 @@
+using AutoMapper;
+using backend.Product.DomainModels.Enums;
 using backend.Product.FieldMasks;
 using backend.Product.Services;
 using backend.Product.ViewModels;
@@ -13,7 +15,7 @@ namespace backend.Product.ProductControllers;
 public class GetProductController(
     IProductViewRepository productViewRepository,
     ProductFieldMaskConfiguration configuration,
-    GetProductExtensions extensions)
+    IMapper mapper)
     : ControllerBase
 {
     [HttpGet("{id:long}")]
@@ -28,7 +30,12 @@ public class GetProductController(
             return NotFound();
         }
 
-        GetProductResponse response = extensions.ToGetProductResponse(product);
+        object response = product.Category switch
+        {
+            Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
+            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
+            _ => mapper.Map<GetProductResponse>(product)
+        };
 
         JsonSerializerSettings settings = new()
         {

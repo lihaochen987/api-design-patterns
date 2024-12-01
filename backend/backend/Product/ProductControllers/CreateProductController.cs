@@ -1,3 +1,4 @@
+using backend.Product.DomainModels.Enums;
 using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -18,7 +19,13 @@ public class CreateProductController(
         DomainModels.Product product = extensions.ToEntity(request);
         await productRepository.CreateProductAsync(product);
 
-        CreateProductResponse response = extensions.ToCreateProductResponse(product);
+        object response = product.Category switch
+        {
+            Category.PetFood => extensions.ToCreatePetFoodResponse(product),
+            Category.GroomingAndHygiene => extensions.ToCreateGroomingAndHygieneResponse(product),
+            _ => extensions.ToCreateProductResponse(product)
+        };
+
         return CreatedAtAction(
             "GetProduct",
             "GetProduct",

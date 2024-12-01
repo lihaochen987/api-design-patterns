@@ -1,11 +1,11 @@
 using System.Globalization;
 using AutoFixture;
+using AutoMapper;
 using backend.Product.FieldMasks;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.Builders;
 using backend.Product.Tests.Fakes;
 using backend.Product.ViewModels;
-using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,18 +17,19 @@ namespace backend.Product.Tests;
 public class GetProductControllerTests
 {
     private readonly GetProductController _controller;
-    private readonly GetProductExtensions _extensions;
+    private readonly IMapper _mapper;
     private readonly Fixture _fixture = new();
     private readonly ProductViewRepositoryFake _productRepository = [];
 
     public GetProductControllerTests()
     {
+        var mapperConfiguration = new MapperConfiguration(cfg => { cfg.AddProfile<GetProductMappingProfile>(); });
+        _mapper = mapperConfiguration.CreateMapper();
         ProductFieldMaskConfiguration configuration = new();
-        _extensions = new GetProductExtensions(new TypeParser());
         _controller = new GetProductController(
             _productRepository,
             configuration,
-            _extensions);
+            _mapper);
     }
 
     [Fact]
@@ -49,7 +50,7 @@ public class GetProductControllerTests
         contentResult.ShouldNotBeNull();
         GetProductResponse? response =
             JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-        response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
+        response.ShouldBeEquivalentTo(_mapper.Map<GetProductResponse>(product));
     }
 
     [Fact]
@@ -70,7 +71,7 @@ public class GetProductControllerTests
         contentResult.ShouldNotBeNull();
         GetProductResponse? response =
             JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-        response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
+        response.ShouldBeEquivalentTo(_mapper.Map<GetProductResponse>(product));
     }
 
     [Fact]
@@ -91,7 +92,7 @@ public class GetProductControllerTests
         contentResult.ShouldNotBeNull();
         GetProductResponse? response =
             JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-        response.ShouldBeEquivalentTo(_extensions.ToGetProductResponse(product));
+        response.ShouldBeEquivalentTo(_mapper.Map<GetProductResponse>(product));
     }
 
     [Fact]

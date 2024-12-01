@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.18.1"/>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="dbup" Version="5.0.41"/>
     <PackageReference Include="dbup-postgresql" Version="5.0.40"/>
     <PackageReference Include="EFCore.NamingConventions" Version="8.0.3"/>
@@ -88,7 +89,7 @@
     <Compile Update="Product\ProductControllers\DeleteProductRequest.cs">
       <DependentUpon>DeleteProductController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\ProductControllers\GetProductExtensions.cs">
+    <Compile Update="Product\ProductControllers\GetProductMappingProfile.cs">
       <DependentUpon>GetProductController.cs</DependentUpon>
     </Compile>
     <Compile Update="Product\ProductControllers\GetProductRequest.cs">

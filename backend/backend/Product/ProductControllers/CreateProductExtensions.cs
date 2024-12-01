@@ -100,69 +100,37 @@ public class CreateProductExtensions(TypeParser typeParser)
                 Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
             }
         };
-
-        if (product is PetFood petFood)
-        {
-            response.AgeGroup = petFood.AgeGroup.ToString();
-            response.BreedSize = petFood.BreedSize.ToString();
-            response.Ingredients = petFood.Ingredients;
-            response.NutritionalInfo =
-                typeParser.ParseDictionaryToString(petFood.NutritionalInfo, "Invalid nutritional info");
-            response.StorageInstructions = petFood.StorageInstructions;
-            response.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
-        }
-
-        if (product is GroomingAndHygiene groomingAndHygiene)
-        {
-            response.IsNatural = groomingAndHygiene.IsNatural;
-            response.IsHypoAllergenic = groomingAndHygiene.IsHypoallergenic;
-            response.UsageInstructions = groomingAndHygiene.UsageInstructions;
-            response.IsCrueltyFree = groomingAndHygiene.IsCrueltyFree;
-            response.SafetyWarnings = groomingAndHygiene.SafetyWarnings;
-        }
-
         return response;
     }
 
-    public CreateProductRequest ToCreateProductRequest(DomainModels.Product product)
+    public CreatePetFoodResponse ToCreatePetFoodResponse(DomainModels.Product product)
     {
-        CreateProductRequest request = new()
+        PetFood petFood = (PetFood)product;
+        return new CreatePetFoodResponse
         {
-            Name = product.Name,
-            Category = product.Category.ToString(),
-            Pricing = new ProductPricingContract
-            {
-                BasePrice = product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-                DiscountPercentage = product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
-                TaxRate = product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
-            },
-            Dimensions = new DimensionsContract
-            {
-                Length = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Width = product.Dimensions.Width.ToString(CultureInfo.InvariantCulture),
-                Height = product.Dimensions.Height.ToString(CultureInfo.InvariantCulture)
-            }
+            GetProductResponse = ToCreateProductResponse(product),
+            AgeGroup = petFood.AgeGroup.ToString(),
+            BreedSize = petFood.BreedSize.ToString(),
+            Ingredients = petFood.Ingredients,
+            NutritionalInfo = petFood.NutritionalInfo is { Count: > 1 }
+                ? typeParser.ParseDictionaryToString(petFood.NutritionalInfo, "Invalid nutritional info")
+                : null,
+            StorageInstructions = petFood.StorageInstructions,
+            WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture)
         };
+    }
 
-        if (product is PetFood petFood)
+    public CreateGroomingAndHygieneResponse ToCreateGroomingAndHygieneResponse(DomainModels.Product product)
+    {
+        GroomingAndHygiene groomingAndHygiene = (GroomingAndHygiene)product;
+        return new CreateGroomingAndHygieneResponse
         {
-            request.AgeGroup = petFood.AgeGroup.ToString();
-            request.BreedSize = petFood.BreedSize.ToString();
-            request.Ingredients = petFood.Ingredients;
-            request.NutritionalInfo = petFood.NutritionalInfo;
-            request.StorageInstructions = petFood.StorageInstructions;
-            request.WeightKg = petFood.WeightKg.ToString(CultureInfo.InvariantCulture);
-        }
-
-        if (product is GroomingAndHygiene groomingAndHygiene)
-        {
-            request.IsNatural = groomingAndHygiene.IsNatural;
-            request.IsHypoAllergenic = groomingAndHygiene.IsHypoallergenic;
-            request.UsageInstructions = groomingAndHygiene.UsageInstructions;
-            request.IsCrueltyFree = groomingAndHygiene.IsCrueltyFree;
-            request.SafetyWarnings = groomingAndHygiene.SafetyWarnings;
-        }
-
-        return request;
+            GetProductResponse = ToCreateProductResponse(product),
+            IsNatural = groomingAndHygiene.IsNatural,
+            IsHypoAllergenic = groomingAndHygiene.IsHypoallergenic,
+            UsageInstructions = groomingAndHygiene.UsageInstructions,
+            IsCrueltyFree = groomingAndHygiene.IsCrueltyFree,
+            SafetyWarnings = groomingAndHygiene.SafetyWarnings
+        };
     }
 }
