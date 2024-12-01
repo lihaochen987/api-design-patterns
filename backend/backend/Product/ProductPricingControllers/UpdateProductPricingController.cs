@@ -30,7 +30,7 @@ public class UpdateProductPricingController(
             configuration.GetUpdatedProductPricingValues(request, productPricing.Pricing);
         productPricing.UpdatePricing(basePrice, discountPercentage, taxRate);
 
-        await productRepository.ReplaceProductAsync(productPricing);
+        await productRepository.UpdateProductAsync(productPricing);
 
         return Ok(extensions.ToUpdateProductPricingResponse(productPricing.Pricing, productPricing.Id));
     }

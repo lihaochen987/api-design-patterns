@@ -20,9 +20,9 @@ public class ProductRepository(ProductDbContext context) : IProductRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task ReplaceProductAsync(DomainModels.Product product)
+    public async Task UpdateProductAsync(DomainModels.Product product)
     {
-        product.Replace(product.Name, product.Pricing, product.Category, product.Dimensions);
+        context.Products.Update(product);
         await context.SaveChangesAsync();
     }
 }

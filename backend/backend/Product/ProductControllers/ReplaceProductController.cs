@@ -1,4 +1,5 @@
 using AutoMapper;
+using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,20 +21,33 @@ public class ReplaceProductController(
         [FromRoute] long id,
         [FromBody] ReplaceProductRequest request)
     {
-        DomainModels.Product product = extensions.ToEntity(request);
-
         DomainModels.Product? existingProduct = await productRepository.GetProductAsync(id);
         if (existingProduct == null)
         {
             return NotFound();
         }
 
-        await productRepository.ReplaceProductAsync(existingProduct);
-        object response = product.Category switch
+        switch (existingProduct)
         {
-            Category.PetFood => mapper.Map<ReplacePetFoodResponse>(product),
-            Category.GroomingAndHygiene => mapper.Map<ReplaceGroomingAndHygieneResponse>(product),
-            _ => mapper.Map<ReplacePetFoodResponse>(product)
+            case PetFood petFood:
+                mapper.Map(request, petFood);
+                break;
+
+            case GroomingAndHygiene groomingAndHygiene:
+                mapper.Map(request, groomingAndHygiene);
+                break;
+
+            default:
+                mapper.Map(request, existingProduct);
+                break;
+        }
+
+        await productRepository.UpdateProductAsync(existingProduct);
+        object response = existingProduct.Category switch
+        {
+            Category.PetFood => mapper.Map<ReplacePetFoodResponse>(existingProduct),
+            Category.GroomingAndHygiene => mapper.Map<ReplaceGroomingAndHygieneResponse>(existingProduct),
+            _ => mapper.Map<ReplaceProductResponse>(existingProduct)
         };
 
         return Ok(response);

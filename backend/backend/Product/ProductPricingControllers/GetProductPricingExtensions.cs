@@ -10,7 +10,7 @@ public class GetProductPricingExtensions
         {
             Id = productId.ToString(),
             BasePrice = pricing.BasePrice.ToString(CultureInfo.InvariantCulture),
-            DiscountPercentage = pricing.DiscountPercentage.ToString(),
-            TaxRate = pricing.TaxRate.ToString()
+            DiscountPercentage = pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture),
+            TaxRate = pricing.TaxRate.ToString(CultureInfo.InvariantCulture)
         };
 }

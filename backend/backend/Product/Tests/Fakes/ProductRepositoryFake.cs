@@ -27,7 +27,7 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
         return Task.CompletedTask;
     }
 
-    public Task ReplaceProductAsync(DomainModels.Product product)
+    public Task UpdateProductAsync(DomainModels.Product product)
     {
         int index = IndexOf(this.FirstOrDefault(p => p.Id == product.Id) ??
                             throw new InvalidOperationException());

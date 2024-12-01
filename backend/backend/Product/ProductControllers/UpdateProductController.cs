@@ -43,7 +43,7 @@ public class UpdateProductController(
 
                 petFood.UpdatePetFoodDetails(ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions,
                     weightKg);
-                await repository.ReplaceProductAsync(product);
+                await repository.UpdateProductAsync(product);
                 return Ok(mapper.Map<UpdatePetFoodResponse>(product));
 
             case GroomingAndHygiene groomingAndHygiene:
@@ -54,11 +54,11 @@ public class UpdateProductController(
                 groomingAndHygiene.UpdateGroomingAndHygieneDetails(isNatural, isHypoAllergenic, usageInstructions,
                     isCrueltyFree,
                     safetyWarnings);
-                await repository.ReplaceProductAsync(product);
+                await repository.UpdateProductAsync(product);
                 return Ok(mapper.Map<UpdateGroomingAndHygieneResponse>(product));
 
             default:
-                await repository.ReplaceProductAsync(product);
+                await repository.UpdateProductAsync(product);
                 return Ok(mapper.Map<UpdateProductResponse>(product));
         }
     }
