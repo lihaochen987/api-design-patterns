@@ -2,36 +2,41 @@ import {useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import axios from 'axios'
-import {components} from "../types";
-
-type getProductResponse = components["schemas"]["GetProductResponse"];
+import {$api} from "./FetchClient.ts";
 
 function App() {
     const [count, setCount] = useState(0)
 
-    axios.get(`http://localhost:8080/Product/${1}`)
-        .then(function (response) {
-            const getProductResponse: getProductResponse = response.data;
-            console.log(getProductResponse);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    const {data, error, isLoading} = $api.useQuery(
+        "get",
+        "/product/{id}",
+        {
+            params: {
+                path: {id: 1},
+            },
+        },
+    );
+
+    if (isLoading || !data) return "Loading...";
+
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    if (error) return `An error occurred: ${error.message}`;
 
     return (
         <>
             <div>
-                <a href="https://vitejs.dev" target="_blank">
+                <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
                     <img src={viteLogo} className="logo" alt="Vite logo"/>
                 </a>
-                <a href="https://react.dev" target="_blank">
+                <a href="https://react.dev" target="_blank" rel="noreferrer">
                     <img src={reactLogo} className="logo react" alt="React logo"/>
                 </a>
             </div>
             <h1>Vite + React</h1>
             <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
+                <button onClick={() => {
+                    setCount((count) => count + 1);
+                }}>
                     count is {count}
                 </button>
                 <p>

@@ -31,9 +31,7 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["CreateProductResponse"];
                         "application/json": components["schemas"]["CreateProductResponse"];
@@ -42,9 +40,7 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -82,9 +78,7 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"];
                         "application/json": components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"];
@@ -93,9 +87,7 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -124,9 +116,7 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["ReplaceProductResponse"];
                         "application/json": components["schemas"]["ReplaceProductResponse"];
@@ -135,9 +125,7 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -163,9 +151,7 @@ export interface paths {
             responses: {
                 /** @description No Content */
                 204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content?: never;
                 };
             };
@@ -192,9 +178,7 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["UpdateProductResponse"];
                         "application/json": components["schemas"]["UpdateProductResponse"];
@@ -203,9 +187,7 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -239,9 +221,7 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["GetProductPricingResponse"];
                         "application/json": components["schemas"]["GetProductPricingResponse"];
@@ -275,9 +255,7 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["UpdateProductPricingResponse"];
                         "application/json": components["schemas"]["UpdateProductPricingResponse"];
@@ -312,9 +290,7 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
+                    headers: Record<string, unknown>;
                     content: {
                         "text/plain": components["schemas"]["ListProductsResponse"];
                         "application/json": components["schemas"]["ListProductsResponse"];
@@ -343,9 +319,7 @@ export interface components {
             ageGroup?: string | null;
             breedSize?: string | null;
             ingredients?: string | null;
-            nutritionalInfo?: {
-                [key: string]: unknown;
-            } | null;
+            nutritionalInfo?: Record<string, unknown> | null;
             storageInstructions?: string | null;
             weightKg?: string | null;
             isNatural?: boolean | null;
@@ -405,9 +379,7 @@ export interface components {
             status?: number | null;
             detail?: string | null;
             instance?: string | null;
-        } & {
-            [key: string]: unknown;
-        };
+        } & Record<string, unknown>;
         ProductPricingContract: {
             basePrice: string;
             discountPercentage: string;
@@ -421,9 +393,7 @@ export interface components {
             ageGroup?: string | null;
             breedSize?: string | null;
             ingredients?: string | null;
-            nutritionalInfo?: {
-                [key: string]: unknown;
-            } | null;
+            nutritionalInfo?: Record<string, unknown> | null;
             storageInstructions?: string | null;
             weightKg?: string | null;
             isNatural?: boolean | null;
@@ -458,9 +428,7 @@ export interface components {
             ageGroup?: string | null;
             breedSize?: string | null;
             ingredients?: string | null;
-            nutritionalInfo?: {
-                [key: string]: unknown;
-            } | null;
+            nutritionalInfo?: Record<string, unknown> | null;
             storageInstructions?: string | null;
             weightKg?: string | null;
             isNatural?: boolean | null;
