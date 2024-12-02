@@ -29,8 +29,7 @@ public class ListProductsController(
             _ => mapper.Map<GetProductResponse>(product)
         }).ToList();
 
-        ListProductsResponse response =
-            new ListProductsResponse { Results = productResponses, NextPageToken = nextPageToken };
+        ListProductsResponse response = new() { Results = productResponses, NextPageToken = nextPageToken };
 
         return Ok(response);
     }

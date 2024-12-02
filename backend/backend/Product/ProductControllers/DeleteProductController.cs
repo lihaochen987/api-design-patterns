@@ -10,8 +10,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class DeleteProductController(
-    IProductApplicationService applicationService,
-    IMapper mapper)
+    IProductApplicationService applicationService)
     : ControllerBase
 {
     [HttpDelete("{id:long}")]
@@ -26,13 +25,6 @@ public class DeleteProductController(
         {
             return NotFound();
         }
-
-        GetProductResponse response = product.Category switch
-        {
-            Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
-            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
-            _ => mapper.Map<GetProductResponse>(product)
-        };
 
         await applicationService.DeleteProductAsync(product);
         return NoContent();

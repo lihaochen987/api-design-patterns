@@ -1,6 +1,7 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer;
 using backend.Product.DomainModels.Enums;
+using backend.Product.DomainModels.Views;
 using backend.Product.Services;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class GetProductController(
     IProductViewApplicationService productViewApplicationService,
-    ProductFieldMaskConfiguration configuration,
+    ProductFieldMaskConfiguration maskConfiguration,
     IMapper mapper)
     : ControllerBase
 {
@@ -25,11 +26,26 @@ public class GetProductController(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)
     {
-        string? json = await productViewApplicationService.GetProductView(id, request);
-        if (json == null)
+        ProductView? productView = await productViewApplicationService.GetProductView(id, request);
+        if (productView == null)
         {
             return NotFound();
         }
+
+        GetProductResponse response = productView.Category switch
+        {
+            Category.PetFood => mapper.Map<GetPetFoodResponse>(productView),
+            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(productView),
+            _ => mapper.Map<GetProductResponse>(productView)
+        };
+        JsonSerializerSettings settings = new()
+        {
+            Converters = new List<JsonConverter>
+            {
+                new FieldMaskConverter(request.FieldMask, maskConfiguration.ProductFieldPaths)
+            }
+        };
+        string json = JsonConvert.SerializeObject(response, settings);
 
         return new OkObjectResult(json) { StatusCode = 200 };
     }
