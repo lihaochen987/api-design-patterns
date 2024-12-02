@@ -21,11 +21,9 @@ public class ProductApplicationService(
         return product ?? null;
     }
 
-    public async Task CreateProductAsync(DomainModels.Product product)
-    {
+    public async Task CreateProductAsync(DomainModels.Product product) =>
         // Apply
         await repository.CreateProductAsync(product);
-    }
 
     public async Task DeleteProductAsync(DomainModels.Product product) =>
         // Apply

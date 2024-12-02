@@ -5,13 +5,13 @@ using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
-using backend.Product.Tests.Builders;
-using backend.Product.Tests.Fakes;
+using backend.Product.Tests.Helpers.Builders;
+using backend.Product.Tests.Helpers.Fakes;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
 
-namespace backend.Product.Tests;
+namespace backend.Product.Tests.Controllers;
 
 public class UpdateProductControllerTests
 {

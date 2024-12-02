@@ -13,7 +13,7 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class UpdateProductController(
     IProductRepository repository,
-    ProductFieldMaskConfiguration configuration,
+    ProductFieldMaskConfiguration maskConfiguration,
     IMapper mapper)
     : ControllerBase
 {
@@ -32,30 +32,17 @@ public class UpdateProductController(
             return NotFound();
         }
 
-        (string name, Pricing pricing, Category category, Dimensions dimensions) =
-            configuration.GetUpdatedProductValues(request, product);
-        product.Replace(name, pricing, category, dimensions);
+        UpdateBaseProduct(maskConfiguration, request, product);
 
         switch (product)
         {
             case PetFood petFood:
-                (AgeGroup ageGroup, BreedSize breedSize, string ingredients, Dictionary<string, object> nutritionalInfo,
-                        string storageInstructions, decimal weightKg) =
-                    configuration.GetUpdatedPetFoodValues(request, petFood);
-
-                petFood.UpdatePetFoodDetails(ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions,
-                    weightKg);
+                UpdatePetFood(maskConfiguration, request, petFood);
                 await repository.UpdateProductAsync(product);
                 return Ok(mapper.Map<UpdatePetFoodResponse>(product));
 
             case GroomingAndHygiene groomingAndHygiene:
-                (bool isNatural, bool isHypoAllergenic, string usageInstructions, bool isCrueltyFree,
-                        string safetyWarnings) =
-                    configuration.GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
-
-                groomingAndHygiene.UpdateGroomingAndHygieneDetails(isNatural, isHypoAllergenic, usageInstructions,
-                    isCrueltyFree,
-                    safetyWarnings);
+                UpdateGroomingAndHygiene(maskConfiguration, request, groomingAndHygiene);
                 await repository.UpdateProductAsync(product);
                 return Ok(mapper.Map<UpdateGroomingAndHygieneResponse>(product));
 
@@ -63,5 +50,42 @@ public class UpdateProductController(
                 await repository.UpdateProductAsync(product);
                 return Ok(mapper.Map<UpdateProductResponse>(product));
         }
+    }
+
+    private static void UpdateBaseProduct(
+        ProductFieldMaskConfiguration maskConfiguration,
+        UpdateProductRequest request,
+        DomainModels.Product product)
+    {
+        (string name, Pricing pricing, Category category, Dimensions dimensions) =
+            maskConfiguration.GetUpdatedProductValues(request, product);
+        product.Replace(name, pricing, category, dimensions);
+    }
+
+    private static void UpdatePetFood(
+        ProductFieldMaskConfiguration maskConfiguration,
+        UpdateProductRequest request,
+        PetFood petFood)
+    {
+        (AgeGroup ageGroup, BreedSize breedSize, string ingredients, Dictionary<string, object> nutritionalInfo,
+                string storageInstructions, decimal weightKg) =
+            maskConfiguration.GetUpdatedPetFoodValues(request, petFood);
+
+        petFood.UpdatePetFoodDetails(ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions,
+            weightKg);
+    }
+
+    private static void UpdateGroomingAndHygiene(
+        ProductFieldMaskConfiguration maskConfiguration,
+        UpdateProductRequest request,
+        GroomingAndHygiene groomingAndHygiene)
+    {
+        (bool isNatural, bool isHypoAllergenic, string usageInstructions, bool isCrueltyFree,
+                string safetyWarnings) =
+            maskConfiguration.GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
+
+        groomingAndHygiene.UpdateGroomingAndHygieneDetails(isNatural, isHypoAllergenic, usageInstructions,
+            isCrueltyFree,
+            safetyWarnings);
     }
 }

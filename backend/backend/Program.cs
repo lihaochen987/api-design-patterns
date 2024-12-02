@@ -31,7 +31,6 @@ builder.Services.AddTransient<ProductFieldMaskConfiguration>();
 builder.Services.AddScoped<CreateProductExtensions>();
 builder.Services.AddAutoMapper(typeof(CreateProductMappingProfile));
 builder.Services.AddAutoMapper(typeof(GetProductMappingProfile));
-builder.Services.AddScoped<ReplaceProductExtensions>();
 builder.Services.AddAutoMapper(typeof(UpdateProductMappingProfile));
 
 builder.Services.AddTransient<ProductPricingFieldMaskConfiguration>();

@@ -2,14 +2,14 @@ using AutoFixture;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
-using backend.Product.Tests.Builders;
-using backend.Product.Tests.Fakes;
+using backend.Product.Tests.Helpers.Builders;
+using backend.Product.Tests.Helpers.Fakes;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 
-namespace backend.Product.Tests;
+namespace backend.Product.Tests.Controllers;
 
 public class GetProductPricingControllerTests
 {
