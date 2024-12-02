@@ -1,3 +1,4 @@
+using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
 
 namespace backend.Product.ApplicationLayer;
@@ -5,5 +6,5 @@ namespace backend.Product.ApplicationLayer;
 public interface IProductViewApplicationService
 {
     Task<string?> GetProductView(long id, GetProductRequest request);
-    Task<ListProductsResponse> ListProductsAsync(ListProductsRequest request);
+    Task<(List<ProductView>, string?)> ListProductsAsync(ListProductsRequest request);
 }

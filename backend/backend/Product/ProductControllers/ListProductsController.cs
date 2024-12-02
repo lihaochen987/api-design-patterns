@@ -1,4 +1,7 @@
+using AutoMapper;
 using backend.Product.ApplicationLayer;
+using backend.Product.DomainModels.Enums;
+using backend.Product.DomainModels.Views;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -7,7 +10,8 @@ namespace backend.Product.ProductControllers;
 [Route("products")]
 [ApiController]
 public class ListProductsController(
-    IProductViewApplicationService applicationService)
+    IProductViewApplicationService applicationService,
+    IMapper mapper)
     : ControllerBase
 {
     [HttpGet]
@@ -16,7 +20,18 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        var products = await applicationService.ListProductsAsync(request);
-        return Ok(products);
+        (List<ProductView> products, string? nextPageToken) = await applicationService.ListProductsAsync(request);
+
+        IEnumerable<GetProductResponse> productResponses = products.Select(product => product.Category switch
+        {
+            Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
+            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
+            _ => mapper.Map<GetProductResponse>(product)
+        }).ToList();
+
+        ListProductsResponse response =
+            new ListProductsResponse { Results = productResponses, NextPageToken = nextPageToken };
+
+        return Ok(response);
     }
 }

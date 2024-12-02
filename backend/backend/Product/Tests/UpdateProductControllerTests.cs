@@ -21,10 +21,7 @@ public class UpdateProductControllerTests
 
     public UpdateProductControllerTests()
     {
-        MapperConfiguration? mapperConfiguration = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<UpdateProductMappingProfile>();
-        });
+        MapperConfiguration? mapperConfiguration = new(cfg => { cfg.AddProfile<UpdateProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
         ProductFieldMaskConfiguration configuration = new();
         _controller = new UpdateProductController(

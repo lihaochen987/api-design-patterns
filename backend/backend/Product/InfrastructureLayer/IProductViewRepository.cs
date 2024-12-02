@@ -6,5 +6,5 @@ namespace backend.Product.InfrastructureLayer;
 public interface IProductViewRepository
 {
     Task<ProductView?> GetProductView(long id);
-    Task<ProductListResult<ProductView>> ListProductsAsync(string? pageToken, string? filter, int maxPageSize);
+    Task<(List<ProductView>, string?)> ListProductsAsync(string? pageToken, string? filter, int maxPageSize);
 }

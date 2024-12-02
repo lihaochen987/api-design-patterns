@@ -14,14 +14,8 @@ public class ProductRepository(ProductDbContext context) : IProductRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task DeleteProductAsync(long id)
+    public async Task DeleteProductAsync(DomainModels.Product product)
     {
-        var product = await context.Products.FindAsync(id);
-        if (product == null)
-        {
-            throw new KeyNotFoundException($"Product with ID {id} not found.");
-        }
-
         context.Products.Remove(product);
         await context.SaveChangesAsync();
     }

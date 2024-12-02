@@ -14,7 +14,7 @@ public class ProductViewRepository(ProductDbContext context) : IProductViewRepos
         await context.Set<ProductView>()
             .FirstOrDefaultAsync(p => p.Id == id);
 
-    public async Task<ProductListResult<ProductView>> ListProductsAsync(
+    public async Task<(List<ProductView>, string?)> ListProductsAsync(
         string? pageToken,
         string? filter,
         int maxPageSize)
@@ -39,7 +39,7 @@ public class ProductViewRepository(ProductDbContext context) : IProductViewRepos
 
         List<ProductView> paginatedProducts = PaginateProducts(products, maxPageSize, out string? nextPageToken);
 
-        return new ProductListResult<ProductView> { Items = paginatedProducts, NextPageToken = nextPageToken };
+        return (paginatedProducts, nextPageToken);
     }
 
     private static Expression<Func<ProductView, bool>> BuildFilterExpression(string filter)

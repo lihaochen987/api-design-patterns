@@ -48,25 +48,15 @@ public class ProductViewApplicationService(
         return json;
     }
 
-    public async Task<ListProductsResponse> ListProductsAsync(ListProductsRequest request)
+    public async Task<(List<ProductView>, string?)> ListProductsAsync(ListProductsRequest request)
     {
         // Prepare
-        ProductListResult<ProductView> products = await repository.ListProductsAsync(
+        (List<ProductView> products, string? nextPageToken) = await repository.ListProductsAsync(
             request.PageToken,
             request.Filter,
             request.MaxPageSize);
 
-        // Execute
-        IEnumerable<GetProductResponse> productResponses = products.Items.Select(product => product.Category switch
-        {
-            Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
-            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
-            _ => mapper.Map<GetProductResponse>(product)
-        }).ToList();
-
-        ListProductsResponse response = new() { Results = productResponses, NextPageToken = products.NextPageToken };
-
         // Apply
-        return response;
+        return (products, nextPageToken);
     }
 }

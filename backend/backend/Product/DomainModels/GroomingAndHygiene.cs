@@ -6,7 +6,9 @@ namespace backend.Product.DomainModels;
 
 public class GroomingAndHygiene : Product
 {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private GroomingAndHygiene()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
     }
 

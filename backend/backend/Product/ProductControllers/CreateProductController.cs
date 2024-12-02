@@ -21,7 +21,7 @@ public class CreateProductController(
         DomainModels.Product product = extensions.ToEntity(request);
 
         long productId = await applicationService.CreateProductAsync(product);
-        var response = applicationService.GetProductAsync(productId);
+        Task<DomainModels.Product>? response = applicationService.GetProductAsync(productId);
 
         return CreatedAtAction(
             "GetProduct",

@@ -6,10 +6,10 @@ namespace backend.Product.DomainModels.Views;
 public class ProductView
 {
     public long Id { get; init; }
-    public string Name { get; init; }
+    public required string Name { get; init; }
     public decimal Price { get; init; }
     public Category Category { get; init; }
-    public Dimensions Dimensions { get; init; }
+    public required Dimensions Dimensions { get; init; }
     public AgeGroup? AgeGroup { get; init; }
     public BreedSize? BreedSize { get; init; }
     public string? Ingredients { get; init; }

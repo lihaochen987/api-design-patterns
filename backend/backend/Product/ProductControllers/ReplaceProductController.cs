@@ -11,7 +11,6 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class ReplaceProductController(
     IProductRepository productRepository,
-    ReplaceProductExtensions extensions,
     IMapper mapper)
     : ControllerBase
 {

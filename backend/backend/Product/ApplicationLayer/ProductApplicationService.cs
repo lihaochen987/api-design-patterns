@@ -9,31 +9,16 @@ using backend.Product.ProductControllers;
 namespace backend.Product.ApplicationLayer;
 
 public class ProductApplicationService(
-    IProductRepository repository,
-    IMapper mapper)
+    IProductRepository repository)
     : IProductApplicationService
 {
-    public async Task<GetProductResponse?> GetProductAsync(long id)
+    public async Task<DomainModels.Product?> GetProductAsync(long id)
     {
         // Prepare
-        var product = await repository.GetProductAsync(id);
-
-        // Todo find better way to return this.
-        if (product == null)
-        {
-            return null;
-        }
-
-        // Execute
-        GetProductResponse response = product.Category switch
-        {
-            Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
-            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
-            _ => mapper.Map<GetProductResponse>(product)
-        };
+        DomainModels.Product? product = await repository.GetProductAsync(id);
 
         // Apply
-        return response;
+        return product ?? null;
     }
 
     public async Task<long> CreateProductAsync(DomainModels.Product product)
@@ -43,9 +28,7 @@ public class ProductApplicationService(
         return product.Id;
     }
 
-    public async Task DeleteProductAsync(long id)
-    {
+    public async Task DeleteProductAsync(DomainModels.Product product) =>
         // Apply
-        await repository.DeleteProductAsync(id);
-    }
+        await repository.DeleteProductAsync(product);
 }
