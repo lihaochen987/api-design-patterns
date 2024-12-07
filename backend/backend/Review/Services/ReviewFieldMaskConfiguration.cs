@@ -9,7 +9,7 @@ public class ReviewFieldMaskConfiguration
     [
         "*",
         "id",
-        "productId",
+        "productid",
         "rating",
         "text",
         "createdat",

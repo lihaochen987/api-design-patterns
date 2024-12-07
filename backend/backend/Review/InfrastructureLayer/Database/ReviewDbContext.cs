@@ -15,13 +15,8 @@ public class ReviewDbContext(DbContextOptions<ReviewDbContext> options) : DbCont
             entity.ToView("reviews_view");
 
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.ProductId)
-                .HasColumnName("product_id");
-            entity.HasOne<DomainModels.Review>()
-                .WithMany()
-                .HasForeignKey(e => e.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
             entity.Property(e => e.Id).HasColumnName("review_id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.Rating).HasColumnName("review_rating");
             entity.Property(e => e.Text).HasColumnName("review_text");
             entity.Property(e => e.CreatedAt).HasColumnName("review_created_at");
@@ -33,13 +28,12 @@ public class ReviewDbContext(DbContextOptions<ReviewDbContext> options) : DbCont
             entity.ToTable("reviews");
 
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.ProductId)
-                .HasColumnName("product_id");
+            entity.Property(e => e.Id).HasColumnName("review_id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.HasOne<DomainModels.Review>()
                 .WithMany()
                 .HasForeignKey(e => e.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
-            entity.Property(e => e.Id).HasColumnName("review_id");
             entity.Property(e => e.Rating).HasColumnName("review_rating");
             entity.Property(e => e.Text).HasColumnName("review_text");
             entity.Property(e => e.CreatedAt).HasColumnName("review_created_at");
