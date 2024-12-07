@@ -1,4 +1,3 @@
-using backend.Product.Contracts;
 using backend.Product.DomainModels.Views;
 
 namespace backend.Product.InfrastructureLayer;

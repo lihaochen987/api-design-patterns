@@ -10,6 +10,7 @@ using backend.Review.ApplicationLayer;
 using backend.Review.InfrastructureLayer;
 using backend.Review.InfrastructureLayer.Database;
 using backend.Review.ReviewControllers;
+using backend.Review.Services;
 using backend.Shared;
 using DbUp;
 using DbUp.Engine;
@@ -51,15 +52,19 @@ builder.Services.AddScoped<IProductApplicationService, ProductApplicationService
 builder.Services.AddScoped<IProductViewApplicationService, ProductViewApplicationService>();
 
 // Inject Review classes
+builder.Services.AddTransient<ReviewFieldMaskConfiguration>();
 builder.Services.AddScoped<CreateReviewExtensions>();
+builder.Services.AddAutoMapper(typeof(GetReviewMappingProfile));
 builder.Services.AddAutoMapper(typeof(CreateReviewMappingProfile));
 builder.Services.AddAutoMapper(typeof(ReplaceReviewMappingProfile));
 
 // Inject Review Infrastructure
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IReviewViewRepository, ReviewViewRepository>();
 
 // Inject Review Services
 builder.Services.AddScoped<IReviewApplicationService, ReviewApplicationService>();
+builder.Services.AddScoped<IReviewViewApplicationService, ReviewViewApplicationService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

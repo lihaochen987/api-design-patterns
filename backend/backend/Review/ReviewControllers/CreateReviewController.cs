@@ -26,6 +26,10 @@ public class CreateReviewController(
         await applicationService.CreateReviewAsync(review);
 
         var response = mapper.Map<CreateReviewResponse>(review);
-        return CreatedAtAction(nameof(CreateReview), new { id = review.Id }, response);
+        return CreatedAtAction(
+            "GetReview",
+            "GetReview",
+            new { id = review.Id },
+            response);
     }
 }

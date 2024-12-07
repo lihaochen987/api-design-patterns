@@ -26,7 +26,7 @@ public class GetProductController(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)
     {
-        ProductView? productView = await productViewApplicationService.GetProductView(id, request);
+        ProductView? productView = await productViewApplicationService.GetProductView(id);
         if (productView == null)
         {
             return NotFound();

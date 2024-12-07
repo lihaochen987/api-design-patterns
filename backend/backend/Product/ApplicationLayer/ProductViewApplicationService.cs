@@ -8,7 +8,7 @@ public class ProductViewApplicationService(
     IProductViewRepository repository)
     : IProductViewApplicationService
 {
-    public async Task<ProductView?> GetProductView(long id, GetProductRequest request)
+    public async Task<ProductView?> GetProductView(long id)
     {
         // Prepare
         ProductView? product = await repository.GetProductView(id);

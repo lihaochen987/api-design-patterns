@@ -22,7 +22,7 @@ public class GetProductControllerTests
 
     public GetProductControllerTests()
     {
-        MapperConfiguration? mapperConfiguration = new(cfg => { cfg.AddProfile<GetProductMappingProfile>(); });
+        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<GetProductMappingProfile>(); });
         IMapper mapper = mapperConfiguration.CreateMapper();
         ProductFieldMaskConfiguration configuration = new();
         _controller = new GetProductController(
@@ -41,19 +41,19 @@ public class GetProductControllerTests
             .Create();
         Mock
             .Get(_mockApplicationService)
-            .Setup(service => service.GetProductView(productView.Id, request))
+            .Setup(service => service.GetProductView(productView.Id))
             .ReturnsAsync(productView);
 
-        ActionResult<GetProductResponse>? result = await _controller.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse> result = await _controller.GetProduct(productView.Id, request);
 
-        OkObjectResult? okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
         string jsonResult = (okResult.Value as string)!;
         jsonResult.ShouldContain("Dog Food");
         Mock
             .Get(_mockApplicationService)
-            .Verify(service => service.GetProductView(productView.Id, request), Times.Once);
+            .Verify(service => service.GetProductView(productView.Id), Times.Once);
     }
 
     [Fact]
@@ -63,15 +63,15 @@ public class GetProductControllerTests
         GetProductRequest request = _fixture.Create<GetProductRequest>();
         Mock
             .Get(_mockApplicationService)
-            .Setup(service => service.GetProductView(productView.Id, request))
+            .Setup(service => service.GetProductView(productView.Id))
             .ReturnsAsync((ProductView?)null);
 
-        ActionResult<GetProductResponse>? result = await _controller.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse> result = await _controller.GetProduct(productView.Id, request);
 
         result.Result.ShouldBeOfType<NotFoundResult>();
         Mock
             .Get(_mockApplicationService)
-            .Verify(service => service.GetProductView(productView.Id, request), Times.Once);
+            .Verify(service => service.GetProductView(productView.Id), Times.Once);
     }
 
 
@@ -86,19 +86,19 @@ public class GetProductControllerTests
             .Create();
         Mock
             .Get(_mockApplicationService)
-            .Setup(service => service.GetProductView(productView.Id, request))
+            .Setup(service => service.GetProductView(productView.Id))
             .ReturnsAsync(productView);
 
-        ActionResult<GetProductResponse>? result = await _controller.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse> result = await _controller.GetProduct(productView.Id, request);
 
-        OkObjectResult? okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
         string jsonResult = (okResult.Value as string)!;
         jsonResult.ShouldContain("Shampoo");
         Mock
             .Get(_mockApplicationService)
-            .Verify(service => service.GetProductView(productView.Id, request), Times.Once);
+            .Verify(service => service.GetProductView(productView.Id), Times.Once);
     }
 
     [Fact]
@@ -109,20 +109,20 @@ public class GetProductControllerTests
         GetProductRequest request = _fixture.Create<GetProductRequest>();
         Mock
             .Get(_mockApplicationService)
-            .Setup(service => service.GetProductView(productView.Id, request))
+            .Setup(service => service.GetProductView(productView.Id))
             .ReturnsAsync(productView);
 
-        ActionResult<GetProductResponse>? result = await _controller.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse> result = await _controller.GetProduct(productView.Id, request);
 
         // Assert
-        OkObjectResult? okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
         string jsonResult = (okResult.Value as string)!;
         jsonResult.ShouldContain("Other Product");
         Mock
             .Get(_mockApplicationService)
-            .Verify(service => service.GetProductView(productView.Id, request), Times.Once);
+            .Verify(service => service.GetProductView(productView.Id), Times.Once);
     }
 
 
@@ -135,12 +135,12 @@ public class GetProductControllerTests
             .Create();
         Mock
             .Get(_mockApplicationService)
-            .Setup(service => service.GetProductView(productView.Id, request))
+            .Setup(service => service.GetProductView(productView.Id))
             .ReturnsAsync(productView);
 
-        ActionResult<GetProductResponse>? result = await _controller.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse> result = await _controller.GetProduct(productView.Id, request);
 
-        OkObjectResult? okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
         string jsonResult = (okResult.Value as string)!;
@@ -148,6 +148,6 @@ public class GetProductControllerTests
         jsonResult.ShouldNotContain("Price");
         Mock
             .Get(_mockApplicationService)
-            .Verify(service => service.GetProductView(productView.Id, request), Times.Once);
+            .Verify(service => service.GetProductView(productView.Id), Times.Once);
     }
 }

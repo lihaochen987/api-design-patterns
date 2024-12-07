@@ -5,6 +5,6 @@ namespace backend.Product.ApplicationLayer;
 
 public interface IProductViewApplicationService
 {
-    Task<ProductView?> GetProductView(long id, GetProductRequest request);
+    Task<ProductView?> GetProductView(long id);
     Task<(List<ProductView>, string?)> ListProductsAsync(ListProductsRequest request);
 }
