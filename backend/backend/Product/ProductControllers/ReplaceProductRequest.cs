@@ -5,14 +5,12 @@ namespace backend.Product.ProductControllers;
 
 public class ReplaceProductRequest
 {
-    [Required] public string Name { get; set; } = "";
+    [Required] public required string Name { get; set; }
 
-    [Required]
-    public ProductPricingContract Pricing { get; set; } =
-        new() { BasePrice = "", DiscountPercentage = "", TaxRate = "" };
+    [Required] public required ProductPricingContract Pricing { get; set; }
 
-    [Required] public string Category { get; set; } = "";
-    [Required] public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
+    [Required] public required string Category { get; set; }
+    [Required] public required DimensionsContract Dimensions { get; set; }
 
     public string? AgeGroup { get; set; }
     public string? BreedSize { get; set; }

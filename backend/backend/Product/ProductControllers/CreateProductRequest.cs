@@ -5,15 +5,13 @@ namespace backend.Product.ProductControllers;
 
 public class CreateProductRequest
 {
-    [Required] public string Name { get; set; } = "";
+    [Required] public required string Name { get; init; }
 
-    [Required]
-    public ProductPricingContract Pricing { get; set; } =
-        new() { BasePrice = "", DiscountPercentage = "", TaxRate = "" };
+    [Required] public required ProductPricingContract Pricing { get; init; }
 
-    [Required] public string Category { get; set; } = "";
+    [Required] public required string Category { get; init; }
 
-    [Required] public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
+    [Required] public required DimensionsContract Dimensions { get; init; }
     public string? AgeGroup { get; set; }
     public string? BreedSize { get; set; }
     public string? Ingredients { get; set; }
