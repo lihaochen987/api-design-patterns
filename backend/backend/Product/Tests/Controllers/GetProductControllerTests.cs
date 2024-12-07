@@ -1,199 +1,153 @@
-// using System.Globalization;
-// using AutoFixture;
-// using AutoMapper;
-// using backend.Product.FieldMasks;
-// using backend.Product.ProductControllers;
-// using backend.Product.Tests.Builders;
-// using backend.Product.Tests.Fakes;
-// using backend.Product.ViewModels;
-// using Microsoft.AspNetCore.Mvc;
-// using Newtonsoft.Json;
-// using Newtonsoft.Json.Linq;
-// using Shouldly;
-// using Xunit;
-//
-// namespace backend.Product.Tests;
-//
-// public class GetProductControllerTests
-// {
-//     private readonly GetProductController _controller;
-//     private readonly IMapper _mapper;
-//     private readonly Fixture _fixture = new();
-//     private readonly ProductViewRepositoryFake _productRepository = [];
-//
-//     public GetProductControllerTests()
-//     {
-//         var mapperConfiguration = new MapperConfiguration(cfg => { cfg.AddProfile<GetProductMappingProfile>(); });
-//         _mapper = mapperConfiguration.CreateMapper();
-//         ProductFieldMaskConfiguration configuration = new();
-//         _controller = new GetProductController(
-//             _productRepository,
-//             configuration,
-//             _mapper);
-//     }
-//
-//     [Fact]
-//     public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsWildcard()
-//     {
-//         ProductView product = new ProductViewTestDataBuilder().Build();
-//         _productRepository.Add(product);
-//
-//         GetProductRequest? request = _fixture.Build<GetProductRequest>()
-//             .With(r => r.FieldMask, ["*"])
-//             .Create();
-//
-//         ActionResult<GetProductResponse> actionResult = await _controller.GetProduct(product.Id, request);
-//
-//         actionResult.Result.ShouldNotBeNull();
-//         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-//         OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
-//         contentResult.ShouldNotBeNull();
-//         GetProductResponse? response =
-//             JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-//         response.ShouldBeEquivalentTo(_mapper.Map<GetProductResponse>(product));
-//     }
-//
-//     [Fact]
-//     public async Task GetProduct_ReturnsFullProduct_WhenFieldMaskIsEmpty()
-//     {
-//         ProductView product = new ProductViewTestDataBuilder().Build();
-//         _productRepository.Add(product);
-//
-//         GetProductRequest? request = _fixture.Build<GetProductRequest>()
-//             .With(r => r.FieldMask, [])
-//             .Create();
-//
-//         ActionResult<GetProductResponse> actionResult = await _controller.GetProduct(product.Id, request);
-//
-//         actionResult.Result.ShouldNotBeNull();
-//         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-//         OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
-//         contentResult.ShouldNotBeNull();
-//         GetProductResponse? response =
-//             JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-//         response.ShouldBeEquivalentTo(_mapper.Map<GetProductResponse>(product));
-//     }
-//
-//     [Fact]
-//     public async Task GetProduct_DefaultsToWildCard_WhenOnlyFieldMaskIsNotMatched()
-//     {
-//         ProductView product = new ProductViewTestDataBuilder().Build();
-//         _productRepository.Add(product);
-//
-//         GetProductRequest? request = _fixture.Build<GetProductRequest>()
-//             .With(r => r.FieldMask, ["UnmatchedField"])
-//             .Create();
-//
-//         ActionResult<GetProductResponse> actionResult = await _controller.GetProduct(product.Id, request);
-//
-//         actionResult.Result.ShouldNotBeNull();
-//         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-//         OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
-//         contentResult.ShouldNotBeNull();
-//         GetProductResponse? response =
-//             JsonConvert.DeserializeObject<GetProductResponse>(contentResult.Value!.ToString()!);
-//         response.ShouldBeEquivalentTo(_mapper.Map<GetProductResponse>(product));
-//     }
-//
-//     [Fact]
-//     public async Task GetProduct_ReturnsValidMasks_WhenInvalidMasksArePassed()
-//     {
-//         ProductView product = new ProductViewTestDataBuilder().Build();
-//         _productRepository.Add(product);
-//
-//         GetProductRequest? request = _fixture.Build<GetProductRequest>()
-//             .With(r => r.FieldMask, ["UnmatchedField", "Price", "Name"])
-//             .Create();
-//
-//         ActionResult<GetProductResponse> actionResult = await _controller.GetProduct(product.Id, request);
-//
-//         actionResult.Result.ShouldNotBeNull();
-//         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-//         OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
-//         contentResult.ShouldNotBeNull();
-//         Dictionary<string, object>? response =
-//             JsonConvert.DeserializeObject<Dictionary<string, object>>(contentResult.Value!.ToString()!);
-//         response!.Count.ShouldBeEquivalentTo(2);
-//         response.ShouldContainKeyAndValue("Name", product.Name);
-//         response.ShouldContainKeyAndValue("Price", product.Price.ToString(CultureInfo.InvariantCulture));
-//     }
-//
-//     [Fact]
-//     public async Task GetProduct_ReturnsPartialProduct_WhenFieldMaskIsSpecified()
-//     {
-//         ProductView product = new ProductViewTestDataBuilder().Build();
-//         _productRepository.Add(product);
-//
-//         GetProductRequest? request = _fixture.Build<GetProductRequest>()
-//             .With(r => r.FieldMask, ["name"])
-//             .Create();
-//
-//         ActionResult<GetProductResponse> actionResult = await _controller.GetProduct(product.Id, request);
-//
-//         actionResult.Result.ShouldNotBeNull();
-//         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-//         OkObjectResult? result = actionResult.Result as OkObjectResult;
-//         Dictionary<string, object>? response =
-//             JsonConvert.DeserializeObject<Dictionary<string, object>>(result!.Value!.ToString()!);
-//         response!.ShouldContainKey("Name");
-//         response!.Count.ShouldBeEquivalentTo(1);
-//     }
-//
-//     [Fact]
-//     public async Task GetProduct_ReturnsPartialProduct_WhenNestedFieldMaskIsSpecified()
-//     {
-//         ProductView product = new ProductViewTestDataBuilder().Build();
-//         _productRepository.Add(product);
-//
-//         GetProductRequest? request = _fixture.Build<GetProductRequest>()
-//             .With(r => r.FieldMask, ["dimensions.width"])
-//             .Create();
-//
-//         ActionResult<GetProductResponse> actionResult = await _controller.GetProduct(product.Id, request);
-//
-//         actionResult.Result.ShouldNotBeNull();
-//         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-//         OkObjectResult? result = actionResult.Result as OkObjectResult;
-//         Dictionary<string, object>? response =
-//             JsonConvert.DeserializeObject<Dictionary<string, object>>(result!.Value!.ToString()!);
-//         response!.ShouldContainKey("Dimensions");
-//         JObject? dimensions = response!["Dimensions"] as JObject;
-//         dimensions!.ShouldContainKey("Width");
-//         dimensions!.Count.ShouldBeEquivalentTo(1);
-//     }
-//
-//     [Fact]
-//     public async Task GetProduct_ReturnsAllFields_WhenPartialRequestIsMade()
-//     {
-//         ProductView product = new ProductViewTestDataBuilder().Build();
-//         _productRepository.Add(product);
-//
-//         GetProductRequest? request = _fixture.Build<GetProductRequest>()
-//             .With(r => r.FieldMask, ["dimensions.*"])
-//             .Create();
-//
-//         ActionResult<GetProductResponse> actionResult = await _controller.GetProduct(product.Id, request);
-//
-//         actionResult.Result.ShouldNotBeNull();
-//         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-//         OkObjectResult? result = actionResult.Result as OkObjectResult;
-//         Dictionary<string, object>? response =
-//             JsonConvert.DeserializeObject<Dictionary<string, object>>(result!.Value!.ToString()!);
-//         response!.ShouldContainKey("Dimensions");
-//         JObject? dimensions = response!["Dimensions"] as JObject;
-//         dimensions!.Count.ShouldBeEquivalentTo(3);
-//     }
-//
-//     [Fact]
-//     public async Task GetProduct_ReturnsNotFound_WhenProductDoesNotExist()
-//     {
-//         GetProductRequest? request = _fixture.Create<GetProductRequest>();
-//
-//         ActionResult<GetProductResponse> result = await _controller.GetProduct(999, request);
-//
-//         result.Result.ShouldBeOfType<NotFoundResult>();
-//     }
-// }
+using System.Net;
+using AutoFixture;
+using AutoMapper;
+using backend.Product.ApplicationLayer;
+using backend.Product.DomainModels.Enums;
+using backend.Product.DomainModels.Views;
+using backend.Product.ProductControllers;
+using backend.Product.Services;
+using backend.Product.Tests.Helpers.Builders;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Shouldly;
+using Xunit;
+
+namespace backend.Product.Tests.Controllers;
+
+public class GetProductControllerTests
+{
+    private readonly GetProductController _controller;
+    private readonly Fixture _fixture = new();
+    private readonly IProductViewApplicationService _mockApplicationService = Mock.Of<IProductViewApplicationService>();
+
+    public GetProductControllerTests()
+    {
+        var mapperConfiguration = new MapperConfiguration(cfg => { cfg.AddProfile<GetProductMappingProfile>(); });
+        IMapper mapper = mapperConfiguration.CreateMapper();
+        ProductFieldMaskConfiguration configuration = new();
+        _controller = new GetProductController(
+            _mockApplicationService,
+            configuration,
+            mapper);
+    }
+
+    [Fact]
+    public async Task GetProduct_ReturnsOkResult_WhenProductExists()
+    {
+        ProductView productView = new ProductViewTestDataBuilder().WithName("Dog Food").WithCategory(Category.PetFood)
+            .Build();
+        GetProductRequest request = _fixture.Build<GetProductRequest>()
+            .With(r => r.FieldMask, ["Name", "Price"])
+            .Create();
+        Mock
+            .Get(_mockApplicationService)
+            .Setup(service => service.GetProductView(productView.Id, request))
+            .ReturnsAsync(productView);
+
+        var result = await _controller.GetProduct(productView.Id, request);
+
+        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
+        okResult.Value.ShouldNotBeNull();
+        string jsonResult = (okResult.Value as string)!;
+        jsonResult.ShouldContain("Dog Food");
+        Mock
+            .Get(_mockApplicationService)
+            .Verify(service => service.GetProductView(productView.Id, request), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetProduct_ReturnsNotFound_WhenProductDoesNotExist()
+    {
+        ProductView productView = new ProductViewTestDataBuilder().Build();
+        GetProductRequest request = _fixture.Create<GetProductRequest>();
+        Mock
+            .Get(_mockApplicationService)
+            .Setup(service => service.GetProductView(productView.Id, request))
+            .ReturnsAsync((ProductView?)null);
+
+        var result = await _controller.GetProduct(productView.Id, request);
+
+        result.Result.ShouldBeOfType<NotFoundResult>();
+        Mock
+            .Get(_mockApplicationService)
+            .Verify(service => service.GetProductView(productView.Id, request), Times.Once);
+    }
 
 
+    [Fact]
+    public async Task
+        GetProduct_ReturnsOkResult_WithGroomingAndHygieneResponse_WhenProductCategoryIsGroomingAndHygiene()
+    {
+        ProductView productView = new ProductViewTestDataBuilder().WithName("Shampoo")
+            .WithCategory(Category.GroomingAndHygiene).Build();
+        GetProductRequest request = _fixture.Build<GetProductRequest>()
+            .With(r => r.FieldMask, ["Name", "Price"])
+            .Create();
+        Mock
+            .Get(_mockApplicationService)
+            .Setup(service => service.GetProductView(productView.Id, request))
+            .ReturnsAsync(productView);
 
+        var result = await _controller.GetProduct(productView.Id, request);
+
+        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
+        okResult.Value.ShouldNotBeNull();
+        string jsonResult = (okResult.Value as string)!;
+        jsonResult.ShouldContain("Shampoo");
+        Mock
+            .Get(_mockApplicationService)
+            .Verify(service => service.GetProductView(productView.Id, request), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetProduct_ReturnsOkResult_WithGenericResponse_WhenProductCategoryIsNotPetFoodOrGrooming()
+    {
+        ProductView productView = new ProductViewTestDataBuilder().WithName("Other Product").WithCategory(Category.Beds)
+            .Build();
+        GetProductRequest request = _fixture.Create<GetProductRequest>();
+        Mock
+            .Get(_mockApplicationService)
+            .Setup(service => service.GetProductView(productView.Id, request))
+            .ReturnsAsync(productView);
+
+        var result = await _controller.GetProduct(productView.Id, request);
+
+        // Assert
+        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
+        okResult.Value.ShouldNotBeNull();
+        string jsonResult = (okResult.Value as string)!;
+        jsonResult.ShouldContain("Other Product");
+        Mock
+            .Get(_mockApplicationService)
+            .Verify(service => service.GetProductView(productView.Id, request), Times.Once);
+    }
+
+
+    [Fact]
+    public async Task GetProduct_SerializesWithFieldMaskCorrectly()
+    {
+        ProductView productView = new ProductViewTestDataBuilder().WithName("Masked Product").Build();
+        GetProductRequest request = _fixture.Build<GetProductRequest>()
+            .With(r => r.FieldMask, ["Name"])
+            .Create();
+        Mock
+            .Get(_mockApplicationService)
+            .Setup(service => service.GetProductView(productView.Id, request))
+            .ReturnsAsync(productView);
+
+        var result = await _controller.GetProduct(productView.Id, request);
+
+        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
+        okResult.Value.ShouldNotBeNull();
+        string jsonResult = (okResult.Value as string)!;
+        jsonResult.ShouldContain("Masked Product");
+        jsonResult.ShouldNotContain("Price");
+        Mock
+            .Get(_mockApplicationService)
+            .Verify(service => service.GetProductView(productView.Id, request), Times.Once);
+    }
+}
