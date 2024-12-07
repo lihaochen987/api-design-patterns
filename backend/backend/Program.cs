@@ -7,6 +7,9 @@ using backend.Product.InfrastructureLayer.Database;
 using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
+using backend.Review.ApplicationLayer;
+using backend.Review.InfrastructureLayer;
+using backend.Review.InfrastructureLayer.Database;
 using backend.Shared;
 using DbUp;
 using DbUp.Engine;
@@ -46,6 +49,12 @@ builder.Services.AddScoped<IProductPricingRepository, ProductPricingRepository>(
 builder.Services.AddScoped<IProductApplicationService, ProductApplicationService>();
 builder.Services.AddScoped<IProductViewApplicationService, ProductViewApplicationService>();
 
+// Inject Review Infrastructure
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+
+// Inject Review Services
+builder.Services.AddScoped<IReviewApplicationService, ReviewApplicationService>();
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -73,6 +82,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<ProductDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ReviewDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 

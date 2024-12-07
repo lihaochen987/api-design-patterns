@@ -1,7 +1,4 @@
-using AutoMapper;
 using backend.Product.ApplicationLayer;
-using backend.Product.DomainModels.Enums;
-using backend.Product.InfrastructureLayer;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
