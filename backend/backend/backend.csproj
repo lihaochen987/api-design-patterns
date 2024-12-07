@@ -12,19 +12,19 @@
     <PackageReference Include="AutoMapper" Version="13.0.1"/>
     <PackageReference Include="dbup" Version="5.0.41"/>
     <PackageReference Include="dbup-postgresql" Version="5.0.40"/>
-    <PackageReference Include="EFCore.NamingConventions" Version="8.0.3"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+    <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="Moq" Version="4.20.72"/>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
     <PackageReference Include="Shouldly" Version="4.2.1"/>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0"/>
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.1.0" />
     <PackageReference Include="xunit" Version="2.9.2"/>
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <PrivateAssets>all</PrivateAssets>
@@ -143,6 +143,54 @@
     </Compile>
     <Compile Update="Product\ProductControllers\ReplaceProductMappingProfile.cs">
       <DependentUpon>ReplaceProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\CreateReviewExtensions.cs">
+      <DependentUpon>CreateReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\CreateReviewMappingProfile.cs">
+      <DependentUpon>CreateReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\CreateReviewRequest.cs">
+      <DependentUpon>CreateReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\CreateReviewResponse.cs">
+      <DependentUpon>CreateReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\DeleteReviewRequest.cs">
+      <DependentUpon>DeleteReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\GetReviewMappingProfile.cs">
+      <DependentUpon>GetReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\GetReviewRequest.cs">
+      <DependentUpon>GetReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\GetReviewResponse.cs">
+      <DependentUpon>GetReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\ListReviewsRequest.cs">
+      <DependentUpon>ListReviewsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\ListReviewsResponse.cs">
+      <DependentUpon>ListReviewsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\ReplaceReviewMappingProfile.cs">
+      <DependentUpon>ReplaceReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\ReplaceReviewRequest.cs">
+      <DependentUpon>ReplaceReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\ReplaceReviewResponse.cs">
+      <DependentUpon>ReplaceReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\UpdateReviewMappingProfile.cs">
+      <DependentUpon>UpdateReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\UpdateReviewRequest.cs">
+      <DependentUpon>UpdateReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\ReviewControllers\UpdateReviewResponse.cs">
+      <DependentUpon>UpdateReviewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

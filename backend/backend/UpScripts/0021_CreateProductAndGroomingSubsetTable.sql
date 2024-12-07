@@ -19,16 +19,22 @@ $$
     END
 $$;
 
-INSERT INTO product_grooming_and_hygiene (product_id,
-                                          product_grooming_and_hygiene_is_natural,
-                                          product_grooming_and_hygiene_is_hypoallergenic,
-                                          product_grooming_and_hygiene_usage_instructions,
-                                          product_grooming_and_hygiene_is_cruelty_free,
-                                          product_grooming_and_hygiene_safety_warnings)
-VALUES (8, true, true, 'Apply a small amount to wet coat, lather, and rinse thoroughly.', true,
-        'Avoid contact with eyes.'),
-       (9, false, true, 'Use daily for brushing teeth. Gently apply to teeth and gums.', true,
-        'Do not allow pet to swallow large amounts.')
-    ,
-       (17, true, false, 'Brush gently from roots to tips to detangle and remove loose fur.', false,
-        'Keep away from heat sources.');
+DO
+$$
+    BEGIN
+        INSERT INTO product_grooming_and_hygiene (product_id,
+                                                  product_grooming_and_hygiene_is_natural,
+                                                  product_grooming_and_hygiene_is_hypoallergenic,
+                                                  product_grooming_and_hygiene_usage_instructions,
+                                                  product_grooming_and_hygiene_is_cruelty_free,
+                                                  product_grooming_and_hygiene_safety_warnings)
+        VALUES (8, true, true, 'Apply a small amount to wet coat, lather, and rinse thoroughly.', true,
+                'Avoid contact with eyes.'),
+               (9, false, true, 'Use daily for brushing teeth. Gently apply to teeth and gums.', true,
+                'Do not allow pet to swallow large amounts.')
+            ,
+               (17, true, false, 'Brush gently from roots to tips to detangle and remove loose fur.', false,
+                'Keep away from heat sources.');
+
+    END;
+$$

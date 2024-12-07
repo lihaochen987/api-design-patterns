@@ -35,6 +35,5 @@ $$
                  LEFT JOIN product_pet_food_breed_sizes ppfbs
                            ON ppf.product_pet_foods_breed_size_id = ppfbs.product_pet_food_breed_sizes_id
                  LEFT JOIN product_grooming_and_hygiene pgah ON p.product_id = pgah.product_id;
-
     END;
 $$

@@ -134,11 +134,11 @@ void ApplyMigrations(
     {
         try
         {
+            EnsureDatabase.For.PostgresqlDatabase(connectionString);
             UpgradeEngine? upgrader = DeployChanges.To
                 .PostgresqlDatabase(connectionString)
                 .WithScriptsFromFileSystem(migrationPath)
                 .LogToConsole()
-                .WithTransaction()
                 .Build();
 
             DatabaseUpgradeResult? result = upgrader.PerformUpgrade();
