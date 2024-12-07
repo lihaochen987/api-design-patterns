@@ -1,6 +1,8 @@
 using System.Globalization;
 using AutoMapper;
 using backend.Product.Contracts;
+using backend.Product.DomainModels;
+using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 
 namespace backend.Product.ProductControllers;
@@ -31,9 +33,7 @@ public class GetProductMappingProfile : Profile
                 opt => opt.MapFrom(src => src.BreedSize.ToString()))
             .ForMember(dest => dest.NutritionalInfo,
                 opt => opt.MapFrom(src =>
-                    src.NutritionalInfo != null
-                        ? Newtonsoft.Json.JsonConvert.SerializeObject(src.NutritionalInfo)
-                        : null));
+                    src.NutritionalInfo));
 
         CreateMap<ProductView, GetGroomingAndHygieneResponse>()
             .IncludeBase<ProductView, GetProductResponse>()

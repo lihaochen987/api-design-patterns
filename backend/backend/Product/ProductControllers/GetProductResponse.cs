@@ -30,7 +30,7 @@ public class GetPetFoodResponse : GetProductResponse
     [Required] public string AgeGroup { get; init; } = "";
     [Required] public string BreedSize { get; init; } = "";
     [Required] public string Ingredients { get; init; } = "";
-    [Required] public string NutritionalInfo { get; init; } = "";
+    [Required] public Dictionary<string, string> NutritionalInfo { get; init; } = new();
     [Required] public string StorageInstructions { get; init; } = "";
     [Required] public string WeightKg { get; init; } = "";
 }
