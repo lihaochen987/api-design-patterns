@@ -6,5 +6,6 @@ namespace backend.Review.InfrastructureLayer;
 public interface IReviewRepository
 {
     Task<DomainModels.Review?> GetReviewAsync(long id);
+    Task CreateReviewAsync(DomainModels.Review review);
     Task DeleteReviewAsync(DomainModels.Review review);
 }

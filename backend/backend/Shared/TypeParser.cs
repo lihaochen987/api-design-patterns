@@ -29,18 +29,6 @@ public class TypeParser
         return result;
     }
 
-    public string ParseDictionaryToString(Dictionary<string, object>? dictionary, string errorMessage)
-    {
-        try
-        {
-            return JsonSerializer.Serialize(dictionary);
-        }
-        catch (JsonException)
-        {
-            throw new ArgumentException(errorMessage);
-        }
-    }
-
     public bool ParseBool(bool? boolValue, string errorMessage)
     {
         if (!bool.TryParse(boolValue.ToString(), out bool boolResult))
@@ -57,5 +45,25 @@ public class TypeParser
             ? throw new ArgumentException(errorMessage)
             : value;
         return stringValue;
+    }
+
+    public long ParseLong(string? value, string errorMessage)
+    {
+        if (!long.TryParse(value, out long result))
+        {
+            throw new ArgumentException(errorMessage);
+        }
+
+        return result;
+    }
+
+    public DateTimeOffset ParseDateTimeOffset(string? value, string errorMessage)
+    {
+        if (string.IsNullOrWhiteSpace(value) || !DateTimeOffset.TryParse(value, out DateTimeOffset result))
+        {
+            throw new ArgumentException(errorMessage);
+        }
+
+        return result;
     }
 }

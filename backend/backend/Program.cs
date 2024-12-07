@@ -10,6 +10,7 @@ using backend.Product.Services;
 using backend.Review.ApplicationLayer;
 using backend.Review.InfrastructureLayer;
 using backend.Review.InfrastructureLayer.Database;
+using backend.Review.ReviewControllers;
 using backend.Shared;
 using DbUp;
 using DbUp.Engine;
@@ -48,6 +49,10 @@ builder.Services.AddScoped<IProductPricingRepository, ProductPricingRepository>(
 // Inject Product Services
 builder.Services.AddScoped<IProductApplicationService, ProductApplicationService>();
 builder.Services.AddScoped<IProductViewApplicationService, ProductViewApplicationService>();
+
+// Inject Review classes
+builder.Services.AddScoped<CreateReviewExtensions>();
+builder.Services.AddAutoMapper(typeof(CreateReviewMappingProfile));
 
 // Inject Review Infrastructure
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();

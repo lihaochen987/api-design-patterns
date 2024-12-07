@@ -34,15 +34,17 @@ public class Review
     public Review(
         long productId,
         decimal rating,
-        string text
+        string text,
+        DateTimeOffset createdAt,
+        DateTimeOffset? updatedAt = null
     )
     {
         EnforceInvariants(rating, text);
         ProductId = productId;
         Rating = rating;
         Text = text;
-        CreatedAt = DateTimeOffset.UtcNow;
-        UpdatedAt = null;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
     }
 
     public long Id { get; private set; }
