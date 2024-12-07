@@ -14,10 +14,7 @@ public class ProductApplicationServiceTests
     private readonly ProductRepositoryFake _repository = [];
     private readonly ProductApplicationService _service;
 
-    public ProductApplicationServiceTests()
-    {
-        _service = new ProductApplicationService(_repository);
-    }
+    public ProductApplicationServiceTests() => _service = new ProductApplicationService(_repository);
 
     [Fact]
     public async Task GetProductAsync_ReturnsProduct_WhenProductExists()
@@ -26,7 +23,7 @@ public class ProductApplicationServiceTests
         _repository.Add(expectedProduct);
         _repository.IsDirty = false;
 
-        var result = await _service.GetProductAsync(expectedProduct.Id);
+        DomainModels.Product? result = await _service.GetProductAsync(expectedProduct.Id);
 
         result.ShouldNotBeNull();
         result.ShouldBeEquivalentTo(expectedProduct);
@@ -38,7 +35,7 @@ public class ProductApplicationServiceTests
     {
         DomainModels.Product expectedProduct = new ProductTestDataBuilder().Build();
 
-        var result = await _service.GetProductAsync(expectedProduct.Id);
+        DomainModels.Product? result = await _service.GetProductAsync(expectedProduct.Id);
 
         result.ShouldBeNull();
     }
@@ -46,7 +43,7 @@ public class ProductApplicationServiceTests
     [Fact]
     public async Task CreateProductAsync_CallsRepositoryWithCorrectProduct()
     {
-        var productToCreate = new ProductTestDataBuilder().Build();
+        DomainModels.Product? productToCreate = new ProductTestDataBuilder().Build();
 
         await _service.CreateProductAsync(productToCreate);
 
@@ -56,7 +53,7 @@ public class ProductApplicationServiceTests
     [Fact]
     public async Task DeleteProductAsync_CallsRepositoryWithCorrectProduct()
     {
-        var productToDelete = new ProductTestDataBuilder().Build();
+        DomainModels.Product? productToDelete = new ProductTestDataBuilder().Build();
 
         await _service.DeleteProductAsync(productToDelete);
 

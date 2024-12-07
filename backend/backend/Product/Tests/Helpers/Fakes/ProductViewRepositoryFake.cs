@@ -18,6 +18,3 @@ public class ProductViewRepositoryFake : Collection<ProductView>, IProductViewRe
     public Task<(List<ProductView>, string?)> ListProductsAsync(string? pageToken, string? filter, int maxPageSize) =>
         throw new NotImplementedException();
 }
-
-
-

@@ -5,6 +5,4 @@ namespace backend.Review.ReviewControllers;
 
 public class CreateReviewMappingProfile
 {
-
-
 }

@@ -22,7 +22,7 @@ public class GetProductControllerTests
 
     public GetProductControllerTests()
     {
-        var mapperConfiguration = new MapperConfiguration(cfg => { cfg.AddProfile<GetProductMappingProfile>(); });
+        MapperConfiguration? mapperConfiguration = new(cfg => { cfg.AddProfile<GetProductMappingProfile>(); });
         IMapper mapper = mapperConfiguration.CreateMapper();
         ProductFieldMaskConfiguration configuration = new();
         _controller = new GetProductController(
@@ -44,9 +44,9 @@ public class GetProductControllerTests
             .Setup(service => service.GetProductView(productView.Id, request))
             .ReturnsAsync(productView);
 
-        var result = await _controller.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse>? result = await _controller.GetProduct(productView.Id, request);
 
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        OkObjectResult? okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
         string jsonResult = (okResult.Value as string)!;
@@ -66,7 +66,7 @@ public class GetProductControllerTests
             .Setup(service => service.GetProductView(productView.Id, request))
             .ReturnsAsync((ProductView?)null);
 
-        var result = await _controller.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse>? result = await _controller.GetProduct(productView.Id, request);
 
         result.Result.ShouldBeOfType<NotFoundResult>();
         Mock
@@ -89,9 +89,9 @@ public class GetProductControllerTests
             .Setup(service => service.GetProductView(productView.Id, request))
             .ReturnsAsync(productView);
 
-        var result = await _controller.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse>? result = await _controller.GetProduct(productView.Id, request);
 
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        OkObjectResult? okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
         string jsonResult = (okResult.Value as string)!;
@@ -112,10 +112,10 @@ public class GetProductControllerTests
             .Setup(service => service.GetProductView(productView.Id, request))
             .ReturnsAsync(productView);
 
-        var result = await _controller.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse>? result = await _controller.GetProduct(productView.Id, request);
 
         // Assert
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        OkObjectResult? okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
         string jsonResult = (okResult.Value as string)!;
@@ -138,9 +138,9 @@ public class GetProductControllerTests
             .Setup(service => service.GetProductView(productView.Id, request))
             .ReturnsAsync(productView);
 
-        var result = await _controller.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse>? result = await _controller.GetProduct(productView.Id, request);
 
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        OkObjectResult? okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
         string jsonResult = (okResult.Value as string)!;

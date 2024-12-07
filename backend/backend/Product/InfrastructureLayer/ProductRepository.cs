@@ -5,10 +5,8 @@ namespace backend.Product.InfrastructureLayer;
 
 public class ProductRepository(ProductDbContext context) : IProductRepository
 {
-    public async Task<DomainModels.Product?> GetProductAsync(long id)
-    {
-        return await context.Products.FirstOrDefaultAsync(p => p.Id == id);
-    }
+    public async Task<DomainModels.Product?> GetProductAsync(long id) =>
+        await context.Products.FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task CreateProductAsync(DomainModels.Product product)
     {
