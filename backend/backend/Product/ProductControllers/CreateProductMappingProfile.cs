@@ -10,8 +10,9 @@ public class CreateProductMappingProfile : Profile
 {
     public CreateProductMappingProfile()
     {
-        CreateMap<Pricing, ProductPricingContract>();
-        CreateMap<Dimensions, DimensionsContract>();
+        CreateMap<Pricing, ProductPricingContract>().ReverseMap();
+        CreateMap<Dimensions, DimensionsContract>().ReverseMap();
+
         CreateMap<Product, CreateProductResponse>();
         CreateMap<PetFood, CreatePetFoodResponse>()
             .IncludeBase<Product, CreateProductResponse>();

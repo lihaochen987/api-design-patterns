@@ -11,8 +11,8 @@ public class ReplaceProductMappingProfile : Profile
 {
     public ReplaceProductMappingProfile()
     {
-        CreateMap<Pricing, ProductPricingContract>();
-        CreateMap<Dimensions, DimensionsContract>();
+        CreateMap<Pricing, ProductPricingContract>().ReverseMap();
+        CreateMap<Dimensions, DimensionsContract>().ReverseMap();
 
         // Map Requests
         CreateMap<ReplaceProductRequest, DomainModels.Product>();

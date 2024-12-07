@@ -11,13 +11,12 @@ public class GetProductMappingProfile : Profile
 {
     public GetProductMappingProfile()
     {
-        CreateMap<Pricing, ProductPricingContract>();
-        CreateMap<Dimensions, DimensionsContract>();
-        CreateMap<ProductView, GetProductResponse>();
+        CreateMap<Pricing, ProductPricingContract>().ReverseMap();
+        CreateMap<Dimensions, DimensionsContract>().ReverseMap();
 
+        CreateMap<ProductView, GetProductResponse>();
         CreateMap<ProductView, GetPetFoodResponse>()
             .IncludeBase<ProductView, GetProductResponse>();
-
         CreateMap<ProductView, GetGroomingAndHygieneResponse>()
             .IncludeBase<ProductView, GetProductResponse>();
     }

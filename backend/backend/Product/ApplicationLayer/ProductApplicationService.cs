@@ -25,4 +25,6 @@ public class ProductApplicationService(
     public async Task DeleteProductAsync(DomainModels.Product product) =>
         // Apply
         await repository.DeleteProductAsync(product);
+
+    public async Task UpdateProductAsync(DomainModels.Product product) => await repository.UpdateProductAsync(product);
 }
