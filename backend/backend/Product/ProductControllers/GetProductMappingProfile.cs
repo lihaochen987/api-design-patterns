@@ -1,7 +1,5 @@
-using System.Globalization;
 using AutoMapper;
 using backend.Product.Contracts;
-using backend.Product.DomainModels;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 

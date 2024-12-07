@@ -1,8 +1,6 @@
-using System.Globalization;
 using AutoMapper;
 using backend.Product.Contracts;
 using backend.Product.DomainModels;
-using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 
 namespace backend.Product.ProductControllers;

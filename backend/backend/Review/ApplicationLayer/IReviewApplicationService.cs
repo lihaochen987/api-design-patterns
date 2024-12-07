@@ -8,4 +8,5 @@ public interface IReviewApplicationService
     Task<DomainModels.Review?> GetReviewAsync(long id);
     Task CreateReviewAsync(DomainModels.Review review);
     Task DeleteReviewAsync(DomainModels.Review review);
+    Task UpdateReviewAsync(DomainModels.Review review);
 }

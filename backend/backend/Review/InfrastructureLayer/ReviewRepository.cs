@@ -20,4 +20,10 @@ public class ReviewRepository(ReviewDbContext context) : IReviewRepository
         context.Reviews.Remove(review);
         await context.SaveChangesAsync();
     }
+
+    public Task UpdateReviewAsync(DomainModels.Review review)
+    {
+        context.Reviews.Update(review);
+        return context.SaveChangesAsync();
+    }
 }

@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 using backend.Database;
 using backend.Product.ApplicationLayer;
 using backend.Product.InfrastructureLayer;
@@ -36,6 +35,7 @@ builder.Services.AddScoped<CreateProductExtensions>();
 builder.Services.AddAutoMapper(typeof(CreateProductMappingProfile));
 builder.Services.AddAutoMapper(typeof(GetProductMappingProfile));
 builder.Services.AddAutoMapper(typeof(UpdateProductMappingProfile));
+builder.Services.AddAutoMapper(typeof(ReplaceProductMappingProfile));
 
 builder.Services.AddTransient<ProductPricingFieldMaskConfiguration>();
 builder.Services.AddTransient<GetProductPricingExtensions>();
@@ -53,6 +53,7 @@ builder.Services.AddScoped<IProductViewApplicationService, ProductViewApplicatio
 // Inject Review classes
 builder.Services.AddScoped<CreateReviewExtensions>();
 builder.Services.AddAutoMapper(typeof(CreateReviewMappingProfile));
+builder.Services.AddAutoMapper(typeof(ReplaceReviewMappingProfile));
 
 // Inject Review Infrastructure
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
