@@ -7,10 +7,10 @@ public class ReplaceProductRequest
 {
     [Required] public required string Name { get; set; }
 
-    [Required] public required ProductPricingContract Pricing { get; set; }
+    [Required] public required ProductPricingRequest Pricing { get; set; }
 
     [Required] public required string Category { get; set; }
-    [Required] public required DimensionsContract Dimensions { get; set; }
+    [Required] public required DimensionsRequest Dimensions { get; set; }
 
     public string? AgeGroup { get; set; }
     public string? BreedSize { get; set; }

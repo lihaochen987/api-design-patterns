@@ -13,11 +13,11 @@ public class UpdateProductResponse
     [Required] public string Name { get; set; } = "";
 
     [Required]
-    public ProductPricingContract Pricing { get; set; } =
+    public ProductPricingResponse Pricing { get; set; } =
         new() { BasePrice = "", DiscountPercentage = "", TaxRate = "" };
 
     [Required] public string Category { get; set; } = "";
-    [Required] public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
+    [Required] public DimensionsResponse Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
 }
 
 public class UpdateGroomingAndHygieneResponse : UpdateProductResponse

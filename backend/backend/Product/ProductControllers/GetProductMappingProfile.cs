@@ -9,8 +9,8 @@ public class GetProductMappingProfile : Profile
 {
     public GetProductMappingProfile()
     {
-        CreateMap<Pricing, ProductPricingContract>().ReverseMap();
-        CreateMap<Dimensions, DimensionsContract>().ReverseMap();
+        CreateMap<Pricing, ProductPricingResponse>().ReverseMap();
+        CreateMap<Dimensions, DimensionsResponse>().ReverseMap();
 
         CreateMap<ProductView, GetProductResponse>();
         CreateMap<ProductView, GetPetFoodResponse>()

@@ -7,11 +7,11 @@ public class CreateProductRequest
 {
     [Required] public required string Name { get; init; }
 
-    [Required] public required ProductPricingContract Pricing { get; init; }
+    [Required] public required ProductPricingRequest Pricing { get; init; }
 
     [Required] public required string Category { get; init; }
 
-    [Required] public required DimensionsContract Dimensions { get; init; }
+    [Required] public required DimensionsRequest Dimensions { get; init; }
     public string? AgeGroup { get; set; }
     public string? BreedSize { get; set; }
     public string? Ingredients { get; set; }

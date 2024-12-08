@@ -11,11 +11,11 @@ public class ReplaceProductResponse
 {
     [Required] public required string Name { get; init; }
 
-    [Required] public required ProductPricingContract Pricing { get; init; }
+    [Required] public required ProductPricingResponse Pricing { get; init; }
 
     [Required] public required string Category { get; init; }
 
-    [Required] public required DimensionsContract Dimensions { get; init; }
+    [Required] public required DimensionsResponse Dimensions { get; init; }
 }
 
 public class ReplaceGroomingAndHygieneResponse : ReplaceProductResponse

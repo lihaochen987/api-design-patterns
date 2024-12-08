@@ -39,7 +39,7 @@ public class UpdateProductControllerTests
 
         UpdateProductRequest request = new()
         {
-            Name = "Updated Name", Pricing = new ProductPricingContract { BasePrice = "1.99" }, Category = "Toys"
+            Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = "1.99" }, Category = "Toys"
         };
 
         ActionResult<UpdateProductResponse> actionResult = await _controller.UpdateProduct(product.Id, request);
@@ -62,7 +62,7 @@ public class UpdateProductControllerTests
 
         UpdateProductRequest request = new()
         {
-            Name = "Updated Name", Pricing = new ProductPricingContract { BasePrice = "1.99" }, FieldMask = ["name"]
+            Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = "1.99" }, FieldMask = ["name"]
         };
 
         ActionResult<UpdateProductResponse> actionResult = await _controller.UpdateProduct(product.Id, request);
@@ -100,7 +100,7 @@ public class UpdateProductControllerTests
         UpdateProductRequest request = new()
         {
             Name = "Updated Name",
-            Pricing = new ProductPricingContract { BasePrice = "25.50", DiscountPercentage = "50" },
+            Pricing = new ProductPricingRequest { BasePrice = "25.50", DiscountPercentage = "50" },
             Category = "Toys",
             FieldMask = ["name", "category", "discountpercentage"]
         };
@@ -126,7 +126,7 @@ public class UpdateProductControllerTests
 
         UpdateProductRequest request = new()
         {
-            Dimensions = new DimensionsContract { Length = "20", Width = "10", Height = "2" },
+            Dimensions = new DimensionsRequest { Length = "20", Width = "10", Height = "2" },
             FieldMask = ["dimensions.width", "dimensions.height"]
         };
 

@@ -6,12 +6,12 @@ public class UpdateProductRequest
 {
     public string Name { get; init; } = "";
 
-    public ProductPricingContract Pricing { get; init; } =
+    public ProductPricingRequest Pricing { get; init; } =
         new() { BasePrice = "", DiscountPercentage = "", TaxRate = "" };
 
     public string Category { get; init; } = "";
 
-    public DimensionsContract Dimensions { get; init; } = new() { Length = "", Width = "", Height = "" };
+    public DimensionsRequest Dimensions { get; init; } = new() { Length = "", Width = "", Height = "" };
 
     public string? AgeGroup { get; set; }
     public string? BreedSize { get; set; }

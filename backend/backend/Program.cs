@@ -8,6 +8,7 @@ using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Review.ApplicationLayer;
+using backend.Review.DomainModels.Views;
 using backend.Review.InfrastructureLayer;
 using backend.Review.InfrastructureLayer.Database;
 using backend.Review.ReviewControllers;
@@ -63,6 +64,7 @@ builder.Services.AddAutoMapper(typeof(ReplaceReviewMappingProfile));
 // Inject Review Infrastructure
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IReviewViewRepository, ReviewViewRepository>();
+builder.Services.AddTransient<QueryService<ReviewView>>();
 
 // Inject Review Services
 builder.Services.AddScoped<IReviewApplicationService, ReviewApplicationService>();

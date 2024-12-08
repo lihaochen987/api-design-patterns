@@ -10,8 +10,8 @@ public class UpdateProductMappingProfile : Profile
 {
     public UpdateProductMappingProfile()
     {
-        CreateMap<Pricing, ProductPricingContract>().ReverseMap();
-        CreateMap<Dimensions, DimensionsContract>().ReverseMap();
+        CreateMap<Pricing, ProductPricingResponse>().ReverseMap();
+        CreateMap<Dimensions, DimensionsResponse>().ReverseMap();
 
         CreateMap<DomainModels.Product, UpdateProductResponse>();
         CreateMap<PetFood, UpdatePetFoodResponse>()
