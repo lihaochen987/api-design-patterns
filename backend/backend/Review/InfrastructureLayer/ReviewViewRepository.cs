@@ -21,9 +21,15 @@ public class ReviewViewRepository(
     public async Task<(List<ReviewView>, string?)> ListReviewsAsync(
         string? pageToken,
         string? filter,
-        int maxPageSize)
+        int maxPageSize,
+        string? parent)
     {
         IQueryable<ReviewView> query = context.Set<ReviewView>().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(parent) && long.TryParse(parent, out long parentId))
+        {
+            query = query.Where(p => p.ProductId == parentId);
+        }
 
         if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenReview))
         {

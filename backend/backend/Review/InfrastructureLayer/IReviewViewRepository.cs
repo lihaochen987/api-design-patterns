@@ -12,5 +12,6 @@ public interface IReviewViewRepository
     Task<(List<ReviewView>, string?)> ListReviewsAsync(
         string? pageToken,
         string? filter,
-        int maxPageSize);
+        int maxPageSize,
+        string? parent);
 }

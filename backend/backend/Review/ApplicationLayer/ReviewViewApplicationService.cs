@@ -24,7 +24,8 @@ public class ReviewViewApplicationService(IReviewViewRepository repository) : IR
         (List<ReviewView> reviews, string? nextPageToken) = await repository.ListReviewsAsync(
             request.PageToken,
             request.Filter,
-            request.MaxPageSize);
+            request.MaxPageSize,
+            request.Parent);
 
         // Apply
         return (reviews, nextPageToken);
