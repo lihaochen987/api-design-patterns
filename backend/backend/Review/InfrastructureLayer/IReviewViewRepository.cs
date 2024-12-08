@@ -8,4 +8,9 @@ namespace backend.Review.InfrastructureLayer;
 public interface IReviewViewRepository
 {
     Task<ReviewView?> GetReviewView(long id);
+
+    Task<(List<ReviewView>, string?)> ListReviewsAsync(
+        string? pageToken,
+        string? filter,
+        int maxPageSize);
 }

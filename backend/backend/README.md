@@ -16,6 +16,8 @@ which this repository places in action. These include:
   typically used for a hierarchical 1-1 relationship.
 - **Pagination** : evident from the `List` standard method in the `Product` folder
 - **Filtering** : evident from the `List` standard method in the `Product` folder
+- **Polymorphic resources** : evident from endpoints in the `Product` folder which adds additional fields based on the
+  `Category`
 
 The other patterns mentioned, but not yet implemented from the book include:
 
@@ -24,7 +26,6 @@ The other patterns mentioned, but not yet implemented from the book include:
 - **Cross references**
 - **Association resources**
 - **Add and remove custom methods**
-- **Polymorphism**
 - **Copy and move**
 - **Batch operations**
 - **Criteria-based deletion**

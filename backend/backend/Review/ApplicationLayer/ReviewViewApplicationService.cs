@@ -17,4 +17,16 @@ public class ReviewViewApplicationService(IReviewViewRepository repository) : IR
         // Apply
         return review;
     }
+
+    public async Task<(List<ReviewView>, string?)> ListProductsAsync(ListReviewsRequest request)
+    {
+        // Prepare
+        (List<ReviewView> reviews, string? nextPageToken) = await repository.ListReviewsAsync(
+            request.PageToken,
+            request.Filter,
+            request.MaxPageSize);
+
+        // Apply
+        return (reviews, nextPageToken);
+    }
 }

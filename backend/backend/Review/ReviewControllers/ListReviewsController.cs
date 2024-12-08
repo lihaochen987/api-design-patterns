@@ -1,8 +1,32 @@
-// Licensed to the.NET Foundation under one or more agreements.
-// The.NET Foundation licenses this file to you under the MIT license.
+using AutoMapper;
+using backend.Product.ProductControllers;
+using backend.Review.ApplicationLayer;
+using backend.Review.DomainModels.Views;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Review.ReviewControllers;
 
-public class ListReviewsController
+[Route("reviews")]
+[ApiController]
+public class ListReviewsController(
+    IReviewViewApplicationService applicationService,
+    IMapper mapper)
+    : ControllerBase
 {
+    [HttpGet]
+    [SwaggerOperation(Summary = "List reviews", Tags = ["Reviews"])]
+    [ProducesResponseType(typeof(ListReviewsResponse), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ListReviewsResponse>>> ListReviews(
+        [FromQuery] ListReviewsRequest request)
+    {
+        (List<ReviewView> reviews, string? nextPageToken) = await applicationService.ListProductsAsync(request);
+
+        ListProductsResponse response = new()
+        {
+            Results = mapper.Map<List<GetReviewResponse>>(reviews), NextPageToken = nextPageToken
+        };
+
+        return Ok(response);
+    }
 }
