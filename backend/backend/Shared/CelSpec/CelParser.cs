@@ -232,6 +232,7 @@ public partial class CelParser<T>(TypeParser typeParser)
             { } t when t == typeof(bool) => ConvertToBool(valueCelToken.Value),
             { } t when t == typeof(decimal) => typeParser.ParseDecimal(valueCelToken.Value, "Invalid Decimal Value"),
             { } t when t == typeof(int) => ConvertToInt(valueCelToken.Value),
+            { } t when t == typeof(long) => typeParser.ParseLong(valueCelToken.Value, "Invalid Long Value"),
             { IsEnum: true } => ConvertToEnum(destinationType, valueCelToken.Value),
             _ => throw new ArgumentException($"Cannot convert '{valueCelToken.Value}' to type '{destinationType.Name}'")
         };
