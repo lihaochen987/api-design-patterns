@@ -1,11 +1,13 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
+using backend.Shared;
+
 namespace backend.Review.DomainModels;
 
 using System.ComponentModel.DataAnnotations;
 
-public class Review
+public class Review : Entity
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     protected Review()
@@ -46,8 +48,6 @@ public class Review
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
     }
-
-    public long Id { get; private set; }
 
     public long ProductId { get; private set; }
 

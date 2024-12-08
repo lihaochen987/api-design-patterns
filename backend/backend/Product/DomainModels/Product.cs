@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
+using backend.Shared;
 
 namespace backend.Product.DomainModels;
 
-public abstract class Product
+public abstract class Product : Entity
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     protected Product()
@@ -45,8 +46,6 @@ public abstract class Product
         Category = category;
         Dimensions = dimensions;
     }
-
-    public long Id { get; private set; }
 
     [MaxLength(100)] public string Name { get; private set; }
 

@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using backend.Database;
 using backend.Product.ApplicationLayer;
+using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 using backend.Product.InfrastructureLayer.Database;
 using backend.Product.ProductControllers;
@@ -46,6 +47,7 @@ builder.Services.AddScoped<UpdateProductPricingExtensions>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductViewRepository, ProductViewRepository>();
 builder.Services.AddScoped<IProductPricingRepository, ProductPricingRepository>();
+builder.Services.AddTransient<QueryService<ProductView>>();
 
 // Inject Product Services
 builder.Services.AddScoped<IProductApplicationService, ProductApplicationService>();

@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace backend.Shared.CelSpecParser;
+namespace backend.Shared.CelSpec;
 
 /// <summary>
 ///     CelParser takes in a filter string and translates it into a form that can be used to filter data.

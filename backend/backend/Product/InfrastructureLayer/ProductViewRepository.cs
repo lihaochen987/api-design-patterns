@@ -1,14 +1,15 @@
 using System.Linq.Expressions;
-using backend.Product.Contracts;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Database;
 using backend.Shared;
-using backend.Shared.CelSpecParser;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Product.InfrastructureLayer;
 
-public class ProductViewRepository(ProductDbContext context) : IProductViewRepository
+public class ProductViewRepository(
+    ProductDbContext context,
+    QueryService<ProductView> queryService)
+    : IProductViewRepository
 {
     public async Task<ProductView?> GetProductView(long id) =>
         await context.Set<ProductView>()
@@ -28,7 +29,7 @@ public class ProductViewRepository(ProductDbContext context) : IProductViewRepos
 
         if (!string.IsNullOrEmpty(filter))
         {
-            Expression<Func<ProductView, bool>> filterExpression = BuildFilterExpression(filter);
+            Expression<Func<ProductView, bool>> filterExpression = queryService.BuildFilterExpression(filter);
             query = query.Where(filterExpression);
         }
 
@@ -37,31 +38,8 @@ public class ProductViewRepository(ProductDbContext context) : IProductViewRepos
             .Take(maxPageSize + 1)
             .ToListAsync();
 
-        List<ProductView> paginatedProducts = PaginateProducts(products, maxPageSize, out string? nextPageToken);
+        List<ProductView> paginatedProducts = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
 
         return (paginatedProducts, nextPageToken);
-    }
-
-    private static Expression<Func<ProductView, bool>> BuildFilterExpression(string filter)
-    {
-        CelParser<ProductView> parser = new(new TypeParser());
-        List<CelToken> tokens = parser.Tokenize(filter);
-        return parser.ParseFilter(tokens);
-    }
-
-    private static List<ProductView> PaginateProducts(
-        List<ProductView> existingProducts,
-        int maxPageSize,
-        out string? nextPageToken)
-    {
-        if (existingProducts.Count <= maxPageSize)
-        {
-            nextPageToken = null;
-            return existingProducts;
-        }
-
-        ProductView lastProductInPage = existingProducts[maxPageSize - 1];
-        nextPageToken = lastProductInPage.Id.ToString();
-        return existingProducts.Take(maxPageSize).ToList();
     }
 }

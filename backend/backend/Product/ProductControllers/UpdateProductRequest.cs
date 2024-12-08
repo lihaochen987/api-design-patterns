@@ -4,14 +4,14 @@ namespace backend.Product.ProductControllers;
 
 public class UpdateProductRequest
 {
-    public string Name { get; set; } = "";
+    public string Name { get; init; } = "";
 
-    public ProductPricingContract Pricing { get; set; } =
+    public ProductPricingContract Pricing { get; init; } =
         new() { BasePrice = "", DiscountPercentage = "", TaxRate = "" };
 
-    public string Category { get; set; } = "";
+    public string Category { get; init; } = "";
 
-    public DimensionsContract Dimensions { get; set; } = new() { Length = "", Width = "", Height = "" };
+    public DimensionsContract Dimensions { get; init; } = new() { Length = "", Width = "", Height = "" };
 
     public string? AgeGroup { get; set; }
     public string? BreedSize { get; set; }

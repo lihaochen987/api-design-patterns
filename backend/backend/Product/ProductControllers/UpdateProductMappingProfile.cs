@@ -16,6 +16,7 @@ public class UpdateProductMappingProfile : Profile
         CreateMap<DomainModels.Product, UpdateProductResponse>();
         CreateMap<PetFood, UpdatePetFoodResponse>()
             .IncludeBase<DomainModels.Product, UpdateProductResponse>();
-        CreateMap<GroomingAndHygiene, UpdateGroomingAndHygieneResponse>();
+        CreateMap<GroomingAndHygiene, UpdateGroomingAndHygieneResponse>()
+            .IncludeBase<DomainModels.Product, UpdateProductResponse>();
     }
 }

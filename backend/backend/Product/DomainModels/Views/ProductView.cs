@@ -1,11 +1,11 @@
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
+using backend.Shared;
 
 namespace backend.Product.DomainModels.Views;
 
-public class ProductView
+public class ProductView : Entity
 {
-    public long Id { get; init; }
     public required string Name { get; init; }
     public decimal Price { get; init; }
     public Category Category { get; init; }
