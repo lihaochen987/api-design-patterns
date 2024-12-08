@@ -1,8 +1,8 @@
 using AutoMapper;
+using backend.Product.ApplicationLayer;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
-using backend.Product.InfrastructureLayer;
 using backend.Product.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -12,7 +12,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class UpdateProductController(
-    IProductRepository repository,
+    IProductApplicationService applicationService,
     ProductFieldMaskConfiguration maskConfiguration,
     IMapper mapper)
     : ControllerBase
@@ -25,7 +25,7 @@ public class UpdateProductController(
         [FromRoute] long id,
         [FromBody] UpdateProductRequest request)
     {
-        DomainModels.Product? product = await repository.GetProductAsync(id);
+        DomainModels.Product? product = await applicationService.GetProductAsync(id);
 
         if (product == null)
         {
@@ -38,16 +38,16 @@ public class UpdateProductController(
         {
             case PetFood petFood:
                 UpdatePetFood(maskConfiguration, request, petFood);
-                await repository.UpdateProductAsync(product);
+                await applicationService.UpdateProductAsync(product);
                 return Ok(mapper.Map<UpdatePetFoodResponse>(product));
 
             case GroomingAndHygiene groomingAndHygiene:
                 UpdateGroomingAndHygiene(maskConfiguration, request, groomingAndHygiene);
-                await repository.UpdateProductAsync(product);
+                await applicationService.UpdateProductAsync(product);
                 return Ok(mapper.Map<UpdateGroomingAndHygieneResponse>(product));
 
             default:
-                await repository.UpdateProductAsync(product);
+                await applicationService.UpdateProductAsync(product);
                 return Ok(mapper.Map<UpdateProductResponse>(product));
         }
     }

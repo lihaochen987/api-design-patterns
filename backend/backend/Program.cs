@@ -60,6 +60,7 @@ builder.Services.AddScoped<CreateReviewExtensions>();
 builder.Services.AddAutoMapper(typeof(GetReviewMappingProfile));
 builder.Services.AddAutoMapper(typeof(CreateReviewMappingProfile));
 builder.Services.AddAutoMapper(typeof(ReplaceReviewMappingProfile));
+builder.Services.AddAutoMapper(typeof(UpdateReviewMappingProfile));
 
 // Inject Review Infrastructure
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();

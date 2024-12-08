@@ -61,10 +61,11 @@ public class Review : Entity
 
     public DateTimeOffset? UpdatedAt { get; private set; }
 
-    public void UpdateReview(decimal reviewRating, string reviewText)
+    public void Replace(long productId, decimal rating, string reviewText)
     {
-        EnforceInvariants(reviewRating, reviewText);
-        Rating = reviewRating;
+        EnforceInvariants(rating, reviewText);
+        ProductId = productId;
+        Rating = rating;
         Text = reviewText;
         UpdatedAt = DateTimeOffset.UtcNow;
     }
