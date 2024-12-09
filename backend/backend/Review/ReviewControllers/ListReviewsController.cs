@@ -22,7 +22,7 @@ public class ListReviewsController(
     {
         (List<ReviewView> reviews, string? nextPageToken) = await applicationService.ListProductsAsync(request);
 
-        ListProductsResponse response = new()
+        ListReviewsResponse response = new()
         {
             Results = mapper.Map<List<GetReviewResponse>>(reviews), NextPageToken = nextPageToken
         };
