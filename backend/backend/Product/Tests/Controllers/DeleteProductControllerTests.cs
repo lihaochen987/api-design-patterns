@@ -8,34 +8,23 @@ using Xunit;
 
 namespace backend.Product.Tests.Controllers;
 
-public class DeleteProductControllerTests
+public class DeleteProductControllerTests : DeleteProductControllerTestBase
 {
-    private readonly DeleteProductController _controller;
-    private readonly IProductApplicationService _mockApplicationService = Mock.Of<IProductApplicationService>();
-
-    public DeleteProductControllerTests() => _controller = new DeleteProductController(_mockApplicationService);
-
     [Fact]
     public async Task DeleteProduct_ProductExists_ReturnsNoContent()
     {
         DomainModels.Product product = new ProductTestDataBuilder().Build();
         Mock
-            .Get(_mockApplicationService)
+            .Get(MockApplicationService)
             .Setup(svc => svc.GetProductAsync(product.Id))
             .ReturnsAsync(product);
-        Mock
-            .Get(_mockApplicationService)
-            .Setup(svc => svc.DeleteProductAsync(product))
-            .Returns(Task.CompletedTask);
+        var sut = DeleteProductController();
 
-        ActionResult result = await _controller.DeleteProduct(product.Id, new DeleteProductRequest());
+        ActionResult result = await sut.DeleteProduct(product.Id, new DeleteProductRequest());
 
         result.ShouldBeOfType<NoContentResult>();
         Mock
-            .Get(_mockApplicationService)
-            .Verify(svc => svc.GetProductAsync(product.Id), Times.Once);
-        Mock
-            .Get(_mockApplicationService)
+            .Get(MockApplicationService)
             .Verify(svc => svc.DeleteProductAsync(product), Times.Once);
     }
 
@@ -44,18 +33,16 @@ public class DeleteProductControllerTests
     {
         DomainModels.Product product = new ProductTestDataBuilder().Build();
         Mock
-            .Get(_mockApplicationService)
+            .Get(MockApplicationService)
             .Setup(svc => svc.GetProductAsync(product.Id))
             .ReturnsAsync((DomainModels.Product?)null);
+        var sut = DeleteProductController();
 
-        ActionResult result = await _controller.DeleteProduct(product.Id, new DeleteProductRequest());
+        ActionResult result = await sut.DeleteProduct(product.Id, new DeleteProductRequest());
 
         result.ShouldBeOfType<NotFoundResult>();
         Mock
-            .Get(_mockApplicationService)
-            .Verify(svc => svc.GetProductAsync(product.Id), Times.Once);
-        Mock
-            .Get(_mockApplicationService)
+            .Get(MockApplicationService)
             .Verify(svc => svc.DeleteProductAsync(product), Times.Never);
     }
 }

@@ -193,6 +193,24 @@
     <Compile Update="Review\ReviewControllers\UpdateReviewResponse.cs">
       <DependentUpon>UpdateReviewController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Tests\ApplicationLayer\ProductApplicationServiceTestBase.cs">
+      <DependentUpon>ProductApplicationServiceTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\Controllers\DeleteProductControllerTestBase.cs">
+      <DependentUpon>DeleteProductControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\Controllers\GetProductControllerTestBase.cs">
+      <DependentUpon>GetProductControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\Controllers\GetProductPricingControllerTestBase.cs">
+      <DependentUpon>GetProductPricingControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\Controllers\UpdateProductPricingControllerTestBase.cs">
+      <DependentUpon>UpdateProductPricingControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\Controllers\UpdateProductControllerTestBase.cs">
+      <DependentUpon>UpdateProductControllerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

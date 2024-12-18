@@ -6,17 +6,16 @@ namespace backend.Product.Tests.Helpers.Builders;
 
 public class ProductPricingTestDataBuilder
 {
-    private readonly Fixture _fixture;
     private int _id;
     private Pricing _pricing;
 
     public ProductPricingTestDataBuilder()
     {
-        _fixture = new Fixture();
-        _fixture.Customizations.Add(new ProductPricingBuilder());
+        Fixture fixture = new();
+        fixture.Customizations.Add(new ProductPricingBuilder());
 
-        _id = _fixture.Create<int>();
-        _pricing = _fixture.Create<Pricing>();
+        _id = fixture.Create<int>();
+        _pricing = fixture.Create<Pricing>();
     }
 
     public ProductPricingTestDataBuilder WithId(int id)
