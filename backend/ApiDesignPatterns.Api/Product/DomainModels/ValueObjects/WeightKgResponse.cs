@@ -5,5 +5,5 @@ namespace backend.Product.DomainModels.ValueObjects;
 
 public record WeightKgResponse
 {
-    public decimal Value { get; init; }
+    public required string Value { get; init; }
 }

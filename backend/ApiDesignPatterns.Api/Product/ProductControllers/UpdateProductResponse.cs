@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using backend.Product.Contracts;
+using backend.Product.DomainModels.ValueObjects;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Product.ProductControllers;

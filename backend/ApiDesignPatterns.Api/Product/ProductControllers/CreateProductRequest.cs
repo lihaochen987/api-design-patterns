@@ -1,4 +1,4 @@
-using backend.Product.Contracts;
+using backend.Product.DomainModels.ValueObjects;
 
 namespace backend.Product.ProductControllers;
 

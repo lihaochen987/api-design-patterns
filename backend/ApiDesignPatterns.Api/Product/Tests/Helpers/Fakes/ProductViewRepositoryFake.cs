@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using backend.Product.Contracts;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 

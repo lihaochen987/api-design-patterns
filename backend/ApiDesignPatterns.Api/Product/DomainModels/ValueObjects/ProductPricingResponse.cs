@@ -1,4 +1,4 @@
-namespace backend.Product.Contracts;
+namespace backend.Product.DomainModels.ValueObjects;
 
 public class ProductPricingResponse
 {
