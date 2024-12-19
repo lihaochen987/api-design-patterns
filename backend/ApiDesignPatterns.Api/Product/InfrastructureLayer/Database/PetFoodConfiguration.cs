@@ -30,6 +30,7 @@ public class PetFoodConfiguration : IEntityTypeConfiguration<PetFood>
                 v => JsonSerializer.Serialize(v, new JsonSerializerOptions { WriteIndented = false }),
                 v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, new JsonSerializerOptions())!);
         entity.Property(p => p.StorageInstructions).HasColumnName("product_pet_foods_storage_instructions");
-        entity.Property(p => p.WeightKg).HasColumnName("product_pet_foods_weight_kg");
+        entity.OwnsOne(e => e.WeightKg,
+            weightKg => { weightKg.Property(d => d.Value).HasColumnName("product_pet_foods_weight_kg"); });
     }
 }

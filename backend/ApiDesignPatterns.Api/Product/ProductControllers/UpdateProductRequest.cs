@@ -1,4 +1,5 @@
 using backend.Product.Contracts;
+using backend.Product.DomainModels.ValueObjects;
 
 namespace backend.Product.ProductControllers;
 
@@ -17,7 +18,7 @@ public record UpdateProductRequest
     public string? Ingredients { get; init; }
     public Dictionary<string, object>? NutritionalInfo { get; init; }
     public string? StorageInstructions { get; init; }
-    public string? WeightKg { get; init; }
+    public WeightKgRequest? WeightKg { get; init; }
     public bool? IsNatural { get; init; }
     public bool? IsHypoAllergenic { get; init; }
     public string? UsageInstructions { get; init; }

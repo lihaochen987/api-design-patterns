@@ -46,6 +46,7 @@ public class CreateProductExtensions(TypeParser typeParser)
                 ? throw new ArgumentException("Storage instructions cannot be null or whitespace.")
                 : request.StorageInstructions;
 
+            WeightKg weightKg = new(weight);
             return new PetFood
             {
                 Name = name,
@@ -57,7 +58,7 @@ public class CreateProductExtensions(TypeParser typeParser)
                 Ingredients = ingredients,
                 NutritionalInfo = request.NutritionalInfo,
                 StorageInstructions = storageInstructions,
-                WeightKg = weight
+                WeightKg = weightKg
             };
         }
 

@@ -18,7 +18,7 @@ public abstract class UpdateProductControllerTestBase
     protected UpdateProductControllerTestBase()
     {
         MockApplicationService = Mock.Of<IProductApplicationService>();
-        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<UpdateProductMappingProfile>(); });
+        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
         Configuration = new ProductFieldMaskConfiguration();
     }

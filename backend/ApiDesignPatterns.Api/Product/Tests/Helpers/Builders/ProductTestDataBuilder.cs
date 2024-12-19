@@ -17,7 +17,7 @@ public class ProductTestDataBuilder
     private readonly Dictionary<string, object> _nutritionalInfo;
     private Pricing _pricing;
     private readonly string _storageInstructions;
-    private readonly decimal _weightKg;
+    private readonly WeightKg _weightKg;
 
     public ProductTestDataBuilder()
     {
@@ -36,7 +36,7 @@ public class ProductTestDataBuilder
         _ingredients = fixture.Create<string>();
         _nutritionalInfo = fixture.Create<Dictionary<string, object>>();
         _storageInstructions = fixture.Create<string>();
-        _weightKg = fixture.Create<decimal>();
+        _weightKg = fixture.Create<WeightKg>();
     }
 
     public ProductTestDataBuilder AsToys()
