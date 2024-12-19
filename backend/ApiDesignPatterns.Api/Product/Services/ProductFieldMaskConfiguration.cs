@@ -191,6 +191,6 @@ public class ProductFieldMaskConfiguration
             ? parsedTaxRate!
             : product.TaxRate;
 
-        return new Pricing(basePrice, discountPercentage, taxRate);
+        return new Pricing { BasePrice = basePrice, DiscountPercentage = discountPercentage, TaxRate = taxRate, };
     }
 }

@@ -59,7 +59,11 @@ public class UpdateProductController(
     {
         (string name, Pricing pricing, Category category, Dimensions dimensions) =
             maskConfiguration.GetUpdatedProductValues(request, product);
-        product.Replace(name, pricing, category, dimensions);
+
+        product.Name = name;
+        product.Pricing = pricing;
+        product.Category = category;
+        product.Dimensions = dimensions;
     }
 
     private static void UpdatePetFood(
@@ -71,8 +75,12 @@ public class UpdateProductController(
                 string storageInstructions, decimal weightKg) =
             maskConfiguration.GetUpdatedPetFoodValues(request, petFood);
 
-        petFood.UpdatePetFoodDetails(ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions,
-            weightKg);
+        petFood.AgeGroup = ageGroup;
+        petFood.BreedSize = breedSize;
+        petFood.Ingredients = ingredients;
+        petFood.NutritionalInfo = nutritionalInfo;
+        petFood.StorageInstructions = storageInstructions;
+        petFood.WeightKg = weightKg;
     }
 
     private static void UpdateGroomingAndHygiene(
@@ -84,8 +92,10 @@ public class UpdateProductController(
                 string safetyWarnings) =
             maskConfiguration.GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
 
-        groomingAndHygiene.UpdateGroomingAndHygieneDetails(isNatural, isHypoAllergenic, usageInstructions,
-            isCrueltyFree,
-            safetyWarnings);
+        groomingAndHygiene.IsNatural = isNatural;
+        groomingAndHygiene.IsHypoallergenic = isHypoAllergenic;
+        groomingAndHygiene.UsageInstructions = usageInstructions;
+        groomingAndHygiene.IsCrueltyFree = isCrueltyFree;
+        groomingAndHygiene.SafetyWarnings = safetyWarnings;
     }
 }

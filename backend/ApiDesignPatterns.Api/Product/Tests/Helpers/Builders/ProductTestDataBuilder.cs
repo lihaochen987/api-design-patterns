@@ -7,12 +7,11 @@ namespace backend.Product.Tests.Helpers.Builders;
 
 public class ProductTestDataBuilder
 {
-    private readonly Fixture _fixture;
     private readonly AgeGroup _ageGroup;
     private readonly BreedSize _breedSize;
     private Category _category;
     private Dimensions _dimensions;
-    private int? _id;
+    private long _id;
     private readonly string _ingredients;
     private string _name;
     private readonly Dictionary<string, object> _nutritionalInfo;
@@ -22,21 +21,22 @@ public class ProductTestDataBuilder
 
     public ProductTestDataBuilder()
     {
-        _fixture = new Fixture();
-        _fixture.Customizations.Add(new ProductPricingBuilder());
-        _fixture.Customizations.Add(new ProductDimensionsBuilder());
+        Fixture fixture = new();
+        fixture.Customizations.Add(new ProductPricingBuilder());
+        fixture.Customizations.Add(new ProductDimensionsBuilder());
 
-        _name = _fixture.Create<string>();
-        _category = _fixture.Create<Category>();
-        _dimensions = _fixture.Create<Dimensions>();
-        _pricing = _fixture.Create<Pricing>();
+        _id = fixture.Create<long>();
+        _name = fixture.Create<string>();
+        _category = fixture.Create<Category>();
+        _dimensions = fixture.Create<Dimensions>();
+        _pricing = fixture.Create<Pricing>();
 
-        _ageGroup = _fixture.Create<AgeGroup>();
-        _breedSize = _fixture.Create<BreedSize>();
-        _ingredients = _fixture.Create<string>();
-        _nutritionalInfo = _fixture.Create<Dictionary<string, object>>();
-        _storageInstructions = _fixture.Create<string>();
-        _weightKg = _fixture.Create<decimal>();
+        _ageGroup = fixture.Create<AgeGroup>();
+        _breedSize = fixture.Create<BreedSize>();
+        _ingredients = fixture.Create<string>();
+        _nutritionalInfo = fixture.Create<Dictionary<string, object>>();
+        _storageInstructions = fixture.Create<string>();
+        _weightKg = fixture.Create<decimal>();
     }
 
     public ProductTestDataBuilder AsToys()
@@ -85,7 +85,7 @@ public class ProductTestDataBuilder
     {
         // Hardcode discount percentage to 10 and taxRate to 5 and then calculate an appropriate BasePrice
         decimal basePrice = maxPrice / ((1 - (decimal)10 / 100) * (1 + (decimal)5 / 100)) - 2m;
-        _pricing = new Pricing(basePrice, 5, 10);
+        _pricing = new Pricing { BasePrice = basePrice, DiscountPercentage = 5, TaxRate = 10 };
 
         return this;
     }
@@ -94,23 +94,29 @@ public class ProductTestDataBuilder
     {
         if (_category == Category.PetFood)
         {
-            return new PetFood(
-                _name,
-                _pricing,
-                _dimensions,
-                _ageGroup,
-                _breedSize,
-                _ingredients,
-                _nutritionalInfo,
-                _storageInstructions,
-                _weightKg);
+            return new PetFood
+            {
+                Id = _id,
+                Name = _name,
+                Category = _category,
+                Pricing = _pricing,
+                Dimensions = _dimensions,
+                AgeGroup = _ageGroup,
+                BreedSize = _breedSize,
+                Ingredients = _ingredients,
+                NutritionalInfo = _nutritionalInfo,
+                StorageInstructions = _storageInstructions,
+                WeightKg = _weightKg
+            };
         }
 
-        return new BaseProduct(
-            _id ?? _fixture.Create<int>(),
-            _name,
-            _pricing,
-            _category,
-            _dimensions);
+        return new BaseProduct
+        {
+            Id = _id,
+            Name = _name,
+            Category = _category,
+            Pricing = _pricing,
+            Dimensions = _dimensions,
+        };
     }
 }

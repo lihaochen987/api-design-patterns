@@ -28,7 +28,9 @@ public class UpdateProductPricingController(
 
         (decimal basePrice, decimal discountPercentage, decimal taxRate) =
             configuration.GetUpdatedProductPricingValues(request, productPricing.Pricing);
-        productPricing.UpdatePricing(basePrice, discountPercentage, taxRate);
+        productPricing.Pricing.BasePrice = basePrice;
+        productPricing.Pricing.DiscountPercentage = discountPercentage;
+        productPricing.Pricing.TaxRate = taxRate;
 
         await productRepository.UpdateProductAsync(productPricing);
 

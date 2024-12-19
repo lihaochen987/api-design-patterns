@@ -25,7 +25,7 @@ public class CreateProductExtensions(TypeParser typeParser)
         decimal height = typeParser.ParseDecimal(request.Dimensions.Height, "Invalid dimensions height");
 
         Dimensions dimensions = new(length, width, height);
-        Pricing pricing = new(basePrice, discountPercentage, taxRate);
+        Pricing pricing = new() { BasePrice = basePrice, DiscountPercentage = discountPercentage, TaxRate = taxRate };
 
         // PetFood
         if (category == Category.PetFood)
@@ -45,16 +45,19 @@ public class CreateProductExtensions(TypeParser typeParser)
                 ? throw new ArgumentException("Storage instructions cannot be null or whitespace.")
                 : request.StorageInstructions;
 
-            return new PetFood(
-                request.Name,
-                pricing,
-                dimensions,
-                ageGroup,
-                breedSize,
-                ingredients,
-                request.NutritionalInfo,
-                storageInstructions,
-                weight);
+            return new PetFood
+            {
+                Name = request.Name,
+                Category = Category.PetFood,
+                Pricing = pricing,
+                Dimensions = dimensions,
+                AgeGroup = ageGroup,
+                BreedSize = breedSize,
+                Ingredients = ingredients,
+                NutritionalInfo = request.NutritionalInfo,
+                StorageInstructions = storageInstructions,
+                WeightKg = weight
+            };
         }
 
         if (category == Category.GroomingAndHygiene)
@@ -65,17 +68,20 @@ public class CreateProductExtensions(TypeParser typeParser)
             string usageInstructions = typeParser.ParseString(request.UsageInstructions, "Invalid Usage Instructions");
             string safetyWarnings = typeParser.ParseString(request.SafetyWarnings, "Invalid Safety Warnings");
 
-            return new GroomingAndHygiene(
-                request.Name,
-                pricing,
-                dimensions,
-                isNatural,
-                isHypoAllergenic,
-                usageInstructions,
-                isCrueltyFree,
-                safetyWarnings);
+            return new GroomingAndHygiene
+            {
+                Name = request.Name,
+                Category = Category.GroomingAndHygiene,
+                Pricing = pricing,
+                Dimensions = dimensions,
+                IsNatural = isNatural,
+                IsHypoallergenic = isHypoAllergenic,
+                UsageInstructions = usageInstructions,
+                IsCrueltyFree = isCrueltyFree,
+                SafetyWarnings = safetyWarnings
+            };
         }
 
-        return new BaseProduct(request.Name, pricing, category, dimensions);
+        return new BaseProduct { Name = request.Name, Category = category, Pricing = pricing, Dimensions = dimensions };
     }
 }

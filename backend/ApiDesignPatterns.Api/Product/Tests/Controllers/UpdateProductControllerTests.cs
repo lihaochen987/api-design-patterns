@@ -77,7 +77,8 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
     public async Task UpdateProduct_WithMultipleFieldsInFieldMask_ShouldUpdateOnlySpecifiedFields()
     {
         DomainModels.Product product = new ProductTestDataBuilder().WithId(3).WithName("Original Name")
-            .WithPricing(new Pricing(20.99m, 5m, 3m)).WithCategory(Category.Feeders).Build();
+            .WithPricing(new Pricing { BasePrice = 20.99m, DiscountPercentage = 5m, TaxRate = 3m })
+            .WithCategory(Category.Feeders).Build();
         UpdateProductRequest request = new()
         {
             Name = "Updated Name",
