@@ -1,9 +1,9 @@
 using backend.Product.DomainModels.ValueObjects;
-using backend.Shared;
 
 namespace backend.Product.DomainModels.Views;
 
-public class ProductPricingView : Entity
+public record ProductPricingView
 {
+    public long Id { get; init; }
     public required Pricing Pricing { get; init; }
 }

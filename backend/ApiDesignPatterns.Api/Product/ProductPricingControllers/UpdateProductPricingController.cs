@@ -19,21 +19,25 @@ public class UpdateProductPricingController(
         [FromRoute] long id,
         [FromBody] UpdateProductPricingRequest request)
     {
-        DomainModels.Product? productPricing = await productRepository.GetProductAsync(id);
+        DomainModels.Product? product = await productRepository.GetProductAsync(id);
 
-        if (productPricing == null)
+        if (product == null)
         {
             return NotFound();
         }
 
         (decimal basePrice, decimal discountPercentage, decimal taxRate) =
-            configuration.GetUpdatedProductPricingValues(request, productPricing.Pricing);
-        productPricing.Pricing.BasePrice = basePrice;
-        productPricing.Pricing.DiscountPercentage = discountPercentage;
-        productPricing.Pricing.TaxRate = taxRate;
+            configuration.GetUpdatedProductPricingValues(request, product.Pricing);
 
-        await productRepository.UpdateProductAsync(productPricing);
+        var updatedPricing = product.Pricing with
+        {
+            BasePrice = basePrice,
+            DiscountPercentage = discountPercentage,
+            TaxRate = taxRate
+        };
+        product.Pricing = updatedPricing;
 
-        return Ok(extensions.ToUpdateProductPricingResponse(productPricing.Pricing, productPricing.Id));
+        await productRepository.UpdateProductAsync(product);
+        return Ok(extensions.ToUpdateProductPricingResponse(product.Pricing, product.Id));
     }
 }

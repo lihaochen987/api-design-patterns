@@ -48,7 +48,6 @@ builder.Services.AddScoped<UpdateProductPricingExtensions>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductViewRepository, ProductViewRepository>();
 builder.Services.AddScoped<IProductPricingRepository, ProductPricingRepository>();
-builder.Services.AddTransient<QueryService<ProductView>>();
 
 // Inject Product Services
 builder.Services.AddScoped<IProductApplicationService, ProductApplicationService>();

@@ -2,14 +2,14 @@ namespace backend.Product.DomainModels.ValueObjects;
 
 public record Pricing
 {
-    private decimal _basePrice;
-    private decimal _discountPercentage;
-    private decimal _taxRate;
+    private readonly decimal _basePrice;
+    private readonly decimal _discountPercentage;
+    private readonly decimal _taxRate;
 
     public decimal BasePrice
     {
         get => _basePrice;
-        set
+        init
         {
             if (value <= 0)
             {
@@ -23,7 +23,7 @@ public record Pricing
     public decimal DiscountPercentage
     {
         get => _discountPercentage;
-        set
+        init
         {
             if (value is < 0 or > 100)
             {
@@ -37,7 +37,7 @@ public record Pricing
     public decimal TaxRate
     {
         get => _taxRate;
-        set
+        init
         {
             if (value is < 0 or > 100)
             {

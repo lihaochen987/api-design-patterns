@@ -2,19 +2,20 @@ namespace backend.Product.DomainModels.ValueObjects;
 
 public record Dimensions
 {
-    private decimal _length;
-    private decimal _width;
-    private decimal _height;
+    private readonly decimal _length;
+    private readonly decimal _width;
+    private readonly decimal _height;
 
     public decimal Length
     {
         get => _length;
-        set
+        init
         {
             if (value is < 0 or > 100)
             {
                 throw new ArgumentException("Length must be greater than zero and less than 100cm.");
             }
+
             _length = value;
             EnforceInvariants();
         }
@@ -23,12 +24,13 @@ public record Dimensions
     public decimal Width
     {
         get => _width;
-        set
+        init
         {
             if (value is < 0 or > 50)
             {
                 throw new ArgumentException("Width must be greater than zero and less than 50cm.");
             }
+
             _width = value;
             EnforceInvariants();
         }
@@ -37,12 +39,13 @@ public record Dimensions
     public decimal Height
     {
         get => _height;
-        set
+        init
         {
             if (value is < 0 or > 50)
             {
                 throw new ArgumentException("Height must be greater than zero and less than 50cm.");
             }
+
             _height = value;
             EnforceInvariants();
         }
