@@ -21,6 +21,6 @@ public class ProductDimensionsBuilder : ISpecimenBuilder
             height = (decimal)(context.Resolve(new RangedNumberRequest(typeof(decimal), 0m, 50m)) ?? 0m);
         } while (length * width * height >= 110_000m);
 
-        return new Dimensions { Length = length, Width = width, Height = height };
+        return new Dimensions(length, width, height);
     }
 }

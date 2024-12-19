@@ -2,60 +2,39 @@ namespace backend.Product.DomainModels.ValueObjects;
 
 public record Dimensions
 {
-    private readonly decimal _length;
-    private readonly decimal _width;
-    private readonly decimal _height;
+    public decimal Length { get; init; }
+    public decimal Width { get; init; }
+    public decimal Height { get; init; }
 
-    public decimal Length
+    public Dimensions(decimal length, decimal width, decimal height)
     {
-        get => _length;
-        init
+        if (!IsValid(length, width, height))
         {
-            if (value is < 0 or > 100)
-            {
-                throw new ArgumentException("Length must be greater than zero and less than 100cm.");
-            }
-
-            _length = value;
-            EnforceInvariants();
+            throw new ArgumentException("Invalid value for dimensions");
         }
+
+        Length = length;
+        Width = width;
+        Height = height;
     }
 
-    public decimal Width
+    private static bool IsValid(decimal length, decimal width, decimal height)
     {
-        get => _width;
-        init
+        if (length is < 0 or > 100)
         {
-            if (value is < 0 or > 50)
-            {
-                throw new ArgumentException("Width must be greater than zero and less than 50cm.");
-            }
-
-            _width = value;
-            EnforceInvariants();
+            return false;
         }
-    }
 
-    public decimal Height
-    {
-        get => _height;
-        init
+        if (width is < 0 or > 50)
         {
-            if (value is < 0 or > 50)
-            {
-                throw new ArgumentException("Height must be greater than zero and less than 50cm.");
-            }
-
-            _height = value;
-            EnforceInvariants();
+            return false;
         }
-    }
 
-    private void EnforceInvariants()
-    {
-        if (_width * _length * _height > 110000)
+        if (height is < 0 or > 50)
         {
-            throw new ArgumentException("Total volume must be less than 110,000cm³.");
+            return false;
         }
+
+        return length * width * height <= 110000;
     }
 }

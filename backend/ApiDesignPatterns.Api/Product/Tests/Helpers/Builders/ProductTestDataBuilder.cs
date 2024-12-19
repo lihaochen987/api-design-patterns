@@ -85,7 +85,7 @@ public class ProductTestDataBuilder
     {
         // Hardcode discount percentage to 10 and taxRate to 5 and then calculate an appropriate BasePrice
         decimal basePrice = maxPrice / ((1 - (decimal)10 / 100) * (1 + (decimal)5 / 100)) - 2m;
-        _pricing = new Pricing { BasePrice = basePrice, DiscountPercentage = 5, TaxRate = 10 };
+        _pricing = new Pricing(basePrice, 5, 10);
 
         return this;
     }

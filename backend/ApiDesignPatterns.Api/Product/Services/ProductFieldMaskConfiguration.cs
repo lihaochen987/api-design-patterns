@@ -44,7 +44,7 @@ public class ProductFieldMaskConfiguration
             DomainModels.Product baseProduct)
     {
         string name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
-                       && !string.IsNullOrEmpty(request.Name)
+                      && !string.IsNullOrEmpty(request.Name)
             ? request.Name
             : baseProduct.Name;
 
@@ -78,7 +78,7 @@ public class ProductFieldMaskConfiguration
             ? decimal.Parse(request.Dimensions.Height)
             : currentDimensions.Height;
 
-        return new Dimensions { Length = length, Width = width, Height = height };
+        return new Dimensions(length, width, height);
     }
 
     public (
@@ -187,6 +187,6 @@ public class ProductFieldMaskConfiguration
             ? parsedTaxRate!
             : product.TaxRate;
 
-        return new Pricing { BasePrice = basePrice, DiscountPercentage = discountPercentage, TaxRate = taxRate, };
+        return new Pricing(basePrice, discountPercentage, taxRate);
     }
 }

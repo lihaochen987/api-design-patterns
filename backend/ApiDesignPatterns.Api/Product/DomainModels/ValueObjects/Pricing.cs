@@ -2,49 +2,34 @@ namespace backend.Product.DomainModels.ValueObjects;
 
 public record Pricing
 {
-    private readonly decimal _basePrice;
-    private readonly decimal _discountPercentage;
-    private readonly decimal _taxRate;
+    public decimal BasePrice { get; init; }
+    public decimal DiscountPercentage { get; init; }
+    public decimal TaxRate { get; init; }
 
-    public decimal BasePrice
+    public Pricing(decimal basePrice, decimal discountPercentage, decimal taxRate)
     {
-        get => _basePrice;
-        init
+        if (!IsValid(basePrice, discountPercentage, taxRate))
         {
-            if (value <= 0)
-            {
-                throw new ArgumentException("Product price must be greater than zero.");
-            }
-
-            _basePrice = value;
+            throw new ArgumentException("Invalid value for Pricing");
         }
+
+        BasePrice = basePrice;
+        DiscountPercentage = discountPercentage;
+        TaxRate = taxRate;
     }
 
-    public decimal DiscountPercentage
+    private static bool IsValid(decimal basePrice, decimal discountPercentage, decimal taxRate)
     {
-        get => _discountPercentage;
-        init
+        if (basePrice <= 0)
         {
-            if (value is < 0 or > 100)
-            {
-                throw new ArgumentException("Discount percentage must be between 0 and 100.");
-            }
-
-            _discountPercentage = value;
+            return false;
         }
-    }
 
-    public decimal TaxRate
-    {
-        get => _taxRate;
-        init
+        if (discountPercentage is < 0 or > 100)
         {
-            if (value is < 0 or > 100)
-            {
-                throw new ArgumentException("Tax rate must be between 0 and 100.");
-            }
-
-            _taxRate = value;
+            return false;
         }
+
+        return taxRate is >= 0 and <= 100;
     }
 }

@@ -17,6 +17,6 @@ public class ProductPricingBuilder : ISpecimenBuilder
             (decimal)(context.Resolve(new RangedNumberRequest(typeof(decimal), 0m, 100m)) ?? 0m);
         decimal taxRate = (decimal)(context.Resolve(new RangedNumberRequest(typeof(decimal), 0m, 100m)) ?? 0m);
 
-        return new Pricing { BasePrice = basePrice, DiscountPercentage = discountPercentage, TaxRate = taxRate, };
+        return new Pricing(basePrice, discountPercentage, taxRate);
     }
 }

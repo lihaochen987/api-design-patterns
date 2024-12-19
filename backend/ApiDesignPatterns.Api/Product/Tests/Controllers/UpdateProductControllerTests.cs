@@ -77,7 +77,7 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
     public async Task UpdateProduct_WithMultipleFieldsInFieldMask_ShouldUpdateOnlySpecifiedFields()
     {
         DomainModels.Product product = new ProductTestDataBuilder().WithId(3).WithName("Original Name")
-            .WithPricing(new Pricing { BasePrice = 20.99m, DiscountPercentage = 5m, TaxRate = 3m })
+            .WithPricing(new Pricing(20.99m, 5m, 3m))
             .WithCategory(Category.Feeders).Build();
         UpdateProductRequest request = new()
         {
@@ -104,7 +104,7 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
     public async Task UpdateProduct_WithNestedFieldInFieldMask_ShouldUpdateNestedField()
     {
         DomainModels.Product product = new ProductTestDataBuilder()
-            .WithId(5).WithDimensions(new Dimensions { Length = 10, Width = 5, Height = 2 }).Build();
+            .WithId(5).WithDimensions(new Dimensions(10, 5, 2)).Build();
         UpdateProductRequest request = new()
         {
             Dimensions = new DimensionsRequest { Length = "20", Width = "10", Height = "2" },
