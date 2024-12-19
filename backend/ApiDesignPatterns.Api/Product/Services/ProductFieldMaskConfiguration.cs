@@ -82,7 +82,7 @@ public class ProductFieldMaskConfiguration
             ? decimal.Parse(request.Dimensions.Height)
             : currentDimensions.Height;
 
-        return new Dimensions(length, width, height);
+        return new Dimensions { Length = length, Width = width, Height = height };
     }
 
     public (

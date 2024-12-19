@@ -24,7 +24,7 @@ public class CreateProductExtensions(TypeParser typeParser)
         decimal width = typeParser.ParseDecimal(request.Dimensions.Width, "Invalid dimensions width");
         decimal height = typeParser.ParseDecimal(request.Dimensions.Height, "Invalid dimensions height");
 
-        Dimensions dimensions = new(length, width, height);
+        Dimensions dimensions = new() { Length = length, Width = width, Height = height };
         Pricing pricing = new() { BasePrice = basePrice, DiscountPercentage = discountPercentage, TaxRate = taxRate };
 
         // PetFood
