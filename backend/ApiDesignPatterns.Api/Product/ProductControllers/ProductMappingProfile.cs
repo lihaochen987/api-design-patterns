@@ -15,11 +15,9 @@ public class ProductMappingProfile : Profile
         // Value Objects
         CreateMap<Pricing, ProductPricingResponse>().ReverseMap();
         CreateMap<Dimensions, DimensionsResponse>().ReverseMap();
-        CreateMap<WeightKg, WeightKgResponse>().ReverseMap();
 
         CreateMap<ProductPricingRequest, Pricing>().ReverseMap();
         CreateMap<DimensionsRequest, Dimensions>().ReverseMap();
-        CreateMap<WeightKgRequest, WeightKg>().ReverseMap();
 
         // CreateProductController
         CreateMap<DomainModels.Product, CreateProductResponse>();

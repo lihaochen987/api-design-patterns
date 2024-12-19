@@ -72,7 +72,7 @@ public class UpdateProductController(
         PetFood petFood)
     {
         (AgeGroup ageGroup, BreedSize breedSize, string ingredients, Dictionary<string, object> nutritionalInfo,
-                string storageInstructions, WeightKg weightKg) =
+                string storageInstructions, decimal weightKg) =
             maskConfiguration.GetUpdatedPetFoodValues(request, petFood);
 
         petFood.AgeGroup = ageGroup;

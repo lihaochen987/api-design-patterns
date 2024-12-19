@@ -126,7 +126,7 @@ public class ProductFieldMaskConfiguration
         string ingredients,
         Dictionary<string, object> nutritionalInfo,
         string storageInstructions,
-        WeightKg weightKg)
+        decimal weightKg)
         GetUpdatedPetFoodValues(
             UpdateProductRequest request,
             PetFood petFood)
@@ -159,12 +159,11 @@ public class ProductFieldMaskConfiguration
                 : petFood.StorageInstructions;
 
         decimal weight = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase)
-                         && !string.IsNullOrEmpty(request.WeightKg?.Value)
-            ? decimal.Parse(request.WeightKg.Value)
-            : petFood.WeightKg.Value;
+                         && !string.IsNullOrEmpty(request.WeightKg)
+            ? decimal.Parse(request.WeightKg)
+            : petFood.WeightKg;
 
-        WeightKg weightKg = new(weight);
-        return (ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions, weightKg);
+        return (ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions, weight);
     }
 
     private static Pricing

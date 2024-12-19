@@ -92,6 +92,9 @@
     <Compile Update="Product\ProductControllers\DeleteProductRequest.cs">
       <DependentUpon>DeleteProductController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\ProductControllers\GetProductMappingProfile.cs">
+      <DependentUpon>GetProductController.cs</DependentUpon>
+    </Compile>
     <Compile Update="Product\ProductControllers\GetProductRequest.cs">
       <DependentUpon>GetProductController.cs</DependentUpon>
     </Compile>
@@ -133,6 +136,15 @@
     </Compile>
     <Compile Update="Product\ProductPricingControllers\UpdateProductPricingResponse.cs">
       <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\CreateProductMappingProfile.cs">
+      <DependentUpon>CreateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\UpdateProductMappingProfile.cs">
+      <DependentUpon>UpdateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\ProductControllers\ReplaceProductMappingProfile.cs">
+      <DependentUpon>ReplaceProductController.cs</DependentUpon>
     </Compile>
     <Compile Update="Review\ReviewControllers\CreateReviewExtensions.cs">
       <DependentUpon>CreateReviewController.cs</DependentUpon>
@@ -214,12 +226,6 @@
     </Compile>
     <Compile Update="Product\DomainModels\ValueObjects\ProductPricingResponse.cs">
       <DependentUpon>Pricing.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\DomainModels\ValueObjects\WeightKgRequest.cs">
-      <DependentUpon>WeightKg.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\DomainModels\ValueObjects\WeightKgResponse.cs">
-      <DependentUpon>WeightKg.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 
