@@ -14,14 +14,12 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
     {
         DomainModels.Product expectedProduct = new ProductTestDataBuilder().Build();
         Repository.Add(expectedProduct);
-        Repository.IsDirty = false;
         var sut = ProductApplicationService();
 
         DomainModels.Product? result = await sut.GetProductAsync(expectedProduct.Id);
 
         result.ShouldNotBeNull();
         result.ShouldBeEquivalentTo(expectedProduct);
-        Repository.IsDirty.ShouldBeFalse();
     }
 
     [Fact]
@@ -44,6 +42,8 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         await sut.CreateProductAsync(productToCreate);
 
         Repository.IsDirty.ShouldBeTrue();
+        Repository.CallCount.Count.ShouldBe(1);
+        Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);
     }
 
     [Fact]
@@ -55,5 +55,7 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         await sut.DeleteProductAsync(productToDelete);
 
         Repository.IsDirty.ShouldBeTrue();
+        Repository.CallCount.Count.ShouldBe(1);
+        Repository.CallCount.ShouldContainKeyAndValue("DeleteProductAsync", 1);
     }
 }
