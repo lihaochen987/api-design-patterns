@@ -5,7 +5,7 @@ using backend.Shared;
 
 namespace backend.Product.DomainModels;
 
-public abstract class Product : Entity
+public class Product : Entity
 {
     private string _name = string.Empty;
 

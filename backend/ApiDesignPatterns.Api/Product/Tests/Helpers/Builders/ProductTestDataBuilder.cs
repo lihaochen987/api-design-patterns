@@ -110,7 +110,7 @@ public class ProductTestDataBuilder
             };
         }
 
-        return new BaseProduct
+        return new DomainModels.Product
         {
             Id = _id,
             Name = _name,

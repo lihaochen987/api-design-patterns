@@ -82,6 +82,9 @@ public class CreateProductExtensions(TypeParser typeParser)
             };
         }
 
-        return new BaseProduct { Name = request.Name, Category = category, Pricing = pricing, Dimensions = dimensions };
+        return new DomainModels.Product
+        {
+            Name = request.Name, Category = category, Pricing = pricing, Dimensions = dimensions
+        };
     }
 }

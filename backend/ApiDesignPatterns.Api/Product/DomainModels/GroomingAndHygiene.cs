@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using backend.Product.DomainModels.Enums;
-using backend.Product.DomainModels.ValueObjects;
 
 namespace backend.Product.DomainModels;
 
