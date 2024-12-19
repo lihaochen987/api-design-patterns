@@ -1,13 +1,13 @@
-// using backend.Product.Database;
-// using backend.Product.DomainModels;
-// using backend.Product.ProductControllers;
-// using backend.Product.Tests.Builders;
+// using ApiDesignPatterns.Api.Product.Database;
+// using ApiDesignPatterns.Api.Product.DomainModels;
+// using ApiDesignPatterns.Api.Product.ProductControllers;
+// using ApiDesignPatterns.Api.Product.Tests.Builders;
 // using Microsoft.AspNetCore.Mvc;
 // using Microsoft.EntityFrameworkCore;
 // using Shouldly;
 // using Xunit;
 //
-// namespace backend.Product.Tests;
+// namespace ApiDesignPatterns.Api.Product.Tests;
 //
 // [Collection("SequentialExecutionCollection")]
 // public class ListProductsControllerTests : IDisposable
