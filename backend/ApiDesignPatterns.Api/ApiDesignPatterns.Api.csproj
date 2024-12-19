@@ -215,6 +215,18 @@
     <Compile Update="Product\Tests\ApplicationLayer\ProductViewApplicationServiceTestBase.cs">
       <DependentUpon>ProductViewApplicationServiceTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\DomainModels\ValueObjects\DimensionsRequest.cs">
+      <DependentUpon>Dimensions.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\DomainModels\ValueObjects\DimensionsResponse.cs">
+      <DependentUpon>Dimensions.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\DomainModels\ValueObjects\ProductPricingRequest.cs">
+      <DependentUpon>Pricing.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\DomainModels\ValueObjects\ProductPricingResponse.cs">
+      <DependentUpon>Pricing.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

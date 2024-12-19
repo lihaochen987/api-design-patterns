@@ -7,21 +7,7 @@ namespace backend.Product.DomainModels;
 
 public class Product : Entity
 {
-    private string _name = string.Empty;
-
-    [MaxLength(100)]
-    public required string Name
-    {
-        get => _name;
-        set
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new ArgumentException("Product name is required.");
-            }
-            _name = value;
-        }
-    }
+    [MaxLength(100)] public required string Name { get; set; }
 
     public Category Category { get; set; }
 
