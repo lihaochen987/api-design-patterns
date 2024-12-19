@@ -1,6 +1,6 @@
 namespace backend.Product.ProductControllers;
 
-public class GetProductRequest
+public record GetProductRequest
 {
-    public List<string> FieldMask { get; set; } = ["*"];
+    public List<string> FieldMask { get; init; } = ["*"];
 }

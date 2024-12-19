@@ -7,33 +7,30 @@ namespace backend.Product.ProductControllers;
 [SwaggerDiscriminator("category")]
 [SwaggerSubType(typeof(UpdatePetFoodResponse))]
 [SwaggerSubType(typeof(UpdateGroomingAndHygieneResponse))]
-public class UpdateProductResponse
+public record UpdateProductResponse
 {
-    [Required] public required string Id { get; init; }
-    [Required] public required string Name { get; init; }
-
-    [Required] public required ProductPricingResponse Pricing { get; init; }
-
-    [Required] public required string Category { get; init; }
-
-    [Required] public required DimensionsResponse Dimensions { get; init; }
+    public required string Id { get; init; }
+    public required string Name { get; init; }
+    public required ProductPricingResponse Pricing { get; init; }
+    public required string Category { get; init; }
+    public required DimensionsResponse Dimensions { get; init; }
 }
 
-public class UpdateGroomingAndHygieneResponse : UpdateProductResponse
+public record UpdateGroomingAndHygieneResponse : UpdateProductResponse
 {
-    [Required] public required bool IsNatural { get; init; }
-    [Required] public required bool IsHypoAllergenic { get; init; }
-    [Required] public required string UsageInstructions { get; init; }
-    [Required] public required bool IsCrueltyFree { get; init; }
-    [Required] public required string SafetyWarnings { get; init; }
+    public required bool IsNatural { get; init; }
+    public required bool IsHypoAllergenic { get; init; }
+    public required string UsageInstructions { get; init; }
+    public required bool IsCrueltyFree { get; init; }
+    public required string SafetyWarnings { get; init; }
 }
 
-public class UpdatePetFoodResponse : UpdateProductResponse
+public record UpdatePetFoodResponse : UpdateProductResponse
 {
-    [Required] public required string AgeGroup { get; init; }
-    [Required] public required string BreedSize { get; init; }
-    [Required] public required string Ingredients { get; init; }
-    [Required] public required string NutritionalInfo { get; init; }
-    [Required] public required string StorageInstructions { get; init; }
-    [Required] public required string WeightKg { get; init; }
+    public required string AgeGroup { get; init; }
+    public required string BreedSize { get; init; }
+    public required string Ingredients { get; init; }
+    public required string NutritionalInfo { get; init; }
+    public required string StorageInstructions { get; init; }
+    public required string WeightKg { get; init; }
 }

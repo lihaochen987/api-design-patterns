@@ -1,8 +1,8 @@
 namespace backend.Product.ProductControllers;
 
-public class ListProductsRequest
+public record ListProductsRequest
 {
-    public string? Filter { get; set; }
-    public string? PageToken { get; set; } = "";
-    public int MaxPageSize { get; set; } = 10;
+    public string? Filter { get; init; }
+    public string? PageToken { get; init; } = "";
+    public int MaxPageSize { get; init; } = 10;
 }

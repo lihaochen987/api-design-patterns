@@ -38,17 +38,13 @@ public class ProductFieldMaskConfiguration
         "safetywarnings"
     ];
 
-    public (
-        string name,
-        Pricing pricing,
-        Category category,
-        Dimensions dimensions)
+    public (string name, Pricing pricing, Category category, Dimensions dimensions)
         GetUpdatedProductValues(
             UpdateProductRequest request,
             DomainModels.Product baseProduct)
     {
         string name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
-                      && !string.IsNullOrEmpty(request.Name)
+                       && !string.IsNullOrEmpty(request.Name)
             ? request.Name
             : baseProduct.Name;
 
@@ -68,17 +64,17 @@ public class ProductFieldMaskConfiguration
         Dimensions currentDimensions)
     {
         decimal length = request.FieldMask.Contains("dimensions.length", StringComparer.OrdinalIgnoreCase)
-                         && !string.IsNullOrEmpty(request.Dimensions.Length)
+                         && !string.IsNullOrEmpty(request.Dimensions?.Length)
             ? decimal.Parse(request.Dimensions.Length)
             : currentDimensions.Length;
 
         decimal width = request.FieldMask.Contains("dimensions.width", StringComparer.OrdinalIgnoreCase)
-                        && !string.IsNullOrEmpty(request.Dimensions.Width)
+                        && !string.IsNullOrEmpty(request.Dimensions?.Width)
             ? decimal.Parse(request.Dimensions.Width)
             : currentDimensions.Width;
 
         decimal height = request.FieldMask.Contains("dimensions.height", StringComparer.OrdinalIgnoreCase)
-                         && !string.IsNullOrEmpty(request.Dimensions.Height)
+                         && !string.IsNullOrEmpty(request.Dimensions?.Height)
             ? decimal.Parse(request.Dimensions.Height)
             : currentDimensions.Height;
 
@@ -176,18 +172,18 @@ public class ProductFieldMaskConfiguration
             Pricing product)
     {
         decimal basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase)
-                            && decimal.TryParse(request.Pricing.BasePrice, out decimal parsedBasePrice)
+                            && decimal.TryParse(request.Pricing?.BasePrice, out decimal parsedBasePrice)
             ? parsedBasePrice
             : product.BasePrice;
 
         decimal discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
-                                     && decimal.TryParse(request.Pricing.DiscountPercentage,
+                                     && decimal.TryParse(request.Pricing?.DiscountPercentage,
                                          out decimal parsedDiscountPercentage)
             ? parsedDiscountPercentage!
             : product.DiscountPercentage;
 
         decimal taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
-                          && decimal.TryParse(request.Pricing.TaxRate, out decimal parsedTaxRate)
+                          && decimal.TryParse(request.Pricing?.TaxRate, out decimal parsedTaxRate)
             ? parsedTaxRate!
             : product.TaxRate;
 

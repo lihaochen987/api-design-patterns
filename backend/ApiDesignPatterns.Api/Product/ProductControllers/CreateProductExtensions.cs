@@ -12,17 +12,18 @@ public class CreateProductExtensions(TypeParser typeParser)
     {
         // ProductPricing fields
         decimal discountPercentage =
-            typeParser.ParseDecimal(request.Pricing.DiscountPercentage, "Invalid discount percentage");
-        decimal taxRate = typeParser.ParseDecimal(request.Pricing.TaxRate, "Invalid tax rate");
-        decimal basePrice = typeParser.ParseDecimal(request.Pricing.BasePrice, "Invalid BasePrice");
+            typeParser.ParseDecimal(request.Pricing?.DiscountPercentage, "Invalid discount percentage");
+        decimal taxRate = typeParser.ParseDecimal(request.Pricing?.TaxRate, "Invalid tax rate");
+        decimal basePrice = typeParser.ParseDecimal(request.Pricing?.BasePrice, "Invalid BasePrice");
 
         // Product fields
+        string name = typeParser.ParseString(request.Name, "Invalid name");
         Category category = typeParser.ParseEnum<Category>(request.Category, "Invalid product category");
 
         // Dimensions Fields
-        decimal length = typeParser.ParseDecimal(request.Dimensions.Length, "Invalid dimensions length");
-        decimal width = typeParser.ParseDecimal(request.Dimensions.Width, "Invalid dimensions width");
-        decimal height = typeParser.ParseDecimal(request.Dimensions.Height, "Invalid dimensions height");
+        decimal length = typeParser.ParseDecimal(request.Dimensions?.Length, "Invalid dimensions length");
+        decimal width = typeParser.ParseDecimal(request.Dimensions?.Width, "Invalid dimensions width");
+        decimal height = typeParser.ParseDecimal(request.Dimensions?.Height, "Invalid dimensions height");
 
         Dimensions dimensions = new() { Length = length, Width = width, Height = height };
         Pricing pricing = new() { BasePrice = basePrice, DiscountPercentage = discountPercentage, TaxRate = taxRate };
@@ -47,7 +48,7 @@ public class CreateProductExtensions(TypeParser typeParser)
 
             return new PetFood
             {
-                Name = request.Name,
+                Name = name,
                 Category = Category.PetFood,
                 Pricing = pricing,
                 Dimensions = dimensions,
@@ -70,7 +71,7 @@ public class CreateProductExtensions(TypeParser typeParser)
 
             return new GroomingAndHygiene
             {
-                Name = request.Name,
+                Name = name,
                 Category = Category.GroomingAndHygiene,
                 Pricing = pricing,
                 Dimensions = dimensions,
@@ -84,7 +85,7 @@ public class CreateProductExtensions(TypeParser typeParser)
 
         return new DomainModels.Product
         {
-            Name = request.Name, Category = category, Pricing = pricing, Dimensions = dimensions
+            Name = name, Category = category, Pricing = pricing, Dimensions = dimensions
         };
     }
 }

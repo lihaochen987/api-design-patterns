@@ -1,26 +1,22 @@
-using System.ComponentModel.DataAnnotations;
 using backend.Product.Contracts;
 
 namespace backend.Product.ProductControllers;
 
-public class CreateProductRequest
+public record CreateProductRequest
 {
-    [Required] public required string Name { get; init; }
-
-    [Required] public required ProductPricingRequest Pricing { get; init; }
-
-    [Required] public required string Category { get; init; }
-
-    [Required] public required DimensionsRequest Dimensions { get; init; }
-    public string? AgeGroup { get; set; }
-    public string? BreedSize { get; set; }
-    public string? Ingredients { get; set; }
-    public Dictionary<string, object>? NutritionalInfo { get; set; }
-    public string? StorageInstructions { get; set; }
-    public string? WeightKg { get; set; }
-    public bool? IsNatural { get; set; }
-    public bool? IsHypoAllergenic { get; set; }
-    public string? UsageInstructions { get; set; }
-    public bool? IsCrueltyFree { get; set; }
-    public string? SafetyWarnings { get; set; }
+    public string? Name { get; init; }
+    public ProductPricingRequest? Pricing { get; init; }
+    public string? Category { get; init; }
+    public DimensionsRequest? Dimensions { get; init; }
+    public string? AgeGroup { get; init; }
+    public string? BreedSize { get; init; }
+    public string? Ingredients { get; init; }
+    public Dictionary<string, object>? NutritionalInfo { get; init; }
+    public string? StorageInstructions { get; init; }
+    public string? WeightKg { get; init; }
+    public bool? IsNatural { get; init; }
+    public bool? IsHypoAllergenic { get; init; }
+    public string? UsageInstructions { get; init; }
+    public bool? IsCrueltyFree { get; init; }
+    public string? SafetyWarnings { get; init; }
 }

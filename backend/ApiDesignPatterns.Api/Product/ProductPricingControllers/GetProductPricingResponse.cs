@@ -1,11 +1,9 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace backend.Product.ProductPricingControllers;
 
-public class GetProductPricingResponse
+public record GetProductPricingResponse
 {
-    [Required] public string Id { get; set; } = "";
-    [Required] public string BasePrice { get; set; } = "";
-    [Required] public string DiscountPercentage { get; set; } = "";
-    [Required] public string TaxRate { get; set; } = "";
+    public required string Id { get; init; }
+    public required string BasePrice { get; init; }
+    public required string DiscountPercentage { get; init; }
+    public required string TaxRate { get; init; }
 }

@@ -1,5 +1,5 @@
 namespace backend.Product.ProductControllers;
 
-public class DeleteProductRequest
+public record DeleteProductRequest
 {
 }
