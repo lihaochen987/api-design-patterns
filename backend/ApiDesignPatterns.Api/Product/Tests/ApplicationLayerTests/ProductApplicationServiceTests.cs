@@ -58,4 +58,20 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         Repository.CallCount.Count.ShouldBe(1);
         Repository.CallCount.ShouldContainKeyAndValue("DeleteProductAsync", 1);
     }
+
+    [Fact]
+    public async Task UpdateProductAsync_ValidProduct_ShouldCallRepositoryUpdateProductAsync()
+    {
+        var existingProduct = new ProductTestDataBuilder().WithId(1).Build();
+        Repository.Add(existingProduct);
+        Repository.IsDirty = false;
+        var updatedProduct = new ProductTestDataBuilder().WithId(1).Build();
+        var sut = ProductApplicationService();
+
+        await sut.UpdateProductAsync(updatedProduct);
+
+        Repository.IsDirty.ShouldBeTrue();
+        Repository.CallCount.Count.ShouldBe(1);
+        Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
+    }
 }

@@ -2,7 +2,10 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
+using backend.Product.DomainModels.Views;
+using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
+using Moq;
 using Shouldly;
 using Xunit;
 
