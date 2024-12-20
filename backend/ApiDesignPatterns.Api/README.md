@@ -18,12 +18,12 @@ which this repository places in action. These include:
 - **Filtering** : evident from the `List` standard method in the `Product` folder
 - **Polymorphic resources** : evident from endpoints in the `Product` folder which adds additional fields based on the
   `Category`
+- **Cross-References**: evident from endpoints in the `Review` folder which references a `Product`
 
 The other patterns mentioned, but not yet implemented from the book include:
 
 - **Custom methods**
 - **Long-running operations**
-- **Cross references**
 - **Association resources**
 - **Add and remove custom methods**
 - **Copy and move**
