@@ -11,19 +11,14 @@ public class ProductApplicationService(
 {
     public async Task<DomainModels.Product?> GetProductAsync(long id)
     {
-        // Prepare
         DomainModels.Product? product = await repository.GetProductAsync(id);
-
-        // Apply
         return product ?? null;
     }
 
     public async Task CreateProductAsync(DomainModels.Product product) =>
-        // Apply
         await repository.CreateProductAsync(product);
 
     public async Task DeleteProductAsync(DomainModels.Product product) =>
-        // Apply
         await repository.DeleteProductAsync(product);
 
     public async Task UpdateProductAsync(DomainModels.Product product) => await repository.UpdateProductAsync(product);

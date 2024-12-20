@@ -11,23 +11,17 @@ public class ReviewViewApplicationService(IReviewViewRepository repository) : IR
 {
     public async Task<ReviewView?> GetReviewView(long id)
     {
-        // Prepare
         ReviewView? review = await repository.GetReviewView(id);
-
-        // Apply
         return review;
     }
 
     public async Task<(List<ReviewView>, string?)> ListProductsAsync(ListReviewsRequest request)
     {
-        // Prepare
         (List<ReviewView> reviews, string? nextPageToken) = await repository.ListReviewsAsync(
             request.PageToken,
             request.Filter,
             request.MaxPageSize,
             request.Parent);
-
-        // Apply
         return (reviews, nextPageToken);
     }
 }

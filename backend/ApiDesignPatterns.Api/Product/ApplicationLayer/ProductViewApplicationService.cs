@@ -10,22 +10,16 @@ public class ProductViewApplicationService(
 {
     public async Task<ProductView?> GetProductView(long id)
     {
-        // Prepare
         ProductView? product = await repository.GetProductView(id);
-
-        // Apply
         return product;
     }
 
     public async Task<(List<ProductView>, string?)> ListProductsAsync(ListProductsRequest request)
     {
-        // Prepare
         (List<ProductView> products, string? nextPageToken) = await repository.ListProductsAsync(
             request.PageToken,
             request.Filter,
             request.MaxPageSize);
-
-        // Apply
         return (products, nextPageToken);
     }
 }
