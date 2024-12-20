@@ -3,6 +3,6 @@
 
 namespace backend.Review.ReviewControllers;
 
-public class DeleteReviewRequest
+public record DeleteReviewRequest
 {
 }

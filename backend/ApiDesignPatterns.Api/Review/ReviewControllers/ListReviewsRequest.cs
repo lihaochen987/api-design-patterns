@@ -3,10 +3,10 @@
 
 namespace backend.Review.ReviewControllers;
 
-public class ListReviewsRequest
+public record ListReviewsRequest
 {
-    public string? Parent { get; set; }
-    public string? Filter { get; set; }
-    public string? PageToken { get; set; } = "";
-    public int MaxPageSize { get; set; } = 10;
+    public string? Parent { get; init; }
+    public string? Filter { get; init; }
+    public string? PageToken { get; init; } = "";
+    public int MaxPageSize { get; init; } = 10;
 }

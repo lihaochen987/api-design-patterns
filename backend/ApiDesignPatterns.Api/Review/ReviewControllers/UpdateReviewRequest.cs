@@ -3,12 +3,12 @@
 
 namespace backend.Review.ReviewControllers;
 
-public class UpdateReviewRequest
+public record UpdateReviewRequest
 {
-    public string ProductId { get; init; } = "";
-    public string Rating { get; init; } = "";
-    public string Text { get; init; } = "";
-    public string CreatedAt { get; init; } = "";
-    public string UpdatedAt { get; init; } = "";
+    public string? ProductId { get; init; }
+    public string? Rating { get; init; }
+    public string? Text { get; init; }
+    public string? CreatedAt { get; init; }
+    public string? UpdatedAt { get; init; }
     public List<string> FieldMask { get; init; } = ["*"];
 }

@@ -3,7 +3,7 @@
 
 namespace backend.Review.ReviewControllers;
 
-public class GetReviewRequest
+public record GetReviewRequest
 {
     public List<string> FieldMask { get; set; } = ["*"];
 }
