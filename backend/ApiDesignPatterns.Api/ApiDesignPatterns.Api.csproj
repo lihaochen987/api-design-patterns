@@ -137,9 +137,6 @@
     <Compile Update="Review\ReviewControllers\CreateReviewExtensions.cs">
       <DependentUpon>CreateReviewController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Review\ReviewControllers\CreateReviewMappingProfile.cs">
-      <DependentUpon>CreateReviewController.cs</DependentUpon>
-    </Compile>
     <Compile Update="Review\ReviewControllers\CreateReviewRequest.cs">
       <DependentUpon>CreateReviewController.cs</DependentUpon>
     </Compile>
@@ -148,9 +145,6 @@
     </Compile>
     <Compile Update="Review\ReviewControllers\DeleteReviewRequest.cs">
       <DependentUpon>DeleteReviewController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Review\ReviewControllers\GetReviewMappingProfile.cs">
-      <DependentUpon>GetReviewController.cs</DependentUpon>
     </Compile>
     <Compile Update="Review\ReviewControllers\GetReviewRequest.cs">
       <DependentUpon>GetReviewController.cs</DependentUpon>
@@ -164,17 +158,11 @@
     <Compile Update="Review\ReviewControllers\ListReviewsResponse.cs">
       <DependentUpon>ListReviewsController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Review\ReviewControllers\ReplaceReviewMappingProfile.cs">
-      <DependentUpon>ReplaceReviewController.cs</DependentUpon>
-    </Compile>
     <Compile Update="Review\ReviewControllers\ReplaceReviewRequest.cs">
       <DependentUpon>ReplaceReviewController.cs</DependentUpon>
     </Compile>
     <Compile Update="Review\ReviewControllers\ReplaceReviewResponse.cs">
       <DependentUpon>ReplaceReviewController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Review\ReviewControllers\UpdateReviewMappingProfile.cs">
-      <DependentUpon>UpdateReviewController.cs</DependentUpon>
     </Compile>
     <Compile Update="Review\ReviewControllers\UpdateReviewRequest.cs">
       <DependentUpon>UpdateReviewController.cs</DependentUpon>

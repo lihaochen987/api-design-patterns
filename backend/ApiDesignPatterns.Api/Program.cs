@@ -51,10 +51,7 @@ builder.Services.AddScoped<IProductViewApplicationService, ProductViewApplicatio
 // Inject Review classes
 builder.Services.AddTransient<ReviewFieldMaskConfiguration>();
 builder.Services.AddScoped<CreateReviewExtensions>();
-builder.Services.AddAutoMapper(typeof(GetReviewMappingProfile));
-builder.Services.AddAutoMapper(typeof(CreateReviewMappingProfile));
-builder.Services.AddAutoMapper(typeof(ReplaceReviewMappingProfile));
-builder.Services.AddAutoMapper(typeof(UpdateReviewMappingProfile));
+builder.Services.AddAutoMapper(typeof(ReviewMappingProfile));
 
 // Inject Review Infrastructure
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
