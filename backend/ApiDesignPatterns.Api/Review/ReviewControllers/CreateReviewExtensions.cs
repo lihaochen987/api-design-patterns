@@ -14,6 +14,9 @@ public class CreateReviewExtensions(TypeParser typeParser)
         string text = typeParser.ParseString(request.Text, "Invalid text");
         DateTimeOffset createdAt = typeParser.ParseDateTimeOffset(request.CreatedAt, "Invalid created at");
 
-        return new DomainModels.Review(productId, rating, text, createdAt);
+        return new DomainModels.Review
+        {
+            ProductId = productId, Rating = rating, Text = text, CreatedAt = createdAt,
+        };
     }
 }

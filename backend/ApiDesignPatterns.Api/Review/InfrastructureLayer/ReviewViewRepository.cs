@@ -5,13 +5,13 @@ using System.Linq.Expressions;
 using backend.Review.DomainModels.Views;
 using backend.Review.InfrastructureLayer.Database;
 using backend.Shared;
+using backend.Shared.CelSpec;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Review.InfrastructureLayer;
 
 public class ReviewViewRepository(
-    ReviewDbContext context,
-    QueryService<ReviewView> queryService)
+    ReviewDbContext context)
     : IReviewViewRepository
 {
     public async Task<ReviewView?> GetReviewView(long id) =>
@@ -38,7 +38,7 @@ public class ReviewViewRepository(
 
         if (!string.IsNullOrEmpty(filter))
         {
-            Expression<Func<ReviewView, bool>> filterExpression = queryService.BuildFilterExpression(filter);
+            Expression<Func<ReviewView, bool>> filterExpression = BuildFilterExpression(filter);
             query = query.Where(filterExpression);
         }
 
@@ -47,8 +47,31 @@ public class ReviewViewRepository(
             .Take(maxPageSize + 1)
             .ToListAsync();
 
-        List<ReviewView> paginatedReviews = queryService.Paginate(reviews, maxPageSize, out string? nextPageToken);
+        List<ReviewView> paginatedReviews = Paginate(reviews, maxPageSize, out string? nextPageToken);
 
         return (paginatedReviews, nextPageToken);
+    }
+
+    private static Expression<Func<ReviewView, bool>> BuildFilterExpression(string filter)
+    {
+        CelParser<ReviewView> parser = new(new TypeParser());
+        List<CelToken> tokens = parser.Tokenize(filter);
+        return parser.ParseFilter(tokens);
+    }
+
+    private static List<ReviewView> Paginate(
+        List<ReviewView> existingItems,
+        int maxPageSize,
+        out string? nextPageToken)
+    {
+        if (existingItems.Count <= maxPageSize)
+        {
+            nextPageToken = null;
+            return existingItems;
+        }
+
+        ReviewView lastItemInPage = existingItems[maxPageSize - 1];
+        nextPageToken = lastItemInPage.Id.ToString();
+        return existingItems.Take(maxPageSize).ToList();
     }
 }

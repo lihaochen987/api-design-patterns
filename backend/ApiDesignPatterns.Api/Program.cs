@@ -1,14 +1,12 @@
 using System.Text.Json.Serialization;
 using backend.Database;
 using backend.Product.ApplicationLayer;
-using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 using backend.Product.InfrastructureLayer.Database;
 using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Review.ApplicationLayer;
-using backend.Review.DomainModels.Views;
 using backend.Review.InfrastructureLayer;
 using backend.Review.InfrastructureLayer.Database;
 using backend.Review.ReviewControllers;
@@ -61,7 +59,6 @@ builder.Services.AddAutoMapper(typeof(UpdateReviewMappingProfile));
 // Inject Review Infrastructure
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IReviewViewRepository, ReviewViewRepository>();
-builder.Services.AddTransient<QueryService<ReviewView>>();
 
 // Inject Review Services
 builder.Services.AddScoped<IReviewApplicationService, ReviewApplicationService>();

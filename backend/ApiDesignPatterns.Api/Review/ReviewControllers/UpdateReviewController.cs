@@ -35,7 +35,9 @@ public class UpdateReviewController(
 
         (long productId, decimal rating, string text) =
             maskConfiguration.GetUpdatedReviewValues(request, review);
-        review.Replace(productId, rating, text);
+        review.ProductId = productId;
+        review.Rating = rating;
+        review.Text = text;
         await applicationService.UpdateReviewAsync(review);
 
         var response = mapper.Map<UpdateReviewResponse>(review);
