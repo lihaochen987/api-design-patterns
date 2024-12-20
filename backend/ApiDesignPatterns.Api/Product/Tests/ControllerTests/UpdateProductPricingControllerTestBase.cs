@@ -4,9 +4,9 @@
 using AutoFixture;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
-using backend.Product.Tests.Helpers.Fakes;
+using backend.Product.Tests.TestHelpers.Fakes;
 
-namespace backend.Product.Tests.Controllers;
+namespace backend.Product.Tests.ControllerTests;
 
 public abstract class UpdateProductPricingControllerTestBase
 {

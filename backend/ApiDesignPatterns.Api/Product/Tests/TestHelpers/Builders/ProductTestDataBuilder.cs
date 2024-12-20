@@ -3,7 +3,7 @@ using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 
-namespace backend.Product.Tests.Helpers.Builders;
+namespace backend.Product.Tests.TestHelpers.Builders;
 
 public class ProductTestDataBuilder
 {

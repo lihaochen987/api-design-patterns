@@ -3,13 +3,13 @@ using AutoFixture;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
-using backend.Product.Tests.Helpers.Builders;
+using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Shouldly;
 using Xunit;
 
-namespace backend.Product.Tests.Controllers;
+namespace backend.Product.Tests.ControllerTests;
 
 public class GetProductControllerTests : GetProductControllerTestBase
 {

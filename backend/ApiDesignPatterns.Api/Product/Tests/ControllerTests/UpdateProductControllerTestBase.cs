@@ -7,7 +7,7 @@ using backend.Product.ProductControllers;
 using backend.Product.Services;
 using Moq;
 
-namespace backend.Product.Tests.Controllers;
+namespace backend.Product.Tests.ControllerTests;
 
 public abstract class UpdateProductControllerTestBase
 {

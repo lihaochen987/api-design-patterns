@@ -1,7 +1,7 @@
 using AutoFixture.Kernel;
 using backend.Product.DomainModels.ValueObjects;
 
-namespace backend.Product.Tests.Helpers.Builders;
+namespace backend.Product.Tests.TestHelpers.Builders;
 
 public class ProductPricingBuilder : ISpecimenBuilder
 {

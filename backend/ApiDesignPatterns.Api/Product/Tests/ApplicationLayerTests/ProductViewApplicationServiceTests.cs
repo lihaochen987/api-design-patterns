@@ -2,11 +2,11 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Product.Tests.Helpers.Builders;
+using backend.Product.Tests.TestHelpers.Builders;
 using Shouldly;
 using Xunit;
 
-namespace backend.Product.Tests.ApplicationLayer;
+namespace backend.Product.Tests.ApplicationLayerTests;
 
 public class ProductViewApplicationServiceTests : ProductViewApplicationServiceTestBase
 {

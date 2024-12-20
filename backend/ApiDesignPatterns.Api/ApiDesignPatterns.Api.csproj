@@ -212,7 +212,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Product\Tests\Helpers\"/>
+    <Folder Include="Product\Tests\TestHelpers\" />
   </ItemGroup>
 
   <ItemGroup>

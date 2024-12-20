@@ -5,7 +5,7 @@ using backend.Product.ApplicationLayer;
 using backend.Product.ProductControllers;
 using Moq;
 
-namespace backend.Product.Tests.Controllers;
+namespace backend.Product.Tests.ControllerTests;
 
 public abstract class DeleteProductControllerTestBase
 {

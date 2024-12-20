@@ -1,13 +1,11 @@
 using AutoFixture;
 using backend.Product.ProductPricingControllers;
-using backend.Product.Services;
-using backend.Product.Tests.Helpers.Builders;
-using backend.Product.Tests.Helpers.Fakes;
+using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Xunit;
 
-namespace backend.Product.Tests.Controllers;
+namespace backend.Product.Tests.ControllerTests;
 
 public class UpdateProductPricingControllerTests : UpdateProductPricingControllerTestBase
 {

@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 using backend.Product.InfrastructureLayer;
 
-namespace backend.Product.Tests.Helpers.Fakes;
+namespace backend.Product.Tests.TestHelpers.Fakes;
 
 public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductRepository
 {

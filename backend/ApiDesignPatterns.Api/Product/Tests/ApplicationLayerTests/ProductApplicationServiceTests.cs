@@ -1,11 +1,11 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Product.Tests.Helpers.Builders;
+using backend.Product.Tests.TestHelpers.Builders;
 using Shouldly;
 using Xunit;
 
-namespace backend.Product.Tests.ApplicationLayer;
+namespace backend.Product.Tests.ApplicationLayerTests;
 
 public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
 {

@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 
-namespace backend.Product.Tests.Helpers.Fakes;
+namespace backend.Product.Tests.TestHelpers.Fakes;
 
 public class ProductViewRepositoryFake : Collection<ProductView>, IProductViewRepository
 {

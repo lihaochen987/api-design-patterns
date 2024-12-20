@@ -2,7 +2,7 @@ using AutoFixture;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 
-namespace backend.Product.Tests.Helpers.Builders;
+namespace backend.Product.Tests.TestHelpers.Builders;
 
 public class ProductPricingTestDataBuilder
 {

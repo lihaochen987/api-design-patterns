@@ -3,9 +3,9 @@
 
 using AutoFixture;
 using backend.Product.ApplicationLayer;
-using backend.Product.Tests.Helpers.Fakes;
+using backend.Product.Tests.TestHelpers.Fakes;
 
-namespace backend.Product.Tests.ApplicationLayer;
+namespace backend.Product.Tests.ApplicationLayerTests;
 
 public class ProductViewApplicationServiceTestBase
 {
