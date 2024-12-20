@@ -13,21 +13,21 @@ public abstract class UpdateProductControllerTestBase
 {
     protected readonly IMapper Mapper;
     protected readonly IProductApplicationService MockApplicationService;
-    protected readonly ProductFieldMaskConfiguration Configuration;
+    private readonly ProductFieldMaskConfiguration _configuration;
 
     protected UpdateProductControllerTestBase()
     {
         MockApplicationService = Mock.Of<IProductApplicationService>();
-        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<UpdateProductMappingProfile>(); });
+        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
-        Configuration = new ProductFieldMaskConfiguration();
+        _configuration = new ProductFieldMaskConfiguration();
     }
 
     protected UpdateProductController UpdateProductController()
     {
         return new UpdateProductController(
             MockApplicationService,
-            Configuration,
+            _configuration,
             Mapper);
     }
 }

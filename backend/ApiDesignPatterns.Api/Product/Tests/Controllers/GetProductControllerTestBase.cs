@@ -21,7 +21,7 @@ public abstract class GetProductControllerTestBase
     {
         Fixture = new Fixture();
         MockApplicationService = Mock.Of<IProductViewApplicationService>();
-        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<GetProductMappingProfile>(); });
+        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
         _configuration = new ProductFieldMaskConfiguration();
     }

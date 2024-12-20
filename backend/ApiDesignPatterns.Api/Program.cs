@@ -35,10 +35,7 @@ builder.Services.AddTransient<TypeParser>();
 // Inject Product classes
 builder.Services.AddTransient<ProductFieldMaskConfiguration>();
 builder.Services.AddScoped<CreateProductExtensions>();
-builder.Services.AddAutoMapper(typeof(CreateProductMappingProfile));
-builder.Services.AddAutoMapper(typeof(GetProductMappingProfile));
-builder.Services.AddAutoMapper(typeof(UpdateProductMappingProfile));
-builder.Services.AddAutoMapper(typeof(ReplaceProductMappingProfile));
+builder.Services.AddAutoMapper(typeof(ProductMappingProfile));
 
 builder.Services.AddTransient<ProductPricingFieldMaskConfiguration>();
 builder.Services.AddTransient<GetProductPricingExtensions>();
