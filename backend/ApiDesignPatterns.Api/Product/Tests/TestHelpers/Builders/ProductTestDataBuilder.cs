@@ -39,18 +39,6 @@ public class ProductTestDataBuilder
         _weightKg = fixture.Create<decimal>();
     }
 
-    public ProductTestDataBuilder AsToys()
-    {
-        _category = Category.Toys;
-        return this;
-    }
-
-    public ProductTestDataBuilder AsPetFood()
-    {
-        _category = Category.PetFood;
-        return this;
-    }
-
     public ProductTestDataBuilder WithId(int id)
     {
         _id = id;
@@ -78,15 +66,6 @@ public class ProductTestDataBuilder
     public ProductTestDataBuilder WithPricing(Pricing pricing)
     {
         _pricing = pricing;
-        return this;
-    }
-
-    public ProductTestDataBuilder WithPriceLessThan(decimal maxPrice)
-    {
-        // Hardcode discount percentage to 10 and taxRate to 5 and then calculate an appropriate BasePrice
-        decimal basePrice = maxPrice / ((1 - (decimal)10 / 100) * (1 + (decimal)5 / 100)) - 2m;
-        _pricing = new Pricing(basePrice, 5, 10);
-
         return this;
     }
 

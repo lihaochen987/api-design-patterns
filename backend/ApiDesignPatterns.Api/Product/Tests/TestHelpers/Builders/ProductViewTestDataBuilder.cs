@@ -16,7 +16,7 @@ public class ProductViewTestDataBuilder
     private readonly string _ingredients;
     private string _name;
     private readonly Dictionary<string, object> _nutritionalInfo;
-    private readonly decimal _price;
+    private decimal _price;
     private readonly string _storageInstructions;
     private readonly decimal _weightKg;
 
@@ -56,10 +56,28 @@ public class ProductViewTestDataBuilder
         return this;
     }
 
+    public ProductViewTestDataBuilder WithPrice(decimal price)
+    {
+        _price = price;
+        return this;
+    }
+
     public ProductViewTestDataBuilder WithDimensions(Dimensions dimensions)
     {
         _dimensions = dimensions;
         return this;
+    }
+
+    public IEnumerable<ProductView> CreateMany(int count)
+    {
+        var products = new List<ProductView>();
+
+        for (int i = 0; i < count; i++)
+        {
+            products.Add(Build());
+        }
+
+        return products;
     }
 
     public ProductView Build() =>

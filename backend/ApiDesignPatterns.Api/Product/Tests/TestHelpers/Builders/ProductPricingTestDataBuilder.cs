@@ -18,17 +18,5 @@ public class ProductPricingTestDataBuilder
         _pricing = fixture.Create<Pricing>();
     }
 
-    public ProductPricingTestDataBuilder WithId(int id)
-    {
-        _id = id;
-        return this;
-    }
-
-    public ProductPricingTestDataBuilder WithPricing(Pricing pricing)
-    {
-        _pricing = pricing;
-        return this;
-    }
-
     public ProductPricingView Build() => new() { Id = _id, Pricing = _pricing };
 }

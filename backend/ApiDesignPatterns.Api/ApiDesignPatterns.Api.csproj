@@ -203,6 +203,30 @@
     <Compile Update="Product\DomainModels\ValueObjects\ProductPricingResponse.cs">
       <DependentUpon>Pricing.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\ProductApplicationServiceTestBase.cs">
+      <DependentUpon>ProductApplicationServiceTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\ProductViewApplicationServiceTestBase.cs">
+      <DependentUpon>ProductViewApplicationServiceTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ControllerTests\DeleteProductControllerTestBase.cs">
+      <DependentUpon>DeleteProductControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ControllerTests\GetProductControllerTestBase.cs">
+      <DependentUpon>GetProductControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ControllerTests\GetProductPricingControllerTestBase.cs">
+      <DependentUpon>GetProductPricingControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ControllerTests\UpdateProductControllerTestBase.cs">
+      <DependentUpon>UpdateProductControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ControllerTests\UpdateProductPricingControllerTestBase.cs">
+      <DependentUpon>UpdateProductPricingControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ControllerTests\ListProductsControllerTestBase.cs">
+      <DependentUpon>ListProductsControllerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
