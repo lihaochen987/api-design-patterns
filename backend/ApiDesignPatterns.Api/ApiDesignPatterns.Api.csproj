@@ -134,9 +134,6 @@
     <Compile Update="Product\ProductPricingControllers\UpdateProductPricingResponse.cs">
       <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Review\ReviewControllers\CreateReviewExtensions.cs">
-      <DependentUpon>CreateReviewController.cs</DependentUpon>
-    </Compile>
     <Compile Update="Review\ReviewControllers\CreateReviewRequest.cs">
       <DependentUpon>CreateReviewController.cs</DependentUpon>
     </Compile>
@@ -229,6 +226,18 @@
     </Compile>
     <Compile Update="Supplier\SupplierControllers\DeleteSupplierRequest.cs">
       <DependentUpon>DeleteSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\SupplierControllers\CreateSupplierRequest.cs">
+      <DependentUpon>CreateSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\SupplierControllers\CreateSupplierResponse.cs">
+      <DependentUpon>CreateSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\SupplierControllers\ReplaceSupplierRequest.cs">
+      <DependentUpon>ReplaceSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\SupplierControllers\ReplaceSupplierResponse.cs">
+      <DependentUpon>ReplaceSupplierController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

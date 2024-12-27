@@ -1,0 +1,12 @@
+{
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Email": "john.doe@example.com",
+    "Street": "123 Elm Street",
+    "City": "Sampletown",
+    "PostalCode": "12345",
+    "Country": "Sampleland",
+    "CountryCode": "SL",
+    "AreaCode": "01",
+    "Number": "5551234567"
+}

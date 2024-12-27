@@ -3,7 +3,7 @@ $$
     BEGIN
         CREATE TABLE IF NOT EXISTS supplier_addresses
         (
-            supplier_id                  SERIAL PRIMARY KEY
+            supplier_id                  BIGINT
                 CONSTRAINT fk_supplier_id
                     REFERENCES suppliers (supplier_id)
                     ON DELETE CASCADE,

@@ -3,7 +3,7 @@
 
 namespace backend.Supplier.DomainModels;
 
-public record PhoneNumber
+public class PhoneNumber
 {
     public long SupplierId { get; set; }
     public string CountryCode { get; set; }

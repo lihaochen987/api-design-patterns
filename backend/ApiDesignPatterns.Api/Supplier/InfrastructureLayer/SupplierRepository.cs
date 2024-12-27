@@ -14,4 +14,10 @@ public class SupplierRepository(SupplierDbContext context) : ISupplierRepository
         context.Suppliers.Remove(supplier);
         await context.SaveChangesAsync();
     }
+
+    public async Task CreateSupplierAsync(DomainModels.Supplier supplier)
+    {
+        context.Suppliers.Add(supplier);
+        await context.SaveChangesAsync();
+    }
 }
