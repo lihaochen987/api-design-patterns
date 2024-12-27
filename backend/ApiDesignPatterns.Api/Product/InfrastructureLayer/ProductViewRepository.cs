@@ -2,13 +2,13 @@ using System.Linq.Expressions;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Database;
 using backend.Shared;
-using backend.Shared.CelSpec;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Product.InfrastructureLayer;
 
 public class ProductViewRepository(
-    ProductDbContext context)
+    ProductDbContext context,
+    QueryService<ProductView> queryService)
     : IProductViewRepository
 {
     public async Task<ProductView?> GetProductView(long id) =>
@@ -29,7 +29,7 @@ public class ProductViewRepository(
 
         if (!string.IsNullOrEmpty(filter))
         {
-            Expression<Func<ProductView, bool>> filterExpression = BuildFilterExpression(filter);
+            Expression<Func<ProductView, bool>> filterExpression = queryService.BuildFilterExpression(filter);
             query = query.Where(filterExpression);
         }
 
@@ -38,31 +38,8 @@ public class ProductViewRepository(
             .Take(maxPageSize + 1)
             .ToListAsync();
 
-        List<ProductView> paginatedProducts = Paginate(products, maxPageSize, out string? nextPageToken);
+        List<ProductView> paginatedProducts = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
 
         return (paginatedProducts, nextPageToken);
-    }
-
-    private static Expression<Func<ProductView, bool>> BuildFilterExpression(string filter)
-    {
-        CelParser<ProductView> parser = new(new TypeParser());
-        List<CelToken> tokens = parser.Tokenize(filter);
-        return parser.ParseFilter(tokens);
-    }
-
-    private static List<ProductView> Paginate(
-        List<ProductView> existingItems,
-        int maxPageSize,
-        out string? nextPageToken)
-    {
-        if (existingItems.Count <= maxPageSize)
-        {
-            nextPageToken = null;
-            return existingItems;
-        }
-
-        ProductView lastItemInPage = existingItems[maxPageSize - 1];
-        nextPageToken = lastItemInPage.Id.ToString();
-        return existingItems.Take(maxPageSize).ToList();
     }
 }

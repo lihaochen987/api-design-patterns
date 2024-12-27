@@ -47,6 +47,20 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
     }
 
     [Fact]
+    public async Task CreateProductAsync_PersistsWhenCalledTwice()
+    {
+        DomainModels.Product firstProductToCreate = new ProductTestDataBuilder().Build();
+        DomainModels.Product secondProductToCreate = new ProductTestDataBuilder().Build();
+        var sut = ProductApplicationService();
+
+        await sut.CreateProductAsync(firstProductToCreate);
+        await sut.CreateProductAsync(secondProductToCreate);
+
+        Repository.IsDirty.ShouldBeTrue();
+        Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 2);
+    }
+
+    [Fact]
     public async Task DeleteProductAsync_CallsRepositoryWithCorrectProduct()
     {
         DomainModels.Product productToDelete = new ProductTestDataBuilder().Build();

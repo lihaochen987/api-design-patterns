@@ -6,7 +6,7 @@ using backend.Shared.CelSpec;
 
 namespace backend.Shared;
 
-public class QueryService<TEntity> where TEntity : Entity
+public class QueryService<TEntity> where TEntity : Identifier
 {
     public Expression<Func<TEntity, bool>> BuildFilterExpression(string filter)
     {

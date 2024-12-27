@@ -3,7 +3,7 @@
 
 namespace backend.Shared;
 
-public abstract class Entity
+public abstract record Identifier
 {
     public long Id { get; init; }
 }

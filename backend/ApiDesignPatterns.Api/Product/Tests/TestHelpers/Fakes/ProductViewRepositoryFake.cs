@@ -1,30 +1,40 @@
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
+using backend.Shared;
 
 namespace backend.Product.Tests.TestHelpers.Fakes;
 
-public class ProductViewRepositoryFake : Collection<ProductView>, IProductViewRepository
+public class ProductViewRepositoryFake(
+    QueryService<ProductView> queryService)
+    : Collection<ProductView>, IProductViewRepository
 {
-    public Dictionary<string, int> CallCount { get; } = new();
-    public bool IsDirty { get; set; }
-
-
-    private void IncrementCallCount(string methodName)
-    {
-        if (!CallCount.TryAdd(methodName, 1))
-        {
-            CallCount[methodName]++;
-        }
-    }
-
     public Task<ProductView?> GetProductView(long id)
     {
-        IncrementCallCount(nameof(GetProductView));
         ProductView? productView = this.FirstOrDefault(p => p.Id == id);
         return Task.FromResult(productView);
     }
 
-    public Task<(List<ProductView>, string?)> ListProductsAsync(string? pageToken, string? filter, int maxPageSize) =>
-        throw new NotImplementedException();
+    public Task<(List<ProductView>, string?)> ListProductsAsync(string? pageToken, string? filter, int maxPageSize)
+    {
+        IEnumerable<ProductView> query = this.AsEnumerable();
+
+        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenProductId))
+        {
+            query = query.Where(p => p.Id > lastSeenProductId);
+        }
+
+        if (!string.IsNullOrEmpty(filter))
+        {
+            Expression<Func<ProductView, bool>> filterExpression = queryService.BuildFilterExpression(filter);
+            query = query.Where(filterExpression.Compile());
+        }
+
+        List<ProductView> products = query.OrderBy(p => p.Id).ToList();
+
+        List<ProductView> paginatedProducts = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
+
+        return Task.FromResult((paginatedProducts, nextPageToken));
+    }
 }

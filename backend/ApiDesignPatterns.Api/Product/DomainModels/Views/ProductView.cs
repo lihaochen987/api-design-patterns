@@ -4,9 +4,8 @@ using backend.Shared;
 
 namespace backend.Product.DomainModels.Views;
 
-public record ProductView
+public record ProductView : Identifier
 {
-    public long Id { get; init; }
     public required string Name { get; init; }
     public decimal Price { get; init; }
     public Category Category { get; init; }

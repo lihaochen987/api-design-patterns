@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
-using backend.Shared;
 
 namespace backend.Product.DomainModels;
 
-public class Product : Entity
+public class Product
 {
+    public long Id { get; set; }
     [MaxLength(100)] public required string Name { get; set; }
 
     public Category Category { get; set; }

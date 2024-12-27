@@ -3,7 +3,9 @@
 
 using AutoFixture;
 using backend.Product.ApplicationLayer;
+using backend.Product.DomainModels.Views;
 using backend.Product.Tests.TestHelpers.Fakes;
+using backend.Shared;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
@@ -15,7 +17,7 @@ public class ProductViewApplicationServiceTestBase
     protected ProductViewApplicationServiceTestBase()
     {
         Fixture = new Fixture();
-        Repository = [];
+        Repository = new ProductViewRepositoryFake(new QueryService<ProductView>());
     }
 
     protected ProductViewApplicationService ProductViewApplicationService()
