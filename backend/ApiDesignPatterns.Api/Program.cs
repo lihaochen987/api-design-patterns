@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using backend.Database;
 using backend.Product.ApplicationLayer;
+using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 using backend.Product.InfrastructureLayer.Database;
 using backend.Product.ProductControllers;
@@ -34,12 +35,12 @@ builder.Services.AddTransient<TypeParser>();
 builder.Services.AddTransient<ProductFieldMaskConfiguration>();
 builder.Services.AddScoped<CreateProductExtensions>();
 builder.Services.AddAutoMapper(typeof(ProductMappingProfile));
-
 builder.Services.AddTransient<ProductPricingFieldMaskConfiguration>();
 builder.Services.AddTransient<GetProductPricingExtensions>();
 builder.Services.AddScoped<UpdateProductPricingExtensions>();
 
 // Inject Product Infrastructure
+builder.Services.AddTransient<QueryService<ProductView>>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductViewRepository, ProductViewRepository>();
 builder.Services.AddScoped<IProductPricingRepository, ProductPricingRepository>();
