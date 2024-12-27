@@ -15,5 +15,6 @@ public class ReviewMappingProfile : Profile
         CreateMap<DomainModels.Review, ReplaceReviewResponse>();
         CreateMap<ReplaceReviewRequest, DomainModels.Review>();
         CreateMap<DomainModels.Review, UpdateReviewResponse>();
+        CreateMap<CreateReviewRequest, DomainModels.Review>();
     }
 }

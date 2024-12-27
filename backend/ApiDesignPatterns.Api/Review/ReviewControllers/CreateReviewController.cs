@@ -11,7 +11,6 @@ namespace backend.Review.ReviewControllers;
 [ApiController]
 [Route("review")]
 public class CreateReviewController(
-    CreateReviewExtensions extensions,
     IReviewApplicationService applicationService,
     IMapper mapper)
     : ControllerBase
@@ -22,7 +21,7 @@ public class CreateReviewController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CreateReviewResponse>> CreateReview([FromBody] CreateReviewRequest request)
     {
-        DomainModels.Review review = extensions.ToEntity(request);
+        var review = mapper.Map<DomainModels.Review>(request);
         await applicationService.CreateReviewAsync(review);
 
         var response = mapper.Map<CreateReviewResponse>(review);
