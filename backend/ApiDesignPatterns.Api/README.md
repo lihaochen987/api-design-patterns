@@ -51,8 +51,8 @@ The other patterns mentioned, but not yet implemented from the book include:
 ## Development Flow
 
 1. CREATE and DESIGN the Database via UpScripts
-2. MODIFY the View
-3. MODIFY the Domain Model (ChatGPT it from the View SQL script lol)
+2. MODIFY the View, prefix joins with "public"
+3. MODIFY the Domain Model, ChatGPT it from the View script using both the relevant join tables and the view itself
 4. MODIFY the DbContext
 5. CHECK Delete standard method still works
 6. MODIFY Create and Replace standard methods

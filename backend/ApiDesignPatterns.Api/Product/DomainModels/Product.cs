@@ -6,7 +6,7 @@ namespace backend.Product.DomainModels;
 
 public class Product
 {
-    public long Id { get; set; }
+    public long Id { get; init; }
     [MaxLength(100)] public required string Name { get; set; }
 
     public Category Category { get; set; }

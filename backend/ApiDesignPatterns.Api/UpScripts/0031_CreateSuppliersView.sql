@@ -13,7 +13,7 @@ $$
                CONCAT(spn.supplier_phone_country_code, ' ', spn.supplier_phone_area_code, ' ',
                       spn.supplier_phone_number)                      AS supplier_phone_number
         FROM suppliers s
-                 LEFT JOIN supplier_phone_numbers spn ON spn.supplier_id = s.supplier_id
-                 LEFT JOIN supplier_addresses sa ON sa.supplier_id = s.supplier_id;
+                 LEFT JOIN public.supplier_phone_numbers spn ON spn.supplier_id = s.supplier_id
+                 LEFT JOIN public.supplier_addresses sa ON sa.supplier_id = s.supplier_id;
     END;
 $$

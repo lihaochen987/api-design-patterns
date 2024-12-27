@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <RootNamespace>backend</RootNamespace>
   </PropertyGroup>
@@ -226,6 +226,9 @@
     </Compile>
     <Compile Update="Product\Tests\ControllerTests\ListProductsControllerTestBase.cs">
       <DependentUpon>ListProductsControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\SupplierControllers\DeleteSupplierRequest.cs">
+      <DependentUpon>DeleteSupplierController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

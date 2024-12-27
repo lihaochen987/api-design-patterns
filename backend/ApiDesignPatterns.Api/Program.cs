@@ -13,6 +13,9 @@ using backend.Review.InfrastructureLayer.Database;
 using backend.Review.ReviewControllers;
 using backend.Review.Services;
 using backend.Shared;
+using backend.Supplier.ApplicationLayer;
+using backend.Supplier.InfrastructureLayer;
+using backend.Supplier.InfrastructureLayer.Database;
 using DbUp;
 using DbUp.Engine;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +65,14 @@ builder.Services.AddScoped<IReviewViewRepository, ReviewViewRepository>();
 builder.Services.AddScoped<IReviewApplicationService, ReviewApplicationService>();
 builder.Services.AddScoped<IReviewViewApplicationService, ReviewViewApplicationService>();
 
+// Inject Supplier classes
+
+// Inject Supplier Infrastructure
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+
+// Inject Supplier Services
+builder.Services.AddScoped<ISupplierApplicationService, SupplierApplicationService>();
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -91,6 +102,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<ReviewDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<SupplierDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
