@@ -4,6 +4,7 @@
 using System.Data;
 using System.Text;
 using backend.Review.DomainModels;
+using backend.Review.InfrastructureLayer.Queries;
 using backend.Review.Services;
 using Dapper;
 
@@ -16,19 +17,8 @@ public class ReviewViewRepository(
 {
     public async Task<ReviewView?> GetReviewView(long id)
     {
-        const string query = """
-                                 SELECT
-                                     review_id AS Id,
-                                     product_id AS ProductId,
-                                     review_rating AS Rating,
-                                     review_text AS Text,
-                                     review_created_at AS CreatedAt,
-                                     review_updated_at AS UpdatedAt
-                                 FROM reviews_view
-                                 WHERE review_id = @Id
-                             """;
-
-        return await dbConnection.QuerySingleOrDefaultAsync<ReviewView>(query, new { Id = id });
+        return await dbConnection.QuerySingleOrDefaultAsync<ReviewView>(ReviewViewQueries.GetReviewView,
+            new { Id = id });
     }
 
     public async Task<(List<ReviewView>, string?)> ListReviewsAsync(
@@ -37,18 +27,7 @@ public class ReviewViewRepository(
         int maxPageSize,
         string? parent)
     {
-        var sql = new StringBuilder("""
-                                        SELECT
-                                            review_id AS Id,
-                                            product_id AS ProductId,
-                                            review_rating AS Rating,
-                                            review_text AS Text,
-                                            review_created_at AS CreatedAt,
-                                            review_updated_at AS UpdatedAt
-                                        FROM reviews_view
-                                        WHERE 1=1
-                                    """);
-
+        var sql = new StringBuilder(ReviewViewQueries.ListReviewsBase);
         var parameters = new DynamicParameters();
 
         // Parent filter
