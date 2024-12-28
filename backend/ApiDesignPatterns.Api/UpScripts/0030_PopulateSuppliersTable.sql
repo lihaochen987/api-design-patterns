@@ -11,23 +11,25 @@ $$
                ('Aiko', 'Tanaka', 'aiko.tanaka@example.jp', CURRENT_TIMESTAMP),
                ('Fatima', 'Ali', 'fatima.ali@example.ae', CURRENT_TIMESTAMP);
 
-        INSERT INTO supplier_addresses (supplier_address_street,
+        INSERT INTO supplier_addresses (supplier_id,
+                                        supplier_address_street,
                                         supplier_address_city,
                                         supplier_address_postal_code,
                                         supplier_address_country)
-        VALUES ('123 Main St', 'Springfield', '62701', 'USA'),
-               ('45 Queen St', 'London', 'SW1A 1AA', 'United Kingdom'),
-               ('Calle Gran Via 23', 'Madrid', '28013', 'Spain'),
-               ('5-1-2 Ginza', 'Tokyo', '104-0061', 'Japan'),
-               ('Sheikh Zayed Rd', 'Dubai', '00000', 'United Arab Emirates');
+        VALUES (1, '123 Main St', 'Springfield', '62701', 'USA'),
+               (2, '45 Queen St', 'London', 'SW1A 1AA', 'United Kingdom'),
+               (3, 'Calle Gran Via 23', 'Madrid', '28013', 'Spain'),
+               (4, '5-1-2 Ginza', 'Tokyo', '104-0061', 'Japan'),
+               (5, 'Sheikh Zayed Rd', 'Dubai', '00000', 'United Arab Emirates');
 
-        INSERT INTO supplier_phone_numbers (supplier_phone_country_code,
+        INSERT INTO supplier_phone_numbers (supplier_id,
+                                            supplier_phone_country_code,
                                             supplier_phone_area_code,
                                             supplier_phone_number)
-        VALUES ('+1', '123', '5556789'),
-               ('+44', '20', '79460000'),
-               ('+34', '91', '1234567'),
-               ('+81', '03', '987654321'),
-               ('+971', '04', '1234567890');
+        VALUES (1, '+1', '123', '5556789'),
+               (2, '+44', '20', '79460000'),
+               (3, '+34', '91', '1234567'),
+               (4, '+81', '03', '987654321'),
+               (5, '+971', '04', '1234567890');
     END
 $$;

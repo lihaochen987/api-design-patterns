@@ -16,6 +16,7 @@ using backend.Shared;
 using backend.Supplier.ApplicationLayer;
 using backend.Supplier.InfrastructureLayer;
 using backend.Supplier.InfrastructureLayer.Database;
+using backend.Supplier.Services;
 using backend.Supplier.SupplierControllers;
 using DbUp;
 using DbUp.Engine;
@@ -66,13 +67,16 @@ builder.Services.AddScoped<IReviewApplicationService, ReviewApplicationService>(
 builder.Services.AddScoped<IReviewViewApplicationService, ReviewViewApplicationService>();
 
 // Inject Supplier classes
+builder.Services.AddTransient<SupplierFieldMaskConfiguration>();
 builder.Services.AddAutoMapper(typeof(SupplierMappingProfile));
 
 // Inject Supplier Infrastructure
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<ISupplierViewRepository, SupplierViewRepository>();
 
 // Inject Supplier Services
 builder.Services.AddScoped<ISupplierApplicationService, SupplierApplicationService>();
+builder.Services.AddScoped<ISupplierViewApplicationService, SupplierViewApplicationService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

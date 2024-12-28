@@ -239,6 +239,12 @@
     <Compile Update="Supplier\SupplierControllers\ReplaceSupplierResponse.cs">
       <DependentUpon>ReplaceSupplierController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\SupplierControllers\GetSupplierRequest.cs">
+      <DependentUpon>GetSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\SupplierControllers\GetSupplierResponse.cs">
+      <DependentUpon>GetSupplierController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
