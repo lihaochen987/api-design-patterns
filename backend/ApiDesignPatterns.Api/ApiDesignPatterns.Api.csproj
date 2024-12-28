@@ -246,6 +246,18 @@
     <Compile Update="Supplier\SupplierControllers\GetSupplierResponse.cs">
       <DependentUpon>GetSupplierController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\DomainModels\AddressRequest.cs">
+      <DependentUpon>Address.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\AddressResponse.cs">
+      <DependentUpon>Address.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\PhoneNumberRequest.cs">
+      <DependentUpon>PhoneNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\PhoneNumberResponse.cs">
+      <DependentUpon>PhoneNumber.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

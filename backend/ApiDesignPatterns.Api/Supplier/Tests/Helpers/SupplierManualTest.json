@@ -1,12 +1,16 @@
 {
-    "FirstName": "HaoChen",
-    "LastName": "Li",
-    "Email": "haochen.li@example.com",
-    "Street": "123 Elm Street",
-    "City": "Sampletown",
-    "PostalCode": "12345",
-    "Country": "Sampleland",
-    "CountryCode": "SL",
-    "AreaCode": "01",
-    "Number": "5551234567"
+    "firstName": "HaoChen",
+    "lastName": "Li",
+    "email": "haochen.li@example.com",
+    "address": {
+        "street": "123 Elm Street",
+        "city": "Sampletown",
+        "postalCode": "12345",
+        "country": "Sampleland"
+    },
+    "phoneNumber": {
+        "countryCode": "+28",
+        "areaCode": "01",
+        "number": "5551234567"
+    }
 }

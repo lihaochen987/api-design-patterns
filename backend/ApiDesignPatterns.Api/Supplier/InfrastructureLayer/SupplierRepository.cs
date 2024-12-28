@@ -35,12 +35,72 @@ public class SupplierRepository(
     {
         await dbConnection.ExecuteAsync(SupplierQueries.DeleteSupplier, new { Id = id });
     }
-    //
-    // public async Task CreateSupplierAsync(DomainModels.Supplier supplier)
-    // {
-    //     context.Suppliers.Add(supplier);
-    //     await context.SaveChangesAsync();
-    // }
+
+    public async Task CreateSupplierAsync(DomainModels.Supplier supplier)
+    {
+        if (dbConnection.State != ConnectionState.Open)
+        {
+            dbConnection.Open();
+        }
+
+        using var transaction = dbConnection.BeginTransaction();
+
+        try
+        {
+            const string insertSupplierQuery = SupplierQueries.CreateSupplier;
+            supplier.Id = await dbConnection.ExecuteScalarAsync<long>(
+                insertSupplierQuery,
+                new { supplier.FirstName, supplier.LastName, supplier.Email, supplier.CreatedAt },
+                transaction
+            );
+
+            if (supplier.Id <= 0)
+            {
+                throw new Exception("Failed to generate Supplier ID.");
+            }
+
+            const string insertAddressQuery = SupplierQueries.CreateSupplierAddress;
+            await dbConnection.ExecuteAsync(
+                insertAddressQuery,
+                new
+                {
+                    SupplierId = supplier.Id,
+                    supplier.Address.Street,
+                    supplier.Address.City,
+                    supplier.Address.PostalCode,
+                    supplier.Address.Country
+                },
+                transaction
+            );
+
+            const string insertPhoneNumberQuery = SupplierQueries.CreateSupplierPhoneNumber;
+            await dbConnection.ExecuteAsync(
+                insertPhoneNumberQuery,
+                new
+                {
+                    SupplierId = supplier.Id,
+                    supplier.PhoneNumber.CountryCode,
+                    supplier.PhoneNumber.AreaCode,
+                    supplier.PhoneNumber.Number
+                },
+                transaction
+            );
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+        finally
+        {
+            if (dbConnection.State != ConnectionState.Closed)
+            {
+                dbConnection.Close();
+            }
+        }
+    }
     //
     // public Task UpdateSupplierAsync(DomainModels.Supplier supplier)
     // {

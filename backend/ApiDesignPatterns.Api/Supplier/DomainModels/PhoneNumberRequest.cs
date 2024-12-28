@@ -3,9 +3,9 @@
 
 namespace backend.Supplier.DomainModels;
 
-public record PhoneNumber
+public record PhoneNumberRequest
 {
-    public required string CountryCode { get; init; }
-    public required string AreaCode { get; init; }
-    public long Number { get; init; }
+    public string? CountryCode { get; init; }
+    public string? AreaCode { get; init; }
+    public string? Number { get; init; }
 }

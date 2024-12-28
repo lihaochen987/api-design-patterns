@@ -3,7 +3,7 @@
 
 namespace backend.Supplier.DomainModels;
 
-public record Address
+public class AddressResponse
 {
     public required string Street { get; init; }
     public required string City { get; init; }

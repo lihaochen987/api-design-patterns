@@ -33,4 +33,46 @@ public static class SupplierQueries
                                                  WHERE supplier_id = @Id;
 
                                          """;
+
+    public const string CreateSupplier = """
+                                         INSERT INTO suppliers (
+                                             supplier_firstname,
+                                             supplier_lastname,
+                                             supplier_email,
+                                             supplier_created_at)
+                                         VALUES (
+                                             @FirstName,
+                                             @LastName,
+                                             @Email,
+                                             @CreatedAt)
+                                         RETURNING supplier_id;
+                                         """;
+
+    public const string CreateSupplierAddress = """
+                                                INSERT INTO supplier_addresses(
+                                                                               supplier_id,
+                                                                               supplier_address_street,
+                                                                               supplier_address_city,
+                                                                               supplier_address_postal_code,
+                                                                               supplier_address_country)
+                                                VALUES (
+                                                        @SupplierId,
+                                                        @Street,
+                                                        @City,
+                                                        @PostalCode,
+                                                        @Country)
+                                                """;
+
+    public const string CreateSupplierPhoneNumber = """
+                                                    INSERT INTO supplier_phone_numbers(
+                                                                                       supplier_id,
+                                                                                       supplier_phone_country_code,
+                                                                                       supplier_phone_area_code,
+                                                                                       supplier_phone_number)
+                                                    VALUES (
+                                                            @SupplierId,
+                                                            @CountryCode,
+                                                            @AreaCode,
+                                                            @Number)
+                                                    """;
 }
