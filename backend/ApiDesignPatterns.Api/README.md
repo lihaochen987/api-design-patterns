@@ -39,25 +39,11 @@ The other patterns mentioned, but not yet implemented from the book include:
 - **Request retrial**
 - **Request authentication**
 
-## Current Features
-
-## Planned Entity Relationships
-
-- A `Product` has a hierarchical 1-N relationship with a `Review`, this is demonstrated using the association pattern.
-- A `Product`has an N-N relationship with a `Supplier`, this is demonstrated using the cross-reference pattern.
-- Still need to come up with a 1-N relationship example to use the cross-reference pattern for.
-- Still need to come up with a hierarchical N-N relationship to use the ... pattern for.
-
 ## Development Flow
 
 1. CREATE and DESIGN the Database via UpScripts
-2. MODIFY the View, prefix joins with "public"
+2. CREATE the View for our Get / List standard methods
 3. MODIFY the Domain Model, ChatGPT it from the View script using both the relevant join tables and the view itself
-4. MODIFY the DbContext
-5. CHECK Delete standard method still works
-6. MODIFY Create and Replace standard methods
-7. MODIFY List, Get and Update standard methods along with field masks
-
-## Note to self
-
-- 3 hours to create product_pet_foods in the table and modify all the standard method endpoints (excluding unit tests).
+4. CHECK Delete standard method still works
+5. MODIFY Create and Replace standard methods
+6. MODIFY List, Get and Update standard methods along with field masks
