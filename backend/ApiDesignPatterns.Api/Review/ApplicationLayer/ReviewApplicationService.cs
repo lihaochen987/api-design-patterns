@@ -19,7 +19,7 @@ public class ReviewApplicationService(IReviewRepository repository) : IReviewApp
         await repository.CreateReviewAsync(review);
     }
 
-    public async Task DeleteReviewAsync(DomainModels.Review review) => await repository.DeleteReviewAsync(review);
+    public async Task DeleteReviewAsync(long id) => await repository.DeleteReviewAsync(id);
 
     public async Task UpdateReviewAsync(DomainModels.Review review)
     {

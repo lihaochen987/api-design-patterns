@@ -1,3 +1,4 @@
+using System.Data;
 using System.Text.Json.Serialization;
 using backend.Database;
 using backend.Product.ApplicationLayer;
@@ -20,7 +21,9 @@ using backend.Supplier.Services;
 using backend.Supplier.SupplierControllers;
 using DbUp;
 using DbUp.Engine;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -111,6 +114,9 @@ builder.Services.AddDbContext<ReviewDbContext>(options =>
 builder.Services.AddDbContext<SupplierDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Register Dapper stuff
+builder.Services.AddScoped<IDbConnection>(sp =>
+    new NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 WebApplication app = builder.Build();
 

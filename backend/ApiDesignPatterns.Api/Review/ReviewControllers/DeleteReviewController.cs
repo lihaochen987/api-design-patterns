@@ -24,7 +24,7 @@ public class DeleteReviewController(IReviewApplicationService applicationService
             return NotFound();
         }
 
-        await applicationService.DeleteReviewAsync(review);
+        await applicationService.DeleteReviewAsync(id);
         return NoContent();
     }
 }
