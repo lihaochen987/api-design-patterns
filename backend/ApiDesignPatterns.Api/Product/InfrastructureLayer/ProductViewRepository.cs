@@ -33,11 +33,7 @@ public class ProductViewRepository(
             query = query.Where(filterExpression);
         }
 
-        List<ProductView> products = await query
-            .OrderBy(p => p.Id)
-            .Take(maxPageSize + 1)
-            .ToListAsync();
-
+        List<ProductView> products = await query.OrderBy(p => p.Id).Take(maxPageSize + 1).ToListAsync();
         List<ProductView> paginatedProducts = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
 
         return (paginatedProducts, nextPageToken);

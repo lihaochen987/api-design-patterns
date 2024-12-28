@@ -20,4 +20,10 @@ public class SupplierRepository(SupplierDbContext context) : ISupplierRepository
         context.Suppliers.Add(supplier);
         await context.SaveChangesAsync();
     }
+
+    public Task UpdateSupplierAsync(DomainModels.Supplier supplier)
+    {
+        context.Suppliers.Update(supplier);
+        return context.SaveChangesAsync();
+    }
 }

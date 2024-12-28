@@ -8,4 +8,5 @@ public interface ISupplierApplicationService
     Task<DomainModels.Supplier?> GetSupplierAsync(long id);
     Task DeleteSupplierAsync(DomainModels.Supplier supplier);
     Task CreateSupplierAsync(DomainModels.Supplier supplier);
+    Task UpdateSupplierAsync(DomainModels.Supplier supplier);
 }

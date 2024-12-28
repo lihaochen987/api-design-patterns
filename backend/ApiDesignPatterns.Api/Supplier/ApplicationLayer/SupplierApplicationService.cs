@@ -22,4 +22,9 @@ public class SupplierApplicationService(ISupplierRepository repository) : ISuppl
         supplier.CreatedAt = DateTimeOffset.UtcNow;
         await repository.CreateSupplierAsync(supplier);
     }
+
+    public async Task UpdateSupplierAsync(DomainModels.Supplier supplier)
+    {
+        await repository.UpdateSupplierAsync(supplier);
+    }
 }
