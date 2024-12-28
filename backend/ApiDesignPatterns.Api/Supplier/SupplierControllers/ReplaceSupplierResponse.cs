@@ -1,6 +1,8 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
+using backend.Supplier.DomainModels;
+
 namespace backend.Supplier.SupplierControllers;
 
 public record ReplaceSupplierResponse
@@ -9,12 +11,7 @@ public record ReplaceSupplierResponse
     public required string FirstName { get; init; }
     public required string LastName { get; init; }
     public required string Email { get; init; }
-    public required string Street { get; init; }
-    public required string City { get; init; }
-    public required string PostalCode { get; init; }
-    public required string Country { get; init; }
+    public required AddressResponse Address { get; init; }
     public required string CreatedAt { get; init; }
-    public required string CountryCode { get; init; }
-    public required string AreaCode { get; init; }
-    public required string Number { get; init; }
+    public required PhoneNumberResponse PhoneNumber { get; init; }
 }

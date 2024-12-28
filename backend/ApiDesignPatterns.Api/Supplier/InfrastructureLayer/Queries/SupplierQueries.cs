@@ -12,15 +12,13 @@ public static class SupplierQueries
                                           supplier_lastname AS LastName,
                                           supplier_email AS Email,
                                           supplier_created_at AS CreatedAt,
-                                          sa.supplier_id AS Address_SupplierId,
-                                          sa.supplier_address_street AS Address_Street,
-                                          sa.supplier_address_city AS Address_City,
-                                          sa.supplier_address_postal_code AS Address_PostalCode,
-                                          sa.supplier_address_country AS Address_Country,
-                                          spn.supplier_id AS PhoneNumber_SupplierId,
-                                          spn.supplier_phone_country_code AS PhoneNumber_CountryCode,
-                                          spn.supplier_phone_area_code AS PhoneNumber_AreaCode,
-                                          spn.supplier_phone_number AS PhoneNumber_Number
+                                          sa.supplier_address_street AS Street,
+                                          sa.supplier_address_city AS City,
+                                          sa.supplier_address_postal_code AS PostalCode,
+                                          sa.supplier_address_country AS Country,
+                                          spn.supplier_phone_country_code AS CountryCode,
+                                          spn.supplier_phone_area_code AS AreaCode,
+                                          spn.supplier_phone_number AS Number
                                       FROM suppliers
                                       LEFT JOIN supplier_addresses sa ON suppliers.supplier_id = sa.supplier_id
                                       LEFT JOIN supplier_phone_numbers spn ON suppliers.supplier_id = spn.supplier_id
@@ -74,5 +72,34 @@ public static class SupplierQueries
                                                             @CountryCode,
                                                             @AreaCode,
                                                             @Number)
+                                                    """;
+
+    public const string UpdateSupplier = """
+                                         UPDATE suppliers
+                                         SET
+                                             supplier_firstname = @FirstName,
+                                             supplier_lastname = @LastName,
+                                             supplier_email = @Email
+                                         WHERE supplier_id = @Id
+                                         RETURNING supplier_id;
+                                         """;
+
+    public const string UpdateSupplierAddress = """
+                                                UPDATE supplier_addresses
+                                                SET
+                                                    supplier_address_street = @Street,
+                                                    supplier_address_city = @City,
+                                                    supplier_address_postal_code = @PostalCode,
+                                                    supplier_address_country = @Country
+                                                WHERE supplier_id = @SupplierId;
+                                                """;
+
+    public const string UpdateSupplierPhoneNumber = """
+                                                    UPDATE supplier_phone_numbers
+                                                    SET
+                                                        supplier_phone_country_code = @CountryCode,
+                                                        supplier_phone_area_code = @AreaCode,
+                                                        supplier_phone_number = @Number
+                                                    WHERE supplier_id = @SupplierId;
                                                     """;
 }
