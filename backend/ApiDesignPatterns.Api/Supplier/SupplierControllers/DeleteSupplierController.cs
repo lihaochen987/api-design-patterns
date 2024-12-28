@@ -24,7 +24,7 @@ public class DeleteSupplierController(ISupplierApplicationService applicationSer
             return NotFound();
         }
 
-        await applicationService.DeleteSupplierAsync(supplier);
+        await applicationService.DeleteSupplierAsync(id);
         return NoContent();
     }
 }

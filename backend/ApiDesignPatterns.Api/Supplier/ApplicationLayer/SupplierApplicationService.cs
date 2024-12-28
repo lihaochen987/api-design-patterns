@@ -14,17 +14,17 @@ public class SupplierApplicationService(ISupplierRepository repository) : ISuppl
         return supplier ?? null;
     }
 
-    public async Task DeleteSupplierAsync(DomainModels.Supplier supplier) =>
-        await repository.DeleteSupplierAsync(supplier);
+    public async Task DeleteSupplierAsync(long id) =>
+        await repository.DeleteSupplierAsync(id);
 
-    public async Task CreateSupplierAsync(DomainModels.Supplier supplier)
-    {
-        supplier.CreatedAt = DateTimeOffset.UtcNow;
-        await repository.CreateSupplierAsync(supplier);
-    }
-
-    public async Task UpdateSupplierAsync(DomainModels.Supplier supplier)
-    {
-        await repository.UpdateSupplierAsync(supplier);
-    }
+    // public async Task CreateSupplierAsync(DomainModels.Supplier supplier)
+    // {
+    //     supplier.CreatedAt = DateTimeOffset.UtcNow;
+    //     await repository.CreateSupplierAsync(supplier);
+    // }
+    //
+    // public async Task UpdateSupplierAsync(DomainModels.Supplier supplier)
+    // {
+    //     await repository.UpdateSupplierAsync(supplier);
+    // }
 }

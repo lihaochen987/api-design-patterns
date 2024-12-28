@@ -6,7 +6,7 @@ namespace backend.Supplier.InfrastructureLayer;
 public interface ISupplierRepository
 {
     Task<DomainModels.Supplier?> GetSupplierAsync(long id);
-    Task DeleteSupplierAsync(DomainModels.Supplier supplier);
-    Task CreateSupplierAsync(DomainModels.Supplier supplier);
-    Task UpdateSupplierAsync(DomainModels.Supplier supplier);
+    Task DeleteSupplierAsync(long id);
+    // Task CreateSupplierAsync(DomainModels.Supplier supplier);
+    // Task UpdateSupplierAsync(DomainModels.Supplier supplier);
 }

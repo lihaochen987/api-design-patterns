@@ -15,7 +15,6 @@ using backend.Review.Services;
 using backend.Shared;
 using backend.Supplier.ApplicationLayer;
 using backend.Supplier.InfrastructureLayer;
-using backend.Supplier.InfrastructureLayer.Database;
 using backend.Supplier.Services;
 using backend.Supplier.SupplierControllers;
 using DbUp;
@@ -36,6 +35,7 @@ builder.Services.AddCors(options =>
 
 // Inject shared classes
 builder.Services.AddTransient<TypeParser>();
+builder.Services.AddScoped<SqlFilterBuilder>();
 
 // Inject Product classes
 builder.Services.AddTransient<ProductFieldMaskConfiguration>();
@@ -73,11 +73,9 @@ builder.Services.AddAutoMapper(typeof(SupplierMappingProfile));
 
 // Inject Supplier Infrastructure
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-builder.Services.AddScoped<ISupplierViewRepository, SupplierViewRepository>();
 
 // Inject Supplier Services
 builder.Services.AddScoped<ISupplierApplicationService, SupplierApplicationService>();
-builder.Services.AddScoped<ISupplierViewApplicationService, SupplierViewApplicationService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -106,8 +104,6 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<ProductDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<SupplierDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register Dapper stuff
