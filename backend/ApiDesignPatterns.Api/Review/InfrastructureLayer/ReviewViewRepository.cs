@@ -1,22 +1,35 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using System.Linq.Expressions;
-using backend.Review.DomainModels.Views;
-using backend.Review.InfrastructureLayer.Database;
-using backend.Shared;
-using backend.Shared.CelSpec;
-using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Text;
+using backend.Review.DomainModels;
+using backend.Review.Services;
+using Dapper;
 
 namespace backend.Review.InfrastructureLayer;
 
 public class ReviewViewRepository(
-    ReviewDbContext context)
+    IDbConnection dbConnection,
+    SqlFilterBuilder sqlFilterBuilder)
     : IReviewViewRepository
 {
-    public async Task<ReviewView?> GetReviewView(long id) =>
-        await context.Set<ReviewView>()
-            .FirstOrDefaultAsync(p => p.Id == id);
+    public async Task<ReviewView?> GetReviewView(long id)
+    {
+        const string query = """
+                                 SELECT
+                                     review_id AS Id,
+                                     product_id AS ProductId,
+                                     review_rating AS Rating,
+                                     review_text AS Text,
+                                     review_created_at AS CreatedAt,
+                                     review_updated_at AS UpdatedAt
+                                 FROM reviews_view
+                                 WHERE review_id = @Id
+                             """;
+
+        return await dbConnection.QuerySingleOrDefaultAsync<ReviewView>(query, new { Id = id });
+    }
 
     public async Task<(List<ReviewView>, string?)> ListReviewsAsync(
         string? pageToken,
@@ -24,39 +37,49 @@ public class ReviewViewRepository(
         int maxPageSize,
         string? parent)
     {
-        IQueryable<ReviewView> query = context.Set<ReviewView>().AsQueryable();
+        var sql = new StringBuilder("""
+                                        SELECT
+                                            review_id AS Id,
+                                            product_id AS ProductId,
+                                            review_rating AS Rating,
+                                            review_text AS Text,
+                                            review_created_at AS CreatedAt,
+                                            review_updated_at AS UpdatedAt
+                                        FROM reviews_view
+                                        WHERE 1=1
+                                    """);
 
+        var parameters = new DynamicParameters();
+
+        // Parent filter
         if (!string.IsNullOrWhiteSpace(parent) && long.TryParse(parent, out long parentId))
         {
-            query = query.Where(p => p.ProductId == parentId);
+            sql.Append(" AND product_id = @ParentId");
+            parameters.Add("ParentId", parentId);
         }
 
+        // Pagination filter
         if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenReview))
         {
-            query = query.Where(p => p.Id > lastSeenReview);
+            sql.Append(" AND review_id > @LastSeenReview");
+            parameters.Add("LastSeenReview", lastSeenReview);
         }
 
+        // Custom filter
         if (!string.IsNullOrEmpty(filter))
         {
-            Expression<Func<ReviewView, bool>> filterExpression = BuildFilterExpression(filter);
-            query = query.Where(filterExpression);
+            string filterClause = sqlFilterBuilder.BuildSqlWhereClause(filter);
+            sql.Append($" AND {filterClause}");
         }
 
-        List<ReviewView> reviews = await query
-            .OrderBy(p => p.Id)
-            .Take(maxPageSize + 1)
-            .ToListAsync();
+        // Order and limit
+        sql.Append(" ORDER BY review_id LIMIT @PageSizePlusOne");
+        parameters.Add("PageSizePlusOne", maxPageSize + 1);
 
-        List<ReviewView> paginatedReviews = Paginate(reviews, maxPageSize, out string? nextPageToken);
+        var reviews = (await dbConnection.QueryAsync<ReviewView>(sql.ToString(), parameters)).ToList();
+        var paginatedReviews = Paginate(reviews, maxPageSize, out string? nextPageToken);
 
         return (paginatedReviews, nextPageToken);
-    }
-
-    private static Expression<Func<ReviewView, bool>> BuildFilterExpression(string filter)
-    {
-        CelParser<ReviewView> parser = new(new TypeParser());
-        List<CelToken> tokens = parser.Tokenize(filter);
-        return parser.ParseFilter(tokens);
     }
 
     private static List<ReviewView> Paginate(

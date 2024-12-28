@@ -29,8 +29,18 @@ public class ReviewRepository(IDbConnection dbConnection) : IReviewRepository
     {
         const string query = """
 
-                                             INSERT INTO reviews (product_id, review_rating, review_text, review_created_at, review_updated_at)
-                                             VALUES (@ProductId, @Rating, @Text, @CreatedAt, @UpdatedAt)
+                                             INSERT INTO reviews (
+                                                                  product_id,
+                                                                  review_rating,
+                                                                  review_text,
+                                                                  review_created_at,
+                                                                  review_updated_at)
+                                             VALUES (
+                                                     @ProductId,
+                                                     @Rating,
+                                                     @Text,
+                                                     @CreatedAt,
+                                                     @UpdatedAt)
                              """;
 
         await dbConnection.ExecuteAsync(query, new

@@ -10,7 +10,6 @@ using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Review.ApplicationLayer;
 using backend.Review.InfrastructureLayer;
-using backend.Review.InfrastructureLayer.Database;
 using backend.Review.ReviewControllers;
 using backend.Review.Services;
 using backend.Shared;
@@ -21,7 +20,6 @@ using backend.Supplier.Services;
 using backend.Supplier.SupplierControllers;
 using DbUp;
 using DbUp.Engine;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -109,13 +107,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<ReviewDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<SupplierDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register Dapper stuff
-builder.Services.AddScoped<IDbConnection>(sp =>
+builder.Services.AddScoped<IDbConnection>(_ =>
     new NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 WebApplication app = builder.Build();

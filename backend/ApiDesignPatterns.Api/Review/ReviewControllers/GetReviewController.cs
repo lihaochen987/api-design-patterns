@@ -4,7 +4,7 @@
 using AutoMapper;
 using backend.Product.ProductControllers;
 using backend.Review.ApplicationLayer;
-using backend.Review.DomainModels.Views;
+using backend.Review.DomainModels;
 using backend.Review.Services;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
