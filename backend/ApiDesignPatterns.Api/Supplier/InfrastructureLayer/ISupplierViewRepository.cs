@@ -8,4 +8,10 @@ namespace backend.Supplier.InfrastructureLayer;
 public interface ISupplierViewRepository
 {
     Task<SupplierView?> GetSupplierView(long id);
+
+    Task<(List<SupplierView>, string?)> ListSuppliersAsync(
+        string? pageToken,
+        string? filter,
+        int maxPageSize,
+        string? parent);
 }

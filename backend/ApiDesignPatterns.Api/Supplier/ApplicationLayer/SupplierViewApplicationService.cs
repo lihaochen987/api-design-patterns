@@ -3,6 +3,7 @@
 
 using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer;
+using backend.Supplier.SupplierControllers;
 
 namespace backend.Supplier.ApplicationLayer;
 
@@ -10,7 +11,17 @@ public class SupplierViewApplicationService(ISupplierViewRepository repository) 
 {
     public async Task<SupplierView?> GetSupplierView(long id)
     {
-        SupplierView supplier = await repository.GetSupplierView(id);
+        SupplierView? supplier = await repository.GetSupplierView(id);
         return supplier;
+    }
+
+    public async Task<(List<SupplierView>, string?)> ListSuppliersAsync(ListSuppliersRequest request)
+    {
+        (List<SupplierView> suppliers, string? nextPageToken) = await repository.ListSuppliersAsync(
+            request.PageToken,
+            request.Filter,
+            request.MaxPageSize,
+            request.Parent);
+        return (suppliers, nextPageToken);
     }
 }
