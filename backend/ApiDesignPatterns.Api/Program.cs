@@ -36,6 +36,8 @@ builder.Services.AddCors(options =>
 // Inject shared classes
 builder.Services.AddTransient<TypeParser>();
 builder.Services.AddScoped<ProductSqlFilterBuilder>();
+builder.Services.AddScoped<SqlFilterBuilder>();
+builder.Services.AddScoped<UpdateProductService>();
 
 // Inject Product classes
 builder.Services.AddTransient<ProductFieldMaskConfiguration>();

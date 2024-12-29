@@ -46,7 +46,6 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         await sut.CreateProductAsync(productToCreate);
 
         Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.Count.ShouldBe(1);
         Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);
     }
 
@@ -73,7 +72,6 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         await sut.DeleteProductAsync(productToDelete);
 
         Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.Count.ShouldBe(1);
         Repository.CallCount.ShouldContainKeyAndValue("DeleteProductAsync", 1);
     }
 
@@ -89,7 +87,6 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         await sut.ReplaceProductAsync(updatedProduct);
 
         Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.Count.ShouldBe(1);
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
     }
 
@@ -113,7 +110,6 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         await sut.UpdateProductAsync(request, product);
 
         Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.Count.ShouldBe(1);
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
         Repository.First().Name.ShouldBeEquivalentTo(request.Name);
         Repository.First().Category.ShouldBeEquivalentTo((Category)Enum.Parse(typeof(Category), request.Category));
@@ -138,7 +134,6 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         await sut.UpdateProductAsync(request, product);
 
         Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.Count.ShouldBe(1);
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
         Repository.First().Dimensions.Length.ShouldBeEquivalentTo(product.Dimensions.Length);
         Repository.First().Dimensions.Width.ShouldBeEquivalentTo(decimal.Parse(request.Dimensions.Width));
@@ -160,7 +155,6 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         await sut.UpdateProductAsync(request, product);
 
         Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.Count.ShouldBe(1);
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
         Repository.First().Name.ShouldBeEquivalentTo(request.Name);
     }

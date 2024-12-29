@@ -4,7 +4,6 @@
 
 using AutoMapper;
 using backend.Review.ApplicationLayer;
-using backend.Review.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -14,7 +13,6 @@ namespace backend.Review.ReviewControllers;
 [Route("review")]
 public class UpdateReviewController(
     IReviewApplicationService applicationService,
-    ReviewFieldMaskConfiguration maskConfiguration,
     IMapper mapper)
     : ControllerBase
 {
@@ -33,12 +31,7 @@ public class UpdateReviewController(
             return NotFound();
         }
 
-        (long productId, decimal rating, string text) =
-            maskConfiguration.GetUpdatedReviewValues(request, review);
-        review.ProductId = productId;
-        review.Rating = rating;
-        review.Text = text;
-        await applicationService.UpdateReviewAsync(review);
+        await applicationService.UpdateReviewAsync(request, review);
 
         var response = mapper.Map<UpdateReviewResponse>(review);
         return Ok(response);

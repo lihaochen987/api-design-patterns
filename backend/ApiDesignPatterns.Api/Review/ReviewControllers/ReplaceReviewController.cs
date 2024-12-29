@@ -29,7 +29,7 @@ public class ReplaceReviewController(
 
         DomainModels.Review replacedReview = mapper.Map(request, existingReview);
 
-        await applicationService.UpdateReviewAsync(replacedReview);
+        await applicationService.ReplaceReviewAsync(replacedReview);
         var response = mapper.Map<ReplaceReviewResponse>(replacedReview);
         return Ok(response);
     }

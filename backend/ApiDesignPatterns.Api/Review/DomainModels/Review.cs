@@ -11,6 +11,6 @@ public class Review
     public long ProductId { get; set; }
     [Range(0, 5)] public decimal Rating { get; set; }
     [MaxLength(5000)] public required string Text { get; set; }
-    public DateTimeOffset CreatedAt { get; init; }
-    public DateTimeOffset? UpdatedAt { get; init; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
 }

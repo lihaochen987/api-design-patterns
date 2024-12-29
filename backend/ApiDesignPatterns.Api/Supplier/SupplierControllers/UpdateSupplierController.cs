@@ -4,8 +4,6 @@
 
 using AutoMapper;
 using backend.Supplier.ApplicationLayer;
-using backend.Supplier.DomainModels;
-using backend.Supplier.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -15,7 +13,6 @@ namespace backend.Supplier.SupplierControllers;
 [Route("supplier")]
 public class UpdateSupplierController(
     ISupplierApplicationService applicationService,
-    SupplierFieldMaskConfiguration maskConfiguration,
     IMapper mapper)
     : ControllerBase
 {
@@ -34,14 +31,7 @@ public class UpdateSupplierController(
             return NotFound();
         }
 
-        (string firstName, string lastName, string email, Address address, PhoneNumber phoneNumber) =
-            maskConfiguration.GetUpdatedSupplierValues(request, supplier);
-        supplier.FirstName = firstName;
-        supplier.LastName = lastName;
-        supplier.Email = email;
-        supplier.Address = address;
-        supplier.PhoneNumber = phoneNumber;
-        await applicationService.UpdateSupplierAsync(supplier, id);
+        await applicationService.UpdateSupplierAsync(request, supplier, id);
 
         var response = mapper.Map<UpdateSupplierResponse>(supplier);
         return Ok(response);

@@ -29,7 +29,7 @@ public class ReplaceSupplierController(
 
         var replacedSupplier = mapper.Map<DomainModels.Supplier>(request);
 
-        await applicationService.UpdateSupplierAsync(replacedSupplier, id);
+        await applicationService.ReplaceSupplierAsync(replacedSupplier, id);
         var response = mapper.Map<ReplaceSupplierResponse>(replacedSupplier);
         return Ok(response);
     }
