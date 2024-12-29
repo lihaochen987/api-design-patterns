@@ -258,6 +258,12 @@
     <Compile Update="Supplier\DomainModels\PhoneNumberResponse.cs">
       <DependentUpon>PhoneNumber.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\SupplierControllers\UpdateSupplierRequest.cs">
+      <DependentUpon>UpdateSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\SupplierControllers\UpdateSupplierResponse.cs">
+      <DependentUpon>UpdateSupplierController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
