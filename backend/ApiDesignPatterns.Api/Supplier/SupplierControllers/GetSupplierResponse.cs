@@ -5,16 +5,13 @@ namespace backend.Supplier.SupplierControllers;
 
 public record GetSupplierResponse
 {
-    public required string Id { get; init; }
-    public required string FirstName { get; init; }
-    public required string LastName { get; init; }
+    public long Id { get; init; }
+    public required string FullName { get; init; }
     public required string Email { get; init; }
+    public required string CreatedAt { get; init; }
     public required string Street { get; init; }
     public required string City { get; init; }
     public required string PostalCode { get; init; }
     public required string Country { get; init; }
-    public required string CreatedAt { get; init; }
-    public required string CountryCode { get; init; }
-    public required string AreaCode { get; init; }
-    public required string Number { get; init; }
+    public required string PhoneNumber { get; init; }
 }

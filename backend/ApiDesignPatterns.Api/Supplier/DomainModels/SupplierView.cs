@@ -8,7 +8,10 @@ public record SupplierView
     public long Id { get; init; }
     public required string FullName { get; init; }
     public required string Email { get; init; }
-    public required Address Address { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
+    public required string Street { get; init; }
+    public required string City { get; init; }
+    public required string PostalCode { get; init; }
+    public required string Country { get; init; }
     public required string PhoneNumber { get; init; }
 }

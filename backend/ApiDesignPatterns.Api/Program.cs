@@ -73,9 +73,11 @@ builder.Services.AddAutoMapper(typeof(SupplierMappingProfile));
 
 // Inject Supplier Infrastructure
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<ISupplierViewRepository, SupplierViewRepository>();
 
 // Inject Supplier Services
 builder.Services.AddScoped<ISupplierApplicationService, SupplierApplicationService>();
+builder.Services.AddScoped<ISupplierViewApplicationService, SupplierViewApplicationService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
