@@ -12,7 +12,7 @@ namespace backend.Review.InfrastructureLayer;
 
 public class ReviewViewRepository(
     IDbConnection dbConnection,
-    SqlFilterBuilder sqlFilterBuilder)
+    ReviewSqlFilterBuilder reviewSqlFilterBuilder)
     : IReviewViewRepository
 {
     public async Task<ReviewView?> GetReviewView(long id)
@@ -47,7 +47,7 @@ public class ReviewViewRepository(
         // Custom filter
         if (!string.IsNullOrEmpty(filter))
         {
-            string filterClause = sqlFilterBuilder.BuildSqlWhereClause(filter);
+            string filterClause = reviewSqlFilterBuilder.BuildSqlWhereClause(filter);
             sql.Append($" AND {filterClause}");
         }
 

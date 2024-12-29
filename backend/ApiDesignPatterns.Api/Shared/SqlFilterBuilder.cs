@@ -1,11 +1,11 @@
 using System.Text.RegularExpressions;
 
-namespace backend.Review.Services;
+namespace backend.Shared;
 
 /// <summary>
 /// SqlFilterBuilder parses a filter string and generates SQL WHERE clauses.
 /// </summary>
-public partial class SqlFilterBuilder
+public abstract partial class SqlFilterBuilder(IColumnMapper columnMapper)
 {
     // Dictionary to map logical and comparison operators to SQL syntax
     private static readonly Dictionary<string, string> s_operators = new()
@@ -31,7 +31,7 @@ public partial class SqlFilterBuilder
             return "1=1"; // Default condition for no filters
 
         List<string> tokens = Tokenize(filter);
-        return GenerateWhereClause(tokens);
+        return GenerateWhereClause(tokens, columnMapper);
     }
 
     /// <summary>
@@ -52,8 +52,10 @@ public partial class SqlFilterBuilder
     /// Generates the SQL WHERE clause from tokens.
     /// </summary>
     /// <param name="tokens">The list of tokens from the filter string.</param>
+    /// <param name="columnMapper">The column mapper interface which is overriden to map to different column names for
+    /// different properties</param>
     /// <returns>The SQL WHERE clause as a string.</returns>
-    private static string GenerateWhereClause(List<string> tokens)
+    private static string GenerateWhereClause(List<string> tokens, IColumnMapper columnMapper)
     {
         var sql = new List<string>();
 
@@ -76,31 +78,12 @@ public partial class SqlFilterBuilder
             else
             {
                 // Map property name to column name
-                string columnName = MapToColumnName(token);
+                string columnName = columnMapper.MapToColumnName(token);
                 sql.Add(columnName);
             }
         }
 
         return string.Join(" ", sql);
-    }
-
-    /// <summary>
-    /// Maps a property name to its corresponding database column name.
-    /// </summary>
-    /// <param name="propertyName">The property name (e.g., "Rating").</param>
-    /// <returns>The corresponding database column name (e.g., "review_rating").</returns>
-    private static string MapToColumnName(string propertyName)
-    {
-        return propertyName switch
-        {
-            "Id" => "review_id",
-            "ProductId" => "product_id",
-            "Rating" => "review_rating",
-            "Text" => "review_text",
-            "CreatedAt" => "review_created_at",
-            "UpdatedAt" => "review_updated_at",
-            _ => throw new ArgumentException($"Invalid property name: {propertyName}")
-        };
     }
 
     [GeneratedRegex("\"[^\"]+\"|\\S+")]
