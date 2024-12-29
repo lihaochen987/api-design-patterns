@@ -43,7 +43,7 @@ public class ReplaceProductController(
                 break;
         }
 
-        await applicationService.UpdateProductAsync(existingProduct);
+        await applicationService.ReplaceProductAsync(existingProduct);
         object response = existingProduct.Category switch
         {
             Category.PetFood => mapper.Map<ReplacePetFoodResponse>(existingProduct),
