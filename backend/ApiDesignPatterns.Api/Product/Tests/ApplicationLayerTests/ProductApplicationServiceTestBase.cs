@@ -11,9 +11,10 @@ public abstract class ProductApplicationServiceTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
     private readonly ProductFieldMaskConfiguration _configuration = new();
+    private readonly UpdateProductService _updateProductService = new();
 
     protected ProductApplicationService ProductApplicationService()
     {
-        return new ProductApplicationService(Repository, _configuration);
+        return new ProductApplicationService(Repository, _configuration, _updateProductService);
     }
 }
