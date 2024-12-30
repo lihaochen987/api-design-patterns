@@ -6,7 +6,7 @@ using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 
-namespace backend.Product.Services;
+namespace backend.Product.Services.ProductServices;
 
 public interface IProductFieldMaskConfiguration
 {

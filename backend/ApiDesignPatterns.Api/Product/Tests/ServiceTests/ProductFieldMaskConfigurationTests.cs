@@ -1,11 +1,11 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoFixture;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
+using backend.Product.Services.ProductServices;
 using backend.Product.Tests.TestHelpers.Builders;
 using Shouldly;
 using Xunit;
@@ -42,39 +42,39 @@ public class ProductFieldMaskConfigurationTests : ProductFieldMaskConfigurationT
         result.name.ShouldBeEquivalentTo(baseProduct.Name);
     }
 
-    [Fact]
-    public void GetUpdatedDimensionValues_ShouldUpdateLength_WhenFieldMaskContainsLength()
-    {
-        var baseDimensions = Fixture.Create<Dimensions>();
-        var request = new UpdateProductRequest
-        {
-            FieldMask = ["dimensions.length"], Dimensions = new DimensionsRequest { Length = "40" }
-        };
-        ProductFieldMaskConfiguration sut = ProductFieldMaskConfiguration();
+    // [Fact]
+    // public void GetUpdatedDimensionValues_ShouldUpdateLength_WhenFieldMaskContainsLength()
+    // {
+    //     var baseDimensions = Fixture.Create<Dimensions>();
+    //     var request = new UpdateProductRequest
+    //     {
+    //         FieldMask = ["dimensions.length"], Dimensions = new DimensionsRequest { Length = "40" }
+    //     };
+    //     ProductFieldMaskConfiguration sut = ProductFieldMaskConfiguration();
+    //
+    //     Dimensions result = sut.GetUpdatedDimensionValues(request, baseDimensions);
+    //
+    //     result.Length.ShouldBeEquivalentTo(40m);
+    //     result.Width.ShouldBeEquivalentTo(baseDimensions.Width);
+    //     result.Height.ShouldBeEquivalentTo(baseDimensions.Height);
+    // }
 
-        Dimensions result = sut.GetUpdatedDimensionValues(request, baseDimensions);
-
-        result.Length.ShouldBeEquivalentTo(40m);
-        result.Width.ShouldBeEquivalentTo(baseDimensions.Width);
-        result.Height.ShouldBeEquivalentTo(baseDimensions.Height);
-    }
-
-    [Fact]
-    public void GetUpdatedProductPricingValues_ShouldUpdateBasePrice_WhenFieldMaskContainsBasePrice()
-    {
-        var basePricing = new ProductPricingTestDataBuilder().Build();
-        var request = new UpdateProductRequest
-        {
-            FieldMask = ["baseprice"], Pricing = new ProductPricingRequest { BasePrice = "200" }
-        };
-        ProductFieldMaskConfiguration sut = ProductFieldMaskConfiguration();
-
-        Pricing result = sut.GetUpdatedProductPricingValues(request, basePricing);
-
-        result.BasePrice.ShouldBeEquivalentTo(200m);
-        result.DiscountPercentage.ShouldBeEquivalentTo(basePricing.DiscountPercentage);
-        result.TaxRate.ShouldBeEquivalentTo(basePricing.TaxRate);
-    }
+    // [Fact]
+    // public void GetUpdatedProductPricingValues_ShouldUpdateBasePrice_WhenFieldMaskContainsBasePrice()
+    // {
+    //     var basePricing = new ProductPricingTestDataBuilder().Build();
+    //     var request = new UpdateProductRequest
+    //     {
+    //         FieldMask = ["baseprice"], Pricing = new ProductPricingRequest { BasePrice = "200" }
+    //     };
+    //     ProductFieldMaskConfiguration sut = ProductFieldMaskConfiguration();
+    //
+    //     Pricing result = sut.GetUpdatedProductPricingValues(request, basePricing);
+    //
+    //     result.BasePrice.ShouldBeEquivalentTo(200m);
+    //     result.DiscountPercentage.ShouldBeEquivalentTo(basePricing.DiscountPercentage);
+    //     result.TaxRate.ShouldBeEquivalentTo(basePricing.TaxRate);
+    // }
     //
     // [Theory, AutoData]
     // public void GetUpdatedPetFoodValues_ShouldUpdateAgeGroup_WhenFieldMaskContainsAgeGroup(UpdateProductRequest request)

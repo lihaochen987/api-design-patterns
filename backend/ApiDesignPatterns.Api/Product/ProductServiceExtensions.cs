@@ -7,6 +7,8 @@ using backend.Product.InfrastructureLayer;
 using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
+using backend.Product.Services.ProductPricingServices;
+using backend.Product.Services.ProductServices;
 using backend.Shared;
 using backend.Supplier.Services;
 
@@ -35,7 +37,9 @@ public static class ProductServiceExtensions
         services.AddScoped<IProductFieldMaskConfiguration, ProductFieldMaskConfiguration>();
         services.AddScoped<IProductPricingFieldMaskConfiguration, ProductPricingFieldMaskConfiguration>();
         services.AddTransient<ProductSqlFilterBuilder>();
-        services.AddScoped<UpdateProductService>();
+        services.AddScoped<UpdateProductTypeService>();
+        services.AddScoped<IProductPricingFieldMaskService, ProductPricingFieldMaskService>();
+        services.AddScoped<IDimensionsFieldMaskService, DimensionsFieldMaskService>();
         services.AddScoped<SqlFilterBuilder, ProductSqlFilterBuilder>();
         services.AddTransient<QueryService<ProductView>>();
     }

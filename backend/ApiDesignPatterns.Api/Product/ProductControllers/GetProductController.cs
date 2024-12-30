@@ -3,6 +3,7 @@ using backend.Product.ApplicationLayer;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Product.Services;
+using backend.Product.Services.ProductServices;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,7 +15,7 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class GetProductController(
     IProductViewApplicationService productViewApplicationService,
-    ProductFieldMaskConfiguration maskConfiguration,
+    ProductFieldPaths fieldPaths,
     IMapper mapper)
     : ControllerBase
 {
@@ -42,7 +43,7 @@ public class GetProductController(
         {
             Converters = new List<JsonConverter>
             {
-                new FieldMaskConverter(request.FieldMask, maskConfiguration.ProductFieldPaths)
+                new FieldMaskConverter(request.FieldMask, fieldPaths.ValidFields)
             }
         };
         string json = JsonConvert.SerializeObject(response, settings);

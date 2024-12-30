@@ -1,6 +1,6 @@
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
-using backend.Product.Services;
+using backend.Product.Services.ProductPricingServices;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

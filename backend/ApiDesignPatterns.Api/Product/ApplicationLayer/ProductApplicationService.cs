@@ -4,13 +4,13 @@
 using backend.Product.DomainModels;
 using backend.Product.InfrastructureLayer;
 using backend.Product.ProductControllers;
-using backend.Product.Services;
+using backend.Product.Services.ProductServices;
 
 namespace backend.Product.ApplicationLayer;
 
 public class ProductApplicationService(
     IProductRepository repository,
-    UpdateProductService updateProductService)
+    UpdateProductTypeService updateProductTypeService)
     : IProductApplicationService
 {
     public async Task<DomainModels.Product?> GetProductAsync(long id)
@@ -29,14 +29,14 @@ public class ProductApplicationService(
         UpdateProductRequest request,
         DomainModels.Product product)
     {
-        updateProductService.UpdateBaseProduct(request, product);
+        updateProductTypeService.UpdateBaseProduct(request, product);
         switch (product)
         {
             case PetFood petFood:
-                updateProductService.UpdatePetFood(request, petFood);
+                updateProductTypeService.UpdatePetFood(request, petFood);
                 break;
             case GroomingAndHygiene groomingAndHygiene:
-                updateProductService.UpdateGroomingAndHygiene(request, groomingAndHygiene);
+                updateProductTypeService.UpdateGroomingAndHygiene(request, groomingAndHygiene);
                 break;
         }
 

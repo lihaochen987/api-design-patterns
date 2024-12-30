@@ -4,7 +4,7 @@
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductPricingControllers;
 
-namespace backend.Product.Services;
+namespace backend.Product.Services.ProductPricingServices;
 
 public interface IProductPricingFieldMaskConfiguration
 {

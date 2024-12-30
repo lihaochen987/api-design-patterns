@@ -3,6 +3,8 @@
 
 using backend.Product.ApplicationLayer;
 using backend.Product.Services;
+using backend.Product.Services.ProductPricingServices;
+using backend.Product.Services.ProductServices;
 using backend.Product.Tests.TestHelpers.Fakes;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -10,10 +12,12 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public abstract class ProductApplicationServiceTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
-    private readonly UpdateProductService _updateProductService = new(new ProductFieldMaskConfiguration());
+
+    private readonly UpdateProductTypeService _updateProductTypeService =
+        new(new ProductFieldMaskConfiguration(new ProductPricingFieldMaskService(), new DimensionsFieldMaskService()));
 
     protected ProductApplicationService ProductApplicationService()
     {
-        return new ProductApplicationService(Repository, _updateProductService);
+        return new ProductApplicationService(Repository, _updateProductTypeService);
     }
 }

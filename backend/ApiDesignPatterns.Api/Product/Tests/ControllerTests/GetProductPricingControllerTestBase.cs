@@ -4,6 +4,7 @@
 using AutoFixture;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
+using backend.Product.Services.ProductPricingServices;
 using backend.Product.Tests.TestHelpers.Fakes;
 
 namespace backend.Product.Tests.ControllerTests;

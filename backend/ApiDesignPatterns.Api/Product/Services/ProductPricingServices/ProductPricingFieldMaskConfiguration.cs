@@ -1,7 +1,7 @@
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductPricingControllers;
 
-namespace backend.Product.Services;
+namespace backend.Product.Services.ProductPricingServices;
 
 /// <summary>
 ///     ProductMaskFieldPaths is a class which holds all the manual changes required for this API to work.
