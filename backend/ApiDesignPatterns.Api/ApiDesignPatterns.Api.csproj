@@ -270,6 +270,9 @@
     <Compile Update="Supplier\SupplierControllers\ListSuppliersResponse.cs">
       <DependentUpon>ListSuppliersController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Tests\ServiceTests\ProductFieldMaskConfigurationTestBase.cs">
+      <DependentUpon>ProductFieldMaskConfigurationTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

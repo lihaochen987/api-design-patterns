@@ -1,25 +1,22 @@
-// Licensed to the.NET Foundation under one or more agreements.
-// The.NET Foundation licenses this file to you under the MIT license.
-
 using AutoFixture;
 using backend.Product.DomainModels.ValueObjects;
+using backend.Product.DomainModels.Views;
 
 namespace backend.Product.Tests.TestHelpers.Builders;
 
-public class ProductPricingTestDataBuilder
+public class ProductPricingViewTestDataBuilder
 {
+    private readonly int _id;
     private readonly Pricing _pricing;
 
-    public ProductPricingTestDataBuilder()
+    public ProductPricingViewTestDataBuilder()
     {
         Fixture fixture = new();
         fixture.Customizations.Add(new ProductPricingBuilder());
 
+        _id = fixture.Create<int>();
         _pricing = fixture.Create<Pricing>();
     }
 
-    public Pricing Build()
-    {
-        return _pricing;
-    }
+    public ProductPricingView Build() => new() { Id = _id, Pricing = _pricing };
 }

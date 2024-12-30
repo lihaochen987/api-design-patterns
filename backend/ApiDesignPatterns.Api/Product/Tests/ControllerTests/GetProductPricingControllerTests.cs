@@ -14,7 +14,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
     [Fact]
     public async Task GetProductPricing_ReturnsPricing_WhenFieldMaskIsWildcard()
     {
-        ProductPricingView product = new ProductPricingTestDataBuilder().Build();
+        ProductPricingView product = new ProductPricingViewTestDataBuilder().Build();
         ProductRepository.Add(product);
         GetProductPricingRequest? request = Fixture.Build<GetProductPricingRequest>()
             .With(r => r.FieldMask, ["*"])
@@ -46,7 +46,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
     [Fact]
     public async Task GetProductPricing_ReturnsPartialPricing_WhenFieldMaskIsSpecified()
     {
-        ProductPricingView product = new ProductPricingTestDataBuilder().Build();
+        ProductPricingView product = new ProductPricingViewTestDataBuilder().Build();
         ProductRepository.Add(product);
         GetProductPricingRequest? request = Fixture.Build<GetProductPricingRequest>()
             .With(r => r.FieldMask, ["BasePrice"])
@@ -67,7 +67,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
     [Fact]
     public async Task GetProductPricing_ReturnsAllFields_WhenFieldMaskIsEmpty()
     {
-        ProductPricingView product = new ProductPricingTestDataBuilder().Build();
+        ProductPricingView product = new ProductPricingViewTestDataBuilder().Build();
         ProductRepository.Add(product);
         GetProductPricingRequest? request = Fixture.Build<GetProductPricingRequest>()
             .With(r => r.FieldMask, [])
@@ -89,7 +89,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
     [Fact]
     public async Task GetProductPricing_ReturnsValidMasks_WhenInvalidMasksArePassed()
     {
-        ProductPricingView product = new ProductPricingTestDataBuilder().Build();
+        ProductPricingView product = new ProductPricingViewTestDataBuilder().Build();
         ProductRepository.Add(product);
         GetProductPricingRequest? request = Fixture.Build<GetProductPricingRequest>()
             .With(r => r.FieldMask, ["InvalidField", "BasePrice", "TaxRate"])

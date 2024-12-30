@@ -59,7 +59,7 @@ public class ProductFieldMaskConfiguration
         return (name, pricing, category, dimensions);
     }
 
-    private static Dimensions GetUpdatedDimensionValues(
+    public Dimensions GetUpdatedDimensionValues(
         UpdateProductRequest request,
         Dimensions currentDimensions)
     {
@@ -166,7 +166,7 @@ public class ProductFieldMaskConfiguration
         return (ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions, weight);
     }
 
-    private static Pricing
+    public Pricing
         GetUpdatedProductPricingValues(
             UpdateProductRequest request,
             Pricing product)
@@ -179,12 +179,12 @@ public class ProductFieldMaskConfiguration
         decimal discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
                                      && decimal.TryParse(request.Pricing?.DiscountPercentage,
                                          out decimal parsedDiscountPercentage)
-            ? parsedDiscountPercentage!
+            ? parsedDiscountPercentage
             : product.DiscountPercentage;
 
         decimal taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
                           && decimal.TryParse(request.Pricing?.TaxRate, out decimal parsedTaxRate)
-            ? parsedTaxRate!
+            ? parsedTaxRate
             : product.TaxRate;
 
         return new Pricing(basePrice, discountPercentage, taxRate);
