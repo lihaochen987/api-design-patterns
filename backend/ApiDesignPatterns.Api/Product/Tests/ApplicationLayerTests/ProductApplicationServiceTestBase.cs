@@ -10,11 +10,10 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public abstract class ProductApplicationServiceTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
-    private readonly ProductFieldMaskConfiguration _configuration = new();
-    private readonly UpdateProductService _updateProductService = new();
+    private readonly UpdateProductService _updateProductService = new(new ProductFieldMaskConfiguration());
 
     protected ProductApplicationService ProductApplicationService()
     {
-        return new ProductApplicationService(Repository, _configuration, _updateProductService);
+        return new ProductApplicationService(Repository, _updateProductService);
     }
 }

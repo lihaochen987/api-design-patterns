@@ -8,10 +8,9 @@ using backend.Product.ProductControllers;
 
 namespace backend.Product.Services;
 
-public class UpdateProductService
+public class UpdateProductService(IProductFieldMaskConfiguration maskConfiguration)
 {
     public void UpdateBaseProduct(
-        ProductFieldMaskConfiguration maskConfiguration,
         UpdateProductRequest request,
         DomainModels.Product product)
     {
@@ -25,7 +24,6 @@ public class UpdateProductService
     }
 
     public void UpdatePetFood(
-        ProductFieldMaskConfiguration maskConfiguration,
         UpdateProductRequest request,
         PetFood petFood)
     {
@@ -42,7 +40,6 @@ public class UpdateProductService
     }
 
     public void UpdateGroomingAndHygiene(
-        ProductFieldMaskConfiguration maskConfiguration,
         UpdateProductRequest request,
         GroomingAndHygiene groomingAndHygiene)
     {

@@ -56,14 +56,4 @@ public class TypeParser
 
         return result;
     }
-
-    public DateTimeOffset ParseDateTimeOffset(string? value, string errorMessage)
-    {
-        if (string.IsNullOrWhiteSpace(value) || !DateTimeOffset.TryParse(value, out DateTimeOffset result))
-        {
-            throw new ArgumentException(errorMessage);
-        }
-
-        return result;
-    }
 }

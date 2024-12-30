@@ -1,5 +1,4 @@
 using backend.Product.ProductControllers;
-using backend.Product.Services;
 
 namespace backend.Product.ApplicationLayer;
 

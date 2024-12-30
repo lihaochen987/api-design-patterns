@@ -9,7 +9,7 @@ namespace backend.Product.ProductPricingControllers;
 [Route("product")]
 public class UpdateProductPricingController(
     IProductRepository productRepository,
-    ProductPricingFieldMaskConfiguration configuration,
+    IProductPricingFieldMaskConfiguration configuration,
     UpdateProductPricingExtensions extensions)
     : ControllerBase
 {

@@ -10,7 +10,7 @@ namespace backend.Product.Services;
 ///     2. Add parsing logic for GetUpdatedProductValues (partial updates)
 ///     3. Add the mapping in the extension methods (TBC on making this more generic and easier)
 /// </summary>
-public class ProductPricingFieldMaskConfiguration
+public class ProductPricingFieldMaskConfiguration : IProductPricingFieldMaskConfiguration
 {
     public readonly HashSet<string> ProductPricingFieldPaths =
     [
@@ -37,12 +37,12 @@ public class ProductPricingFieldMaskConfiguration
         decimal discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
                                      && decimal.TryParse(request.DiscountPercentage,
                                          out decimal parsedDiscountPercentage)
-            ? parsedDiscountPercentage!
+            ? parsedDiscountPercentage
             : product.DiscountPercentage;
 
         decimal taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
                           && decimal.TryParse(request.TaxRate, out decimal parsedTaxRate)
-            ? parsedTaxRate!
+            ? parsedTaxRate
             : product.TaxRate;
 
         return (basePrice, discountPercentage, taxRate);

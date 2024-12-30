@@ -32,8 +32,8 @@ public static class ProductServiceExtensions
         services.AddScoped<IProductPricingRepository, ProductPricingRepository>();
 
         // Inject Product Services
-        services.AddTransient<ProductFieldMaskConfiguration>();
-        services.AddTransient<ProductPricingFieldMaskConfiguration>();
+        services.AddScoped<IProductFieldMaskConfiguration, ProductFieldMaskConfiguration>();
+        services.AddScoped<IProductPricingFieldMaskConfiguration, ProductPricingFieldMaskConfiguration>();
         services.AddTransient<ProductSqlFilterBuilder>();
         services.AddScoped<UpdateProductService>();
         services.AddScoped<SqlFilterBuilder, ProductSqlFilterBuilder>();

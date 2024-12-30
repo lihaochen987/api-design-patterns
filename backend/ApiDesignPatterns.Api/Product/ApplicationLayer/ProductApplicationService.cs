@@ -10,7 +10,6 @@ namespace backend.Product.ApplicationLayer;
 
 public class ProductApplicationService(
     IProductRepository repository,
-    ProductFieldMaskConfiguration maskConfiguration,
     UpdateProductService updateProductService)
     : IProductApplicationService
 {
@@ -30,14 +29,14 @@ public class ProductApplicationService(
         UpdateProductRequest request,
         DomainModels.Product product)
     {
-        updateProductService.UpdateBaseProduct(maskConfiguration, request, product);
+        updateProductService.UpdateBaseProduct(request, product);
         switch (product)
         {
             case PetFood petFood:
-                updateProductService.UpdatePetFood(maskConfiguration, request, petFood);
+                updateProductService.UpdatePetFood(request, petFood);
                 break;
             case GroomingAndHygiene groomingAndHygiene:
-                updateProductService.UpdateGroomingAndHygiene(maskConfiguration, request, groomingAndHygiene);
+                updateProductService.UpdateGroomingAndHygiene(request, groomingAndHygiene);
                 break;
         }
 

@@ -12,7 +12,7 @@ namespace backend.Product.Services;
 ///     2. Add parsing logic for GetUpdatedProductValues (partial updates)
 ///     3. Add the mapping in the extension methods (TBC on making this more generic and easier)
 /// </summary>
-public class ProductFieldMaskConfiguration
+public class ProductFieldMaskConfiguration : IProductFieldMaskConfiguration
 {
     public readonly HashSet<string> ProductFieldPaths =
     [
