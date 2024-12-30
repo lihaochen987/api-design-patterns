@@ -24,6 +24,6 @@ public static class SupplierServiceExtensions
         services.AddScoped<ISupplierViewRepository, SupplierViewRepository>();
 
         // Inject Supplier Services
-        services.AddTransient<SupplierFieldMaskConfiguration>();
+        services.AddSingleton<SupplierFieldMaskConfiguration>();
     }
 }

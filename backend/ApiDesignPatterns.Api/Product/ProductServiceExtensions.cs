@@ -19,9 +19,9 @@ public static class ProductServiceExtensions
     {
         // Inject Product Controllers
         services.AddAutoMapper(typeof(ProductMappingProfile));
-        services.AddTransient<GetProductPricingExtensions>();
-        services.AddScoped<CreateProductExtensions>();
-        services.AddScoped<UpdateProductPricingExtensions>();
+        services.AddSingleton<GetProductPricingExtensions>();
+        services.AddSingleton<CreateProductExtensions>();
+        services.AddSingleton<UpdateProductPricingExtensions>();
 
         // Inject Product Application Layer
         services.AddScoped<IProductApplicationService, ProductApplicationService>();
@@ -33,13 +33,13 @@ public static class ProductServiceExtensions
         services.AddScoped<IProductPricingRepository, ProductPricingRepository>();
 
         // Inject Product Services
-        services.AddScoped<IProductFieldMaskConfiguration, ProductFieldMaskConfiguration>();
-        services.AddScoped<IProductPricingFieldMaskConfiguration, ProductPricingFieldMaskConfiguration>();
-        services.AddTransient<ProductSqlFilterBuilder>();
-        services.AddScoped<UpdateProductTypeService>();
-        services.AddScoped<IProductPricingFieldMaskService, ProductPricingFieldMaskService>();
-        services.AddScoped<IDimensionsFieldMaskService, DimensionsFieldMaskService>();
-        services.AddScoped<SqlFilterBuilder, ProductSqlFilterBuilder>();
-        services.AddTransient<QueryService<ProductView>>();
+        services.AddSingleton<IProductFieldMaskConfiguration, ProductFieldMaskConfiguration>();
+        services.AddSingleton<IProductPricingFieldMaskConfiguration, ProductPricingFieldMaskConfiguration>();
+        services.AddSingleton<ProductSqlFilterBuilder>();
+        services.AddSingleton<UpdateProductTypeService>();
+        services.AddSingleton<IProductPricingFieldMaskService, ProductPricingFieldMaskService>();
+        services.AddSingleton<IDimensionsFieldMaskService, DimensionsFieldMaskService>();
+        services.AddSingleton<SqlFilterBuilder, ProductSqlFilterBuilder>();
+        services.AddSingleton<QueryService<ProductView>>();
     }
 }

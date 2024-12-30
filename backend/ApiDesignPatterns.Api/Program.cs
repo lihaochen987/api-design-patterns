@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
 });
 
 // Inject shared classes
-builder.Services.AddTransient<TypeParser>();
+builder.Services.AddSingleton<TypeParser>();
 
 builder.Services.AddProductDependencies();
 builder.Services.AddReviewDependencies();
