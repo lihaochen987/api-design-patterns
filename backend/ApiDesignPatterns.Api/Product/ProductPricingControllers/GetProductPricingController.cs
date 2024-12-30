@@ -12,7 +12,7 @@ namespace backend.Product.ProductPricingControllers;
 [Route("product")]
 public class GetProductPricingController(
     IProductPricingRepository productRepository,
-    ProductPricingFieldMaskConfiguration configuration,
+    ProductPricingFieldPaths fieldPaths,
     GetProductPricingExtensions extensions)
     : ControllerBase
 {
@@ -35,7 +35,7 @@ public class GetProductPricingController(
         {
             Converters = new List<JsonConverter>
             {
-                new FieldMaskConverter(request.FieldMask, configuration.ProductPricingFieldPaths)
+                new FieldMaskConverter(request.FieldMask, fieldPaths.ValidPaths)
             }
         };
 

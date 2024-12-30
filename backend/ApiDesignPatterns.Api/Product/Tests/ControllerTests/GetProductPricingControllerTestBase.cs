@@ -14,13 +14,13 @@ public abstract class GetProductPricingControllerTestBase
     protected readonly GetProductPricingExtensions Extensions = new();
     protected readonly Fixture Fixture = new();
     protected readonly ProductPricingRepositoryFake ProductRepository = [];
-    private readonly ProductPricingFieldMaskConfiguration _configuration = new();
+    private readonly ProductPricingFieldPaths _fieldPaths = new();
 
     protected GetProductPricingController ProductPricingController()
     {
         return new GetProductPricingController(
             ProductRepository,
-            _configuration,
+            _fieldPaths,
             Extensions);
     }
 }

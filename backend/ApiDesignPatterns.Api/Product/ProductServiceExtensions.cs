@@ -6,7 +6,6 @@ using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
-using backend.Product.Services;
 using backend.Product.Services.ProductPricingServices;
 using backend.Product.Services.ProductServices;
 using backend.Shared;

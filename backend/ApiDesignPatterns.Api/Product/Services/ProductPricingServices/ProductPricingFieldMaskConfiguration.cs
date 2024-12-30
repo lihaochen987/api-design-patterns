@@ -12,15 +12,6 @@ namespace backend.Product.Services.ProductPricingServices;
 /// </summary>
 public class ProductPricingFieldMaskConfiguration : IProductPricingFieldMaskConfiguration
 {
-    public readonly HashSet<string> ProductPricingFieldPaths =
-    [
-        "*",
-        "id",
-        "baseprice",
-        "discountpercentage",
-        "taxrate"
-    ];
-
     public (
         decimal basePrice,
         decimal discountPercentage,
