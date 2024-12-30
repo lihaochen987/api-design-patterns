@@ -8,14 +8,8 @@ public enum CelTokenType
     Logical
 }
 
-public class CelToken
+public class CelToken(CelTokenType type, string value)
 {
-    public CelToken(CelTokenType type, string value)
-    {
-        Type = type;
-        Value = value;
-    }
-
-    public CelTokenType Type { get; set; }
-    public string Value { get; set; }
+    public CelTokenType Type { get; set; } = type;
+    public string Value { get; set; } = value;
 }

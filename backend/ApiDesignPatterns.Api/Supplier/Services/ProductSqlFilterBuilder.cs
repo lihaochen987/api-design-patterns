@@ -1,5 +1,6 @@
-using backend.Shared;
+using backend.Shared.SqlFilter;
+using SqlFilterBuilder = backend.Shared.SqlFilter.SqlFilterBuilder;
 
 namespace backend.Supplier.Services;
 
-public class ProductSqlFilterBuilder() : SqlFilterBuilder(new ProductColumnMapper());
+public class ProductSqlFilterBuilder(ISqlFilterParser filterParser) : SqlFilterBuilder(filterParser);

@@ -6,6 +6,7 @@ using backend.Product.InfrastructureLayer.Database;
 using backend.Product.ProductControllers;
 using backend.Review;
 using backend.Shared;
+using backend.Shared.SqlFilter;
 using backend.Supplier;
 using DbUp;
 using DbUp.Engine;
@@ -25,6 +26,12 @@ builder.Services.AddCors(options =>
 
 // Inject shared classes
 builder.Services.AddSingleton<TypeParser>();
+builder.Services.AddSingleton<SqlOperators>();
+builder.Services.AddSingleton<ISqlFilterParser>(provider =>
+    new SqlFilterParser(
+        provider.GetRequiredService<IColumnMapper>(),
+        provider.GetRequiredService<SqlOperators>()));
+
 
 builder.Services.AddProductDependencies();
 builder.Services.AddReviewDependencies();
@@ -53,7 +60,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Register ApplicationDbContext with PostgreSQL
+// Register ApplicationDbContext with Postgres
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<ProductDbContext>(options =>

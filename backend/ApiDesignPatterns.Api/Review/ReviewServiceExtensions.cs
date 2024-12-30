@@ -6,6 +6,7 @@ using backend.Review.InfrastructureLayer;
 using backend.Review.ReviewControllers;
 using backend.Review.Services;
 using backend.Shared;
+using SqlFilterBuilder = backend.Shared.SqlFilter.SqlFilterBuilder;
 
 namespace backend.Review;
 
@@ -28,5 +29,7 @@ public static class ReviewServiceExtensions
         services.AddSingleton<ReviewSqlFilterBuilder>();
         services.AddSingleton<ReviewFieldMaskConfiguration>();
         services.AddSingleton<SqlFilterBuilder, ReviewSqlFilterBuilder>();
+        services.AddSingleton<IColumnMapper, ReviewColumnMapper>();
+        services.AddSingleton<ReviewSqlFilterBuilder>();
     }
 }

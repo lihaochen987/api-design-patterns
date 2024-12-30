@@ -10,6 +10,7 @@ using backend.Product.Services.ProductPricingServices;
 using backend.Product.Services.ProductServices;
 using backend.Shared;
 using backend.Supplier.Services;
+using SqlFilterBuilder = backend.Shared.SqlFilter.SqlFilterBuilder;
 
 namespace backend.Product;
 
@@ -41,5 +42,6 @@ public static class ProductServiceExtensions
         services.AddSingleton<IDimensionsFieldMaskService, DimensionsFieldMaskService>();
         services.AddSingleton<SqlFilterBuilder, ProductSqlFilterBuilder>();
         services.AddSingleton<QueryService<ProductView>>();
+        services.AddSingleton<ProductSqlFilterBuilder>();
     }
 }

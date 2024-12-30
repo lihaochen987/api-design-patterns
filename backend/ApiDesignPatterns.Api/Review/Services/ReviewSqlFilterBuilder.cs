@@ -1,5 +1,6 @@
-using backend.Shared;
+using backend.Shared.SqlFilter;
+using SqlFilterBuilder = backend.Shared.SqlFilter.SqlFilterBuilder;
 
 namespace backend.Review.Services;
 
-public class ReviewSqlFilterBuilder() : SqlFilterBuilder(new ReviewColumnMapper());
+public class ReviewSqlFilterBuilder(ISqlFilterParser filterParser) : SqlFilterBuilder(filterParser);
