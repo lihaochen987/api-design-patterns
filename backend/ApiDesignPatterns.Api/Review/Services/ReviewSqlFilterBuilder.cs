@@ -3,4 +3,4 @@ using SqlFilterBuilder = backend.Shared.SqlFilter.SqlFilterBuilder;
 
 namespace backend.Review.Services;
 
-public class ReviewSqlFilterBuilder(ISqlFilterParser filterParser) : SqlFilterBuilder(filterParser);
+public class ReviewSqlFilterBuilder(SqlFilterParser filterParser) : SqlFilterBuilder(filterParser);

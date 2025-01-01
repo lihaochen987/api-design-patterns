@@ -10,8 +10,7 @@ namespace backend.Shared.SqlFilter;
 /// </summary>
 public partial class SqlFilterParser(
     IColumnMapper columnMapper,
-    SqlOperators operators) :
-    ISqlFilterParser
+    SqlOperators operators)
 {
     /// <summary>
     /// Tokenizes the filter string into parts (fields, operators, and values).

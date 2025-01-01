@@ -3,7 +3,7 @@ namespace backend.Shared.SqlFilter;
 /// <summary>
 /// SqlFilterBuilder parses a filter string and generates SQL WHERE clauses.
 /// </summary>
-public abstract class SqlFilterBuilder(ISqlFilterParser filterParser)
+public abstract class SqlFilterBuilder(SqlFilterParser filterParser)
 {
     /// <summary>
     /// Builds a SQL WHERE clause from the provided filter string.

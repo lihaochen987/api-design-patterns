@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
 // Inject shared classes
 builder.Services.AddSingleton<TypeParser>();
 builder.Services.AddSingleton<SqlOperators>();
-builder.Services.AddSingleton<ISqlFilterParser>(provider =>
+builder.Services.AddSingleton<SqlFilterParser>(provider =>
     new SqlFilterParser(
         provider.GetRequiredService<IColumnMapper>(),
         provider.GetRequiredService<SqlOperators>()));
