@@ -14,7 +14,7 @@ namespace backend.Product.Services.ProductServices;
 ///     3. Add the mapping in the extension methods (TBC on making this more generic and easier)
 /// </summary>
 public class ProductFieldMaskConfiguration(
-    IProductPricingFieldMaskService pricingFieldMaskService,
+    ProductPricingFieldMaskService pricingFieldMaskService,
     DimensionsFieldMaskService dimensionsFieldMaskService)
 {
     public (string name, Pricing pricing, Category category, Dimensions dimensions)

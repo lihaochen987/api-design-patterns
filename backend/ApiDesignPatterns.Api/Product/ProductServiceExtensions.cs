@@ -35,14 +35,14 @@ public static class ProductServiceExtensions
 
         // Inject Product Services
         services.AddSingleton<ProductFieldMaskConfiguration>();
-        services.AddSingleton<IProductPricingFieldMaskConfiguration, ProductPricingFieldMaskConfiguration>();
-        services.AddSingleton<ProductSqlFilterBuilder>();
+        services.AddSingleton<ProductPricingFieldMaskConfiguration>();
+        services.AddSingleton<SupplierSqlFilterBuilder>();
         services.AddSingleton<UpdateProductTypeService>();
-        services.AddSingleton<IProductPricingFieldMaskService, ProductPricingFieldMaskService>();
+        services.AddSingleton<ProductPricingFieldMaskService>();
         services.AddSingleton<DimensionsFieldMaskService>();
-        services.AddSingleton<SqlFilterBuilder, ProductSqlFilterBuilder>();
+        services.AddSingleton<SqlFilterBuilder, SupplierSqlFilterBuilder>();
         services.AddSingleton<QueryService<ProductView>>();
-        services.AddSingleton<ProductSqlFilterBuilder>();
+        services.AddSingleton<SupplierSqlFilterBuilder>();
         services.AddSingleton<ProductFieldPaths>();
     }
 }

@@ -10,7 +10,7 @@ namespace backend.Product.Services.ProductPricingServices;
 ///     2. Add parsing logic for GetUpdatedProductValues (partial updates)
 ///     3. Add the mapping in the extension methods (TBC on making this more generic and easier)
 /// </summary>
-public class ProductPricingFieldMaskConfiguration : IProductPricingFieldMaskConfiguration
+public class ProductPricingFieldMaskConfiguration
 {
     public (
         decimal basePrice,

@@ -10,7 +10,7 @@ namespace backend.Product.Tests.ServiceTests;
 
 public class ProductFieldMaskConfigurationTestBase
 {
-    private readonly IProductPricingFieldMaskService _productPricingFieldMaskService;
+    private readonly ProductPricingFieldMaskService _productPricingFieldMaskService;
     private readonly DimensionsFieldMaskService _dimensionsFieldMaskService;
 
     protected ProductFieldMaskConfigurationTestBase()

@@ -6,7 +6,7 @@ using backend.Product.ProductControllers;
 
 namespace backend.Product.Services.ProductPricingServices;
 
-public class ProductPricingFieldMaskService : IProductPricingFieldMaskService
+public class ProductPricingFieldMaskService
 {
     public Pricing
         GetUpdatedProductPricingValues(

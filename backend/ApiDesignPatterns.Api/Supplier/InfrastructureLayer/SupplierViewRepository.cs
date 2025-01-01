@@ -12,7 +12,7 @@ namespace backend.Supplier.InfrastructureLayer;
 
 public class SupplierViewRepository(
     IDbConnection dbConnection,
-    ProductSqlFilterBuilder sqlFilterBuilder)
+    SupplierSqlFilterBuilder sqlFilterBuilder)
     : ISupplierViewRepository
 {
     public async Task<SupplierView?> GetSupplierView(long id)

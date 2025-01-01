@@ -5,7 +5,7 @@ using backend.Shared;
 
 namespace backend.Supplier.Services;
 
-public class ProductColumnMapper : IColumnMapper
+public class SupplierColumnMapper : IColumnMapper
 {
     public string MapToColumnName(string propertyName)
     {

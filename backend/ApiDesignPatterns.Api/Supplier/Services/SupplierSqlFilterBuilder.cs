@@ -3,4 +3,4 @@ using SqlFilterBuilder = backend.Shared.SqlFilter.SqlFilterBuilder;
 
 namespace backend.Supplier.Services;
 
-public class ProductSqlFilterBuilder(SqlFilterParser filterParser) : SqlFilterBuilder(filterParser);
+public class SupplierSqlFilterBuilder(SqlFilterParser filterParser) : SqlFilterBuilder(filterParser);
