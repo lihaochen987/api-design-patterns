@@ -6,13 +6,15 @@ using System.Text;
 using backend.Review.DomainModels;
 using backend.Review.InfrastructureLayer.Queries;
 using backend.Review.Services;
+using backend.Shared;
 using Dapper;
 
 namespace backend.Review.InfrastructureLayer;
 
 public class ReviewViewRepository(
     IDbConnection dbConnection,
-    ReviewSqlFilterBuilder reviewSqlFilterBuilder)
+    ReviewSqlFilterBuilder reviewSqlFilterBuilder,
+    QueryService<ReviewView> queryService)
     : IReviewViewRepository
 {
     public async Task<ReviewView?> GetReviewView(long id)
@@ -55,25 +57,9 @@ public class ReviewViewRepository(
         sql.Append(" ORDER BY review_id LIMIT @PageSizePlusOne");
         parameters.Add("PageSizePlusOne", maxPageSize + 1);
 
-        var reviews = (await dbConnection.QueryAsync<ReviewView>(sql.ToString(), parameters)).ToList();
-        var paginatedReviews = Paginate(reviews, maxPageSize, out string? nextPageToken);
+        List<ReviewView> reviews = (await dbConnection.QueryAsync<ReviewView>(sql.ToString(), parameters)).ToList();
+        List<ReviewView> paginatedReviews = queryService.Paginate(reviews, maxPageSize, out string? nextPageToken);
 
         return (paginatedReviews, nextPageToken);
-    }
-
-    private static List<ReviewView> Paginate(
-        List<ReviewView> existingItems,
-        int maxPageSize,
-        out string? nextPageToken)
-    {
-        if (existingItems.Count <= maxPageSize)
-        {
-            nextPageToken = null;
-            return existingItems;
-        }
-
-        ReviewView lastItemInPage = existingItems[maxPageSize - 1];
-        nextPageToken = lastItemInPage.Id.ToString();
-        return existingItems.Take(maxPageSize).ToList();
     }
 }

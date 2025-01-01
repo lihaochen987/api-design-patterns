@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Review.ApplicationLayer;
+using backend.Review.DomainModels;
 using backend.Review.InfrastructureLayer;
 using backend.Review.ReviewControllers;
 using backend.Review.Services;
@@ -30,5 +31,6 @@ public static class ReviewServiceExtensions
         services.AddSingleton<SqlFilterBuilder, ReviewSqlFilterBuilder>();
         services.AddSingleton<IColumnMapper, ReviewColumnMapper>();
         services.AddSingleton<ReviewSqlFilterBuilder>();
+        services.AddSingleton<QueryService<ReviewView>>();
     }
 }
