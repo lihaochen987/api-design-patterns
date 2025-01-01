@@ -3,9 +3,9 @@
 
 using AutoFixture;
 using backend.Product.ProductPricingControllers;
-using backend.Product.Services;
 using backend.Product.Services.ProductPricingServices;
 using backend.Product.Tests.TestHelpers.Fakes;
+using backend.Shared.FieldMask;
 
 namespace backend.Product.Tests.ControllerTests;
 
@@ -16,11 +16,15 @@ public abstract class GetProductPricingControllerTestBase
     protected readonly ProductPricingRepositoryFake ProductRepository = [];
     private readonly ProductPricingFieldPaths _fieldPaths = new();
 
+    private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory =
+        new FieldMaskConverterFactory(new FieldMaskExpander(), new PropertyHandler(new NestedJObjectBuilder()));
+
     protected GetProductPricingController ProductPricingController()
     {
         return new GetProductPricingController(
             ProductRepository,
             _fieldPaths,
-            Extensions);
+            Extensions,
+            _fieldMaskConverterFactory);
     }
 }

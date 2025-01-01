@@ -6,6 +6,7 @@ using backend.Product.InfrastructureLayer.Database;
 using backend.Product.ProductControllers;
 using backend.Review;
 using backend.Shared;
+using backend.Shared.FieldMask;
 using backend.Shared.SqlFilter;
 using backend.Supplier;
 using DbUp;
@@ -32,6 +33,10 @@ builder.Services.AddSingleton<ISqlFilterParser>(provider =>
         provider.GetRequiredService<IColumnMapper>(),
         provider.GetRequiredService<SqlOperators>()));
 
+builder.Services.AddSingleton<NestedJObjectBuilder>();
+builder.Services.AddSingleton<PropertyHandler>();
+builder.Services.AddSingleton<FieldMaskExpander>();
+builder.Services.AddScoped<IFieldMaskConverterFactory, FieldMaskConverterFactory>();
 
 builder.Services.AddProductDependencies();
 builder.Services.AddReviewDependencies();

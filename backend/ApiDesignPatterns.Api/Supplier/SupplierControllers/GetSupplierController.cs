@@ -3,7 +3,7 @@
 
 using AutoMapper;
 using backend.Product.ProductControllers;
-using backend.Shared;
+using backend.Shared.FieldMask;
 using backend.Supplier.ApplicationLayer;
 using backend.Supplier.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +17,7 @@ namespace backend.Supplier.SupplierControllers;
 public class GetSupplierController(
     ISupplierViewApplicationService applicationService,
     SupplierFieldMaskConfiguration maskConfiguration,
+    IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase
 {
@@ -36,13 +37,8 @@ public class GetSupplierController(
 
         var response = mapper.Map<GetSupplierResponse>(supplierView);
 
-        JsonSerializerSettings settings = new()
-        {
-            Converters = new List<JsonConverter>
-            {
-                new FieldMaskConverter(request.FieldMask, maskConfiguration.SupplierFieldPaths)
-            }
-        };
+        var converter = fieldMaskConverterFactory.Create(request.FieldMask, maskConfiguration.SupplierFieldPaths);
+        JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };
         string json = JsonConvert.SerializeObject(response, settings);
 
         return new OkObjectResult(json) { StatusCode = 200 };

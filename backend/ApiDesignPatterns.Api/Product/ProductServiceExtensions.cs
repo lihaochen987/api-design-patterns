@@ -43,5 +43,6 @@ public static class ProductServiceExtensions
         services.AddSingleton<SqlFilterBuilder, ProductSqlFilterBuilder>();
         services.AddSingleton<QueryService<ProductView>>();
         services.AddSingleton<ProductSqlFilterBuilder>();
+        services.AddSingleton<ProductFieldPaths>();
     }
 }

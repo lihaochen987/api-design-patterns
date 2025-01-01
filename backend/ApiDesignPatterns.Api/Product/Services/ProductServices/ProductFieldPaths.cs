@@ -5,7 +5,7 @@ namespace backend.Product.Services.ProductServices;
 
 public class ProductFieldPaths
 {
-    public readonly HashSet<string> ValidFields =
+    public readonly HashSet<string> ValidPaths =
     [
         "*",
         "id",

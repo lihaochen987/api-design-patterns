@@ -3,7 +3,7 @@ using backend.Product.ApplicationLayer;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Product.Services.ProductServices;
-using backend.Shared;
+using backend.Shared.FieldMask;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,6 +15,7 @@ namespace backend.Product.ProductControllers;
 public class GetProductController(
     IProductViewApplicationService productViewApplicationService,
     ProductFieldPaths fieldPaths,
+    IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase
 {
@@ -38,13 +39,9 @@ public class GetProductController(
             Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(productView),
             _ => mapper.Map<GetProductResponse>(productView)
         };
-        JsonSerializerSettings settings = new()
-        {
-            Converters = new List<JsonConverter>
-            {
-                new FieldMaskConverter(request.FieldMask, fieldPaths.ValidFields)
-            }
-        };
+
+        var converter = fieldMaskConverterFactory.Create(request.FieldMask, fieldPaths.ValidPaths);
+        JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };
         string json = JsonConvert.SerializeObject(response, settings);
 
         return new OkObjectResult(json) { StatusCode = 200 };

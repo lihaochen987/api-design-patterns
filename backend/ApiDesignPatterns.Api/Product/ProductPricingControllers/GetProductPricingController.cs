@@ -1,7 +1,7 @@
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 using backend.Product.Services.ProductPricingServices;
-using backend.Shared;
+using backend.Shared.FieldMask;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
@@ -13,7 +13,8 @@ namespace backend.Product.ProductPricingControllers;
 public class GetProductPricingController(
     IProductPricingRepository productRepository,
     ProductPricingFieldPaths fieldPaths,
-    GetProductPricingExtensions extensions)
+    GetProductPricingExtensions extensions,
+    IFieldMaskConverterFactory fieldMaskConverterFactory)
     : ControllerBase
 {
     [HttpGet("{id:long}/pricing")]
@@ -31,13 +32,8 @@ public class GetProductPricingController(
 
         GetProductPricingResponse response = extensions.ToGetProductPricingResponse(product.Pricing, product.Id);
 
-        JsonSerializerSettings settings = new()
-        {
-            Converters = new List<JsonConverter>
-            {
-                new FieldMaskConverter(request.FieldMask, fieldPaths.ValidPaths)
-            }
-        };
+        var converter = fieldMaskConverterFactory.Create(request.FieldMask, fieldPaths.ValidPaths);
+        JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };
 
         string json = JsonConvert.SerializeObject(response, settings);
 
