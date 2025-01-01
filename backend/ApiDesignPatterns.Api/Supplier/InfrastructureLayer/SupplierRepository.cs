@@ -4,12 +4,14 @@
 using System.Data;
 using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer.Queries;
+using backend.Supplier.Services;
 using Dapper;
 
 namespace backend.Supplier.InfrastructureLayer;
 
 public class SupplierRepository(
-    IDbConnection dbConnection)
+    IDbConnection dbConnection,
+    SupplierDataWriter dataWriter)
     : ISupplierRepository
 {
     public async Task<DomainModels.Supplier?> GetSupplierAsync(long id)
@@ -38,14 +40,14 @@ public class SupplierRepository(
 
     public async Task CreateSupplierAsync(DomainModels.Supplier supplier)
     {
-        EnsureConnectionIsOpen();
+        dbConnection.Open();
 
         using var transaction = dbConnection.BeginTransaction();
         try
         {
-            supplier.Id = await CreateSupplier(supplier, transaction);
-            await CreateSupplierAddress(supplier, transaction);
-            await CreateSupplierPhoneNumber(supplier, transaction);
+            supplier.Id = await dataWriter.CreateSupplier(supplier, transaction);
+            await dataWriter.CreateSupplierAddress(supplier, transaction);
+            await dataWriter.CreateSupplierPhoneNumber(supplier, transaction);
             transaction.Commit();
         }
         catch
@@ -54,80 +56,21 @@ public class SupplierRepository(
             throw;
         }
         finally
-        {
-            CloseConnectionIfNeeded();
-        }
-    }
-
-    private void EnsureConnectionIsOpen()
-    {
-        if (dbConnection.State != ConnectionState.Open)
-        {
-            dbConnection.Open();
-        }
-    }
-
-    private void CloseConnectionIfNeeded()
-    {
-        if (dbConnection.State != ConnectionState.Closed)
         {
             dbConnection.Close();
         }
     }
 
-    private async Task<long> CreateSupplier(DomainModels.Supplier supplier, IDbTransaction transaction)
-    {
-        const string insertSupplierQuery = SupplierQueries.CreateSupplier;
-        return await dbConnection.ExecuteScalarAsync<long>(
-            insertSupplierQuery,
-            new { supplier.FirstName, supplier.LastName, supplier.Email, supplier.CreatedAt },
-            transaction
-        );
-    }
-
-    private async Task CreateSupplierAddress(DomainModels.Supplier supplier, IDbTransaction transaction)
-    {
-        const string insertAddressQuery = SupplierQueries.CreateSupplierAddress;
-        await dbConnection.ExecuteAsync(
-            insertAddressQuery,
-            new
-            {
-                SupplierId = supplier.Id,
-                supplier.Address.Street,
-                supplier.Address.City,
-                supplier.Address.PostalCode,
-                supplier.Address.Country
-            },
-            transaction
-        );
-    }
-
-    private async Task CreateSupplierPhoneNumber(DomainModels.Supplier supplier, IDbTransaction transaction)
-    {
-        const string insertPhoneNumberQuery = SupplierQueries.CreateSupplierPhoneNumber;
-        await dbConnection.ExecuteAsync(
-            insertPhoneNumberQuery,
-            new
-            {
-                SupplierId = supplier.Id,
-                supplier.PhoneNumber.CountryCode,
-                supplier.PhoneNumber.AreaCode,
-                supplier.PhoneNumber.Number
-            },
-            transaction
-        );
-    }
-
     public async Task UpdateSupplierAsync(DomainModels.Supplier supplier)
     {
-        EnsureConnectionIsOpen();
+        dbConnection.Open();
 
         using var transaction = dbConnection.BeginTransaction();
         try
         {
-            supplier.Id = await UpdateSupplier(supplier, transaction);
-            await UpdateSupplierAddress(supplier, transaction);
-            await UpdateSupplierPhoneNumber(supplier, transaction);
+            supplier.Id = await dataWriter.UpdateSupplier(supplier, transaction);
+            await dataWriter.UpdateSupplierAddress(supplier, transaction);
+            await dataWriter.UpdateSupplierPhoneNumber(supplier, transaction);
             transaction.Commit();
         }
         catch
@@ -137,50 +80,7 @@ public class SupplierRepository(
         }
         finally
         {
-            CloseConnectionIfNeeded();
+            dbConnection.Close();
         }
-    }
-
-    private async Task UpdateSupplierPhoneNumber(DomainModels.Supplier supplier, IDbTransaction transaction)
-    {
-        const string updatePhoneNumberQuery = SupplierQueries.UpdateSupplierPhoneNumber;
-        await dbConnection.ExecuteAsync(
-            updatePhoneNumberQuery,
-            new
-            {
-                SupplierId = supplier.Id,
-                supplier.PhoneNumber.CountryCode,
-                supplier.PhoneNumber.AreaCode,
-                supplier.PhoneNumber.Number
-            },
-            transaction
-        );
-    }
-
-    private async Task UpdateSupplierAddress(DomainModels.Supplier supplier, IDbTransaction transaction)
-    {
-        const string updateAddressQuery = SupplierQueries.UpdateSupplierAddress;
-        await dbConnection.ExecuteAsync(
-            updateAddressQuery,
-            new
-            {
-                SupplierId = supplier.Id,
-                supplier.Address.Street,
-                supplier.Address.City,
-                supplier.Address.PostalCode,
-                supplier.Address.Country
-            },
-            transaction
-        );
-    }
-
-    private async Task<long> UpdateSupplier(DomainModels.Supplier supplier, IDbTransaction transaction)
-    {
-        const string updateSupplierQuery = SupplierQueries.UpdateSupplier;
-        return await dbConnection.ExecuteScalarAsync<long>(
-            updateSupplierQuery,
-            new { supplier.Id, supplier.FirstName, supplier.LastName, supplier.Email },
-            transaction
-        );
     }
 }
