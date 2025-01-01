@@ -27,19 +27,6 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
     public Task CreateProductAsync(DomainModels.Product product)
     {
         IncrementCallCount(nameof(CreateProductAsync));
-        // switch (product)
-        // {
-        //     case PetFood petFood:
-        //         Add(petFood);
-        //         break;
-        //     case GroomingAndHygiene groomingAndHygiene:
-        //         Add(groomingAndHygiene);
-        //         break;
-        //     default:
-        //         Add(product);
-        //         break;
-        // }
-
         IsDirty = true;
         return Task.CompletedTask;
     }

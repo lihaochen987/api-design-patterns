@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using backend.Product.DomainModels.ValueObjects;
 using Swashbuckle.AspNetCore.Annotations;
 

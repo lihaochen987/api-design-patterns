@@ -102,9 +102,9 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         UpdateProductRequest request = new()
         {
             Name = "Updated Name",
-            Pricing = new ProductPricingRequest { BasePrice = "25.50", DiscountPercentage = "50" },
+            Pricing = new ProductPricingRequest { BasePrice = "25.50", DiscountPercentage = "50", TaxRate = "15" },
             Category = "Toys",
-            FieldMask = ["name", "category", "discountpercentage"]
+            FieldMask = ["name", "category", "discountpercentage", "taxrate"]
         };
         ProductApplicationService sut = ProductApplicationService();
 
@@ -116,6 +116,7 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         Repository.First().Category.ShouldBeEquivalentTo((Category)Enum.Parse(typeof(Category), request.Category));
         Repository.First().Pricing.DiscountPercentage
             .ShouldBeEquivalentTo(decimal.Parse(request.Pricing.DiscountPercentage));
+        Repository.First().Pricing.TaxRate.ShouldBeEquivalentTo(decimal.Parse(request.Pricing.TaxRate));
     }
 
     [Fact]
@@ -171,17 +172,19 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
             UsageInstructions = "Place into palm and apply",
             IsNatural = false,
             IsHypoAllergenic = true,
-            FieldMask = ["usageinstructions", "isnatural", "ishypoallergenic"]
+            IsCrueltyFree = false,
+            SafetyWarnings = "Just don't strangle the dog",
+            FieldMask = ["usageinstructions", "isnatural", "ishypoallergenic", "iscrueltyfree", "safetywarnings"]
         };
         ProductApplicationService sut = ProductApplicationService();
-
         await sut.UpdateProductAsync(request, product);
-
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
         var groomingAndHygiene = (GroomingAndHygiene)Repository.First();
         groomingAndHygiene.UsageInstructions.ShouldBeEquivalentTo(request.UsageInstructions);
         groomingAndHygiene.IsNatural.ShouldBeEquivalentTo(request.IsNatural);
         groomingAndHygiene.IsHypoallergenic.ShouldBeEquivalentTo(request.IsHypoAllergenic);
+        groomingAndHygiene.SafetyWarnings.ShouldBeEquivalentTo(request.SafetyWarnings);
+        groomingAndHygiene.IsCrueltyFree.ShouldBeEquivalentTo(request.IsCrueltyFree);
     }
 }

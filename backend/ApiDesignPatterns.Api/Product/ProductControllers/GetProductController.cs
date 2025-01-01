@@ -2,7 +2,6 @@ using AutoMapper;
 using backend.Product.ApplicationLayer;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
-using backend.Product.Services;
 using backend.Product.Services.ProductServices;
 using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
