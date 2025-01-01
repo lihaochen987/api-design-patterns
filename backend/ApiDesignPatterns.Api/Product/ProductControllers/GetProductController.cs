@@ -2,8 +2,8 @@ using AutoMapper;
 using backend.Product.ApplicationLayer;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
-using backend.Product.Services.ProductServices;
 using backend.Shared.FieldMask;
+using backend.Shared.FieldPath;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
@@ -14,7 +14,7 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class GetProductController(
     IProductViewApplicationService productViewApplicationService,
-    ProductFieldPaths fieldPaths,
+    IFieldPathFactory fieldPathFactory,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase
@@ -40,7 +40,8 @@ public class GetProductController(
             _ => mapper.Map<GetProductResponse>(productView)
         };
 
-        var converter = fieldMaskConverterFactory.Create(request.FieldMask, fieldPaths.ValidPaths);
+        var paths = fieldPathFactory.Create("Product");
+        var converter = fieldMaskConverterFactory.Create(request.FieldMask, paths.ValidPaths);
         JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };
         string json = JsonConvert.SerializeObject(response, settings);
 

@@ -5,8 +5,8 @@ using AutoFixture;
 using AutoMapper;
 using backend.Product.ApplicationLayer;
 using backend.Product.ProductControllers;
-using backend.Product.Services.ProductServices;
 using backend.Shared.FieldMask;
+using backend.Shared.FieldPath;
 using Moq;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -16,7 +16,7 @@ public abstract class GetProductControllerTestBase
     protected readonly Fixture Fixture;
     protected readonly IProductViewApplicationService MockApplicationService;
     private readonly IMapper _mapper;
-    private readonly ProductFieldPaths _productFieldPaths;
+    private readonly IFieldPathFactory _fieldPathFactory;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
 
     protected GetProductControllerTestBase()
@@ -25,7 +25,7 @@ public abstract class GetProductControllerTestBase
         MockApplicationService = Mock.Of<IProductViewApplicationService>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
-        _productFieldPaths = new ProductFieldPaths();
+        _fieldPathFactory = new FieldPathFactory();
         _fieldMaskConverterFactory =
             new FieldMaskConverterFactory(new FieldMaskExpander(), new PropertyHandler(new NestedJObjectBuilder()));
     }
@@ -34,7 +34,7 @@ public abstract class GetProductControllerTestBase
     {
         return new GetProductController(
             MockApplicationService,
-            _productFieldPaths,
+            _fieldPathFactory,
             _fieldMaskConverterFactory,
             _mapper);
     }

@@ -4,8 +4,8 @@
 using AutoMapper;
 using backend.Product.ProductControllers;
 using backend.Shared.FieldMask;
+using backend.Shared.FieldPath;
 using backend.Supplier.ApplicationLayer;
-using backend.Supplier.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
@@ -17,7 +17,7 @@ namespace backend.Supplier.SupplierControllers;
 public class GetSupplierController(
     ISupplierViewApplicationService applicationService,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
-    SupplierFieldPaths fieldPaths,
+    IFieldPathFactory fieldPathFactory,
     IMapper mapper)
     : ControllerBase
 {
@@ -37,7 +37,8 @@ public class GetSupplierController(
 
         var response = mapper.Map<GetSupplierResponse>(supplierView);
 
-        var converter = fieldMaskConverterFactory.Create(request.FieldMask, fieldPaths.ValidPaths);
+        var paths = fieldPathFactory.Create("Supplier");
+        var converter = fieldMaskConverterFactory.Create(request.FieldMask, paths.ValidPaths);
         JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };
         string json = JsonConvert.SerializeObject(response, settings);
 

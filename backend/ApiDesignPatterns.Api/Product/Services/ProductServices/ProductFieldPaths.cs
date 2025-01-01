@@ -1,11 +1,13 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
+using backend.Shared.FieldPath;
+
 namespace backend.Product.Services.ProductServices;
 
-public class ProductFieldPaths
+public class ProductFieldPaths : IFieldPaths
 {
-    public readonly HashSet<string> ValidPaths =
+    public HashSet<string> ValidPaths { get; } =
     [
         "*",
         "id",

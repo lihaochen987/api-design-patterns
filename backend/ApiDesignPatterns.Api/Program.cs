@@ -7,6 +7,7 @@ using backend.Product.ProductControllers;
 using backend.Review;
 using backend.Shared;
 using backend.Shared.FieldMask;
+using backend.Shared.FieldPath;
 using backend.Shared.SqlFilter;
 using backend.Supplier;
 using DbUp;
@@ -37,6 +38,7 @@ builder.Services.AddSingleton<NestedJObjectBuilder>();
 builder.Services.AddSingleton<PropertyHandler>();
 builder.Services.AddSingleton<FieldMaskExpander>();
 builder.Services.AddScoped<IFieldMaskConverterFactory, FieldMaskConverterFactory>();
+builder.Services.AddSingleton<IFieldPathFactory, FieldPathFactory>();
 
 builder.Services.AddProductDependencies();
 builder.Services.AddReviewDependencies();

@@ -26,10 +26,5 @@ public class CreateSupplierController(
 
         var response = mapper.Map<CreateSupplierResponse>(supplier);
         return Ok(response);
-        // return CreatedAtAction(
-        //     "GetSupplier",
-        //     "GetSupplier",
-        //     new { id = supplier.Id },
-        //     response);
     }
 }
