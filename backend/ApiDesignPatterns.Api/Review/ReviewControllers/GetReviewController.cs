@@ -18,7 +18,7 @@ namespace backend.Review.ReviewControllers;
 public class GetReviewController(
     IReviewViewApplicationService reviewViewApplicationService,
     ReviewFieldMaskConfiguration maskConfiguration,
-    FieldMaskConverterFactory fieldMaskConverterFactory,
+    IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase
 {

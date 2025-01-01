@@ -36,7 +36,7 @@ builder.Services.AddSingleton<SqlFilterParser>(provider =>
 builder.Services.AddSingleton<NestedJObjectBuilder>();
 builder.Services.AddSingleton<PropertyHandler>();
 builder.Services.AddSingleton<FieldMaskExpander>();
-builder.Services.AddScoped<FieldMaskConverterFactory>();
+builder.Services.AddScoped<IFieldMaskConverterFactory, FieldMaskConverterFactory>();
 
 builder.Services.AddProductDependencies();
 builder.Services.AddReviewDependencies();

@@ -26,7 +26,6 @@ public static class ReviewServiceExtensions
         services.AddScoped<IReviewViewRepository, ReviewViewRepository>();
 
         // Inject Review Services
-        services.AddSingleton<ReviewSqlFilterBuilder>();
         services.AddSingleton<ReviewFieldMaskConfiguration>();
         services.AddSingleton<SqlFilterBuilder, ReviewSqlFilterBuilder>();
         services.AddSingleton<IColumnMapper, ReviewColumnMapper>();

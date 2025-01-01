@@ -17,7 +17,7 @@ public abstract class GetProductControllerTestBase
     protected readonly IProductViewApplicationService MockApplicationService;
     private readonly IMapper _mapper;
     private readonly ProductFieldPaths _productFieldPaths;
-    private readonly FieldMaskConverterFactory _fieldMaskConverterFactory;
+    private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
 
     protected GetProductControllerTestBase()
     {

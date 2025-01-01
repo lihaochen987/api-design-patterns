@@ -16,7 +16,7 @@ namespace backend.Supplier.SupplierControllers;
 [Route("supplier")]
 public class GetSupplierController(
     ISupplierViewApplicationService applicationService,
-    FieldMaskConverterFactory fieldMaskConverterFactory,
+    IFieldMaskConverterFactory fieldMaskConverterFactory,
     SupplierFieldPaths fieldPaths,
     IMapper mapper)
     : ControllerBase
