@@ -18,6 +18,11 @@ public class ProductTestDataBuilder
     private Pricing _pricing;
     private readonly string _storageInstructions;
     private readonly decimal _weightKg;
+    private readonly bool _isNatural;
+    private readonly bool _isHypoAllergenic;
+    private readonly string _usageInstructions;
+    private readonly bool _isCrueltyFree;
+    private readonly string _safetyWarnings;
 
     public ProductTestDataBuilder()
     {
@@ -37,6 +42,12 @@ public class ProductTestDataBuilder
         _nutritionalInfo = fixture.Create<Dictionary<string, object>>();
         _storageInstructions = fixture.Create<string>();
         _weightKg = fixture.Create<decimal>();
+
+        _isNatural = fixture.Create<bool>();
+        _isHypoAllergenic = fixture.Create<bool>();
+        _usageInstructions = fixture.Create<string>();
+        _isCrueltyFree = fixture.Create<bool>();
+        _safetyWarnings = fixture.Create<string>();
     }
 
     public ProductTestDataBuilder WithId(int id)
@@ -69,11 +80,12 @@ public class ProductTestDataBuilder
         return this;
     }
 
+    // Todo: Refactor this
     public DomainModels.Product Build()
     {
-        if (_category == Category.PetFood)
+        return _category switch
         {
-            return new PetFood
+            Category.PetFood => new PetFood
             {
                 Id = _id,
                 Name = _name,
@@ -86,16 +98,28 @@ public class ProductTestDataBuilder
                 NutritionalInfo = _nutritionalInfo,
                 StorageInstructions = _storageInstructions,
                 WeightKg = _weightKg
-            };
-        }
-
-        return new DomainModels.Product
-        {
-            Id = _id,
-            Name = _name,
-            Category = _category,
-            Pricing = _pricing,
-            Dimensions = _dimensions,
+            },
+            Category.GroomingAndHygiene => new GroomingAndHygiene
+            {
+                Id = _id,
+                Name = _name,
+                Category = _category,
+                Pricing = _pricing,
+                Dimensions = _dimensions,
+                IsNatural = _isNatural,
+                IsHypoallergenic = _isHypoAllergenic,
+                UsageInstructions = _usageInstructions,
+                IsCrueltyFree = _isCrueltyFree,
+                SafetyWarnings = _safetyWarnings
+            },
+            _ => new DomainModels.Product
+            {
+                Id = _id,
+                Name = _name,
+                Category = _category,
+                Pricing = _pricing,
+                Dimensions = _dimensions,
+            }
         };
     }
 }

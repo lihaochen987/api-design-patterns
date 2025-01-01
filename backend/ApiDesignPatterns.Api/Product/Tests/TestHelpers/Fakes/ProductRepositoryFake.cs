@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using backend.Product.DomainModels;
 using backend.Product.InfrastructureLayer;
 
 namespace backend.Product.Tests.TestHelpers.Fakes;
@@ -26,7 +27,19 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
     public Task CreateProductAsync(DomainModels.Product product)
     {
         IncrementCallCount(nameof(CreateProductAsync));
-        Add(product);
+        // switch (product)
+        // {
+        //     case PetFood petFood:
+        //         Add(petFood);
+        //         break;
+        //     case GroomingAndHygiene groomingAndHygiene:
+        //         Add(groomingAndHygiene);
+        //         break;
+        //     default:
+        //         Add(product);
+        //         break;
+        // }
+
         IsDirty = true;
         return Task.CompletedTask;
     }

@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.ApplicationLayer;
+using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
@@ -157,5 +158,30 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
         Repository.First().Name.ShouldBeEquivalentTo(request.Name);
+    }
+
+    [Fact]
+    public async Task UpdateProductAsync_GroomingAndHygiene_ShouldUpdateSpecifiedFields()
+    {
+        DomainModels.Product product = new ProductTestDataBuilder().WithCategory(Category.GroomingAndHygiene).Build();
+        Repository.Add(product);
+        Repository.IsDirty = false;
+        UpdateProductRequest request = new()
+        {
+            UsageInstructions = "Place into palm and apply",
+            IsNatural = false,
+            IsHypoAllergenic = true,
+            FieldMask = ["usageinstructions", "isnatural", "ishypoallergenic"]
+        };
+        ProductApplicationService sut = ProductApplicationService();
+
+        await sut.UpdateProductAsync(request, product);
+
+        Repository.IsDirty.ShouldBeTrue();
+        Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
+        var groomingAndHygiene = (GroomingAndHygiene)Repository.First();
+        groomingAndHygiene.UsageInstructions.ShouldBeEquivalentTo(request.UsageInstructions);
+        groomingAndHygiene.IsNatural.ShouldBeEquivalentTo(request.IsNatural);
+        groomingAndHygiene.IsHypoallergenic.ShouldBeEquivalentTo(request.IsHypoAllergenic);
     }
 }
