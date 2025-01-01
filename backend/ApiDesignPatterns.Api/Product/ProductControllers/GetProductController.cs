@@ -15,7 +15,7 @@ namespace backend.Product.ProductControllers;
 public class GetProductController(
     IProductViewApplicationService productViewApplicationService,
     ProductFieldPaths fieldPaths,
-    IFieldMaskConverterFactory fieldMaskConverterFactory,
+    FieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase
 {

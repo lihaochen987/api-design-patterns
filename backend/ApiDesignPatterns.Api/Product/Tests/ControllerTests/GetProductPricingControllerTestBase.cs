@@ -16,7 +16,7 @@ public abstract class GetProductPricingControllerTestBase
     protected readonly ProductPricingRepositoryFake ProductRepository = [];
     private readonly ProductPricingFieldPaths _fieldPaths = new();
 
-    private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory =
+    private readonly FieldMaskConverterFactory _fieldMaskConverterFactory =
         new FieldMaskConverterFactory(new FieldMaskExpander(), new PropertyHandler(new NestedJObjectBuilder()));
 
     protected GetProductPricingController ProductPricingController()

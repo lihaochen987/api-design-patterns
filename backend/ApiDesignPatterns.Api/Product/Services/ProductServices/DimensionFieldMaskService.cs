@@ -6,7 +6,7 @@ using backend.Product.ProductControllers;
 
 namespace backend.Product.Services.ProductServices;
 
-public class DimensionsFieldMaskService : IDimensionsFieldMaskService
+public class DimensionsFieldMaskService
 {
     public Dimensions GetUpdatedDimensionValues(
         UpdateProductRequest request,

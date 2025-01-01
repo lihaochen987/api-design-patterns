@@ -8,7 +8,7 @@ using backend.Product.ProductControllers;
 
 namespace backend.Product.Services.ProductServices;
 
-public class UpdateProductTypeService(IProductFieldMaskConfiguration maskConfiguration)
+public class UpdateProductTypeService(ProductFieldMaskConfiguration maskConfiguration)
 {
     public void UpdateBaseProduct(
         UpdateProductRequest request,

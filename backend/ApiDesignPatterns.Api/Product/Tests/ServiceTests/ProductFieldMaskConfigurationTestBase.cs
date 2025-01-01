@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Product.Services;
 using backend.Product.Services.ProductPricingServices;
 using backend.Product.Services.ProductServices;
 using backend.Product.Tests.TestHelpers.Builders;
@@ -11,20 +10,19 @@ namespace backend.Product.Tests.ServiceTests;
 
 public class ProductFieldMaskConfigurationTestBase
 {
-    protected readonly IFixture Fixture;
-    protected readonly IProductPricingFieldMaskService ProductPricingFieldMaskService;
-    protected readonly IDimensionsFieldMaskService DimensionsFieldMaskService;
+    private readonly IProductPricingFieldMaskService _productPricingFieldMaskService;
+    private readonly DimensionsFieldMaskService _dimensionsFieldMaskService;
 
     protected ProductFieldMaskConfigurationTestBase()
     {
-        ProductPricingFieldMaskService = new ProductPricingFieldMaskService();
-        DimensionsFieldMaskService = new DimensionsFieldMaskService();
-        Fixture = new Fixture();
-        Fixture.Customizations.Add(new ProductDimensionsBuilder());
+        _productPricingFieldMaskService = new ProductPricingFieldMaskService();
+        _dimensionsFieldMaskService = new DimensionsFieldMaskService();
+        IFixture fixture = new Fixture();
+        fixture.Customizations.Add(new ProductDimensionsBuilder());
     }
 
     protected ProductFieldMaskConfiguration ProductFieldMaskConfiguration()
     {
-        return new ProductFieldMaskConfiguration(ProductPricingFieldMaskService, DimensionsFieldMaskService);
+        return new ProductFieldMaskConfiguration(_productPricingFieldMaskService, _dimensionsFieldMaskService);
     }
 }

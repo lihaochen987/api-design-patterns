@@ -17,7 +17,7 @@ namespace backend.Supplier.SupplierControllers;
 public class GetSupplierController(
     ISupplierViewApplicationService applicationService,
     SupplierFieldMaskConfiguration maskConfiguration,
-    IFieldMaskConverterFactory fieldMaskConverterFactory,
+    FieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase
 {

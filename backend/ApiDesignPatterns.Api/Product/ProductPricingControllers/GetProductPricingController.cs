@@ -14,7 +14,7 @@ public class GetProductPricingController(
     IProductPricingRepository productRepository,
     ProductPricingFieldPaths fieldPaths,
     GetProductPricingExtensions extensions,
-    IFieldMaskConverterFactory fieldMaskConverterFactory)
+    FieldMaskConverterFactory fieldMaskConverterFactory)
     : ControllerBase
 {
     [HttpGet("{id:long}/pricing")]

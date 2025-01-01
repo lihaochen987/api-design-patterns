@@ -15,8 +15,7 @@ namespace backend.Product.Services.ProductServices;
 /// </summary>
 public class ProductFieldMaskConfiguration(
     IProductPricingFieldMaskService pricingFieldMaskService,
-    IDimensionsFieldMaskService dimensionsFieldMaskService)
-    : IProductFieldMaskConfiguration
+    DimensionsFieldMaskService dimensionsFieldMaskService)
 {
     public (string name, Pricing pricing, Category category, Dimensions dimensions)
         GetUpdatedProductValues(

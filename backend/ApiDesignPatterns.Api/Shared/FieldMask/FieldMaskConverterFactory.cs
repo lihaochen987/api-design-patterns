@@ -6,7 +6,6 @@ namespace backend.Shared.FieldMask;
 public class FieldMaskConverterFactory(
     FieldMaskExpander expander,
     PropertyHandler propertyHandler)
-    : IFieldMaskConverterFactory
 {
     public FieldMaskConverter Create(IList<string> fieldMask, HashSet<string> allFieldPaths)
     {
