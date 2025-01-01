@@ -3,6 +3,7 @@
 
 using System.Data;
 using System.Text;
+using backend.Shared;
 using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer.Queries;
 using backend.Supplier.Services;
@@ -12,7 +13,8 @@ namespace backend.Supplier.InfrastructureLayer;
 
 public class SupplierViewRepository(
     IDbConnection dbConnection,
-    SupplierSqlFilterBuilder sqlFilterBuilder)
+    SupplierSqlFilterBuilder sqlFilterBuilder,
+    QueryService<SupplierView> queryService)
     : ISupplierViewRepository
 {
     public async Task<SupplierView?> GetSupplierView(long id)
@@ -55,25 +57,11 @@ public class SupplierViewRepository(
         sql.Append(" ORDER BY supplier_id LIMIT @PageSizePlusOne");
         parameters.Add("PageSizePlusOne", maxPageSize + 1);
 
-        var suppliers = (await dbConnection.QueryAsync<SupplierView>(sql.ToString(), parameters)).ToList();
-        var paginatedSuppliers = Paginate(suppliers, maxPageSize, out string? nextPageToken);
+        List<SupplierView> suppliers =
+            (await dbConnection.QueryAsync<SupplierView>(sql.ToString(), parameters)).ToList();
+        List<SupplierView> paginatedSuppliers =
+            queryService.Paginate(suppliers, maxPageSize, out string? nextPageToken);
 
         return (paginatedSuppliers, nextPageToken);
-    }
-
-    private static List<SupplierView> Paginate(
-        List<SupplierView> existingItems,
-        int maxPageSize,
-        out string? nextPageToken)
-    {
-        if (existingItems.Count <= maxPageSize)
-        {
-            nextPageToken = null;
-            return existingItems;
-        }
-
-        SupplierView lastItemInPage = existingItems[maxPageSize - 1];
-        nextPageToken = lastItemInPage.Id.ToString();
-        return existingItems.Take(maxPageSize).ToList();
     }
 }

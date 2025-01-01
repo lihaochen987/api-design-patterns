@@ -4,6 +4,7 @@
 using backend.Shared;
 using backend.Shared.SqlFilter;
 using backend.Supplier.ApplicationLayer;
+using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer;
 using backend.Supplier.Services;
 using backend.Supplier.SupplierControllers;
@@ -33,5 +34,6 @@ public static class SupplierServiceExtensions
         services.AddSingleton<SupplierFieldPaths>();
         services.AddSingleton<SupplierValueObjectUpdater>();
         services.AddScoped<SupplierDataWriter>();
+        services.AddSingleton<QueryService<SupplierView>>();
     }
 }
