@@ -29,5 +29,7 @@ public static class SupplierServiceExtensions
         services.AddSingleton<SupplierFieldMaskConfiguration>();
         services.AddSingleton<IColumnMapper, SupplierColumnMapper>();
         services.AddSingleton<SqlFilterBuilder, SupplierSqlFilterBuilder>();
+        services.AddSingleton<SupplierFieldPaths>();
+        services.AddSingleton<SupplierValueObjectUpdater>();
     }
 }

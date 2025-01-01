@@ -6,22 +6,8 @@ using backend.Supplier.SupplierControllers;
 
 namespace backend.Supplier.Services;
 
-public class SupplierFieldMaskConfiguration
+public class SupplierFieldMaskConfiguration(SupplierValueObjectUpdater supplierValueObjectUpdater)
 {
-    public readonly HashSet<string> SupplierFieldPaths =
-    [
-        "*",
-        "id",
-        "fullname",
-        "email",
-        "address.street",
-        "address.city",
-        "address.postalcode",
-        "address.country",
-        "createdat",
-        "phonenumber"
-    ];
-
     public (
         string firstName,
         string lastName,
@@ -44,52 +30,9 @@ public class SupplierFieldMaskConfiguration
             ? request.Email
             : supplier.Email;
 
-        Address address = GetUpdatedSupplierAddressValues(request, supplier);
-        PhoneNumber phoneNumber = GetUpdateSupplierPhoneNumberValues(request, supplier);
+        Address address = supplierValueObjectUpdater.GetUpdatedSupplierAddressValues(request, supplier);
+        PhoneNumber phoneNumber = supplierValueObjectUpdater.GetUpdateSupplierPhoneNumberValues(request, supplier);
 
         return (firstname, lastName, email, address, phoneNumber);
-    }
-
-    private static Address GetUpdatedSupplierAddressValues(
-        UpdateSupplierRequest request, DomainModels.Supplier supplier)
-    {
-        string street = request.FieldMask.Contains("street") && !string.IsNullOrEmpty(request.Address?.Street)
-            ? request.Address.Street
-            : supplier.Address.Street;
-
-        string city = request.FieldMask.Contains("city") && !string.IsNullOrEmpty(request.Address?.City)
-            ? request.Address.City
-            : supplier.Address.City;
-
-        string postalCode =
-            request.FieldMask.Contains("postalcode") && !string.IsNullOrEmpty(request.Address?.PostalCode)
-                ? request.Address.PostalCode
-                : supplier.Address.PostalCode;
-
-        string country = request.FieldMask.Contains("country") && !string.IsNullOrEmpty(request.Address?.Country)
-            ? request.Address.Country
-            : supplier.Address.Country;
-
-        return new Address { Street = street, City = city, PostalCode = postalCode, Country = country };
-    }
-
-    private static PhoneNumber GetUpdateSupplierPhoneNumberValues(UpdateSupplierRequest request,
-        DomainModels.Supplier supplier)
-    {
-        string countryCode = request.FieldMask.Contains("countrycode") &&
-                             !string.IsNullOrEmpty(request.PhoneNumber?.CountryCode)
-            ? request.PhoneNumber.CountryCode
-            : supplier.PhoneNumber.CountryCode;
-
-        string areaCode = request.FieldMask.Contains("areacode") &&
-                          !string.IsNullOrEmpty(request.PhoneNumber?.AreaCode)
-            ? request.PhoneNumber.AreaCode
-            : supplier.PhoneNumber.AreaCode;
-
-        long number = request.FieldMask.Contains("number") && !string.IsNullOrEmpty(request.PhoneNumber?.Number)
-            ? long.Parse(request.PhoneNumber.Number)
-            : supplier.PhoneNumber.Number;
-
-        return new PhoneNumber { CountryCode = countryCode, AreaCode = areaCode, Number = number };
     }
 }
