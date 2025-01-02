@@ -8,12 +8,12 @@ namespace backend.Shared.FieldPath;
 
 public class FieldPathAdapter : IFieldPathAdapter
 {
-    public IFieldPaths GetFieldPaths(string context)
+    public HashSet<string> GetFieldPaths(string context)
     {
         return context switch
         {
-            "Supplier" => new SupplierFieldPaths(),
-            "Product" => new ProductFieldPaths(),
+            "Supplier" => new SupplierFieldPaths().ValidPaths,
+            "Product" => new ProductFieldPaths().ValidPaths,
             _ => throw new ArgumentException($"Invalid context: {context}", nameof(context))
         };
     }

@@ -5,5 +5,5 @@ namespace backend.Shared.FieldPath;
 
 public interface IFieldPathAdapter
 {
-    IFieldPaths GetFieldPaths(string context);
+    HashSet<string> GetFieldPaths(string context);
 }
