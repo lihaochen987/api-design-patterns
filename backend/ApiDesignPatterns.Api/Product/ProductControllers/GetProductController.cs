@@ -14,7 +14,7 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class GetProductController(
     IProductViewApplicationService productViewApplicationService,
-    IFieldPathFactory fieldPathFactory,
+    IFieldPathAdapter fieldPathFactory,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase
@@ -40,7 +40,7 @@ public class GetProductController(
             _ => mapper.Map<GetProductResponse>(productView)
         };
 
-        var paths = fieldPathFactory.Create("Product");
+        var paths = fieldPathFactory.GetFieldPaths("Product");
         var converter = fieldMaskConverterFactory.Create(request.FieldMask, paths.ValidPaths);
         JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };
         string json = JsonConvert.SerializeObject(response, settings);

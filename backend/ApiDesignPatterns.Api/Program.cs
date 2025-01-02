@@ -38,7 +38,7 @@ builder.Services.AddSingleton<NestedJObjectBuilder>();
 builder.Services.AddSingleton<PropertyHandler>();
 builder.Services.AddSingleton<FieldMaskExpander>();
 builder.Services.AddScoped<IFieldMaskConverterFactory, FieldMaskConverterFactory>();
-builder.Services.AddSingleton<IFieldPathFactory, FieldPathFactory>();
+builder.Services.AddSingleton<IFieldPathAdapter, FieldPathAdapter>();
 
 builder.Services.AddProductDependencies();
 builder.Services.AddReviewDependencies();

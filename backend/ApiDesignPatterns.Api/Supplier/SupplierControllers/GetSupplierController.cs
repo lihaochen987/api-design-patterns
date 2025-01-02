@@ -17,7 +17,7 @@ namespace backend.Supplier.SupplierControllers;
 public class GetSupplierController(
     ISupplierViewApplicationService applicationService,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
-    IFieldPathFactory fieldPathFactory,
+    IFieldPathAdapter fieldPathFactory,
     IMapper mapper)
     : ControllerBase
 {
@@ -37,7 +37,7 @@ public class GetSupplierController(
 
         var response = mapper.Map<GetSupplierResponse>(supplierView);
 
-        var paths = fieldPathFactory.Create("Supplier");
+        var paths = fieldPathFactory.GetFieldPaths("Supplier");
         var converter = fieldMaskConverterFactory.Create(request.FieldMask, paths.ValidPaths);
         JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };
         string json = JsonConvert.SerializeObject(response, settings);

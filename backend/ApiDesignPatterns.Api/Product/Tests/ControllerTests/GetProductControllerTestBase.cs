@@ -16,7 +16,7 @@ public abstract class GetProductControllerTestBase
     protected readonly Fixture Fixture;
     protected readonly IProductViewApplicationService MockApplicationService;
     private readonly IMapper _mapper;
-    private readonly IFieldPathFactory _fieldPathFactory;
+    private readonly IFieldPathAdapter _fieldPathAdapter;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
 
     protected GetProductControllerTestBase()
@@ -25,7 +25,7 @@ public abstract class GetProductControllerTestBase
         MockApplicationService = Mock.Of<IProductViewApplicationService>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
-        _fieldPathFactory = new FieldPathFactory();
+        _fieldPathAdapter = new FieldPathAdapter();
         _fieldMaskConverterFactory =
             new FieldMaskConverterFactory(new FieldMaskExpander(), new PropertyHandler(new NestedJObjectBuilder()));
     }
@@ -34,7 +34,7 @@ public abstract class GetProductControllerTestBase
     {
         return new GetProductController(
             MockApplicationService,
-            _fieldPathFactory,
+            _fieldPathAdapter,
             _fieldMaskConverterFactory,
             _mapper);
     }

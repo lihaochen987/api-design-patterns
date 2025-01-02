@@ -3,7 +3,7 @@
 
 namespace backend.Shared.FieldPath;
 
-public interface IFieldPathFactory
+public interface IFieldPathAdapter
 {
-    IFieldPaths Create(string context);
+    IFieldPaths GetFieldPaths(string context);
 }
