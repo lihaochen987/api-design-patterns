@@ -7,7 +7,6 @@ using backend.Product.ProductControllers;
 using backend.Review;
 using backend.Shared;
 using backend.Shared.FieldMask;
-using backend.Shared.FieldPath;
 using backend.Shared.SqlFilter;
 using backend.Supplier;
 using DbUp;
@@ -34,14 +33,22 @@ builder.Services.AddSingleton<SqlFilterParser>(provider =>
         provider.GetRequiredService<IColumnMapper>(),
         provider.GetRequiredService<SqlOperators>()));
 
-builder.Services.AddSingleton<NestedJObjectBuilder>();
-builder.Services.AddSingleton<PropertyHandler>();
-builder.Services.AddSingleton<FieldMaskExpander>();
-builder.Services.AddScoped<IFieldMaskConverterFactory, FieldMaskConverterFactory>();
-builder.Services.AddSingleton<IFieldPathAdapter, FieldPathAdapter>();
-
 builder.Services.AddProductDependencies();
-builder.Services.AddReviewDependencies();
+
+// Todo: Refactor this out once 1. we convert the Product resource to use Dapper
+var sqlOperators = new SqlOperators();
+var fieldMaskExpander = new FieldMaskExpander();
+var nestedJObjectBuilder = new NestedJObjectBuilder();
+var fieldMaskPropertyHandler = new PropertyHandler(nestedJObjectBuilder);
+IFieldMaskConverterFactory fieldMaskConverterFactory =
+    new FieldMaskConverterFactory(fieldMaskExpander, fieldMaskPropertyHandler);
+
+builder.Services.AddSingleton(fieldMaskConverterFactory);
+
+// Review Composition Root
+var reviewCompositionRoot = new ReviewCompositionRoot(builder.Configuration, sqlOperators, fieldMaskConverterFactory);
+reviewCompositionRoot.ConfigureServices(builder.Services);
+
 builder.Services.AddSupplierDependencies();
 
 builder.Services.AddControllers()
