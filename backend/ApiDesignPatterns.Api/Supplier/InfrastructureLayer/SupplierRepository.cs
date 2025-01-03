@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Data;
-using backend.Supplier.DomainModels;
+using AutoMapper;
 using backend.Supplier.InfrastructureLayer.Queries;
 using backend.Supplier.Services;
 using Dapper;
@@ -11,26 +11,17 @@ namespace backend.Supplier.InfrastructureLayer;
 
 public class SupplierRepository(
     IDbConnection dbConnection,
-    SupplierDataWriter dataWriter)
+    SupplierDataWriter dataWriter,
+    IMapper mapper)
     : ISupplierRepository
 {
     public async Task<DomainModels.Supplier?> GetSupplierAsync(long id)
     {
-        const string query = SupplierQueries.GetSupplier;
+        var result =
+            await dbConnection.QueryFirstOrDefaultAsync<DomainModels.Supplier>(SupplierQueries.GetSupplier,
+                new { Id = id });
 
-        var results = await dbConnection.QueryAsync<DomainModels.Supplier, Address, PhoneNumber, DomainModels.Supplier>(
-            query,
-            (supplier, address, phoneNumber) =>
-            {
-                supplier.Address = address;
-                supplier.PhoneNumber = phoneNumber;
-                return supplier;
-            },
-            new { Id = id },
-            splitOn: "Street,CountryCode"
-        );
-
-        return results.FirstOrDefault();
+        return result == null ? null : mapper.Map<DomainModels.Supplier>(result);
     }
 
     public async Task DeleteSupplierAsync(long id)
