@@ -46,7 +46,7 @@ IFieldMaskConverterFactory fieldMaskConverterFactory =
 builder.Services.AddSingleton(fieldMaskConverterFactory);
 
 // Review Composition Root
-var reviewCompositionRoot = new ReviewCompositionRoot(builder.Configuration, sqlOperators, fieldMaskConverterFactory);
+var reviewCompositionRoot = new ReviewComposer(builder.Configuration, sqlOperators, fieldMaskConverterFactory);
 reviewCompositionRoot.ConfigureServices(builder.Services);
 
 builder.Services.AddSupplierDependencies();

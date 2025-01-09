@@ -14,7 +14,7 @@ using Npgsql;
 
 namespace backend.Review;
 
-public class ReviewCompositionRoot
+public class ReviewComposer
 {
     private readonly ReviewFieldMaskConfiguration _reviewFieldMaskConfiguration;
     private readonly ReviewSqlFilterBuilder _reviewSqlFilterBuilder;
@@ -23,7 +23,7 @@ public class ReviewCompositionRoot
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
 
-    public ReviewCompositionRoot(
+    public ReviewComposer(
         IConfiguration configuration,
         SqlOperators sqlOperators,
         IFieldMaskConverterFactory fieldMaskConverterFactory)
