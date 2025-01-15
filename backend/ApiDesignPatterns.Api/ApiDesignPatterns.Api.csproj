@@ -201,9 +201,6 @@
     <Compile Update="Product\DomainModels\ValueObjects\ProductPricingResponse.cs">
       <DependentUpon>Pricing.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\ProductApplicationServiceTestBase.cs">
-      <DependentUpon>ProductApplicationServiceTests.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\Tests\ApplicationLayerTests\ProductViewApplicationServiceTestBase.cs">
       <DependentUpon>ProductViewApplicationServiceTests.cs</DependentUpon>
     </Compile>
@@ -272,6 +269,15 @@
     </Compile>
     <Compile Update="Product\Tests\ServiceTests\ProductFieldMaskConfigurationTestBase.cs">
       <DependentUpon>ProductFieldMaskConfigurationTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\ProductQueryApplicationServiceTestBase.cs">
+      <DependentUpon>ProductQueryApplicationServiceTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\UpdateProductServiceTestBase.cs">
+      <DependentUpon>UpdateProductServiceTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\DeleteProductServiceTestBase.cs">
+      <DependentUpon>DeleteProductServiceTests.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

@@ -1,96 +1,20 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
+using backend.Shared;
 using Shouldly;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
+public class UpdateProductServiceTests : UpdateProductServiceTestBase
 {
-    [Fact]
-    public async Task GetProductAsync_ReturnsProduct_WhenProductExists()
-    {
-        DomainModels.Product expectedProduct = new ProductTestDataBuilder().Build();
-        Repository.Add(expectedProduct);
-        ProductApplicationService sut = ProductApplicationService();
-
-        DomainModels.Product? result = await sut.GetProductAsync(expectedProduct.Id);
-
-        result.ShouldNotBeNull();
-        result.ShouldBeEquivalentTo(expectedProduct);
-    }
-
-    [Fact]
-    public async Task GetProductAsync_ReturnsNull_WhenProductDoesNotExist()
-    {
-        DomainModels.Product expectedProduct = new ProductTestDataBuilder().Build();
-        ProductApplicationService sut = ProductApplicationService();
-
-        DomainModels.Product? result = await sut.GetProductAsync(expectedProduct.Id);
-
-        result.ShouldBeNull();
-    }
-
-    [Fact]
-    public async Task CreateProductAsync_CallsRepositoryWithCorrectProduct()
-    {
-        DomainModels.Product productToCreate = new ProductTestDataBuilder().Build();
-        ProductApplicationService sut = ProductApplicationService();
-
-        await sut.CreateProductAsync(productToCreate);
-
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);
-    }
-
-    [Fact]
-    public async Task CreateProductAsync_PersistsWhenCalledTwice()
-    {
-        DomainModels.Product firstProductToCreate = new ProductTestDataBuilder().Build();
-        DomainModels.Product secondProductToCreate = new ProductTestDataBuilder().Build();
-        ProductApplicationService sut = ProductApplicationService();
-
-        await sut.CreateProductAsync(firstProductToCreate);
-        await sut.CreateProductAsync(secondProductToCreate);
-
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 2);
-    }
-
-    [Fact]
-    public async Task DeleteProductAsync_CallsRepositoryWithCorrectProduct()
-    {
-        DomainModels.Product productToDelete = new ProductTestDataBuilder().Build();
-        ProductApplicationService sut = ProductApplicationService();
-
-        await sut.DeleteProductAsync(productToDelete);
-
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("DeleteProductAsync", 1);
-    }
-
-    [Fact]
-    public async Task UpdateProductAsync_ValidProduct_ShouldCallRepositoryUpdateProductAsync()
-    {
-        var existingProduct = new ProductTestDataBuilder().WithId(1).Build();
-        Repository.Add(existingProduct);
-        Repository.IsDirty = false;
-        var updatedProduct = new ProductTestDataBuilder().WithId(1).Build();
-        ProductApplicationService sut = ProductApplicationService();
-
-        await sut.ReplaceProductAsync(updatedProduct);
-
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
-    }
-
     [Fact]
     public async Task UpdateProductAsync_WithMultipleFieldsInFieldMask_ShouldUpdateOnlySpecifiedFields()
     {
@@ -106,9 +30,9 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
             Category = "Toys",
             FieldMask = ["name", "category", "discountpercentage", "taxrate"]
         };
-        ProductApplicationService sut = ProductApplicationService();
+        ICommandService<UpdateProduct> sut = UpdateProductService();
 
-        await sut.UpdateProductAsync(request, product);
+        await sut.Execute(new UpdateProduct { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
@@ -131,9 +55,9 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
             Dimensions = new DimensionsRequest { Length = "20", Width = "10", Height = "2" },
             FieldMask = ["dimensions.width", "dimensions.height"]
         };
-        ProductApplicationService sut = ProductApplicationService();
+        ICommandService<UpdateProduct> sut = UpdateProductService();
 
-        await sut.UpdateProductAsync(request, product);
+        await sut.Execute(new UpdateProduct { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
@@ -152,9 +76,9 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
         {
             Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = "1.99" }, FieldMask = ["name"]
         };
-        ProductApplicationService sut = ProductApplicationService();
+        ICommandService<UpdateProduct> sut = UpdateProductService();
 
-        await sut.UpdateProductAsync(request, product);
+        await sut.Execute(new UpdateProduct { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
@@ -176,8 +100,10 @@ public class ProductApplicationServiceTests : ProductApplicationServiceTestBase
             SafetyWarnings = "Just don't strangle the dog",
             FieldMask = ["usageinstructions", "isnatural", "ishypoallergenic", "iscrueltyfree", "safetywarnings"]
         };
-        ProductApplicationService sut = ProductApplicationService();
-        await sut.UpdateProductAsync(request, product);
+        ICommandService<UpdateProduct> sut = UpdateProductService();
+
+        await sut.Execute(new UpdateProduct { Product = product, Request = request });
+
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
         var groomingAndHygiene = (GroomingAndHygiene)Repository.First();

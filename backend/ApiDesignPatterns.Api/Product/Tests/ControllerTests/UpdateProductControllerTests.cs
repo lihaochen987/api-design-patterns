@@ -1,3 +1,4 @@
+using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
@@ -19,7 +20,7 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
             Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = "1.99" }, Category = "Toys"
         };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockProductQueryService)
             .Setup(service => service.GetProductAsync(product.Id))
             .ReturnsAsync(product);
         var sut = UpdateProductController();
@@ -31,9 +32,9 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
         UpdateProductResponse? response = contentResult!.Value as UpdateProductResponse;
         response.ShouldBeEquivalentTo(Mapper.Map<UpdateProductResponse>(product));
         Mock
-            .Get(MockApplicationService)
+            .Get(MockUpdateProductService)
             .Verify(
-                svc => svc.UpdateProductAsync(request, It.IsAny<DomainModels.Product>()), Times.Once);
+                svc => svc.Execute(new UpdateProduct { Request = request, Product = product }));
     }
 
     [Fact]

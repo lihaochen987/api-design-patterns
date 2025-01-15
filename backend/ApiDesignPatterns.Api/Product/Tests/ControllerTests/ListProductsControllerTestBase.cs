@@ -10,19 +10,19 @@ namespace backend.Product.Tests.ControllerTests;
 
 public abstract class ListProductsControllerTestBase
 {
-    protected readonly IProductViewApplicationService MockApplicationService;
+    protected readonly IProductViewQueryApplicationService MockQueryApplicationService;
     private readonly IMapper _mapper;
     protected const int DefaultMaxPageSize = 10;
 
     protected ListProductsControllerTestBase()
     {
-        MockApplicationService = Mock.Of<IProductViewApplicationService>();
+        MockQueryApplicationService = Mock.Of<IProductViewQueryApplicationService>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
     }
 
     protected ListProductsController ListProductsController()
     {
-        return new ListProductsController(MockApplicationService, _mapper);
+        return new ListProductsController(MockQueryApplicationService, _mapper);
     }
 }

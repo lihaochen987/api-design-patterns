@@ -1,4 +1,6 @@
 using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.DeleteProduct;
+using backend.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -7,7 +9,8 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class DeleteProductController(
-    IProductApplicationService applicationService)
+    ICommandService<DeleteProduct> service,
+    IProductQueryApplicationService productQueryApplicationService)
     : ControllerBase
 {
     [HttpDelete("{id:long}")]
@@ -17,13 +20,13 @@ public class DeleteProductController(
         [FromRoute] long id,
         [FromQuery] DeleteProductRequest request)
     {
-        DomainModels.Product? product = await applicationService.GetProductAsync(id);
+        DomainModels.Product? product = await productQueryApplicationService.GetProductAsync(id);
         if (product == null)
         {
             return NotFound();
         }
 
-        await applicationService.DeleteProductAsync(product);
+        await service.Execute(new DeleteProduct { Product = product });
         return NoContent();
     }
 }

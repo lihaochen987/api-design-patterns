@@ -10,7 +10,7 @@ namespace backend.Product.ProductControllers;
 [Route("products")]
 [ApiController]
 public class ListProductsController(
-    IProductViewApplicationService applicationService,
+    IProductViewQueryApplicationService queryApplicationService,
     IMapper mapper)
     : ControllerBase
 {
@@ -20,7 +20,7 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        (List<ProductView> products, string? nextPageToken) = await applicationService.ListProductsAsync(request);
+        (List<ProductView> products, string? nextPageToken) = await queryApplicationService.ListProductsAsync(request);
 
         IEnumerable<GetProductResponse> productResponses = products.Select(product => product.Category switch
         {

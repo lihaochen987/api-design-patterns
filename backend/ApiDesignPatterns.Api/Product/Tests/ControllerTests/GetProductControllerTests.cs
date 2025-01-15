@@ -22,7 +22,7 @@ public class GetProductControllerTests : GetProductControllerTestBase
             .With(r => r.FieldMask, ["Name", "Price"])
             .Create();
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.GetProductView(productView.Id))
             .ReturnsAsync(productView);
         var sut = GetProductController();
@@ -42,7 +42,7 @@ public class GetProductControllerTests : GetProductControllerTestBase
         ProductView productView = new ProductViewTestDataBuilder().Build();
         GetProductRequest request = Fixture.Create<GetProductRequest>();
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.GetProductView(productView.Id))
             .ReturnsAsync((ProductView?)null);
         var sut = GetProductController();
@@ -63,7 +63,7 @@ public class GetProductControllerTests : GetProductControllerTestBase
             .With(r => r.FieldMask, ["Name", "Price"])
             .Create();
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.GetProductView(productView.Id))
             .ReturnsAsync(productView);
         var sut = GetProductController();
@@ -84,7 +84,7 @@ public class GetProductControllerTests : GetProductControllerTestBase
             .Build();
         GetProductRequest request = Fixture.Create<GetProductRequest>();
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.GetProductView(productView.Id))
             .ReturnsAsync(productView);
         var sut = GetProductController();
@@ -107,7 +107,7 @@ public class GetProductControllerTests : GetProductControllerTestBase
             .With(r => r.FieldMask, ["Name"])
             .Create();
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.GetProductView(productView.Id))
             .ReturnsAsync(productView);
         var sut = GetProductController();

@@ -13,7 +13,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class GetProductController(
-    IProductViewApplicationService productViewApplicationService,
+    IProductViewQueryApplicationService productViewQueryApplicationService,
     IFieldPathAdapter fieldPathAdapter,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
@@ -27,7 +27,7 @@ public class GetProductController(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)
     {
-        ProductView? productView = await productViewApplicationService.GetProductView(id);
+        ProductView? productView = await productViewQueryApplicationService.GetProductView(id);
         if (productView == null)
         {
             return NotFound();

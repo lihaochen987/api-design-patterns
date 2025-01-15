@@ -20,8 +20,8 @@ public class ProductViewApplicationServiceTestBase
         Repository = new ProductViewRepositoryFake(new QueryService<ProductView>());
     }
 
-    protected ProductViewApplicationService ProductViewApplicationService()
+    protected ProductViewQueryApplicationService ProductViewApplicationService()
     {
-        return new ProductViewApplicationService(Repository);
+        return new ProductViewQueryApplicationService(Repository);
     }
 }

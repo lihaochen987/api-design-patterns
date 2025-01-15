@@ -2,6 +2,10 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.CreateProduct;
+using backend.Product.ApplicationLayer.DeleteProduct;
+using backend.Product.ApplicationLayer.ReplaceProduct;
+using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 using backend.Product.ProductControllers;
@@ -25,8 +29,12 @@ public static class ProductServiceExtensions
         services.AddSingleton<UpdateProductPricingExtensions>();
 
         // Inject Product Application Layer
-        services.AddScoped<IProductApplicationService, ProductApplicationService>();
-        services.AddScoped<IProductViewApplicationService, ProductViewApplicationService>();
+        services.AddScoped<IProductQueryApplicationService, ProductQueryApplicationService>();
+        services.AddScoped<CreateProductService>();
+        services.AddScoped<UpdateProductService>();
+        services.AddScoped<DeleteProductService>();
+        services.AddScoped<ReplaceProductService>();
+        services.AddScoped<IProductViewQueryApplicationService, ProductViewQueryApplicationService>();
 
         // Inject Product Infrastructure Layer
         services.AddScoped<IProductRepository, ProductRepository>();

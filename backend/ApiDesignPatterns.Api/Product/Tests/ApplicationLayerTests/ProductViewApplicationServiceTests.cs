@@ -19,7 +19,7 @@ public class ProductViewApplicationServiceTests : ProductViewApplicationServiceT
     {
         var productView = new ProductViewTestDataBuilder().WithName("Sample Product").Build();
         Repository.Add(productView);
-        ProductViewApplicationService sut = ProductViewApplicationService();
+        ProductViewQueryApplicationService sut = ProductViewApplicationService();
 
         ProductView? result = await sut.GetProductView(productView.Id);
 
@@ -31,7 +31,7 @@ public class ProductViewApplicationServiceTests : ProductViewApplicationServiceT
     public async Task GetProductView_ShouldReturnNull_WhenProductDoesNotExist()
     {
         long productId = Fixture.Create<long>();
-        ProductViewApplicationService sut = ProductViewApplicationService();
+        ProductViewQueryApplicationService sut = ProductViewApplicationService();
 
         ProductView? result = await sut.GetProductView(productId);
 
@@ -46,7 +46,7 @@ public class ProductViewApplicationServiceTests : ProductViewApplicationServiceT
         ProductView productTwo = new ProductViewTestDataBuilder().WithId(2).WithCategory(Category.Toys).Build();
         Repository.Add(productOne);
         Repository.Add(productTwo);
-        ProductViewApplicationService sut = ProductViewApplicationService();
+        ProductViewQueryApplicationService sut = ProductViewApplicationService();
 
         (List<ProductView>, string?) result = await sut.ListProductsAsync(request);
 
@@ -59,7 +59,7 @@ public class ProductViewApplicationServiceTests : ProductViewApplicationServiceT
     public async Task ListProductsAsync_ShouldReturnEmptyList_WhenNoProductsExist()
     {
         var request = new ListProductsRequest();
-        ProductViewApplicationService sut = ProductViewApplicationService();
+        ProductViewQueryApplicationService sut = ProductViewApplicationService();
 
         (List<ProductView>, string?) result = await sut.ListProductsAsync(request);
 
@@ -74,7 +74,7 @@ public class ProductViewApplicationServiceTests : ProductViewApplicationServiceT
         {
             PageToken = "1", Filter = "InvalidFilter == \"SomeValue\"", MaxPageSize = 5
         };
-        ProductViewApplicationService sut = ProductViewApplicationService();
+        ProductViewQueryApplicationService sut = ProductViewApplicationService();
 
         await Should.ThrowAsync<ArgumentException>(() => sut.ListProductsAsync(request));
     }

@@ -4,9 +4,9 @@ using backend.Product.ProductControllers;
 
 namespace backend.Product.ApplicationLayer;
 
-public class ProductViewApplicationService(
+public class ProductViewQueryApplicationService(
     IProductViewRepository repository)
-    : IProductViewApplicationService
+    : IProductViewQueryApplicationService
 {
     public async Task<ProductView?> GetProductView(long id)
     {

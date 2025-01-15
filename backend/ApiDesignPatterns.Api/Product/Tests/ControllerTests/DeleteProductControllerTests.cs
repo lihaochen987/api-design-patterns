@@ -1,3 +1,4 @@
+using backend.Product.ApplicationLayer.DeleteProduct;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
@@ -14,17 +15,17 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
     {
         DomainModels.Product product = new ProductTestDataBuilder().Build();
         Mock
-            .Get(MockApplicationService)
+            .Get(MockProductQueryService)
             .Setup(svc => svc.GetProductAsync(product.Id))
             .ReturnsAsync(product);
-        var sut = DeleteProductController();
+        DeleteProductController sut = DeleteProductController();
 
         ActionResult result = await sut.DeleteProduct(product.Id, new DeleteProductRequest());
 
         result.ShouldBeOfType<NoContentResult>();
         Mock
-            .Get(MockApplicationService)
-            .Verify(svc => svc.DeleteProductAsync(product), Times.Once);
+            .Get(MockDeleteProductService)
+            .Verify(svc => svc.Execute(new DeleteProduct { Product = product }), Times.Once);
     }
 
     [Fact]
@@ -32,7 +33,7 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
     {
         DomainModels.Product product = new ProductTestDataBuilder().Build();
         Mock
-            .Get(MockApplicationService)
+            .Get(MockProductQueryService)
             .Setup(svc => svc.GetProductAsync(product.Id))
             .ReturnsAsync((DomainModels.Product?)null);
         var sut = DeleteProductController();
@@ -41,7 +42,7 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
 
         result.ShouldBeOfType<NotFoundResult>();
         Mock
-            .Get(MockApplicationService)
-            .Verify(svc => svc.DeleteProductAsync(product), Times.Never);
+            .Get(MockDeleteProductService)
+            .Verify(svc => svc.Execute(new DeleteProduct { Product = product }), Times.Never);
     }
 }

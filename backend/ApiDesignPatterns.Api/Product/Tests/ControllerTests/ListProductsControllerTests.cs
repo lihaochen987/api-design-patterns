@@ -18,7 +18,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         List<ProductView> productViews = new ProductViewTestDataBuilder().CreateMany(4).ToList();
         ListProductsRequest request = new() { MaxPageSize = 4 };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync((productViews, null));
         ListProductsController sut = ListProductsController();
@@ -41,7 +41,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var expectedPageResults = productViewList.Skip(2).Take(2).ToList();
         ListProductsRequest request = new() { PageToken = "2", MaxPageSize = 2 };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync((expectedPageResults, null));
         ListProductsController sut = ListProductsController();
@@ -64,7 +64,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         List<ProductView> firstPageProducts = products.Take(2).ToList();
         ListProductsRequest request = new() { MaxPageSize = 2 };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync((firstPageProducts, "2"));
         ListProductsController sut = ListProductsController();
@@ -87,7 +87,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         List<ProductView> defaultPageProducts = products.Take(DefaultMaxPageSize).ToList();
         ListProductsRequest request = new();
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync((defaultPageProducts, DefaultMaxPageSize.ToString()));
         ListProductsController sut = ListProductsController();
@@ -108,7 +108,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
     {
         ListProductsRequest request = new() { MaxPageSize = 2 };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync(([], null));
         ListProductsController sut = ListProductsController();
@@ -131,7 +131,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         List<ProductView> firstPageProducts = products.Take(DefaultMaxPageSize).ToList();
         ListProductsRequest request = new();
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync((firstPageProducts, DefaultMaxPageSize.ToString()));
         ListProductsController sut = ListProductsController();
@@ -155,7 +155,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var filteredProducts = new List<ProductView> { product };
         ListProductsRequest request = new() { Filter = "Category == \"PetFood\" && Price < 20", MaxPageSize = 10 };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync((filteredProducts, null));
         ListProductsController sut = ListProductsController();
@@ -181,7 +181,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
             Filter = "Dimensions.Length == 5 && Dimensions.Width < 20", MaxPageSize = 10
         };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync((filteredProducts, null));
         ListProductsController sut = ListProductsController();
@@ -204,7 +204,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var filteredProducts = new List<ProductView> { product };
         ListProductsRequest request = new() { Filter = "Name == \"Chew Toy\"", MaxPageSize = 10 };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync((filteredProducts, null));
         ListProductsController sut = ListProductsController();
@@ -228,7 +228,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var filteredProducts = new List<ProductView> { product };
         ListProductsRequest request = new() { Filter = "Category == \"Beds\"", MaxPageSize = 2, PageToken = "1" };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync((filteredProducts, "2"));
         ListProductsController sut = ListProductsController();
@@ -252,7 +252,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var filteredProducts = new List<ProductView> { firstFilteredProduct, secondFilteredProduct };
         ListProductsRequest request = new() { Filter = "Category == \"Beds\"", MaxPageSize = 5, PageToken = "1" };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ReturnsAsync((filteredProducts, null));
         ListProductsController sut = ListProductsController();
@@ -270,7 +270,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
     {
         ListProductsRequest request = new() { Filter = "InvalidFilter == \"NonExistent\"", MaxPageSize = 10 };
         Mock
-            .Get(MockApplicationService)
+            .Get(MockQueryApplicationService)
             .Setup(service => service.ListProductsAsync(request))
             .ThrowsAsync(new ArgumentException("Invalid filter syntax"));
 

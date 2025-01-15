@@ -1,0 +1,31 @@
+// Licensed to the.NET Foundation under one or more agreements.
+// The.NET Foundation licenses this file to you under the MIT license.
+
+using backend.Product.DomainModels;
+using backend.Product.InfrastructureLayer;
+using backend.Product.Services.ProductServices;
+using backend.Shared;
+
+namespace backend.Product.ApplicationLayer.UpdateProduct;
+
+public class UpdateProductService(
+    IProductRepository repository,
+    UpdateProductTypeService updateProductTypeService)
+    : ICommandService<UpdateProduct>
+{
+    public async Task Execute(UpdateProduct command)
+    {
+        updateProductTypeService.UpdateBaseProduct(command.Request, command.Product);
+        switch (command.Product)
+        {
+            case PetFood petFood:
+                updateProductTypeService.UpdatePetFood(command.Request, petFood);
+                break;
+            case GroomingAndHygiene groomingAndHygiene:
+                updateProductTypeService.UpdateGroomingAndHygiene(command.Request, groomingAndHygiene);
+                break;
+        }
+
+        await repository.UpdateProductAsync(command.Product);
+    }
+}

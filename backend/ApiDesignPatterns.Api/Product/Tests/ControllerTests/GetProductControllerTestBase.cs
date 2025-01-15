@@ -14,7 +14,7 @@ namespace backend.Product.Tests.ControllerTests;
 public abstract class GetProductControllerTestBase
 {
     protected readonly Fixture Fixture;
-    protected readonly IProductViewApplicationService MockApplicationService;
+    protected readonly IProductViewQueryApplicationService MockQueryApplicationService;
     private readonly IMapper _mapper;
     private readonly IFieldPathAdapter _fieldPathAdapter;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
@@ -22,7 +22,7 @@ public abstract class GetProductControllerTestBase
     protected GetProductControllerTestBase()
     {
         Fixture = new Fixture();
-        MockApplicationService = Mock.Of<IProductViewApplicationService>();
+        MockQueryApplicationService = Mock.Of<IProductViewQueryApplicationService>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
         _fieldPathAdapter = new FieldPathAdapter();
@@ -33,7 +33,7 @@ public abstract class GetProductControllerTestBase
     protected GetProductController GetProductController()
     {
         return new GetProductController(
-            MockApplicationService,
+            MockQueryApplicationService,
             _fieldPathAdapter,
             _fieldMaskConverterFactory,
             _mapper);
