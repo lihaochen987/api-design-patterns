@@ -2,6 +2,7 @@ using AutoMapper;
 using backend.Product.ApplicationLayer.CreateProduct;
 using backend.Product.DomainModels.Enums;
 using backend.Shared;
+using backend.Shared.CommandService;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

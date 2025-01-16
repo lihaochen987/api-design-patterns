@@ -7,6 +7,7 @@ using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
 using backend.Shared;
+using backend.Shared.CommandService;
 using Moq;
 
 namespace backend.Product.Tests.ControllerTests;

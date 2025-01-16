@@ -5,6 +5,7 @@ using backend.Product.ApplicationLayer;
 using backend.Product.ApplicationLayer.DeleteProduct;
 using backend.Product.ProductControllers;
 using backend.Shared;
+using backend.Shared.CommandService;
 using Moq;
 
 namespace backend.Product.Tests.ControllerTests;

@@ -5,5 +5,5 @@ namespace backend.Product.ApplicationLayer.DeleteProduct;
 
 public record DeleteProduct
 {
-    public required DomainModels.Product Product { get; set; }
+    public required DomainModels.Product Product { get; init; }
 }

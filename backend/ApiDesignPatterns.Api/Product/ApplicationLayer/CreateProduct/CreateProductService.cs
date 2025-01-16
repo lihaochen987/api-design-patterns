@@ -3,6 +3,7 @@
 
 using backend.Product.InfrastructureLayer;
 using backend.Shared;
+using backend.Shared.CommandService;
 
 namespace backend.Product.ApplicationLayer.CreateProduct;
 

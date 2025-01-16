@@ -4,6 +4,7 @@
 using backend.Product.ApplicationLayer.CreateProduct;
 using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared;
+using backend.Shared.CommandService;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 

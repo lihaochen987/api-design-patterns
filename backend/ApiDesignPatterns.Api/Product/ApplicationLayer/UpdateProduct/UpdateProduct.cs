@@ -7,6 +7,6 @@ namespace backend.Product.ApplicationLayer.UpdateProduct;
 
 public record UpdateProduct
 {
-    public required DomainModels.Product Product { get; set; }
-    public required UpdateProductRequest Request { get; set; }
+    public required DomainModels.Product Product { get; init; }
+    public required UpdateProductRequest Request { get; init; }
 }

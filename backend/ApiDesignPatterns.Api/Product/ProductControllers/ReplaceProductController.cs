@@ -4,6 +4,7 @@ using backend.Product.ApplicationLayer.ReplaceProduct;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Shared;
+using backend.Shared.CommandService;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

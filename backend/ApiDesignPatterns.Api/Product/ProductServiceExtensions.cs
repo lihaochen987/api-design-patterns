@@ -13,8 +13,7 @@ using backend.Product.ProductPricingControllers;
 using backend.Product.Services.ProductPricingServices;
 using backend.Product.Services.ProductServices;
 using backend.Shared;
-using backend.Supplier.Services;
-using SqlFilterBuilder = backend.Shared.SqlFilter.SqlFilterBuilder;
+using backend.Shared.CommandService;
 
 namespace backend.Product;
 
@@ -30,10 +29,10 @@ public static class ProductServiceExtensions
 
         // Inject Product Application Layer
         services.AddScoped<IProductQueryApplicationService, ProductQueryApplicationService>();
-        services.AddScoped<CreateProductService>();
-        services.AddScoped<UpdateProductService>();
-        services.AddScoped<DeleteProductService>();
-        services.AddScoped<ReplaceProductService>();
+        services.AddScoped<ICommandService<CreateProduct>, CreateProductService>();
+        services.AddScoped<ICommandService<UpdateProduct>, UpdateProductService>();
+        services.AddScoped<ICommandService<DeleteProduct>, DeleteProductService>();
+        services.AddScoped<ICommandService<ReplaceProduct>, ReplaceProductService>();
         services.AddScoped<IProductViewQueryApplicationService, ProductViewQueryApplicationService>();
 
         // Inject Product Infrastructure Layer

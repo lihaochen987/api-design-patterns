@@ -8,6 +8,7 @@ using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared;
+using backend.Shared.CommandService;
 using Shouldly;
 using Xunit;
 

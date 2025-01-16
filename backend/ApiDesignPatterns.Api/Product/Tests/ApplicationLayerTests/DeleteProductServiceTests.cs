@@ -4,6 +4,7 @@
 using backend.Product.ApplicationLayer.DeleteProduct;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared;
+using backend.Shared.CommandService;
 using Shouldly;
 using Xunit;
 

@@ -1,6 +1,7 @@
 using backend.Product.ApplicationLayer;
 using backend.Product.ApplicationLayer.DeleteProduct;
 using backend.Shared;
+using backend.Shared.CommandService;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

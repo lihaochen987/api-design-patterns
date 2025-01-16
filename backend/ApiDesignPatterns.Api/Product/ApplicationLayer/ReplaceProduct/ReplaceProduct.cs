@@ -5,5 +5,5 @@ namespace backend.Product.ApplicationLayer.ReplaceProduct;
 
 public record ReplaceProduct
 {
-    public required DomainModels.Product Product { get; set; }
+    public required DomainModels.Product Product { get; init; }
 }
