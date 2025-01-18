@@ -1,15 +1,17 @@
 {
-  "name": "@repo/api-types",
+  "name": "@repo/product-data-access",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "lint": "eslint \"**/*.ts\""
   },
-  "types": "./types.d.ts",
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@repo/api-types": "*",
     "eslint": "^8.57.0",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "openapi-fetch": "^0.13.4",
+    "openapi-react-query": "^0.2.9"
   }
 }

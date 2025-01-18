@@ -1,6 +1,6 @@
 import createFetchClient from "openapi-fetch";
 import createClient from "openapi-react-query";
-import {paths} from "../../../shared/utility/src/types";
+import {paths} from "@repo/api-types";
 
 const fetchClient = createFetchClient<paths>({
     baseUrl: "http://localhost:8080/",

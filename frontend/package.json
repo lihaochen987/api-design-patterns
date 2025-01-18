@@ -15,6 +15,8 @@
   "packageManager": "npm@11.0.0",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/shared/ui/*",
+    "packages/shared/utility/*",
+    "packages/products/data-access/*"
   ]
 }
