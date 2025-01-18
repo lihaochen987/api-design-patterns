@@ -15,9 +15,6 @@
   "packageManager": "npm@11.0.0",
   "workspaces": [
     "apps/*",
-    "packages/*",
-    "packages/shared/*",
-    "packages/shared/ui/*",
-    "packages/shared/utility/*"
+    "packages/*"
   ]
 }
