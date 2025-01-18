@@ -1,0 +1,17 @@
+{
+  "name": "@repo/api-types",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"**/*.ts\""
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "eslint": "^8.57.0",
+    "typescript": "5.5.4"
+  },
+  "exports": {
+    "./paths": "./types.d.ts"
+  }
+}
