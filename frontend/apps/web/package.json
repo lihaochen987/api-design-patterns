@@ -10,13 +10,18 @@
     "lint": "eslint \"src/**/*.ts\""
   },
   "dependencies": {
-    "@repo/ui": "*"
+    "@repo/ui": "*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@repo/product-data-access": "*",
     "eslint": "^8.57.0",
     "typescript": "5.5.4",
-    "vite": "^5.1.4"
+    "vite": "^5.1.4",
+    "@types/react": "^18.3.10",
+    "@types/react-dom": "^18.3.0"
   }
 }
