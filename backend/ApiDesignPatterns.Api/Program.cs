@@ -41,9 +41,10 @@ var nestedJObjectBuilder = new NestedJObjectBuilder();
 var fieldMaskPropertyHandler = new PropertyHandler(nestedJObjectBuilder);
 IFieldMaskConverterFactory fieldMaskConverterFactory =
     new FieldMaskConverterFactory(fieldMaskExpander, fieldMaskPropertyHandler);
-var fieldPathAdapter = new FieldPathAdapter();
-
 builder.Services.AddSingleton(fieldMaskConverterFactory);
+
+var fieldPathAdapter = new FieldPathAdapter();
+builder.Services.AddSingleton<IFieldPathAdapter, FieldPathAdapter>();
 
 // Review Composition Root
 var reviewCompositionRoot = new ReviewComposer(builder.Configuration, sqlOperators, fieldMaskConverterFactory);
