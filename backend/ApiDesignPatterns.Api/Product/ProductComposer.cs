@@ -36,11 +36,13 @@ public class ProductComposer
     private readonly UpdateProductTypeService _updateProductTypeService;
     private readonly ProductPricingFieldPaths _productPricingFieldPaths;
     private readonly ProductPricingFieldMaskConfiguration _productPricingFieldMaskConfiguration;
+    private readonly ILoggerFactory _loggerFactory;
 
     public ProductComposer(
         IConfiguration configuration,
         IFieldPathAdapter fieldPathAdapter,
-        IFieldMaskConverterFactory fieldMaskConverterFactory)
+        IFieldMaskConverterFactory fieldMaskConverterFactory,
+        ILoggerFactory loggerFactory)
     {
         _getProductPricingExtensions = new GetProductPricingExtensions();
         var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
@@ -59,6 +61,7 @@ public class ProductComposer
         _updateProductTypeService = new UpdateProductTypeService(productFieldMaskConfiguration);
         _productPricingFieldPaths = new ProductPricingFieldPaths();
         _productPricingFieldMaskConfiguration = new ProductPricingFieldMaskConfiguration();
+        _loggerFactory = loggerFactory;
     }
 
     private IProductRepository CreateProductRepository()
@@ -90,7 +93,9 @@ public class ProductComposer
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var commandService = new UpdateProductService(repository, _updateProductTypeService);
-        return new AuditCommandServiceDecorator<UpdateProduct>(commandService, dbConnection);
+        var auditCommandService = new AuditCommandServiceDecorator<UpdateProduct>(commandService, dbConnection);
+        var logger = _loggerFactory.CreateLogger<LoggingCommandServiceDecorator<UpdateProduct>>();
+        return new LoggingCommandServiceDecorator<UpdateProduct>(auditCommandService, logger);
     }
 
     private ICommandService<CreateProduct> CreateCreateProductService()
@@ -98,7 +103,9 @@ public class ProductComposer
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var commandService = new CreateProductService(repository);
-        return new AuditCommandServiceDecorator<CreateProduct>(commandService, dbConnection);
+        var auditCommandService = new AuditCommandServiceDecorator<CreateProduct>(commandService, dbConnection);
+        var logger = _loggerFactory.CreateLogger<LoggingCommandServiceDecorator<CreateProduct>>();
+        return new LoggingCommandServiceDecorator<CreateProduct>(auditCommandService, logger);
     }
 
     private ICommandService<ReplaceProduct> CreateReplaceProductService()
@@ -106,7 +113,9 @@ public class ProductComposer
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var commandService = new ReplaceProductService(repository);
-        return new AuditCommandServiceDecorator<ReplaceProduct>(commandService, dbConnection);
+        var auditCommandService = new AuditCommandServiceDecorator<ReplaceProduct>(commandService, dbConnection);
+        var logger = _loggerFactory.CreateLogger<LoggingCommandServiceDecorator<ReplaceProduct>>();
+        return new LoggingCommandServiceDecorator<ReplaceProduct>(auditCommandService, logger);
     }
 
     private ICommandService<DeleteProduct> CreateDeleteProductService()
@@ -114,7 +123,9 @@ public class ProductComposer
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var commandService = new DeleteProductService(repository);
-        return new AuditCommandServiceDecorator<DeleteProduct>(commandService, dbConnection);
+        var auditCommandService = new AuditCommandServiceDecorator<DeleteProduct>(commandService, dbConnection);
+        var logger = _loggerFactory.CreateLogger<LoggingCommandServiceDecorator<DeleteProduct>>();
+        return new LoggingCommandServiceDecorator<DeleteProduct>(auditCommandService, logger);
     }
 
     private IProductQueryApplicationService CreateProductQueryApplicationService()

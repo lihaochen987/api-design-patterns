@@ -46,12 +46,19 @@ builder.Services.AddSingleton(fieldMaskConverterFactory);
 var fieldPathAdapter = new FieldPathAdapter();
 builder.Services.AddSingleton<IFieldPathAdapter, FieldPathAdapter>();
 
+var loggerFactory = LoggerFactory.Create(loggingBuilder =>
+{
+    loggingBuilder.AddConsole();
+    loggingBuilder.AddDebug();
+});
+
 // Review Composition Root
 var reviewCompositionRoot = new ReviewComposer(builder.Configuration, sqlOperators, fieldMaskConverterFactory);
 reviewCompositionRoot.ConfigureServices(builder.Services);
 
 // Product Composition Root
-var productCompositionRoot = new ProductComposer(builder.Configuration, fieldPathAdapter, fieldMaskConverterFactory);
+var productCompositionRoot =
+    new ProductComposer(builder.Configuration, fieldPathAdapter, fieldMaskConverterFactory, loggerFactory);
 productCompositionRoot.ConfigureServices(builder.Services);
 
 builder.Services.AddSupplierDependencies();
