@@ -19,6 +19,7 @@ using backend.Shared.CommandService;
 using backend.Shared.FieldMask;
 using backend.Shared.FieldPath;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace backend.Product;
 
@@ -87,25 +88,33 @@ public class ProductComposer
     private ICommandService<UpdateProduct> CreateUpdateProductService()
     {
         var repository = CreateProductRepository();
-        return new UpdateProductService(repository, _updateProductTypeService);
+        var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        var commandService = new UpdateProductService(repository, _updateProductTypeService);
+        return new AuditCommandServiceDecorator<UpdateProduct>(commandService, dbConnection);
     }
 
     private ICommandService<CreateProduct> CreateCreateProductService()
     {
         var repository = CreateProductRepository();
-        return new CreateProductService(repository);
+        var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        var commandService = new CreateProductService(repository);
+        return new AuditCommandServiceDecorator<CreateProduct>(commandService, dbConnection);
     }
 
     private ICommandService<ReplaceProduct> CreateReplaceProductService()
     {
         var repository = CreateProductRepository();
-        return new ReplaceProductService(repository);
+        var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        var commandService = new ReplaceProductService(repository);
+        return new AuditCommandServiceDecorator<ReplaceProduct>(commandService, dbConnection);
     }
 
     private ICommandService<DeleteProduct> CreateDeleteProductService()
     {
         var repository = CreateProductRepository();
-        return new DeleteProductService(repository);
+        var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        var commandService = new DeleteProductService(repository);
+        return new AuditCommandServiceDecorator<DeleteProduct>(commandService, dbConnection);
     }
 
     private IProductQueryApplicationService CreateProductQueryApplicationService()
