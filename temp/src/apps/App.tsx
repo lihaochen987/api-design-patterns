@@ -2,7 +2,7 @@ import {useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import {$api} from "./shared/FetchClient.ts";
+import {$api} from "../libs/product/data-access/src/FetchClient.ts";
 
 function App() {
     const [count, setCount] = useState(0)

@@ -1,17 +1,33 @@
-# React + TypeScript + Vite
+# `Turborepo` Vite starter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a community-maintained example. If you experience a problem, please submit a pull request with a fix. GitHub Issues will be closed.
 
-Currently, two official plugins are available:
+## Using this example
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md)
-  uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast
-  Refresh
+Run the following command:
 
-## Generating types
+```sh
+npx create-turbo@latest -e with-vite
+```
 
-1. Install openapi-typescript
-2. Create a `.json` with the OpenApi schema inside of it
-3. Run the command `openapi-typescript .\schema.json --output types.d.ts`
-4. Run the command `eslint --fix` since the generated file will have some linting errors
+## What's inside?
+
+This Turborepo includes the following packages and apps:
+
+### Apps and Packages
+
+- `docs`: a vanilla [vite](https://vitejs.dev) ts app
+- `web`: another vanilla [vite](https://vitejs.dev) ts app
+- `@repo/ui`: a stub component & utility library shared by both `web` and `docs` applications
+- `@repo/eslint-config`: shared `eslint` configurations
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+
+Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
+
+### Utilities
+
+This Turborepo has some additional tools already setup for you:
+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting

@@ -1,0 +1,17 @@
+{
+  "name": "data-access",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "tags": {
+    "scope": "product",
+    "type": "data-access"
+  }
+}
