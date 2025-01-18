@@ -1,0 +1,14 @@
+{
+  "name": "@repo/vite-config",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "./index.js",
+  "private": true,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.4"
+  }
+}

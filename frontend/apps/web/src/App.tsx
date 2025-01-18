@@ -16,7 +16,6 @@ function App() {
 
     if (isLoading || !data) return "Loading...";
 
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     if (error) return `An error occurred: ${error.message}`;
 
     return (
