@@ -162,7 +162,7 @@ PublishScripts/
 # NuGet Packages
 *.nupkg
 # The packages folder can be ignored because of Package Restore
-**/packages/*
+backend/packages/*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
@@ -400,3 +400,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+*.turbo
