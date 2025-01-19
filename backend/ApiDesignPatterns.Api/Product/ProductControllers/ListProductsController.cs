@@ -1,7 +1,8 @@
 using AutoMapper;
-using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.ListProducts;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
+using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -10,7 +11,7 @@ namespace backend.Product.ProductControllers;
 [Route("products")]
 [ApiController]
 public class ListProductsController(
-    IProductViewQueryApplicationService queryApplicationService,
+    IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> listProducts,
     IMapper mapper)
     : ControllerBase
 {
@@ -20,7 +21,10 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        (List<ProductView> products, string? nextPageToken) = await queryApplicationService.ListProductsAsync(request);
+        (List<ProductView> products, string? nextPageToken) = await listProducts.Handle(new ListProductsQuery
+        {
+            Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
+        });
 
         IEnumerable<GetProductResponse> productResponses = products.Select(product => product.Category switch
         {

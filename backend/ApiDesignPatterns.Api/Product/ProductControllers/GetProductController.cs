@@ -1,9 +1,10 @@
 using AutoMapper;
-using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.GetProductView;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Shared.FieldMask;
 using backend.Shared.FieldPath;
+using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
@@ -13,7 +14,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class GetProductController(
-    IProductViewQueryApplicationService productViewQueryApplicationService,
+    IQueryHandler<GetProductViewQuery, ProductView> getProductView,
     IFieldPathAdapter fieldPathAdapter,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
@@ -27,7 +28,7 @@ public class GetProductController(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)
     {
-        ProductView? productView = await productViewQueryApplicationService.GetProductView(id);
+        ProductView? productView = await getProductView.Handle(new GetProductViewQuery { Id = id });
         if (productView == null)
         {
             return NotFound();

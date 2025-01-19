@@ -2,10 +2,11 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Product.ApplicationLayer;
 using backend.Product.ApplicationLayer.CreateProduct;
 using backend.Product.ApplicationLayer.DeleteProduct;
 using backend.Product.ApplicationLayer.GetProduct;
+using backend.Product.ApplicationLayer.GetProductView;
+using backend.Product.ApplicationLayer.ListProducts;
 using backend.Product.ApplicationLayer.ReplaceProduct;
 using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.DomainModels.Views;
@@ -136,16 +137,22 @@ public class ProductComposer
         return new GetProductHandler(repository);
     }
 
-    private IProductViewQueryApplicationService CreateProductViewQueryApplicationService()
+    private IQueryHandler<GetProductViewQuery, ProductView> CreateGetProductViewHandler()
     {
         var repository = CreateProductViewRepository();
-        return new ProductViewQueryApplicationService(repository);
+        return new GetProductViewHandler(repository);
+    }
+
+    private IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> CreateListProductsHandler()
+    {
+        var repository = CreateProductViewRepository();
+        return new ListProductsHandler(repository);
     }
 
     private GetProductController CreateGetProductController()
     {
-        var applicationService = CreateProductViewQueryApplicationService();
-        return new GetProductController(applicationService, _fieldPathAdapter, _fieldMaskConverterFactory, _mapper);
+        var queryService = CreateGetProductViewHandler();
+        return new GetProductController(queryService, _fieldPathAdapter, _fieldMaskConverterFactory, _mapper);
     }
 
     private UpdateProductController CreateUpdateProductController()
@@ -177,8 +184,8 @@ public class ProductComposer
 
     private ListProductsController CreateListProductsController()
     {
-        var applicationService = CreateProductViewQueryApplicationService();
-        return new ListProductsController(applicationService, _mapper);
+        var queryService = CreateListProductsHandler();
+        return new ListProductsController(queryService, _mapper);
     }
 
     private GetProductPricingController CreateGetProductPricingController()
@@ -210,7 +217,9 @@ public class ProductComposer
 
         // Application Services
         services.AddScoped<IQueryHandler<GetProductQuery, DomainModels.Product>>(_ => CreateGetProductHandler());
-        services.AddScoped<IProductViewQueryApplicationService>(_ => CreateProductViewQueryApplicationService());
+        services.AddScoped<IQueryHandler<ListProductsQuery, (List<ProductView>, string?)>>(_ =>
+            CreateListProductsHandler());
+        services.AddScoped<IQueryHandler<GetProductViewQuery, ProductView>>(_ => CreateGetProductViewHandler());
 
         // Controllers
         services.AddScoped<GetProductController>(_ => CreateGetProductController());

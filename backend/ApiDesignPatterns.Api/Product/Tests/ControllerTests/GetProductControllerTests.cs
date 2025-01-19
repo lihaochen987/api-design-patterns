@@ -1,5 +1,6 @@
 using System.Net;
 using AutoFixture;
+using backend.Product.ApplicationLayer.GetProductView;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
@@ -22,8 +23,8 @@ public class GetProductControllerTests : GetProductControllerTestBase
             .With(r => r.FieldMask, ["Name", "Price"])
             .Create();
         Mock
-            .Get(MockQueryApplicationService)
-            .Setup(service => service.GetProductView(productView.Id))
+            .Get(MockGetProductView)
+            .Setup(service => service.Handle(It.Is<GetProductViewQuery>(q => q.Id == productView.Id)))
             .ReturnsAsync(productView);
         var sut = GetProductController();
 
@@ -42,8 +43,8 @@ public class GetProductControllerTests : GetProductControllerTestBase
         ProductView productView = new ProductViewTestDataBuilder().Build();
         GetProductRequest request = Fixture.Create<GetProductRequest>();
         Mock
-            .Get(MockQueryApplicationService)
-            .Setup(service => service.GetProductView(productView.Id))
+            .Get(MockGetProductView)
+            .Setup(service => service.Handle(It.Is<GetProductViewQuery>(q => q.Id == productView.Id)))
             .ReturnsAsync((ProductView?)null);
         var sut = GetProductController();
 
@@ -63,8 +64,8 @@ public class GetProductControllerTests : GetProductControllerTestBase
             .With(r => r.FieldMask, ["Name", "Price"])
             .Create();
         Mock
-            .Get(MockQueryApplicationService)
-            .Setup(service => service.GetProductView(productView.Id))
+            .Get(MockGetProductView)
+            .Setup(service => service.Handle(It.Is<GetProductViewQuery>(q => q.Id == productView.Id)))
             .ReturnsAsync(productView);
         var sut = GetProductController();
 
@@ -84,8 +85,8 @@ public class GetProductControllerTests : GetProductControllerTestBase
             .Build();
         GetProductRequest request = Fixture.Create<GetProductRequest>();
         Mock
-            .Get(MockQueryApplicationService)
-            .Setup(service => service.GetProductView(productView.Id))
+            .Get(MockGetProductView)
+            .Setup(service => service.Handle(It.Is<GetProductViewQuery>(q => q.Id == productView.Id)))
             .ReturnsAsync(productView);
         var sut = GetProductController();
 
@@ -107,8 +108,8 @@ public class GetProductControllerTests : GetProductControllerTestBase
             .With(r => r.FieldMask, ["Name"])
             .Create();
         Mock
-            .Get(MockQueryApplicationService)
-            .Setup(service => service.GetProductView(productView.Id))
+            .Get(MockGetProductView)
+            .Setup(service => service.Handle(It.Is<GetProductViewQuery>(q => q.Id == productView.Id)))
             .ReturnsAsync(productView);
         var sut = GetProductController();
 

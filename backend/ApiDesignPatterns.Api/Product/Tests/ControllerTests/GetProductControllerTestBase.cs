@@ -3,10 +3,12 @@
 
 using AutoFixture;
 using AutoMapper;
-using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.GetProductView;
+using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
 using backend.Shared.FieldMask;
 using backend.Shared.FieldPath;
+using backend.Shared.QueryHandler;
 using Moq;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -14,7 +16,7 @@ namespace backend.Product.Tests.ControllerTests;
 public abstract class GetProductControllerTestBase
 {
     protected readonly Fixture Fixture;
-    protected readonly IProductViewQueryApplicationService MockQueryApplicationService;
+    protected readonly IQueryHandler<GetProductViewQuery, ProductView> MockGetProductView;
     private readonly IMapper _mapper;
     private readonly IFieldPathAdapter _fieldPathAdapter;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
@@ -22,7 +24,7 @@ public abstract class GetProductControllerTestBase
     protected GetProductControllerTestBase()
     {
         Fixture = new Fixture();
-        MockQueryApplicationService = Mock.Of<IProductViewQueryApplicationService>();
+        MockGetProductView = Mock.Of<IQueryHandler<GetProductViewQuery, ProductView>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
         _fieldPathAdapter = new FieldPathAdapter();
@@ -33,7 +35,7 @@ public abstract class GetProductControllerTestBase
     protected GetProductController GetProductController()
     {
         return new GetProductController(
-            MockQueryApplicationService,
+            MockGetProductView,
             _fieldPathAdapter,
             _fieldMaskConverterFactory,
             _mapper);

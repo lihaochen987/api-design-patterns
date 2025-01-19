@@ -3,26 +3,29 @@
 
 using AutoMapper;
 using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.ListProducts;
+using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
+using backend.Shared.QueryHandler;
 using Moq;
 
 namespace backend.Product.Tests.ControllerTests;
 
 public abstract class ListProductsControllerTestBase
 {
-    protected readonly IProductViewQueryApplicationService MockQueryApplicationService;
+    protected readonly IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> MockListProducts;
     private readonly IMapper _mapper;
     protected const int DefaultMaxPageSize = 10;
 
     protected ListProductsControllerTestBase()
     {
-        MockQueryApplicationService = Mock.Of<IProductViewQueryApplicationService>();
+        MockListProducts = Mock.Of<IQueryHandler<ListProductsQuery, (List<ProductView>, string?)>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
     }
 
     protected ListProductsController ListProductsController()
     {
-        return new ListProductsController(MockQueryApplicationService, _mapper);
+        return new ListProductsController(MockListProducts, _mapper);
     }
 }

@@ -2,26 +2,28 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.GetProductView;
+using backend.Product.ApplicationLayer.ListProducts;
 using backend.Product.DomainModels.Views;
 using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared;
+using backend.Shared.QueryHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public class ProductViewApplicationServiceTestBase
+public abstract class ListProductServiceTestBase
 {
     protected readonly ProductViewRepositoryFake Repository;
     protected readonly IFixture Fixture;
 
-    protected ProductViewApplicationServiceTestBase()
+    protected ListProductServiceTestBase()
     {
         Fixture = new Fixture();
         Repository = new ProductViewRepositoryFake(new QueryService<ProductView>());
     }
 
-    protected ProductViewQueryApplicationService ProductViewApplicationService()
+    protected IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> ListProductsViewHandler()
     {
-        return new ProductViewQueryApplicationService(Repository);
+        return new ListProductsHandler(Repository);
     }
 }
