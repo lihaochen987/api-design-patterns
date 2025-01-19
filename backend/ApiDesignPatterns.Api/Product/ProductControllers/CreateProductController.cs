@@ -1,5 +1,5 @@
 using AutoMapper;
-using backend.Product.ApplicationLayer.CreateProduct;
+using backend.Product.Commands.CreateProduct;
 using backend.Product.DomainModels.Enums;
 using backend.Shared.CommandHandler;
 using Microsoft.AspNetCore.Mvc;

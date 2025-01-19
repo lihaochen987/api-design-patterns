@@ -3,7 +3,7 @@
 
 using backend.Product.ProductControllers;
 
-namespace backend.Product.ApplicationLayer.UpdateProduct;
+namespace backend.Product.Commands.UpdateProduct;
 
 public record UpdateProductQuery
 {

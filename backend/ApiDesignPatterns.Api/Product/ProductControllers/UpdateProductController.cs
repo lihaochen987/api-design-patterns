@@ -1,9 +1,7 @@
 using AutoMapper;
-using backend.Product.ApplicationLayer;
-using backend.Product.ApplicationLayer.GetProduct;
-using backend.Product.ApplicationLayer.UpdateProduct;
+using backend.Product.Commands.UpdateProduct;
 using backend.Product.DomainModels;
-using backend.Shared;
+using backend.Product.Queries.GetProduct;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;

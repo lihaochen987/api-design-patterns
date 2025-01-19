@@ -4,7 +4,7 @@
 using backend.Product.InfrastructureLayer;
 using backend.Shared.QueryHandler;
 
-namespace backend.Product.ApplicationLayer.GetProduct;
+namespace backend.Product.Queries.GetProduct;
 
 public class GetProductHandler(IProductRepository repository) : IQueryHandler<GetProductQuery, DomainModels.Product>
 {

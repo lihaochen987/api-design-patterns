@@ -1,7 +1,7 @@
 using AutoFixture;
-using backend.Product.ApplicationLayer.GetProductPricing;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductPricingControllers;
+using backend.Product.Queries.GetProductPricing;
 using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

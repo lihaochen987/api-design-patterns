@@ -1,7 +1,7 @@
 using AutoMapper;
-using backend.Product.ApplicationLayer.ListProducts;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
+using backend.Product.Queries.ListProducts;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

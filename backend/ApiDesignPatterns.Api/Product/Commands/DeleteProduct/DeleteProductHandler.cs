@@ -2,10 +2,9 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.InfrastructureLayer;
-using backend.Shared;
 using backend.Shared.CommandHandler;
 
-namespace backend.Product.ApplicationLayer.DeleteProduct;
+namespace backend.Product.Commands.DeleteProduct;
 
 public class DeleteProductHandler(IProductRepository repository) : ICommandHandler<DeleteProductQuery>
 {

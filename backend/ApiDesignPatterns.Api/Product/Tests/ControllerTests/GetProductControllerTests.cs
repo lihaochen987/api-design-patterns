@@ -1,9 +1,9 @@
 using System.Net;
 using AutoFixture;
-using backend.Product.ApplicationLayer.GetProductView;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
+using backend.Product.Queries.GetProductView;
 using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

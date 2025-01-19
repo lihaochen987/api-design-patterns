@@ -5,7 +5,7 @@ using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 using backend.Shared.QueryHandler;
 
-namespace backend.Product.ApplicationLayer.GetProductView;
+namespace backend.Product.Queries.GetProductView;
 
 public class GetProductViewHandler(IProductViewRepository repository) : IQueryHandler<GetProductViewQuery, ProductView>
 {

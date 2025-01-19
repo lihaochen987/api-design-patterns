@@ -1,7 +1,7 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Product.ApplicationLayer.UpdateProduct;
+using backend.Product.Commands.UpdateProduct;
 using backend.Product.Services.ProductPricingServices;
 using backend.Product.Services.ProductServices;
 using backend.Product.Tests.TestHelpers.Fakes;

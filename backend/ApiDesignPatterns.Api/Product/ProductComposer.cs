@@ -2,19 +2,19 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Product.ApplicationLayer.CreateProduct;
-using backend.Product.ApplicationLayer.DeleteProduct;
-using backend.Product.ApplicationLayer.GetProduct;
-using backend.Product.ApplicationLayer.GetProductPricing;
-using backend.Product.ApplicationLayer.GetProductView;
-using backend.Product.ApplicationLayer.ListProducts;
-using backend.Product.ApplicationLayer.ReplaceProduct;
-using backend.Product.ApplicationLayer.UpdateProduct;
+using backend.Product.Commands.CreateProduct;
+using backend.Product.Commands.DeleteProduct;
+using backend.Product.Commands.ReplaceProduct;
+using backend.Product.Commands.UpdateProduct;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 using backend.Product.InfrastructureLayer.Database;
 using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
+using backend.Product.Queries.GetProduct;
+using backend.Product.Queries.GetProductPricing;
+using backend.Product.Queries.GetProductView;
+using backend.Product.Queries.ListProducts;
 using backend.Product.Services.ProductPricingServices;
 using backend.Product.Services.ProductServices;
 using backend.Shared;

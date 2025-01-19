@@ -1,5 +1,5 @@
-using backend.Product.ApplicationLayer.DeleteProduct;
-using backend.Product.ApplicationLayer.GetProduct;
+using backend.Product.Commands.DeleteProduct;
+using backend.Product.Queries.GetProduct;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;

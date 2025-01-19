@@ -1,6 +1,6 @@
-using backend.Product.ApplicationLayer.DeleteProduct;
-using backend.Product.ApplicationLayer.GetProduct;
+using backend.Product.Commands.DeleteProduct;
 using backend.Product.ProductControllers;
+using backend.Product.Queries.GetProduct;
 using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

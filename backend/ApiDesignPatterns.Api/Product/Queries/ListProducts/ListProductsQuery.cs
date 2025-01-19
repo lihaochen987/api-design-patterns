@@ -4,7 +4,7 @@
 using backend.Product.DomainModels.Views;
 using backend.Shared.QueryHandler;
 
-namespace backend.Product.ApplicationLayer.ListProducts;
+namespace backend.Product.Queries.ListProducts;
 
 public record ListProductsQuery : IQuery<(List<ProductView>, string?)>
 {

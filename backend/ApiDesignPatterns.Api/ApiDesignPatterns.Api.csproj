@@ -294,6 +294,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Product\Commands\" />
+    <Folder Include="Product\Queries\" />
     <Folder Include="Product\Tests\TestHelpers\" />
   </ItemGroup>
 
