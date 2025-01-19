@@ -11,9 +11,9 @@ public class AuditCommandHandlerDecorator<TCommand>(
     IDbConnection dbConnection)
     : ICommandHandler<TCommand>
 {
-    public async Task Execute(TCommand command)
+    public async Task Handle(TCommand command)
     {
-        await commandHandler.Execute(command);
+        await commandHandler.Handle(command);
         await AppendToAuditTrail(command);
     }
 

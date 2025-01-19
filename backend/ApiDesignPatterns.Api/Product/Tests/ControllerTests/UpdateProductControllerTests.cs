@@ -34,7 +34,7 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
         Mock
             .Get(MockUpdateProductHandler)
             .Verify(
-                svc => svc.Execute(new UpdateProduct { Request = request, Product = product }));
+                svc => svc.Handle(new UpdateProduct { Request = request, Product = product }));
     }
 
     [Fact]

@@ -33,7 +33,7 @@ public class UpdateProductServiceTests : UpdateProductServiceTestBase
         };
         ICommandHandler<UpdateProduct> sut = UpdateProductService();
 
-        await sut.Execute(new UpdateProduct { Product = product, Request = request });
+        await sut.Handle(new UpdateProduct { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
@@ -58,7 +58,7 @@ public class UpdateProductServiceTests : UpdateProductServiceTestBase
         };
         ICommandHandler<UpdateProduct> sut = UpdateProductService();
 
-        await sut.Execute(new UpdateProduct { Product = product, Request = request });
+        await sut.Handle(new UpdateProduct { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
@@ -79,7 +79,7 @@ public class UpdateProductServiceTests : UpdateProductServiceTestBase
         };
         ICommandHandler<UpdateProduct> sut = UpdateProductService();
 
-        await sut.Execute(new UpdateProduct { Product = product, Request = request });
+        await sut.Handle(new UpdateProduct { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
@@ -103,7 +103,7 @@ public class UpdateProductServiceTests : UpdateProductServiceTestBase
         };
         ICommandHandler<UpdateProduct> sut = UpdateProductService();
 
-        await sut.Execute(new UpdateProduct { Product = product, Request = request });
+        await sut.Handle(new UpdateProduct { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);

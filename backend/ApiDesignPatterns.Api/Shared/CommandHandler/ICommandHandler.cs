@@ -5,5 +5,5 @@ namespace backend.Shared.CommandHandler;
 
 public interface ICommandHandler<in TCommand>
 {
-    Task Execute(TCommand command);
+    Task Handle(TCommand command);
 }

@@ -17,7 +17,7 @@ public class CreateProductServiceTests : CreateProductServiceTestBase
         DomainModels.Product productToCreate = new ProductTestDataBuilder().Build();
         ICommandHandler<ApplicationLayer.CreateProduct.CreateProduct> sut = CreateProductService();
 
-        await sut.Execute(new ApplicationLayer.CreateProduct.CreateProduct { Product = productToCreate });
+        await sut.Handle(new ApplicationLayer.CreateProduct.CreateProduct { Product = productToCreate });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);
@@ -30,8 +30,8 @@ public class CreateProductServiceTests : CreateProductServiceTestBase
         DomainModels.Product secondProductToCreate = new ProductTestDataBuilder().Build();
         ICommandHandler<ApplicationLayer.CreateProduct.CreateProduct> sut = CreateProductService();
 
-        await sut.Execute(new ApplicationLayer.CreateProduct.CreateProduct { Product = firstProductToCreate });
-        await sut.Execute(new ApplicationLayer.CreateProduct.CreateProduct { Product = secondProductToCreate });
+        await sut.Handle(new ApplicationLayer.CreateProduct.CreateProduct { Product = firstProductToCreate });
+        await sut.Handle(new ApplicationLayer.CreateProduct.CreateProduct { Product = secondProductToCreate });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 2);

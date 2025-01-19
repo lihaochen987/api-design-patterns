@@ -23,7 +23,7 @@ public class CreateProductController(
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
         DomainModels.Product product = extensions.ToEntity(request);
-        await handler.Execute(new CreateProduct { Product = product });
+        await handler.Handle(new CreateProduct { Product = product });
 
         object response = product.Category switch
         {

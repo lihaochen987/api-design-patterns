@@ -14,7 +14,7 @@ public class UpdateProductHandler(
     UpdateProductTypeService updateProductTypeService)
     : ICommandHandler<UpdateProduct>
 {
-    public async Task Execute(UpdateProduct command)
+    public async Task Handle(UpdateProduct command)
     {
         updateProductTypeService.UpdateBaseProduct(command.Request, command.Product);
         switch (command.Product)

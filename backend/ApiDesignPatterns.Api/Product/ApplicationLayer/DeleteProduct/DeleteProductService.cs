@@ -9,7 +9,7 @@ namespace backend.Product.ApplicationLayer.DeleteProduct;
 
 public class DeleteProductHandler(IProductRepository repository) : ICommandHandler<DeleteProduct>
 {
-    public async Task Execute(DeleteProduct command)
+    public async Task Handle(DeleteProduct command)
     {
         await repository.DeleteProductAsync(command.Product);
     }

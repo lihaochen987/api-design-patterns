@@ -47,7 +47,7 @@ public class ReplaceProductController(
                 break;
         }
 
-        await handler.Execute(new ReplaceProduct{Product = existingProduct});
+        await handler.Handle(new ReplaceProduct{Product = existingProduct});
         object response = existingProduct.Category switch
         {
             Category.PetFood => mapper.Map<ReplacePetFoodResponse>(existingProduct),

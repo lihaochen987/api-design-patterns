@@ -10,7 +10,7 @@ public class LoggingCommandHandlerDecorator<TCommand>(
     ILogger<LoggingCommandHandlerDecorator<TCommand>> logger)
     : ICommandHandler<TCommand>
 {
-    public async Task Execute(TCommand command)
+    public async Task Handle(TCommand command)
     {
         if (command == null)
         {
@@ -24,7 +24,7 @@ public class LoggingCommandHandlerDecorator<TCommand>(
             string commandDetails = JsonConvert.SerializeObject(command, Formatting.Indented);
             logger.LogInformation("Executing command: {Operation} with data: {CommandDetails}", operation,
                 commandDetails);
-            await commandHandler.Execute(command);
+            await commandHandler.Handle(command);
             logger.LogInformation("Successfully executed command: {Operation}", operation);
         }
         catch (Exception ex)

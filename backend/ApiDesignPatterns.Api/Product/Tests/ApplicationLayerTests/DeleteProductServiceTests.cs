@@ -18,7 +18,7 @@ public class DeleteProductServiceTests : DeleteProductServiceTestBase
         DomainModels.Product productToDelete = new ProductTestDataBuilder().Build();
         ICommandHandler<DeleteProduct> sut = DeleteProductService();
 
-        await sut.Execute(new DeleteProduct{Product = productToDelete});
+        await sut.Handle(new DeleteProduct{Product = productToDelete});
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("DeleteProductAsync", 1);

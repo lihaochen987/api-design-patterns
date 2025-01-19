@@ -32,7 +32,7 @@ public class UpdateProductController(
             return NotFound();
         }
 
-        await handler.Execute(new UpdateProduct { Request = request, Product = product });
+        await handler.Handle(new UpdateProduct { Request = request, Product = product });
 
         return product switch
         {

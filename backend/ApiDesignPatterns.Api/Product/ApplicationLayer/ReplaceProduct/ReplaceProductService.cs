@@ -9,7 +9,7 @@ namespace backend.Product.ApplicationLayer.ReplaceProduct;
 
 public class ReplaceProductHandler(IProductRepository repository) : ICommandHandler<ReplaceProduct>
 {
-    public async Task Execute(ReplaceProduct command)
+    public async Task Handle(ReplaceProduct command)
     {
         await repository.UpdateProductAsync(command.Product);
     }

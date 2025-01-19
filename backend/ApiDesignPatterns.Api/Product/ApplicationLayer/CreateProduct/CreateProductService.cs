@@ -8,7 +8,7 @@ namespace backend.Product.ApplicationLayer.CreateProduct;
 
 public class CreateProductHandler(IProductRepository repository) : ICommandHandler<CreateProduct>
 {
-    public async Task Execute(CreateProduct command)
+    public async Task Handle(CreateProduct command)
     {
         await repository.CreateProductAsync(command.Product);
     }
