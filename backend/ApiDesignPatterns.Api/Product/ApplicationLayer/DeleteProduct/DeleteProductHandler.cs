@@ -7,9 +7,9 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.DeleteProduct;
 
-public class DeleteProductHandler(IProductRepository repository) : ICommandHandler<DeleteProduct>
+public class DeleteProductHandler(IProductRepository repository) : ICommandHandler<DeleteProductQuery>
 {
-    public async Task Handle(DeleteProduct command)
+    public async Task Handle(DeleteProductQuery command)
     {
         await repository.DeleteProductAsync(command.Product);
     }

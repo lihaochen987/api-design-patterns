@@ -16,7 +16,7 @@ public abstract class UpdateProductServiceTestBase
     private readonly UpdateProductTypeService _updateProductTypeService =
         new(new ProductFieldMaskConfiguration(new ProductPricingFieldMaskService(), new DimensionsFieldMaskService()));
 
-    protected ICommandHandler<UpdateProduct> UpdateProductService()
+    protected ICommandHandler<UpdateProductQuery> UpdateProductService()
     {
         return new UpdateProductHandler(Repository, _updateProductTypeService);
     }

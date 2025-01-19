@@ -12,9 +12,9 @@ namespace backend.Product.ApplicationLayer.UpdateProduct;
 public class UpdateProductHandler(
     IProductRepository repository,
     UpdateProductTypeService updateProductTypeService)
-    : ICommandHandler<UpdateProduct>
+    : ICommandHandler<UpdateProductQuery>
 {
-    public async Task Handle(UpdateProduct command)
+    public async Task Handle(UpdateProductQuery command)
     {
         updateProductTypeService.UpdateBaseProduct(command.Request, command.Product);
         switch (command.Product)

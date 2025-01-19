@@ -16,9 +16,9 @@ public class DeleteProductServiceTests : DeleteProductServiceTestBase
     public async Task DeleteProductAsync_CallsRepositoryWithCorrectProduct()
     {
         DomainModels.Product productToDelete = new ProductTestDataBuilder().Build();
-        ICommandHandler<DeleteProduct> sut = DeleteProductService();
+        ICommandHandler<DeleteProductQuery> sut = DeleteProductService();
 
-        await sut.Handle(new DeleteProduct{Product = productToDelete});
+        await sut.Handle(new DeleteProductQuery{Product = productToDelete});
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("DeleteProductAsync", 1);

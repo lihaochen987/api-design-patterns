@@ -12,7 +12,7 @@ public abstract class DeleteProductServiceTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
 
-    protected ICommandHandler<DeleteProduct> DeleteProductService()
+    protected ICommandHandler<DeleteProductQuery> DeleteProductService()
     {
         return new DeleteProductHandler(Repository);
     }

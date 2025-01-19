@@ -3,7 +3,7 @@
 
 namespace backend.Product.ApplicationLayer.ReplaceProduct;
 
-public record ReplaceProduct
+public record ReplaceProductQuery
 {
     public required DomainModels.Product Product { get; init; }
 }

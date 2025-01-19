@@ -12,7 +12,7 @@ public abstract class CreateProductServiceTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
 
-    protected ICommandHandler<ApplicationLayer.CreateProduct.CreateProduct> CreateProductService()
+    protected ICommandHandler<ApplicationLayer.CreateProduct.CreateProductQuery> CreateProductService()
     {
         return new CreateProductHandler(Repository);
     }

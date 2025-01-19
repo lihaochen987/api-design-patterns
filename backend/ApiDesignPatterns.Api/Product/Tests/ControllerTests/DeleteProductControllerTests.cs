@@ -1,4 +1,5 @@
 using backend.Product.ApplicationLayer.DeleteProduct;
+using backend.Product.ApplicationLayer.GetProduct;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +16,8 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
     {
         DomainModels.Product product = new ProductTestDataBuilder().Build();
         Mock
-            .Get(MockProductQueryService)
-            .Setup(svc => svc.GetProductAsync(product.Id))
+            .Get(MockGetProductHandler)
+            .Setup(svc => svc.Handle(It.Is<GetProductQuery>(q => q.Id == product.Id)))
             .ReturnsAsync(product);
         DeleteProductController sut = DeleteProductController();
 
@@ -25,7 +26,7 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
         result.ShouldBeOfType<NoContentResult>();
         Mock
             .Get(MockDeleteProductHandler)
-            .Verify(svc => svc.Handle(new DeleteProduct { Product = product }), Times.Once);
+            .Verify(svc => svc.Handle(new DeleteProductQuery { Product = product }), Times.Once);
     }
 
     [Fact]
@@ -33,8 +34,8 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
     {
         DomainModels.Product product = new ProductTestDataBuilder().Build();
         Mock
-            .Get(MockProductQueryService)
-            .Setup(svc => svc.GetProductAsync(product.Id))
+            .Get(MockGetProductHandler)
+            .Setup(svc => svc.Handle(It.Is<GetProductQuery>(q => q.Id == product.Id)))
             .ReturnsAsync((DomainModels.Product?)null);
         var sut = DeleteProductController();
 
@@ -43,6 +44,6 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
         result.ShouldBeOfType<NotFoundResult>();
         Mock
             .Get(MockDeleteProductHandler)
-            .Verify(svc => svc.Handle(new DeleteProduct { Product = product }), Times.Never);
+            .Verify(svc => svc.Handle(new DeleteProductQuery { Product = product }), Times.Never);
     }
 }

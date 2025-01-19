@@ -1,8 +1,9 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.GetProduct;
 using backend.Product.Tests.TestHelpers.Builders;
+using backend.Shared.QueryHandler;
 using Shouldly;
 using Xunit;
 
@@ -15,9 +16,9 @@ public class ProductQueryApplicationServiceTests : ProductQueryApplicationServic
     {
         DomainModels.Product expectedProduct = new ProductTestDataBuilder().Build();
         Repository.Add(expectedProduct);
-        ProductQueryApplicationService sut = ProductQueryApplicationService();
+        IQueryHandler<GetProductQuery, DomainModels.Product> sut = GetProductHandler();
 
-        DomainModels.Product? result = await sut.GetProductAsync(expectedProduct.Id);
+        DomainModels.Product? result = await sut.Handle(new GetProductQuery { Id = expectedProduct.Id });
 
         result.ShouldNotBeNull();
         result.ShouldBeEquivalentTo(expectedProduct);
@@ -27,9 +28,9 @@ public class ProductQueryApplicationServiceTests : ProductQueryApplicationServic
     public async Task GetProductAsync_ReturnsNull_WhenProductDoesNotExist()
     {
         DomainModels.Product expectedProduct = new ProductTestDataBuilder().Build();
-        ProductQueryApplicationService sut = ProductQueryApplicationService();
+        IQueryHandler<GetProductQuery, DomainModels.Product> sut = GetProductHandler();
 
-        DomainModels.Product? result = await sut.GetProductAsync(expectedProduct.Id);
+        DomainModels.Product? result = await sut.Handle(new GetProductQuery { Id = expectedProduct.Id });
 
         result.ShouldBeNull();
     }

@@ -2,12 +2,11 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.GetProduct;
 using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.ProductControllers;
-using backend.Product.Services;
-using backend.Shared;
 using backend.Shared.CommandHandler;
+using backend.Shared.QueryHandler;
 using Moq;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -15,13 +14,13 @@ namespace backend.Product.Tests.ControllerTests;
 public abstract class UpdateProductControllerTestBase
 {
     protected readonly IMapper Mapper;
-    protected readonly IProductQueryApplicationService MockProductQueryService;
-    protected readonly ICommandHandler<UpdateProduct> MockUpdateProductHandler;
+    protected readonly IQueryHandler<GetProductQuery, DomainModels.Product> MockGetProductHandler;
+    protected readonly ICommandHandler<UpdateProductQuery> MockUpdateProductHandler;
 
     protected UpdateProductControllerTestBase()
     {
-        MockProductQueryService = Mock.Of<IProductQueryApplicationService>();
-        MockUpdateProductHandler = Mock.Of<ICommandHandler<UpdateProduct>>();
+        MockGetProductHandler = Mock.Of<IQueryHandler<GetProductQuery, DomainModels.Product>>();
+        MockUpdateProductHandler = Mock.Of<ICommandHandler<UpdateProductQuery>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
     }
@@ -29,7 +28,7 @@ public abstract class UpdateProductControllerTestBase
     protected UpdateProductController UpdateProductController()
     {
         return new UpdateProductController(
-            MockProductQueryService,
+            MockGetProductHandler,
             MockUpdateProductHandler,
             Mapper);
     }

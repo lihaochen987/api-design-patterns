@@ -1,9 +1,11 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer;
+using backend.Product.ApplicationLayer.GetProduct;
 using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.DomainModels;
 using backend.Shared;
 using backend.Shared.CommandHandler;
+using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -12,8 +14,8 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class UpdateProductController(
-    IProductQueryApplicationService productQueryApplicationService,
-    ICommandHandler<UpdateProduct> handler,
+    IQueryHandler<GetProductQuery, DomainModels.Product> getProduct,
+    ICommandHandler<UpdateProductQuery> updateProduct,
     IMapper mapper)
     : ControllerBase
 {
@@ -25,14 +27,14 @@ public class UpdateProductController(
         [FromRoute] long id,
         [FromBody] UpdateProductRequest request)
     {
-        DomainModels.Product? product = await productQueryApplicationService.GetProductAsync(id);
+        DomainModels.Product? product = await getProduct.Handle(new GetProductQuery { Id = id });
 
         if (product == null)
         {
             return NotFound();
         }
 
-        await handler.Handle(new UpdateProduct { Request = request, Product = product });
+        await updateProduct.Handle(new UpdateProductQuery { Request = request, Product = product });
 
         return product switch
         {

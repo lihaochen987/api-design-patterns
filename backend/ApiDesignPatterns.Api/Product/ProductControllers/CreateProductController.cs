@@ -11,7 +11,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class CreateProductController(
-    ICommandHandler<CreateProduct> handler,
+    ICommandHandler<CreateProductQuery> handler,
     CreateProductExtensions extensions,
     IMapper mapper)
     : ControllerBase
@@ -23,7 +23,7 @@ public class CreateProductController(
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
         DomainModels.Product product = extensions.ToEntity(request);
-        await handler.Handle(new CreateProduct { Product = product });
+        await handler.Handle(new CreateProductQuery { Product = product });
 
         object response = product.Category switch
         {

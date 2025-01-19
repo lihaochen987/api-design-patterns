@@ -5,6 +5,7 @@ using AutoMapper;
 using backend.Product.ApplicationLayer;
 using backend.Product.ApplicationLayer.CreateProduct;
 using backend.Product.ApplicationLayer.DeleteProduct;
+using backend.Product.ApplicationLayer.GetProduct;
 using backend.Product.ApplicationLayer.ReplaceProduct;
 using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.DomainModels.Views;
@@ -18,6 +19,7 @@ using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.FieldMask;
 using backend.Shared.FieldPath;
+using backend.Shared.QueryHandler;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -88,50 +90,50 @@ public class ProductComposer
         return new ProductPricingRepository(dbContext);
     }
 
-    private ICommandHandler<UpdateProduct> CreateUpdateProductService()
+    private ICommandHandler<UpdateProductQuery> CreateUpdateProductService()
     {
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var commandService = new UpdateProductHandler(repository, _updateProductTypeService);
-        var auditCommandService = new AuditCommandHandlerDecorator<UpdateProduct>(commandService, dbConnection);
-        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProduct>>();
-        return new LoggingCommandHandlerDecorator<UpdateProduct>(auditCommandService, logger);
+        var auditCommandService = new AuditCommandHandlerDecorator<UpdateProductQuery>(commandService, dbConnection);
+        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductQuery>>();
+        return new LoggingCommandHandlerDecorator<UpdateProductQuery>(auditCommandService, logger);
     }
 
-    private ICommandHandler<CreateProduct> CreateCreateProductService()
+    private ICommandHandler<CreateProductQuery> CreateCreateProductService()
     {
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var commandService = new CreateProductHandler(repository);
-        var auditCommandService = new AuditCommandHandlerDecorator<CreateProduct>(commandService, dbConnection);
-        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateProduct>>();
-        return new LoggingCommandHandlerDecorator<CreateProduct>(auditCommandService, logger);
+        var auditCommandService = new AuditCommandHandlerDecorator<CreateProductQuery>(commandService, dbConnection);
+        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateProductQuery>>();
+        return new LoggingCommandHandlerDecorator<CreateProductQuery>(auditCommandService, logger);
     }
 
-    private ICommandHandler<ReplaceProduct> CreateReplaceProductService()
+    private ICommandHandler<ReplaceProductQuery> CreateReplaceProductService()
     {
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var commandService = new ReplaceProductHandler(repository);
-        var auditCommandService = new AuditCommandHandlerDecorator<ReplaceProduct>(commandService, dbConnection);
-        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceProduct>>();
-        return new LoggingCommandHandlerDecorator<ReplaceProduct>(auditCommandService, logger);
+        var auditCommandService = new AuditCommandHandlerDecorator<ReplaceProductQuery>(commandService, dbConnection);
+        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceProductQuery>>();
+        return new LoggingCommandHandlerDecorator<ReplaceProductQuery>(auditCommandService, logger);
     }
 
-    private ICommandHandler<DeleteProduct> CreateDeleteProductService()
+    private ICommandHandler<DeleteProductQuery> CreateDeleteProductService()
     {
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var commandService = new DeleteProductHandler(repository);
-        var auditCommandService = new AuditCommandHandlerDecorator<DeleteProduct>(commandService, dbConnection);
-        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteProduct>>();
-        return new LoggingCommandHandlerDecorator<DeleteProduct>(auditCommandService, logger);
+        var auditCommandService = new AuditCommandHandlerDecorator<DeleteProductQuery>(commandService, dbConnection);
+        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteProductQuery>>();
+        return new LoggingCommandHandlerDecorator<DeleteProductQuery>(auditCommandService, logger);
     }
 
-    private IProductQueryApplicationService CreateProductQueryApplicationService()
+    private IQueryHandler<GetProductQuery, DomainModels.Product> CreateGetProductHandler()
     {
         var repository = CreateProductRepository();
-        return new ProductQueryApplicationService(repository);
+        return new GetProductHandler(repository);
     }
 
     private IProductViewQueryApplicationService CreateProductViewQueryApplicationService()
@@ -148,7 +150,7 @@ public class ProductComposer
 
     private UpdateProductController CreateUpdateProductController()
     {
-        var applicationService = CreateProductQueryApplicationService();
+        var applicationService = CreateGetProductHandler();
         var commandService = CreateUpdateProductService();
         return new UpdateProductController(applicationService, commandService, _mapper);
     }
@@ -161,7 +163,7 @@ public class ProductComposer
 
     private ReplaceProductController CreateReplaceProductController()
     {
-        var applicationService = CreateProductQueryApplicationService();
+        var applicationService = CreateGetProductHandler();
         var commandService = CreateReplaceProductService();
         return new ReplaceProductController(applicationService, commandService, _mapper);
     }
@@ -169,7 +171,7 @@ public class ProductComposer
     private DeleteProductController CreateDeleteProductController()
     {
         var commandService = CreateDeleteProductService();
-        var applicationService = CreateProductQueryApplicationService();
+        var applicationService = CreateGetProductHandler();
         return new DeleteProductController(commandService, applicationService);
     }
 
@@ -201,13 +203,13 @@ public class ProductComposer
         services.AddScoped<IProductPricingRepository>(_ => CreateProductPricingRepository());
 
         // Command Services
-        services.AddScoped<ICommandHandler<UpdateProduct>>(_ => CreateUpdateProductService());
-        services.AddScoped<ICommandHandler<CreateProduct>>(_ => CreateCreateProductService());
-        services.AddScoped<ICommandHandler<ReplaceProduct>>(_ => CreateReplaceProductService());
-        services.AddScoped<ICommandHandler<DeleteProduct>>(_ => CreateDeleteProductService());
+        services.AddScoped<ICommandHandler<UpdateProductQuery>>(_ => CreateUpdateProductService());
+        services.AddScoped<ICommandHandler<CreateProductQuery>>(_ => CreateCreateProductService());
+        services.AddScoped<ICommandHandler<ReplaceProductQuery>>(_ => CreateReplaceProductService());
+        services.AddScoped<ICommandHandler<DeleteProductQuery>>(_ => CreateDeleteProductService());
 
         // Application Services
-        services.AddScoped<IProductQueryApplicationService>(_ => CreateProductQueryApplicationService());
+        services.AddScoped<IQueryHandler<GetProductQuery, DomainModels.Product>>(_ => CreateGetProductHandler());
         services.AddScoped<IProductViewQueryApplicationService>(_ => CreateProductViewQueryApplicationService());
 
         // Controllers

@@ -1,3 +1,4 @@
+using backend.Product.ApplicationLayer.GetProduct;
 using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
@@ -20,8 +21,8 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
             Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = "1.99" }, Category = "Toys"
         };
         Mock
-            .Get(MockProductQueryService)
-            .Setup(service => service.GetProductAsync(product.Id))
+            .Get(MockGetProductHandler)
+            .Setup(svc => svc.Handle(It.Is<GetProductQuery>(q => q.Id == product.Id)))
             .ReturnsAsync(product);
         var sut = UpdateProductController();
 
@@ -34,7 +35,7 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
         Mock
             .Get(MockUpdateProductHandler)
             .Verify(
-                svc => svc.Handle(new UpdateProduct { Request = request, Product = product }));
+                svc => svc.Handle(new UpdateProductQuery { Request = request, Product = product }));
     }
 
     [Fact]

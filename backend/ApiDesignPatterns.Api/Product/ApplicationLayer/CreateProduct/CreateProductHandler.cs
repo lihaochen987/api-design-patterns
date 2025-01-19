@@ -6,9 +6,9 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.CreateProduct;
 
-public class CreateProductHandler(IProductRepository repository) : ICommandHandler<CreateProduct>
+public class CreateProductHandler(IProductRepository repository) : ICommandHandler<CreateProductQuery>
 {
-    public async Task Handle(CreateProduct command)
+    public async Task Handle(CreateProductQuery command)
     {
         await repository.CreateProductAsync(command.Product);
     }
