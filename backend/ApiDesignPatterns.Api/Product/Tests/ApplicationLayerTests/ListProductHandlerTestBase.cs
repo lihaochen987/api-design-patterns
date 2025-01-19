@@ -11,12 +11,12 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public abstract class ListProductServiceTestBase
+public abstract class ListProductHandlerTestBase
 {
     protected readonly ProductViewRepositoryFake Repository;
     protected readonly IFixture Fixture;
 
-    protected ListProductServiceTestBase()
+    protected ListProductHandlerTestBase()
     {
         Fixture = new Fixture();
         Repository = new ProductViewRepositoryFake(new QueryService<ProductView>());

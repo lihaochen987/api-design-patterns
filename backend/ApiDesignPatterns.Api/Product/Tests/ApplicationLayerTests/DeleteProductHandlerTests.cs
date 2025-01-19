@@ -10,7 +10,7 @@ using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public class DeleteProductServiceTests : DeleteProductServiceTestBase
+public class DeleteProductHandlerTests : DeleteProductHandlerTestBase
 {
     [Fact]
     public async Task DeleteProductAsync_CallsRepositoryWithCorrectProduct()

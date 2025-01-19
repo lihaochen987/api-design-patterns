@@ -11,7 +11,7 @@ using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public class GetProductServiceTests : GetProductServiceTestBase
+public class GetProductViewHandlerTests : GetProductViewHandlerTestBase
 {
     [Fact]
     public async Task GetProductView_ShouldReturnProduct_WhenProductExists()

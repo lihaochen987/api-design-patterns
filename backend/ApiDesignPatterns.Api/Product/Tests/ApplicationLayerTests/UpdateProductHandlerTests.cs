@@ -14,7 +14,7 @@ using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public class UpdateProductServiceTests : UpdateProductServiceTestBase
+public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
 {
     [Fact]
     public async Task UpdateProductAsync_WithMultipleFieldsInFieldMask_ShouldUpdateOnlySpecifiedFields()

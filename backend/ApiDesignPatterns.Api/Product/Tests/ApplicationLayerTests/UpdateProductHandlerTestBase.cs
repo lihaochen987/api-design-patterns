@@ -10,7 +10,7 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public abstract class UpdateProductServiceTestBase
+public abstract class UpdateProductHandlerTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
     private readonly UpdateProductTypeService _updateProductTypeService =

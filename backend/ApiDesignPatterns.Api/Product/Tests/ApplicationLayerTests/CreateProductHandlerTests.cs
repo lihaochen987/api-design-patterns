@@ -9,7 +9,7 @@ using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public class CreateProductServiceTests : CreateProductServiceTestBase
+public class CreateProductHandlerTests : CreateProductHandlerTestBase
 {
     [Fact]
     public async Task CreateProductAsync_CallsRepositoryWithCorrectProduct()

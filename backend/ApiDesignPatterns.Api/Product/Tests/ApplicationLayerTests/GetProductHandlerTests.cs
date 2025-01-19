@@ -9,7 +9,7 @@ using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public class ProductQueryApplicationServiceTests : ProductQueryApplicationServiceTestBase
+public class GetProductHandlerTests : GetProductHandlerTestBase
 {
     [Fact]
     public async Task GetProductAsync_ReturnsProduct_WhenProductExists()

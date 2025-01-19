@@ -8,7 +8,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public abstract class ProductQueryApplicationServiceTestBase
+public abstract class GetProductHandlerTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
 

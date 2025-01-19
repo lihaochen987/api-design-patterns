@@ -10,7 +10,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public abstract class GetProductServiceTestBase
+public abstract class GetProductViewHandlerTestBase
 {
     protected readonly ProductViewRepositoryFake Repository = new(new QueryService<ProductView>());
     protected readonly IFixture Fixture = new Fixture();

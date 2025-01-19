@@ -267,20 +267,23 @@
     <Compile Update="Product\Tests\ServiceTests\ProductFieldMaskConfigurationTestBase.cs">
       <DependentUpon>ProductFieldMaskConfigurationTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\ProductQueryApplicationServiceTestBase.cs">
-      <DependentUpon>ProductQueryApplicationServiceTests.cs</DependentUpon>
+    <Compile Update="Product\Tests\ApplicationLayerTests\GetProductHandlerTestBase.cs">
+      <DependentUpon>GetProductHandlerTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\UpdateProductServiceTestBase.cs">
-      <DependentUpon>UpdateProductServiceTests.cs</DependentUpon>
+    <Compile Update="Product\Tests\ApplicationLayerTests\UpdateProductHandlerTestBase.cs">
+      <DependentUpon>UpdateProductHandlerTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\DeleteProductServiceTestBase.cs">
-      <DependentUpon>DeleteProductServiceTests.cs</DependentUpon>
+    <Compile Update="Product\Tests\ApplicationLayerTests\DeleteProductHandlerTestBase.cs">
+      <DependentUpon>DeleteProductHandlerTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\GetProductServiceTestBase.cs">
-      <DependentUpon>GetProductServiceTests.cs</DependentUpon>
+    <Compile Update="Product\Tests\ApplicationLayerTests\GetProductViewHandlerTestBase.cs">
+      <DependentUpon>GetProductViewHandlerTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\ListProductServiceTestBase.cs">
-      <DependentUpon>ListProductServiceTests.cs</DependentUpon>
+    <Compile Update="Product\Tests\ApplicationLayerTests\ListProductHandlerTestBase.cs">
+      <DependentUpon>ListProductHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\CreateProductHandlerTestBase.cs">
+      <DependentUpon>CreateProductHandlerTests.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

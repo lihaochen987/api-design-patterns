@@ -12,7 +12,7 @@ using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public class ListProductServiceTests : ListProductServiceTestBase
+public class ListProductHandlerTests : ListProductHandlerTestBase
 {
     [Fact]
     public async Task ListProductsAsync_ShouldReturnProductsAndNextPageToken()
