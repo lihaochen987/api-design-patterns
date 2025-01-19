@@ -1,7 +1,8 @@
+using backend.Product.ApplicationLayer.GetProductPricing;
 using backend.Product.DomainModels.Views;
-using backend.Product.InfrastructureLayer;
 using backend.Product.Services.ProductPricingServices;
 using backend.Shared.FieldMask;
+using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
@@ -11,7 +12,7 @@ namespace backend.Product.ProductPricingControllers;
 [ApiController]
 [Route("product")]
 public class GetProductPricingController(
-    IProductPricingRepository productRepository,
+    IQueryHandler<GetProductPricingQuery, ProductPricingView> getProductPricing,
     ProductPricingFieldPaths fieldPaths,
     GetProductPricingExtensions extensions,
     IFieldMaskConverterFactory fieldMaskConverterFactory)
@@ -23,7 +24,7 @@ public class GetProductPricingController(
         [FromRoute] long id,
         [FromQuery] GetProductPricingRequest request)
     {
-        ProductPricingView? product = await productRepository.GetProductPricingAsync(id);
+        ProductPricingView? product = await getProductPricing.Handle(new GetProductPricingQuery { Id = id });
 
         if (product == null)
         {

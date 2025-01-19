@@ -5,6 +5,7 @@ using AutoMapper;
 using backend.Product.ApplicationLayer.CreateProduct;
 using backend.Product.ApplicationLayer.DeleteProduct;
 using backend.Product.ApplicationLayer.GetProduct;
+using backend.Product.ApplicationLayer.GetProductPricing;
 using backend.Product.ApplicationLayer.GetProductView;
 using backend.Product.ApplicationLayer.ListProducts;
 using backend.Product.ApplicationLayer.ReplaceProduct;
@@ -131,6 +132,12 @@ public class ProductComposer
         return new LoggingCommandHandlerDecorator<DeleteProductQuery>(auditCommandService, logger);
     }
 
+    private IQueryHandler<GetProductPricingQuery, ProductPricingView> CreateGetProductPricingHandler()
+    {
+        var repository = CreateProductPricingRepository();
+        return new GetProductPricingHandler(repository);
+    }
+
     private IQueryHandler<GetProductQuery, DomainModels.Product> CreateGetProductHandler()
     {
         var repository = CreateProductRepository();
@@ -190,8 +197,8 @@ public class ProductComposer
 
     private GetProductPricingController CreateGetProductPricingController()
     {
-        var repository = CreateProductPricingRepository();
-        return new GetProductPricingController(repository, _productPricingFieldPaths, _getProductPricingExtensions,
+        var queryService = CreateGetProductPricingHandler();
+        return new GetProductPricingController(queryService, _productPricingFieldPaths, _getProductPricingExtensions,
             _fieldMaskConverterFactory);
     }
 

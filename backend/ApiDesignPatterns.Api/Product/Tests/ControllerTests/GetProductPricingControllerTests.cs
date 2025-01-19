@@ -1,8 +1,10 @@
 using AutoFixture;
+using backend.Product.ApplicationLayer.GetProductPricing;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
@@ -15,10 +17,13 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
     public async Task GetProductPricing_ReturnsPricing_WhenFieldMaskIsWildcard()
     {
         ProductPricingView product = new ProductPricingViewTestDataBuilder().Build();
-        ProductRepository.Add(product);
         GetProductPricingRequest? request = Fixture.Build<GetProductPricingRequest>()
             .With(r => r.FieldMask, ["*"])
             .Create();
+        Mock
+            .Get(MockGetProductPricing)
+            .Setup(service => service.Handle(It.Is<GetProductPricingQuery>(q => q.Id == product.Id)))
+            .ReturnsAsync(product);
         var sut = ProductPricingController();
 
         ActionResult<GetProductPricingResponse> actionResult = await sut.GetProductPricing(product.Id, request);
@@ -47,10 +52,13 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
     public async Task GetProductPricing_ReturnsPartialPricing_WhenFieldMaskIsSpecified()
     {
         ProductPricingView product = new ProductPricingViewTestDataBuilder().Build();
-        ProductRepository.Add(product);
         GetProductPricingRequest? request = Fixture.Build<GetProductPricingRequest>()
             .With(r => r.FieldMask, ["BasePrice"])
             .Create();
+        Mock
+            .Get(MockGetProductPricing)
+            .Setup(service => service.Handle(It.Is<GetProductPricingQuery>(q => q.Id == product.Id)))
+            .ReturnsAsync(product);
         var sut = ProductPricingController();
 
         ActionResult<GetProductPricingResponse> actionResult = await sut.GetProductPricing(product.Id, request);
@@ -68,10 +76,13 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
     public async Task GetProductPricing_ReturnsAllFields_WhenFieldMaskIsEmpty()
     {
         ProductPricingView product = new ProductPricingViewTestDataBuilder().Build();
-        ProductRepository.Add(product);
         GetProductPricingRequest? request = Fixture.Build<GetProductPricingRequest>()
             .With(r => r.FieldMask, [])
             .Create();
+        Mock
+            .Get(MockGetProductPricing)
+            .Setup(service => service.Handle(It.Is<GetProductPricingQuery>(q => q.Id == product.Id)))
+            .ReturnsAsync(product);
         var sut = ProductPricingController();
 
         ActionResult<GetProductPricingResponse> actionResult = await sut.GetProductPricing(product.Id, request);
@@ -90,10 +101,13 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
     public async Task GetProductPricing_ReturnsValidMasks_WhenInvalidMasksArePassed()
     {
         ProductPricingView product = new ProductPricingViewTestDataBuilder().Build();
-        ProductRepository.Add(product);
         GetProductPricingRequest? request = Fixture.Build<GetProductPricingRequest>()
             .With(r => r.FieldMask, ["InvalidField", "BasePrice", "TaxRate"])
             .Create();
+        Mock
+            .Get(MockGetProductPricing)
+            .Setup(service => service.Handle(It.Is<GetProductPricingQuery>(q => q.Id == product.Id)))
+            .ReturnsAsync(product);
         var sut = ProductPricingController();
 
         ActionResult<GetProductPricingResponse> actionResult = await sut.GetProductPricing(product.Id, request);
