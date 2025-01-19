@@ -6,7 +6,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.ListProducts;
 
-public class ListProductsQuery : IQuery<(List<ProductView>, string?)>
+public record ListProductsQuery : IQuery<(List<ProductView>, string?)>
 {
     public string? Filter { get; init; }
     public string? PageToken { get; init; }

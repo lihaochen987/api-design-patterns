@@ -4,7 +4,6 @@
 using backend.Product.DomainModels;
 using backend.Product.InfrastructureLayer;
 using backend.Product.Services.ProductServices;
-using backend.Shared;
 using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.UpdateProduct;

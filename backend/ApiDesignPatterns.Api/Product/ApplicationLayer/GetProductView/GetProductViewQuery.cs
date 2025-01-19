@@ -6,7 +6,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.GetProductView;
 
-public class GetProductViewQuery : IQuery<ProductView>
+public record GetProductViewQuery : IQuery<ProductView>
 {
-    public required long Id { get; set; }
+    public required long Id { get; init; }
 }

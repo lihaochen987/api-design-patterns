@@ -1,7 +1,6 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer.CreateProduct;
 using backend.Product.DomainModels.Enums;
-using backend.Shared;
 using backend.Shared.CommandHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -11,7 +10,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class CreateProductController(
-    ICommandHandler<CreateProductQuery> handler,
+    ICommandHandler<CreateProductQuery> createProduct,
     CreateProductExtensions extensions,
     IMapper mapper)
     : ControllerBase
@@ -23,7 +22,7 @@ public class CreateProductController(
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
         DomainModels.Product product = extensions.ToEntity(request);
-        await handler.Handle(new CreateProductQuery { Product = product });
+        await createProduct.Handle(new CreateProductQuery { Product = product });
 
         object response = product.Category switch
         {
