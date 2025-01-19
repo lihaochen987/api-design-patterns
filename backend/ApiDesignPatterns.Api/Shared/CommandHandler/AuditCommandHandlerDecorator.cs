@@ -4,16 +4,16 @@
 using System.Data;
 using Dapper;
 
-namespace backend.Shared.CommandService;
+namespace backend.Shared.CommandHandler;
 
-public class AuditCommandServiceDecorator<TCommand>(
-    ICommandService<TCommand> commandService,
+public class AuditCommandHandlerDecorator<TCommand>(
+    ICommandHandler<TCommand> commandHandler,
     IDbConnection dbConnection)
-    : ICommandService<TCommand>
+    : ICommandHandler<TCommand>
 {
     public async Task Execute(TCommand command)
     {
-        await commandService.Execute(command);
+        await commandHandler.Execute(command);
         await AppendToAuditTrail(command);
     }
 

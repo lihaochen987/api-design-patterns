@@ -3,11 +3,11 @@
 
 using backend.Product.InfrastructureLayer;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.ReplaceProduct;
 
-public class ReplaceProductService(IProductRepository repository) : ICommandService<ReplaceProduct>
+public class ReplaceProductHandler(IProductRepository repository) : ICommandHandler<ReplaceProduct>
 {
     public async Task Execute(ReplaceProduct command)
     {

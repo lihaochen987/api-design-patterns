@@ -4,7 +4,7 @@
 using backend.Product.ApplicationLayer.DeleteProduct;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 using Shouldly;
 using Xunit;
 
@@ -16,7 +16,7 @@ public class DeleteProductServiceTests : DeleteProductServiceTestBase
     public async Task DeleteProductAsync_CallsRepositoryWithCorrectProduct()
     {
         DomainModels.Product productToDelete = new ProductTestDataBuilder().Build();
-        ICommandService<DeleteProduct> sut = DeleteProductService();
+        ICommandHandler<DeleteProduct> sut = DeleteProductService();
 
         await sut.Execute(new DeleteProduct{Product = productToDelete});
 

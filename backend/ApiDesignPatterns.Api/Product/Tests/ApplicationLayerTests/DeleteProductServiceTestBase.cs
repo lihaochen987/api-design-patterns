@@ -4,7 +4,7 @@
 using backend.Product.ApplicationLayer.DeleteProduct;
 using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
@@ -12,8 +12,8 @@ public abstract class DeleteProductServiceTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
 
-    protected ICommandService<DeleteProduct> DeleteProductService()
+    protected ICommandHandler<DeleteProduct> DeleteProductService()
     {
-        return new DeleteProductService(Repository);
+        return new DeleteProductHandler(Repository);
     }
 }

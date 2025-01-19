@@ -4,7 +4,7 @@
 using backend.Product.ApplicationLayer.CreateProduct;
 using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
@@ -12,8 +12,8 @@ public abstract class CreateProductServiceTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
 
-    protected ICommandService<ApplicationLayer.CreateProduct.CreateProduct> CreateProductService()
+    protected ICommandHandler<ApplicationLayer.CreateProduct.CreateProduct> CreateProductService()
     {
-        return new CreateProductService(Repository);
+        return new CreateProductHandler(Repository);
     }
 }

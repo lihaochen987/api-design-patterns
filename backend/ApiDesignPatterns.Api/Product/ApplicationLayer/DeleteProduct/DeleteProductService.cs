@@ -3,11 +3,11 @@
 
 using backend.Product.InfrastructureLayer;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.DeleteProduct;
 
-public class DeleteProductService(IProductRepository repository) : ICommandService<DeleteProduct>
+public class DeleteProductHandler(IProductRepository repository) : ICommandHandler<DeleteProduct>
 {
     public async Task Execute(DeleteProduct command)
     {

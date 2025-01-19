@@ -5,14 +5,14 @@ using backend.Product.DomainModels;
 using backend.Product.InfrastructureLayer;
 using backend.Product.Services.ProductServices;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.UpdateProduct;
 
-public class UpdateProductService(
+public class UpdateProductHandler(
     IProductRepository repository,
     UpdateProductTypeService updateProductTypeService)
-    : ICommandService<UpdateProduct>
+    : ICommandHandler<UpdateProduct>
 {
     public async Task Execute(UpdateProduct command)
     {

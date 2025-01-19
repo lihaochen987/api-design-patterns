@@ -4,7 +4,7 @@ using backend.Product.ApplicationLayer.ReplaceProduct;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -14,7 +14,7 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class ReplaceProductController(
     IProductQueryApplicationService productQueryApplicationService,
-    ICommandService<ReplaceProduct> service,
+    ICommandHandler<ReplaceProduct> handler,
     IMapper mapper)
     : ControllerBase
 {
@@ -47,7 +47,7 @@ public class ReplaceProductController(
                 break;
         }
 
-        await service.Execute(new ReplaceProduct{Product = existingProduct});
+        await handler.Execute(new ReplaceProduct{Product = existingProduct});
         object response = existingProduct.Category switch
         {
             Category.PetFood => mapper.Map<ReplacePetFoodResponse>(existingProduct),

@@ -6,7 +6,7 @@ using backend.Product.Services.ProductPricingServices;
 using backend.Product.Services.ProductServices;
 using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
@@ -16,8 +16,8 @@ public abstract class UpdateProductServiceTestBase
     private readonly UpdateProductTypeService _updateProductTypeService =
         new(new ProductFieldMaskConfiguration(new ProductPricingFieldMaskService(), new DimensionsFieldMaskService()));
 
-    protected ICommandService<UpdateProduct> UpdateProductService()
+    protected ICommandHandler<UpdateProduct> UpdateProductService()
     {
-        return new UpdateProductService(Repository, _updateProductTypeService);
+        return new UpdateProductHandler(Repository, _updateProductTypeService);
     }
 }

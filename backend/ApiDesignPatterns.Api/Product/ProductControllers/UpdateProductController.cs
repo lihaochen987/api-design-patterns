@@ -3,7 +3,7 @@ using backend.Product.ApplicationLayer;
 using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.DomainModels;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -13,7 +13,7 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class UpdateProductController(
     IProductQueryApplicationService productQueryApplicationService,
-    ICommandService<UpdateProduct> service,
+    ICommandHandler<UpdateProduct> handler,
     IMapper mapper)
     : ControllerBase
 {
@@ -32,7 +32,7 @@ public class UpdateProductController(
             return NotFound();
         }
 
-        await service.Execute(new UpdateProduct { Request = request, Product = product });
+        await handler.Execute(new UpdateProduct { Request = request, Product = product });
 
         return product switch
         {

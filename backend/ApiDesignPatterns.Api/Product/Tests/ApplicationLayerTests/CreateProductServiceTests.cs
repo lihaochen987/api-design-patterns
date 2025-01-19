@@ -3,7 +3,7 @@
 
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 using Shouldly;
 using Xunit;
 
@@ -15,7 +15,7 @@ public class CreateProductServiceTests : CreateProductServiceTestBase
     public async Task CreateProductAsync_CallsRepositoryWithCorrectProduct()
     {
         DomainModels.Product productToCreate = new ProductTestDataBuilder().Build();
-        ICommandService<ApplicationLayer.CreateProduct.CreateProduct> sut = CreateProductService();
+        ICommandHandler<ApplicationLayer.CreateProduct.CreateProduct> sut = CreateProductService();
 
         await sut.Execute(new ApplicationLayer.CreateProduct.CreateProduct { Product = productToCreate });
 
@@ -28,7 +28,7 @@ public class CreateProductServiceTests : CreateProductServiceTestBase
     {
         DomainModels.Product firstProductToCreate = new ProductTestDataBuilder().Build();
         DomainModels.Product secondProductToCreate = new ProductTestDataBuilder().Build();
-        ICommandService<ApplicationLayer.CreateProduct.CreateProduct> sut = CreateProductService();
+        ICommandHandler<ApplicationLayer.CreateProduct.CreateProduct> sut = CreateProductService();
 
         await sut.Execute(new ApplicationLayer.CreateProduct.CreateProduct { Product = firstProductToCreate });
         await sut.Execute(new ApplicationLayer.CreateProduct.CreateProduct { Product = secondProductToCreate });

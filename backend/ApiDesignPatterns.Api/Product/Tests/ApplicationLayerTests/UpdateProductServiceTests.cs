@@ -8,7 +8,7 @@ using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 using Shouldly;
 using Xunit;
 
@@ -31,7 +31,7 @@ public class UpdateProductServiceTests : UpdateProductServiceTestBase
             Category = "Toys",
             FieldMask = ["name", "category", "discountpercentage", "taxrate"]
         };
-        ICommandService<UpdateProduct> sut = UpdateProductService();
+        ICommandHandler<UpdateProduct> sut = UpdateProductService();
 
         await sut.Execute(new UpdateProduct { Product = product, Request = request });
 
@@ -56,7 +56,7 @@ public class UpdateProductServiceTests : UpdateProductServiceTestBase
             Dimensions = new DimensionsRequest { Length = "20", Width = "10", Height = "2" },
             FieldMask = ["dimensions.width", "dimensions.height"]
         };
-        ICommandService<UpdateProduct> sut = UpdateProductService();
+        ICommandHandler<UpdateProduct> sut = UpdateProductService();
 
         await sut.Execute(new UpdateProduct { Product = product, Request = request });
 
@@ -77,7 +77,7 @@ public class UpdateProductServiceTests : UpdateProductServiceTestBase
         {
             Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = "1.99" }, FieldMask = ["name"]
         };
-        ICommandService<UpdateProduct> sut = UpdateProductService();
+        ICommandHandler<UpdateProduct> sut = UpdateProductService();
 
         await sut.Execute(new UpdateProduct { Product = product, Request = request });
 
@@ -101,7 +101,7 @@ public class UpdateProductServiceTests : UpdateProductServiceTestBase
             SafetyWarnings = "Just don't strangle the dog",
             FieldMask = ["usageinstructions", "isnatural", "ishypoallergenic", "iscrueltyfree", "safetywarnings"]
         };
-        ICommandService<UpdateProduct> sut = UpdateProductService();
+        ICommandHandler<UpdateProduct> sut = UpdateProductService();
 
         await sut.Execute(new UpdateProduct { Product = product, Request = request });
 

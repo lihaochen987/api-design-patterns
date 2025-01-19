@@ -32,7 +32,7 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
         UpdateProductResponse? response = contentResult!.Value as UpdateProductResponse;
         response.ShouldBeEquivalentTo(Mapper.Map<UpdateProductResponse>(product));
         Mock
-            .Get(MockUpdateProductService)
+            .Get(MockUpdateProductHandler)
             .Verify(
                 svc => svc.Execute(new UpdateProduct { Request = request, Product = product }));
     }

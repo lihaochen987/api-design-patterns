@@ -24,7 +24,7 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
 
         result.ShouldBeOfType<NoContentResult>();
         Mock
-            .Get(MockDeleteProductService)
+            .Get(MockDeleteProductHandler)
             .Verify(svc => svc.Execute(new DeleteProduct { Product = product }), Times.Once);
     }
 
@@ -42,7 +42,7 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
 
         result.ShouldBeOfType<NotFoundResult>();
         Mock
-            .Get(MockDeleteProductService)
+            .Get(MockDeleteProductHandler)
             .Verify(svc => svc.Execute(new DeleteProduct { Product = product }), Times.Never);
     }
 }

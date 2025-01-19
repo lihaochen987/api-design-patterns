@@ -1,7 +1,7 @@
 using backend.Product.ApplicationLayer;
 using backend.Product.ApplicationLayer.DeleteProduct;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -10,7 +10,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class DeleteProductController(
-    ICommandService<DeleteProduct> service,
+    ICommandHandler<DeleteProduct> handler,
     IProductQueryApplicationService productQueryApplicationService)
     : ControllerBase
 {
@@ -27,7 +27,7 @@ public class DeleteProductController(
             return NotFound();
         }
 
-        await service.Execute(new DeleteProduct { Product = product });
+        await handler.Execute(new DeleteProduct { Product = product });
         return NoContent();
     }
 }

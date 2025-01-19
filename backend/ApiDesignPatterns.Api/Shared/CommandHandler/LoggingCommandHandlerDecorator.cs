@@ -3,12 +3,12 @@
 
 using Newtonsoft.Json;
 
-namespace backend.Shared.CommandService;
+namespace backend.Shared.CommandHandler;
 
-public class LoggingCommandServiceDecorator<TCommand>(
-    ICommandService<TCommand> commandService,
-    ILogger<LoggingCommandServiceDecorator<TCommand>> logger)
-    : ICommandService<TCommand>
+public class LoggingCommandHandlerDecorator<TCommand>(
+    ICommandHandler<TCommand> commandHandler,
+    ILogger<LoggingCommandHandlerDecorator<TCommand>> logger)
+    : ICommandHandler<TCommand>
 {
     public async Task Execute(TCommand command)
     {
@@ -24,7 +24,7 @@ public class LoggingCommandServiceDecorator<TCommand>(
             string commandDetails = JsonConvert.SerializeObject(command, Formatting.Indented);
             logger.LogInformation("Executing command: {Operation} with data: {CommandDetails}", operation,
                 commandDetails);
-            await commandService.Execute(command);
+            await commandHandler.Execute(command);
             logger.LogInformation("Successfully executed command: {Operation}", operation);
         }
         catch (Exception ex)

@@ -2,11 +2,11 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.InfrastructureLayer;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.CreateProduct;
 
-public class CreateProductService(IProductRepository repository) : ICommandService<CreateProduct>
+public class CreateProductHandler(IProductRepository repository) : ICommandHandler<CreateProduct>
 {
     public async Task Execute(CreateProduct command)
     {

@@ -5,18 +5,18 @@ using backend.Product.ApplicationLayer;
 using backend.Product.ApplicationLayer.DeleteProduct;
 using backend.Product.ProductControllers;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 using Moq;
 
 namespace backend.Product.Tests.ControllerTests;
 
 public abstract class DeleteProductControllerTestBase
 {
-    protected readonly ICommandService<DeleteProduct> MockDeleteProductService = Mock.Of<ICommandService<DeleteProduct>>();
+    protected readonly ICommandHandler<DeleteProduct> MockDeleteProductHandler = Mock.Of<ICommandHandler<DeleteProduct>>();
     protected readonly IProductQueryApplicationService MockProductQueryService = Mock.Of<IProductQueryApplicationService>();
 
     protected DeleteProductController DeleteProductController()
     {
-        return new DeleteProductController(MockDeleteProductService, MockProductQueryService);
+        return new DeleteProductController(MockDeleteProductHandler, MockProductQueryService);
     }
 }

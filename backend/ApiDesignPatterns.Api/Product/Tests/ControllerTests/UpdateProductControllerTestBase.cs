@@ -7,7 +7,7 @@ using backend.Product.ApplicationLayer.UpdateProduct;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
 using backend.Shared;
-using backend.Shared.CommandService;
+using backend.Shared.CommandHandler;
 using Moq;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -16,12 +16,12 @@ public abstract class UpdateProductControllerTestBase
 {
     protected readonly IMapper Mapper;
     protected readonly IProductQueryApplicationService MockProductQueryService;
-    protected readonly ICommandService<UpdateProduct> MockUpdateProductService;
+    protected readonly ICommandHandler<UpdateProduct> MockUpdateProductHandler;
 
     protected UpdateProductControllerTestBase()
     {
         MockProductQueryService = Mock.Of<IProductQueryApplicationService>();
-        MockUpdateProductService = Mock.Of<ICommandService<UpdateProduct>>();
+        MockUpdateProductHandler = Mock.Of<ICommandHandler<UpdateProduct>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
     }
@@ -30,7 +30,7 @@ public abstract class UpdateProductControllerTestBase
     {
         return new UpdateProductController(
             MockProductQueryService,
-            MockUpdateProductService,
+            MockUpdateProductHandler,
             Mapper);
     }
 }
