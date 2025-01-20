@@ -76,7 +76,8 @@ public class ProductComposer
     private IProductRepository CreateProductRepository()
     {
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        return new ProductRepository(dbConnection);
+        var productDataWriter = new ProductDataWriter(dbConnection);
+        return new ProductRepository(dbConnection, productDataWriter);
     }
 
     private IProductViewRepository CreateProductViewRepository()
@@ -245,5 +246,7 @@ public class ProductComposer
         services.AddScoped<GetProductPricingController>(_ => CreateGetProductPricingController());
         services.AddScoped<UpdateProductPricingController>(_ => CreateUpdateProductPricingController());
         services.AddScoped<ListProductsController>(_ => CreateListProductsController());
+
+        services.AddSingleton<CreateProductExtensions>();
     }
 }

@@ -40,8 +40,49 @@ public static class ProductQueries
                                             @BasePrice,
                                             @DiscountPercentage,
                                             @TaxRate
-                                            );
+                                            )
+                                        RETURNING product_id;
                                         """;
+
+    public const string CreatePetFoodProduct = """
+                                               INSERT INTO product_pet_foods (
+                                               product_id,
+                                               product_pet_foods_age_group_id,
+                                               product_pet_foods_breed_size_id,
+                                               product_pet_foods_nutritional_info,
+                                               product_pet_foods_ingredients,
+                                               product_pet_foods_weight_kg,
+                                               product_pet_foods_storage_instructions
+                                               )
+                                               VALUES (
+                                                   @Id,
+                                                   @AgeGroup,
+                                                   @BreedSize,
+                                                   @Ingredients,
+                                                   @NutritionalInfo,
+                                                   @StorageInstructions,
+                                                   @WeightKg
+                                                   );
+                                               """;
+
+    public const string CreateGroomingAndHygieneProduct = """
+                                                          INSERT INTO product_grooming_and_hygiene (
+                                                          product_id,
+                                                          product_grooming_and_hygiene_is_natural,
+                                                          product_grooming_and_hygiene_is_hypoallergenic,
+                                                          product_grooming_and_hygiene_usage_instructions,
+                                                          product_grooming_and_hygiene_is_cruelty_free,
+                                                          product_grooming_and_hygiene_safety_warnings
+                                                          )
+                                                          VALUES (
+                                                              @Id,
+                                                              @IsNatural,
+                                                              @IsHypoallergenic,
+                                                              @UsageInstructions,
+                                                              @IsCrueltyFree,
+                                                              @SafetyWarnings
+                                                              );
+                                                          """;
 
 
     public const string DeleteProduct = """
