@@ -1,41 +1,54 @@
-using System.Linq.Expressions;
+using System.Data;
+using System.Text;
 using backend.Product.DomainModels.Views;
-using backend.Product.InfrastructureLayer.Database;
+using backend.Product.InfrastructureLayer.Queries;
+using backend.Product.Services;
 using backend.Shared;
-using Microsoft.EntityFrameworkCore;
+using Dapper;
 
 namespace backend.Product.InfrastructureLayer;
 
 public class ProductViewRepository(
-    ProductDbContext context,
-    QueryService<ProductView> queryService)
+    IDbConnection dbConnection,
+    QueryService<ProductView> queryService,
+    ProductSqlFilterBuilder productSqlFilterBuilder)
     : IProductViewRepository
 {
-    public async Task<ProductView?> GetProductView(long id) =>
-        await context.Set<ProductView>()
-            .FirstOrDefaultAsync(p => p.Id == id);
+    public async Task<ProductView?> GetProductView(long id)
+    {
+        return await dbConnection.QuerySingleOrDefaultAsync<ProductView>(ProductViewQueries.GetProductView,
+            new { Id = id });
+    }
 
     public async Task<(List<ProductView>, string?)> ListProductsAsync(
         string? pageToken,
         string? filter,
         int maxPageSize)
     {
-        IQueryable<ProductView> query = context.Set<ProductView>().AsQueryable();
+        var sql = new StringBuilder(ProductViewQueries.ListProductsBase);
+        var parameters = new DynamicParameters();
 
-        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenProductId))
+        // Pagination filter
+        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenReview))
         {
-            query = query.Where(p => p.Id > lastSeenProductId);
+            sql.Append(" AND review_id > @LastSeenReview");
+            parameters.Add("LastSeenReview", lastSeenReview);
         }
 
+        // Custom filter
         if (!string.IsNullOrEmpty(filter))
         {
-            Expression<Func<ProductView, bool>> filterExpression = queryService.BuildFilterExpression(filter);
-            query = query.Where(filterExpression);
+            string filterClause = productSqlFilterBuilder.BuildSqlWhereClause(filter);
+            sql.Append($" AND {filterClause}");
         }
 
-        List<ProductView> products = await query.OrderBy(p => p.Id).Take(maxPageSize + 1).ToListAsync();
-        List<ProductView> paginatedProducts = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
+        // Order and limit
+        sql.Append(" ORDER BY review_id LIMIT @PageSizePlusOne");
+        parameters.Add("PageSizePlusOne", maxPageSize + 1);
 
-        return (paginatedProducts, nextPageToken);
+        List<ProductView> products = (await dbConnection.QueryAsync<ProductView>(sql.ToString(), parameters)).ToList();
+        List<ProductView> paginatedReviews = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
+
+        return (paginatedReviews, nextPageToken);
     }
 }

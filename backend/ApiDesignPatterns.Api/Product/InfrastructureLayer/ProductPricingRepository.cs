@@ -1,15 +1,16 @@
+using System.Data;
 using backend.Product.DomainModels.Views;
-using backend.Product.InfrastructureLayer.Database;
-using Microsoft.EntityFrameworkCore;
+using backend.Product.InfrastructureLayer.Queries;
+using backend.Review.InfrastructureLayer.Queries;
+using Dapper;
 
 namespace backend.Product.InfrastructureLayer;
 
-public class ProductPricingRepository(ProductDbContext context) : IProductPricingRepository
+public class ProductPricingRepository(IDbConnection dbConnection) : IProductPricingRepository
 {
     public async Task<ProductPricingView?> GetProductPricingAsync(long id)
     {
-        ProductPricingView? product = await context.Set<ProductPricingView>()
-            .FirstOrDefaultAsync(p => p.Id == id);
-        return product;
+        return await dbConnection.QuerySingleOrDefaultAsync<ProductPricingView>(ProductPricingQueries.GetProductPricing,
+            new { Id = id });
     }
 }

@@ -1,8 +1,6 @@
 using System.Data;
 using System.Text.Json.Serialization;
-using backend.Database;
 using backend.Product;
-using backend.Product.InfrastructureLayer.Database;
 using backend.Product.ProductControllers;
 using backend.Review;
 using backend.Shared;
@@ -12,7 +10,6 @@ using backend.Shared.SqlFilter;
 using backend.Supplier;
 using DbUp;
 using DbUp.Engine;
-using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -58,7 +55,12 @@ reviewCompositionRoot.ConfigureServices(builder.Services);
 
 // Product Composition Root
 var productCompositionRoot =
-    new ProductComposer(builder.Configuration, fieldPathAdapter, fieldMaskConverterFactory, loggerFactory);
+    new ProductComposer(
+        builder.Configuration,
+        fieldPathAdapter,
+        fieldMaskConverterFactory,
+        loggerFactory,
+        sqlOperators);
 productCompositionRoot.ConfigureServices(builder.Services);
 
 builder.Services.AddSupplierDependencies();
@@ -86,12 +88,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Register ApplicationDbContext with Postgres
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<ProductDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 // Register Dapper stuff
 builder.Services.AddScoped<IDbConnection>(_ =>
     new NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -106,17 +102,19 @@ using (IServiceScope scope = app.Services.CreateScope())
     try
     {
         string migrationPath = Path.Combine(Directory.GetCurrentDirectory(), "UpScripts");
-        if (connectionString != null)
+
+        if (connectionString != null && Directory.Exists(migrationPath))
         {
             ApplyMigrations(connectionString, 5, 2000, migrationPath);
         }
-
-        scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        scope.ServiceProvider.GetRequiredService<ProductDbContext>();
+        else
+        {
+            Console.WriteLine("Invalid connection string or migration path.");
+        }
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"An error occurred while applying migrations or seeding the database: {ex.Message}");
+        Console.WriteLine($"An error occurred while applying migrations: {ex.Message}");
     }
 }
 

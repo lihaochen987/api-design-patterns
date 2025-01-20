@@ -8,13 +8,13 @@ using backend.Product.Commands.ReplaceProduct;
 using backend.Product.Commands.UpdateProduct;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
-using backend.Product.InfrastructureLayer.Database;
 using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Queries.GetProduct;
 using backend.Product.Queries.GetProductPricing;
 using backend.Product.Queries.GetProductView;
 using backend.Product.Queries.ListProducts;
+using backend.Product.Services;
 using backend.Product.Services.ProductPricingServices;
 using backend.Product.Services.ProductServices;
 using backend.Shared;
@@ -22,7 +22,7 @@ using backend.Shared.CommandHandler;
 using backend.Shared.FieldMask;
 using backend.Shared.FieldPath;
 using backend.Shared.QueryHandler;
-using Microsoft.EntityFrameworkCore;
+using backend.Shared.SqlFilter;
 using Npgsql;
 
 namespace backend.Product;
@@ -41,12 +41,14 @@ public class ProductComposer
     private readonly ProductPricingFieldPaths _productPricingFieldPaths;
     private readonly ProductPricingFieldMaskConfiguration _productPricingFieldMaskConfiguration;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly ProductSqlFilterBuilder _productSqlFilterBuilder;
 
     public ProductComposer(
         IConfiguration configuration,
         IFieldPathAdapter fieldPathAdapter,
         IFieldMaskConverterFactory fieldMaskConverterFactory,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,
+        SqlOperators sqlOperators)
     {
         _getProductPricingExtensions = new GetProductPricingExtensions();
         var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
@@ -66,30 +68,27 @@ public class ProductComposer
         _productPricingFieldPaths = new ProductPricingFieldPaths();
         _productPricingFieldMaskConfiguration = new ProductPricingFieldMaskConfiguration();
         _loggerFactory = loggerFactory;
+        ProductColumnMapper productColumnMapper = new();
+        SqlFilterParser productSqlFilterParser = new(productColumnMapper, sqlOperators);
+        _productSqlFilterBuilder = new ProductSqlFilterBuilder(productSqlFilterParser);
     }
 
     private IProductRepository CreateProductRepository()
     {
-        var optionsBuilder = new DbContextOptionsBuilder<ProductDbContext>();
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
-        var dbContext = new ProductDbContext(optionsBuilder.Options);
-        return new ProductRepository(dbContext);
+        var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        return new ProductRepository(dbConnection);
     }
 
     private IProductViewRepository CreateProductViewRepository()
     {
-        var optionsBuilder = new DbContextOptionsBuilder<ProductDbContext>();
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
-        var dbContext = new ProductDbContext(optionsBuilder.Options);
-        return new ProductViewRepository(dbContext, _productQueryService);
+        var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        return new ProductViewRepository(dbConnection, _productQueryService, _productSqlFilterBuilder);
     }
 
     private IProductPricingRepository CreateProductPricingRepository()
     {
-        var optionsBuilder = new DbContextOptionsBuilder<ProductDbContext>();
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
-        var dbContext = new ProductDbContext(optionsBuilder.Options);
-        return new ProductPricingRepository(dbContext);
+        var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        return new ProductPricingRepository(dbConnection);
     }
 
     private ICommandHandler<UpdateProductQuery> CreateUpdateProductService()
@@ -135,19 +134,28 @@ public class ProductComposer
     private IQueryHandler<GetProductPricingQuery, ProductPricingView> CreateGetProductPricingHandler()
     {
         var repository = CreateProductPricingRepository();
-        return new GetProductPricingHandler(repository);
+        var queryHandler = new GetProductPricingHandler(repository);
+        var logger =
+            _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>>();
+        return new LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(queryHandler, logger);
     }
 
     private IQueryHandler<GetProductQuery, DomainModels.Product> CreateGetProductHandler()
     {
         var repository = CreateProductRepository();
-        return new GetProductHandler(repository);
+        var queryHandler = new GetProductHandler(repository);
+        var logger =
+            _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>();
+        return new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(queryHandler, logger);
     }
 
     private IQueryHandler<GetProductViewQuery, ProductView> CreateGetProductViewHandler()
     {
         var repository = CreateProductViewRepository();
-        return new GetProductViewHandler(repository);
+        var queryHandler = new GetProductViewHandler(repository);
+        var logger =
+            _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>>();
+        return new LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>(queryHandler, logger);
     }
 
     private IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> CreateListProductsHandler()

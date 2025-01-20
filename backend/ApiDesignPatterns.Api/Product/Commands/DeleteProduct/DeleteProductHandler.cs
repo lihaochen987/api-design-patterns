@@ -10,6 +10,6 @@ public class DeleteProductHandler(IProductRepository repository) : ICommandHandl
 {
     public async Task Handle(DeleteProductQuery command)
     {
-        await repository.DeleteProductAsync(command.Product);
+        await repository.DeleteProductAsync(command.Id);
     }
 }

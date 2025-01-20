@@ -27,7 +27,7 @@ public class DeleteProductController(
             return NotFound();
         }
 
-        await deleteProduct.Handle(new DeleteProductQuery { Product = product });
+        await deleteProduct.Handle(new DeleteProductQuery { Id = product.Id });
         return NoContent();
     }
 }

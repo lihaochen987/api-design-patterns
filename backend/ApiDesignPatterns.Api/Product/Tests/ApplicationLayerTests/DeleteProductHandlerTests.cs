@@ -3,7 +3,6 @@
 
 using backend.Product.Commands.DeleteProduct;
 using backend.Product.Tests.TestHelpers.Builders;
-using backend.Shared;
 using backend.Shared.CommandHandler;
 using Shouldly;
 using Xunit;
@@ -16,9 +15,10 @@ public class DeleteProductHandlerTests : DeleteProductHandlerTestBase
     public async Task DeleteProductAsync_CallsRepositoryWithCorrectProduct()
     {
         DomainModels.Product productToDelete = new ProductTestDataBuilder().Build();
+        Repository.Add(productToDelete);
         ICommandHandler<DeleteProductQuery> sut = DeleteProductService();
 
-        await sut.Handle(new DeleteProductQuery{Product = productToDelete});
+        await sut.Handle(new DeleteProductQuery { Id = productToDelete.Id });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("DeleteProductAsync", 1);

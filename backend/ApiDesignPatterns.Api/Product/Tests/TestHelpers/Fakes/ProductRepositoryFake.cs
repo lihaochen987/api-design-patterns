@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using backend.Product.DomainModels;
 using backend.Product.InfrastructureLayer;
 
 namespace backend.Product.Tests.TestHelpers.Fakes;
@@ -31,9 +30,14 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
         return Task.CompletedTask;
     }
 
-    public Task DeleteProductAsync(DomainModels.Product product)
+    public Task DeleteProductAsync(long id)
     {
         IncrementCallCount(nameof(DeleteProductAsync));
+        var product = this.FirstOrDefault(p => p.Id == id);
+        if (product == null)
+        {
+            return Task.CompletedTask;
+        }
         Remove(product);
         IsDirty = true;
         return Task.CompletedTask;

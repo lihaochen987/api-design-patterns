@@ -5,5 +5,5 @@ namespace backend.Product.Commands.DeleteProduct;
 
 public record DeleteProductQuery
 {
-    public required DomainModels.Product Product { get; init; }
+    public required long Id { get; init; }
 }
