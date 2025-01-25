@@ -38,4 +38,50 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 2);
     }
+
+    [Fact]
+    public async Task CreateProductAsync_CreatesPetFoodProduct_WhenCategoryIsPetFood()
+    {
+        var petFoodProduct = new ProductTestDataBuilder()
+            .WithCategory(Category.PetFood)
+            .Build();
+        ICommandHandler<CreateProductQuery> sut = CreateProductService();
+
+        await sut.Handle(new CreateProductQuery { Product = petFoodProduct });
+
+        Repository.IsDirty.ShouldBeTrue();
+        Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);
+        Repository.CallCount.ShouldContainKeyAndValue("CreatePetFoodProductAsync", 1);
+    }
+
+    [Fact]
+    public async Task CreateProductAsync_CreatesGroomingAndHygieneProduct_WhenCategoryIsGroomingAndHygiene()
+    {
+        var groomingProduct = new ProductTestDataBuilder()
+            .WithCategory(Category.GroomingAndHygiene)
+            .Build();
+        ICommandHandler<CreateProductQuery> sut = CreateProductService();
+
+        await sut.Handle(new CreateProductQuery { Product = groomingProduct });
+
+        Repository.IsDirty.ShouldBeTrue();
+        Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);
+        Repository.CallCount.ShouldContainKeyAndValue("CreateGroomingAndHygieneProductAsync", 1);
+    }
+
+    [Fact]
+    public async Task CreateProductAsync_DoesNotCallSpecificCategoryMethods_ForOtherCategories()
+    {
+        var genericProduct = new ProductTestDataBuilder()
+            .WithCategory(Category.Beds)
+            .Build();
+        ICommandHandler<CreateProductQuery> sut = CreateProductService();
+
+        await sut.Handle(new CreateProductQuery { Product = genericProduct });
+
+        Repository.IsDirty.ShouldBeTrue();
+        Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);
+        Repository.CallCount.ShouldNotContainKey("CreatePetFoodProductAsync");
+        Repository.CallCount.ShouldNotContainKey("CreateGroomingAndHygieneProductAsync");
+    }
 }

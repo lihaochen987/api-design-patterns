@@ -50,7 +50,7 @@ public class ProductTestDataBuilder
         _safetyWarnings = fixture.Create<string>();
     }
 
-    public ProductTestDataBuilder WithId(int id)
+    public ProductTestDataBuilder WithId(long id)
     {
         _id = id;
         return this;

@@ -285,6 +285,9 @@
     <Compile Update="Product\Tests\ApplicationLayerTests\CreateProductHandlerTestBase.cs">
       <DependentUpon>CreateProductHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\ReplaceProductHandlerTestBase.cs">
+      <DependentUpon>ReplaceProductHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
