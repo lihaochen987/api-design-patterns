@@ -167,7 +167,12 @@ public class ProductComposer
     private IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> CreateListProductsHandler()
     {
         var repository = CreateProductViewRepository();
-        return new ListProductsHandler(repository);
+        var queryHandler = new ListProductsHandler(repository);
+        var loggerQueryHandler = new LoggingQueryHandlerDecorator<ListProductsQuery, (List<ProductView>, string?)>(
+            queryHandler,
+            _loggerFactory
+                .CreateLogger<LoggingQueryHandlerDecorator<ListProductsQuery, (List<ProductView>, string?)>>());
+        return loggerQueryHandler;
     }
 
     private GetProductController CreateGetProductController()
