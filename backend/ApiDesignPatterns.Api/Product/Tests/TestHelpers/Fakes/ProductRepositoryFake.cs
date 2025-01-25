@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using backend.Product.DomainModels;
 using backend.Product.InfrastructureLayer;
 
 namespace backend.Product.Tests.TestHelpers.Fakes;
@@ -23,11 +24,28 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
         return Task.FromResult(product);
     }
 
-    public Task CreateProductAsync(DomainModels.Product product)
+    public Task CreatePetFoodProductAsync(PetFood product)
     {
         IncrementCallCount(nameof(CreateProductAsync));
         IsDirty = true;
-        return Task.CompletedTask;
+        Add(product);
+        return Task.FromResult(product.Id);
+    }
+
+    public Task CreateGroomingAndHygieneProductAsync(GroomingAndHygiene product)
+    {
+        IncrementCallCount(nameof(CreateProductAsync));
+        IsDirty = true;
+        Add(product);
+        return Task.FromResult(product.Id);
+    }
+
+    public Task<long> CreateProductAsync(DomainModels.Product product)
+    {
+        IncrementCallCount(nameof(CreateProductAsync));
+        IsDirty = true;
+        Add(product);
+        return Task.FromResult(product.Id);
     }
 
     public Task DeleteProductAsync(long id)
@@ -38,6 +56,7 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
         {
             return Task.CompletedTask;
         }
+
         Remove(product);
         IsDirty = true;
         return Task.CompletedTask;

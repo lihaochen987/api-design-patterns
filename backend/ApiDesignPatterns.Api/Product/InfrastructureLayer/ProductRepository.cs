@@ -25,37 +25,55 @@ public class ProductRepository(IDbConnection dbConnection, ProductDataWriter dat
         return product.SingleOrDefault();
     }
 
-    public async Task CreateProductAsync(DomainModels.Product product)
+    public async Task<long> CreateProductAsync(DomainModels.Product product)
     {
-        dbConnection.Open();
-        using var transaction = dbConnection.BeginTransaction();
-
-        try
-        {
-            long id = await dataWriter.CreateProduct(product, transaction);
-            switch (product)
+        return await dbConnection.ExecuteScalarAsync<long>(
+            ProductQueries.CreateProduct,
+            new
             {
-                case PetFood petFood:
-                    petFood.Id = id;
-                    await dataWriter.CreatePetFoodProduct(petFood, transaction);
-                    break;
-                case GroomingAndHygiene groomingAndHygiene:
-                    groomingAndHygiene.Id = id;
-                    await dataWriter.CreateGroomingAndHygieneProduct(groomingAndHygiene, transaction);
-                    break;
+                product.Name,
+                product.Dimensions.Length,
+                product.Dimensions.Width,
+                product.Dimensions.Height,
+                product.Category,
+                product.Pricing.BasePrice,
+                product.Pricing.DiscountPercentage,
+                product.Pricing.TaxRate
             }
+        );
+    }
 
-            transaction.Commit();
-        }
-        catch
-        {
-            transaction.Rollback();
-            throw;
-        }
-        finally
-        {
-            dbConnection.Close();
-        }
+    public async Task CreatePetFoodProductAsync(PetFood product)
+    {
+        await dbConnection.ExecuteAsync(
+            ProductQueries.CreatePetFoodProduct,
+            new
+            {
+                product.Id,
+                product.AgeGroup,
+                product.BreedSize,
+                product.Ingredients,
+                product.NutritionalInfo,
+                product.StorageInstructions,
+                product.WeightKg
+            }
+        );
+    }
+
+    public async Task CreateGroomingAndHygieneProductAsync(GroomingAndHygiene product)
+    {
+        await dbConnection.ExecuteScalarAsync(
+            ProductQueries.CreateGroomingAndHygieneProduct,
+            new
+            {
+                product.Id,
+                product.IsNatural,
+                product.IsHypoallergenic,
+                product.UsageInstructions,
+                product.IsCrueltyFree,
+                product.SafetyWarnings
+            }
+        );
     }
 
     public async Task DeleteProductAsync(long id)

@@ -2,8 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.Commands.CreateProduct;
+using backend.Product.DomainModels.Enums;
 using backend.Product.Tests.TestHelpers.Builders;
-using backend.Shared;
 using backend.Shared.CommandHandler;
 using Shouldly;
 using Xunit;
@@ -15,7 +15,7 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
     [Fact]
     public async Task CreateProductAsync_CallsRepositoryWithCorrectProduct()
     {
-        DomainModels.Product productToCreate = new ProductTestDataBuilder().Build();
+        DomainModels.Product productToCreate = new ProductTestDataBuilder().WithCategory(Category.Beds).Build();
         ICommandHandler<CreateProductQuery> sut = CreateProductService();
 
         await sut.Handle(new CreateProductQuery { Product = productToCreate });
@@ -27,8 +27,9 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
     [Fact]
     public async Task CreateProductAsync_PersistsWhenCalledTwice()
     {
-        DomainModels.Product firstProductToCreate = new ProductTestDataBuilder().Build();
-        DomainModels.Product secondProductToCreate = new ProductTestDataBuilder().Build();
+        DomainModels.Product firstProductToCreate = new ProductTestDataBuilder().WithCategory(Category.Beds).Build();
+        DomainModels.Product secondProductToCreate =
+            new ProductTestDataBuilder().WithCategory(Category.Clothing).Build();
         ICommandHandler<CreateProductQuery> sut = CreateProductService();
 
         await sut.Handle(new CreateProductQuery { Product = firstProductToCreate });

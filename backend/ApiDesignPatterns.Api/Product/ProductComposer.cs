@@ -102,14 +102,17 @@ public class ProductComposer
         return new LoggingCommandHandlerDecorator<UpdateProductQuery>(auditCommandService, logger);
     }
 
-    private ICommandHandler<CreateProductQuery> CreateCreateProductService()
+    private ICommandHandler<CreateProductQuery> CreateCreateProductHandler()
     {
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        var commandService = new CreateProductHandler(repository);
-        var auditCommandService = new AuditCommandHandlerDecorator<CreateProductQuery>(commandService, dbConnection);
-        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateProductQuery>>();
-        return new LoggingCommandHandlerDecorator<CreateProductQuery>(auditCommandService, logger);
+        var commandHandler = new CreateProductHandler(repository);
+        var auditCommandHandler = new AuditCommandHandlerDecorator<CreateProductQuery>(commandHandler, dbConnection);
+        var loggerCommandHandler = new LoggingCommandHandlerDecorator<CreateProductQuery>(auditCommandHandler,
+            _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateProductQuery>>());
+        var transactionHandler =
+            new TransactionCommandHandlerDecorator<CreateProductQuery>(loggerCommandHandler, dbConnection);
+        return transactionHandler;
     }
 
     private ICommandHandler<ReplaceProductQuery> CreateReplaceProductService()
@@ -180,7 +183,7 @@ public class ProductComposer
 
     private CreateProductController CreateCreateProductController()
     {
-        var commandService = CreateCreateProductService();
+        var commandService = CreateCreateProductHandler();
         return new CreateProductController(commandService, _createProductExtensions, _mapper);
     }
 
@@ -227,7 +230,7 @@ public class ProductComposer
 
         // Command Services
         services.AddScoped<ICommandHandler<UpdateProductQuery>>(_ => CreateUpdateProductService());
-        services.AddScoped<ICommandHandler<CreateProductQuery>>(_ => CreateCreateProductService());
+        services.AddScoped<ICommandHandler<CreateProductQuery>>(_ => CreateCreateProductHandler());
         services.AddScoped<ICommandHandler<ReplaceProductQuery>>(_ => CreateReplaceProductService());
         services.AddScoped<ICommandHandler<DeleteProductQuery>>(_ => CreateDeleteProductService());
 
