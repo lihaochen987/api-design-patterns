@@ -23,13 +23,13 @@ public class LoggingQueryHandlerDecorator<TQuery, TResult>(
         {
             string commandDetails = JsonConvert.SerializeObject(query, Formatting.Indented);
             logger.LogInformation(
-                "Executing command: {Operation} with data: {CommandDetails}",
+                "Executing query: {Operation} with data: {CommandDetails}",
                 operation,
                 commandDetails);
             TResult? result = await queryHandler.Handle(query);
             string commandResult = JsonConvert.SerializeObject(result, Formatting.Indented);
             logger.LogInformation(
-                "Successfully executed command: {Operation} with data: {commandResult}",
+                "Successfully executed query: {Operation} with data: {commandResult}",
                 operation,
                 commandResult);
             return result;

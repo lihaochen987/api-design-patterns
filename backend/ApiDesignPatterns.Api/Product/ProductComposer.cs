@@ -117,51 +117,54 @@ public class ProductComposer
         return transactionHandler;
     }
 
-    private ICommandHandler<ReplaceProductQuery> CreateReplaceProductService()
+    private ICommandHandler<ReplaceProductQuery> CreateReplaceProductHandler()
     {
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        var commandService = new ReplaceProductHandler(repository);
-        var auditCommandService = new AuditCommandHandlerDecorator<ReplaceProductQuery>(commandService, dbConnection);
-        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceProductQuery>>();
-        return new LoggingCommandHandlerDecorator<ReplaceProductQuery>(auditCommandService, logger);
+        var commandHandler = new ReplaceProductHandler(repository);
+        var auditCommandHandler = new AuditCommandHandlerDecorator<ReplaceProductQuery>(commandHandler, dbConnection);
+        var loggerCommandHandler = new LoggingCommandHandlerDecorator<ReplaceProductQuery>(auditCommandHandler,
+            _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceProductQuery>>());
+        return loggerCommandHandler;
     }
 
-    private ICommandHandler<DeleteProductQuery> CreateDeleteProductService()
+    private ICommandHandler<DeleteProductQuery> CreateDeleteProductHandler()
     {
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         var commandService = new DeleteProductHandler(repository);
         var auditCommandService = new AuditCommandHandlerDecorator<DeleteProductQuery>(commandService, dbConnection);
-        var logger = _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteProductQuery>>();
-        return new LoggingCommandHandlerDecorator<DeleteProductQuery>(auditCommandService, logger);
+        var loggerCommandHandler = new LoggingCommandHandlerDecorator<DeleteProductQuery>(auditCommandService,
+            _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteProductQuery>>());
+        return loggerCommandHandler;
     }
 
     private IQueryHandler<GetProductPricingQuery, ProductPricingView> CreateGetProductPricingHandler()
     {
         var repository = CreateProductPricingRepository();
         var queryHandler = new GetProductPricingHandler(repository);
-        var logger =
-            _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>>();
-        return new LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(queryHandler, logger);
+        var loggerQueryHandler = new LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(
+            queryHandler,
+            _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>>());
+        return loggerQueryHandler;
     }
 
     private IQueryHandler<GetProductQuery, DomainModels.Product> CreateGetProductHandler()
     {
         var repository = CreateProductRepository();
         var queryHandler = new GetProductHandler(repository);
-        var logger =
-            _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>();
-        return new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(queryHandler, logger);
+        var loggerQueryHandler = new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(queryHandler,
+            _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
+        return loggerQueryHandler;
     }
 
     private IQueryHandler<GetProductViewQuery, ProductView> CreateGetProductViewHandler()
     {
         var repository = CreateProductViewRepository();
         var queryHandler = new GetProductViewHandler(repository);
-        var logger =
-            _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>>();
-        return new LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>(queryHandler, logger);
+        var loggerQueryHandler = new LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>(queryHandler,
+            _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>>());
+        return loggerQueryHandler;
     }
 
     private IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> CreateListProductsHandler()
@@ -177,47 +180,47 @@ public class ProductComposer
 
     private GetProductController CreateGetProductController()
     {
-        var queryService = CreateGetProductViewHandler();
-        return new GetProductController(queryService, _fieldPathAdapter, _fieldMaskConverterFactory, _mapper);
+        var queryHandler = CreateGetProductViewHandler();
+        return new GetProductController(queryHandler, _fieldPathAdapter, _fieldMaskConverterFactory, _mapper);
     }
 
     private UpdateProductController CreateUpdateProductController()
     {
-        var applicationService = CreateGetProductHandler();
-        var commandService = CreateUpdateProductHandler();
-        return new UpdateProductController(applicationService, commandService, _mapper);
+        var queryHandler = CreateGetProductHandler();
+        var commandHandler = CreateUpdateProductHandler();
+        return new UpdateProductController(queryHandler, commandHandler, _mapper);
     }
 
     private CreateProductController CreateCreateProductController()
     {
-        var commandService = CreateCreateProductHandler();
-        return new CreateProductController(commandService, _createProductExtensions, _mapper);
+        var commandHandler = CreateCreateProductHandler();
+        return new CreateProductController(commandHandler, _createProductExtensions, _mapper);
     }
 
     private ReplaceProductController CreateReplaceProductController()
     {
-        var applicationService = CreateGetProductHandler();
-        var commandService = CreateReplaceProductService();
-        return new ReplaceProductController(applicationService, commandService, _mapper);
+        var queryHandler = CreateGetProductHandler();
+        var commandHandler = CreateReplaceProductHandler();
+        return new ReplaceProductController(queryHandler, commandHandler, _mapper);
     }
 
     private DeleteProductController CreateDeleteProductController()
     {
-        var commandService = CreateDeleteProductService();
-        var applicationService = CreateGetProductHandler();
-        return new DeleteProductController(commandService, applicationService);
+        var commandHandler = CreateDeleteProductHandler();
+        var queryHandler = CreateGetProductHandler();
+        return new DeleteProductController(commandHandler, queryHandler);
     }
 
     private ListProductsController CreateListProductsController()
     {
-        var queryService = CreateListProductsHandler();
-        return new ListProductsController(queryService, _mapper);
+        var queryHandler = CreateListProductsHandler();
+        return new ListProductsController(queryHandler, _mapper);
     }
 
     private GetProductPricingController CreateGetProductPricingController()
     {
-        var queryService = CreateGetProductPricingHandler();
-        return new GetProductPricingController(queryService, _productPricingFieldPaths, _getProductPricingExtensions,
+        var queryHandler = CreateGetProductPricingHandler();
+        return new GetProductPricingController(queryHandler, _productPricingFieldPaths, _getProductPricingExtensions,
             _fieldMaskConverterFactory);
     }
 
@@ -238,8 +241,8 @@ public class ProductComposer
         // Command Services
         services.AddScoped<ICommandHandler<UpdateProductQuery>>(_ => CreateUpdateProductHandler());
         services.AddScoped<ICommandHandler<CreateProductQuery>>(_ => CreateCreateProductHandler());
-        services.AddScoped<ICommandHandler<ReplaceProductQuery>>(_ => CreateReplaceProductService());
-        services.AddScoped<ICommandHandler<DeleteProductQuery>>(_ => CreateDeleteProductService());
+        services.AddScoped<ICommandHandler<ReplaceProductQuery>>(_ => CreateReplaceProductHandler());
+        services.AddScoped<ICommandHandler<DeleteProductQuery>>(_ => CreateDeleteProductHandler());
 
         // Application Services
         services.AddScoped<IQueryHandler<GetProductQuery, DomainModels.Product>>(_ => CreateGetProductHandler());
