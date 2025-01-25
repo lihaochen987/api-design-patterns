@@ -65,7 +65,31 @@ public class ProductRepository(IDbConnection dbConnection, ProductDataWriter dat
 
     public async Task UpdateProductAsync(DomainModels.Product product)
     {
-        await dbConnection.ExecuteAsync(ProductQueries.UpdateProduct,
-            new { product.Id, });
+        dbConnection.Open();
+        using var transaction = dbConnection.BeginTransaction();
+        try
+        {
+            product.Id = await dataWriter.UpdateProduct(product, transaction);
+            switch (product)
+            {
+                case PetFood petFood:
+                    await dataWriter.UpdatePetFoodProduct(petFood, transaction);
+                    break;
+                case GroomingAndHygiene groomingAndHygiene:
+                    await dataWriter.UpdateGroomingAndHygieneProduct(groomingAndHygiene, transaction);
+                    break;
+            }
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+        finally
+        {
+            dbConnection.Close();
+        }
     }
 }

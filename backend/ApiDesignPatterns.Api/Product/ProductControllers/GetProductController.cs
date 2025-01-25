@@ -34,12 +34,13 @@ public class GetProductController(
             return NotFound();
         }
 
-        GetProductResponse response = productView.Category switch
+        GetProductResponse response = Enum.Parse<Category>(productView.Category) switch
         {
             Category.PetFood => mapper.Map<GetPetFoodResponse>(productView),
             Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(productView),
             _ => mapper.Map<GetProductResponse>(productView)
         };
+
 
         HashSet<string> validPaths = fieldPathAdapter.GetFieldPaths("Product");
         var converter = fieldMaskConverterFactory.Create(request.FieldMask, validPaths);

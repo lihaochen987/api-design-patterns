@@ -10,7 +10,7 @@ public class ProductViewTestDataBuilder
     private readonly Fixture _fixture;
     private readonly AgeGroup _ageGroup;
     private readonly BreedSize _breedSize;
-    private Category _category;
+    private string _category;
     private Dimensions _dimensions;
     private int? _id;
     private readonly string _ingredients;
@@ -27,7 +27,7 @@ public class ProductViewTestDataBuilder
         _fixture.Customizations.Add(new ProductDimensionsBuilder());
 
         _name = _fixture.Create<string>();
-        _category = _fixture.Create<Category>();
+        _category = _fixture.Create<Category>().ToString();
         _dimensions = _fixture.Create<Dimensions>();
         _price = _fixture.Create<long>();
         _ageGroup = _fixture.Create<AgeGroup>();
@@ -52,7 +52,7 @@ public class ProductViewTestDataBuilder
 
     public ProductViewTestDataBuilder WithCategory(Category category)
     {
-        _category = category;
+        _category = category.ToString();
         return this;
     }
 

@@ -101,6 +101,31 @@ public static class ProductQueries
                                         product_base_price = @BasePrice,
                                         product_discount_percentage = @DiscountPercentage,
                                         product_tax_rate = @TaxRate
-                                        WHERE product_id = @Id;
+                                        WHERE product_id = @Id
+                                        RETURNING product_id;
                                         """;
+
+    public const string UpdatePetFoodProduct = """
+                                               UPDATE product_pet_foods
+                                               SET
+                                               product_pet_foods_age_group_id = @AgeGroup,
+                                               product_pet_foods_breed_size_id = @BreedSize,
+                                               product_pet_foods_ingredients = @Ingredients,
+                                               product_pet_foods_storage_instructions = @StorageInstructions,
+                                               product_pet_foods_weight_kg = @WeightKg
+                                               WHERE product_id = @Id
+                                               RETURNING product_id;
+                                               """;
+
+    public const string UpdateGroomingAndHygieneProduct = """
+                                                          UPDATE product_grooming_and_hygiene
+                                                          SET
+                                                          product_grooming_and_hygiene_is_natural = @IsNatural,
+                                                          product_grooming_and_hygiene_is_hypoallergenic = @IsHypoallergenic,
+                                                          product_grooming_and_hygiene_usage_instructions = @UsageInstructions,
+                                                          product_grooming_and_hygiene_is_cruelty_free = @IsCrueltyFree,
+                                                          product_grooming_and_hygiene_safety_warnings = @SafetyWarnings
+                                                          WHERE product_id = @Id
+                                                          RETURNING product_id;
+                                                          """;
 }

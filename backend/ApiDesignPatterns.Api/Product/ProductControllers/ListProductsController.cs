@@ -26,12 +26,13 @@ public class ListProductsController(
             Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
         });
 
-        IEnumerable<GetProductResponse> productResponses = products.Select(product => product.Category switch
-        {
-            Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
-            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
-            _ => mapper.Map<GetProductResponse>(product)
-        }).ToList();
+        IEnumerable<GetProductResponse> productResponses = products.Select(product =>
+            Enum.Parse<Category>(product.Category) switch
+            {
+                Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
+                Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
+                _ => mapper.Map<GetProductResponse>(product)
+            }).ToList();
 
         ListProductsResponse response = new() { Results = productResponses, NextPageToken = nextPageToken };
 

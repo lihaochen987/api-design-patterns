@@ -8,7 +8,7 @@ public class ProductView : Identifier
 {
     public required string Name { get; set; }
     public decimal Price { get; set; }
-    public Category Category { get; set; }
+    public required string Category { get; set; }
     public required Dimensions Dimensions { get; set; }
     public AgeGroup? AgeGroup { get; set; }
     public BreedSize? BreedSize { get; set; }
