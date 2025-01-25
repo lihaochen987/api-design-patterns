@@ -2,12 +2,11 @@ using System.Data;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.InfrastructureLayer.Queries;
-using backend.Product.Services;
 using Dapper;
 
 namespace backend.Product.InfrastructureLayer;
 
-public class ProductRepository(IDbConnection dbConnection, ProductDataWriter dataWriter) : IProductRepository
+public class ProductRepository(IDbConnection dbConnection) : IProductRepository
 {
     public async Task<DomainModels.Product?> GetProductAsync(long id)
     {
@@ -18,6 +17,38 @@ public class ProductRepository(IDbConnection dbConnection, ProductDataWriter dat
                 product.Dimensions = dimensions;
                 product.Pricing = pricing;
                 return product;
+            },
+            new { Id = id },
+            splitOn: "Length,BasePrice");
+
+        return product.SingleOrDefault();
+    }
+
+    public async Task<PetFood?> GetPetFoodProductAsync(long id)
+    {
+        var product = await dbConnection.QueryAsync<PetFood, Dimensions, Pricing, PetFood>(
+            ProductQueries.GetPetFoodProduct,
+            (petFood, dimensions, pricing) =>
+            {
+                petFood.Dimensions = dimensions;
+                petFood.Pricing = pricing;
+                return petFood;
+            },
+            new { Id = id },
+            splitOn: "Length,BasePrice");
+
+        return product.SingleOrDefault();
+    }
+
+    public async Task<GroomingAndHygiene?> GetGroomingAndHygieneProductAsync(long id)
+    {
+        var product = await dbConnection.QueryAsync<GroomingAndHygiene, Dimensions, Pricing, GroomingAndHygiene>(
+            ProductQueries.GetGroomingAndHygieneProduct,
+            (petFood, dimensions, pricing) =>
+            {
+                petFood.Dimensions = dimensions;
+                petFood.Pricing = pricing;
+                return petFood;
             },
             new { Id = id },
             splitOn: "Length,BasePrice");
@@ -62,7 +93,7 @@ public class ProductRepository(IDbConnection dbConnection, ProductDataWriter dat
 
     public async Task CreateGroomingAndHygieneProductAsync(GroomingAndHygiene product)
     {
-        await dbConnection.ExecuteScalarAsync(
+        await dbConnection.ExecuteAsync(
             ProductQueries.CreateGroomingAndHygieneProduct,
             new
             {
@@ -81,33 +112,54 @@ public class ProductRepository(IDbConnection dbConnection, ProductDataWriter dat
         await dbConnection.ExecuteAsync(ProductQueries.DeleteProduct, new { Id = id });
     }
 
-    public async Task UpdateProductAsync(DomainModels.Product product)
+    public async Task<long> UpdateProductAsync(DomainModels.Product product)
     {
-        dbConnection.Open();
-        using var transaction = dbConnection.BeginTransaction();
-        try
-        {
-            product.Id = await dataWriter.UpdateProduct(product, transaction);
-            switch (product)
+        return await dbConnection.ExecuteScalarAsync<long>(
+            ProductQueries.UpdateProduct,
+            new
             {
-                case PetFood petFood:
-                    await dataWriter.UpdatePetFoodProduct(petFood, transaction);
-                    break;
-                case GroomingAndHygiene groomingAndHygiene:
-                    await dataWriter.UpdateGroomingAndHygieneProduct(groomingAndHygiene, transaction);
-                    break;
+                product.Id,
+                product.Name,
+                product.Category,
+                product.Dimensions.Width,
+                product.Dimensions.Height,
+                product.Dimensions.Length,
+                product.Pricing.BasePrice,
+                product.Pricing.DiscountPercentage,
+                product.Pricing.TaxRate,
             }
+        );
+    }
 
-            transaction.Commit();
-        }
-        catch
-        {
-            transaction.Rollback();
-            throw;
-        }
-        finally
-        {
-            dbConnection.Close();
-        }
+    public async Task UpdatePetFoodProductAsync(PetFood product)
+    {
+        await dbConnection.ExecuteAsync(
+            ProductQueries.UpdatePetFoodProduct,
+            new
+            {
+                product.Id,
+                product.AgeGroup,
+                product.BreedSize,
+                product.Ingredients,
+                product.StorageInstructions,
+                product.WeightKg
+            }
+        );
+    }
+
+    public async Task UpdateGroomingAndHygieneProductAsync(GroomingAndHygiene product)
+    {
+        await dbConnection.ExecuteAsync(
+            ProductQueries.UpdateGroomingAndHygieneProduct,
+            new
+            {
+                product.Id,
+                product.IsNatural,
+                product.IsHypoallergenic,
+                product.UsageInstructions,
+                product.IsCrueltyFree,
+                product.SafetyWarnings
+            }
+        );
     }
 }

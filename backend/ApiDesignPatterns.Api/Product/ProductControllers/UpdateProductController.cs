@@ -1,7 +1,8 @@
 using AutoMapper;
-using backend.Product.Commands.UpdateProduct;
+using backend.Product.ApplicationLayer.Commands.UpdateProduct;
+using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.DomainModels;
-using backend.Product.Queries.GetProduct;
+using backend.Product.DomainModels.Enums;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,8 @@ public class UpdateProductController(
         [FromRoute] long id,
         [FromBody] UpdateProductRequest request)
     {
-        DomainModels.Product? product = await getProduct.Handle(new GetProductQuery { Id = id });
+        DomainModels.Product? product =
+            await getProduct.Handle(new GetProductQuery { Id = id });
 
         if (product == null)
         {

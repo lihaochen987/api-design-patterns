@@ -1,9 +1,9 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-namespace backend.Product.Commands.CreateProduct;
+namespace backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 
-public record CreateProductQuery
+public record ReplaceProductQuery
 {
     public required DomainModels.Product Product { get; init; }
 }

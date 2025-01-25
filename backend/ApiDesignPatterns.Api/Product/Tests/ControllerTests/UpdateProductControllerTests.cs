@@ -1,7 +1,7 @@
-using backend.Product.Commands.UpdateProduct;
+using backend.Product.ApplicationLayer.Commands.UpdateProduct;
+using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
-using backend.Product.Queries.GetProduct;
 using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

@@ -1,8 +1,8 @@
 using AutoMapper;
-using backend.Product.Commands.ReplaceProduct;
+using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
+using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
-using backend.Product.Queries.GetProduct;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;

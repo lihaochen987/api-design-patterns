@@ -5,7 +5,7 @@ using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 using backend.Shared.QueryHandler;
 
-namespace backend.Product.Queries.GetProductPricing;
+namespace backend.Product.ApplicationLayer.Queries.GetProductPricing;
 
 public class GetProductPricingHandler(IProductPricingRepository repository)
     : IQueryHandler<GetProductPricingQuery, ProductPricingView>

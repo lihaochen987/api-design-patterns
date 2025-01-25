@@ -3,9 +3,9 @@
 
 using AutoFixture;
 using AutoMapper;
+using backend.Product.ApplicationLayer.Queries.GetProductView;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
-using backend.Product.Queries.GetProductView;
 using backend.Shared.FieldMask;
 using backend.Shared.FieldPath;
 using backend.Shared.QueryHandler;

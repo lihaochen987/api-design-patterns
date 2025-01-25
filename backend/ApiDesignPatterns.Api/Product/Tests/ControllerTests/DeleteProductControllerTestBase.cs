@@ -1,9 +1,9 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Product.Commands.DeleteProduct;
+using backend.Product.ApplicationLayer.Commands.DeleteProduct;
+using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ProductControllers;
-using backend.Product.Queries.GetProduct;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Moq;

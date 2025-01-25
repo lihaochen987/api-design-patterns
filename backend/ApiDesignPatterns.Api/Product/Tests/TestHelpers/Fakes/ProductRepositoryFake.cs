@@ -24,9 +24,23 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
         return Task.FromResult(product);
     }
 
+    public Task<PetFood?> GetPetFoodProductAsync(long id)
+    {
+        IncrementCallCount(nameof(GetPetFoodProductAsync));
+        PetFood? product = this.FirstOrDefault(p => p.Id == id) as PetFood;
+        return Task.FromResult(product);
+    }
+
+    public Task<GroomingAndHygiene?> GetGroomingAndHygieneProductAsync(long id)
+    {
+        IncrementCallCount(nameof(GetGroomingAndHygieneProductAsync));
+        GroomingAndHygiene? product = this.FirstOrDefault(p => p.Id == id) as GroomingAndHygiene;
+        return Task.FromResult(product);
+    }
+
     public Task CreatePetFoodProductAsync(PetFood product)
     {
-        IncrementCallCount(nameof(CreateProductAsync));
+        IncrementCallCount(nameof(CreatePetFoodProductAsync));
         IsDirty = true;
         Add(product);
         return Task.FromResult(product.Id);
@@ -34,7 +48,7 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
 
     public Task CreateGroomingAndHygieneProductAsync(GroomingAndHygiene product)
     {
-        IncrementCallCount(nameof(CreateProductAsync));
+        IncrementCallCount(nameof(CreateGroomingAndHygieneProductAsync));
         IsDirty = true;
         Add(product);
         return Task.FromResult(product.Id);
@@ -62,7 +76,7 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
         return Task.CompletedTask;
     }
 
-    public Task UpdateProductAsync(DomainModels.Product product)
+    public Task<long> UpdateProductAsync(DomainModels.Product product)
     {
         IncrementCallCount(nameof(UpdateProductAsync));
         int index = IndexOf(this.FirstOrDefault(p => p.Id == product.Id) ??
@@ -70,6 +84,28 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
         this[index] = product;
         IsDirty = true;
 
-        return Task.CompletedTask;
+        return Task.FromResult(product.Id);
+    }
+
+    public Task UpdatePetFoodProductAsync(PetFood product)
+    {
+        IncrementCallCount(nameof(UpdatePetFoodProductAsync));
+        int index = IndexOf(this.FirstOrDefault(p => p.Id == product.Id) ??
+                            throw new InvalidOperationException());
+        this[index] = product;
+        IsDirty = true;
+
+        return Task.FromResult(product.Id);
+    }
+
+    public Task UpdateGroomingAndHygieneProductAsync(GroomingAndHygiene product)
+    {
+        IncrementCallCount(nameof(UpdateGroomingAndHygieneProductAsync));
+        int index = IndexOf(this.FirstOrDefault(p => p.Id == product.Id) ??
+                            throw new InvalidOperationException());
+        this[index] = product;
+        IsDirty = true;
+
+        return Task.FromResult(product.Id);
     }
 }

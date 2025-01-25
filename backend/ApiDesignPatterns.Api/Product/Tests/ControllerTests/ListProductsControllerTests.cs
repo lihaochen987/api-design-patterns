@@ -1,8 +1,8 @@
+using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
-using backend.Product.Queries.ListProducts;
 using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

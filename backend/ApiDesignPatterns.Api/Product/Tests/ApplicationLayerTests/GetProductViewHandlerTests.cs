@@ -2,8 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
+using backend.Product.ApplicationLayer.Queries.GetProductView;
 using backend.Product.DomainModels.Views;
-using backend.Product.Queries.GetProductView;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
 using Shouldly;

@@ -20,6 +20,48 @@ public static class ProductQueries
                                      WHERE product_id = @Id;
                                      """;
 
+    public const string GetPetFoodProduct = """
+                                            SELECT
+                                                p.product_id AS Id,
+                                                product_name AS Name,
+                                                product_category AS Category,
+                                                pf.product_pet_foods_age_group_id AS AgeGroup,
+                                                pf.product_pet_foods_breed_size_id AS BreedSize,
+                                                pf.product_pet_foods_ingredients AS Ingredients,
+                                                pf.product_pet_foods_storage_instructions AS StorageInstructions,
+                                                pf.product_pet_foods_weight_kg AS WeightKg,
+                                                product_dimensions_length_cm AS Length,
+                                                product_dimensions_width_cm AS Width,
+                                                product_dimensions_height_cm AS Height,
+                                                product_base_price AS BasePrice,
+                                                product_discount_percentage AS DiscountPercentage,
+                                                product_tax_rate AS TaxRate
+                                            FROM products p
+                                            JOIN public.product_pet_foods pf ON p.product_id = pf.product_id
+                                            WHERE p.product_id = @Id;
+                                            """;
+
+    public const string GetGroomingAndHygieneProduct = """
+                                                       SELECT
+                                                           p.product_id AS Id,
+                                                           product_name AS Name,
+                                                           product_category AS Category,
+                                                           pgah.product_grooming_and_hygiene_is_natural AS IsNatural,
+                                                           pgah.product_grooming_and_hygiene_is_hypoallergenic AS IsHypoallergenic,
+                                                           pgah.product_grooming_and_hygiene_usage_instructions AS UsageInstructions,
+                                                           pgah.product_grooming_and_hygiene_is_cruelty_free AS IsCrueltyFree,
+                                                           pgah.product_grooming_and_hygiene_safety_warnings AS SafetyWarnings,
+                                                           product_dimensions_length_cm AS Length,
+                                                           product_dimensions_width_cm AS Width,
+                                                           product_dimensions_height_cm AS Height,
+                                                           product_base_price AS BasePrice,
+                                                           product_discount_percentage AS DiscountPercentage,
+                                                           product_tax_rate AS TaxRate
+                                                       FROM products p
+                                                       JOIN public.product_grooming_and_hygiene pgah ON p.product_id = pgah.product_id
+                                                       WHERE p.product_id = @Id;
+                                                       """;
+
     public const string CreateProduct = """
                                         INSERT INTO products (
                                         product_name,

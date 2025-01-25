@@ -1,9 +1,11 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-namespace backend.Product.Commands.DeleteProduct;
+using backend.Shared.QueryHandler;
 
-public record DeleteProductQuery
+namespace backend.Product.ApplicationLayer.Queries.GetProduct;
+
+public record GetProductQuery : IQuery<DomainModels.Product>
 {
     public required long Id { get; init; }
 }

@@ -4,7 +4,7 @@
 using backend.Product.InfrastructureLayer;
 using backend.Shared.CommandHandler;
 
-namespace backend.Product.Commands.DeleteProduct;
+namespace backend.Product.ApplicationLayer.Commands.DeleteProduct;
 
 public class DeleteProductHandler(IProductRepository repository) : ICommandHandler<DeleteProductQuery>
 {

@@ -1,9 +1,11 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace backend.Product.DomainModels.ValueObjects;
 
 public record Pricing
 {
+    private Pricing()
+    {
+    }
+
     public decimal BasePrice { get; init; }
 
     public decimal DiscountPercentage { get; init; }

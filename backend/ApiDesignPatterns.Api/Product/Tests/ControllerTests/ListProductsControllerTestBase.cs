@@ -2,9 +2,9 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
-using backend.Product.Queries.ListProducts;
 using backend.Shared.QueryHandler;
 using Moq;
 

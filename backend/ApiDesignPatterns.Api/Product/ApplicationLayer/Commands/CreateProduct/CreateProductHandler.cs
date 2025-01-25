@@ -5,7 +5,7 @@ using backend.Product.DomainModels;
 using backend.Product.InfrastructureLayer;
 using backend.Shared.CommandHandler;
 
-namespace backend.Product.Commands.CreateProduct;
+namespace backend.Product.ApplicationLayer.Commands.CreateProduct;
 
 public class CreateProductHandler(IProductRepository repository) : ICommandHandler<CreateProductQuery>
 {

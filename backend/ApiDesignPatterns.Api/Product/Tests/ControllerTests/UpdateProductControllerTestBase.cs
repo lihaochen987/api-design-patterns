@@ -2,9 +2,9 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Product.Commands.UpdateProduct;
+using backend.Product.ApplicationLayer.Commands.UpdateProduct;
+using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ProductControllers;
-using backend.Product.Queries.GetProduct;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Moq;

@@ -4,7 +4,7 @@
 using backend.Product.InfrastructureLayer;
 using backend.Shared.CommandHandler;
 
-namespace backend.Product.Commands.ReplaceProduct;
+namespace backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 
 public class ReplaceProductHandler(IProductRepository repository) : ICommandHandler<ReplaceProductQuery>
 {

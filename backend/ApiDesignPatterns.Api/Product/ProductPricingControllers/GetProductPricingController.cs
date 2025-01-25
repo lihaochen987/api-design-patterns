@@ -1,5 +1,5 @@
+using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.DomainModels.Views;
-using backend.Product.Queries.GetProductPricing;
 using backend.Product.Services.ProductPricingServices;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;

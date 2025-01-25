@@ -4,7 +4,7 @@
 using backend.Product.DomainModels.Views;
 using backend.Shared.QueryHandler;
 
-namespace backend.Product.Queries.GetProductPricing;
+namespace backend.Product.ApplicationLayer.Queries.GetProductPricing;
 
 public record GetProductPricingQuery : IQuery<ProductPricingView>
 {
