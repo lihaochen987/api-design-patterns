@@ -1,5 +1,6 @@
 using System.Data;
 using System.Text;
+using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Queries;
 using backend.Product.Services;
@@ -16,8 +17,18 @@ public class ProductViewRepository(
 {
     public async Task<ProductView?> GetProductView(long id)
     {
-        return await dbConnection.QuerySingleOrDefaultAsync<ProductView>(ProductViewQueries.GetProductView,
-            new { Id = id });
+        var product = await dbConnection.QueryAsync<ProductView, Dimensions, ProductView>(
+            ProductViewQueries.GetProductView,
+            (product, dimensions) =>
+            {
+                product.Dimensions = dimensions;
+                return product;
+            },
+            new { Id = id },
+            splitOn: "Length"
+        );
+
+        return product.SingleOrDefault();
     }
 
     public async Task<(List<ProductView>, string?)> ListProductsAsync(
@@ -29,10 +40,10 @@ public class ProductViewRepository(
         var parameters = new DynamicParameters();
 
         // Pagination filter
-        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenReview))
+        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenProduct))
         {
-            sql.Append(" AND review_id > @LastSeenReview");
-            parameters.Add("LastSeenReview", lastSeenReview);
+            sql.Append(" AND product_id > @LastSeenProduct");
+            parameters.Add("LastSeenProduct", lastSeenProduct);
         }
 
         // Custom filter
@@ -43,12 +54,21 @@ public class ProductViewRepository(
         }
 
         // Order and limit
-        sql.Append(" ORDER BY review_id LIMIT @PageSizePlusOne");
+        sql.Append(" ORDER BY product_id LIMIT @PageSizePlusOne");
         parameters.Add("PageSizePlusOne", maxPageSize + 1);
 
-        List<ProductView> products = (await dbConnection.QueryAsync<ProductView>(sql.ToString(), parameters)).ToList();
-        List<ProductView> paginatedReviews = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
+        var products = (await dbConnection.QueryAsync<ProductView, Dimensions, ProductView>(
+            sql.ToString(),
+            (product, dimensions) =>
+            {
+                product.Dimensions = dimensions;
+                return product;
+            },
+            parameters,
+            splitOn: "Length"
+        )).ToList();
+        List<ProductView> paginatedProducts = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
 
-        return (paginatedReviews, nextPageToken);
+        return (paginatedProducts, nextPageToken);
     }
 }

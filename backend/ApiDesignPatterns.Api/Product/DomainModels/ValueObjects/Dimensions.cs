@@ -2,6 +2,7 @@ namespace backend.Product.DomainModels.ValueObjects;
 
 public record Dimensions
 {
+    private Dimensions(){}
     public decimal Length { get; init; }
     public decimal Width { get; init; }
     public decimal Height { get; init; }

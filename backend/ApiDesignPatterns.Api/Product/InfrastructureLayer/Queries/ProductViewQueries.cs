@@ -5,16 +5,51 @@ namespace backend.Product.InfrastructureLayer.Queries;
 
 public static class ProductViewQueries
 {
-    public const string GetProductView = """Hello""";
+    public const string GetProductView = """
+                                         SELECT
+                                             product_id AS Id,
+                                             product_name AS Name,
+                                             product_price AS Price,
+                                             product_dimensions_length_cm AS Length,
+                                             product_dimensions_width_cm AS Width,
+                                             product_dimensions_height_cm AS Height,
+                                             product_category_name AS Category,
+                                             product_pet_food_age_group AS AgeGroup,
+                                             product_pet_food_breed_size AS BreedSize,
+                                             product_pet_foods_ingredients AS Ingredients,
+                                             product_pet_foods_nutritional_info::text AS NutritionalInfo,
+                                             product_pet_foods_storage_instructions AS StorageInstructions,
+                                             product_pet_foods_weight_kg AS WeightKg,
+                                             product_grooming_and_hygiene_is_natural AS IsNatural,
+                                             product_grooming_and_hygiene_is_hypoallergenic AS IsHypoallergenic,
+                                             product_grooming_and_hygiene_usage_instructions AS UsageInstructions,
+                                             product_grooming_and_hygiene_is_cruelty_free AS IsCrueltyFree,
+                                             product_grooming_and_hygiene_safety_warnings AS SafetyWarnings
+                                         FROM products_view
+                                         WHERE product_id = @Id;
+                                         """;
 
     public const string ListProductsBase = """
                                            SELECT
-                                               product_id AS ProductId,
-                                               review_rating AS Rating,
-                                               review_text AS Text,
-                                               review_created_at AS CreatedAt,
-                                               review_updated_at AS UpdatedAt
-                                           FROM reviews_view
-                                           WHERE review_id = @Id;
+                                               product_id AS Id,
+                                               product_name AS Name,
+                                               product_price AS Price,
+                                               product_dimensions_length_cm AS Length,
+                                               product_dimensions_width_cm AS Width,
+                                               product_dimensions_height_cm AS Height,
+                                               product_category_name AS Category,
+                                               product_pet_food_age_group AS AgeGroup,
+                                               product_pet_food_breed_size AS BreedSize,
+                                               product_pet_foods_ingredients AS Ingredients,
+                                               product_pet_foods_nutritional_info::text AS NutritionalInfo,
+                                               product_pet_foods_storage_instructions AS StorageInstructions,
+                                               product_pet_foods_weight_kg AS WeightKg,
+                                               product_grooming_and_hygiene_is_natural AS IsNatural,
+                                               product_grooming_and_hygiene_is_hypoallergenic AS IsHypoallergenic,
+                                               product_grooming_and_hygiene_usage_instructions AS UsageInstructions,
+                                               product_grooming_and_hygiene_is_cruelty_free AS IsCrueltyFree,
+                                               product_grooming_and_hygiene_safety_warnings AS SafetyWarnings
+                                           FROM products_view
+                                           WHERE 1=1
                                            """;
 }

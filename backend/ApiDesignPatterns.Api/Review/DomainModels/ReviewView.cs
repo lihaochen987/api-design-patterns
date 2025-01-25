@@ -5,11 +5,11 @@ using backend.Shared;
 
 namespace backend.Review.DomainModels;
 
-public record ReviewView : Identifier
+public class ReviewView : Identifier
 {
-    public required long ProductId { get; init; }
-    public required decimal Rating { get; init; }
-    public required string Text { get; init; }
-    public required DateTimeOffset CreatedAt { get; init; }
-    public DateTimeOffset? UpdatedAt { get; init; }
+    public required long ProductId { get; set; }
+    public required decimal Rating { get; set; }
+    public required string Text { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
 }

@@ -4,21 +4,21 @@ using backend.Shared;
 
 namespace backend.Product.DomainModels.Views;
 
-public record ProductView : Identifier
+public class ProductView : Identifier
 {
-    public required string Name { get; init; }
-    public decimal Price { get; init; }
-    public Category Category { get; init; }
-    public required Dimensions Dimensions { get; init; }
-    public AgeGroup? AgeGroup { get; init; }
-    public BreedSize? BreedSize { get; init; }
-    public string? Ingredients { get; init; }
-    public Dictionary<string, object>? NutritionalInfo { get; init; }
-    public string? StorageInstructions { get; init; }
-    public decimal? WeightKg { get; init; }
-    public bool? IsNatural { get; init; }
-    public bool? IsHypoallergenic { get; init; }
-    public string? UsageInstructions { get; init; }
-    public bool? IsCrueltyFree { get; init; }
-    public string? SafetyWarnings { get; init; }
+    public required string Name { get; set; }
+    public decimal Price { get; set; }
+    public Category Category { get; set; }
+    public required Dimensions Dimensions { get; set; }
+    public AgeGroup? AgeGroup { get; set; }
+    public BreedSize? BreedSize { get; set; }
+    public string? Ingredients { get; set; }
+    public Dictionary<string, object>? NutritionalInfo { get; set; }
+    public string? StorageInstructions { get; set; }
+    public decimal? WeightKg { get; set; }
+    public bool? IsNatural { get; set; }
+    public bool? IsHypoallergenic { get; set; }
+    public string? UsageInstructions { get; set; }
+    public bool? IsCrueltyFree { get; set; }
+    public string? SafetyWarnings { get; set; }
 }
