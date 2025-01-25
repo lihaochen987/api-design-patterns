@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
+using backend.Product.InfrastructureLayer.Database.ProductView;
 using backend.Shared;
 
 namespace backend.Product.Tests.TestHelpers.Fakes;

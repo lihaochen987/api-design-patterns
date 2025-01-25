@@ -5,6 +5,8 @@ using AutoMapper;
 using backend.Review.ApplicationLayer;
 using backend.Review.DomainModels;
 using backend.Review.InfrastructureLayer;
+using backend.Review.InfrastructureLayer.Database.Review;
+using backend.Review.InfrastructureLayer.Database.ReviewView;
 using backend.Review.ReviewControllers;
 using backend.Review.Services;
 using backend.Shared;

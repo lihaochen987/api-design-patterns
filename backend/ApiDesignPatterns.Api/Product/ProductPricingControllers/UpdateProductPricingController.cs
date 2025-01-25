@@ -1,4 +1,5 @@
 using backend.Product.InfrastructureLayer;
+using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Product.Services.ProductPricingServices;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

@@ -3,6 +3,7 @@
 
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
+using backend.Product.InfrastructureLayer.Database.ProductPricing;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.GetProductPricing;

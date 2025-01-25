@@ -3,6 +3,7 @@
 
 using backend.Product.DomainModels;
 using backend.Product.InfrastructureLayer;
+using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.Commands.CreateProduct;

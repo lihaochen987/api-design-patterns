@@ -1,10 +1,9 @@
 using System.Data;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.ValueObjects;
-using backend.Product.InfrastructureLayer.Queries;
 using Dapper;
 
-namespace backend.Product.InfrastructureLayer;
+namespace backend.Product.InfrastructureLayer.Database.Product;
 
 public class ProductRepository(IDbConnection dbConnection) : IProductRepository
 {

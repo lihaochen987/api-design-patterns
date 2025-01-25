@@ -1,6 +1,6 @@
 using backend.Product.DomainModels;
 
-namespace backend.Product.InfrastructureLayer;
+namespace backend.Product.InfrastructureLayer.Database.Product;
 
 public interface IProductRepository
 {

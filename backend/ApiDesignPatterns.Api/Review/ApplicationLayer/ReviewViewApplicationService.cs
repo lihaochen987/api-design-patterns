@@ -3,6 +3,7 @@
 
 using backend.Review.DomainModels;
 using backend.Review.InfrastructureLayer;
+using backend.Review.InfrastructureLayer.Database.ReviewView;
 using backend.Review.ReviewControllers;
 
 namespace backend.Review.ApplicationLayer;

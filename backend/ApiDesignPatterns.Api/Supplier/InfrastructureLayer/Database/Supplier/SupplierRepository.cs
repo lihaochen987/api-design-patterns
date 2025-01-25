@@ -3,11 +3,10 @@
 
 using System.Data;
 using AutoMapper;
-using backend.Supplier.InfrastructureLayer.Queries;
 using backend.Supplier.Services;
 using Dapper;
 
-namespace backend.Supplier.InfrastructureLayer;
+namespace backend.Supplier.InfrastructureLayer.Database.Supplier;
 
 public class SupplierRepository(
     IDbConnection dbConnection,

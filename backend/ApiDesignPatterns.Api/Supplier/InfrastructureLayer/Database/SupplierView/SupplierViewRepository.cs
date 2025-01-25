@@ -4,26 +4,24 @@
 using System.Data;
 using System.Text;
 using backend.Shared;
-using backend.Supplier.DomainModels;
-using backend.Supplier.InfrastructureLayer.Queries;
 using backend.Supplier.Services;
 using Dapper;
 
-namespace backend.Supplier.InfrastructureLayer;
+namespace backend.Supplier.InfrastructureLayer.Database.SupplierView;
 
 public class SupplierViewRepository(
     IDbConnection dbConnection,
     SupplierSqlFilterBuilder sqlFilterBuilder,
-    QueryService<SupplierView> queryService)
+    QueryService<DomainModels.SupplierView> queryService)
     : ISupplierViewRepository
 {
-    public async Task<SupplierView?> GetSupplierView(long id)
+    public async Task<DomainModels.SupplierView?> GetSupplierView(long id)
     {
-        return await dbConnection.QuerySingleOrDefaultAsync<SupplierView>(SupplierViewQueries.GetSupplierView,
+        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.SupplierView>(SupplierViewQueries.GetSupplierView,
             new { Id = id });
     }
 
-    public async Task<(List<SupplierView>, string?)> ListSuppliersAsync(
+    public async Task<(List<DomainModels.SupplierView>, string?)> ListSuppliersAsync(
         string? pageToken,
         string? filter,
         int maxPageSize,
@@ -57,9 +55,9 @@ public class SupplierViewRepository(
         sql.Append(" ORDER BY supplier_id LIMIT @PageSizePlusOne");
         parameters.Add("PageSizePlusOne", maxPageSize + 1);
 
-        List<SupplierView> suppliers =
-            (await dbConnection.QueryAsync<SupplierView>(sql.ToString(), parameters)).ToList();
-        List<SupplierView> paginatedSuppliers =
+        List<DomainModels.SupplierView> suppliers =
+            (await dbConnection.QueryAsync<DomainModels.SupplierView>(sql.ToString(), parameters)).ToList();
+        List<DomainModels.SupplierView> paginatedSuppliers =
             queryService.Paginate(suppliers, maxPageSize, out string? nextPageToken);
 
         return (paginatedSuppliers, nextPageToken);

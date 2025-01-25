@@ -1,4 +1,4 @@
-namespace backend.Review.InfrastructureLayer.Queries;
+namespace backend.Review.InfrastructureLayer.Database.ReviewView;
 
 public static class ReviewViewQueries
 {

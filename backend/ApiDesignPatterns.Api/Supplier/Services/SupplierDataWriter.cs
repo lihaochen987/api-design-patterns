@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Data;
-using backend.Supplier.InfrastructureLayer.Queries;
+using backend.Supplier.InfrastructureLayer.Database.Supplier;
 using Dapper;
 
 namespace backend.Supplier.Services;

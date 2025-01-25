@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.InfrastructureLayer;
+using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.Commands.DeleteProduct;

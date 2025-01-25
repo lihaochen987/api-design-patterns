@@ -1,10 +1,8 @@
 using System.Data;
 using backend.Product.DomainModels.Views;
-using backend.Product.InfrastructureLayer.Queries;
-using backend.Review.InfrastructureLayer.Queries;
 using Dapper;
 
-namespace backend.Product.InfrastructureLayer;
+namespace backend.Product.InfrastructureLayer.Database.ProductPricing;
 
 public class ProductPricingRepository(IDbConnection dbConnection) : IProductPricingRepository
 {

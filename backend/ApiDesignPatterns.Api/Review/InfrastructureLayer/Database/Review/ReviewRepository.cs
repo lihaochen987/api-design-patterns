@@ -2,10 +2,9 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Data;
-using backend.Review.InfrastructureLayer.Queries;
 using Dapper;
 
-namespace backend.Review.InfrastructureLayer;
+namespace backend.Review.InfrastructureLayer.Database.Review;
 
 public class ReviewRepository(
     IDbConnection dbConnection)

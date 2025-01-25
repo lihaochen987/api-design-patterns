@@ -3,6 +3,7 @@
 
 using backend.Product.DomainModels.Enums;
 using backend.Product.InfrastructureLayer;
+using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.GetProduct;

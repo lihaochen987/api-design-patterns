@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using backend.Product.DomainModels;
 using backend.Product.InfrastructureLayer;
+using backend.Product.InfrastructureLayer.Database.Product;
 
 namespace backend.Product.Tests.TestHelpers.Fakes;
 

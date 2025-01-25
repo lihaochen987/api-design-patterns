@@ -1,23 +1,21 @@
 using System.Data;
 using System.Text;
 using backend.Product.DomainModels.ValueObjects;
-using backend.Product.DomainModels.Views;
-using backend.Product.InfrastructureLayer.Queries;
 using backend.Product.Services;
 using backend.Shared;
 using Dapper;
 
-namespace backend.Product.InfrastructureLayer;
+namespace backend.Product.InfrastructureLayer.Database.ProductView;
 
 public class ProductViewRepository(
     IDbConnection dbConnection,
-    QueryService<ProductView> queryService,
+    QueryService<DomainModels.Views.ProductView> queryService,
     ProductSqlFilterBuilder productSqlFilterBuilder)
     : IProductViewRepository
 {
-    public async Task<ProductView?> GetProductView(long id)
+    public async Task<DomainModels.Views.ProductView?> GetProductView(long id)
     {
-        var product = await dbConnection.QueryAsync<ProductView, Dimensions, ProductView>(
+        var product = await dbConnection.QueryAsync<DomainModels.Views.ProductView, Dimensions, DomainModels.Views.ProductView>(
             ProductViewQueries.GetProductView,
             (product, dimensions) =>
             {
@@ -31,7 +29,7 @@ public class ProductViewRepository(
         return product.SingleOrDefault();
     }
 
-    public async Task<(List<ProductView>, string?)> ListProductsAsync(
+    public async Task<(List<DomainModels.Views.ProductView>, string?)> ListProductsAsync(
         string? pageToken,
         string? filter,
         int maxPageSize)
@@ -57,7 +55,7 @@ public class ProductViewRepository(
         sql.Append(" ORDER BY product_id LIMIT @PageSizePlusOne");
         parameters.Add("PageSizePlusOne", maxPageSize + 1);
 
-        var products = (await dbConnection.QueryAsync<ProductView, Dimensions, ProductView>(
+        var products = (await dbConnection.QueryAsync<DomainModels.Views.ProductView, Dimensions, DomainModels.Views.ProductView>(
             sql.ToString(),
             (product, dimensions) =>
             {
@@ -67,7 +65,7 @@ public class ProductViewRepository(
             parameters,
             splitOn: "Length"
         )).ToList();
-        List<ProductView> paginatedProducts = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
+        List<DomainModels.Views.ProductView> paginatedProducts = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
 
         return (paginatedProducts, nextPageToken);
     }

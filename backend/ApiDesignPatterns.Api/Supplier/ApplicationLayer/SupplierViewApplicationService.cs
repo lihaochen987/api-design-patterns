@@ -3,6 +3,7 @@
 
 using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer;
+using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 using backend.Supplier.SupplierControllers;
 
 namespace backend.Supplier.ApplicationLayer;

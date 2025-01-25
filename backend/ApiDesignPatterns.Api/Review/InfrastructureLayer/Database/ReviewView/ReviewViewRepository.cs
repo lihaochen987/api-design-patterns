@@ -3,27 +3,25 @@
 
 using System.Data;
 using System.Text;
-using backend.Review.DomainModels;
-using backend.Review.InfrastructureLayer.Queries;
 using backend.Review.Services;
 using backend.Shared;
 using Dapper;
 
-namespace backend.Review.InfrastructureLayer;
+namespace backend.Review.InfrastructureLayer.Database.ReviewView;
 
 public class ReviewViewRepository(
     IDbConnection dbConnection,
     ReviewSqlFilterBuilder reviewSqlFilterBuilder,
-    QueryService<ReviewView> queryService)
+    QueryService<DomainModels.ReviewView> queryService)
     : IReviewViewRepository
 {
-    public async Task<ReviewView?> GetReviewView(long id)
+    public async Task<DomainModels.ReviewView?> GetReviewView(long id)
     {
-        return await dbConnection.QuerySingleOrDefaultAsync<ReviewView>(ReviewViewQueries.GetReviewView,
+        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.ReviewView>(ReviewViewQueries.GetReviewView,
             new { Id = id });
     }
 
-    public async Task<(List<ReviewView>, string?)> ListReviewsAsync(
+    public async Task<(List<DomainModels.ReviewView>, string?)> ListReviewsAsync(
         string? pageToken,
         string? filter,
         int maxPageSize,
@@ -57,8 +55,8 @@ public class ReviewViewRepository(
         sql.Append(" ORDER BY review_id LIMIT @PageSizePlusOne");
         parameters.Add("PageSizePlusOne", maxPageSize + 1);
 
-        List<ReviewView> reviews = (await dbConnection.QueryAsync<ReviewView>(sql.ToString(), parameters)).ToList();
-        List<ReviewView> paginatedReviews = queryService.Paginate(reviews, maxPageSize, out string? nextPageToken);
+        List<DomainModels.ReviewView> reviews = (await dbConnection.QueryAsync<DomainModels.ReviewView>(sql.ToString(), parameters)).ToList();
+        List<DomainModels.ReviewView> paginatedReviews = queryService.Paginate(reviews, maxPageSize, out string? nextPageToken);
 
         return (paginatedReviews, nextPageToken);
     }

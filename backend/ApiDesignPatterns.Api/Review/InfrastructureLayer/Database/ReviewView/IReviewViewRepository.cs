@@ -1,15 +1,13 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Review.DomainModels;
-
-namespace backend.Review.InfrastructureLayer;
+namespace backend.Review.InfrastructureLayer.Database.ReviewView;
 
 public interface IReviewViewRepository
 {
-    Task<ReviewView?> GetReviewView(long id);
+    Task<DomainModels.ReviewView?> GetReviewView(long id);
 
-    Task<(List<ReviewView>, string?)> ListReviewsAsync(
+    Task<(List<DomainModels.ReviewView>, string?)> ListReviewsAsync(
         string? pageToken,
         string? filter,
         int maxPageSize,

@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Review.InfrastructureLayer;
+using backend.Review.InfrastructureLayer.Database.Review;
 using backend.Review.ReviewControllers;
 using backend.Review.Services;
 

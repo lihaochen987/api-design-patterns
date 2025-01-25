@@ -3,6 +3,7 @@
 
 using backend.Product.DomainModels;
 using backend.Product.InfrastructureLayer;
+using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Product.Services.ProductServices;
 using backend.Shared.CommandHandler;
 
