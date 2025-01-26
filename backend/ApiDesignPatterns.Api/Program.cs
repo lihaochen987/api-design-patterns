@@ -82,6 +82,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
     c.UseOneOfForPolymorphism();
+    c.SchemaFilter<RequireNonNullablePropertiesSchemaFilter>();
     c.SelectSubTypesUsing(baseType =>
     {
         if (baseType == typeof(GetProductResponse))
