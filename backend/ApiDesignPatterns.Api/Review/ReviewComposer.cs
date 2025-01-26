@@ -4,6 +4,7 @@
 using AutoMapper;
 using backend.Review.ApplicationLayer;
 using backend.Review.ApplicationLayer.Commands.CreateReview;
+using backend.Review.ApplicationLayer.Commands.DeleteReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Review.DomainModels;
 using backend.Review.InfrastructureLayer.Database.Review;
@@ -80,9 +81,9 @@ public class ReviewComposer
 
     private DeleteReviewController CreateDeleteReviewController()
     {
-        var applicationService = CreateReviewApplicationService();
+        var commandHandler = CreateDeleteReviewHandler();
         var queryHandler = CreateGetReviewHandler();
-        return new DeleteReviewController(queryHandler, applicationService);
+        return new DeleteReviewController(queryHandler, commandHandler);
     }
 
     private GetReviewController CreateGetReviewController()
@@ -136,6 +137,17 @@ public class ReviewComposer
         return loggerCommandHandler;
     }
 
+    private ICommandHandler<DeleteReviewQuery> CreateDeleteReviewHandler()
+    {
+        var repository = CreateReviewRepository();
+        var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        var commandService = new DeleteReviewHandler(repository);
+        var auditCommandService = new AuditCommandHandlerDecorator<DeleteReviewQuery>(commandService, dbConnection);
+        var loggerCommandHandler = new LoggingCommandHandlerDecorator<DeleteReviewQuery>(auditCommandService,
+            _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteReviewQuery>>());
+        return loggerCommandHandler;
+    }
+
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddScoped<IReviewRepository>(_ => CreateReviewRepository());
@@ -151,6 +163,7 @@ public class ReviewComposer
 
         // Command Handlers
         services.AddScoped<ICommandHandler<CreateReviewQuery>>(_ => CreateCreateReviewHandler());
+        services.AddScoped<ICommandHandler<DeleteReviewQuery>>(_ => CreateDeleteReviewHandler());
 
         // Query Handlers
         services.AddScoped<IQueryHandler<GetReviewQuery, DomainModels.Review>>(_ => CreateGetReviewHandler());

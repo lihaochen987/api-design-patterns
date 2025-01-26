@@ -7,7 +7,6 @@ namespace backend.Review.ApplicationLayer;
 
 public interface IReviewApplicationService
 {
-    Task DeleteReviewAsync(long id);
     Task ReplaceReviewAsync(DomainModels.Review review);
     Task UpdateReviewAsync(UpdateReviewRequest request, DomainModels.Review review);
 }

@@ -1,7 +1,6 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Review.InfrastructureLayer;
 using backend.Review.InfrastructureLayer.Database.Review;
 using backend.Review.ReviewControllers;
 using backend.Review.Services;
@@ -13,8 +12,6 @@ public class ReviewApplicationService(
     ReviewFieldMaskConfiguration maskConfiguration)
     : IReviewApplicationService
 {
-    public async Task DeleteReviewAsync(long id) => await repository.DeleteReviewAsync(id);
-
     public async Task ReplaceReviewAsync(DomainModels.Review review)
     {
         await repository.UpdateReviewAsync(review);
