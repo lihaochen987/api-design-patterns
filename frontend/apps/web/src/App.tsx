@@ -1,26 +1,21 @@
 import {$api} from "@repo/product-data-access/api";
 import React from 'react';
+import {ShoppingList} from "./ShoppingList/shopping-list.tsx";
 
 function App() {
-    const {data, error, isLoading} = $api.useQuery(
+    const {data, isLoading} = $api.useQuery(
         "get",
-        "/product/{id}",
-        {
-            params: {
-                path: {id: 1},
-            },
-        },
+        "/products"
     );
 
     console.log(data);
 
     if (isLoading || !data) return "Loading...";
 
-    if (error) return `An error occurred: ${error.message}`;
-
     return (
         <>
             <h1>Welcome to the Pet store</h1>
+            <ShoppingList/>
         </>
     )
 }

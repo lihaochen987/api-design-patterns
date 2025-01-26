@@ -31,7 +31,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["CreateProductResponse"];
                         "application/json": components["schemas"]["CreateProductResponse"];
@@ -40,7 +42,9 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -82,7 +86,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["CreateReviewResponse"];
                         "application/json": components["schemas"]["CreateReviewResponse"];
@@ -91,7 +97,64 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/supplier": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a supplier */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateSupplierRequest"];
+                    "text/json": components["schemas"]["CreateSupplierRequest"];
+                    "application/*+json": components["schemas"]["CreateSupplierRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CreateSupplierResponse"];
+                        "application/json": components["schemas"]["CreateSupplierResponse"];
+                        "text/json": components["schemas"]["CreateSupplierResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -129,7 +192,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"];
                         "application/json": components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"];
@@ -138,7 +203,9 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -167,7 +234,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ReplaceProductResponse"];
                         "application/json": components["schemas"]["ReplaceProductResponse"];
@@ -176,7 +245,9 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -202,7 +273,9 @@ export interface paths {
             responses: {
                 /** @description No Content */
                 204: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content?: never;
                 };
             };
@@ -229,7 +302,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["UpdateProductResponse"];
                         "application/json": components["schemas"]["UpdateProductResponse"];
@@ -238,7 +313,9 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -272,7 +349,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["GetReviewResponse"];
                         "application/json": components["schemas"]["GetReviewResponse"];
@@ -281,7 +360,9 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -310,7 +391,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ReplaceReviewResponse"];
                         "application/json": components["schemas"]["ReplaceReviewResponse"];
@@ -319,7 +402,9 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -345,7 +430,9 @@ export interface paths {
             responses: {
                 /** @description No Content */
                 204: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content?: never;
                 };
             };
@@ -372,7 +459,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["UpdateReviewResponse"];
                         "application/json": components["schemas"]["UpdateReviewResponse"];
@@ -381,7 +470,166 @@ export interface paths {
                 };
                 /** @description Not Found */
                 404: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/supplier/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a supplier */
+        get: {
+            parameters: {
+                query?: {
+                    FieldMask?: string[];
+                };
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GetSupplierResponse"];
+                        "application/json": components["schemas"]["GetSupplierResponse"];
+                        "text/json": components["schemas"]["GetSupplierResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        /** Replace a supplier */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["ReplaceSupplierRequest"];
+                    "text/json": components["schemas"]["ReplaceSupplierRequest"];
+                    "application/*+json": components["schemas"]["ReplaceSupplierRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ReplaceSupplierResponse"];
+                        "application/json": components["schemas"]["ReplaceSupplierResponse"];
+                        "text/json": components["schemas"]["ReplaceSupplierResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        /** Delete a supplier */
+        delete: {
+            parameters: {
+                query?: {
+                    request?: components["schemas"]["DeleteSupplierRequest"];
+                };
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description No Content */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        /** Update a supplier */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["UpdateSupplierRequest"];
+                    "text/json": components["schemas"]["UpdateSupplierRequest"];
+                    "application/*+json": components["schemas"]["UpdateSupplierRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["UpdateSupplierResponse"];
+                        "application/json": components["schemas"]["UpdateSupplierResponse"];
+                        "text/json": components["schemas"]["UpdateSupplierResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ProblemDetails"];
                         "application/json": components["schemas"]["ProblemDetails"];
@@ -415,7 +663,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["GetProductPricingResponse"];
                         "application/json": components["schemas"]["GetProductPricingResponse"];
@@ -449,7 +699,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["UpdateProductPricingResponse"];
                         "application/json": components["schemas"]["UpdateProductPricingResponse"];
@@ -471,7 +723,6 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    Parent?: string;
                     Filter?: string;
                     PageToken?: string;
                     MaxPageSize?: number;
@@ -484,7 +735,9 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ListProductsResponse"];
                         "application/json": components["schemas"]["ListProductsResponse"];
@@ -525,11 +778,56 @@ export interface paths {
             responses: {
                 /** @description OK */
                 200: {
-                    headers: Record<string, unknown>;
+                    headers: {
+                        [name: string]: unknown;
+                    };
                     content: {
                         "text/plain": components["schemas"]["ListReviewsResponse"];
                         "application/json": components["schemas"]["ListReviewsResponse"];
                         "text/json": components["schemas"]["ListReviewsResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/suppliers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List suppliers */
+        get: {
+            parameters: {
+                query?: {
+                    Parent?: string;
+                    Filter?: string;
+                    PageToken?: string;
+                    MaxPageSize?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ListSuppliersResponse"];
+                        "application/json": components["schemas"]["ListSuppliersResponse"];
+                        "text/json": components["schemas"]["ListSuppliersResponse"];
                     };
                 };
             };
@@ -548,22 +846,36 @@ export type webhooks = Record<string, never>;
 
 export interface components {
     schemas: {
+        AddressRequest: {
+            street?: string;
+            city?: string;
+            postalCode?: string;
+            country?: string;
+        };
+        AddressResponse: {
+            street: string;
+            city: string;
+            postalCode: string;
+            country: string;
+        };
         CreateProductRequest: {
-            name: string;
+            name?: string;
             pricing: components["schemas"]["ProductPricingRequest"];
-            category: string;
+            category?: string;
             dimensions: components["schemas"]["DimensionsRequest"];
-            ageGroup?: string | null;
-            breedSize?: string | null;
-            ingredients?: string | null;
-            nutritionalInfo?: Record<string, unknown> | null;
-            storageInstructions?: string | null;
-            weightKg?: string | null;
-            isNatural?: boolean | null;
-            isHypoAllergenic?: boolean | null;
-            usageInstructions?: string | null;
-            isCrueltyFree?: boolean | null;
-            safetyWarnings?: string | null;
+            ageGroup?: string;
+            breedSize?: string;
+            ingredients?: string;
+            nutritionalInfo?: {
+                [key: string]: unknown;
+            };
+            storageInstructions?: string;
+            weightKg?: string;
+            isNatural?: boolean;
+            isHypoAllergenic?: boolean;
+            usageInstructions?: string;
+            isCrueltyFree?: boolean;
+            safetyWarnings?: string;
         };
         CreateProductResponse: {
             id: string;
@@ -573,10 +885,9 @@ export interface components {
             dimensions: components["schemas"]["DimensionsResponse"];
         };
         CreateReviewRequest: {
-            productId: string;
-            rating: string;
-            text: string;
-            createdAt?: string | null;
+            productId?: string;
+            rating?: string;
+            text?: string;
         };
         CreateReviewResponse: {
             id: string;
@@ -586,12 +897,29 @@ export interface components {
             createdAt: string;
             updatedAt: string;
         };
+        CreateSupplierRequest: {
+            firstName?: string;
+            lastName?: string;
+            email?: string;
+            address: components["schemas"]["AddressRequest"];
+            phoneNumber: components["schemas"]["PhoneNumberRequest"];
+        };
+        CreateSupplierResponse: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            email: string;
+            address: components["schemas"]["AddressResponse"];
+            createdAt: string;
+            phoneNumber: components["schemas"]["PhoneNumberResponse"];
+        };
         DeleteProductRequest: Record<string, never>;
         DeleteReviewRequest: Record<string, never>;
+        DeleteSupplierRequest: Record<string, never>;
         DimensionsRequest: {
-            length?: string | null;
-            width?: string | null;
-            height?: string | null;
+            length?: string;
+            width?: string;
+            height?: string;
         };
         DimensionsResponse: {
             length: string;
@@ -609,7 +937,9 @@ export interface components {
             ageGroup: string;
             breedSize: string;
             ingredients: string;
-            nutritionalInfo: Record<string, string>;
+            nutritionalInfo: {
+                [key: string]: string;
+            };
             storageInstructions: string;
             weightKg: string;
         } & components["schemas"]["GetProductResponse"];
@@ -634,26 +964,54 @@ export interface components {
             createdAt: string;
             updatedAt: string;
         };
+        GetSupplierResponse: {
+            /** Format: int64 */
+            id: number;
+            fullName: string;
+            email: string;
+            createdAt: string;
+            street: string;
+            city: string;
+            postalCode: string;
+            country: string;
+            phoneNumber: string;
+        };
         ListProductsResponse: {
-            results: unknown[];
-            nextPageToken: string;
+            results?: unknown[];
+            nextPageToken?: string;
         };
         ListReviewsResponse: {
-            results: components["schemas"]["GetReviewResponse"][];
-            nextPageToken: string;
+            results?: components["schemas"]["GetReviewResponse"][];
+            nextPageToken?: string;
+        };
+        ListSuppliersResponse: {
+            results?: components["schemas"]["GetSupplierResponse"][];
+            nextPageToken?: string;
+        };
+        PhoneNumberRequest: {
+            countryCode?: string;
+            areaCode?: string;
+            number?: string;
+        };
+        PhoneNumberResponse: {
+            countryCode: string;
+            areaCode: string;
+            number: string;
         };
         ProblemDetails: {
-            type?: string | null;
-            title?: string | null;
+            type?: string;
+            title?: string;
             /** Format: int32 */
-            status?: number | null;
-            detail?: string | null;
-            instance?: string | null;
-        } & Record<string, unknown>;
+            status?: number;
+            detail?: string;
+            instance?: string;
+        } & {
+            [key: string]: unknown;
+        };
         ProductPricingRequest: {
-            basePrice?: string | null;
-            discountPercentage?: string | null;
-            taxRate?: string | null;
+            basePrice?: string;
+            discountPercentage?: string;
+            taxRate?: string;
         };
         ProductPricingResponse: {
             basePrice: string;
@@ -661,21 +1019,23 @@ export interface components {
             taxRate: string;
         };
         ReplaceProductRequest: {
-            name: string;
+            name?: string;
             pricing: components["schemas"]["ProductPricingRequest"];
-            category: string;
+            category?: string;
             dimensions: components["schemas"]["DimensionsRequest"];
-            ageGroup?: string | null;
-            breedSize?: string | null;
-            ingredients?: string | null;
-            nutritionalInfo?: Record<string, unknown> | null;
-            storageInstructions?: string | null;
-            weightKg?: string | null;
-            isNatural?: boolean | null;
-            isHypoAllergenic?: boolean | null;
-            usageInstructions?: string | null;
-            isCrueltyFree?: boolean | null;
-            safetyWarnings?: string | null;
+            ageGroup?: string;
+            breedSize?: string;
+            ingredients?: string;
+            nutritionalInfo?: {
+                [key: string]: unknown;
+            };
+            storageInstructions?: string;
+            weightKg?: string;
+            isNatural?: boolean;
+            isHypoAllergenic?: boolean;
+            usageInstructions?: string;
+            isCrueltyFree?: boolean;
+            safetyWarnings?: string;
         };
         ReplaceProductResponse: {
             name: string;
@@ -684,10 +1044,9 @@ export interface components {
             dimensions: components["schemas"]["DimensionsResponse"];
         };
         ReplaceReviewRequest: {
-            productId: string;
-            rating: string;
-            text: string;
-            updatedAt?: string | null;
+            productId?: string;
+            rating?: string;
+            text?: string;
         };
         ReplaceReviewResponse: {
             id: string;
@@ -697,11 +1056,27 @@ export interface components {
             createdAt: string;
             updatedAt: string;
         };
+        ReplaceSupplierRequest: {
+            firstName?: string;
+            lastName?: string;
+            email?: string;
+            address: components["schemas"]["AddressRequest"];
+            phoneNumber: components["schemas"]["PhoneNumberRequest"];
+        };
+        ReplaceSupplierResponse: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            email: string;
+            address: components["schemas"]["AddressResponse"];
+            createdAt: string;
+            phoneNumber: components["schemas"]["PhoneNumberResponse"];
+        };
         UpdateProductPricingRequest: {
-            basePrice?: string | null;
-            discountPercentage?: string | null;
-            taxRate?: string | null;
-            fieldMask?: string[] | null;
+            basePrice?: string;
+            discountPercentage?: string;
+            taxRate?: string;
+            fieldMask?: string[];
         };
         UpdateProductPricingResponse: {
             id: string;
@@ -710,22 +1085,24 @@ export interface components {
             taxRate: string;
         };
         UpdateProductRequest: {
-            name?: string | null;
-            pricing?: components["schemas"]["ProductPricingRequest"];
-            category?: string | null;
-            dimensions?: components["schemas"]["DimensionsRequest"];
-            ageGroup?: string | null;
-            breedSize?: string | null;
-            ingredients?: string | null;
-            nutritionalInfo?: Record<string, unknown> | null;
-            storageInstructions?: string | null;
-            weightKg?: string | null;
-            isNatural?: boolean | null;
-            isHypoAllergenic?: boolean | null;
-            usageInstructions?: string | null;
-            isCrueltyFree?: boolean | null;
-            safetyWarnings?: string | null;
-            fieldMask?: string[] | null;
+            name?: string;
+            pricing: components["schemas"]["ProductPricingRequest"];
+            category?: string;
+            dimensions: components["schemas"]["DimensionsRequest"];
+            ageGroup?: string;
+            breedSize?: string;
+            ingredients?: string;
+            nutritionalInfo?: {
+                [key: string]: unknown;
+            };
+            storageInstructions?: string;
+            weightKg?: string;
+            isNatural?: boolean;
+            isHypoAllergenic?: boolean;
+            usageInstructions?: string;
+            isCrueltyFree?: boolean;
+            safetyWarnings?: string;
+            fieldMask?: string[];
         };
         UpdateProductResponse: {
             id: string;
@@ -735,12 +1112,10 @@ export interface components {
             dimensions: components["schemas"]["DimensionsResponse"];
         };
         UpdateReviewRequest: {
-            productId?: string | null;
-            rating?: string | null;
-            text?: string | null;
-            createdAt?: string | null;
-            updatedAt?: string | null;
-            fieldMask?: string[] | null;
+            productId?: string;
+            rating?: string;
+            text?: string;
+            fieldMask?: string[];
         };
         UpdateReviewResponse: {
             id: string;
@@ -749,6 +1124,22 @@ export interface components {
             text: string;
             createdAt: string;
             updatedAt: string;
+        };
+        UpdateSupplierRequest: {
+            firstName?: string;
+            lastName?: string;
+            email?: string;
+            address: components["schemas"]["AddressRequest"];
+            phoneNumber: components["schemas"]["PhoneNumberRequest"];
+            fieldMask?: string[];
+        };
+        UpdateSupplierResponse: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            email: string;
+            address: components["schemas"]["AddressResponse"];
+            phoneNumber: components["schemas"]["PhoneNumberResponse"];
         };
     };
     responses: never;
