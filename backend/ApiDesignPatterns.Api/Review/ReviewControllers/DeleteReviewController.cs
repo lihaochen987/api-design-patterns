@@ -2,6 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Review.ApplicationLayer;
+using backend.Review.ApplicationLayer.Queries.GetReview;
+using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -9,7 +11,9 @@ namespace backend.Review.ReviewControllers;
 
 [ApiController]
 [Route("review")]
-public class DeleteReviewController(IReviewApplicationService applicationService) : ControllerBase
+public class DeleteReviewController(
+    IQueryHandler<GetReviewQuery, DomainModels.Review> getReview,
+    IReviewApplicationService applicationService) : ControllerBase
 {
     [HttpDelete("{id:long}")]
     [SwaggerOperation(Summary = "Delete a review", Tags = ["Reviews"])]
@@ -18,7 +22,7 @@ public class DeleteReviewController(IReviewApplicationService applicationService
         [FromRoute] long id,
         [FromQuery] DeleteReviewRequest request)
     {
-        DomainModels.Review? review = await applicationService.GetReviewAsync(id);
+        DomainModels.Review? review = await getReview.Handle(new GetReviewQuery { Id = id });
         if (review == null)
         {
             return NotFound();

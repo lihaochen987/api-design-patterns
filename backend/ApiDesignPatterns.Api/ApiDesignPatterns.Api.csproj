@@ -298,6 +298,7 @@
 
   <ItemGroup>
     <Folder Include="Product\ApplicationLayer\" />
+    <Folder Include="Review\ApplicationLayer\Commands\" />
   </ItemGroup>
 
   <ItemGroup>

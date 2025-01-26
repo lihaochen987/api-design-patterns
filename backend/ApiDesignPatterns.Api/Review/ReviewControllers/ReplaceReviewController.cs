@@ -1,6 +1,8 @@
 using AutoMapper;
 using backend.Product.ProductControllers;
 using backend.Review.ApplicationLayer;
+using backend.Review.ApplicationLayer.Queries.GetReview;
+using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -9,6 +11,7 @@ namespace backend.Review.ReviewControllers;
 [ApiController]
 [Route("review")]
 public class ReplaceReviewController(
+    IQueryHandler<GetReviewQuery, DomainModels.Review> getReview,
     IReviewApplicationService applicationService,
     IMapper mapper)
     : ControllerBase
@@ -21,7 +24,7 @@ public class ReplaceReviewController(
         [FromRoute] long id,
         [FromBody] ReplaceReviewRequest request)
     {
-        DomainModels.Review? existingReview = await applicationService.GetReviewAsync(id);
+        DomainModels.Review? existingReview = await getReview.Handle(new GetReviewQuery { Id = id });
         if (existingReview == null)
         {
             return NotFound();

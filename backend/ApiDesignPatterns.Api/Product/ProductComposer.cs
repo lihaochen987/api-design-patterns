@@ -240,13 +240,13 @@ public class ProductComposer
         services.AddScoped<IProductViewRepository>(_ => CreateProductViewRepository());
         services.AddScoped<IProductPricingRepository>(_ => CreateProductPricingRepository());
 
-        // Command Services
+        // Command Handlers
         services.AddScoped<ICommandHandler<UpdateProductQuery>>(_ => CreateUpdateProductHandler());
         services.AddScoped<ICommandHandler<CreateProductQuery>>(_ => CreateCreateProductHandler());
         services.AddScoped<ICommandHandler<ReplaceProductQuery>>(_ => CreateReplaceProductHandler());
         services.AddScoped<ICommandHandler<DeleteProductQuery>>(_ => CreateDeleteProductHandler());
 
-        // Application Services
+        // Query Handlers
         services.AddScoped<IQueryHandler<GetProductQuery, DomainModels.Product>>(_ => CreateGetProductHandler());
         services.AddScoped<IQueryHandler<ListProductsQuery, (List<ProductView>, string?)>>(_ =>
             CreateListProductsHandler());

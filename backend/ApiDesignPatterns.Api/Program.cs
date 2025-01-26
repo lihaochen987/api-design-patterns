@@ -50,7 +50,12 @@ var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 });
 
 // Review Composition Root
-var reviewCompositionRoot = new ReviewComposer(builder.Configuration, sqlOperators, fieldMaskConverterFactory);
+var reviewCompositionRoot =
+    new ReviewComposer(
+        builder.Configuration,
+        sqlOperators,
+        fieldMaskConverterFactory,
+        loggerFactory);
 reviewCompositionRoot.ConfigureServices(builder.Services);
 
 // Product Composition Root

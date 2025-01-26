@@ -3,14 +3,15 @@
 
 using AutoMapper;
 using backend.Review.ApplicationLayer;
+using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Review.DomainModels;
-using backend.Review.InfrastructureLayer;
 using backend.Review.InfrastructureLayer.Database.Review;
 using backend.Review.InfrastructureLayer.Database.ReviewView;
 using backend.Review.ReviewControllers;
 using backend.Review.Services;
 using backend.Shared;
 using backend.Shared.FieldMask;
+using backend.Shared.QueryHandler;
 using backend.Shared.SqlFilter;
 using Npgsql;
 
@@ -24,11 +25,13 @@ public class ReviewComposer
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
+    private readonly ILoggerFactory _loggerFactory;
 
     public ReviewComposer(
         IConfiguration configuration,
         SqlOperators sqlOperators,
-        IFieldMaskConverterFactory fieldMaskConverterFactory)
+        IFieldMaskConverterFactory fieldMaskConverterFactory,
+        ILoggerFactory loggerFactory)
     {
         ReviewColumnMapper reviewColumnMapper = new();
         SqlFilterParser reviewSqlFilterParser = new(reviewColumnMapper, sqlOperators);
@@ -38,6 +41,7 @@ public class ReviewComposer
         _reviewSqlFilterBuilder = new ReviewSqlFilterBuilder(reviewSqlFilterParser);
         _reviewQueryService = new QueryService<ReviewView>();
         _fieldMaskConverterFactory = fieldMaskConverterFactory;
+        _loggerFactory = loggerFactory;
         _mapper = mapperConfig.CreateMapper();
         _configuration = configuration;
     }
@@ -75,7 +79,8 @@ public class ReviewComposer
     private DeleteReviewController CreateDeleteReviewController()
     {
         var applicationService = CreateReviewApplicationService();
-        return new DeleteReviewController(applicationService);
+        var queryHandler = CreateGetReviewHandler();
+        return new DeleteReviewController(queryHandler, applicationService);
     }
 
     private GetReviewController CreateGetReviewController()
@@ -97,13 +102,25 @@ public class ReviewComposer
     private ReplaceReviewController CreateReplaceReviewController()
     {
         var applicationService = CreateReviewApplicationService();
-        return new ReplaceReviewController(applicationService, _mapper);
+        var queryHandler = CreateGetReviewHandler();
+        return new ReplaceReviewController(queryHandler, applicationService, _mapper);
     }
 
     private UpdateReviewController CreateUpdateReviewController()
     {
         var applicationService = CreateReviewApplicationService();
-        return new UpdateReviewController(applicationService, _mapper);
+        var queryHandler = CreateGetReviewHandler();
+        return new UpdateReviewController(queryHandler, applicationService, _mapper);
+    }
+
+    private IQueryHandler<GetReviewQuery, DomainModels.Review> CreateGetReviewHandler()
+    {
+        var repository = CreateReviewRepository();
+        var queryHandler = new GetReviewHandler(repository);
+        var loggerQueryHandler = new LoggingQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>(
+            queryHandler,
+            _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>>());
+        return loggerQueryHandler;
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -118,6 +135,9 @@ public class ReviewComposer
         services.AddScoped<ListReviewsController>(_ => CreateListReviewsController());
         services.AddScoped<ReplaceReviewController>(_ => CreateReplaceReviewController());
         services.AddScoped<UpdateReviewController>(_ => CreateUpdateReviewController());
+
+        // Query Handlers
+        services.AddScoped<IQueryHandler<GetReviewQuery, DomainModels.Review>>(_ => CreateGetReviewHandler());
 
         services.AddSingleton(_reviewFieldMaskConfiguration);
     }
