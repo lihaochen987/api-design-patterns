@@ -20,7 +20,6 @@ public static class ReviewQueries
                                     """;
 
     public const string CreateReview = """
-
                                                INSERT INTO reviews (
                                                    product_id,
                                                    review_rating,
@@ -32,8 +31,8 @@ public static class ReviewQueries
                                                    @Rating,
                                                    @Text,
                                                    @CreatedAt,
-                                                   @UpdatedAt);
-
+                                                   @UpdatedAt)
+                                               RETURNING review_id;
                                        """;
 
     public const string DeleteReview = """

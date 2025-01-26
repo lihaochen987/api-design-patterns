@@ -13,11 +13,6 @@ public class ReviewApplicationService(
     ReviewFieldMaskConfiguration maskConfiguration)
     : IReviewApplicationService
 {
-    public async Task CreateReviewAsync(DomainModels.Review review)
-    {
-        await repository.CreateReviewAsync(review);
-    }
-
     public async Task DeleteReviewAsync(long id) => await repository.DeleteReviewAsync(id);
 
     public async Task ReplaceReviewAsync(DomainModels.Review review)

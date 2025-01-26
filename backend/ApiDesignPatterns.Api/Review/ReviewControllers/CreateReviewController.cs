@@ -2,7 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Review.ApplicationLayer;
+using backend.Review.ApplicationLayer.Commands.CreateReview;
+using backend.Shared.CommandHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -11,7 +12,7 @@ namespace backend.Review.ReviewControllers;
 [ApiController]
 [Route("review")]
 public class CreateReviewController(
-    IReviewApplicationService applicationService,
+    ICommandHandler<CreateReviewQuery> createReview,
     IMapper mapper)
     : ControllerBase
 {
@@ -22,7 +23,8 @@ public class CreateReviewController(
     public async Task<ActionResult<CreateReviewResponse>> CreateReview([FromBody] CreateReviewRequest request)
     {
         var review = mapper.Map<DomainModels.Review>(request);
-        await applicationService.CreateReviewAsync(review);
+        review.CreatedAt = DateTime.UtcNow;
+        await createReview.Handle(new CreateReviewQuery { Review = review });
 
         var response = mapper.Map<CreateReviewResponse>(review);
         return CreatedAtAction(
