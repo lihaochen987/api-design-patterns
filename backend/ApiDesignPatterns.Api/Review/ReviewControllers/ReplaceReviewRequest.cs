@@ -8,5 +8,4 @@ public record ReplaceReviewRequest
     public string? ProductId { get; init; }
     public string? Rating { get; init; }
     public string? Text { get; init; }
-    public string UpdatedAt { get; init; } = DateTimeOffset.UtcNow.ToString("o");
 }

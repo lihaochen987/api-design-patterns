@@ -7,6 +7,5 @@ namespace backend.Review.ApplicationLayer;
 
 public interface IReviewApplicationService
 {
-    Task ReplaceReviewAsync(DomainModels.Review review);
     Task UpdateReviewAsync(UpdateReviewRequest request, DomainModels.Review review);
 }

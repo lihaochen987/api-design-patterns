@@ -1,7 +1,8 @@
 using AutoMapper;
 using backend.Product.ProductControllers;
-using backend.Review.ApplicationLayer;
+using backend.Review.ApplicationLayer.Commands.ReplaceReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
+using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -12,7 +13,7 @@ namespace backend.Review.ReviewControllers;
 [Route("review")]
 public class ReplaceReviewController(
     IQueryHandler<GetReviewQuery, DomainModels.Review> getReview,
-    IReviewApplicationService applicationService,
+    ICommandHandler<ReplaceReviewQuery> replaceReview,
     IMapper mapper)
     : ControllerBase
 {
@@ -32,7 +33,7 @@ public class ReplaceReviewController(
 
         DomainModels.Review replacedReview = mapper.Map(request, existingReview);
 
-        await applicationService.ReplaceReviewAsync(replacedReview);
+        await replaceReview.Handle(new ReplaceReviewQuery { Review = replacedReview });
         var response = mapper.Map<ReplaceReviewResponse>(replacedReview);
         return Ok(response);
     }

@@ -12,11 +12,6 @@ public class ReviewApplicationService(
     ReviewFieldMaskConfiguration maskConfiguration)
     : IReviewApplicationService
 {
-    public async Task ReplaceReviewAsync(DomainModels.Review review)
-    {
-        await repository.UpdateReviewAsync(review);
-    }
-
     public async Task UpdateReviewAsync(UpdateReviewRequest request, DomainModels.Review review)
     {
         (long productId, decimal rating, string text) =
