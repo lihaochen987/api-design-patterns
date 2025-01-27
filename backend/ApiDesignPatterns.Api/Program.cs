@@ -1,7 +1,6 @@
 using System.Data;
 using System.Text.Json.Serialization;
 using backend.Product;
-using backend.Product.ProductControllers;
 using backend.Review;
 using backend.Shared;
 using backend.Shared.FieldMask;
@@ -75,6 +74,7 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.DefaultIgnoreCondition =
             JsonIgnoreCondition.WhenWritingNull;
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -83,15 +83,6 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
     c.UseOneOfForPolymorphism();
     c.SchemaFilter<RequireNonNullablePropertiesSchemaFilter>();
-    c.SelectSubTypesUsing(baseType =>
-    {
-        if (baseType == typeof(GetProductResponse))
-        {
-            return [typeof(GetPetFoodResponse), typeof(GetGroomingAndHygieneResponse)];
-        }
-
-        return [];
-    });
 });
 
 // Register Dapper stuff

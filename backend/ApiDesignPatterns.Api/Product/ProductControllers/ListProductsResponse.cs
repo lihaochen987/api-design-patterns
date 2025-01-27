@@ -1,7 +1,9 @@
+using Swashbuckle.AspNetCore.Annotations;
+
 namespace backend.Product.ProductControllers;
 
-public record ListProductsResponse
+public class ListProductsResponse
 {
-    public IEnumerable<object?> Results { get; init; } = [];
+    public IEnumerable<GetProductResponse> Results { get; init; } = [];
     public string? NextPageToken { get; init; }
 }

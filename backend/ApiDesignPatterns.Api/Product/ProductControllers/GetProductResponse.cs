@@ -1,11 +1,12 @@
+using System.Text.Json.Serialization;
 using backend.Product.DomainModels.ValueObjects;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Product.ProductControllers;
 
 [SwaggerDiscriminator("category")]
-[SwaggerSubType(typeof(GetPetFoodResponse))]
-[SwaggerSubType(typeof(GetGroomingAndHygieneResponse))]
+[JsonDerivedType(typeof(GetPetFoodResponse), "PetFood")]
+[JsonDerivedType(typeof(GetGroomingAndHygieneResponse), "GroomingAndHygiene")]
 public record GetProductResponse
 {
     public required string Id { get; init; }
