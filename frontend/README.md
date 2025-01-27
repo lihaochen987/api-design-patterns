@@ -36,6 +36,6 @@ This TurboRepo has some additional tools already setup for you:
 ## Generating types
 
 1. Install openapi-typescript
-2. Create a `.json` with the OpenApi schema inside of it
+2. Create a `schema.json` in the root with the OpenApi schema inside of it
 3. Run the command `npx openapi-typescript .\schema.json --output types.d.ts`
 4. Run the command `eslint --fix` since the generated file will have some linting errors
