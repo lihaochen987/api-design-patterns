@@ -38,6 +38,7 @@ var fieldMaskPropertyHandler = new PropertyHandler(nestedJObjectBuilder);
 IFieldMaskConverterFactory fieldMaskConverterFactory =
     new FieldMaskConverterFactory(fieldMaskExpander, fieldMaskPropertyHandler);
 builder.Services.AddSingleton(fieldMaskConverterFactory);
+var recursiveValidator = new RecursiveValidator();
 
 var fieldPathAdapter = new FieldPathAdapter();
 builder.Services.AddSingleton<IFieldPathAdapter, FieldPathAdapter>();
@@ -64,7 +65,8 @@ var productCompositionRoot =
         fieldPathAdapter,
         fieldMaskConverterFactory,
         loggerFactory,
-        sqlOperators);
+        sqlOperators,
+        recursiveValidator);
 productCompositionRoot.ConfigureServices(builder.Services);
 
 builder.Services.AddSupplierDependencies();

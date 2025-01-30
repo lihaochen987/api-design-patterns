@@ -44,13 +44,15 @@ public class ProductComposer
     private readonly ProductPricingFieldMaskConfiguration _productPricingFieldMaskConfiguration;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ProductSqlFilterBuilder _productSqlFilterBuilder;
+    private readonly RecursiveValidator _recursiveValidator;
 
     public ProductComposer(
         IConfiguration configuration,
         IFieldPathAdapter fieldPathAdapter,
         IFieldMaskConverterFactory fieldMaskConverterFactory,
         ILoggerFactory loggerFactory,
-        SqlOperators sqlOperators)
+        SqlOperators sqlOperators,
+        RecursiveValidator recursiveValidator)
     {
         _getProductPricingExtensions = new GetProductPricingExtensions();
         var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
@@ -70,6 +72,7 @@ public class ProductComposer
         _productPricingFieldPaths = new ProductPricingFieldPaths();
         _productPricingFieldMaskConfiguration = new ProductPricingFieldMaskConfiguration();
         _loggerFactory = loggerFactory;
+        _recursiveValidator = recursiveValidator;
         ProductColumnMapper productColumnMapper = new();
         SqlFilterParser productSqlFilterParser = new(productColumnMapper, sqlOperators);
         _productSqlFilterBuilder = new ProductSqlFilterBuilder(productSqlFilterParser);
@@ -148,7 +151,10 @@ public class ProductComposer
         var loggerQueryHandler = new LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(
             queryHandler,
             _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>>());
-        return loggerQueryHandler;
+        var validationQueryHandler =
+            new ValidationQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(loggerQueryHandler,
+                _recursiveValidator);
+        return validationQueryHandler;
     }
 
     private IQueryHandler<GetProductQuery, DomainModels.Product> CreateGetProductHandler()
@@ -157,7 +163,10 @@ public class ProductComposer
         var queryHandler = new GetProductHandler(repository);
         var loggerQueryHandler = new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(queryHandler,
             _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
-        return loggerQueryHandler;
+        var validationQueryHandler =
+            new ValidationQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(loggerQueryHandler,
+                _recursiveValidator);
+        return validationQueryHandler;
     }
 
     private IQueryHandler<GetProductViewQuery, ProductView> CreateGetProductViewHandler()
@@ -166,7 +175,10 @@ public class ProductComposer
         var queryHandler = new GetProductViewHandler(repository);
         var loggerQueryHandler = new LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>(queryHandler,
             _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>>());
-        return loggerQueryHandler;
+        var validationQueryHandler =
+            new ValidationQueryHandlerDecorator<GetProductViewQuery, ProductView>(loggerQueryHandler,
+                _recursiveValidator);
+        return validationQueryHandler;
     }
 
     private IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> CreateListProductsHandler()
@@ -177,7 +189,10 @@ public class ProductComposer
             queryHandler,
             _loggerFactory
                 .CreateLogger<LoggingQueryHandlerDecorator<ListProductsQuery, (List<ProductView>, string?)>>());
-        return loggerQueryHandler;
+        var validationQueryHandler =
+            new ValidationQueryHandlerDecorator<ListProductsQuery, (List<ProductView>, string?)>(loggerQueryHandler,
+                _recursiveValidator);
+        return validationQueryHandler;
     }
 
     private GetProductController CreateGetProductController()
