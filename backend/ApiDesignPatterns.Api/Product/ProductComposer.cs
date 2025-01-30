@@ -6,6 +6,7 @@ using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
+using backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.ApplicationLayer.Queries.GetProductView;
@@ -37,7 +38,6 @@ public class ProductComposer
     private readonly QueryService<ProductView> _productQueryService;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly IMapper _mapper;
-    private readonly ProductPricingFieldMaskConfiguration _productPricingFieldMaskConfiguration;
     private readonly ILoggerFactory _loggerFactory;
     private readonly SqlFilterBuilder _productSqlFilterBuilder;
     private readonly RecursiveValidator _recursiveValidator;
@@ -57,7 +57,6 @@ public class ProductComposer
         ProductFieldPaths productFieldPaths = new();
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(productFieldPaths.ValidPaths);
         _mapper = mapperConfig.CreateMapper();
-        _productPricingFieldMaskConfiguration = new ProductPricingFieldMaskConfiguration();
         _loggerFactory = loggerFactory;
         _recursiveValidator = recursiveValidator;
         ProductColumnMapper productColumnMapper = new();
@@ -127,6 +126,18 @@ public class ProductComposer
         var auditCommandService = new AuditCommandHandlerDecorator<DeleteProductQuery>(commandService, dbConnection);
         var loggerCommandHandler = new LoggingCommandHandlerDecorator<DeleteProductQuery>(auditCommandService,
             _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteProductQuery>>());
+        return loggerCommandHandler;
+    }
+
+    private ICommandHandler<UpdateProductPricingQuery> CreateUpdateProductPricingHandler()
+    {
+        var repository = CreateProductRepository();
+        var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        var commandService = new UpdateProductPricingHandler(repository);
+        var auditCommandService =
+            new AuditCommandHandlerDecorator<UpdateProductPricingQuery>(commandService, dbConnection);
+        var loggerCommandHandler = new LoggingCommandHandlerDecorator<UpdateProductPricingQuery>(auditCommandService,
+            _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductPricingQuery>>());
         return loggerCommandHandler;
     }
 
@@ -231,9 +242,9 @@ public class ProductComposer
 
     private UpdateProductPricingController CreateUpdateProductPricingController()
     {
-        var repository = CreateProductRepository();
-        return new UpdateProductPricingController(repository, _productPricingFieldMaskConfiguration,
-            _updateProductPricingExtensions);
+        var queryHandler = CreateGetProductHandler();
+        var commandHandler = CreateUpdateProductPricingHandler();
+        return new UpdateProductPricingController(queryHandler, commandHandler, _updateProductPricingExtensions);
     }
 
     public void ConfigureServices(IServiceCollection services)

@@ -1,7 +1,9 @@
 using AutoFixture;
+using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using Shouldly;
 using Xunit;
 
@@ -14,7 +16,7 @@ public class UpdateProductPricingControllerTests : UpdateProductPricingControlle
     {
         long id = Fixture.Create<long>();
         UpdateProductPricingRequest? request = Fixture.Create<UpdateProductPricingRequest>();
-        var sut = UpdateProductPricingController();
+        UpdateProductPricingController sut = UpdateProductPricingController();
 
         ActionResult<UpdateProductPricingResponse> actionResult = await sut.UpdateProductPricing(id, request);
 
@@ -25,8 +27,6 @@ public class UpdateProductPricingControllerTests : UpdateProductPricingControlle
     public async Task UpdateProductPricing_UpdatesPricing_WhenProductExists()
     {
         DomainModels.Product product = new ProductTestDataBuilder().Build();
-        ProductRepository.Add(product);
-        ProductRepository.IsDirty = false;
         UpdateProductPricingRequest request = new()
         {
             BasePrice = "99.99",
@@ -34,6 +34,10 @@ public class UpdateProductPricingControllerTests : UpdateProductPricingControlle
             TaxRate = "5",
             FieldMask = ["baseprice", "discountpercentage", "taxrate"]
         };
+        Mock
+            .Get(MockGetProductHandler)
+            .Setup(svc => svc.Handle(It.Is<GetProductQuery>(q => q.Id == product.Id)))
+            .ReturnsAsync(product);
         var sut = UpdateProductPricingController();
 
         ActionResult<UpdateProductPricingResponse> actionResult = await sut.UpdateProductPricing(product.Id, request);
@@ -44,6 +48,5 @@ public class UpdateProductPricingControllerTests : UpdateProductPricingControlle
         contentResult.ShouldNotBeNull();
         UpdateProductPricingResponse? response = contentResult.Value as UpdateProductPricingResponse;
         response.ShouldBeEquivalentTo(Extensions.ToUpdateProductPricingResponse(product.Pricing, product.Id));
-        ProductRepository.IsDirty.ShouldBeEquivalentTo(true);
     }
 }
