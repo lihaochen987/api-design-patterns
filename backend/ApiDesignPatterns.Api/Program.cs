@@ -3,11 +3,11 @@ using System.Text.Json.Serialization;
 using backend.Product;
 using backend.Review;
 using backend.Shared;
-using backend.Shared.SqlFilter;
 using backend.Supplier;
 using DbUp;
 using DbUp.Engine;
 using Npgsql;
+using SqlFilterBuilder = backend.Shared.SqlFilterBuilder;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +22,7 @@ builder.Services.AddCors(options =>
 
 // Inject shared classes
 builder.Services.AddSingleton<TypeParser>();
+builder.Services.AddSingleton<RequireNonNullablePropertiesSchemaFilter>();
 builder.Services.AddSingleton<SqlFilterBuilder>(provider =>
     new SqlFilterBuilder(
         provider.GetRequiredService<IColumnMapper>()));

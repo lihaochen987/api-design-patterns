@@ -16,9 +16,9 @@ using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
-using backend.Shared.SqlFilter;
 using backend.Supplier.Services;
 using Npgsql;
+using SqlFilterBuilder = backend.Shared.SqlFilterBuilder;
 
 namespace backend.Review;
 

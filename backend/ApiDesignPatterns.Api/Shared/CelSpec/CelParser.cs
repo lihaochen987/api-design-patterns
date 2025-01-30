@@ -5,14 +5,23 @@ using System.Text.RegularExpressions;
 namespace backend.Shared.CelSpec;
 
 /// <summary>
-///     CelParser takes in a filter string and translates it into a form that can be used to filter data.
+/// CelParser takes in a filter string and translates it into a form that can be used to filter data.
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">The type of object being filtered</typeparam>
 public partial class CelParser<T>(TypeParser typeParser)
 {
     private readonly ParameterExpression _parameter = Expression.Parameter(typeof(T), "x");
 
-    public Expression<Func<T, bool>> ParseFilter(List<CelToken> filterTokens)
+    /// <summary>
+    /// Builds a strongly-typed filter expression from a list of CEL tokens.
+    /// </summary>
+    /// <param name="filterTokens">The tokenized filter expression</param>
+    /// <returns>A compiled lambda expression that can be used to filter objects of type T</returns>
+    /// <example>
+    /// Given tokens representing "Price > 50 && Category == "Food"", creates Expression{Func{T, bool}}
+    /// that returns true only for objects matching these criteria
+    /// </example>
+    public Expression<Func<T, bool>> BuildFilterExpression(List<CelToken> filterTokens)
     {
         Expression? expression = null;
 
@@ -22,11 +31,11 @@ public partial class CelParser<T>(TypeParser typeParser)
 
             if (currentToken.Type == CelTokenType.Field)
             {
-                expression = BuildFieldExpression(filterTokens, ref i, expression, _parameter);
+                expression = CreateComparisonExpression(filterTokens, ref i, expression, _parameter);
             }
             else if (currentToken.Type == CelTokenType.Logical && expression != null)
             {
-                expression = BuildLogicalExpression(filterTokens, ref i, expression, currentToken.Value);
+                expression = CombineWithLogicalOperator(filterTokens, ref i, expression, currentToken.Value);
                 break;
             }
         }
@@ -34,31 +43,53 @@ public partial class CelParser<T>(TypeParser typeParser)
         return Expression.Lambda<Func<T, bool>>(expression ?? Expression.Constant(true), _parameter);
     }
 
-    private BinaryExpression BuildFieldExpression(
+    /// <summary>
+    /// Creates a binary comparison expression between a property and a value.
+    /// </summary>
+    /// <param name="filterTokens">The complete list of filter tokens</param>
+    /// <param name="index">Current position in the token list, updated as tokens are consumed</param>
+    /// <param name="existingExpression">Optional existing expression to combine with the new comparison</param>
+    /// <param name="parameter">The parameter expression representing the object being filtered</param>
+    /// <returns>A binary expression representing the comparison</returns>
+    /// <example>
+    /// For tokens representing "Price > 50", creates Expression equivalent to x => x.Price > 50
+    /// </example>
+    private BinaryExpression CreateComparisonExpression(
         List<CelToken> filterTokens,
         ref int index,
         Expression? existingExpression,
         ParameterExpression parameter)
     {
-        MemberExpression fieldExpression = GetFieldExpression(filterTokens[index], parameter);
+        MemberExpression fieldExpression = CreatePropertyAccessExpression(filterTokens[index], parameter);
         CelToken operatorToken = filterTokens[++index];
         CelToken valueToken = filterTokens[++index];
-        ConstantExpression comparisonValue = ConvertTokenToExpression(valueToken, fieldExpression.Type);
+        ConstantExpression comparisonValue = CreateConstantExpression(valueToken, fieldExpression.Type);
 
         BinaryExpression comparisonExpression =
-            BuildComparisonExpression(fieldExpression, operatorToken.Value, comparisonValue);
+            CreateComparisonOperator(fieldExpression, operatorToken.Value, comparisonValue);
         return existingExpression == null
             ? comparisonExpression
             : Expression.AndAlso(existingExpression, comparisonExpression);
     }
 
-    private BinaryExpression BuildLogicalExpression(
+    /// <summary>
+    /// Combines two expressions using a logical operator (AND/OR).
+    /// </summary>
+    /// <param name="filterTokens">The complete list of filter tokens</param>
+    /// <param name="index">Current position in the token list</param>
+    /// <param name="existingExpression">The left-hand expression to combine</param>
+    /// <param name="logicalOperator">The logical operator ("&amp;&amp;" or "||")</param>
+    /// <returns>A binary expression representing the logical combination</returns>
+    /// <example>
+    /// Given "x > 5" and "y &lt; 10", with "&amp;&amp;" operator, creates "x > 5 AND y &lt; 10"
+    /// </example>
+    private BinaryExpression CombineWithLogicalOperator(
         List<CelToken> filterTokens,
         ref int index,
         Expression existingExpression,
         string logicalOperator)
     {
-        Expression<Func<T, bool>> nextExpression = ParseFilter(filterTokens.Skip(index + 1).ToList());
+        Expression<Func<T, bool>> nextExpression = BuildFilterExpression(filterTokens.Skip(index + 1).ToList());
         return logicalOperator == "&&"
             ? Expression.AndAlso(existingExpression, nextExpression.Body)
             : Expression.OrElse(existingExpression, nextExpression.Body);
@@ -98,14 +129,14 @@ public partial class CelParser<T>(TypeParser typeParser)
         {
             string part = match.Value;
 
-            if (TryGetOperatorToken(part, operatorsDict, out CelToken? operatorToken))
+            if (TryParseOperatorToken(part, operatorsDict, out CelToken? operatorToken))
             {
                 if (operatorToken != null)
                 {
                     tokens.Add(operatorToken);
                 }
             }
-            else if (TryGetValueToken(part, out CelToken? valueToken))
+            else if (TryParseValueToken(part, out CelToken? valueToken))
             {
                 if (valueToken != null)
                 {
@@ -121,7 +152,14 @@ public partial class CelParser<T>(TypeParser typeParser)
         return tokens;
     }
 
-    private static bool TryGetOperatorToken(
+    /// <summary>
+    /// Attempts to parse a string as an operator token.
+    /// </summary>
+    /// <param name="part">The string to parse</param>
+    /// <param name="operatorsDict">Dictionary of valid operators and their types</param>
+    /// <param name="token">The resulting token if successful</param>
+    /// <returns>True if the string was successfully parsed as an operator, false otherwise</returns>
+    private static bool TryParseOperatorToken(
         string part,
         Dictionary<string, CelTokenType> operatorsDict,
         out CelToken? token)
@@ -136,7 +174,13 @@ public partial class CelParser<T>(TypeParser typeParser)
         return false;
     }
 
-    private static bool TryGetValueToken(
+    /// <summary>
+    /// Attempts to parse a string as a value token (string, boolean, or number).
+    /// </summary>
+    /// <param name="part">The string to parse</param>
+    /// <param name="token">The resulting token if successful</param>
+    /// <returns>True if the string was successfully parsed as a value, false otherwise</returns>
+    private static bool TryParseValueToken(
         string part,
         out CelToken? token)
     {
@@ -162,7 +206,17 @@ public partial class CelParser<T>(TypeParser typeParser)
         return false;
     }
 
-    private static MemberExpression GetFieldExpression(
+    /// <summary>
+    /// Creates a member access expression for accessing a property path on the filtered object.
+    /// </summary>
+    /// <param name="fieldCelToken">Token containing the property path</param>
+    /// <param name="lambdaParameter">Parameter expression representing the filtered object</param>
+    /// <returns>A member expression for accessing the specified property</returns>
+    /// <exception cref="ArgumentException">Thrown when a property in the path doesn't exist</exception>
+    /// <example>
+    /// For token "Product.Price", creates expression equivalent to x => x.Product.Price
+    /// </example>
+    private static MemberExpression CreatePropertyAccessExpression(
         CelToken fieldCelToken,
         ParameterExpression lambdaParameter)
     {
@@ -188,19 +242,17 @@ public partial class CelParser<T>(TypeParser typeParser)
     }
 
     /// <summary>
-    ///     Creates a comparison based on the operator
+    /// Creates a binary comparison operator expression based on the specified operator.
     /// </summary>
-    /// <param name="fieldExpression">
-    /// </param>
-    /// <param name="comparisonOperator">
-    /// </param>
-    /// <param name="comparisonValueExpression">
-    /// </param>
-    /// <returns>
-    /// </returns>
-    /// <exception cref="NotSupportedException">
-    /// </exception>
-    private static BinaryExpression BuildComparisonExpression(
+    /// <param name="fieldExpression">The left-hand property expression</param>
+    /// <param name="comparisonOperator">The string representation of the operator ("==", "!=", etc.)</param>
+    /// <param name="comparisonValueExpression">The right-hand value expression</param>
+    /// <returns>A binary expression representing the comparison</returns>
+    /// <exception cref="NotSupportedException">Thrown when an unsupported operator is encountered</exception>
+    /// <example>
+    /// Given field "Price" and operator ">", creates expression equivalent to x.Price > [value]
+    /// </example>
+    private static BinaryExpression CreateComparisonOperator(
         Expression fieldExpression,
         string comparisonOperator,
         Expression comparisonValueExpression) =>
@@ -216,13 +268,16 @@ public partial class CelParser<T>(TypeParser typeParser)
         };
 
     /// <summary>
-    ///     Converts the token to the right format
+    /// Creates a typed constant expression from a token value.
     /// </summary>
-    /// <param name="valueCelToken"></param>
-    /// <param name="destinationType"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
-    private ConstantExpression ConvertTokenToExpression(
+    /// <param name="valueCelToken">The token containing the value to convert</param>
+    /// <param name="destinationType">The target type for the conversion</param>
+    /// <returns>A constant expression of the specified type</returns>
+    /// <exception cref="ArgumentException">Thrown when the value cannot be converted to the target type</exception>
+    /// <example>
+    /// Converting "123" to an int constant expression, or "true" to a bool constant expression
+    /// </example>
+    private ConstantExpression CreateConstantExpression(
         CelToken valueCelToken,
         Type destinationType)
     {

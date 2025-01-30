@@ -12,7 +12,7 @@ public class QueryService<TEntity> where TEntity : Identifier
     {
         CelParser<TEntity> parser = new(new TypeParser());
         List<CelToken> tokens = parser.Tokenize(filter);
-        return parser.ParseFilter(tokens);
+        return parser.BuildFilterExpression(tokens);
     }
 
     public List<TEntity> Paginate(

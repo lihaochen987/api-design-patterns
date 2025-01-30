@@ -2,10 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Shared;
-using backend.Shared.SqlFilter;
 using backend.Supplier.ApplicationLayer;
 using backend.Supplier.DomainModels;
-using backend.Supplier.InfrastructureLayer;
 using backend.Supplier.InfrastructureLayer.Database.Supplier;
 using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 using backend.Supplier.Services;

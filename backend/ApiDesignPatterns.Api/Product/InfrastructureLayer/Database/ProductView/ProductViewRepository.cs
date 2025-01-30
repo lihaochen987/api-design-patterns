@@ -2,8 +2,8 @@ using System.Data;
 using System.Text;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Shared;
-using backend.Shared.SqlFilter;
 using Dapper;
+using SqlFilterBuilder = backend.Shared.SqlFilterBuilder;
 
 namespace backend.Product.InfrastructureLayer.Database.ProductView;
 

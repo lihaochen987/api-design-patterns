@@ -8,7 +8,6 @@ public class RecursiveValidator
     public List<ValidationResult> Validate(object obj)
     {
         var validationResults = new List<ValidationResult>();
-        var validationContext = new ValidationContext(obj);
 
         ValidateObject(obj, string.Empty, validationResults);
         return validationResults;

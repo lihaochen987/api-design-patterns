@@ -4,8 +4,8 @@
 using System.Data;
 using System.Text;
 using backend.Shared;
-using backend.Shared.SqlFilter;
 using Dapper;
+using SqlFilterBuilder = backend.Shared.SqlFilterBuilder;
 
 namespace backend.Review.InfrastructureLayer.Database.ReviewView;
 

@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace backend.Shared.SqlFilter;
+namespace backend.Shared;
 
 /// <summary>
 /// SqlFilterBuilder parses a filter string and generates SQL WHERE clauses.
