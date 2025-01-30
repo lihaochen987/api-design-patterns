@@ -84,7 +84,7 @@ public class UpdateProductPricingHandler(IProductRepository repository) : IComma
     /// var result = GetUpdatedProductPricingValues(request, currentPricing);
     /// </code>
     /// </example>
-    private (
+    private static (
         decimal basePrice,
         decimal discountPercentage,
         decimal taxRate)

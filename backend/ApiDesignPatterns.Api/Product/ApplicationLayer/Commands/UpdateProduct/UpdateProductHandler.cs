@@ -86,7 +86,7 @@ public class UpdateProductHandler(
     /// <remarks>
     /// Updates name, pricing, category, and dimensions if specified in the field mask.
     /// </remarks>
-    private void UpdateBaseProduct(
+    private static void UpdateBaseProduct(
         UpdateProductRequest request,
         DomainModels.Product product)
     {
@@ -108,7 +108,7 @@ public class UpdateProductHandler(
     /// Updates age group, breed size, ingredients, nutritional info, storage instructions, and weight
     /// if specified in the field mask.
     /// </remarks>
-    private void UpdatePetFood(
+    private static void UpdatePetFood(
         UpdateProductRequest request,
         PetFood petFood)
     {
@@ -133,7 +133,7 @@ public class UpdateProductHandler(
     /// Updates natural status, hypoallergenic status, usage instructions, cruelty-free status,
     /// and safety warnings if specified in the field mask.
     /// </remarks>
-    private void UpdateGroomingAndHygiene(
+    private static void UpdateGroomingAndHygiene(
         UpdateProductRequest request,
         GroomingAndHygiene groomingAndHygiene)
     {
@@ -188,7 +188,7 @@ public class UpdateProductHandler(
     /// }
     /// </code>
     /// </example>
-    private (string name, Pricing pricing, Category category, Dimensions dimensions)
+    private static (string name, Pricing pricing, Category category, Dimensions dimensions)
         GetUpdatedProductValues(
             UpdateProductRequest request,
             DomainModels.Product baseProduct)
@@ -231,7 +231,7 @@ public class UpdateProductHandler(
     /// );
     /// </code>
     /// </example>
-    private Pricing
+    private static Pricing
         GetUpdatedProductPricingValues(
             UpdateProductRequest request,
             Pricing product)
@@ -261,7 +261,7 @@ public class UpdateProductHandler(
     /// <param name="request">The update request containing new values.</param>
     /// <param name="currentDimensions">The current dimensions state.</param>
     /// <returns>A new Dimensions object with updated values.</returns>
-    private Dimensions GetUpdatedDimensionValues(
+    private static Dimensions GetUpdatedDimensionValues(
         UpdateProductRequest request,
         Dimensions currentDimensions)
     {
@@ -289,7 +289,7 @@ public class UpdateProductHandler(
     /// <param name="request">The update request containing new values.</param>
     /// <param name="groomingAndHygiene">The current grooming and hygiene product state.</param>
     /// <returns>A tuple containing updated grooming and hygiene specific values.</returns>
-    private (
+    private static (
         bool isNatural,
         bool isHypoAllergenic,
         string usageInstructions,
@@ -368,7 +368,7 @@ public class UpdateProductHandler(
     /// }
     /// </code>
     /// </example>
-    private (
+    private static (
         AgeGroup ageGroup,
         BreedSize breedSize,
         string ingredients,

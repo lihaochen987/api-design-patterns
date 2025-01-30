@@ -49,25 +49,25 @@ public class ReviewComposer
         _configuration = configuration;
     }
 
-    private IReviewRepository CreateReviewRepository()
+    private ReviewRepository CreateReviewRepository()
     {
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         return new ReviewRepository(dbConnection);
     }
 
-    private IReviewViewRepository CreateReviewViewRepository()
+    private ReviewViewRepository CreateReviewViewRepository()
     {
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         return new ReviewViewRepository(dbConnection, _reviewSqlFilterBuilder, _reviewQueryService);
     }
 
-    private IReviewApplicationService CreateReviewApplicationService()
+    private ReviewApplicationService CreateReviewApplicationService()
     {
         var repository = CreateReviewRepository();
         return new ReviewApplicationService(repository, _reviewFieldMaskConfiguration);
     }
 
-    private IReviewViewApplicationService CreateReviewViewApplicationService()
+    private ReviewViewApplicationService CreateReviewViewApplicationService()
     {
         var repository = CreateReviewViewRepository();
         return new ReviewViewApplicationService(repository);

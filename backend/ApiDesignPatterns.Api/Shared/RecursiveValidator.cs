@@ -119,7 +119,7 @@ public class RecursiveValidator
     /// - Complex object property validation with nested paths
     /// - Null checking and primitive type detection
     /// </remarks>
-    private void ValidateObject(object? obj, string propertyPath, List<ValidationResult> validationResults)
+    private static void ValidateObject(object? obj, string propertyPath, List<ValidationResult> validationResults)
     {
         if (obj == null) return;
 
@@ -192,7 +192,7 @@ public class RecursiveValidator
     /// - Guid
     /// - Enums
     /// </remarks>
-    private bool IsPrimitive(Type type)
+    private static bool IsPrimitive(Type type)
     {
         return type.IsPrimitive ||
                type == typeof(string) ||

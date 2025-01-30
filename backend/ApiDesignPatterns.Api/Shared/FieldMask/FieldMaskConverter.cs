@@ -110,7 +110,7 @@ public class FieldMaskConverter(
     /// If the property is in the field mask, it's added directly.
     /// If it's a complex type, it's processed recursively.
     /// </remarks>
-    private void AddPropertyToJObject(
+    private static void AddPropertyToJObject(
         JObject jObject,
         PropertyInfo property,
         object value,
@@ -145,7 +145,7 @@ public class FieldMaskConverter(
     /// <param name="serializer">The JSON serializer.</param>
     /// <param name="expandedFieldMask">The expanded field mask paths.</param>
     /// <returns>A JObject containing the nested property's serialized values.</returns>
-    private JObject Build(
+    private static JObject Build(
         PropertyInfo property,
         object instance,
         JsonSerializer serializer,

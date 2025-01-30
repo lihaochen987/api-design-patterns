@@ -92,7 +92,7 @@ public partial class SqlFilterBuilder(IColumnMapper columnMapper)
     /// // Output: ["Price", "&lt;", "100", "||", "Category", "==", "\"Books\""]
     /// </code>
     /// </example>
-    private List<string> Tokenize(string filter)
+    private static List<string> Tokenize(string filter)
     {
         var regex = QuotedStringOrWordRegex();
         var matches = regex.Matches(filter);
