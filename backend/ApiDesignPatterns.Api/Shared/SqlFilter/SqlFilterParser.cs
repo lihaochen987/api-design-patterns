@@ -9,8 +9,7 @@ namespace backend.Shared.SqlFilter;
 /// SqlFilterParser is responsible for parsing filter strings into SQL tokens and clauses.
 /// </summary>
 public partial class SqlFilterParser(
-    IColumnMapper columnMapper,
-    SqlOperators operators)
+    IColumnMapper columnMapper)
 {
     /// <summary>
     /// Tokenizes the filter string into parts (fields, operators, and values).
@@ -36,7 +35,7 @@ public partial class SqlFilterParser(
 
         foreach (string token in tokens)
         {
-            if (operators.ValidOperators.TryGetValue(token, out string? sqlOperator))
+            if (_validOperators.TryGetValue(token, out string? sqlOperator))
             {
                 sql.Add(sqlOperator);
             }
@@ -60,6 +59,19 @@ public partial class SqlFilterParser(
 
         return string.Join(" ", sql);
     }
+
+    // Dictionary to map logical and comparison operators to SQL syntax
+    private readonly Dictionary<string, string> _validOperators = new()
+    {
+        { "==", "=" },
+        { "!=", "<>" },
+        { "<", "<" },
+        { ">", ">" },
+        { "<=", "<=" },
+        { ">=", ">=" },
+        { "&&", "AND" },
+        { "||", "OR" }
+    };
 
     [GeneratedRegex("\"[^\"]+\"|\\S+")]
     private static partial Regex QuotedStringOrWordRegex();

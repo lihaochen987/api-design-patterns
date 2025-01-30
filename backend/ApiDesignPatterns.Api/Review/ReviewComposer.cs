@@ -33,12 +33,11 @@ public class ReviewComposer
 
     public ReviewComposer(
         IConfiguration configuration,
-        SqlOperators sqlOperators,
         IFieldMaskConverterFactory fieldMaskConverterFactory,
         ILoggerFactory loggerFactory)
     {
         ReviewColumnMapper reviewColumnMapper = new();
-        SqlFilterParser reviewSqlFilterParser = new(reviewColumnMapper, sqlOperators);
+        SqlFilterParser reviewSqlFilterParser = new(reviewColumnMapper);
         var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ReviewMappingProfile>(); });
 
         _reviewFieldMaskConfiguration = new ReviewFieldMaskConfiguration();

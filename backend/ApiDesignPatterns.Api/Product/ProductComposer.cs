@@ -51,7 +51,6 @@ public class ProductComposer
         IFieldPathAdapter fieldPathAdapter,
         IFieldMaskConverterFactory fieldMaskConverterFactory,
         ILoggerFactory loggerFactory,
-        SqlOperators sqlOperators,
         RecursiveValidator recursiveValidator)
     {
         _getProductPricingExtensions = new GetProductPricingExtensions();
@@ -74,7 +73,7 @@ public class ProductComposer
         _loggerFactory = loggerFactory;
         _recursiveValidator = recursiveValidator;
         ProductColumnMapper productColumnMapper = new();
-        SqlFilterParser productSqlFilterParser = new(productColumnMapper, sqlOperators);
+        SqlFilterParser productSqlFilterParser = new(productColumnMapper);
         _productSqlFilterBuilder = new ProductSqlFilterBuilder(productSqlFilterParser);
     }
 

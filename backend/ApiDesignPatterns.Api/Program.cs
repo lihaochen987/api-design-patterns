@@ -24,14 +24,11 @@ builder.Services.AddCors(options =>
 
 // Inject shared classes
 builder.Services.AddSingleton<TypeParser>();
-builder.Services.AddSingleton<SqlOperators>();
 builder.Services.AddSingleton<SqlFilterParser>(provider =>
     new SqlFilterParser(
-        provider.GetRequiredService<IColumnMapper>(),
-        provider.GetRequiredService<SqlOperators>()));
+        provider.GetRequiredService<IColumnMapper>()));
 
 // Todo: Refactor this out once 1. we convert the Product resource to use Dapper
-var sqlOperators = new SqlOperators();
 var fieldMaskExpander = new FieldMaskExpander();
 var nestedJObjectBuilder = new NestedJObjectBuilder();
 var fieldMaskPropertyHandler = new PropertyHandler(nestedJObjectBuilder);
@@ -53,7 +50,6 @@ var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 var reviewCompositionRoot =
     new ReviewComposer(
         builder.Configuration,
-        sqlOperators,
         fieldMaskConverterFactory,
         loggerFactory);
 reviewCompositionRoot.ConfigureServices(builder.Services);
@@ -65,7 +61,6 @@ var productCompositionRoot =
         fieldPathAdapter,
         fieldMaskConverterFactory,
         loggerFactory,
-        sqlOperators,
         recursiveValidator);
 productCompositionRoot.ConfigureServices(builder.Services);
 
