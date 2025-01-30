@@ -8,11 +8,11 @@ public class Product
 {
     public long Id { get; set; }
 
-    [MaxLength(100)] public required string Name { get; set; }
+    [Required] [MaxLength(100)] public required string Name { get; set; }
 
-    public Category Category { get; set; }
+    [Required] public Category Category { get; set; }
 
-    public required Pricing Pricing { get; set; }
+    [Required] public required Pricing Pricing { get; set; }
 
-    public required Dimensions Dimensions { get; set; }
+    [Required] public required Dimensions Dimensions { get; set; }
 }
