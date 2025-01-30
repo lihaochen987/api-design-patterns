@@ -18,21 +18,33 @@ namespace backend.Product.ApplicationLayer.Commands.UpdateProduct;
 /// maintaining existing values for unspecified fields.
 /// </remarks>
 /// <example>
-/// Here's how to use the UpdateProductHandler to update a pet food product:
+/// Input:
 /// <code>
-/// var handler = new UpdateProductHandler(productRepository);
-/// var command = new UpdateProductQuery
+/// // Existing product state:
 /// {
-///     Request = new UpdateProductRequest
-///     {
-///         Name = "Premium Dog Food",
-///         FieldMask = new[] { "name", "weightkg", "ingredients" },
-///         WeightKg = "5.5",
-///         Ingredients = "Chicken, Rice, Vegetables"
-///     },
-///     Product = existingPetFood
-/// };
-/// await handler.Handle(command);
+///   "id": 1,
+///   "name": "Basic Dog Food",
+///   "weightKg": 2.5,
+///   "ingredients": "Chicken, Wheat"
+/// }
+///
+/// // Update request:
+/// {
+///   "name": "Premium Dog Food",
+///   "fieldMask": ["name", "weightKg", "ingredients"],
+///   "weightKg": "5.5",
+///   "ingredients": "Chicken, Rice, Vegetables"
+/// }
+/// </code>
+///
+/// Output:
+/// <code>
+/// {
+///   "id": 1,
+///   "name": "Premium Dog Food",
+///   "weightKg": 5.5,
+///   "ingredients": "Chicken, Rice, Vegetables"
+/// }
 /// </code>
 /// </example>
 public class UpdateProductHandler(
@@ -139,20 +151,41 @@ public class UpdateProductHandler(
     /// <summary>
     /// Retrieves updated values for base product properties based on the field mask.
     /// </summary>
-    /// <param name="request">The update request containing new values.</param>
-    /// <param name="baseProduct">The current product state.</param>
-    /// <returns>A tuple containing updated name, pricing, category, and dimensions.</returns>
     /// <example>
+    /// Input:
     /// <code>
-    /// var (name, pricing, category, dimensions) = GetUpdatedProductValues(
-    ///     new UpdateProductRequest
-    ///     {
-    ///         Name = "New Product Name",
-    ///         FieldMask = new[] { "name", "category" },
-    ///         Category = "PetFood"
-    ///     },
-    ///     existingProduct
-    /// );
+    /// // Existing product:
+    /// {
+    ///   "name": "Basic Shampoo",
+    ///   "category": "Grooming",
+    ///   "pricing": {
+    ///     "basePrice": 9.99,
+    ///     "discountPercentage": 0,
+    ///     "taxRate": 8.5
+    ///   }
+    /// }
+    ///
+    /// // Update request:
+    /// {
+    ///   "name": "Premium Shampoo",
+    ///   "fieldMask": ["name", "pricing.basePrice"],
+    ///   "pricing": {
+    ///     "basePrice": "14.99"
+    ///   }
+    /// }
+    /// </code>
+    ///
+    /// Output:
+    /// <code>
+    /// {
+    ///   "name": "Premium Shampoo",
+    ///   "category": "Grooming",
+    ///   "pricing": {
+    ///     "basePrice": 14.99,
+    ///     "discountPercentage": 0,
+    ///     "taxRate": 8.5
+    ///   }
+    /// }
     /// </code>
     /// </example>
     private (string name, Pricing pricing, Category category, Dimensions dimensions)
@@ -298,21 +331,41 @@ public class UpdateProductHandler(
     /// <summary>
     /// Retrieves updated values for pet food products based on the field mask.
     /// </summary>
-    /// <param name="request">The update request containing new values.</param>
-    /// <param name="petFood">The current pet food product state.</param>
-    /// <returns>A tuple containing updated pet food specific values.</returns>
     /// <example>
+    /// Input:
     /// <code>
-    /// var (ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions, weightKg) =
-    ///     GetUpdatedPetFoodValues(
-    ///         new UpdateProductRequest
-    ///         {
-    ///             FieldMask = new[] { "ageGroup", "ingredients" },
-    ///             AgeGroup = "Adult",
-    ///             Ingredients = "Beef, Brown Rice, Carrots"
-    ///         },
-    ///         existingPetFood
-    ///     );
+    /// // Existing pet food:
+    /// {
+    ///   "ageGroup": "Puppy",
+    ///   "breedSize": "Small",
+    ///   "ingredients": "Chicken, Rice",
+    ///   "weightKg": 1.5,
+    ///   "nutritionalInfo": {
+    ///     "protein": "22%",
+    ///     "fat": "14%"
+    ///   }
+    /// }
+    ///
+    /// // Update request:
+    /// {
+    ///   "ageGroup": "Adult",
+    ///   "ingredients": "Beef, Brown Rice, Carrots",
+    ///   "fieldMask": ["ageGroup", "ingredients"]
+    /// }
+    /// </code>
+    ///
+    /// Output:
+    /// <code>
+    /// {
+    ///   "ageGroup": "Adult",
+    ///   "breedSize": "Small",
+    ///   "ingredients": "Beef, Brown Rice, Carrots",
+    ///   "weightKg": 1.5,
+    ///   "nutritionalInfo": {
+    ///     "protein": "22%",
+    ///     "fat": "14%"
+    ///   }
+    /// }
     /// </code>
     /// </example>
     private (

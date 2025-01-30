@@ -20,8 +20,6 @@ public abstract class GetProductPricingControllerTestBase
     protected readonly IQueryHandler<GetProductPricingQuery, ProductPricingView> MockGetProductPricing =
         Mock.Of<IQueryHandler<GetProductPricingQuery, ProductPricingView>>();
 
-    private readonly ProductPricingFieldPaths _fieldPaths = new();
-
     private readonly FieldMaskConverterFactory _fieldMaskConverterFactory =
         new(new ProductPricingFieldPaths().ValidPaths);
 
