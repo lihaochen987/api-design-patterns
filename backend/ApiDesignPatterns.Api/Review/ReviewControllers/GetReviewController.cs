@@ -5,7 +5,6 @@ using AutoMapper;
 using backend.Product.ProductControllers;
 using backend.Review.ApplicationLayer;
 using backend.Review.DomainModels;
-using backend.Review.Services;
 using backend.Shared.FieldMask;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,7 +16,6 @@ namespace backend.Review.ReviewControllers;
 [Route("review")]
 public class GetReviewController(
     IReviewViewApplicationService reviewViewApplicationService,
-    ReviewFieldMaskConfiguration maskConfiguration,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase
@@ -38,7 +36,7 @@ public class GetReviewController(
 
         var response = mapper.Map<GetReviewResponse>(reviewView);
 
-        var converter = fieldMaskConverterFactory.Create(request.FieldMask, maskConfiguration.ReviewFieldPaths);
+        var converter = fieldMaskConverterFactory.Create(request.FieldMask);
         JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };
         string json = JsonConvert.SerializeObject(response, settings);
 

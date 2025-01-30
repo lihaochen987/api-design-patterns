@@ -17,6 +17,7 @@ using backend.Shared.CommandHandler;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
 using backend.Shared.SqlFilter;
+using backend.Supplier.Services;
 using Npgsql;
 
 namespace backend.Review;
@@ -33,7 +34,6 @@ public class ReviewComposer
 
     public ReviewComposer(
         IConfiguration configuration,
-        IFieldMaskConverterFactory fieldMaskConverterFactory,
         ILoggerFactory loggerFactory)
     {
         ReviewColumnMapper reviewColumnMapper = new();
@@ -43,7 +43,8 @@ public class ReviewComposer
         _reviewFieldMaskConfiguration = new ReviewFieldMaskConfiguration();
         _reviewSqlFilterBuilder = new ReviewSqlFilterBuilder(reviewSqlFilterParser);
         _reviewQueryService = new QueryService<ReviewView>();
-        _fieldMaskConverterFactory = fieldMaskConverterFactory;
+        SupplierFieldPaths fieldPaths = new();
+        _fieldMaskConverterFactory = new FieldMaskConverterFactory(fieldPaths.ValidPaths);
         _loggerFactory = loggerFactory;
         _mapper = mapperConfig.CreateMapper();
         _configuration = configuration;
@@ -91,7 +92,6 @@ public class ReviewComposer
         var applicationService = CreateReviewViewApplicationService();
         return new GetReviewController(
             applicationService,
-            _reviewFieldMaskConfiguration,
             _fieldMaskConverterFactory,
             _mapper);
     }

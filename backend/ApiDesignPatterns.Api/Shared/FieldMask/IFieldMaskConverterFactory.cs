@@ -5,5 +5,5 @@ namespace backend.Shared.FieldMask;
 
 public interface IFieldMaskConverterFactory
 {
-    FieldMaskConverter Create(IList<string> fieldMask, HashSet<string> allFieldPaths);
+    FieldMaskConverter Create(IList<string> fieldMask);
 }

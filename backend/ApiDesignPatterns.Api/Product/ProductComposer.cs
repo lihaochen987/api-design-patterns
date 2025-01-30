@@ -22,7 +22,6 @@ using backend.Product.Services.ProductServices;
 using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.FieldMask;
-using backend.Shared.FieldPath;
 using backend.Shared.QueryHandler;
 using backend.Shared.SqlFilter;
 using Npgsql;
@@ -36,11 +35,9 @@ public class ProductComposer
     private readonly UpdateProductPricingExtensions _updateProductPricingExtensions;
     private readonly IConfiguration _configuration;
     private readonly QueryService<ProductView> _productQueryService;
-    private readonly IFieldPathAdapter _fieldPathAdapter;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly IMapper _mapper;
     private readonly UpdateProductTypeService _updateProductTypeService;
-    private readonly ProductPricingFieldPaths _productPricingFieldPaths;
     private readonly ProductPricingFieldMaskConfiguration _productPricingFieldMaskConfiguration;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ProductSqlFilterBuilder _productSqlFilterBuilder;
@@ -48,8 +45,6 @@ public class ProductComposer
 
     public ProductComposer(
         IConfiguration configuration,
-        IFieldPathAdapter fieldPathAdapter,
-        IFieldMaskConverterFactory fieldMaskConverterFactory,
         ILoggerFactory loggerFactory,
         RecursiveValidator recursiveValidator)
     {
@@ -60,15 +55,14 @@ public class ProductComposer
         _updateProductPricingExtensions = new UpdateProductPricingExtensions();
         _configuration = configuration;
         _productQueryService = new QueryService<ProductView>();
-        _fieldPathAdapter = fieldPathAdapter;
-        _fieldMaskConverterFactory = fieldMaskConverterFactory;
+        ProductFieldPaths productFieldPaths = new();
+        _fieldMaskConverterFactory = new FieldMaskConverterFactory(productFieldPaths.ValidPaths);
         _mapper = mapperConfig.CreateMapper();
         ProductPricingFieldMaskService productPricingFieldMaskService = new();
         DimensionsFieldMaskService dimensionsFieldMaskService = new();
         ProductFieldMaskConfiguration productFieldMaskConfiguration =
             new(productPricingFieldMaskService, dimensionsFieldMaskService);
         _updateProductTypeService = new UpdateProductTypeService(productFieldMaskConfiguration);
-        _productPricingFieldPaths = new ProductPricingFieldPaths();
         _productPricingFieldMaskConfiguration = new ProductPricingFieldMaskConfiguration();
         _loggerFactory = loggerFactory;
         _recursiveValidator = recursiveValidator;
@@ -197,7 +191,7 @@ public class ProductComposer
     private GetProductController CreateGetProductController()
     {
         var queryHandler = CreateGetProductViewHandler();
-        return new GetProductController(queryHandler, _fieldPathAdapter, _fieldMaskConverterFactory, _mapper);
+        return new GetProductController(queryHandler, _fieldMaskConverterFactory, _mapper);
     }
 
     private UpdateProductController CreateUpdateProductController()
@@ -236,7 +230,9 @@ public class ProductComposer
     private GetProductPricingController CreateGetProductPricingController()
     {
         var queryHandler = CreateGetProductPricingHandler();
-        return new GetProductPricingController(queryHandler, _productPricingFieldPaths, _getProductPricingExtensions,
+        return new GetProductPricingController(
+            queryHandler,
+            _getProductPricingExtensions,
             _fieldMaskConverterFactory);
     }
 

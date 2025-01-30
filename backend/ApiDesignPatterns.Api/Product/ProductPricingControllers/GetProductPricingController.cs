@@ -1,6 +1,5 @@
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.DomainModels.Views;
-using backend.Product.Services.ProductPricingServices;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,6 @@ namespace backend.Product.ProductPricingControllers;
 [Route("product")]
 public class GetProductPricingController(
     IQueryHandler<GetProductPricingQuery, ProductPricingView> getProductPricing,
-    ProductPricingFieldPaths fieldPaths,
     GetProductPricingExtensions extensions,
     IFieldMaskConverterFactory fieldMaskConverterFactory)
     : ControllerBase
@@ -33,7 +31,7 @@ public class GetProductPricingController(
 
         GetProductPricingResponse response = extensions.ToGetProductPricingResponse(product.Pricing, product.Id);
 
-        var converter = fieldMaskConverterFactory.Create(request.FieldMask, fieldPaths.ValidPaths);
+        var converter = fieldMaskConverterFactory.Create(request.FieldMask);
         JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };
 
         string json = JsonConvert.SerializeObject(response, settings);

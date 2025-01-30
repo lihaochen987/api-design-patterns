@@ -4,7 +4,6 @@ using backend.Product;
 using backend.Review;
 using backend.Shared;
 using backend.Shared.FieldMask;
-using backend.Shared.FieldPath;
 using backend.Shared.SqlFilter;
 using backend.Supplier;
 using DbUp;
@@ -29,16 +28,7 @@ builder.Services.AddSingleton<SqlFilterParser>(provider =>
         provider.GetRequiredService<IColumnMapper>()));
 
 // Todo: Refactor this out once 1. we convert the Product resource to use Dapper
-var fieldMaskExpander = new FieldMaskExpander();
-var nestedJObjectBuilder = new NestedJObjectBuilder();
-var fieldMaskPropertyHandler = new PropertyHandler(nestedJObjectBuilder);
-IFieldMaskConverterFactory fieldMaskConverterFactory =
-    new FieldMaskConverterFactory(fieldMaskExpander, fieldMaskPropertyHandler);
-builder.Services.AddSingleton(fieldMaskConverterFactory);
 var recursiveValidator = new RecursiveValidator();
-
-var fieldPathAdapter = new FieldPathAdapter();
-builder.Services.AddSingleton<IFieldPathAdapter, FieldPathAdapter>();
 
 var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 {
@@ -50,7 +40,6 @@ var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 var reviewCompositionRoot =
     new ReviewComposer(
         builder.Configuration,
-        fieldMaskConverterFactory,
         loggerFactory);
 reviewCompositionRoot.ConfigureServices(builder.Services);
 
@@ -58,8 +47,6 @@ reviewCompositionRoot.ConfigureServices(builder.Services);
 var productCompositionRoot =
     new ProductComposer(
         builder.Configuration,
-        fieldPathAdapter,
-        fieldMaskConverterFactory,
         loggerFactory,
         recursiveValidator);
 productCompositionRoot.ConfigureServices(builder.Services);

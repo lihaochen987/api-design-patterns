@@ -3,13 +3,10 @@
 
 namespace backend.Shared.FieldMask;
 
-public class FieldMaskConverterFactory(
-    FieldMaskExpander expander,
-    PropertyHandler propertyHandler)
-    : IFieldMaskConverterFactory
+public class FieldMaskConverterFactory(HashSet<string> allFieldPaths) : IFieldMaskConverterFactory
 {
-    public FieldMaskConverter Create(IList<string> fieldMask, HashSet<string> allFieldPaths)
+    public FieldMaskConverter Create(IList<string> fieldMask)
     {
-        return new FieldMaskConverter(fieldMask, allFieldPaths, expander, propertyHandler);
+        return new FieldMaskConverter(fieldMask, allFieldPaths);
     }
 }

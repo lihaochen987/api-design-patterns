@@ -6,8 +6,8 @@ using AutoMapper;
 using backend.Product.ApplicationLayer.Queries.GetProductView;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
+using backend.Product.Services.ProductServices;
 using backend.Shared.FieldMask;
-using backend.Shared.FieldPath;
 using backend.Shared.QueryHandler;
 using Moq;
 
@@ -18,7 +18,6 @@ public abstract class GetProductControllerTestBase
     protected readonly Fixture Fixture;
     protected readonly IQueryHandler<GetProductViewQuery, ProductView> MockGetProductView;
     private readonly IMapper _mapper;
-    private readonly IFieldPathAdapter _fieldPathAdapter;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
 
     protected GetProductControllerTestBase()
@@ -27,16 +26,13 @@ public abstract class GetProductControllerTestBase
         MockGetProductView = Mock.Of<IQueryHandler<GetProductViewQuery, ProductView>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
-        _fieldPathAdapter = new FieldPathAdapter();
-        _fieldMaskConverterFactory =
-            new FieldMaskConverterFactory(new FieldMaskExpander(), new PropertyHandler(new NestedJObjectBuilder()));
+        _fieldMaskConverterFactory = new FieldMaskConverterFactory(new ProductFieldPaths().ValidPaths);
     }
 
     protected GetProductController GetProductController()
     {
         return new GetProductController(
             MockGetProductView,
-            _fieldPathAdapter,
             _fieldMaskConverterFactory,
             _mapper);
     }

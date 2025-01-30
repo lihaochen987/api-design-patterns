@@ -6,7 +6,6 @@ using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services.ProductPricingServices;
-using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
 using Moq;
@@ -24,13 +23,12 @@ public abstract class GetProductPricingControllerTestBase
     private readonly ProductPricingFieldPaths _fieldPaths = new();
 
     private readonly FieldMaskConverterFactory _fieldMaskConverterFactory =
-        new(new FieldMaskExpander(), new PropertyHandler(new NestedJObjectBuilder()));
+        new(new ProductPricingFieldPaths().ValidPaths);
 
     protected GetProductPricingController ProductPricingController()
     {
         return new GetProductPricingController(
             MockGetProductPricing,
-            _fieldPaths,
             Extensions,
             _fieldMaskConverterFactory);
     }
