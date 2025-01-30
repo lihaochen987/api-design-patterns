@@ -5,7 +5,6 @@ namespace backend.Supplier.SupplierControllers;
 
 public record ListSuppliersRequest
 {
-    public string? Parent { get; init; }
     public string? Filter { get; init; }
     public string? PageToken { get; init; } = "";
     public int MaxPageSize { get; init; } = 10;

@@ -7,7 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Review.ReviewControllers;
 
-[Route("reviews")]
+[Route("{productId}/reviews")]
 [ApiController]
 public class ListReviewsController(
     IReviewViewApplicationService applicationService,
@@ -18,9 +18,10 @@ public class ListReviewsController(
     [SwaggerOperation(Summary = "List reviews", Tags = ["Reviews"])]
     [ProducesResponseType(typeof(ListReviewsResponse), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ListReviewsResponse>>> ListReviews(
-        [FromQuery] ListReviewsRequest request)
+        [FromQuery] ListReviewsRequest request,
+        string productId)
     {
-        (List<ReviewView> reviews, string? nextPageToken) = await applicationService.ListProductsAsync(request);
+        (List<ReviewView> reviews, string? nextPageToken) = await applicationService.ListProductsAsync(request, productId);
 
         ListReviewsResponse response = new()
         {

@@ -10,6 +10,5 @@ public interface ISupplierViewRepository
     Task<(List<DomainModels.SupplierView>, string?)> ListSuppliersAsync(
         string? pageToken,
         string? filter,
-        int maxPageSize,
-        string? parent);
+        int maxPageSize);
 }

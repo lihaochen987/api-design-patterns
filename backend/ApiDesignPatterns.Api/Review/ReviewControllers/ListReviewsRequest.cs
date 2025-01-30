@@ -5,7 +5,6 @@ namespace backend.Review.ReviewControllers;
 
 public record ListReviewsRequest
 {
-    public string? Parent { get; init; }
     public string? Filter { get; init; }
     public string? PageToken { get; init; } = "";
     public int MaxPageSize { get; init; } = 10;

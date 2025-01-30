@@ -10,6 +10,7 @@ public class CreateReviewHandler(IReviewRepository repository) : ICommandHandler
 {
     public async Task Handle(CreateReviewQuery command)
     {
+        command.Review.ProductId = command.ProductId;
         await repository.CreateReviewAsync(command.Review);
     }
 }

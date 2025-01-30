@@ -24,18 +24,10 @@ public class SupplierViewRepository(
     public async Task<(List<DomainModels.SupplierView>, string?)> ListSuppliersAsync(
         string? pageToken,
         string? filter,
-        int maxPageSize,
-        string? parent)
+        int maxPageSize)
     {
         var sql = new StringBuilder(SupplierViewQueries.ListSuppliersBase);
         var parameters = new DynamicParameters();
-
-        // Parent filter
-        if (!string.IsNullOrWhiteSpace(parent) && long.TryParse(parent, out long parentId))
-        {
-            sql.Append(" AND product_id = @ParentId");
-            parameters.Add("ParentId", parentId);
-        }
 
         // Pagination filter
         if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenSupplier))

@@ -21,8 +21,7 @@ public class SupplierViewApplicationService(ISupplierViewRepository repository) 
         (List<SupplierView> suppliers, string? nextPageToken) = await repository.ListSuppliersAsync(
             request.PageToken,
             request.Filter,
-            request.MaxPageSize,
-            request.Parent);
+            request.MaxPageSize);
         return (suppliers, nextPageToken);
     }
 }

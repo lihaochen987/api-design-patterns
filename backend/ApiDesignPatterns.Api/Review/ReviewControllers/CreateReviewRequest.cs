@@ -5,7 +5,6 @@ namespace backend.Review.ReviewControllers;
 
 public record CreateReviewRequest
 {
-    public string? ProductId { get; init; }
     public string? Rating { get; init; }
     public string? Text { get; init; }
 }

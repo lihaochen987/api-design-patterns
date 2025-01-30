@@ -10,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace backend.Review.ReviewControllers;
 
 [ApiController]
-[Route("review")]
+[Route("{productId}/review")]
 public class CreateReviewController(
     ICommandHandler<CreateReviewQuery> createReview,
     IMapper mapper)
@@ -20,11 +20,13 @@ public class CreateReviewController(
     [SwaggerOperation(Summary = "Create a review", Tags = ["Reviews"])]
     [ProducesResponseType(typeof(CreateReviewResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CreateReviewResponse>> CreateReview([FromBody] CreateReviewRequest request)
+    public async Task<ActionResult<CreateReviewResponse>> CreateReview(
+        [FromBody] CreateReviewRequest request,
+        long productId)
     {
         var review = mapper.Map<DomainModels.Review>(request);
         review.CreatedAt = DateTime.UtcNow;
-        await createReview.Handle(new CreateReviewQuery { Review = review });
+        await createReview.Handle(new CreateReviewQuery { Review = review, ProductId = productId });
 
         var response = mapper.Map<CreateReviewResponse>(review);
         return CreatedAtAction(

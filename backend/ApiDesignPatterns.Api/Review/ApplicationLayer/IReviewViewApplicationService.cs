@@ -9,5 +9,5 @@ namespace backend.Review.ApplicationLayer;
 public interface IReviewViewApplicationService
 {
     Task<ReviewView?> GetReviewView(long id);
-    Task<(List<ReviewView>, string?)> ListProductsAsync(ListReviewsRequest request);
+    Task<(List<ReviewView>, string?)> ListProductsAsync(ListReviewsRequest request, string productId);
 }
