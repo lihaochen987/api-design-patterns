@@ -18,19 +18,15 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
     public async Task ListProductsAsync_ShouldReturnProductsAndNextPageToken()
     {
         var request = new ListProductsRequest { Filter = "Category == \"Toys\"", MaxPageSize = 5 };
-        ProductView productOne = new ProductViewTestDataBuilder().WithId(1).WithCategory(Category.Toys).Build();
-        ProductView productTwo = new ProductViewTestDataBuilder().WithId(2).WithCategory(Category.Toys).Build();
-        Repository.Add(productOne);
-        Repository.Add(productTwo);
+        Repository.AddProductView(1, Category.Toys);
+        Repository.AddProductView(2, Category.Toys);
         IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> sut = ListProductsViewHandler();
 
         (List<ProductView>, string?) result =
             await sut.Handle(
                 new ListProductsQuery
                 {
-                    Filter = request.Filter,
-                    MaxPageSize = request.MaxPageSize,
-                    PageToken = request.PageToken
+                    Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
                 });
 
         result.Item1.ShouldNotBeEmpty();
@@ -46,9 +42,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
 
         (List<ProductView>, string?) result = await sut.Handle(new ListProductsQuery
         {
-            Filter = request.Filter,
-            MaxPageSize = request.MaxPageSize,
-            PageToken = request.PageToken
+            Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
         });
 
         result.Item1.ShouldBeEmpty();
@@ -66,9 +60,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
 
         await Should.ThrowAsync<ArgumentException>(() => sut.Handle(new ListProductsQuery
         {
-            Filter = request.Filter,
-            MaxPageSize = request.MaxPageSize,
-            PageToken = request.PageToken
+            Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
         }));
     }
 }

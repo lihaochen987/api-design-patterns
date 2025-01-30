@@ -1,8 +1,11 @@
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
+using AutoFixture;
+using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer;
 using backend.Product.InfrastructureLayer.Database.ProductView;
+using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared;
 
 namespace backend.Product.Tests.TestHelpers.Fakes;
@@ -11,6 +14,11 @@ public class ProductViewRepositoryFake(
     QueryService<ProductView> queryService)
     : Collection<ProductView>, IProductViewRepository
 {
+    public void AddProductView(int id, Category category)
+    {
+        var productView = new ProductViewTestDataBuilder().WithId(id).WithCategory(category).Build();
+        Add(productView);
+    }
     public Task<ProductView?> GetProductView(long id)
     {
         ProductView? productView = this.FirstOrDefault(p => p.Id == id);
