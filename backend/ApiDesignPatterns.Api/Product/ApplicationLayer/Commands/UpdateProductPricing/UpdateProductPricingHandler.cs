@@ -15,11 +15,7 @@ public class UpdateProductPricingHandler(IProductRepository repository) : IComma
         (decimal basePrice, decimal discountPercentage, decimal taxRate) =
             GetUpdatedProductPricingValues(command.Request, command.Product.Pricing);
 
-        var updatedPricing = command.Product.Pricing with
-        {
-            BasePrice = basePrice, DiscountPercentage = discountPercentage, TaxRate = taxRate
-        };
-        command.Product.Pricing = updatedPricing;
+        command.Product.Pricing = new Pricing(basePrice, discountPercentage, taxRate);
 
         await repository.UpdateProductAsync(command.Product);
     }

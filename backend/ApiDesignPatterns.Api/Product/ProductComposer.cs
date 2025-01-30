@@ -18,7 +18,6 @@ using backend.Product.InfrastructureLayer.Database.ProductView;
 using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
-using backend.Product.Services.ProductPricingServices;
 using backend.Product.Services.ProductServices;
 using backend.Shared;
 using backend.Shared.CommandHandler;
@@ -259,6 +258,7 @@ public class ProductComposer
         services.AddScoped<ICommandHandler<CreateProductQuery>>(_ => CreateCreateProductHandler());
         services.AddScoped<ICommandHandler<ReplaceProductQuery>>(_ => CreateReplaceProductHandler());
         services.AddScoped<ICommandHandler<DeleteProductQuery>>(_ => CreateDeleteProductHandler());
+        services.AddScoped<ICommandHandler<UpdateProductPricingQuery>>(_ => CreateUpdateProductPricingHandler());
 
         // Query Handlers
         services.AddScoped<IQueryHandler<GetProductQuery, DomainModels.Product>>(_ => CreateGetProductHandler());
@@ -277,5 +277,6 @@ public class ProductComposer
         services.AddScoped<ListProductsController>(_ => CreateListProductsController());
 
         services.AddSingleton<CreateProductExtensions>();
+        services.AddSingleton<UpdateProductPricingExtensions>();
     }
 }
