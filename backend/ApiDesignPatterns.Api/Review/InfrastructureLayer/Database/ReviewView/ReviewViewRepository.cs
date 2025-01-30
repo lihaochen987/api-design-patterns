@@ -3,15 +3,15 @@
 
 using System.Data;
 using System.Text;
-using backend.Review.Services;
 using backend.Shared;
+using backend.Shared.SqlFilter;
 using Dapper;
 
 namespace backend.Review.InfrastructureLayer.Database.ReviewView;
 
 public class ReviewViewRepository(
     IDbConnection dbConnection,
-    ReviewSqlFilterBuilder reviewSqlFilterBuilder,
+    SqlFilterBuilder reviewSqlFilterBuilder,
     QueryService<DomainModels.ReviewView> queryService)
     : IReviewViewRepository
 {

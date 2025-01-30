@@ -89,7 +89,7 @@ public partial class CelParser<T>(TypeParser typeParser)
             { "||", CelTokenType.Logical }
         };
 
-        List<CelToken> tokens = new();
+        List<CelToken> tokens = [];
 
         Regex regex = QuotedStringOrWord();
 

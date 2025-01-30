@@ -1,8 +1,8 @@
 using System.Data;
 using System.Text;
 using backend.Product.DomainModels.ValueObjects;
-using backend.Product.Services;
 using backend.Shared;
+using backend.Shared.SqlFilter;
 using Dapper;
 
 namespace backend.Product.InfrastructureLayer.Database.ProductView;
@@ -10,7 +10,7 @@ namespace backend.Product.InfrastructureLayer.Database.ProductView;
 public class ProductViewRepository(
     IDbConnection dbConnection,
     QueryService<DomainModels.Views.ProductView> queryService,
-    ProductSqlFilterBuilder productSqlFilterBuilder)
+    SqlFilterBuilder productSqlFilterBuilder)
     : IProductViewRepository
 {
     public async Task<DomainModels.Views.ProductView?> GetProductView(long id)

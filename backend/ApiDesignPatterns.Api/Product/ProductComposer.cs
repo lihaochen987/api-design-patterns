@@ -40,7 +40,7 @@ public class ProductComposer
     private readonly UpdateProductTypeService _updateProductTypeService;
     private readonly ProductPricingFieldMaskConfiguration _productPricingFieldMaskConfiguration;
     private readonly ILoggerFactory _loggerFactory;
-    private readonly ProductSqlFilterBuilder _productSqlFilterBuilder;
+    private readonly SqlFilterBuilder _productSqlFilterBuilder;
     private readonly RecursiveValidator _recursiveValidator;
 
     public ProductComposer(
@@ -67,8 +67,7 @@ public class ProductComposer
         _loggerFactory = loggerFactory;
         _recursiveValidator = recursiveValidator;
         ProductColumnMapper productColumnMapper = new();
-        SqlFilterParser productSqlFilterParser = new(productColumnMapper);
-        _productSqlFilterBuilder = new ProductSqlFilterBuilder(productSqlFilterParser);
+        _productSqlFilterBuilder = new SqlFilterBuilder(productColumnMapper);
     }
 
     private IProductRepository CreateProductRepository()

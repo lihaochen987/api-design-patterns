@@ -31,8 +31,6 @@ public static class SupplierServiceExtensions
         // Inject Supplier Services
         services.AddSingleton<SupplierFieldMaskConfiguration>();
         services.AddSingleton<IColumnMapper, SupplierColumnMapper>();
-        services.AddSingleton<SupplierSqlFilterBuilder>();
-        services.AddSingleton<SqlFilterBuilder, SupplierSqlFilterBuilder>();
         services.AddSingleton<SupplierFieldPaths>();
         services.AddSingleton<SupplierValueObjectUpdater>();
         services.AddScoped<SupplierDataWriter>();

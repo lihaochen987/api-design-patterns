@@ -4,14 +4,14 @@
 using System.Data;
 using System.Text;
 using backend.Shared;
-using backend.Supplier.Services;
+using backend.Shared.SqlFilter;
 using Dapper;
 
 namespace backend.Supplier.InfrastructureLayer.Database.SupplierView;
 
 public class SupplierViewRepository(
     IDbConnection dbConnection,
-    SupplierSqlFilterBuilder sqlFilterBuilder,
+    SqlFilterBuilder sqlFilterBuilder,
     QueryService<DomainModels.SupplierView> queryService)
     : ISupplierViewRepository
 {

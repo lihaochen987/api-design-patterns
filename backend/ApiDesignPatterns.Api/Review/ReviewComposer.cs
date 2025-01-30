@@ -25,7 +25,7 @@ namespace backend.Review;
 public class ReviewComposer
 {
     private readonly ReviewFieldMaskConfiguration _reviewFieldMaskConfiguration;
-    private readonly ReviewSqlFilterBuilder _reviewSqlFilterBuilder;
+    private readonly SqlFilterBuilder _reviewSqlFilterBuilder;
     private readonly QueryService<ReviewView> _reviewQueryService;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly IMapper _mapper;
@@ -37,11 +37,10 @@ public class ReviewComposer
         ILoggerFactory loggerFactory)
     {
         ReviewColumnMapper reviewColumnMapper = new();
-        SqlFilterParser reviewSqlFilterParser = new(reviewColumnMapper);
         var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ReviewMappingProfile>(); });
 
         _reviewFieldMaskConfiguration = new ReviewFieldMaskConfiguration();
-        _reviewSqlFilterBuilder = new ReviewSqlFilterBuilder(reviewSqlFilterParser);
+        _reviewSqlFilterBuilder = new SqlFilterBuilder(reviewColumnMapper);
         _reviewQueryService = new QueryService<ReviewView>();
         SupplierFieldPaths fieldPaths = new();
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(fieldPaths.ValidPaths);

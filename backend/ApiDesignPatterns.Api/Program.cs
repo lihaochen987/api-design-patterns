@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 using backend.Product;
 using backend.Review;
 using backend.Shared;
-using backend.Shared.FieldMask;
 using backend.Shared.SqlFilter;
 using backend.Supplier;
 using DbUp;
@@ -23,8 +22,8 @@ builder.Services.AddCors(options =>
 
 // Inject shared classes
 builder.Services.AddSingleton<TypeParser>();
-builder.Services.AddSingleton<SqlFilterParser>(provider =>
-    new SqlFilterParser(
+builder.Services.AddSingleton<SqlFilterBuilder>(provider =>
+    new SqlFilterBuilder(
         provider.GetRequiredService<IColumnMapper>()));
 
 // Todo: Refactor this out once 1. we convert the Product resource to use Dapper
