@@ -37,7 +37,6 @@ public class ProductComposer
     private readonly QueryService<ProductView> _productQueryService;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly IMapper _mapper;
-    private readonly UpdateProductTypeService _updateProductTypeService;
     private readonly ProductPricingFieldMaskConfiguration _productPricingFieldMaskConfiguration;
     private readonly ILoggerFactory _loggerFactory;
     private readonly SqlFilterBuilder _productSqlFilterBuilder;
@@ -58,11 +57,6 @@ public class ProductComposer
         ProductFieldPaths productFieldPaths = new();
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(productFieldPaths.ValidPaths);
         _mapper = mapperConfig.CreateMapper();
-        ProductPricingFieldMaskService productPricingFieldMaskService = new();
-        DimensionsFieldMaskService dimensionsFieldMaskService = new();
-        ProductFieldMaskConfiguration productFieldMaskConfiguration =
-            new(productPricingFieldMaskService, dimensionsFieldMaskService);
-        _updateProductTypeService = new UpdateProductTypeService(productFieldMaskConfiguration);
         _productPricingFieldMaskConfiguration = new ProductPricingFieldMaskConfiguration();
         _loggerFactory = loggerFactory;
         _recursiveValidator = recursiveValidator;
@@ -92,7 +86,7 @@ public class ProductComposer
     {
         var repository = CreateProductRepository();
         var dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        var commandHandler = new UpdateProductHandler(repository, _updateProductTypeService);
+        var commandHandler = new UpdateProductHandler(repository);
         var auditCommandHandler = new AuditCommandHandlerDecorator<UpdateProductQuery>(commandHandler, dbConnection);
         var loggerCommandHandler = new LoggingCommandHandlerDecorator<UpdateProductQuery>(auditCommandHandler,
             _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductQuery>>());

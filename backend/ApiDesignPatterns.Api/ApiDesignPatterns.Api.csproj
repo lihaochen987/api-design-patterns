@@ -264,9 +264,6 @@
     <Compile Update="Supplier\SupplierControllers\ListSuppliersResponse.cs">
       <DependentUpon>ListSuppliersController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ServiceTests\ProductFieldMaskConfigurationTestBase.cs">
-      <DependentUpon>ProductFieldMaskConfigurationTests.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\Tests\ApplicationLayerTests\GetProductHandlerTestBase.cs">
       <DependentUpon>GetProductHandlerTests.cs</DependentUpon>
     </Compile>

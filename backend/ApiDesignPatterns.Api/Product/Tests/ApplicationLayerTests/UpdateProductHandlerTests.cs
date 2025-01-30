@@ -7,7 +7,6 @@ using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
-using backend.Shared;
 using backend.Shared.CommandHandler;
 using Shouldly;
 using Xunit;
