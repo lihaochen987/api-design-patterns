@@ -1,13 +1,14 @@
+using System.ComponentModel.DataAnnotations;
 using backend.Product.DomainModels.ValueObjects;
 
 namespace backend.Product.ProductControllers;
 
 public record CreateProductRequest
 {
-    public string? Name { get; init; }
-    public ProductPricingRequest? Pricing { get; init; }
-    public string? Category { get; init; }
-    public DimensionsRequest? Dimensions { get; init; }
+    [Required] public required string Name { get; init; }
+    [Required] public required ProductPricingRequest Pricing { get; init; }
+    [Required] public required string Category { get; init; }
+    [Required] public required DimensionsRequest Dimensions { get; init; }
     public string? AgeGroup { get; init; }
     public string? BreedSize { get; init; }
     public string? Ingredients { get; init; }

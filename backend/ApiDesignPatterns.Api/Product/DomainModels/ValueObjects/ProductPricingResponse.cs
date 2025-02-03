@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace backend.Product.DomainModels.ValueObjects;
 
 public class ProductPricingResponse
 {
-    public required string BasePrice { get; init; }
-    public required string DiscountPercentage { get; init; }
-    public required string TaxRate { get; init; }
+    [Required] public required string BasePrice { get; init; }
+    [Required] public required string DiscountPercentage { get; init; }
+    [Required] public required string TaxRate { get; init; }
 }

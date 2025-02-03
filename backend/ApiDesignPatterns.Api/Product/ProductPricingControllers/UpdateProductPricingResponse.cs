@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace backend.Product.ProductPricingControllers;
 
 public record UpdateProductPricingResponse
 {
-    public required string Id { get; init; }
-    public required string BasePrice { get; init; }
-    public required string DiscountPercentage { get; init; }
-    public required string TaxRate { get; init; }
+    [Required] public required string Id { get; init; }
+    [Required] public required string BasePrice { get; init; }
+    [Required] public required string DiscountPercentage { get; init; }
+    [Required] public required string TaxRate { get; init; }
 }

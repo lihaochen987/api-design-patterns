@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace backend.Product.DomainModels.ValueObjects;
 
 public class DimensionsResponse
 {
-    public required string Length { get; init; }
-    public required string Width { get; init; }
-    public required string Height { get; init; }
+    [Required] public required string Length { get; init; }
+    [Required] public required string Width { get; init; }
+    [Required] public required string Height { get; init; }
 }
