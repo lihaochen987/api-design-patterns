@@ -28,7 +28,8 @@ var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 });
 
 // Manual dependency injection
-builder.Services.AddSingleton<IControllerActivator>(new ProductControllerActivator(builder.Configuration));
+builder.Services.AddSingleton<IControllerActivator>(
+    new ProductControllerActivator(builder.Configuration, loggerFactory, recursiveValidator));
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
