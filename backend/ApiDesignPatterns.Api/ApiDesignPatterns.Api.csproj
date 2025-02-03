@@ -299,8 +299,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\" />
-    <Folder Include="dotTrace\tools\NetCore\runtimes\unix\lib\netstandard1.1\" />
     <Folder Include="Product\ApplicationLayer\" />
     <Folder Include="Review\ApplicationLayer\Queries\GetReviewView\" />
   </ItemGroup>
