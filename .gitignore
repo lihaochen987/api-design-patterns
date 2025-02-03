@@ -402,3 +402,4 @@ dist-ssr
 *.sw?
 
 *.turbo
+*.dotTrace

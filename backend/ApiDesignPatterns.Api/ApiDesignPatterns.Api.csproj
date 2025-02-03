@@ -291,16 +291,121 @@
     <Content Include="..\.dockerignore">
       <Link>.dockerignore</Link>
     </Content>
+    <Content Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\Microsoft.NETCore.App.runtimeconfig.json" />
+    <Content Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\Microsoft.NETCore.App.deps.json" />
+    <Content Remove="dotTrace\tools\dottrace.runtimeconfig.json" />
+    <Content Remove="dotTrace\tools\dottrace.exe.config" />
+    <Content Remove="dotTrace\tools\JetBrains.Profiler.Windows.ElevationAgent.exe.config" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\" />
+    <Folder Include="dotTrace\tools\NetCore\runtimes\unix\lib\netstandard1.1\" />
     <Folder Include="Product\ApplicationLayer\" />
+    <Folder Include="Review\ApplicationLayer\Queries\GetReviewView\" />
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Product\Tests\Helpers\Json\BaseProductManualTest.json" />
     <_ContentIncludedByDefault Remove="Product\Tests\Helpers\Json\GroomingAndHygieneManualTest.json" />
     <_ContentIncludedByDefault Remove="Product\Tests\Helpers\Json\PetFoodManualTest.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="dotTrace\tools\plist-cil.dll" />
+    <None Remove="dotTrace\tools\linux-x64\libJetBrains.Common.MemoryMappedStorageApi_v10.so" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\sos\System.Memory.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Xml.XPath.XDocument.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Xml.ReaderWriter.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Transactions.Local.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Threading.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Threading.ThreadPool.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Text.Encodings.Web.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Text.Encoding.Extensions.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Security.Cryptography.Encoding.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Security.Cryptography.Csp.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Runtime.Serialization.Xml.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Runtime.Serialization.Primitives.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Runtime.Intrinsics.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Runtime.CompilerServices.Unsafe.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Resources.Writer.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Resources.ResourceManager.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Private.Xml.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.ObjectModel.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Numerics.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Net.Mail.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Net.HttpListener.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Linq.Parallel.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.IO.FileSystem.Primitives.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.IO.FileSystem.DriveInfo.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.IO.Compression.FileSystem.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.IO.Compression.Brotli.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Dynamic.Runtime.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Drawing.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Diagnostics.StackTrace.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Diagnostics.Process.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Diagnostics.DiagnosticSource.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Data.DataSetExtensions.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.Core.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\System.AppContext.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\shared\Microsoft.NETCore.App\8.0.11\Microsoft.VisualBasic.Core.dll" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\crossgen2\libclrjit_win_x86_x64.so" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\crossgen2\libclrjit_win_x64_x64.so" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\crossgen2\libclrjit_unix_x64_x64.so" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\ThirdPartyNotices.txt" />
+    <None Remove="dotTrace\tools\linux-x64\dotnet\LICENSE.txt" />
+    <None Remove="dotTrace\tools\System.ServiceModel.dll" />
+    <None Remove="dotTrace\tools\System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <None Remove="dotTrace\tools\System.Runtime.CompilerServices.Unsafe.dll" />
+    <None Remove="dotTrace\tools\System.Reflection.Metadata.dll" />
+    <None Remove="dotTrace\tools\System.IO.FileSystem.AccessControl.dll" />
+    <None Remove="dotTrace\tools\System.Drawing.dll" />
+    <None Remove="dotTrace\tools\System.Buffers.dll" />
+    <None Remove="dotTrace\tools\Sprache.dll" />
+    <None Remove="dotTrace\tools\NuGet.Protocol.dll" />
+    <None Remove="dotTrace\tools\NuGet.Packaging.dll" />
+    <None Remove="dotTrace\tools\NetCore\System.ServiceProcess.ServiceController.xml" />
+    <None Remove="dotTrace\tools\NetCore\System.ServiceProcess.ServiceController.dll" />
+    <None Remove="dotTrace\tools\NetCore\System.Security.Permissions.dll" />
+    <None Remove="dotTrace\tools\NetCore\System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <None Remove="dotTrace\tools\NetCore\System.Runtime.CompilerServices.Unsafe.dll" />
+    <None Remove="dotTrace\tools\NetCore\System.IO.FileSystem.AccessControl.dll" />
+    <None Remove="dotTrace\tools\NetCore\System.Design.dll" />
+    <None Remove="dotTrace\tools\NetCore\System.Configuration.ConfigurationManager.dll" />
+    <None Remove="dotTrace\tools\NetCore\System.Collections.Immutable.dll" />
+    <None Remove="dotTrace\tools\NetCore\System.CodeDom.dll" />
+    <None Remove="dotTrace\tools\NetCore\NuGet.Resolver.dll" />
+    <None Remove="dotTrace\tools\NetCore\NuGet.Protocol.xml" />
+    <None Remove="dotTrace\tools\NetCore\NuGet.Packaging.xml" />
+    <None Remove="dotTrace\tools\NetCore\Microsoft.Web.XmlTransform.dll" />
+    <None Remove="dotTrace\tools\NetCore\Microsoft.IdentityModel.Tokens.dll" />
+    <None Remove="dotTrace\tools\NetCore\Microsoft.Extensions.Primitives.dll" />
+    <None Remove="dotTrace\tools\NetCore\Microsoft.Diagnostics.NETCore.Client.dll" />
+    <None Remove="dotTrace\tools\NetCore\Microsoft.CodeAnalysis.Features.dll" />
+    <None Remove="dotTrace\tools\NetCore\Microsoft.CodeAnalysis.CSharp.dll" />
+    <None Remove="dotTrace\tools\NetCore\Microsoft.CodeAnalysis.CSharp.Workspaces.dll" />
+    <None Remove="dotTrace\tools\NetCore\Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
+    <None Remove="dotTrace\tools\NetCore\Microsoft.Bcl.AsyncInterfaces.dll" />
+    <None Remove="dotTrace\tools\NetCore\JetBrains.Lifetimes.dll" />
+    <None Remove="dotTrace\tools\NetCore\Castle.Core.dll" />
+    <None Remove="dotTrace\tools\NetCore\BeatyBit.Armature.dll" />
+    <None Remove="dotTrace\tools\Microsoft.Extensions.FileSystemGlobbing.dll" />
+    <None Remove="dotTrace\tools\Microsoft.Extensions.FileProviders.Abstractions.dll" />
+    <None Remove="dotTrace\tools\Microsoft.Diagnostics.NETCore.Client.dll" />
+    <None Remove="dotTrace\tools\Microsoft.Deployment.Compression.dll" />
+    <None Remove="dotTrace\tools\JetBrains.RdFramework.dll" />
+    <None Remove="dotTrace\tools\JetBrains.Profiler.Windows.RemoteAgent.dll" />
+    <None Remove="dotTrace\tools\JetBrains.Profiler.Windows.Remotable.Util.dll" />
+    <None Remove="dotTrace\tools\JetBrains.Profiler.Windows.Remotable.Proxy.dll" />
+    <None Remove="dotTrace\tools\JetBrains.Profiler.Windows.Remotable.Agent.dll" />
+    <None Remove="dotTrace\tools\JetBrains.Profiler.Windows.Impl.dll" />
+    <None Remove="dotTrace\tools\JetBrains.Platform.Interop.dll" />
+    <None Remove="dotTrace\tools\JetBrains.Platform.ComponentModel.dll" />
+    <None Remove="dotTrace\tools\JetBrains.Platform.BuildInterfaces.dll" />
+    <None Remove="dotTrace\tools\JetBrains.Common.Util.Metadata.dll" />
+    <None Remove="dotTrace\tools\DeploymentPackagingIdentity.txt" />
+    <None Remove="dotTrace\tools\Castle.Core.dll" />
+    <None Remove="dotTrace\tools\BouncyCastle.Cryptography.dll" />
   </ItemGroup>
 
 </Project>

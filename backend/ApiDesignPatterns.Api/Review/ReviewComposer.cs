@@ -73,20 +73,20 @@ public class ReviewComposer
         return new ReviewViewApplicationService(repository);
     }
 
-    private CreateReviewController CreateCreateReviewController()
+    public CreateReviewController CreateCreateReviewController()
     {
         var commandHandler = CreateCreateReviewHandler();
         return new CreateReviewController(commandHandler, _mapper);
     }
 
-    private DeleteReviewController CreateDeleteReviewController()
+    public DeleteReviewController CreateDeleteReviewController()
     {
         var commandHandler = CreateDeleteReviewHandler();
         var queryHandler = CreateGetReviewHandler();
         return new DeleteReviewController(queryHandler, commandHandler);
     }
 
-    private GetReviewController CreateGetReviewController()
+    public GetReviewController CreateGetReviewController()
     {
         var applicationService = CreateReviewViewApplicationService();
         return new GetReviewController(
@@ -95,20 +95,20 @@ public class ReviewComposer
             _mapper);
     }
 
-    private ListReviewsController CreateListReviewsController()
+    public ListReviewsController CreateListReviewsController()
     {
         var applicationService = CreateReviewViewApplicationService();
         return new ListReviewsController(applicationService, _mapper);
     }
 
-    private ReplaceReviewController CreateReplaceReviewController()
+    public ReplaceReviewController CreateReplaceReviewController()
     {
         var queryHandler = CreateGetReviewHandler();
         var commandHandler = CreateReplaceReviewHandler();
         return new ReplaceReviewController(queryHandler, commandHandler, _mapper);
     }
 
-    private UpdateReviewController CreateUpdateReviewController()
+    public UpdateReviewController CreateUpdateReviewController()
     {
         var applicationService = CreateReviewApplicationService();
         var queryHandler = CreateGetReviewHandler();
@@ -156,29 +156,5 @@ public class ReviewComposer
         var loggerCommandHandler = new LoggingCommandHandlerDecorator<ReplaceReviewQuery>(auditCommandService,
             _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceReviewQuery>>());
         return loggerCommandHandler;
-    }
-
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.AddScoped<IReviewRepository>(_ => CreateReviewRepository());
-        services.AddScoped<IReviewViewRepository>(_ => CreateReviewViewRepository());
-        services.AddScoped<IReviewApplicationService>(_ => CreateReviewApplicationService());
-        services.AddScoped<IReviewViewApplicationService>(_ => CreateReviewViewApplicationService());
-        services.AddScoped<CreateReviewController>(_ => CreateCreateReviewController());
-        services.AddScoped<DeleteReviewController>(_ => CreateDeleteReviewController());
-        services.AddScoped<GetReviewController>(_ => CreateGetReviewController());
-        services.AddScoped<ListReviewsController>(_ => CreateListReviewsController());
-        services.AddScoped<ReplaceReviewController>(_ => CreateReplaceReviewController());
-        services.AddScoped<UpdateReviewController>(_ => CreateUpdateReviewController());
-
-        // Command Handlers
-        services.AddScoped<ICommandHandler<CreateReviewQuery>>(_ => CreateCreateReviewHandler());
-        services.AddScoped<ICommandHandler<DeleteReviewQuery>>(_ => CreateDeleteReviewHandler());
-        services.AddScoped<ICommandHandler<ReplaceReviewQuery>>(_ => CreateReplaceReviewHandler());
-
-        // Query Handlers
-        services.AddScoped<IQueryHandler<GetReviewQuery, DomainModels.Review>>(_ => CreateGetReviewHandler());
-
-        services.AddSingleton(_reviewFieldMaskConfiguration);
     }
 }

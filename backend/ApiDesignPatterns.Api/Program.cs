@@ -1,13 +1,12 @@
 using System.Data;
 using System.Text.Json.Serialization;
+using backend;
 using backend.Product;
-using backend.Review;
 using backend.Shared;
-using backend.Supplier;
 using DbUp;
 using DbUp.Engine;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Npgsql;
-using SqlFilterBuilder = backend.Shared.SqlFilterBuilder;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -20,14 +19,6 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });
 
-// Inject shared classes
-builder.Services.AddSingleton<TypeParser>();
-builder.Services.AddSingleton<RequireNonNullablePropertiesSchemaFilter>();
-builder.Services.AddSingleton<SqlFilterBuilder>(provider =>
-    new SqlFilterBuilder(
-        provider.GetRequiredService<IColumnMapper>()));
-
-// Todo: Refactor this out once 1. we convert the Product resource to use Dapper
 var recursiveValidator = new RecursiveValidator();
 
 var loggerFactory = LoggerFactory.Create(loggingBuilder =>
@@ -36,22 +27,8 @@ var loggerFactory = LoggerFactory.Create(loggingBuilder =>
     loggingBuilder.AddDebug();
 });
 
-// Review Composition Root
-var reviewCompositionRoot =
-    new ReviewComposer(
-        builder.Configuration,
-        loggerFactory);
-reviewCompositionRoot.ConfigureServices(builder.Services);
-
-// Product Composition Root
-var productCompositionRoot =
-    new ProductComposer(
-        builder.Configuration,
-        loggerFactory,
-        recursiveValidator);
-productCompositionRoot.ConfigureServices(builder.Services);
-
-builder.Services.AddSupplierDependencies();
+// Manual dependency injection
+builder.Services.AddSingleton<IControllerActivator>(new ProductControllerActivator(builder.Configuration));
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
