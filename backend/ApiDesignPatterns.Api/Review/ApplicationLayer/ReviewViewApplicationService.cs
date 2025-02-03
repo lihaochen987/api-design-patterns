@@ -10,12 +10,6 @@ namespace backend.Review.ApplicationLayer;
 
 public class ReviewViewApplicationService(IReviewViewRepository repository) : IReviewViewApplicationService
 {
-    public async Task<ReviewView?> GetReviewView(long id)
-    {
-        ReviewView? review = await repository.GetReviewView(id);
-        return review;
-    }
-
     public async Task<(List<ReviewView>, string?)> ListProductsAsync(ListReviewsRequest request, string productId)
     {
         (List<ReviewView> reviews, string? nextPageToken) = await repository.ListReviewsAsync(

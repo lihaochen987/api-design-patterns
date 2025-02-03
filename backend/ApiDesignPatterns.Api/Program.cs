@@ -1,7 +1,7 @@
 using System.Data;
 using System.Text.Json.Serialization;
-using backend;
 using backend.Product;
+using backend.Review;
 using backend.Shared;
 using DbUp;
 using DbUp.Engine;
@@ -19,8 +19,6 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });
 
-var recursiveValidator = new RecursiveValidator();
-
 var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 {
     loggingBuilder.AddConsole();
@@ -29,7 +27,10 @@ var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 
 // Manual dependency injection
 builder.Services.AddSingleton<IControllerActivator>(
-    new ProductControllerActivator(builder.Configuration, loggerFactory, recursiveValidator));
+    new ProductControllerActivator(builder.Configuration, loggerFactory));
+builder.Services.AddSingleton<IControllerActivator>(new ReviewControllerActivator(
+    builder.Configuration,
+    loggerFactory));
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

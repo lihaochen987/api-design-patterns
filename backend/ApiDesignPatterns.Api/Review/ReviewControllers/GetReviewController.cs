@@ -3,9 +3,10 @@
 
 using AutoMapper;
 using backend.Product.ProductControllers;
-using backend.Review.ApplicationLayer;
+using backend.Review.ApplicationLayer.Queries.GetReviewView;
 using backend.Review.DomainModels;
 using backend.Shared.FieldMask;
+using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,7 +16,7 @@ namespace backend.Review.ReviewControllers;
 [ApiController]
 [Route("review")]
 public class GetReviewController(
-    IReviewViewApplicationService reviewViewApplicationService,
+    IQueryHandler<GetReviewViewQuery, ReviewView> getReviewView,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase
@@ -28,7 +29,7 @@ public class GetReviewController(
         [FromRoute] long id,
         [FromQuery] GetReviewRequest request)
     {
-        ReviewView? reviewView = await reviewViewApplicationService.GetReviewView(id);
+        ReviewView? reviewView = await getReviewView.Handle(new GetReviewViewQuery { Id = id });
         if (reviewView == null)
         {
             return NotFound();

@@ -31,12 +31,11 @@ public class ProductControllerActivator : BaseControllerActivator
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly CreateProductExtensions _createProductExtensions;
     private readonly ILoggerFactory _loggerFactory;
-    private readonly RecursiveValidator _recursiveValidator;
 
     public ProductControllerActivator(
         IConfiguration configuration,
-        ILoggerFactory loggerFactory,
-        RecursiveValidator recursiveValidator) : base(configuration)
+        ILoggerFactory loggerFactory)
+        : base(configuration)
     {
         _productQueryService = new QueryService<ProductView>();
 
@@ -53,8 +52,6 @@ public class ProductControllerActivator : BaseControllerActivator
         _createProductExtensions = new CreateProductExtensions(typeParser);
 
         _loggerFactory = loggerFactory;
-
-        _recursiveValidator = recursiveValidator;
     }
 
     public override object Create(ControllerContext context)
@@ -99,11 +96,8 @@ public class ProductControllerActivator : BaseControllerActivator
             var getProductWithLogging = new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(
                 getProduct,
                 _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
-            var getProductWithValidation =
-                new ValidationQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(getProductWithLogging,
-                    _recursiveValidator);
 
-            return new DeleteProductController(deleteProductWithLogging, getProductWithValidation);
+            return new DeleteProductController(deleteProductWithLogging, getProductWithLogging);
         }
 
         if (type == typeof(GetProductController))
@@ -117,12 +111,9 @@ public class ProductControllerActivator : BaseControllerActivator
             var getProductViewWithLogging = new LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>(
                 getProductView,
                 _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>>());
-            var getProductViewWithValidation =
-                new ValidationQueryHandlerDecorator<GetProductViewQuery, ProductView>(getProductViewWithLogging,
-                    _recursiveValidator);
 
             return new GetProductController(
-                getProductViewWithValidation,
+                getProductViewWithLogging,
                 _fieldMaskConverterFactory,
                 _mapper);
         }
@@ -140,12 +131,8 @@ public class ProductControllerActivator : BaseControllerActivator
                     listProducts,
                     _loggerFactory
                         .CreateLogger<LoggingQueryHandlerDecorator<ListProductsQuery, (List<ProductView>, string?)>>());
-            var listProductsWithValidation =
-                new ValidationQueryHandlerDecorator<ListProductsQuery, (List<ProductView>, string?)>(
-                    listProductsWithLogging,
-                    _recursiveValidator);
 
-            return new ListProductsController(listProductsWithValidation, _mapper);
+            return new ListProductsController(listProductsWithLogging, _mapper);
         }
 
         if (type == typeof(ReplaceProductController))
@@ -159,9 +146,6 @@ public class ProductControllerActivator : BaseControllerActivator
             var getProductWithLogging = new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(
                 getProduct,
                 _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
-            var getProductWithValidation =
-                new ValidationQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(getProductWithLogging,
-                    _recursiveValidator);
 
             // ReplaceProduct handler
             var replaceProduct = new ReplaceProductHandler(repository);
@@ -171,7 +155,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 replaceProductWithAuditing,
                 _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceProductQuery>>());
 
-            return new ReplaceProductController(getProductWithValidation, replaceProductWithLogging, _mapper);
+            return new ReplaceProductController(getProductWithLogging, replaceProductWithLogging, _mapper);
         }
 
         if (type == typeof(UpdateProductController))
@@ -185,9 +169,6 @@ public class ProductControllerActivator : BaseControllerActivator
             var getProductWithLogging = new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(
                 getProduct,
                 _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
-            var getProductWithValidation =
-                new ValidationQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(getProductWithLogging,
-                    _recursiveValidator);
 
             // UpdateProduct handler
             var updateProduct = new UpdateProductHandler(repository);
@@ -198,7 +179,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductQuery>>());
             var updateProductWithTransaction =
                 new TransactionCommandHandlerDecorator<UpdateProductQuery>(updateProductWithLogging, dbConnection);
-            return new UpdateProductController(getProductWithValidation, updateProductWithTransaction, _mapper);
+            return new UpdateProductController(getProductWithLogging, updateProductWithTransaction, _mapper);
         }
 
         throw new Exception($"Unknown product controller type: {type.Name}");

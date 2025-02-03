@@ -7,10 +7,10 @@ using System.ComponentModel.DataAnnotations;
 
 public class Review
 {
-    public long Id { get; set; }
-    public long ProductId { get; set; }
-    [Range(0, 5)] public decimal Rating { get; set; }
-    [MaxLength(5000)] public required string Text { get; set; }
-    public DateTimeOffset CreatedAt { get; set; }
+    [Required] public required long Id { get; set; }
+    [Required] public required long ProductId { get; set; }
+    [Required] [Range(0, 5)] public required decimal Rating { get; set; }
+    [Required] [MaxLength(5000)] public required string Text { get; set; }
+    [Required] public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
 }

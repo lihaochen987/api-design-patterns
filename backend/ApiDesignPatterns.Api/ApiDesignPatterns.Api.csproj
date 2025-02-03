@@ -300,7 +300,6 @@
 
   <ItemGroup>
     <Folder Include="Product\ApplicationLayer\" />
-    <Folder Include="Review\ApplicationLayer\Queries\GetReviewView\" />
   </ItemGroup>
 
   <ItemGroup>

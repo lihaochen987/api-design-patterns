@@ -86,14 +86,14 @@ public class ReviewComposer
         return new DeleteReviewController(queryHandler, commandHandler);
     }
 
-    public GetReviewController CreateGetReviewController()
-    {
-        var applicationService = CreateReviewViewApplicationService();
-        return new GetReviewController(
-            applicationService,
-            _fieldMaskConverterFactory,
-            _mapper);
-    }
+    // public GetReviewController CreateGetReviewController()
+    // {
+    //     var applicationService = CreateReviewViewApplicationService();
+    //     return new GetReviewController(
+    //         applicationService,
+    //         _fieldMaskConverterFactory,
+    //         _mapper);
+    // }
 
     public ListReviewsController CreateListReviewsController()
     {
