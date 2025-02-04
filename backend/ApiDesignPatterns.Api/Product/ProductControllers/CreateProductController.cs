@@ -1,7 +1,7 @@
-using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
-using backend.Product.DomainModels.Enums;
+using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
 using backend.Shared.CommandHandler;
+using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -11,8 +11,8 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class CreateProductController(
     ICommandHandler<CreateProductQuery> createProduct,
-    CreateProductExtensions extensions,
-    IMapper mapper)
+    IQueryHandler<CreateProductResponseQuery, CreateProductResponse> createProductResponse,
+    CreateProductExtensions extensions)
     : ControllerBase
 {
     [HttpPost]
@@ -24,12 +24,7 @@ public class CreateProductController(
         DomainModels.Product product = extensions.ToEntity(request);
         await createProduct.Handle(new CreateProductQuery { Product = product });
 
-        CreateProductResponse response = product.Category switch
-        {
-            Category.PetFood => mapper.Map<CreatePetFoodResponse>(product),
-            Category.GroomingAndHygiene => mapper.Map<CreateGroomingAndHygieneResponse>(product),
-            _ => mapper.Map<CreateProductResponse>(product)
-        };
+        var response = await createProductResponse.Handle(new CreateProductResponseQuery { Product = product });
 
         return CreatedAtAction(
             "GetProduct",

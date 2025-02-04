@@ -6,6 +6,7 @@ using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
+using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
@@ -74,7 +75,20 @@ public class ProductControllerActivator : BaseControllerActivator
             var createProductWithTransaction =
                 new TransactionCommandHandlerDecorator<CreateProductQuery>(createProductWithLogging, dbConnection);
 
-            return new CreateProductController(createProductWithTransaction, _createProductExtensions, _mapper);
+            // CreateProductResponse handler
+            var createProductResponse = new CreateProductResponseHandler(_mapper);
+            var createProductResponseWithLogging =
+                new LoggingQueryHandlerDecorator<CreateProductResponseQuery, CreateProductResponse>(
+                    createProductResponse,
+                    _loggerFactory
+                        .CreateLogger<
+                            LoggingQueryHandlerDecorator<CreateProductResponseQuery, CreateProductResponse>>());
+            var createProductResponseWithValidation =
+                new ValidationQueryHandlerDecorator<CreateProductResponseQuery, CreateProductResponse>(
+                    createProductResponseWithLogging);
+
+            return new CreateProductController(createProductWithTransaction, createProductResponseWithValidation,
+                _createProductExtensions);
         }
 
         if (type == typeof(DeleteProductController))
