@@ -1,7 +1,4 @@
-using AutoMapper;
-using backend.Product.ApplicationLayer.Queries.GetProductView;
-using backend.Product.DomainModels.Enums;
-using backend.Product.DomainModels.Views;
+using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +10,8 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class GetProductController(
-    IQueryHandler<GetProductViewQuery, ProductView> getProductView,
-    IFieldMaskConverterFactory fieldMaskConverterFactory,
-    IMapper mapper)
+    IQueryHandler<GetProductResponseQuery, GetProductResponse> getProductResponse,
+    IFieldMaskConverterFactory fieldMaskConverterFactory)
     : ControllerBase
 {
     [HttpGet("{id:long}")]
@@ -26,18 +22,11 @@ public class GetProductController(
         [FromRoute] long id,
         [FromQuery] GetProductRequest request)
     {
-        ProductView? productView = await getProductView.Handle(new GetProductViewQuery { Id = id });
-        if (productView == null)
+        var response = await getProductResponse.Handle(new GetProductResponseQuery { Id = id });
+        if (response == null)
         {
             return NotFound();
         }
-
-        GetProductResponse response = Enum.Parse<Category>(productView.Category) switch
-        {
-            Category.PetFood => mapper.Map<GetPetFoodResponse>(productView),
-            Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(productView),
-            _ => mapper.Map<GetProductResponse>(productView)
-        };
 
         var converter = fieldMaskConverterFactory.Create(request.FieldMask);
         JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };

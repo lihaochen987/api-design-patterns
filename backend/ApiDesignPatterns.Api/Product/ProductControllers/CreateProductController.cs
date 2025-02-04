@@ -24,7 +24,7 @@ public class CreateProductController(
         DomainModels.Product product = extensions.ToEntity(request);
         await createProduct.Handle(new CreateProductQuery { Product = product });
 
-        object response = product.Category switch
+        CreateProductResponse response = product.Category switch
         {
             Category.PetFood => mapper.Map<CreatePetFoodResponse>(product),
             Category.GroomingAndHygiene => mapper.Map<CreateGroomingAndHygieneResponse>(product),

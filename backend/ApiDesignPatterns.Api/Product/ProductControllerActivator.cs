@@ -7,7 +7,7 @@ using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
-using backend.Product.ApplicationLayer.Queries.GetProductView;
+using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Database.Product;
@@ -106,16 +106,20 @@ public class ProductControllerActivator : BaseControllerActivator
             TrackDisposable(context, dbConnection);
             var repository = new ProductViewRepository(dbConnection, _productQueryService, _productSqlFilterBuilder);
 
-            // GetProductView handler
-            var getProductView = new GetProductViewHandler(repository);
-            var getProductViewWithLogging = new LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>(
-                getProductView,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductViewQuery, ProductView>>());
+            // GetProductResponse handler
+            var getProductResponse = new GetProductResponseHandler(repository, _mapper);
+            var getProductResponseWithLogging =
+                new LoggingQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>(
+                    getProductResponse,
+                    _loggerFactory
+                        .CreateLogger<LoggingQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>>());
+            var getProductResponseWithValidation =
+                new ValidationQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>(
+                    getProductResponseWithLogging);
 
             return new GetProductController(
-                getProductViewWithLogging,
-                _fieldMaskConverterFactory,
-                _mapper);
+                getProductResponseWithValidation,
+                _fieldMaskConverterFactory);
         }
 
         if (type == typeof(ListProductsController))

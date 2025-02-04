@@ -1,8 +1,7 @@
 using System.Net;
 using AutoFixture;
-using backend.Product.ApplicationLayer.Queries.GetProductView;
+using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.DomainModels.Enums;
-using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using Microsoft.AspNetCore.Mvc;
@@ -17,18 +16,23 @@ public class GetProductControllerTests : GetProductControllerTestBase
     [Fact]
     public async Task GetProduct_ReturnsOkResult_WhenProductExists()
     {
-        ProductView productView = new ProductViewTestDataBuilder().WithName("Dog Food").WithCategory(Category.PetFood)
-            .Build();
+        long productId = Fixture.Create<long>();
+        GetProductResponse productResponse = new ProductViewTestDataBuilder()
+            .WithId(productId)
+            .WithName("Dog Food")
+            .WithCategory(Category.PetFood)
+            .BuildAndConvertToResponse();
         GetProductRequest request = Fixture.Build<GetProductRequest>()
             .With(r => r.FieldMask, ["Name", "Price"])
             .Create();
         Mock
-            .Get(MockGetProductView)
-            .Setup(service => service.Handle(It.Is<GetProductViewQuery>(q => q.Id == productView.Id)))
-            .ReturnsAsync(productView);
-        var sut = GetProductController();
+            .Get(MockGetProductResponse)
+            .Setup(service =>
+                service.Handle(It.Is<GetProductResponseQuery>(q => q.Id.ToString() == productResponse.Id)))
+            .ReturnsAsync(productResponse);
+        GetProductController sut = GetProductController();
 
-        ActionResult<GetProductResponse> result = await sut.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse> result = await sut.GetProduct(productId, request);
 
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
@@ -40,15 +44,15 @@ public class GetProductControllerTests : GetProductControllerTestBase
     [Fact]
     public async Task GetProduct_ReturnsNotFound_WhenProductDoesNotExist()
     {
-        ProductView productView = new ProductViewTestDataBuilder().Build();
+        long productId = Fixture.Create<long>();
         GetProductRequest request = Fixture.Create<GetProductRequest>();
         Mock
-            .Get(MockGetProductView)
-            .Setup(service => service.Handle(It.Is<GetProductViewQuery>(q => q.Id == productView.Id)))
-            .ReturnsAsync((ProductView?)null);
-        var sut = GetProductController();
+            .Get(MockGetProductResponse)
+            .Setup(service => service.Handle(It.Is<GetProductResponseQuery>(q => q.Id == productId)))
+            .ReturnsAsync((GetProductResponse?)null);
+        GetProductController sut = GetProductController();
 
-        ActionResult<GetProductResponse> result = await sut.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse> result = await sut.GetProduct(productId, request);
 
         result.Result.ShouldBeOfType<NotFoundResult>();
     }
@@ -58,18 +62,22 @@ public class GetProductControllerTests : GetProductControllerTestBase
     public async Task
         GetProduct_ReturnsOkResult_WithGroomingAndHygieneResponse_WhenProductCategoryIsGroomingAndHygiene()
     {
-        ProductView productView = new ProductViewTestDataBuilder().WithName("Shampoo")
-            .WithCategory(Category.GroomingAndHygiene).Build();
+        long productId = Fixture.Create<long>();
+        GetProductResponse productResponse = new ProductViewTestDataBuilder()
+            .WithId(productId)
+            .WithName("Shampoo")
+            .WithCategory(Category.GroomingAndHygiene)
+            .BuildAndConvertToResponse();
         GetProductRequest request = Fixture.Build<GetProductRequest>()
             .With(r => r.FieldMask, ["Name", "Price"])
             .Create();
         Mock
-            .Get(MockGetProductView)
-            .Setup(service => service.Handle(It.Is<GetProductViewQuery>(q => q.Id == productView.Id)))
-            .ReturnsAsync(productView);
-        var sut = GetProductController();
+            .Get(MockGetProductResponse)
+            .Setup(service => service.Handle(It.Is<GetProductResponseQuery>(q => q.Id == productId)))
+            .ReturnsAsync(productResponse);
+        GetProductController sut = GetProductController();
 
-        ActionResult<GetProductResponse> result = await sut.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse> result = await sut.GetProduct(productId, request);
 
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
@@ -81,16 +89,20 @@ public class GetProductControllerTests : GetProductControllerTestBase
     [Fact]
     public async Task GetProduct_ReturnsOkResult_WithGenericResponse_WhenProductCategoryIsNotPetFoodOrGrooming()
     {
-        ProductView productView = new ProductViewTestDataBuilder().WithName("Other Product").WithCategory(Category.Beds)
-            .Build();
+        long productId = Fixture.Create<long>();
+        GetProductResponse productResponse = new ProductViewTestDataBuilder()
+            .WithId(productId)
+            .WithName("Other Product")
+            .WithCategory(Category.Beds)
+            .BuildAndConvertToResponse();
         GetProductRequest request = Fixture.Create<GetProductRequest>();
         Mock
-            .Get(MockGetProductView)
-            .Setup(service => service.Handle(It.Is<GetProductViewQuery>(q => q.Id == productView.Id)))
-            .ReturnsAsync(productView);
-        var sut = GetProductController();
+            .Get(MockGetProductResponse)
+            .Setup(service => service.Handle(It.Is<GetProductResponseQuery>(q => q.Id == productId)))
+            .ReturnsAsync(productResponse);
+        GetProductController sut = GetProductController();
 
-        ActionResult<GetProductResponse> result = await sut.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse> result = await sut.GetProduct(productId, request);
 
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
@@ -103,17 +115,21 @@ public class GetProductControllerTests : GetProductControllerTestBase
     [Fact]
     public async Task GetProduct_SerializesWithFieldMaskCorrectly()
     {
-        ProductView productView = new ProductViewTestDataBuilder().WithName("Masked Product").Build();
+        long productId = Fixture.Create<long>();
+        GetProductResponse productResponse = new ProductViewTestDataBuilder()
+            .WithId(productId)
+            .WithName("Masked Product")
+            .BuildAndConvertToResponse();
         GetProductRequest request = Fixture.Build<GetProductRequest>()
             .With(r => r.FieldMask, ["Name"])
             .Create();
         Mock
-            .Get(MockGetProductView)
-            .Setup(service => service.Handle(It.Is<GetProductViewQuery>(q => q.Id == productView.Id)))
-            .ReturnsAsync(productView);
-        var sut = GetProductController();
+            .Get(MockGetProductResponse)
+            .Setup(service => service.Handle(It.Is<GetProductResponseQuery>(q => q.Id == productId)))
+            .ReturnsAsync(productResponse);
+        GetProductController sut = GetProductController();
 
-        ActionResult<GetProductResponse> result = await sut.GetProduct(productView.Id, request);
+        ActionResult<GetProductResponse> result = await sut.GetProduct(productId, request);
 
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);

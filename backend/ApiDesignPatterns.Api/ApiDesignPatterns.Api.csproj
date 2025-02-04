@@ -273,9 +273,6 @@
     <Compile Update="Product\Tests\ApplicationLayerTests\DeleteProductHandlerTestBase.cs">
       <DependentUpon>DeleteProductHandlerTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\GetProductViewHandlerTestBase.cs">
-      <DependentUpon>GetProductViewHandlerTests.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\Tests\ApplicationLayerTests\ListProductHandlerTestBase.cs">
       <DependentUpon>ListProductHandlerTests.cs</DependentUpon>
     </Compile>

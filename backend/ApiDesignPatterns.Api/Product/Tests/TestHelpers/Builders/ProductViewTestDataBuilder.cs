@@ -1,7 +1,9 @@
 using AutoFixture;
+using AutoMapper;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
+using backend.Product.ProductControllers;
 
 namespace backend.Product.Tests.TestHelpers.Builders;
 
@@ -12,19 +14,25 @@ public class ProductViewTestDataBuilder
     private readonly BreedSize _breedSize;
     private string _category;
     private Dimensions _dimensions;
-    private int? _id;
+    private long? _id;
     private readonly string _ingredients;
     private string _name;
     private readonly Dictionary<string, object> _nutritionalInfo;
     private decimal _price;
     private readonly string _storageInstructions;
     private readonly decimal _weightKg;
+    private readonly IMapper _mapper;
 
     public ProductViewTestDataBuilder()
     {
+        // Fixture configuration
         _fixture = new Fixture();
         _fixture.Customizations.Add(new ProductPricingBuilder());
         _fixture.Customizations.Add(new ProductDimensionsBuilder());
+
+        // Mapper configuration
+        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
+        _mapper = mapperConfig.CreateMapper();
 
         _name = _fixture.Create<string>();
         _category = _fixture.Create<Category>().ToString();
@@ -38,7 +46,7 @@ public class ProductViewTestDataBuilder
         _weightKg = _fixture.Create<decimal>();
     }
 
-    public ProductViewTestDataBuilder WithId(int id)
+    public ProductViewTestDataBuilder WithId(long id)
     {
         _id = id;
         return this;
@@ -78,6 +86,12 @@ public class ProductViewTestDataBuilder
         }
 
         return products;
+    }
+
+    public GetProductResponse BuildAndConvertToResponse()
+    {
+        var productView = Build();
+        return _mapper.Map<GetProductResponse>(productView);
     }
 
     public ProductView Build() =>

@@ -28,9 +28,11 @@ var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 // Manual dependency injection
 builder.Services.AddSingleton<IControllerActivator>(
     new ProductControllerActivator(builder.Configuration, loggerFactory));
-builder.Services.AddSingleton<IControllerActivator>(new ReviewControllerActivator(
-    builder.Configuration,
-    loggerFactory));
+
+// Todo: Find out how to have multiple
+// builder.Services.AddSingleton<IControllerActivator>(new ReviewControllerActivator(
+//     builder.Configuration,
+//     loggerFactory));
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

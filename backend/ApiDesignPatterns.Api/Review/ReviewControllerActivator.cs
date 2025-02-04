@@ -60,6 +60,6 @@ public class ReviewControllerActivator : BaseControllerActivator
                 _mapper);
         }
 
-        throw new Exception($"Unknown product controller type: {type.Name}");
+        throw new Exception($"Unknown reviewe controller type: {type.Name}");
     }
 }
