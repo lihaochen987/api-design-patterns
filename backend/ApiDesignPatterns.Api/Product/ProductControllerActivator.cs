@@ -18,6 +18,7 @@ using backend.Product.Services;
 using backend.Product.Services.ProductServices;
 using backend.Shared;
 using backend.Shared.CommandHandler;
+using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +56,7 @@ public class ProductControllerActivator : BaseControllerActivator
         _loggerFactory = loggerFactory;
     }
 
-    public override object Create(ControllerContext context)
+    public override object? Create(ControllerContext context)
     {
         Type type = context.ActionDescriptor.ControllerTypeInfo.AsType();
 
@@ -200,6 +201,6 @@ public class ProductControllerActivator : BaseControllerActivator
             return new UpdateProductController(getProductWithLogging, updateProductWithTransaction, _mapper);
         }
 
-        throw new Exception($"Unknown product controller type: {type.Name}");
+        return null;
     }
 }

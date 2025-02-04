@@ -176,7 +176,7 @@ public class UpdateProductHandler(
     /// </code>
     ///
     /// Output:
-    /// <code>
+    /// <code> 
     /// {
     ///   "name": "Premium Shampoo",
     ///   "category": "Grooming",

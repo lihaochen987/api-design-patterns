@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Npgsql;
 
-namespace backend;
+namespace backend.Shared.ControllerActivators;
 
 public abstract class BaseControllerActivator(IConfiguration configuration) : IControllerActivator
 {
-    public abstract object Create(ControllerContext context);
+    public abstract object? Create(ControllerContext context);
 
     public virtual void Release(ControllerContext context, object controller)
     {

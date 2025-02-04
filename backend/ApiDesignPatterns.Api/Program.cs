@@ -1,8 +1,10 @@
 using System.Data;
 using System.Text.Json.Serialization;
+using backend;
 using backend.Product;
 using backend.Review;
 using backend.Shared;
+using backend.Shared.ControllerActivators;
 using DbUp;
 using DbUp.Engine;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -26,13 +28,16 @@ var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 });
 
 // Manual dependency injection
-builder.Services.AddSingleton<IControllerActivator>(
+builder.Services.AddSingleton<BaseControllerActivator>(
     new ProductControllerActivator(builder.Configuration, loggerFactory));
+builder.Services.AddSingleton<BaseControllerActivator>(
+    new ReviewControllerActivator(builder.Configuration, loggerFactory));
 
-// Todo: Find out how to have multiple
-// builder.Services.AddSingleton<IControllerActivator>(new ReviewControllerActivator(
-//     builder.Configuration,
-//     loggerFactory));
+builder.Services.AddSingleton<IControllerActivator>(sp =>
+{
+    var activators = sp.GetServices<BaseControllerActivator>().ToList();
+    return new CompositeControllerActivator(builder.Configuration, activators);
+});
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
