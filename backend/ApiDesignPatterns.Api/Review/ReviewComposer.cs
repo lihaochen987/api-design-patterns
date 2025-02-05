@@ -67,11 +67,11 @@ public class ReviewComposer
         return new ReviewApplicationService(repository, _reviewFieldMaskConfiguration);
     }
 
-    private ReviewViewApplicationService CreateReviewViewApplicationService()
-    {
-        var repository = CreateReviewViewRepository();
-        return new ReviewViewApplicationService(repository);
-    }
+    // private ReviewViewApplicationService CreateReviewViewApplicationService()
+    // {
+    //     var repository = CreateReviewViewRepository();
+    //     return new ReviewViewApplicationService(repository);
+    // }
 
     public CreateReviewController CreateCreateReviewController()
     {
@@ -95,11 +95,11 @@ public class ReviewComposer
     //         _mapper);
     // }
 
-    public ListReviewsController CreateListReviewsController()
-    {
-        var applicationService = CreateReviewViewApplicationService();
-        return new ListReviewsController(applicationService, _mapper);
-    }
+    // public ListReviewsController CreateListReviewsController()
+    // {
+    //     var applicationService = CreateReviewViewApplicationService();
+    //     return new ListReviewsController(applicationService, _mapper);
+    // }
 
     public ReplaceReviewController CreateReplaceReviewController()
     {

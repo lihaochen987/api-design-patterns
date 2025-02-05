@@ -1,16 +1,16 @@
 using AutoMapper;
-using backend.Product.ProductControllers;
-using backend.Review.ApplicationLayer;
+using backend.Review.ApplicationLayer.Queries.ListReviews;
 using backend.Review.DomainModels;
+using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Review.ReviewControllers;
 
-[Route("{productId}/reviews")]
+[Route("{parentId}/reviews")]
 [ApiController]
 public class ListReviewsController(
-    IReviewViewApplicationService applicationService,
+    IQueryHandler<ListReviewsQuery, (List<ReviewView>, string?)> listReviews,
     IMapper mapper)
     : ControllerBase
 {
@@ -19,9 +19,10 @@ public class ListReviewsController(
     [ProducesResponseType(typeof(ListReviewsResponse), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ListReviewsResponse>>> ListReviews(
         [FromQuery] ListReviewsRequest request,
-        string productId)
+        string parentId)
     {
-        (List<ReviewView> reviews, string? nextPageToken) = await applicationService.ListProductsAsync(request, productId);
+        (List<ReviewView> reviews, string? nextPageToken) =
+            await listReviews.Handle(new ListReviewsQuery { ParentId = parentId, Request = request });
 
         ListReviewsResponse response = new()
         {
