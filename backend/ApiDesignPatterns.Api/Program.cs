@@ -1,6 +1,5 @@
 using System.Data;
 using System.Text.Json.Serialization;
-using backend;
 using backend.Product;
 using backend.Review;
 using backend.Shared;
@@ -30,6 +29,8 @@ var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 // Manual dependency injection
 builder.Services.AddSingleton<BaseControllerActivator>(
     new ProductControllerActivator(builder.Configuration, loggerFactory));
+builder.Services.AddSingleton<BaseControllerActivator>(
+    new ProductPricingControllerActivator(builder.Configuration, loggerFactory));
 builder.Services.AddSingleton<BaseControllerActivator>(
     new ReviewControllerActivator(builder.Configuration, loggerFactory));
 

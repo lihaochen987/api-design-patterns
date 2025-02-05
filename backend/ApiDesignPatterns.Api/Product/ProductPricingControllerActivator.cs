@@ -2,13 +2,11 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Product.ApplicationLayer.Queries.GetProductResponse;
+using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.DomainModels.Views;
-using backend.Product.InfrastructureLayer.Database.ProductView;
-using backend.Product.ProductControllers;
+using backend.Product.InfrastructureLayer.Database.ProductPricing;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
-using backend.Shared;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
@@ -18,8 +16,6 @@ namespace backend.Product;
 
 public class ProductPricingControllerActivator : BaseControllerActivator
 {
-    private readonly QueryService<ProductView> _productQueryService;
-    private readonly SqlFilterBuilder _productSqlFilterBuilder;
     private readonly IMapper _mapper;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly ILoggerFactory _loggerFactory;
@@ -29,16 +25,11 @@ public class ProductPricingControllerActivator : BaseControllerActivator
         ILoggerFactory loggerFactory)
         : base(configuration)
     {
-        _productQueryService = new QueryService<ProductView>();
-
-        ProductColumnMapper productColumnMapper = new();
-        _productSqlFilterBuilder = new SqlFilterBuilder(productColumnMapper);
-
-        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
+        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductPricingMappingProfile>(); });
         _mapper = mapperConfig.CreateMapper();
 
-        ProductFieldPaths productFieldPaths = new();
-        _fieldMaskConverterFactory = new FieldMaskConverterFactory(productFieldPaths.ValidPaths);
+        ProductPricingFieldPaths productPricingFieldPaths = new();
+        _fieldMaskConverterFactory = new FieldMaskConverterFactory(productPricingFieldPaths.ValidPaths);
 
         _loggerFactory = loggerFactory;
     }
@@ -51,21 +42,22 @@ public class ProductPricingControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new ProductViewRepository(dbConnection, _productQueryService, _productSqlFilterBuilder);
+            var repository = new ProductPricingRepository(dbConnection);
 
-            // GetProductResponse handler
-            var getProductResponse = new GetProductResponseHandler(repository, _mapper);
-            var getProductResponseWithLogging =
-                new LoggingQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>(
-                    getProductResponse,
+            // GetProductPricing handler
+            var getProductPricing = new GetProductPricingHandler(repository);
+            var getProductPricingWithLogging =
+                new LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(
+                    getProductPricing,
                     _loggerFactory
-                        .CreateLogger<LoggingQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>>());
-            var getProductResponseWithValidation =
-                new ValidationQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>(
-                    getProductResponseWithLogging);
+                        .CreateLogger<LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>>());
+            var getPricingWithValidation =
+                new ValidationQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(
+                    getProductPricingWithLogging);
 
-            return new GetProductController(
-                getProductResponseWithValidation,
+            return new GetProductPricingController(
+                getPricingWithValidation,
+                _mapper,
                 _fieldMaskConverterFactory);
         }
 
