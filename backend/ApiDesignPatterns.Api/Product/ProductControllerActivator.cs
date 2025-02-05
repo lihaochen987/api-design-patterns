@@ -14,8 +14,8 @@ using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Product.InfrastructureLayer.Database.ProductView;
 using backend.Product.ProductControllers;
+using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
-using backend.Product.Services.ProductServices;
 using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
@@ -199,6 +199,28 @@ public class ProductControllerActivator : BaseControllerActivator
             var updateProductWithTransaction =
                 new TransactionCommandHandlerDecorator<UpdateProductQuery>(updateProductWithLogging, dbConnection);
             return new UpdateProductController(getProductWithLogging, updateProductWithTransaction, _mapper);
+        }
+
+        if (type == typeof(GetProductPricingController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new ProductViewRepository(dbConnection, _productQueryService, _productSqlFilterBuilder);
+
+            // GetProductResponse handler
+            var getProductResponse = new GetProductResponseHandler(repository, _mapper);
+            var getProductResponseWithLogging =
+                new LoggingQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>(
+                    getProductResponse,
+                    _loggerFactory
+                        .CreateLogger<LoggingQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>>());
+            var getProductResponseWithValidation =
+                new ValidationQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>(
+                    getProductResponseWithLogging);
+
+            return new GetProductController(
+                getProductResponseWithValidation,
+                _fieldMaskConverterFactory);
         }
 
         return null;

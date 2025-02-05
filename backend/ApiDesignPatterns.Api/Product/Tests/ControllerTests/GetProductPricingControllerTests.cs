@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Net;
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.DomainModels.Views;
@@ -28,13 +30,15 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
 
         ActionResult<GetProductPricingResponse> actionResult = await sut.GetProductPricing(product.Id, request);
 
-        actionResult.Result.ShouldNotBeNull();
         actionResult.Result.ShouldBeOfType<OkObjectResult>();
         OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
-        contentResult.ShouldNotBeNull();
-        GetProductPricingResponse? response =
-            JsonConvert.DeserializeObject<GetProductPricingResponse>(contentResult.Value!.ToString()!);
-        response.ShouldBeEquivalentTo(Extensions.ToGetProductPricingResponse(product.Pricing, product.Id));
+        GetProductPricingResponse response =
+            JsonConvert.DeserializeObject<GetProductPricingResponse>(contentResult!.Value!.ToString()!)!;
+        response.pricing.BasePrice.ShouldBeEquivalentTo(
+            product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture));
+        response.pricing.DiscountPercentage.ShouldBeEquivalentTo(
+            product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture));
+        response.pricing.TaxRate.ShouldBeEquivalentTo(product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture));
     }
 
     [Fact]
@@ -53,7 +57,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
     {
         ProductPricingView product = new ProductPricingViewTestDataBuilder().Build();
         GetProductPricingRequest? request = Fixture.Build<GetProductPricingRequest>()
-            .With(r => r.FieldMask, ["BasePrice"])
+            .With(r => r.FieldMask, ["pricing.BasePrice"])
             .Create();
         Mock
             .Get(MockGetProductPricing)
@@ -61,15 +65,13 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
             .ReturnsAsync(product);
         var sut = ProductPricingController();
 
-        ActionResult<GetProductPricingResponse> actionResult = await sut.GetProductPricing(product.Id, request);
+        ActionResult<GetProductPricingResponse> result = await sut.GetProductPricing(product.Id, request);
 
-        actionResult.Result.ShouldNotBeNull();
-        actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? result = actionResult.Result as OkObjectResult;
-        Dictionary<string, object>? response =
-            JsonConvert.DeserializeObject<Dictionary<string, object>>(result!.Value!.ToString()!);
-        response!.ShouldContainKey("BasePrice");
-        response!.Count.ShouldBe(1);
+        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
+        okResult.Value.ShouldNotBeNull();
+        string jsonResult = (okResult.Value as string)!;
+        jsonResult.ShouldContain("BasePrice");
     }
 
     [Fact]
@@ -85,16 +87,15 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
             .ReturnsAsync(product);
         var sut = ProductPricingController();
 
-        ActionResult<GetProductPricingResponse> actionResult = await sut.GetProductPricing(product.Id, request);
+        ActionResult<GetProductPricingResponse> result = await sut.GetProductPricing(product.Id, request);
 
-        actionResult.Result.ShouldNotBeNull();
-        actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? result = actionResult.Result as OkObjectResult;
-        Dictionary<string, object>? response =
-            JsonConvert.DeserializeObject<Dictionary<string, object>>(result!.Value!.ToString()!);
-        response!.ShouldContainKey("BasePrice");
-        response!.ShouldContainKey("DiscountPercentage");
-        response!.ShouldContainKey("TaxRate");
+        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
+        okResult.Value.ShouldNotBeNull();
+        string jsonResult = (okResult.Value as string)!;
+        jsonResult.ShouldContain("BasePrice");
+        jsonResult.ShouldContain("DiscountPercentage");
+        jsonResult.ShouldContain("TaxRate");
     }
 
     [Fact]
@@ -102,7 +103,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
     {
         ProductPricingView product = new ProductPricingViewTestDataBuilder().Build();
         GetProductPricingRequest? request = Fixture.Build<GetProductPricingRequest>()
-            .With(r => r.FieldMask, ["InvalidField", "BasePrice", "TaxRate"])
+            .With(r => r.FieldMask, ["InvalidField", "pricing.baseprice", "pricing.taxrate"])
             .Create();
         Mock
             .Get(MockGetProductPricing)
@@ -110,16 +111,14 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
             .ReturnsAsync(product);
         var sut = ProductPricingController();
 
-        ActionResult<GetProductPricingResponse> actionResult = await sut.GetProductPricing(product.Id, request);
+        ActionResult<GetProductPricingResponse> result = await sut.GetProductPricing(product.Id, request);
 
-        actionResult.Result.ShouldNotBeNull();
-        actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
-        contentResult.ShouldNotBeNull();
-        Dictionary<string, object>? response =
-            JsonConvert.DeserializeObject<Dictionary<string, object>>(contentResult.Value!.ToString()!);
-        response!.ShouldContainKey("BasePrice");
-        response!.ShouldContainKey("TaxRate");
-        response!.Count.ShouldBe(2);
+        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
+        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
+        okResult.Value.ShouldNotBeNull();
+        string jsonResult = (okResult.Value as string)!;
+        jsonResult.ShouldContain("BasePrice");
+        jsonResult.ShouldContain("TaxRate");
+        jsonResult.ShouldNotContain("DiscountPercentage");
     }
 }

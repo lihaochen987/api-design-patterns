@@ -1,3 +1,4 @@
+using AutoMapper;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.DomainModels.Views;
 using backend.Shared.FieldMask;
@@ -12,7 +13,7 @@ namespace backend.Product.ProductPricingControllers;
 [Route("product")]
 public class GetProductPricingController(
     IQueryHandler<GetProductPricingQuery, ProductPricingView> getProductPricing,
-    GetProductPricingExtensions extensions,
+    IMapper mapper,
     IFieldMaskConverterFactory fieldMaskConverterFactory)
     : ControllerBase
 {
@@ -22,14 +23,14 @@ public class GetProductPricingController(
         [FromRoute] long id,
         [FromQuery] GetProductPricingRequest request)
     {
-        ProductPricingView? product = await getProductPricing.Handle(new GetProductPricingQuery { Id = id });
+        ProductPricingView? productPricingView = await getProductPricing.Handle(new GetProductPricingQuery { Id = id });
 
-        if (product == null)
+        if (productPricingView == null)
         {
             return NotFound();
         }
 
-        GetProductPricingResponse response = extensions.ToGetProductPricingResponse(product.Pricing, product.Id);
+        GetProductPricingResponse response = mapper.Map<GetProductPricingResponse>(productPricingView);
 
         var converter = fieldMaskConverterFactory.Create(request.FieldMask);
         JsonSerializerSettings settings = new() { Converters = new List<JsonConverter> { converter } };

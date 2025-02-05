@@ -3,7 +3,6 @@ using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.InfrastructureLayer;
 using backend.Product.InfrastructureLayer.Database.Product;
-using backend.Product.Services.ProductPricingServices;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;

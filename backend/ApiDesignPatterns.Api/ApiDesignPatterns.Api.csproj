@@ -117,9 +117,6 @@
     <Compile Update="Product\ProductControllers\UpdateProductResponse.cs">
       <DependentUpon>UpdateProductController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\ProductPricingControllers\GetProductPricingExtensions.cs">
-      <DependentUpon>GetProductPricingController.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\ProductPricingControllers\GetProductPricingRequest.cs">
       <DependentUpon>GetProductPricingController.cs</DependentUpon>
     </Compile>
