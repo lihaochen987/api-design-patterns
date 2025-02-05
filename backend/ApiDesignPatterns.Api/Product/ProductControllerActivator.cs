@@ -198,6 +198,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductQuery>>());
             var updateProductWithTransaction =
                 new TransactionCommandHandlerDecorator<UpdateProductQuery>(updateProductWithLogging, dbConnection);
+
             return new UpdateProductController(getProductWithLogging, updateProductWithTransaction, _mapper);
         }
 

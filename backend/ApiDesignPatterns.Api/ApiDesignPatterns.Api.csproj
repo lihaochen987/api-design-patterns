@@ -123,9 +123,6 @@
     <Compile Update="Product\ProductPricingControllers\GetProductPricingResponse.cs">
       <DependentUpon>GetProductPricingController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\ProductPricingControllers\UpdateProductPricingExtensions.cs">
-      <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\ProductPricingControllers\UpdateProductPricingRequest.cs">
       <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
     </Compile>
@@ -284,6 +281,12 @@
     </Compile>
     <Compile Update="Product\Tests\ApplicationLayerTests\GetProductResponseHandlerTestBase.cs">
       <DependentUpon>GetProductResponseHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\UpdateProductPricingHandlerTestBase.cs">
+      <DependentUpon>UpdateProductPricingHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\CreateProductResponseHandlerTestBase.cs">
+      <DependentUpon>CreateProductResponseHandlerTests.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

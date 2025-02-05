@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Net;
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
+using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Tests.TestHelpers.Builders;
@@ -34,11 +35,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
         OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
         GetProductPricingResponse response =
             JsonConvert.DeserializeObject<GetProductPricingResponse>(contentResult!.Value!.ToString()!)!;
-        response.pricing.BasePrice.ShouldBeEquivalentTo(
-            product.Pricing.BasePrice.ToString(CultureInfo.InvariantCulture));
-        response.pricing.DiscountPercentage.ShouldBeEquivalentTo(
-            product.Pricing.DiscountPercentage.ToString(CultureInfo.InvariantCulture));
-        response.pricing.TaxRate.ShouldBeEquivalentTo(product.Pricing.TaxRate.ToString(CultureInfo.InvariantCulture));
+        response.pricing.ShouldBeEquivalentTo(Mapper.Map<ProductPricingResponse>(product.Pricing));
     }
 
     [Fact]

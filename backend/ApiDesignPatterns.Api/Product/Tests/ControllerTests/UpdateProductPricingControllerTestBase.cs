@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
+using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ProductPricingControllers;
@@ -14,19 +15,26 @@ namespace backend.Product.Tests.ControllerTests;
 
 public abstract class UpdateProductPricingControllerTestBase
 {
-    protected readonly UpdateProductPricingExtensions Extensions = new();
+    protected readonly IMapper Mapper;
     protected readonly Fixture Fixture = new();
 
     protected readonly IQueryHandler<GetProductQuery, DomainModels.Product> MockGetProductHandler =
         Mock.Of<IQueryHandler<GetProductQuery, DomainModels.Product>>();
-    protected readonly ICommandHandler<UpdateProductPricingQuery> MockUpdateProductPricingHandler =
+
+    private readonly ICommandHandler<UpdateProductPricingQuery> _mockUpdateProductPricingHandler =
         Mock.Of<ICommandHandler<UpdateProductPricingQuery>>();
+
+    protected UpdateProductPricingControllerTestBase()
+    {
+        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductPricingMappingProfile>(); });
+        Mapper = mapperConfiguration.CreateMapper();
+    }
 
     protected UpdateProductPricingController UpdateProductPricingController()
     {
         return new UpdateProductPricingController(
             MockGetProductHandler,
-            MockUpdateProductPricingHandler,
-            Extensions);
+            _mockUpdateProductPricingHandler,
+            Mapper);
     }
 }

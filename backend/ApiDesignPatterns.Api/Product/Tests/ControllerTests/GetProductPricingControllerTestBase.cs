@@ -15,7 +15,7 @@ namespace backend.Product.Tests.ControllerTests;
 
 public abstract class GetProductPricingControllerTestBase
 {
-    private readonly IMapper _mapper;
+    protected readonly IMapper Mapper;
     protected readonly Fixture Fixture = new();
 
     protected readonly IQueryHandler<GetProductPricingQuery, ProductPricingView> MockGetProductPricing =
@@ -27,14 +27,14 @@ public abstract class GetProductPricingControllerTestBase
     protected GetProductPricingControllerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductPricingMappingProfile>(); });
-        _mapper = mapperConfiguration.CreateMapper();
+        Mapper = mapperConfiguration.CreateMapper();
     }
 
     protected GetProductPricingController ProductPricingController()
     {
         return new GetProductPricingController(
             MockGetProductPricing,
-            _mapper,
+            Mapper,
             _fieldMaskConverterFactory);
     }
 }

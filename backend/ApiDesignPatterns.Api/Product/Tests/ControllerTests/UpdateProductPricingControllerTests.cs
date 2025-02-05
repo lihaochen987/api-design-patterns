@@ -32,7 +32,7 @@ public class UpdateProductPricingControllerTests : UpdateProductPricingControlle
             BasePrice = "99.99",
             DiscountPercentage = "10",
             TaxRate = "5",
-            FieldMask = ["baseprice", "discountpercentage", "taxrate"]
+            FieldMask = ["pricing.baseprice", "pricing.discountpercentage", "pricing.taxrate"]
         };
         Mock
             .Get(MockGetProductHandler)
@@ -47,6 +47,6 @@ public class UpdateProductPricingControllerTests : UpdateProductPricingControlle
         OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
         contentResult.ShouldNotBeNull();
         UpdateProductPricingResponse? response = contentResult.Value as UpdateProductPricingResponse;
-        response.ShouldBeEquivalentTo(Extensions.ToUpdateProductPricingResponse(product.Pricing, product.Id));
+        response.ShouldBeEquivalentTo(Mapper.Map<UpdateProductPricingResponse>(product));
     }
 }

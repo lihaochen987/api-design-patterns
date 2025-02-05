@@ -2,11 +2,15 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
+using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.DomainModels.Views;
+using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Product.InfrastructureLayer.Database.ProductPricing;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
+using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
@@ -59,6 +63,35 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                 getPricingWithValidation,
                 _mapper,
                 _fieldMaskConverterFactory);
+        }
+
+        if (type == typeof(UpdateProductPricingController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new ProductRepository(dbConnection);
+
+            // GetProduct handler
+            var getProduct = new GetProductHandler(repository);
+            var getProductWithLogging = new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(
+                getProduct,
+                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
+
+            // UpdateProductPricing handler
+            var updateProduct = new UpdateProductPricingHandler(repository);
+            var updateProductPricingWithAuditing =
+                new AuditCommandHandlerDecorator<UpdateProductPricingQuery>(updateProduct, dbConnection);
+            var updateProductPricingWithLogging = new LoggingCommandHandlerDecorator<UpdateProductPricingQuery>(
+                updateProductPricingWithAuditing,
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductPricingQuery>>());
+            var updateProductPricingWithTransaction =
+                new TransactionCommandHandlerDecorator<UpdateProductPricingQuery>(updateProductPricingWithLogging,
+                    dbConnection);
+
+            return new UpdateProductPricingController(
+                getProductWithLogging,
+                updateProductPricingWithTransaction,
+                _mapper);
         }
 
         return null;

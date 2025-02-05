@@ -1,3 +1,4 @@
+using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
@@ -15,7 +16,7 @@ namespace backend.Product.ProductPricingControllers;
 public class UpdateProductPricingController(
     IQueryHandler<GetProductQuery, DomainModels.Product> getProduct,
     ICommandHandler<UpdateProductPricingQuery> updateProductPricing,
-    UpdateProductPricingExtensions extensions)
+    IMapper mapper)
     : ControllerBase
 {
     [HttpPatch("{id:long}/pricing")]
@@ -33,7 +34,8 @@ public class UpdateProductPricingController(
 
         await updateProductPricing.Handle(
             new UpdateProductPricingQuery { Product = product, Request = request });
+        var response = mapper.Map<UpdateProductPricingResponse>(product);
 
-        return Ok(extensions.ToUpdateProductPricingResponse(product.Pricing, product.Id));
+        return Ok(response);
     }
 }
