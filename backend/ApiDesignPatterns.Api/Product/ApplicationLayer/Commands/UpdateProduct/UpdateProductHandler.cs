@@ -11,55 +11,23 @@ using backend.Shared.CommandHandler;
 namespace backend.Product.ApplicationLayer.Commands.UpdateProduct;
 
 /// <summary>
-/// Handles product update operations for the pet store product catalog, supporting different product types like PetFood and GroomingAndHygiene.
+/// Updates pet store product catalog items using field masking to selectively modify properties.
 /// </summary>
-/// <remarks>
-/// The handler uses a field mask approach to selectively update only the specified properties,
-/// maintaining existing values for unspecified fields.
-/// </remarks>
 /// <example>
-/// Input:
-/// <code>
-/// // Existing product state:
-/// {
-///   "id": 1,
-///   "name": "Basic Dog Food",
-///   "weightKg": 2.5,
-///   "ingredients": "Chicken, Wheat"
-/// }
-///
-/// // Update request:
+/// Update request:
 /// {
 ///   "name": "Premium Dog Food",
-///   "fieldMask": ["name", "weightKg", "ingredients"],
-///   "weightKg": "5.5",
-///   "ingredients": "Chicken, Rice, Vegetables"
+///   "fieldMask": ["name", "weightKg"],
+///   "weightKg": "5.5"
 /// }
-/// </code>
-///
-/// Output:
-/// <code>
-/// {
-///   "id": 1,
-///   "name": "Premium Dog Food",
-///   "weightKg": 5.5,
-///   "ingredients": "Chicken, Rice, Vegetables"
-/// }
-/// </code>
 /// </example>
 public class UpdateProductHandler(
     IProductRepository repository)
     : ICommandHandler<UpdateProductQuery>
 {
     /// <summary>
-    /// Processes the update product command by applying changes based on the field mask.
+    /// Updates product properties specified in the field mask.
     /// </summary>
-    /// <param name="command">The update command containing the request and target product.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    /// <remarks>
-    /// The method first updates base product properties, then handles type-specific updates
-    /// based on whether the product is PetFood or GroomingAndHygiene.
-    /// </remarks>
     public async Task Handle(UpdateProductQuery command)
     {
         UpdateBaseProduct(command.Request, command.Product);
@@ -79,13 +47,8 @@ public class UpdateProductHandler(
     }
 
     /// <summary>
-    /// Updates the base properties of a product entity.
+    /// Updates base product properties if specified in field mask.
     /// </summary>
-    /// <param name="request">The update request containing new values.</param>
-    /// <param name="product">The product to update.</param>
-    /// <remarks>
-    /// Updates name, pricing, category, and dimensions if specified in the field mask.
-    /// </remarks>
     private static void UpdateBaseProduct(
         UpdateProductRequest request,
         DomainModels.Product product)
@@ -100,14 +63,8 @@ public class UpdateProductHandler(
     }
 
     /// <summary>
-    /// Updates properties specific to pet food products.
+    /// Updates pet food specific properties if specified in field mask.
     /// </summary>
-    /// <param name="request">The update request containing new values.</param>
-    /// <param name="petFood">The pet food product to update.</param>
-    /// <remarks>
-    /// Updates age group, breed size, ingredients, nutritional info, storage instructions, and weight
-    /// if specified in the field mask.
-    /// </remarks>
     private static void UpdatePetFood(
         UpdateProductRequest request,
         PetFood petFood)
@@ -125,14 +82,8 @@ public class UpdateProductHandler(
     }
 
     /// <summary>
-    /// Updates properties specific to grooming and hygiene products.
+    /// Updates pet food specific properties if specified in field mask.
     /// </summary>
-    /// <param name="request">The update request containing new values.</param>
-    /// <param name="groomingAndHygiene">The grooming and hygiene product to update.</param>
-    /// <remarks>
-    /// Updates natural status, hypoallergenic status, usage instructions, cruelty-free status,
-    /// and safety warnings if specified in the field mask.
-    /// </remarks>
     private static void UpdateGroomingAndHygiene(
         UpdateProductRequest request,
         GroomingAndHygiene groomingAndHygiene)
@@ -149,45 +100,8 @@ public class UpdateProductHandler(
     }
 
     /// <summary>
-    /// Retrieves updated values for base product properties based on the field mask.
+    /// Returns updated base product values based on field mask.
     /// </summary>
-    /// <example>
-    /// Input:
-    /// <code>
-    /// // Existing product:
-    /// {
-    ///   "name": "Basic Shampoo",
-    ///   "category": "Grooming",
-    ///   "pricing": {
-    ///     "basePrice": 9.99,
-    ///     "discountPercentage": 0,
-    ///     "taxRate": 8.5
-    ///   }
-    /// }
-    ///
-    /// // Update request:
-    /// {
-    ///   "name": "Premium Shampoo",
-    ///   "fieldMask": ["name", "pricing.basePrice"],
-    ///   "pricing": {
-    ///     "basePrice": "14.99"
-    ///   }
-    /// }
-    /// </code>
-    ///
-    /// Output:
-    /// <code> 
-    /// {
-    ///   "name": "Premium Shampoo",
-    ///   "category": "Grooming",
-    ///   "pricing": {
-    ///     "basePrice": 14.99,
-    ///     "discountPercentage": 0,
-    ///     "taxRate": 8.5
-    ///   }
-    /// }
-    /// </code>
-    /// </example>
     private static (string name, Pricing pricing, Category category, Dimensions dimensions)
         GetUpdatedProductValues(
             UpdateProductRequest request,
@@ -210,27 +124,8 @@ public class UpdateProductHandler(
     }
 
     /// <summary>
-    /// Retrieves updated pricing values based on the field mask.
+    /// Returns updated pricing values based on field mask.
     /// </summary>
-    /// <param name="request">The update request containing new values.</param>
-    /// <param name="product">The current pricing state.</param>
-    /// <returns>A new Pricing object with updated values.</returns>
-    /// <example>
-    /// <code>
-    /// var updatedPricing = GetUpdatedProductPricingValues(
-    ///     new UpdateProductRequest
-    ///     {
-    ///         FieldMask = new[] { "basePrice", "discountPercentage" },
-    ///         Pricing = new PricingRequest
-    ///         {
-    ///             BasePrice = "29.99",
-    ///             DiscountPercentage = "10.0"
-    ///         }
-    ///     },
-    ///     existingPricing
-    /// );
-    /// </code>
-    /// </example>
     private static Pricing
         GetUpdatedProductPricingValues(
             UpdateProductRequest request,
@@ -256,11 +151,8 @@ public class UpdateProductHandler(
     }
 
     /// <summary>
-    /// Retrieves updated dimension values based on the field mask.
+    /// Returns updated dimension values based on field mask.
     /// </summary>
-    /// <param name="request">The update request containing new values.</param>
-    /// <param name="currentDimensions">The current dimensions state.</param>
-    /// <returns>A new Dimensions object with updated values.</returns>
     private static Dimensions GetUpdatedDimensionValues(
         UpdateProductRequest request,
         Dimensions currentDimensions)
@@ -284,11 +176,8 @@ public class UpdateProductHandler(
     }
 
     /// <summary>
-    /// Retrieves updated values for grooming and hygiene products based on the field mask.
+    /// Returns updated grooming and hygiene values based on field mask.
     /// </summary>
-    /// <param name="request">The update request containing new values.</param>
-    /// <param name="groomingAndHygiene">The current grooming and hygiene product state.</param>
-    /// <returns>A tuple containing updated grooming and hygiene specific values.</returns>
     private static (
         bool isNatural,
         bool isHypoAllergenic,
@@ -329,45 +218,8 @@ public class UpdateProductHandler(
 
 
     /// <summary>
-    /// Retrieves updated values for pet food products based on the field mask.
+    /// Returns updated pet food values based on field mask.
     /// </summary>
-    /// <example>
-    /// Input:
-    /// <code>
-    /// // Existing pet food:
-    /// {
-    ///   "ageGroup": "Puppy",
-    ///   "breedSize": "Small",
-    ///   "ingredients": "Chicken, Rice",
-    ///   "weightKg": 1.5,
-    ///   "nutritionalInfo": {
-    ///     "protein": "22%",
-    ///     "fat": "14%"
-    ///   }
-    /// }
-    ///
-    /// // Update request:
-    /// {
-    ///   "ageGroup": "Adult",
-    ///   "ingredients": "Beef, Brown Rice, Carrots",
-    ///   "fieldMask": ["ageGroup", "ingredients"]
-    /// }
-    /// </code>
-    ///
-    /// Output:
-    /// <code>
-    /// {
-    ///   "ageGroup": "Adult",
-    ///   "breedSize": "Small",
-    ///   "ingredients": "Beef, Brown Rice, Carrots",
-    ///   "weightKg": 1.5,
-    ///   "nutritionalInfo": {
-    ///     "protein": "22%",
-    ///     "fat": "14%"
-    ///   }
-    /// }
-    /// </code>
-    /// </example>
     private static (
         AgeGroup ageGroup,
         BreedSize breedSize,
