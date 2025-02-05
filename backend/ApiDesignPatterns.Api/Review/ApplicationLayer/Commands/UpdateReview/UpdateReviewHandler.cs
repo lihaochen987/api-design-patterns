@@ -1,13 +1,25 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
+using backend.Review.InfrastructureLayer.Database.Review;
 using backend.Review.ReviewControllers;
+using backend.Shared.CommandHandler;
 
-namespace backend.Review.Services;
+namespace backend.Review.ApplicationLayer.Commands.UpdateReview;
 
-public class ReviewFieldMaskConfiguration
+public class UpdateReviewHandler(IReviewRepository repository) : ICommandHandler<UpdateReviewQuery>
 {
-    public (
+    public async Task Handle(UpdateReviewQuery command)
+    {
+        (long productId, decimal rating, string text) = GetUpdatedReviewValues(command.Request, command.Review);
+        command.Review.ProductId = productId;
+        command.Review.Rating = rating;
+        command.Review.Text = text;
+        command.Review.UpdatedAt = DateTimeOffset.UtcNow;
+        await repository.UpdateReviewAsync(command.Review);
+    }
+
+    private static (
         long productId,
         decimal rating,
         string text)

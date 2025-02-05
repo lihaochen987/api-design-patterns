@@ -5,6 +5,7 @@ using AutoMapper;
 using backend.Review.ApplicationLayer.Commands.CreateReview;
 using backend.Review.ApplicationLayer.Commands.DeleteReview;
 using backend.Review.ApplicationLayer.Commands.ReplaceReview;
+using backend.Review.ApplicationLayer.Commands.UpdateReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Review.ApplicationLayer.Queries.GetReviewView;
 using backend.Review.ApplicationLayer.Queries.ListReviews;
@@ -164,6 +165,35 @@ public class ReviewControllerActivator : BaseControllerActivator
             return new ReplaceReviewController(
                 getReviewWithValidation,
                 replaceReviewWithTransaction,
+                _mapper);
+        }
+
+        if (type == typeof(UpdateReviewController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new ReviewRepository(dbConnection);
+
+            // GetReview handler
+            var getReview = new GetReviewHandler(repository);
+            var getReviewWithLogging = new LoggingQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>(
+                getReview,
+                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>>());
+            var getReviewWithValidation =
+                new ValidationQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>(getReviewWithLogging);
+
+            // UpdateReview handler
+            var updateReview = new UpdateReviewHandler(repository);
+            var updateReviewWithLogging = new LoggingCommandHandlerDecorator<UpdateReviewQuery>(updateReview,
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateReviewQuery>>());
+            var updateReviewWithAudit =
+                new AuditCommandHandlerDecorator<UpdateReviewQuery>(updateReviewWithLogging, dbConnection);
+            var updateReviewWithTransaction =
+                new TransactionCommandHandlerDecorator<UpdateReviewQuery>(updateReviewWithAudit, dbConnection);
+
+            return new UpdateReviewController(
+                getReviewWithValidation,
+                updateReviewWithTransaction,
                 _mapper);
         }
 

@@ -3,8 +3,9 @@
 
 
 using AutoMapper;
-using backend.Review.ApplicationLayer;
+using backend.Review.ApplicationLayer.Commands.UpdateReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
+using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,7 +16,7 @@ namespace backend.Review.ReviewControllers;
 [Route("review")]
 public class UpdateReviewController(
     IQueryHandler<GetReviewQuery, DomainModels.Review> getReview,
-    IReviewApplicationService applicationService,
+    ICommandHandler<UpdateReviewQuery> updateReview,
     IMapper mapper)
     : ControllerBase
 {
@@ -34,7 +35,7 @@ public class UpdateReviewController(
             return NotFound();
         }
 
-        await applicationService.UpdateReviewAsync(request, review);
+        await updateReview.Handle(new UpdateReviewQuery { Request = request, Review = review });
 
         var response = mapper.Map<UpdateReviewResponse>(review);
         return Ok(response);
