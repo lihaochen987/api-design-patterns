@@ -29,7 +29,7 @@ public record ReplacePetFoodResponse : ReplaceProductResponse
     [Required] public required string AgeGroup { get; init; }
     [Required] public required string BreedSize { get; init; }
     [Required] public required string Ingredients { get; init; }
-    [Required] public required string NutritionalInfo { get; init; }
+    public required string NutritionalInfo { get; init; }
     [Required] public required string StorageInstructions { get; init; }
     [Required] public required string WeightKg { get; init; }
 }

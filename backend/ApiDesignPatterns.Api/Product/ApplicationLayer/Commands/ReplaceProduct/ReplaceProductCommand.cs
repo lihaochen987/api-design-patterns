@@ -7,6 +7,6 @@ namespace backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 
 public record ReplaceProductCommand
 {
-    public required DomainModels.Product Product { get; init; }
+    public required long ExistingProductId { get; init; }
     public required ReplaceProductRequest Request { get; init; }
 }

@@ -30,9 +30,18 @@ public class ReplaceProductController(
             return NotFound();
         }
 
-        await replaceProduct.Handle(new ReplaceProductCommand { Product = existingProduct, Request = request });
+        await replaceProduct.Handle(new ReplaceProductCommand
+        {
+            ExistingProductId = existingProduct.Id, Request = request
+        });
+        var replacedProduct = await getProduct.Handle(new GetProductQuery { Id = id });
+        if (replacedProduct == null)
+        {
+            return NotFound();
+        }
+
         var response =
-            await replaceProductResponse.Handle(new ReplaceProductResponseQuery { Product = existingProduct });
+            await replaceProductResponse.Handle(new ReplaceProductResponseQuery { Product = replacedProduct });
 
         return Ok(response);
     }

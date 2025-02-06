@@ -3,6 +3,7 @@
 
 using AutoMapper;
 using backend.Product.DomainModels;
+using backend.Product.DomainModels.Enums;
 using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Shared.CommandHandler;
 
@@ -15,21 +16,30 @@ public class ReplaceProductHandler(
 {
     public async Task Handle(ReplaceProductCommand command)
     {
-        switch (command.Product)
+        DomainModels.Product replacedProduct;
+        if (command.Request.Category == Category.PetFood.ToString())
         {
-            case PetFood petFood:
-                mapper.Map(command.Request, petFood);
-                break;
-
-            case GroomingAndHygiene groomingAndHygiene:
-                mapper.Map(command.Request, groomingAndHygiene);
-                break;
-
-            default:
-                mapper.Map(command.Request, command.Product);
-                break;
+            replacedProduct = mapper.Map<PetFood>(command.Request);
+        }
+        else if (command.Request.Category == Category.GroomingAndHygiene.ToString())
+        {
+            replacedProduct = mapper.Map<GroomingAndHygiene>(command.Request);
+        }
+        else
+        {
+            replacedProduct = mapper.Map<DomainModels.Product>(command.Request);
         }
 
-        await repository.UpdateProductAsync(command.Product);
+        replacedProduct.Id = command.ExistingProductId;
+        await repository.UpdateProductAsync(replacedProduct);
+        switch (replacedProduct)
+        {
+            case PetFood petFood:
+                await repository.UpdatePetFoodProductAsync(petFood);
+                break;
+            case GroomingAndHygiene groomingAndHygiene:
+                await repository.UpdateGroomingAndHygieneProductAsync(groomingAndHygiene);
+                break;
+        }
     }
 }
