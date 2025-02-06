@@ -288,6 +288,12 @@
     <Compile Update="Product\Tests\ControllerTests\CreateProductControllerTestBase.cs">
       <DependentUpon>CreateProductControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\ReplaceProductResponseHandlerTestBase.cs">
+      <DependentUpon>ReplaceProductResponseHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ControllerTests\ReplaceProductControllerTestBase.cs">
+      <DependentUpon>ReplaceProductControllerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

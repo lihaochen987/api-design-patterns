@@ -51,6 +51,10 @@ public class ProductMappingProfile : Profile
         CreateMap<GroomingAndHygiene, ReplaceGroomingAndHygieneResponse>()
             .IncludeBase<DomainModels.Product, ReplaceProductResponse>();
 
+        CreateMap<PetFood, ReplaceProductRequest>();
+        CreateMap<DomainModels.Product, ReplaceProductRequest>();
+        CreateMap<GroomingAndHygiene, ReplaceProductRequest>();
+
         // UpdateProductController
         CreateMap<DomainModels.Product, UpdateProductResponse>();
         CreateMap<PetFood, UpdatePetFoodResponse>()

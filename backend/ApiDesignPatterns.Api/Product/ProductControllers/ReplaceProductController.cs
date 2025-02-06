@@ -1,6 +1,7 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
+using backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Shared.CommandHandler;
@@ -15,7 +16,7 @@ namespace backend.Product.ProductControllers;
 public class ReplaceProductController(
     IQueryHandler<GetProductQuery, DomainModels.Product> getProduct,
     ICommandHandler<ReplaceProductCommand> replaceProduct,
-    IMapper mapper)
+    IQueryHandler<ReplaceProductResponseQuery, ReplaceProductResponse> replaceProductResponse)
     : ControllerBase
 {
     [HttpPut("{id:long}")]
@@ -32,28 +33,9 @@ public class ReplaceProductController(
             return NotFound();
         }
 
-        switch (existingProduct)
-        {
-            case PetFood petFood:
-                mapper.Map(request, petFood);
-                break;
-
-            case GroomingAndHygiene groomingAndHygiene:
-                mapper.Map(request, groomingAndHygiene);
-                break;
-
-            default:
-                mapper.Map(request, existingProduct);
-                break;
-        }
-
-        await replaceProduct.Handle(new ReplaceProductCommand { Product = existingProduct });
-        object response = existingProduct.Category switch
-        {
-            Category.PetFood => mapper.Map<ReplacePetFoodResponse>(existingProduct),
-            Category.GroomingAndHygiene => mapper.Map<ReplaceGroomingAndHygieneResponse>(existingProduct),
-            _ => mapper.Map<ReplaceProductResponse>(existingProduct)
-        };
+        await replaceProduct.Handle(new ReplaceProductCommand { Product = existingProduct, Request = request });
+        var response =
+            await replaceProductResponse.Handle(new ReplaceProductResponseQuery { Product = existingProduct });
 
         return Ok(response);
     }

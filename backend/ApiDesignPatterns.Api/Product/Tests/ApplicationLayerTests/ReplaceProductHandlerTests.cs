@@ -1,8 +1,8 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoFixture;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
+using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
 using Shouldly;
@@ -16,9 +16,10 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
     public async Task Handle_UpdatesProduct_WhenValidProductIsProvided()
     {
         var existingProduct = new ProductTestDataBuilder().Build();
-        Repository.Add(existingProduct);
         var replacedProduct = new ProductTestDataBuilder().WithId(existingProduct.Id).Build();
-        var command = new ReplaceProductCommand { Product = replacedProduct };
+        var request = Mapper.Map<ReplaceProductRequest>(replacedProduct);
+        Repository.Add(existingProduct);
+        var command = new ReplaceProductCommand { Product = existingProduct, Request = request };
         ICommandHandler<ReplaceProductCommand> sut = ReplaceProductHandler();
         Repository.IsDirty = false;
 
@@ -26,5 +27,6 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
+        Repository.First().ShouldBeEquivalentTo(replacedProduct);
     }
 }

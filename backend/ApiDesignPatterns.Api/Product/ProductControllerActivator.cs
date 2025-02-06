@@ -10,6 +10,7 @@ using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
+using backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Product.InfrastructureLayer.Database.ProductView;
@@ -165,14 +166,29 @@ public class ProductControllerActivator : BaseControllerActivator
                 _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
 
             // ReplaceProduct handler
-            var replaceProduct = new ReplaceProductHandler(repository);
+            var replaceProduct = new ReplaceProductHandler(repository, _mapper);
             var replaceProductWithAuditing =
                 new AuditCommandHandlerDecorator<ReplaceProductCommand>(replaceProduct, dbConnection);
             var replaceProductWithLogging = new LoggingCommandHandlerDecorator<ReplaceProductCommand>(
                 replaceProductWithAuditing,
                 _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceProductCommand>>());
 
-            return new ReplaceProductController(getProductWithLogging, replaceProductWithLogging, _mapper);
+            // ReplaceProductResponse handler
+            var replaceProductResponse = new ReplaceProductResponseHandler(_mapper);
+            var replaceProductResponseWithLogging =
+                new LoggingQueryHandlerDecorator<ReplaceProductResponseQuery, ReplaceProductResponse>(
+                    replaceProductResponse,
+                    _loggerFactory
+                        .CreateLogger<
+                            LoggingQueryHandlerDecorator<ReplaceProductResponseQuery, ReplaceProductResponse>>());
+            var replaceProductResponseWithValidation =
+                new ValidationQueryHandlerDecorator<ReplaceProductResponseQuery, ReplaceProductResponse>(
+                    replaceProductResponseWithLogging);
+
+            return new ReplaceProductController(
+                getProductWithLogging,
+                replaceProductWithLogging,
+                replaceProductResponseWithValidation);
         }
 
         if (type == typeof(UpdateProductController))
