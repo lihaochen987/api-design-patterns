@@ -14,6 +14,7 @@ public abstract class ReplaceProductHandlerTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
     protected readonly IMapper Mapper;
+    protected readonly Fixture Fixture = new();
 
     protected ReplaceProductHandlerTestBase()
     {
