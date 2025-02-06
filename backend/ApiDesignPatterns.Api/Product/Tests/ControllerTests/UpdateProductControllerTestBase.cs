@@ -6,6 +6,7 @@ using backend.Product.ApplicationLayer.Commands.UpdateProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
+using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Moq;

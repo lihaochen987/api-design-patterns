@@ -107,4 +107,27 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
             .Get(ReplaceProduct)
             .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Once);
     }
+
+    [Fact]
+    public async Task ReplaceProduct_ReturnsNotFound_WhenProductDisappearsAfterReplacement()
+    {
+        var product = new ProductTestDataBuilder().Build();
+        var request = Mapper.Map<ReplaceProductRequest>(product);
+        Mock
+            .Get(GetProduct)
+            .SetupSequence(x => x.Handle(It.Is<GetProductQuery>(q => q.Id == product.Id)))
+            .ReturnsAsync(product)
+            .ReturnsAsync((DomainModels.Product?)null);
+        ReplaceProductController sut = GetReplaceProductController();
+
+        var result = await sut.ReplaceProduct(product.Id, request);
+
+        result.Result.ShouldBeOfType<NotFoundResult>();
+        Mock
+            .Get(ReplaceProduct)
+            .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Once);
+        Mock
+            .Get(ReplaceProductResponse)
+            .Verify(x => x.Handle(It.IsAny<ReplaceProductResponseQuery>()), Times.Never);
+    }
 }

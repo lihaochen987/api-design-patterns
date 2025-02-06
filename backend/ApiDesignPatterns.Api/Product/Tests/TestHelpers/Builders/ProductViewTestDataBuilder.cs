@@ -5,6 +5,7 @@ using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
+using backend.Product.Services.Mappers;
 
 namespace backend.Product.Tests.TestHelpers.Builders;
 

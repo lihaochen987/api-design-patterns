@@ -5,6 +5,7 @@ using AutoMapper;
 using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
+using backend.Product.Services.Mappers;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;

@@ -10,6 +10,7 @@ using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Product.InfrastructureLayer.Database.ProductPricing;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
+using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;

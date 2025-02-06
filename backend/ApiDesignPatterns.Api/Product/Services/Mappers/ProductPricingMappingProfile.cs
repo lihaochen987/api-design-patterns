@@ -5,8 +5,9 @@ using AutoMapper;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
+using backend.Product.ProductPricingControllers;
 
-namespace backend.Product.ProductPricingControllers;
+namespace backend.Product.Services.Mappers;
 
 public class ProductPricingMappingProfile : Profile
 {

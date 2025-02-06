@@ -7,7 +7,7 @@ using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
 
-namespace backend.Product.Services;
+namespace backend.Product.Services.Mappers;
 
 public class ProductMappingProfile : Profile
 {

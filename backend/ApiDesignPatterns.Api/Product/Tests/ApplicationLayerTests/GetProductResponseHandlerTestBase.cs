@@ -6,6 +6,7 @@ using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
+using backend.Product.Services.Mappers;
 using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared;
 using backend.Shared.QueryHandler;

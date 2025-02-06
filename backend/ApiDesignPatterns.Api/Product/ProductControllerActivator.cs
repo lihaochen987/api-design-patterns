@@ -17,6 +17,7 @@ using backend.Product.InfrastructureLayer.Database.ProductView;
 using backend.Product.ProductControllers;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
+using backend.Product.Services.Mappers;
 using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;

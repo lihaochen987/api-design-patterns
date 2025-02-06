@@ -4,6 +4,7 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
 using backend.Product.Services;
+using backend.Product.Services.Mappers;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;

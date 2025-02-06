@@ -6,6 +6,7 @@ using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
+using backend.Product.Services.Mappers;
 using backend.Shared.QueryHandler;
 using Moq;
 

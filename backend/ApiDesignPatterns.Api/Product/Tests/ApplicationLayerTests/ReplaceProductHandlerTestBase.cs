@@ -5,6 +5,7 @@ using AutoFixture;
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.Services;
+using backend.Product.Services.Mappers;
 using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared.CommandHandler;
 
