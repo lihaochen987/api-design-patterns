@@ -303,6 +303,12 @@
     <Compile Update="Review\Tests\ApplicationLayerTests\ReplaceReviewHandlerTestBase.cs">
       <DependentUpon>ReplaceReviewHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Review\Tests\ApplicationLayerTests\UpdateReviewHandlerTestBase.cs">
+      <DependentUpon>UpdateReviewHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Tests\ApplicationLayerTests\GetReviewHandlerTestBase.cs">
+      <DependentUpon>GetReviewHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
