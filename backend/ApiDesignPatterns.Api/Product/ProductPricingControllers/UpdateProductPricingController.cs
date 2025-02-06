@@ -15,7 +15,7 @@ namespace backend.Product.ProductPricingControllers;
 [Route("product")]
 public class UpdateProductPricingController(
     IQueryHandler<GetProductQuery, DomainModels.Product> getProduct,
-    ICommandHandler<UpdateProductPricingQuery> updateProductPricing,
+    ICommandHandler<UpdateProductPricingCommand> updateProductPricing,
     IMapper mapper)
     : ControllerBase
 {
@@ -33,7 +33,7 @@ public class UpdateProductPricingController(
         }
 
         await updateProductPricing.Handle(
-            new UpdateProductPricingQuery { Product = product, Request = request });
+            new UpdateProductPricingCommand { Product = product, Request = request });
         var response = mapper.Map<UpdateProductPricingResponse>(product);
 
         return Ok(response);

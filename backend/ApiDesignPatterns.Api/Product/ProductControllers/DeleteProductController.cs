@@ -10,7 +10,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class DeleteProductController(
-    ICommandHandler<DeleteProductQuery> deleteProduct,
+    ICommandHandler<DeleteProductCommand> deleteProduct,
     IQueryHandler<GetProductQuery, DomainModels.Product> getProduct)
     : ControllerBase
 {
@@ -27,7 +27,7 @@ public class DeleteProductController(
             return NotFound();
         }
 
-        await deleteProduct.Handle(new DeleteProductQuery { Id = product.Id });
+        await deleteProduct.Handle(new DeleteProductCommand { Id = product.Id });
         return NoContent();
     }
 }

@@ -5,7 +5,7 @@ using backend.Product.ProductControllers;
 
 namespace backend.Product.ApplicationLayer.Commands.UpdateProduct;
 
-public record UpdateProductQuery
+public record UpdateProductCommand
 {
     public required DomainModels.Product Product { get; init; }
     public required UpdateProductRequest Request { get; init; }

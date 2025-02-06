@@ -14,7 +14,7 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class UpdateProductController(
     IQueryHandler<GetProductQuery, DomainModels.Product> getProduct,
-    ICommandHandler<UpdateProductQuery> updateProduct,
+    ICommandHandler<UpdateProductCommand> updateProduct,
     IMapper mapper)
     : ControllerBase
 {
@@ -34,7 +34,7 @@ public class UpdateProductController(
             return NotFound();
         }
 
-        await updateProduct.Handle(new UpdateProductQuery { Request = request, Product = product });
+        await updateProduct.Handle(new UpdateProductCommand { Request = request, Product = product });
 
         return product switch
         {

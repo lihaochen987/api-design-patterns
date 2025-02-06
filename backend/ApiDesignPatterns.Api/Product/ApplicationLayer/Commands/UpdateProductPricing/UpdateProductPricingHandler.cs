@@ -11,7 +11,7 @@ namespace backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
 /// <summary>
 /// Updates product pricing using field masking for selective property updates.
 /// </summary>
-public class UpdateProductPricingHandler(IProductRepository repository) : ICommandHandler<UpdateProductPricingQuery>
+public class UpdateProductPricingHandler(IProductRepository repository) : ICommandHandler<UpdateProductPricingCommand>
 {
     /// <summary>
     /// Updates product pricing based on field mask.
@@ -23,7 +23,7 @@ public class UpdateProductPricingHandler(IProductRepository repository) : IComma
     ///     "fieldMask": ["basePrice", "taxRate"]
     /// }
     /// </example>
-    public async Task Handle(UpdateProductPricingQuery command)
+    public async Task Handle(UpdateProductPricingCommand command)
     {
         (decimal basePrice, decimal discountPercentage, decimal taxRate) =
             GetUpdatedProductPricingValues(command.Request, command.Product.Pricing);

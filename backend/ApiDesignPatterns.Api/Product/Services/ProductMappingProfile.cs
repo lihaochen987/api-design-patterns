@@ -5,8 +5,9 @@ using AutoMapper;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
+using backend.Product.ProductControllers;
 
-namespace backend.Product.ProductControllers;
+namespace backend.Product.Services;
 
 public class ProductMappingProfile : Profile
 {
@@ -25,6 +26,10 @@ public class ProductMappingProfile : Profile
             .IncludeBase<DomainModels.Product, CreateProductResponse>();
         CreateMap<GroomingAndHygiene, CreateGroomingAndHygieneResponse>()
             .IncludeBase<DomainModels.Product, CreateProductResponse>();
+
+        CreateMap<DomainModels.Product, CreateProductRequest>().ReverseMap();
+        CreateMap<PetFood, CreateProductRequest>().ReverseMap();
+        CreateMap<GroomingAndHygiene, CreateProductRequest>().ReverseMap();
 
         // GetProductController
         CreateMap<ProductView, GetProductResponse>();

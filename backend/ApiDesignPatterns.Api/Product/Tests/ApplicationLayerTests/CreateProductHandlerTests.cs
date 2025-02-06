@@ -16,9 +16,9 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
     public async Task CreateProductAsync_CallsRepositoryWithCorrectProduct()
     {
         DomainModels.Product productToCreate = new ProductTestDataBuilder().WithCategory(Category.Beds).Build();
-        ICommandHandler<CreateProductQuery> sut = CreateProductService();
+        ICommandHandler<CreateProductCommand> sut = CreateProductService();
 
-        await sut.Handle(new CreateProductQuery { Product = productToCreate });
+        await sut.Handle(new CreateProductCommand { Product = productToCreate });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);
@@ -30,10 +30,10 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
         DomainModels.Product firstProductToCreate = new ProductTestDataBuilder().WithCategory(Category.Beds).Build();
         DomainModels.Product secondProductToCreate =
             new ProductTestDataBuilder().WithCategory(Category.Clothing).Build();
-        ICommandHandler<CreateProductQuery> sut = CreateProductService();
+        ICommandHandler<CreateProductCommand> sut = CreateProductService();
 
-        await sut.Handle(new CreateProductQuery { Product = firstProductToCreate });
-        await sut.Handle(new CreateProductQuery { Product = secondProductToCreate });
+        await sut.Handle(new CreateProductCommand { Product = firstProductToCreate });
+        await sut.Handle(new CreateProductCommand { Product = secondProductToCreate });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 2);
@@ -45,9 +45,9 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
         var petFoodProduct = new ProductTestDataBuilder()
             .WithCategory(Category.PetFood)
             .Build();
-        ICommandHandler<CreateProductQuery> sut = CreateProductService();
+        ICommandHandler<CreateProductCommand> sut = CreateProductService();
 
-        await sut.Handle(new CreateProductQuery { Product = petFoodProduct });
+        await sut.Handle(new CreateProductCommand { Product = petFoodProduct });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);
@@ -60,9 +60,9 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
         var groomingProduct = new ProductTestDataBuilder()
             .WithCategory(Category.GroomingAndHygiene)
             .Build();
-        ICommandHandler<CreateProductQuery> sut = CreateProductService();
+        ICommandHandler<CreateProductCommand> sut = CreateProductService();
 
-        await sut.Handle(new CreateProductQuery { Product = groomingProduct });
+        await sut.Handle(new CreateProductCommand { Product = groomingProduct });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);
@@ -75,9 +75,9 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
         var genericProduct = new ProductTestDataBuilder()
             .WithCategory(Category.Beds)
             .Build();
-        ICommandHandler<CreateProductQuery> sut = CreateProductService();
+        ICommandHandler<CreateProductCommand> sut = CreateProductService();
 
-        await sut.Handle(new CreateProductQuery { Product = genericProduct });
+        await sut.Handle(new CreateProductCommand { Product = genericProduct });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("CreateProductAsync", 1);

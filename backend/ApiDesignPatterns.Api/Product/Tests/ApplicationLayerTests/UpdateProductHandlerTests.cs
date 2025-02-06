@@ -30,9 +30,9 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
             Category = "Toys",
             FieldMask = ["name", "category", "discountpercentage", "taxrate"]
         };
-        ICommandHandler<UpdateProductQuery> sut = UpdateProductService();
+        ICommandHandler<UpdateProductCommand> sut = UpdateProductService();
 
-        await sut.Handle(new UpdateProductQuery { Product = product, Request = request });
+        await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
@@ -55,9 +55,9 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
             Dimensions = new DimensionsRequest { Length = "20", Width = "10", Height = "2" },
             FieldMask = ["dimensions.width", "dimensions.height"]
         };
-        ICommandHandler<UpdateProductQuery> sut = UpdateProductService();
+        ICommandHandler<UpdateProductCommand> sut = UpdateProductService();
 
-        await sut.Handle(new UpdateProductQuery { Product = product, Request = request });
+        await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
@@ -76,9 +76,9 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         {
             Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = "1.99" }, FieldMask = ["name"]
         };
-        ICommandHandler<UpdateProductQuery> sut = UpdateProductService();
+        ICommandHandler<UpdateProductCommand> sut = UpdateProductService();
 
-        await sut.Handle(new UpdateProductQuery { Product = product, Request = request });
+        await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
@@ -100,9 +100,9 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
             SafetyWarnings = "Just don't strangle the dog",
             FieldMask = ["usageinstructions", "isnatural", "ishypoallergenic", "iscrueltyfree", "safetywarnings"]
         };
-        ICommandHandler<UpdateProductQuery> sut = UpdateProductService();
+        ICommandHandler<UpdateProductCommand> sut = UpdateProductService();
 
-        await sut.Handle(new UpdateProductQuery { Product = product, Request = request });
+        await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);

@@ -80,12 +80,12 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             // UpdateProductPricing handler
             var updateProduct = new UpdateProductPricingHandler(repository);
             var updateProductPricingWithAuditing =
-                new AuditCommandHandlerDecorator<UpdateProductPricingQuery>(updateProduct, dbConnection);
-            var updateProductPricingWithLogging = new LoggingCommandHandlerDecorator<UpdateProductPricingQuery>(
+                new AuditCommandHandlerDecorator<UpdateProductPricingCommand>(updateProduct, dbConnection);
+            var updateProductPricingWithLogging = new LoggingCommandHandlerDecorator<UpdateProductPricingCommand>(
                 updateProductPricingWithAuditing,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductPricingQuery>>());
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductPricingCommand>>());
             var updateProductPricingWithTransaction =
-                new TransactionCommandHandlerDecorator<UpdateProductPricingQuery>(updateProductPricingWithLogging,
+                new TransactionCommandHandlerDecorator<UpdateProductPricingCommand>(updateProductPricingWithLogging,
                     dbConnection);
 
             return new UpdateProductPricingController(

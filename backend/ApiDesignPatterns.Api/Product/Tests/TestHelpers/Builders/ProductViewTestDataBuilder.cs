@@ -4,6 +4,7 @@ using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
+using backend.Product.Services;
 
 namespace backend.Product.Tests.TestHelpers.Builders;
 

@@ -14,7 +14,7 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class ReplaceProductController(
     IQueryHandler<GetProductQuery, DomainModels.Product> getProduct,
-    ICommandHandler<ReplaceProductQuery> replaceProduct,
+    ICommandHandler<ReplaceProductCommand> replaceProduct,
     IMapper mapper)
     : ControllerBase
 {
@@ -47,7 +47,7 @@ public class ReplaceProductController(
                 break;
         }
 
-        await replaceProduct.Handle(new ReplaceProductQuery { Product = existingProduct });
+        await replaceProduct.Handle(new ReplaceProductCommand { Product = existingProduct });
         object response = existingProduct.Category switch
         {
             Category.PetFood => mapper.Map<ReplacePetFoodResponse>(existingProduct),

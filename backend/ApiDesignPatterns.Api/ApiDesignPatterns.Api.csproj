@@ -81,9 +81,6 @@
     <Compile Update="Product\Controllers\UpdateProductExtensions.cs">
       <DependentUpon>UpdateProductController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\ProductControllers\CreateProductExtensions.cs">
-      <DependentUpon>CreateProductController.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\ProductControllers\CreateProductRequest.cs">
       <DependentUpon>CreateProductController.cs</DependentUpon>
     </Compile>
@@ -287,6 +284,9 @@
     </Compile>
     <Compile Update="Product\Tests\ApplicationLayerTests\CreateProductResponseHandlerTestBase.cs">
       <DependentUpon>CreateProductResponseHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ControllerTests\CreateProductControllerTestBase.cs">
+      <DependentUpon>CreateProductControllerTests.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

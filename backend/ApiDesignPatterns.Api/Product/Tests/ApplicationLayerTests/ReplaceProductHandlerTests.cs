@@ -18,8 +18,8 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
         var existingProduct = new ProductTestDataBuilder().Build();
         Repository.Add(existingProduct);
         var replacedProduct = new ProductTestDataBuilder().WithId(existingProduct.Id).Build();
-        var command = new ReplaceProductQuery { Product = replacedProduct };
-        ICommandHandler<ReplaceProductQuery> sut = ReplaceProductHandler();
+        var command = new ReplaceProductCommand { Product = replacedProduct };
+        ICommandHandler<ReplaceProductCommand> sut = ReplaceProductHandler();
         Repository.IsDirty = false;
 
         await sut.Handle(command);

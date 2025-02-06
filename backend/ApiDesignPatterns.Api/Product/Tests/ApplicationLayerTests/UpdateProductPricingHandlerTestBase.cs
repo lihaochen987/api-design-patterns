@@ -11,7 +11,7 @@ public abstract class UpdateProductPricingHandlerTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
 
-    protected ICommandHandler<UpdateProductPricingQuery> GetUpdateProductPricingHandler()
+    protected ICommandHandler<UpdateProductPricingCommand> GetUpdateProductPricingHandler()
     {
         return new UpdateProductPricingHandler(Repository);
     }

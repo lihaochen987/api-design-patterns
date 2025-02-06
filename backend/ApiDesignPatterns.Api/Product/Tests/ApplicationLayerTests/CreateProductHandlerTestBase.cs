@@ -11,7 +11,7 @@ public abstract class CreateProductHandlerTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
 
-    protected ICommandHandler<CreateProductQuery> CreateProductService()
+    protected ICommandHandler<CreateProductCommand> CreateProductService()
     {
         return new CreateProductHandler(Repository);
     }

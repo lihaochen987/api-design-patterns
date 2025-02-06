@@ -8,9 +8,9 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.Commands.CreateProduct;
 
-public class CreateProductHandler(IProductRepository repository) : ICommandHandler<CreateProductQuery>
+public class CreateProductHandler(IProductRepository repository) : ICommandHandler<CreateProductCommand>
 {
-    public async Task Handle(CreateProductQuery command)
+    public async Task Handle(CreateProductCommand command)
     {
         long id = await repository.CreateProductAsync(command.Product);
         command.Product.Id = id;

@@ -31,7 +31,6 @@ public class ProductControllerActivator : BaseControllerActivator
     private readonly SqlFilterBuilder _productSqlFilterBuilder;
     private readonly IMapper _mapper;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
-    private readonly CreateProductExtensions _createProductExtensions;
     private readonly ILoggerFactory _loggerFactory;
 
     public ProductControllerActivator(
@@ -50,9 +49,6 @@ public class ProductControllerActivator : BaseControllerActivator
         ProductFieldPaths productFieldPaths = new();
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(productFieldPaths.ValidPaths);
 
-        TypeParser typeParser = new();
-        _createProductExtensions = new CreateProductExtensions(typeParser);
-
         _loggerFactory = loggerFactory;
     }
 
@@ -69,12 +65,12 @@ public class ProductControllerActivator : BaseControllerActivator
             // CreateProduct handler
             var createProduct = new CreateProductHandler(repository);
             var createProductWithAudit =
-                new AuditCommandHandlerDecorator<CreateProductQuery>(createProduct, dbConnection);
-            var createProductWithLogging = new LoggingCommandHandlerDecorator<CreateProductQuery>(
+                new AuditCommandHandlerDecorator<CreateProductCommand>(createProduct, dbConnection);
+            var createProductWithLogging = new LoggingCommandHandlerDecorator<CreateProductCommand>(
                 createProductWithAudit,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateProductQuery>>());
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateProductCommand>>());
             var createProductWithTransaction =
-                new TransactionCommandHandlerDecorator<CreateProductQuery>(createProductWithLogging, dbConnection);
+                new TransactionCommandHandlerDecorator<CreateProductCommand>(createProductWithLogging, dbConnection);
 
             // CreateProductResponse handler
             var createProductResponse = new CreateProductResponseHandler(_mapper);
@@ -88,8 +84,10 @@ public class ProductControllerActivator : BaseControllerActivator
                 new ValidationQueryHandlerDecorator<CreateProductResponseQuery, CreateProductResponse>(
                     createProductResponseWithLogging);
 
-            return new CreateProductController(createProductWithTransaction, createProductResponseWithValidation,
-                _createProductExtensions);
+            return new CreateProductController(
+                createProductWithTransaction,
+                createProductResponseWithValidation,
+                _mapper);
         }
 
         if (type == typeof(DeleteProductController))
@@ -101,10 +99,10 @@ public class ProductControllerActivator : BaseControllerActivator
             // DeleteProduct handler
             var deleteProduct = new DeleteProductHandler(repository);
             var deleteProductWithAudit =
-                new AuditCommandHandlerDecorator<DeleteProductQuery>(deleteProduct, dbConnection);
-            var deleteProductWithLogging = new LoggingCommandHandlerDecorator<DeleteProductQuery>(
+                new AuditCommandHandlerDecorator<DeleteProductCommand>(deleteProduct, dbConnection);
+            var deleteProductWithLogging = new LoggingCommandHandlerDecorator<DeleteProductCommand>(
                 deleteProductWithAudit,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteProductQuery>>());
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteProductCommand>>());
 
             // GetProduct handler
             var getProduct = new GetProductHandler(repository);
@@ -169,10 +167,10 @@ public class ProductControllerActivator : BaseControllerActivator
             // ReplaceProduct handler
             var replaceProduct = new ReplaceProductHandler(repository);
             var replaceProductWithAuditing =
-                new AuditCommandHandlerDecorator<ReplaceProductQuery>(replaceProduct, dbConnection);
-            var replaceProductWithLogging = new LoggingCommandHandlerDecorator<ReplaceProductQuery>(
+                new AuditCommandHandlerDecorator<ReplaceProductCommand>(replaceProduct, dbConnection);
+            var replaceProductWithLogging = new LoggingCommandHandlerDecorator<ReplaceProductCommand>(
                 replaceProductWithAuditing,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceProductQuery>>());
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceProductCommand>>());
 
             return new ReplaceProductController(getProductWithLogging, replaceProductWithLogging, _mapper);
         }
@@ -192,12 +190,12 @@ public class ProductControllerActivator : BaseControllerActivator
             // UpdateProduct handler
             var updateProduct = new UpdateProductHandler(repository);
             var updateProductWithAuditing =
-                new AuditCommandHandlerDecorator<UpdateProductQuery>(updateProduct, dbConnection);
-            var updateProductWithLogging = new LoggingCommandHandlerDecorator<UpdateProductQuery>(
+                new AuditCommandHandlerDecorator<UpdateProductCommand>(updateProduct, dbConnection);
+            var updateProductWithLogging = new LoggingCommandHandlerDecorator<UpdateProductCommand>(
                 updateProductWithAuditing,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductQuery>>());
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductCommand>>());
             var updateProductWithTransaction =
-                new TransactionCommandHandlerDecorator<UpdateProductQuery>(updateProductWithLogging, dbConnection);
+                new TransactionCommandHandlerDecorator<UpdateProductCommand>(updateProductWithLogging, dbConnection);
 
             return new UpdateProductController(getProductWithLogging, updateProductWithTransaction, _mapper);
         }

@@ -13,7 +13,7 @@ public abstract class ReplaceProductHandlerTestBase
     protected readonly ProductRepositoryFake Repository = [];
     protected readonly Fixture Fixture = new();
 
-    protected ICommandHandler<ReplaceProductQuery> ReplaceProductHandler()
+    protected ICommandHandler<ReplaceProductCommand> ReplaceProductHandler()
     {
         return new ReplaceProductHandler(Repository);
     }

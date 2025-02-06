@@ -6,9 +6,9 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 
-public class ReplaceProductHandler(IProductRepository repository) : ICommandHandler<ReplaceProductQuery>
+public class ReplaceProductHandler(IProductRepository repository) : ICommandHandler<ReplaceProductCommand>
 {
-    public async Task Handle(ReplaceProductQuery command)
+    public async Task Handle(ReplaceProductCommand command)
     {
         await repository.UpdateProductAsync(command.Product);
     }

@@ -3,7 +3,7 @@
 
 namespace backend.Product.ApplicationLayer.Commands.CreateProduct;
 
-public record CreateProductQuery
+public record CreateProductCommand
 {
     public required DomainModels.Product Product { get; init; }
 }

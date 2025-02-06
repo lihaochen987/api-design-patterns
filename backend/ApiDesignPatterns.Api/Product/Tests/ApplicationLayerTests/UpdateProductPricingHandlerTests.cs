@@ -27,8 +27,8 @@ public class UpdateProductPricingHandlerTests : UpdateProductPricingHandlerTestB
             TaxRate = "9.5",
             FieldMask = ["pricing.baseprice", "pricing.discountpercentage", "pricing.taxrate"]
         };
-        var command = new UpdateProductPricingQuery { Product = product, Request = request };
-        ICommandHandler<UpdateProductPricingQuery> sut = GetUpdateProductPricingHandler();
+        var command = new UpdateProductPricingCommand { Product = product, Request = request };
+        ICommandHandler<UpdateProductPricingCommand> sut = GetUpdateProductPricingHandler();
 
         await sut.Handle(command);
 
@@ -53,8 +53,8 @@ public class UpdateProductPricingHandlerTests : UpdateProductPricingHandlerTestB
             TaxRate = "9.5",
             FieldMask = ["pricing.baseprice", "pricing.taxrate"]
         };
-        var command = new UpdateProductPricingQuery { Product = product, Request = request };
-        ICommandHandler<UpdateProductPricingQuery> sut = GetUpdateProductPricingHandler();
+        var command = new UpdateProductPricingCommand { Product = product, Request = request };
+        ICommandHandler<UpdateProductPricingCommand> sut = GetUpdateProductPricingHandler();
 
         await sut.Handle(command);
 
@@ -76,8 +76,8 @@ public class UpdateProductPricingHandlerTests : UpdateProductPricingHandlerTestB
         {
             BasePrice = "199.99", DiscountPercentage = "15.5", TaxRate = "9.5", FieldMask = []
         };
-        var command = new UpdateProductPricingQuery { Product = product, Request = request };
-        ICommandHandler<UpdateProductPricingQuery> sut = GetUpdateProductPricingHandler();
+        var command = new UpdateProductPricingCommand { Product = product, Request = request };
+        ICommandHandler<UpdateProductPricingCommand> sut = GetUpdateProductPricingHandler();
         Repository.IsDirty = false;
 
         await sut.Handle(command);
@@ -103,8 +103,8 @@ public class UpdateProductPricingHandlerTests : UpdateProductPricingHandlerTestB
             TaxRate = "invalid",
             FieldMask = ["pricing.baseprice", "pricing.discountpercentage", "pricing.taxrate"]
         };
-        var command = new UpdateProductPricingQuery { Product = product, Request = request };
-        ICommandHandler<UpdateProductPricingQuery> sut = GetUpdateProductPricingHandler();
+        var command = new UpdateProductPricingCommand { Product = product, Request = request };
+        ICommandHandler<UpdateProductPricingCommand> sut = GetUpdateProductPricingHandler();
 
         await sut.Handle(command);
 

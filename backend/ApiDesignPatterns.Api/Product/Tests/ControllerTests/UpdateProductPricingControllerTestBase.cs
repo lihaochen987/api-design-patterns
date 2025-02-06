@@ -21,8 +21,8 @@ public abstract class UpdateProductPricingControllerTestBase
     protected readonly IQueryHandler<GetProductQuery, DomainModels.Product> MockGetProductHandler =
         Mock.Of<IQueryHandler<GetProductQuery, DomainModels.Product>>();
 
-    private readonly ICommandHandler<UpdateProductPricingQuery> _mockUpdateProductPricingHandler =
-        Mock.Of<ICommandHandler<UpdateProductPricingQuery>>();
+    private readonly ICommandHandler<UpdateProductPricingCommand> _mockUpdateProductPricingHandler =
+        Mock.Of<ICommandHandler<UpdateProductPricingCommand>>();
 
     protected UpdateProductPricingControllerTestBase()
     {

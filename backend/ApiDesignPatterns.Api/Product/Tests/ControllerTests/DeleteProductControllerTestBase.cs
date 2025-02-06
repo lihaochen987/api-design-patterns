@@ -12,8 +12,8 @@ namespace backend.Product.Tests.ControllerTests;
 
 public abstract class DeleteProductControllerTestBase
 {
-    protected readonly ICommandHandler<DeleteProductQuery> MockDeleteProductHandler =
-        Mock.Of<ICommandHandler<DeleteProductQuery>>();
+    protected readonly ICommandHandler<DeleteProductCommand> MockDeleteProductHandler =
+        Mock.Of<ICommandHandler<DeleteProductCommand>>();
 
     protected readonly IQueryHandler<GetProductQuery, DomainModels.Product> MockGetProductHandler =
         Mock.Of<IQueryHandler<GetProductQuery, DomainModels.Product>>();

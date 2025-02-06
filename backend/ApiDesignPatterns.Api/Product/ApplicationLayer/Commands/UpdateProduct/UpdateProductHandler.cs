@@ -23,12 +23,12 @@ namespace backend.Product.ApplicationLayer.Commands.UpdateProduct;
 /// </example>
 public class UpdateProductHandler(
     IProductRepository repository)
-    : ICommandHandler<UpdateProductQuery>
+    : ICommandHandler<UpdateProductCommand>
 {
     /// <summary>
     /// Updates product properties specified in the field mask.
     /// </summary>
-    public async Task Handle(UpdateProductQuery command)
+    public async Task Handle(UpdateProductCommand command)
     {
         UpdateBaseProduct(command.Request, command.Product);
         long id = await repository.UpdateProductAsync(command.Product);

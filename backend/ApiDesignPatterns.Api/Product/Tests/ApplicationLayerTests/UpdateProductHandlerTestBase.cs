@@ -11,7 +11,7 @@ public abstract class UpdateProductHandlerTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
 
-    protected ICommandHandler<UpdateProductQuery> UpdateProductService()
+    protected ICommandHandler<UpdateProductCommand> UpdateProductService()
     {
         return new UpdateProductHandler(Repository);
     }

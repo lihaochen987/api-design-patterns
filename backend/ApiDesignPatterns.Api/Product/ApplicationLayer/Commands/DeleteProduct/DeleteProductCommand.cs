@@ -3,7 +3,7 @@
 
 namespace backend.Product.ApplicationLayer.Commands.DeleteProduct;
 
-public record DeleteProductQuery
+public record DeleteProductCommand
 {
     public required long Id { get; init; }
 }
