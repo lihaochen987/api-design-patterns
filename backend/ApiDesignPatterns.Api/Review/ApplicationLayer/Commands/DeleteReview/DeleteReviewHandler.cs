@@ -6,9 +6,9 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Review.ApplicationLayer.Commands.DeleteReview;
 
-public class DeleteReviewHandler(IReviewRepository repository) : ICommandHandler<DeleteReviewQuery>
+public class DeleteReviewHandler(IReviewRepository repository) : ICommandHandler<DeleteReviewCommand>
 {
-    public async Task Handle(DeleteReviewQuery command)
+    public async Task Handle(DeleteReviewCommand command)
     {
         await repository.DeleteReviewAsync(command.Id);
     }

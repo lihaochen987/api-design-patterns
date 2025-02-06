@@ -15,7 +15,7 @@ namespace backend.Review.ReviewControllers;
 [Route("review")]
 public class DeleteReviewController(
     IQueryHandler<GetReviewQuery, DomainModels.Review> getReview,
-    ICommandHandler<DeleteReviewQuery> deleteReview)
+    ICommandHandler<DeleteReviewCommand> deleteReview)
     : ControllerBase
 {
     [HttpDelete("{id:long}")]
@@ -31,7 +31,7 @@ public class DeleteReviewController(
             return NotFound();
         }
 
-        await deleteReview.Handle(new DeleteReviewQuery { Id = id });
+        await deleteReview.Handle(new DeleteReviewCommand { Id = id });
         return NoContent();
     }
 }

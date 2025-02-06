@@ -13,7 +13,7 @@ namespace backend.Review.ReviewControllers;
 [Route("review")]
 public class ReplaceReviewController(
     IQueryHandler<GetReviewQuery, DomainModels.Review> getReview,
-    ICommandHandler<ReplaceReviewQuery> replaceReview,
+    ICommandHandler<ReplaceReviewCommand> replaceReview,
     IMapper mapper)
     : ControllerBase
 {
@@ -33,7 +33,7 @@ public class ReplaceReviewController(
 
         DomainModels.Review replacedReview = mapper.Map(request, existingReview);
 
-        await replaceReview.Handle(new ReplaceReviewQuery { Review = replacedReview });
+        await replaceReview.Handle(new ReplaceReviewCommand { Review = replacedReview });
         var response = mapper.Map<ReplaceReviewResponse>(replacedReview);
         return Ok(response);
     }

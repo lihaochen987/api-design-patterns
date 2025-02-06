@@ -59,12 +59,12 @@ public class ReviewControllerActivator : BaseControllerActivator
 
             // CreateReview handler
             var createReview = new CreateReviewHandler(repository);
-            var createReviewWithLogging = new LoggingCommandHandlerDecorator<CreateReviewQuery>(createReview,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateReviewQuery>>());
+            var createReviewWithLogging = new LoggingCommandHandlerDecorator<CreateReviewCommand>(createReview,
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateReviewCommand>>());
             var createReviewWithAudit =
-                new AuditCommandHandlerDecorator<CreateReviewQuery>(createReviewWithLogging, dbConnection);
+                new AuditCommandHandlerDecorator<CreateReviewCommand>(createReviewWithLogging, dbConnection);
             var createReviewWithTransaction =
-                new TransactionCommandHandlerDecorator<CreateReviewQuery>(createReviewWithAudit, dbConnection);
+                new TransactionCommandHandlerDecorator<CreateReviewCommand>(createReviewWithAudit, dbConnection);
 
             return new CreateReviewController(
                 createReviewWithTransaction,
@@ -87,12 +87,12 @@ public class ReviewControllerActivator : BaseControllerActivator
 
             // DeleteReview handler
             var deleteReview = new DeleteReviewHandler(repository);
-            var deleteReviewWithLogging = new LoggingCommandHandlerDecorator<DeleteReviewQuery>(deleteReview,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteReviewQuery>>());
+            var deleteReviewWithLogging = new LoggingCommandHandlerDecorator<DeleteReviewCommand>(deleteReview,
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteReviewCommand>>());
             var deleteReviewWithAudit =
-                new AuditCommandHandlerDecorator<DeleteReviewQuery>(deleteReviewWithLogging, dbConnection);
+                new AuditCommandHandlerDecorator<DeleteReviewCommand>(deleteReviewWithLogging, dbConnection);
             var deleteReviewWithTransaction =
-                new TransactionCommandHandlerDecorator<DeleteReviewQuery>(deleteReviewWithAudit, dbConnection);
+                new TransactionCommandHandlerDecorator<DeleteReviewCommand>(deleteReviewWithAudit, dbConnection);
 
             return new DeleteReviewController(
                 getReviewWithValidation,
@@ -155,12 +155,12 @@ public class ReviewControllerActivator : BaseControllerActivator
 
             // ReplaceReview handler
             var replaceReview = new ReplaceReviewHandler(repository);
-            var replaceReviewWithLogging = new LoggingCommandHandlerDecorator<ReplaceReviewQuery>(replaceReview,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceReviewQuery>>());
+            var replaceReviewWithLogging = new LoggingCommandHandlerDecorator<ReplaceReviewCommand>(replaceReview,
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceReviewCommand>>());
             var replaceReviewWithAudit =
-                new AuditCommandHandlerDecorator<ReplaceReviewQuery>(replaceReviewWithLogging, dbConnection);
+                new AuditCommandHandlerDecorator<ReplaceReviewCommand>(replaceReviewWithLogging, dbConnection);
             var replaceReviewWithTransaction =
-                new TransactionCommandHandlerDecorator<ReplaceReviewQuery>(replaceReviewWithAudit, dbConnection);
+                new TransactionCommandHandlerDecorator<ReplaceReviewCommand>(replaceReviewWithAudit, dbConnection);
 
             return new ReplaceReviewController(
                 getReviewWithValidation,
@@ -184,12 +184,12 @@ public class ReviewControllerActivator : BaseControllerActivator
 
             // UpdateReview handler
             var updateReview = new UpdateReviewHandler(repository);
-            var updateReviewWithLogging = new LoggingCommandHandlerDecorator<UpdateReviewQuery>(updateReview,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateReviewQuery>>());
+            var updateReviewWithLogging = new LoggingCommandHandlerDecorator<UpdateReviewCommand>(updateReview,
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateReviewCommand>>());
             var updateReviewWithAudit =
-                new AuditCommandHandlerDecorator<UpdateReviewQuery>(updateReviewWithLogging, dbConnection);
+                new AuditCommandHandlerDecorator<UpdateReviewCommand>(updateReviewWithLogging, dbConnection);
             var updateReviewWithTransaction =
-                new TransactionCommandHandlerDecorator<UpdateReviewQuery>(updateReviewWithAudit, dbConnection);
+                new TransactionCommandHandlerDecorator<UpdateReviewCommand>(updateReviewWithAudit, dbConnection);
 
             return new UpdateReviewController(
                 getReviewWithValidation,

@@ -16,7 +16,7 @@ namespace backend.Review.ReviewControllers;
 [Route("review")]
 public class UpdateReviewController(
     IQueryHandler<GetReviewQuery, DomainModels.Review> getReview,
-    ICommandHandler<UpdateReviewQuery> updateReview,
+    ICommandHandler<UpdateReviewCommand> updateReview,
     IMapper mapper)
     : ControllerBase
 {
@@ -35,7 +35,7 @@ public class UpdateReviewController(
             return NotFound();
         }
 
-        await updateReview.Handle(new UpdateReviewQuery { Request = request, Review = review });
+        await updateReview.Handle(new UpdateReviewCommand { Request = request, Review = review });
 
         var response = mapper.Map<UpdateReviewResponse>(review);
         return Ok(response);

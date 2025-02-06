@@ -3,7 +3,7 @@
 
 namespace backend.Review.ApplicationLayer.Commands.DeleteReview;
 
-public record DeleteReviewQuery
+public record DeleteReviewCommand
 {
     public long Id { get; init; }
 }

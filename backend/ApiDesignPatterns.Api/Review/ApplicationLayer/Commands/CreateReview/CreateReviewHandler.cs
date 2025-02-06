@@ -6,9 +6,9 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Review.ApplicationLayer.Commands.CreateReview;
 
-public class CreateReviewHandler(IReviewRepository repository) : ICommandHandler<CreateReviewQuery>
+public class CreateReviewHandler(IReviewRepository repository) : ICommandHandler<CreateReviewCommand>
 {
-    public async Task Handle(CreateReviewQuery command)
+    public async Task Handle(CreateReviewCommand command)
     {
         command.Review.ProductId = command.ProductId;
         await repository.CreateReviewAsync(command.Review);

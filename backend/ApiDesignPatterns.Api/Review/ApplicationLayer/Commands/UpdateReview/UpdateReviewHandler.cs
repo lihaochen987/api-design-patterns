@@ -7,9 +7,9 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Review.ApplicationLayer.Commands.UpdateReview;
 
-public class UpdateReviewHandler(IReviewRepository repository) : ICommandHandler<UpdateReviewQuery>
+public class UpdateReviewHandler(IReviewRepository repository) : ICommandHandler<UpdateReviewCommand>
 {
-    public async Task Handle(UpdateReviewQuery command)
+    public async Task Handle(UpdateReviewCommand command)
     {
         (long productId, decimal rating, string text) = GetUpdatedReviewValues(command.Request, command.Review);
         command.Review.ProductId = productId;

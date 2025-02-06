@@ -5,7 +5,7 @@ using backend.Review.ReviewControllers;
 
 namespace backend.Review.ApplicationLayer.Commands.UpdateReview;
 
-public class UpdateReviewQuery
+public class UpdateReviewCommand
 {
     public required UpdateReviewRequest Request { get; set; }
     public required DomainModels.Review Review { get; set; }

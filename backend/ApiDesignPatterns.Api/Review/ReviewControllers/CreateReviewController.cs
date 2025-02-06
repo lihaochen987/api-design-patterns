@@ -12,7 +12,7 @@ namespace backend.Review.ReviewControllers;
 [ApiController]
 [Route("{productId}/review")]
 public class CreateReviewController(
-    ICommandHandler<CreateReviewQuery> createReview,
+    ICommandHandler<CreateReviewCommand> createReview,
     IMapper mapper)
     : ControllerBase
 {
@@ -26,7 +26,7 @@ public class CreateReviewController(
     {
         var review = mapper.Map<DomainModels.Review>(request);
         review.CreatedAt = DateTime.UtcNow;
-        await createReview.Handle(new CreateReviewQuery { Review = review, ProductId = productId });
+        await createReview.Handle(new CreateReviewCommand { Review = review, ProductId = productId });
 
         var response = mapper.Map<CreateReviewResponse>(review);
         return CreatedAtAction(
