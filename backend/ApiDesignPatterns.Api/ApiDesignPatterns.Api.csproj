@@ -297,6 +297,12 @@
     <Compile Update="Review\Tests\ApplicationLayerTests\CreateReviewHandlerTestBase.cs">
       <DependentUpon>CreateReviewHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Review\Tests\ApplicationLayerTests\DeleteReviewHandlerTestBase.cs">
+      <DependentUpon>DeleteReviewHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Tests\ApplicationLayerTests\ReplaceReviewHandlerTestBase.cs">
+      <DependentUpon>ReplaceReviewHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

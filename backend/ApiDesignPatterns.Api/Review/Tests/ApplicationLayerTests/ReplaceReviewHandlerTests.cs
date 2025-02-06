@@ -1,0 +1,84 @@
+// Licensed to the.NET Foundation under one or more agreements.
+// The.NET Foundation licenses this file to you under the MIT license.
+
+using AutoFixture;
+using backend.Review.ApplicationLayer.Commands.ReplaceReview;
+using backend.Review.Tests.TestHelpers.Builders;
+using backend.Shared.CommandHandler;
+using Shouldly;
+using Xunit;
+
+namespace backend.Review.Tests.ApplicationLayerTests;
+
+public class ReplaceReviewHandlerTests : ReplaceReviewHandlerTestBase
+{
+    [Fact]
+    public async Task Handle_UpdatesReview_WhenValidReviewIsProvided()
+    {
+        var existingReview = new ReviewTestDataBuilder()
+            .WithRating(3.5m)
+            .WithText("Original review")
+            .Build();
+        var replacementReview = new ReviewTestDataBuilder()
+            .WithId(existingReview.Id)
+            .WithRating(4.0m)
+            .WithText("Updated review")
+            .Build();
+        Repository.Add(existingReview);
+        var command = new ReplaceReviewCommand { Review = replacementReview };
+        ICommandHandler<ReplaceReviewCommand> sut = ReplaceReviewHandler();
+        Repository.IsDirty = false;
+
+        await sut.Handle(command);
+
+        Repository.IsDirty.ShouldBeTrue();
+        Repository.CallCount.ShouldContainKeyAndValue("UpdateReviewAsync", 1);
+        var updatedReview = Repository.First();
+        updatedReview.Rating.ShouldBe(replacementReview.Rating);
+        updatedReview.Text.ShouldBe(replacementReview.Text);
+    }
+
+    [Fact]
+    public async Task Handle_SetsTimestamps_WhenReplacingReview()
+    {
+        DateTimeOffset oldCreatedAt = DateTimeOffset.UtcNow.AddDays(-1);
+        var existingReview = new ReviewTestDataBuilder()
+            .WithCreatedAt(oldCreatedAt)
+            .WithUpdatedAt(DateTimeOffset.UtcNow.AddHours(-1))
+            .Build();
+        var replacementReview = new ReviewTestDataBuilder()
+            .WithId(existingReview.Id)
+            .WithCreatedAt(DateTimeOffset.UtcNow.AddDays(-2))
+            .WithUpdatedAt(DateTimeOffset.UtcNow)
+            .Build();
+        Repository.Add(existingReview);
+        var command = new ReplaceReviewCommand { Review = replacementReview };
+        ICommandHandler<ReplaceReviewCommand> sut = ReplaceReviewHandler();
+
+        await sut.Handle(command);
+
+        var updatedReview = Repository.First();
+        updatedReview.CreatedAt.ShouldBeGreaterThan(oldCreatedAt);
+        updatedReview.UpdatedAt.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Handle_UpdatesMultipleReviews_Successfully()
+    {
+        var firstReview = new ReviewTestDataBuilder().Build();
+        var secondReview = new ReviewTestDataBuilder().Build();
+        Repository.Add(firstReview);
+        Repository.Add(secondReview);
+        var replacementReview = new ReviewTestDataBuilder()
+            .WithId(firstReview.Id)
+            .Build();
+        var command = new ReplaceReviewCommand { Review = replacementReview };
+        ICommandHandler<ReplaceReviewCommand> sut = ReplaceReviewHandler();
+        Repository.IsDirty = false;
+
+        await sut.Handle(command);
+
+        Repository.IsDirty.ShouldBeTrue();
+        Repository.CallCount.ShouldContainKeyAndValue("UpdateReviewAsync", 1);
+    }
+}
