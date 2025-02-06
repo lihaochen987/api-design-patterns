@@ -5,8 +5,8 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
 
-public class ReplaceProductResponseQuery : IQuery<ReplaceProductResponseQuery>,
+public record ReplaceProductResponseQuery : IQuery<ReplaceProductResponseQuery>,
     IQuery<ProductControllers.ReplaceProductResponse>
 {
-    public required DomainModels.Product Product { get; set; }
+    public required DomainModels.Product Product { get; init; }
 }

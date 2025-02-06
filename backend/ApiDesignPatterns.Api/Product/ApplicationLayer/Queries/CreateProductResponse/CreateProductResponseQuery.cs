@@ -5,7 +5,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.CreateProductResponse;
 
-public class CreateProductResponseQuery : IQuery<ProductControllers.CreateProductResponse>
+public record CreateProductResponseQuery : IQuery<ProductControllers.CreateProductResponse>
 {
-    public required DomainModels.Product Product { get; set; }
+    public required DomainModels.Product Product { get; init; }
 }

@@ -5,8 +5,8 @@ using backend.Product.ProductPricingControllers;
 
 namespace backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
 
-public class UpdateProductPricingCommand
+public record UpdateProductPricingCommand
 {
-    public required DomainModels.Product Product { get; set; }
-    public required UpdateProductPricingRequest Request { get; set; }
+    public required DomainModels.Product Product { get; init; }
+    public required UpdateProductPricingRequest Request { get; init; }
 }
