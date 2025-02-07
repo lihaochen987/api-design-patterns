@@ -24,12 +24,6 @@ public class SupplierApplicationService(
     public async Task DeleteSupplierAsync(long id) =>
         await repository.DeleteSupplierAsync(id);
 
-    public async Task CreateSupplierAsync(DomainModels.Supplier supplier)
-    {
-        supplier.CreatedAt = DateTimeOffset.UtcNow;
-        await repository.CreateSupplierAsync(supplier);
-    }
-
     public async Task ReplaceSupplierAsync(DomainModels.Supplier supplier, long id)
     {
         supplier.Id = id;

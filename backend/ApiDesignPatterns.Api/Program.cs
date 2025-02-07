@@ -4,6 +4,7 @@ using backend.Product;
 using backend.Review;
 using backend.Shared;
 using backend.Shared.ControllerActivators;
+using backend.Supplier;
 using DbUp;
 using DbUp.Engine;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -33,6 +34,8 @@ builder.Services.AddSingleton<BaseControllerActivator>(
     new ProductPricingControllerActivator(builder.Configuration, loggerFactory));
 builder.Services.AddSingleton<BaseControllerActivator>(
     new ReviewControllerActivator(builder.Configuration, loggerFactory));
+builder.Services.AddSingleton<BaseControllerActivator>(
+    new SupplierControllerActivator(builder.Configuration, loggerFactory));
 
 builder.Services.AddSingleton<IControllerActivator>(sp =>
 {

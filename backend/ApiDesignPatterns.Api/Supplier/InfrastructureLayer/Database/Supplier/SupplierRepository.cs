@@ -2,25 +2,18 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Data;
-using AutoMapper;
-using backend.Supplier.Services;
 using Dapper;
 
 namespace backend.Supplier.InfrastructureLayer.Database.Supplier;
 
 public class SupplierRepository(
-    IDbConnection dbConnection,
-    SupplierDataWriter dataWriter,
-    IMapper mapper)
+    IDbConnection dbConnection)
     : ISupplierRepository
 {
     public async Task<DomainModels.Supplier?> GetSupplierAsync(long id)
     {
-        var result =
-            await dbConnection.QueryFirstOrDefaultAsync<DomainModels.Supplier>(SupplierQueries.GetSupplier,
-                new { Id = id });
-
-        return result == null ? null : mapper.Map<DomainModels.Supplier>(result);
+        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.Supplier>(SupplierQueries.GetSupplier,
+            new { Id = id });
     }
 
     public async Task DeleteSupplierAsync(long id)
@@ -28,27 +21,13 @@ public class SupplierRepository(
         await dbConnection.ExecuteAsync(SupplierQueries.DeleteSupplier, new { Id = id });
     }
 
-    public async Task CreateSupplierAsync(DomainModels.Supplier supplier)
+    public async Task<long> CreateSupplierAsync(DomainModels.Supplier supplier)
     {
-        dbConnection.Open();
-
-        using var transaction = dbConnection.BeginTransaction();
-        try
-        {
-            supplier.Id = await dataWriter.CreateSupplier(supplier, transaction);
-            await dataWriter.CreateSupplierAddress(supplier, transaction);
-            await dataWriter.CreateSupplierPhoneNumber(supplier, transaction);
-            transaction.Commit();
-        }
-        catch
-        {
-            transaction.Rollback();
-            throw;
-        }
-        finally
-        {
-            dbConnection.Close();
-        }
+        const string insertSupplierQuery = SupplierQueries.CreateSupplier;
+        return await dbConnection.ExecuteScalarAsync<long>(
+            insertSupplierQuery,
+            new { supplier.FirstName, supplier.LastName, supplier.Email, supplier.CreatedAt }
+        );
     }
 
     public async Task UpdateSupplierAsync(DomainModels.Supplier supplier)
@@ -58,9 +37,9 @@ public class SupplierRepository(
         using var transaction = dbConnection.BeginTransaction();
         try
         {
-            supplier.Id = await dataWriter.UpdateSupplier(supplier, transaction);
-            await dataWriter.UpdateSupplierAddress(supplier, transaction);
-            await dataWriter.UpdateSupplierPhoneNumber(supplier, transaction);
+            supplier.Id = await UpdateSupplierAsync(supplier, transaction);
+            await UpdateSupplierAddressAsync(supplier, transaction);
+            await UpdateSupplierPhoneNumberAsync(supplier, transaction);
             transaction.Commit();
         }
         catch
@@ -72,5 +51,79 @@ public class SupplierRepository(
         {
             dbConnection.Close();
         }
+    }
+
+    public async Task CreateSupplierAddressAsync(DomainModels.Supplier supplier)
+    {
+        const string insertAddressQuery = SupplierQueries.CreateSupplierAddress;
+        await dbConnection.ExecuteAsync(
+            insertAddressQuery,
+            new
+            {
+                SupplierId = supplier.Id,
+                supplier.Address.Street,
+                supplier.Address.City,
+                supplier.Address.PostalCode,
+                supplier.Address.Country
+            }
+        );
+    }
+
+    public async Task CreateSupplierPhoneNumberAsync(DomainModels.Supplier supplier)
+    {
+        const string insertPhoneNumberQuery = SupplierQueries.CreateSupplierPhoneNumber;
+        await dbConnection.ExecuteAsync(
+            insertPhoneNumberQuery,
+            new
+            {
+                SupplierId = supplier.Id,
+                supplier.PhoneNumber.CountryCode,
+                supplier.PhoneNumber.AreaCode,
+                supplier.PhoneNumber.Number
+            }
+        );
+    }
+
+    public async Task UpdateSupplierPhoneNumberAsync(DomainModels.Supplier supplier, IDbTransaction transaction)
+    {
+        const string updatePhoneNumberQuery = SupplierQueries.UpdateSupplierPhoneNumber;
+        await dbConnection.ExecuteAsync(
+            updatePhoneNumberQuery,
+            new
+            {
+                SupplierId = supplier.Id,
+                supplier.PhoneNumber.CountryCode,
+                supplier.PhoneNumber.AreaCode,
+                supplier.PhoneNumber.Number
+            },
+            transaction
+        );
+    }
+
+    public async Task UpdateSupplierAddressAsync(DomainModels.Supplier supplier, IDbTransaction transaction)
+    {
+        const string updateAddressQuery = SupplierQueries.UpdateSupplierAddress;
+        await dbConnection.ExecuteAsync(
+            updateAddressQuery,
+            new
+            {
+                SupplierId = supplier.Id,
+                supplier.Address.Street,
+                supplier.Address.City,
+                supplier.Address.PostalCode,
+                supplier.Address.Country
+            },
+            transaction
+        );
+    }
+
+    public async Task<long> UpdateSupplierAsync(DomainModels.Supplier supplier, IDbTransaction transaction)
+    {
+        const string updateSupplierQuery = SupplierQueries.UpdateSupplier;
+        return await dbConnection.ExecuteScalarAsync<long>(
+            updateSupplierQuery,
+            new { supplier.Id, supplier.FirstName, supplier.LastName, supplier.Email },
+            transaction
+        );
     }
 }

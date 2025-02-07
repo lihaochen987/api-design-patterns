@@ -3,8 +3,9 @@
 
 using AutoMapper;
 using backend.Supplier.DomainModels;
+using backend.Supplier.SupplierControllers;
 
-namespace backend.Supplier.SupplierControllers;
+namespace backend.Supplier.Services;
 
 public class SupplierMappingProfile : Profile
 {

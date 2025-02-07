@@ -2,7 +2,9 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Shared.CommandHandler;
 using backend.Supplier.ApplicationLayer;
+using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -11,7 +13,7 @@ namespace backend.Supplier.SupplierControllers;
 [ApiController]
 [Route("supplier")]
 public class CreateSupplierController(
-    ISupplierApplicationService applicationService,
+    ICommandHandler<CreateSupplierCommand> createSupplier,
     IMapper mapper)
     : ControllerBase
 {
@@ -22,7 +24,7 @@ public class CreateSupplierController(
     public async Task<ActionResult<CreateSupplierResponse>> CreateSupplier([FromBody] CreateSupplierRequest request)
     {
         var supplier = mapper.Map<DomainModels.Supplier>(request);
-        await applicationService.CreateSupplierAsync(supplier);
+        await createSupplier.Handle(new CreateSupplierCommand { Supplier = supplier });
 
         var response = mapper.Map<CreateSupplierResponse>(supplier);
         return Ok(response);

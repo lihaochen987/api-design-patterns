@@ -7,6 +7,8 @@ public interface ISupplierRepository
 {
     Task<DomainModels.Supplier?> GetSupplierAsync(long id);
     Task DeleteSupplierAsync(long id);
-    Task CreateSupplierAsync(DomainModels.Supplier supplier);
+    Task<long> CreateSupplierAsync(DomainModels.Supplier supplier);
     Task UpdateSupplierAsync(DomainModels.Supplier supplier);
+    Task CreateSupplierAddressAsync(DomainModels.Supplier supplier);
+    Task CreateSupplierPhoneNumberAsync(DomainModels.Supplier supplier);
 }
