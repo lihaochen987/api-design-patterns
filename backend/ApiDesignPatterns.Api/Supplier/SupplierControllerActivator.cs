@@ -2,9 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Review.ApplicationLayer.Commands.DeleteReview;
-using backend.Review.ApplicationLayer.Queries.GetReview;
-using backend.Review.DomainModels;
 using backend.Review.Services;
 using backend.Shared;
 using backend.Shared.CommandHandler;
@@ -14,7 +11,10 @@ using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
 using backend.Supplier.ApplicationLayer.Commands.DeleteSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
+using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
+using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer.Database.Supplier;
+using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 using backend.Supplier.Services;
 using backend.Supplier.SupplierControllers;
 using Microsoft.AspNetCore.Mvc;
@@ -23,25 +23,25 @@ namespace backend.Supplier;
 
 public class SupplierControllerActivator : BaseControllerActivator
 {
-    private readonly QueryService<ReviewView> _reviewQueryService;
-    private readonly SqlFilterBuilder _reviewSqlFilterBuilder;
+    private readonly QueryService<SupplierView> _supplierQueryService;
+    private readonly SqlFilterBuilder _supplierSqlFilterBuilder;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly IMapper _mapper;
 
     public SupplierControllerActivator(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration)
     {
-        _reviewQueryService = new QueryService<ReviewView>();
+        _supplierQueryService = new QueryService<SupplierView>();
 
-        ReviewColumnMapper reviewColumnMapper = new();
-        _reviewSqlFilterBuilder = new SqlFilterBuilder(reviewColumnMapper);
+        SupplierColumnMapper supplierColumnMapper = new();
+        _supplierSqlFilterBuilder = new SqlFilterBuilder(supplierColumnMapper);
 
         _loggerFactory = loggerFactory;
 
-        ReviewFieldPaths reviewFieldPaths = new();
-        _fieldMaskConverterFactory = new FieldMaskConverterFactory(reviewFieldPaths.ValidPaths);
+        SupplierFieldPaths supplierFieldPaths = new();
+        _fieldMaskConverterFactory = new FieldMaskConverterFactory(supplierFieldPaths.ValidPaths);
 
-        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<SupplierMappingProfile>(); });
+        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ReviewMappingProfile>(); });
         _mapper = mapperConfig.CreateMapper();
     }
 
@@ -95,6 +95,26 @@ public class SupplierControllerActivator : BaseControllerActivator
             return new DeleteSupplierController(
                 getSupplierWithValidation,
                 deleteSupplierWithTransaction);
+        }
+
+        if (type == typeof(GetSupplierController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierQueryService);
+
+            // GetSupplierView handler
+            var getSupplierView = new GetSupplierViewHandler(repository);
+            var getSupplierViewWithLogging = new LoggingQueryHandlerDecorator<GetSupplierViewQuery, SupplierView>(
+                getSupplierView,
+                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetSupplierViewQuery, SupplierView>>());
+            var getSupplierViewWithValidation =
+                new ValidationQueryHandlerDecorator<GetSupplierViewQuery, SupplierView>(getSupplierViewWithLogging);
+
+            return new GetSupplierController(
+                getSupplierViewWithValidation,
+                _fieldMaskConverterFactory,
+                _mapper);
         }
 
         return null;

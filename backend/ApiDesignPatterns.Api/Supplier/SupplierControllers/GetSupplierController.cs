@@ -4,7 +4,9 @@
 using AutoMapper;
 using backend.Product.ProductControllers;
 using backend.Shared.FieldMask;
-using backend.Supplier.ApplicationLayer;
+using backend.Shared.QueryHandler;
+using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
+using backend.Supplier.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
@@ -14,7 +16,7 @@ namespace backend.Supplier.SupplierControllers;
 [ApiController]
 [Route("supplier")]
 public class GetSupplierController(
-    ISupplierViewApplicationService applicationService,
+    IQueryHandler<GetSupplierViewQuery, SupplierView> getSupplierView,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase
@@ -27,7 +29,7 @@ public class GetSupplierController(
         [FromRoute] long id,
         [FromQuery] GetSupplierRequest request)
     {
-        var supplierView = await applicationService.GetSupplierView(id);
+        var supplierView = await getSupplierView.Handle(new GetSupplierViewQuery { Id = id });
         if (supplierView == null)
         {
             return NotFound();

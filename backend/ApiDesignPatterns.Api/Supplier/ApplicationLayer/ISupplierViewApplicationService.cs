@@ -8,6 +8,5 @@ namespace backend.Supplier.ApplicationLayer;
 
 public interface ISupplierViewApplicationService
 {
-    Task<SupplierView?> GetSupplierView(long id);
     Task<(List<SupplierView>, string?)> ListSuppliersAsync(ListSuppliersRequest request);
 }
