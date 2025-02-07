@@ -14,13 +14,19 @@ public class ReviewViewRepositoryFake(
     QueryService<ReviewView> queryService)
     : Collection<ReviewView>, IReviewViewRepository
 {
-    public void AddReviewView(long id, long productId, decimal rating, string text)
+    public void AddReviewView(long productId)
     {
         var reviewView = new ReviewViewTestDataBuilder()
-            .WithId(id)
+            .WithProductId(productId)
+            .Build();
+        Add(reviewView);
+    }
+
+    public void AddReviewView(long productId, long rating)
+    {
+        var reviewView = new ReviewViewTestDataBuilder()
             .WithProductId(productId)
             .WithRating(rating)
-            .WithText(text)
             .Build();
         Add(reviewView);
     }
@@ -35,9 +41,11 @@ public class ReviewViewRepositoryFake(
         string? pageToken,
         string? filter,
         int maxPageSize,
-        string? parent)
+        string parentId)
     {
         IEnumerable<ReviewView> query = this.AsEnumerable();
+
+        query = query.Where(r => r.ProductId == long.Parse(parentId));
 
         if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenReviewId))
         {

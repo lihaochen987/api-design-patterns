@@ -3,8 +3,9 @@
 
 using AutoMapper;
 using backend.Review.DomainModels;
+using backend.Review.ReviewControllers;
 
-namespace backend.Review.ReviewControllers;
+namespace backend.Review.Services;
 
 public class ReviewMappingProfile : Profile
 {
@@ -16,5 +17,7 @@ public class ReviewMappingProfile : Profile
         CreateMap<ReplaceReviewRequest, DomainModels.Review>();
         CreateMap<DomainModels.Review, UpdateReviewResponse>();
         CreateMap<CreateReviewRequest, DomainModels.Review>();
+
+        CreateMap<DomainModels.Review, CreateReviewRequest>();
     }
 }

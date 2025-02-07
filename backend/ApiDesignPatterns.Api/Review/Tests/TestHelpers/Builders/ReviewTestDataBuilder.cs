@@ -20,7 +20,7 @@ public class ReviewTestDataBuilder
 
         _id = fixture.Create<long>();
         _productId = fixture.Create<long>();
-        _rating = fixture.Create<decimal>() % 5 + 1; // Ensures rating is between 1-5
+        _rating = fixture.Create<decimal>() % 5 + 1;
         _text = fixture.Create<string>();
         _createdAt = fixture.Create<DateTimeOffset>();
         _updatedAt = fixture.Create<DateTimeOffset?>();

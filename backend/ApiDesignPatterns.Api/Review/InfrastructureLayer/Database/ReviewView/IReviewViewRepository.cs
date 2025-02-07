@@ -11,5 +11,5 @@ public interface IReviewViewRepository
         string? pageToken,
         string? filter,
         int maxPageSize,
-        string? parent);
+        string parent);
 }
