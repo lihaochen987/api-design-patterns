@@ -10,6 +10,7 @@ using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
 using backend.Supplier.ApplicationLayer.Commands.DeleteSupplier;
+using backend.Supplier.ApplicationLayer.Commands.ReplaceSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
@@ -135,6 +136,35 @@ public class SupplierControllerActivator : BaseControllerActivator
 
             return new ListSuppliersController(
                 listSuppliersWithLogging,
+                _mapper);
+        }
+
+        if (type == typeof(ReplaceSupplierController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new SupplierRepository(dbConnection);
+
+            // GetSupplier handler
+            var getSupplier = new GetSupplierHandler(repository);
+            var getSupplierWithLogging = new LoggingQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>(
+                getSupplier,
+                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>>());
+            var getSupplierWithValidation =
+                new ValidationQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>(getSupplierWithLogging);
+
+            // ReplaceSupplier handler
+            var replaceSupplier = new ReplaceSupplierHandler(repository);
+            var replaceSupplierWithLogging = new LoggingCommandHandlerDecorator<ReplaceSupplierCommand>(replaceSupplier,
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceSupplierCommand>>());
+            var replaceSupplierWithAudit =
+                new AuditCommandHandlerDecorator<ReplaceSupplierCommand>(replaceSupplierWithLogging, dbConnection);
+            var replaceSupplierWithTransaction =
+                new TransactionCommandHandlerDecorator<ReplaceSupplierCommand>(replaceSupplierWithAudit, dbConnection);
+
+            return new ReplaceSupplierController(
+                getSupplierWithValidation,
+                replaceSupplierWithTransaction,
                 _mapper);
         }
 

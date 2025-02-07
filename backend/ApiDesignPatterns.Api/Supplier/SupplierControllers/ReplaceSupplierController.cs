@@ -1,7 +1,8 @@
 using AutoMapper;
 using backend.Product.ProductControllers;
+using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
-using backend.Supplier.ApplicationLayer;
+using backend.Supplier.ApplicationLayer.Commands.ReplaceSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -11,8 +12,8 @@ namespace backend.Supplier.SupplierControllers;
 [ApiController]
 [Route("supplier")]
 public class ReplaceSupplierController(
-    ISupplierApplicationService applicationService,
     IQueryHandler<GetSupplierQuery, DomainModels.Supplier> getSupplier,
+    ICommandHandler<ReplaceSupplierCommand> replaceSupplier,
     IMapper mapper)
     : ControllerBase
 {
@@ -32,7 +33,7 @@ public class ReplaceSupplierController(
 
         var replacedSupplier = mapper.Map<DomainModels.Supplier>(request);
 
-        await applicationService.ReplaceSupplierAsync(replacedSupplier, id);
+        await replaceSupplier.Handle(new ReplaceSupplierCommand { Supplier = replacedSupplier });
         var response = mapper.Map<ReplaceSupplierResponse>(replacedSupplier);
         return Ok(response);
     }
