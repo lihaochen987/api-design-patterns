@@ -25,7 +25,6 @@ public class CreateReviewController(
         long productId)
     {
         var review = mapper.Map<DomainModels.Review>(request);
-        review.CreatedAt = DateTime.UtcNow;
         await createReview.Handle(new CreateReviewCommand { Review = review, ProductId = productId });
 
         var response = mapper.Map<CreateReviewResponse>(review);

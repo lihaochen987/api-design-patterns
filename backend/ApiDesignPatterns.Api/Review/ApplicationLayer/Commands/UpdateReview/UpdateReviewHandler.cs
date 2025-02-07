@@ -12,11 +12,16 @@ public class UpdateReviewHandler(IReviewRepository repository) : ICommandHandler
     public async Task Handle(UpdateReviewCommand command)
     {
         (long productId, decimal rating, string text) = GetUpdatedReviewValues(command.Request, command.Review);
-        command.Review.ProductId = productId;
-        command.Review.Rating = rating;
-        command.Review.Text = text;
-        command.Review.UpdatedAt = DateTimeOffset.UtcNow;
-        await repository.UpdateReviewAsync(command.Review);
+        var review = new DomainModels.Review
+        {
+            Id = command.Review.Id,
+            ProductId = productId,
+            Rating = rating,
+            Text = text,
+            CreatedAt = command.Review.CreatedAt,
+            UpdatedAt = DateTimeOffset.Now
+        };
+        await repository.UpdateReviewAsync(review);
     }
 
     private static (

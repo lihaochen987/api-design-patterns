@@ -23,7 +23,7 @@ public class CreateReviewHandlerTests : CreateReviewHandlerTestBase
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("CreateReviewAsync", 1);
-        reviewToCreate.ProductId.ShouldBeEquivalentTo(productId);
+        Repository.First().ProductId.ShouldBeEquivalentTo(productId);
     }
 
     [Fact]
@@ -40,7 +40,9 @@ public class CreateReviewHandlerTests : CreateReviewHandlerTestBase
 
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("CreateReviewAsync", 2);
-        firstReviewToCreate.ProductId.ShouldBeEquivalentTo(firstProductId);
-        secondReviewToCreate.ProductId.ShouldBeEquivalentTo(secondProductId);
+        var firstReview = Repository.First(x => x.Id == firstReviewToCreate.Id);
+        firstReview.ProductId.ShouldBeEquivalentTo(firstProductId);
+        var secondReview = Repository.First(x => x.Id == secondReviewToCreate.Id);
+        secondReview.ProductId.ShouldBeEquivalentTo(secondProductId);
     }
 }

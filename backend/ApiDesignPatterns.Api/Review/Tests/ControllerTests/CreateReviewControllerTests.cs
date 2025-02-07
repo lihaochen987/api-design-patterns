@@ -36,25 +36,6 @@ public class CreateReviewControllerTests : CreateReviewControllerTestBase
     }
 
     [Fact]
-    public async Task CreateReview_SetsCreatedAtToUtcNow_WhenCreatingReview()
-    {
-        long productId = Fixture.Create<long>();
-        var review = new ReviewTestDataBuilder().Build();
-        var request = Mapper.Map<CreateReviewRequest>(review);
-        var beforeTest = DateTime.UtcNow;
-        var sut = GetCreateReviewController();
-
-        await sut.CreateReview(request, productId);
-
-        Mock
-            .Get(CreateReview)
-            .Verify(x => x.Handle(It.Is<CreateReviewCommand>(c =>
-                    c.Review.CreatedAt >= beforeTest &&
-                    c.Review.CreatedAt <= DateTime.UtcNow)),
-                Times.Once);
-    }
-
-    [Fact]
     public async Task CreateReview_HandlesCommandFailure_WhenCreateReviewFails()
     {
         long productId = Fixture.Create<long>();
