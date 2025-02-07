@@ -3,12 +3,12 @@
 
 namespace backend.Review.DomainModels;
 
-public class Review
+public record Review
 {
-    public required long Id { get; set; }
-    public required long ProductId { get; set; }
-    public required decimal Rating { get; set; }
-    public required string Text { get; set; }
-    public DateTimeOffset CreatedAt { get; set; }
-    public DateTimeOffset? UpdatedAt { get; set; }
+    public required long Id { get; init; }
+    public required long ProductId { get; init; }
+    public required decimal Rating { get; init; }
+    public required string Text { get; init; }
+    public DateTimeOffset CreatedAt { get; init; }
+    public DateTimeOffset? UpdatedAt { get; init; }
 }

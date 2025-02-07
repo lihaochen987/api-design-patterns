@@ -30,18 +30,17 @@ public class UpdateProductHandler(
     /// </summary>
     public async Task Handle(UpdateProductCommand command)
     {
-        UpdateBaseProduct(command.Request, command.Product);
-        long id = await repository.UpdateProductAsync(command.Product);
-        command.Product.Id = id;
-        switch (command.Product)
+        var updatedBaseProduct = UpdateBaseProduct(command.Request, command.Product);
+        long id = await repository.UpdateProductAsync(updatedBaseProduct);
+        switch (updatedBaseProduct)
         {
             case PetFood petFood:
-                UpdatePetFood(command.Request, petFood);
-                await repository.UpdatePetFoodProductAsync(petFood);
+                var updatedPetFood = UpdatePetFood(id, command.Request, petFood);
+                await repository.UpdatePetFoodProductAsync(updatedPetFood);
                 break;
             case GroomingAndHygiene groomingAndHygiene:
-                UpdateGroomingAndHygiene(command.Request, groomingAndHygiene);
-                await repository.UpdateGroomingAndHygieneProductAsync(groomingAndHygiene);
+                var updatedGroomingAndHygiene = UpdateGroomingAndHygiene(id, command.Request, groomingAndHygiene);
+                await repository.UpdateGroomingAndHygieneProductAsync(updatedGroomingAndHygiene);
                 break;
         }
     }
@@ -49,23 +48,27 @@ public class UpdateProductHandler(
     /// <summary>
     /// Updates base product properties if specified in field mask.
     /// </summary>
-    private static void UpdateBaseProduct(
+    private static DomainModels.Product UpdateBaseProduct(
         UpdateProductRequest request,
         DomainModels.Product product)
     {
         (string name, Pricing pricing, Category category, Dimensions dimensions) =
             GetUpdatedProductValues(request, product);
 
-        product.Name = name;
-        product.Pricing = pricing;
-        product.Category = category;
-        product.Dimensions = dimensions;
+        // Use the 'with' expression on the original product to maintain its type
+        var updatedProduct = product with
+        {
+            Name = name, Category = category, Pricing = pricing, Dimensions = dimensions
+        };
+
+        return updatedProduct;
     }
 
     /// <summary>
     /// Updates pet food specific properties if specified in field mask.
     /// </summary>
-    private static void UpdatePetFood(
+    private static PetFood UpdatePetFood(
+        long id,
         UpdateProductRequest request,
         PetFood petFood)
     {
@@ -73,18 +76,25 @@ public class UpdateProductHandler(
                 string storageInstructions, decimal weightKg) =
             GetUpdatedPetFoodValues(request, petFood);
 
-        petFood.AgeGroup = ageGroup;
-        petFood.BreedSize = breedSize;
-        petFood.Ingredients = ingredients;
-        petFood.NutritionalInfo = nutritionalInfo;
-        petFood.StorageInstructions = storageInstructions;
-        petFood.WeightKg = weightKg;
+        var updatedPetFood = petFood with
+        {
+            Id = id,
+            AgeGroup = ageGroup,
+            BreedSize = breedSize,
+            Ingredients = ingredients,
+            NutritionalInfo = nutritionalInfo,
+            StorageInstructions = storageInstructions,
+            WeightKg = weightKg
+        };
+
+        return updatedPetFood;
     }
 
     /// <summary>
     /// Updates pet food specific properties if specified in field mask.
     /// </summary>
-    private static void UpdateGroomingAndHygiene(
+    private static GroomingAndHygiene UpdateGroomingAndHygiene(
+        long id,
         UpdateProductRequest request,
         GroomingAndHygiene groomingAndHygiene)
     {
@@ -92,11 +102,17 @@ public class UpdateProductHandler(
                 string safetyWarnings) =
             GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
 
-        groomingAndHygiene.IsNatural = isNatural;
-        groomingAndHygiene.IsHypoallergenic = isHypoAllergenic;
-        groomingAndHygiene.UsageInstructions = usageInstructions;
-        groomingAndHygiene.IsCrueltyFree = isCrueltyFree;
-        groomingAndHygiene.SafetyWarnings = safetyWarnings;
+        var updatedGroomingAndHygiene = groomingAndHygiene with
+        {
+            Id = id,
+            IsNatural = isNatural,
+            IsHypoallergenic = isHypoAllergenic,
+            UsageInstructions = usageInstructions,
+            IsCrueltyFree = isCrueltyFree,
+            SafetyWarnings = safetyWarnings
+        };
+
+        return updatedGroomingAndHygiene;
     }
 
     /// <summary>

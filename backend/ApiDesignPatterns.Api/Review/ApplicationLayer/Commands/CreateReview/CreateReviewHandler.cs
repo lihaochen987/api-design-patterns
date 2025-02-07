@@ -10,15 +10,7 @@ public class CreateReviewHandler(IReviewRepository repository) : ICommandHandler
 {
     public async Task Handle(CreateReviewCommand command)
     {
-        var review = new DomainModels.Review
-        {
-            Id = command.Review.Id,
-            ProductId = command.ProductId,
-            Rating = command.Review.Rating,
-            Text = command.Review.Text,
-            CreatedAt = DateTimeOffset.UtcNow,
-            UpdatedAt = command.Review.UpdatedAt,
-        };
+        var review = command.Review with { ProductId = command.ProductId, CreatedAt = DateTimeOffset.UtcNow };
         await repository.CreateReviewAsync(review);
     }
 }

@@ -13,9 +13,15 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
             ProductQueries.GetProduct,
             (product, dimensions, pricing) =>
             {
-                product.Dimensions = dimensions;
-                product.Pricing = pricing;
-                return product;
+                var productResult = new DomainModels.Product
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Category = product.Category,
+                    Pricing = pricing,
+                    Dimensions = dimensions
+                };
+                return productResult;
             },
             new { Id = id },
             splitOn: "Length,BasePrice");
@@ -29,9 +35,8 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
             ProductQueries.GetPetFoodProduct,
             (petFood, dimensions, pricing) =>
             {
-                petFood.Dimensions = dimensions;
-                petFood.Pricing = pricing;
-                return petFood;
+                var petFoodResult = petFood with { Pricing = pricing, Dimensions = dimensions };
+                return petFoodResult;
             },
             new { Id = id },
             splitOn: "Length,BasePrice");
@@ -43,11 +48,10 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
     {
         var product = await dbConnection.QueryAsync<GroomingAndHygiene, Dimensions, Pricing, GroomingAndHygiene>(
             ProductQueries.GetGroomingAndHygieneProduct,
-            (petFood, dimensions, pricing) =>
+            (groomingAndHygiene, dimensions, pricing) =>
             {
-                petFood.Dimensions = dimensions;
-                petFood.Pricing = pricing;
-                return petFood;
+                var groomingAndHygieneResult = groomingAndHygiene with { Pricing = pricing, Dimensions = dimensions };
+                return groomingAndHygieneResult;
             },
             new { Id = id },
             splitOn: "Length,BasePrice");

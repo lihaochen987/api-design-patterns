@@ -28,9 +28,10 @@ public class UpdateProductPricingHandler(IProductRepository repository) : IComma
         (decimal basePrice, decimal discountPercentage, decimal taxRate) =
             GetUpdatedProductPricingValues(command.Request, command.Product.Pricing);
 
-        command.Product.Pricing = new Pricing(basePrice, discountPercentage, taxRate);
+        var updatedProductWithPricing =
+            command.Product with { Pricing = new Pricing(basePrice, discountPercentage, taxRate) };
 
-        await repository.UpdateProductAsync(command.Product);
+        await repository.UpdateProductAsync(updatedProductWithPricing);
     }
 
     /// <summary>
@@ -49,11 +50,12 @@ public class UpdateProductPricingHandler(IProductRepository repository) : IComma
             ? parsedBasePrice
             : product.BasePrice;
 
-        decimal discountPercentage = request.FieldMask.Contains("pricing.discountpercentage", StringComparer.OrdinalIgnoreCase)
-                                     && decimal.TryParse(request.DiscountPercentage,
-                                         out decimal parsedDiscountPercentage)
-            ? parsedDiscountPercentage
-            : product.DiscountPercentage;
+        decimal discountPercentage =
+            request.FieldMask.Contains("pricing.discountpercentage", StringComparer.OrdinalIgnoreCase)
+            && decimal.TryParse(request.DiscountPercentage,
+                out decimal parsedDiscountPercentage)
+                ? parsedDiscountPercentage
+                : product.DiscountPercentage;
 
         decimal taxRate = request.FieldMask.Contains("pricing.taxrate", StringComparer.OrdinalIgnoreCase)
                           && decimal.TryParse(request.TaxRate, out decimal parsedTaxRate)

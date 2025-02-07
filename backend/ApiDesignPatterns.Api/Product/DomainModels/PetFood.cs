@@ -2,12 +2,12 @@ using backend.Product.DomainModels.Enums;
 
 namespace backend.Product.DomainModels;
 
-public class PetFood : Product
+public record PetFood : Product
 {
-    public required AgeGroup AgeGroup { get; set; }
-    public required BreedSize BreedSize { get; set; }
-    public required string Ingredients { get; set; }
-    public required Dictionary<string, object> NutritionalInfo { get; set; }
-    public required string StorageInstructions { get; set; }
-    public required decimal WeightKg { get; set; }
+    public required AgeGroup AgeGroup { get; init; }
+    public required BreedSize BreedSize { get; init; }
+    public required string Ingredients { get; init; }
+    public required Dictionary<string, object> NutritionalInfo { get; init; }
+    public required string StorageInstructions { get; init; }
+    public required decimal WeightKg { get; init; }
 }

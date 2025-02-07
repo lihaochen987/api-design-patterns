@@ -3,15 +3,15 @@ using backend.Product.DomainModels.ValueObjects;
 
 namespace backend.Product.DomainModels;
 
-public class Product
+public record Product
 {
-    public long Id { get; set; }
+    public required long Id { get; init; }
 
-    public required string Name { get; set; }
+    public required string Name { get; init; }
 
-    public Category Category { get; set; }
+    public Category Category { get; init; }
 
-    public required Pricing Pricing { get; set; }
+    public required Pricing Pricing { get; init; }
 
-    public required Dimensions Dimensions { get; set; }
+    public required Dimensions Dimensions { get; init; }
 }

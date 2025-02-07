@@ -13,8 +13,8 @@ public class CreateProductHandler(IProductRepository repository) : ICommandHandl
     public async Task Handle(CreateProductCommand command)
     {
         long id = await repository.CreateProductAsync(command.Product);
-        command.Product.Id = id;
-        switch (command.Product)
+        var updatedProduct = command.Product with { Id = id };
+        switch (updatedProduct)
         {
             case PetFood petFood:
                 await repository.CreatePetFoodProductAsync(petFood);

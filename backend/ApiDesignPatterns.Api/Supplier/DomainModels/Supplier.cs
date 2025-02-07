@@ -3,13 +3,13 @@
 
 namespace backend.Supplier.DomainModels;
 
-public class Supplier
+public record Supplier
 {
-    public long Id { get; set; }
-    public required string FirstName { get; set; }
-    public required string LastName { get; set; }
-    public required string Email { get; set; }
-    public required Address Address { get; set; }
-    public DateTimeOffset CreatedAt { get; set; }
-    public required PhoneNumber PhoneNumber { get; set; }
+    public long Id { get; init; }
+    public required string FirstName { get; init; }
+    public required string LastName { get; init; }
+    public required string Email { get; init; }
+    public required Address Address { get; init; }
+    public DateTimeOffset CreatedAt { get; init; }
+    public required PhoneNumber PhoneNumber { get; init; }
 }

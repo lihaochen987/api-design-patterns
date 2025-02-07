@@ -7,12 +7,12 @@ namespace backend.Supplier.DomainModels;
 
 public class SupplierView : Identifier
 {
-    public required string FullName { get; set; }
-    public required string Email { get; set; }
-    public DateTimeOffset CreatedAt { get; set; }
-    public required string Street { get; set; }
-    public required string City { get; set; }
-    public required string PostalCode { get; set; }
-    public required string Country { get; set; }
-    public required string PhoneNumber { get; set; }
+    public required string FullName { get; init; }
+    public required string Email { get; init; }
+    public DateTimeOffset CreatedAt { get; init; }
+    public required string Street { get; init; }
+    public required string City { get; init; }
+    public required string PostalCode { get; init; }
+    public required string Country { get; init; }
+    public required string PhoneNumber { get; init; }
 }

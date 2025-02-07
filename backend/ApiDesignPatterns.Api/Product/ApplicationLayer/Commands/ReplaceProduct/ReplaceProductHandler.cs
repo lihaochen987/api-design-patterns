@@ -30,9 +30,9 @@ public class ReplaceProductHandler(
             replacedProduct = mapper.Map<DomainModels.Product>(command.Request);
         }
 
-        replacedProduct.Id = command.ExistingProductId;
-        await repository.UpdateProductAsync(replacedProduct);
-        switch (replacedProduct)
+        var replacedProductWithId = replacedProduct with { Id = command.ExistingProductId };
+        await repository.UpdateProductAsync(replacedProductWithId);
+        switch (replacedProductWithId)
         {
             case PetFood petFood:
                 await repository.UpdatePetFoodProductAsync(petFood);
