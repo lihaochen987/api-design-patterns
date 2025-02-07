@@ -318,6 +318,15 @@
     <Compile Update="Review\Tests\ControllerTests\CreateReviewControllerTestBase.cs">
       <DependentUpon>CreateReviewControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Review\Tests\ControllerTests\DeleteReviewControllerTestBase.cs">
+      <DependentUpon>DeleteReviewControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Tests\ControllerTests\GetReviewControllerTestBase.cs">
+      <DependentUpon>GetReviewControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Tests\ControllerTests\ListReviewsControllerTestBase.cs">
+      <DependentUpon>ListReviewsControllerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

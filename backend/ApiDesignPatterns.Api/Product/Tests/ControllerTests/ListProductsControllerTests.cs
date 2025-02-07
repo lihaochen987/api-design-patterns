@@ -189,8 +189,8 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         listProductsResponse.ShouldNotBeNull();
         listProductsResponse.Results.ShouldHaveSingleItem()
             .ShouldSatisfyAllConditions(
-                p => ((GetPetFoodResponse)p!).Category.ShouldBe(product.Category.ToString()),
-                p => decimal.Parse(((GetPetFoodResponse)p!).Price).ShouldBeLessThan(20));
+                p => ((GetPetFoodResponse)p).Category.ShouldBe(product.Category),
+                p => decimal.Parse(((GetPetFoodResponse)p).Price).ShouldBeLessThan(20));
     }
 
     [Fact]
@@ -217,8 +217,8 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var listProductsResponse = response!.Value as ListProductsResponse;
         listProductsResponse!.Results.ShouldHaveSingleItem()
             .ShouldSatisfyAllConditions(
-                p => int.Parse(((GetProductResponse)p!).Dimensions.Length).ShouldBe(5),
-                p => int.Parse(((GetProductResponse)p!).Dimensions.Width).ShouldBeLessThan(20));
+                p => int.Parse(p.Dimensions.Length).ShouldBe(5),
+                p => int.Parse(p.Dimensions.Width).ShouldBeLessThan(20));
     }
 
 
@@ -245,7 +245,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         listProductsResponse.ShouldNotBeNull();
         listProductsResponse.Results.ShouldHaveSingleItem()
             .ShouldSatisfyAllConditions(
-                p => ((GetProductResponse)p!).Name.ShouldBe(product.Name));
+                p => p.Name.ShouldBe(product.Name));
     }
 
 
@@ -271,7 +271,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var listProductsResponse = response!.Value as ListProductsResponse;
         listProductsResponse!.Results.Count().ShouldBe(1);
         listProductsResponse.Results
-            .All(p => ((GetProductResponse)p!).Category == product.Category.ToString())
+            .All(p => p.Category == product.Category)
             .ShouldBeTrue();
     }
 
