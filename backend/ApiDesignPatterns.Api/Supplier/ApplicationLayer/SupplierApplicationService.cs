@@ -14,16 +14,6 @@ public class SupplierApplicationService(
     SupplierFieldMaskConfiguration maskConfiguration)
     : ISupplierApplicationService
 {
-    public async Task<DomainModels.Supplier?> GetSupplierAsync(long id)
-    {
-        DomainModels.Supplier? supplier = await repository.GetSupplierAsync(id);
-
-        return supplier ?? null;
-    }
-
-    public async Task DeleteSupplierAsync(long id) =>
-        await repository.DeleteSupplierAsync(id);
-
     public async Task ReplaceSupplierAsync(DomainModels.Supplier supplier, long id)
     {
         supplier.Id = id;

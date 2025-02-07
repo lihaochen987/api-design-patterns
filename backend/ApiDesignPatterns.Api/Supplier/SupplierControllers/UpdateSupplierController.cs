@@ -3,7 +3,9 @@
 
 
 using AutoMapper;
+using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer;
+using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -13,6 +15,7 @@ namespace backend.Supplier.SupplierControllers;
 [Route("supplier")]
 public class UpdateSupplierController(
     ISupplierApplicationService applicationService,
+    IQueryHandler<GetSupplierQuery, DomainModels.Supplier> getSupplier,
     IMapper mapper)
     : ControllerBase
 {
@@ -24,16 +27,16 @@ public class UpdateSupplierController(
         [FromRoute] long id,
         [FromBody] UpdateSupplierRequest request)
     {
-        var supplier = await applicationService.GetSupplierAsync(id);
+        var existingSupplier = await getSupplier.Handle(new GetSupplierQuery { Id = id });
 
-        if (supplier == null)
+        if (existingSupplier == null)
         {
             return NotFound();
         }
 
-        await applicationService.UpdateSupplierAsync(request, supplier, id);
+        await applicationService.UpdateSupplierAsync(request, existingSupplier, id);
 
-        var response = mapper.Map<UpdateSupplierResponse>(supplier);
+        var response = mapper.Map<UpdateSupplierResponse>(existingSupplier);
         return Ok(response);
     }
 }

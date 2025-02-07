@@ -1,6 +1,8 @@
 using AutoMapper;
 using backend.Product.ProductControllers;
+using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer;
+using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -10,6 +12,7 @@ namespace backend.Supplier.SupplierControllers;
 [Route("supplier")]
 public class ReplaceSupplierController(
     ISupplierApplicationService applicationService,
+    IQueryHandler<GetSupplierQuery, DomainModels.Supplier> getSupplier,
     IMapper mapper)
     : ControllerBase
 {
@@ -21,7 +24,7 @@ public class ReplaceSupplierController(
         [FromRoute] long id,
         [FromBody] ReplaceSupplierRequest request)
     {
-        var existingSupplier = await applicationService.GetSupplierAsync(id);
+        var existingSupplier = await getSupplier.Handle(new GetSupplierQuery { Id = id });
         if (existingSupplier == null)
         {
             return NotFound();
