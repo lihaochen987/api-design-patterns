@@ -12,6 +12,7 @@ using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
 using backend.Supplier.ApplicationLayer.Commands.DeleteSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
+using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
 using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer.Database.Supplier;
 using backend.Supplier.InfrastructureLayer.Database.SupplierView;
@@ -114,6 +115,26 @@ public class SupplierControllerActivator : BaseControllerActivator
             return new GetSupplierController(
                 getSupplierViewWithValidation,
                 _fieldMaskConverterFactory,
+                _mapper);
+        }
+
+        if (type == typeof(ListSuppliersController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierQueryService);
+
+            // ListSuppliers query handler
+            var listSuppliers = new ListSuppliersHandler(repository);
+            var listSuppliersWithLogging =
+                new LoggingQueryHandlerDecorator<ListSuppliersQuery, (List<SupplierView>, string?)>(
+                    listSuppliers,
+                    _loggerFactory
+                        .CreateLogger<LoggingQueryHandlerDecorator<ListSuppliersQuery, (List<SupplierView>, string?
+                            )>>());
+
+            return new ListSuppliersController(
+                listSuppliersWithLogging,
                 _mapper);
         }
 

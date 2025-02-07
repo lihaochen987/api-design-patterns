@@ -1,5 +1,7 @@
 using AutoMapper;
+using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer;
+using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
 using backend.Supplier.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -9,7 +11,7 @@ namespace backend.Supplier.SupplierControllers;
 [Route("suppliers")]
 [ApiController]
 public class ListSuppliersController(
-    ISupplierViewApplicationService applicationService,
+    IQueryHandler<ListSuppliersQuery, (List<SupplierView>, string?)> listSuppliers,
     IMapper mapper)
     : ControllerBase
 {
@@ -19,7 +21,8 @@ public class ListSuppliersController(
     public async Task<ActionResult<IEnumerable<ListSuppliersResponse>>> ListSuppliers(
         [FromQuery] ListSuppliersRequest request)
     {
-        (List<SupplierView> suppliers, string? nextPageToken) = await applicationService.ListSuppliersAsync(request);
+        (List<SupplierView> suppliers, string? nextPageToken) =
+            await listSuppliers.Handle(new ListSuppliersQuery { Request = request });
 
         ListSuppliersResponse response = new()
         {
