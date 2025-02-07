@@ -11,16 +11,7 @@ public class CreateSupplierHandler(ISupplierRepository repository) : ICommandHan
     public async Task Handle(CreateSupplierCommand command)
     {
         long id = await repository.CreateSupplierAsync(command.Supplier);
-        var supplier = new DomainModels.Supplier
-        {
-            Id = id,
-            FirstName = command.Supplier.FirstName,
-            LastName = command.Supplier.LastName,
-            Email = command.Supplier.Email,
-            Address = command.Supplier.Address,
-            CreatedAt = DateTimeOffset.UtcNow,
-            PhoneNumber = command.Supplier.PhoneNumber,
-        };
+        var supplier = command.Supplier with { Id = id, CreatedAt = DateTimeOffset.UtcNow };
         await repository.CreateSupplierAddressAsync(supplier);
         await repository.CreateSupplierPhoneNumberAsync(supplier);
     }

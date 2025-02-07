@@ -11,6 +11,7 @@ using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
 using backend.Supplier.ApplicationLayer.Commands.DeleteSupplier;
 using backend.Supplier.ApplicationLayer.Commands.ReplaceSupplier;
+using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
@@ -165,6 +166,35 @@ public class SupplierControllerActivator : BaseControllerActivator
             return new ReplaceSupplierController(
                 getSupplierWithValidation,
                 replaceSupplierWithTransaction,
+                _mapper);
+        }
+
+        if (type == typeof(UpdateSupplierController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new SupplierRepository(dbConnection);
+
+            // GetSupplier handler
+            var getSupplier = new GetSupplierHandler(repository);
+            var getSupplierWithLogging = new LoggingQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>(
+                getSupplier,
+                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>>());
+            var getSupplierWithValidation =
+                new ValidationQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>(getSupplierWithLogging);
+
+            // UpdateSupplier handler
+            var updateSupplier = new UpdateSupplierHandler(repository);
+            var updateSupplierWithLogging = new LoggingCommandHandlerDecorator<UpdateSupplierCommand>(updateSupplier,
+                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateSupplierCommand>>());
+            var updateSupplierWithAudit =
+                new AuditCommandHandlerDecorator<UpdateSupplierCommand>(updateSupplierWithLogging, dbConnection);
+            var updateSupplierWithTransaction =
+                new TransactionCommandHandlerDecorator<UpdateSupplierCommand>(updateSupplierWithAudit, dbConnection);
+
+            return new UpdateSupplierController(
+                getSupplierWithValidation,
+                updateSupplierWithTransaction,
                 _mapper);
         }
 
