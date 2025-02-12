@@ -339,6 +339,9 @@
     <Compile Update="Supplier\Tests\ApplicationLayerTests\DeleteSupplierHandlerTestBase.cs">
       <DependentUpon>DeleteSupplierHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\Tests\ApplicationLayerTests\GetSupplierHandlerTestBase.cs">
+      <DependentUpon>GetSupplierHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
