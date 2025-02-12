@@ -333,6 +333,12 @@
     <Compile Update="Review\Tests\ControllerTests\UpdateReviewControllerTestBase.cs">
       <DependentUpon>UpdateReviewControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\Tests\ApplicationLayerTests\CreateSupplierHandlerTestBase.cs">
+      <DependentUpon>CreateSupplierHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Tests\ApplicationLayerTests\DeleteSupplierHandlerTestBase.cs">
+      <DependentUpon>DeleteSupplierHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
