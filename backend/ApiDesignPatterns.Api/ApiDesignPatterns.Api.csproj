@@ -342,6 +342,9 @@
     <Compile Update="Supplier\Tests\ApplicationLayerTests\GetSupplierHandlerTestBase.cs">
       <DependentUpon>GetSupplierHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\Tests\ApplicationLayerTests\GetSupplierViewHandlerTestBase.cs">
+      <DependentUpon>GetSupplierViewHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
