@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Review.Services;
 using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
@@ -44,7 +43,7 @@ public class SupplierControllerActivator : BaseControllerActivator
         SupplierFieldPaths supplierFieldPaths = new();
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(supplierFieldPaths.ValidPaths);
 
-        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ReviewMappingProfile>(); });
+        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<SupplierMappingProfile>(); });
         _mapper = mapperConfig.CreateMapper();
     }
 

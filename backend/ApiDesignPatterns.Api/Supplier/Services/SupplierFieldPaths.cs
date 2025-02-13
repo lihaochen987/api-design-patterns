@@ -12,11 +12,15 @@ public class SupplierFieldPaths
         "id",
         "fullname",
         "email",
+        "address.*",
         "address.street",
         "address.city",
         "address.postalcode",
         "address.country",
         "createdat",
-        "phonenumber"
+        "phonenumber.*",
+        "phonenumber.countrycode",
+        "phonenumber.areacode",
+        "phonenumber.number"
     ];
 }

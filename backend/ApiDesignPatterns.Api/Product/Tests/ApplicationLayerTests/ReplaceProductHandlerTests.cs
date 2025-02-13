@@ -15,7 +15,7 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
 {
     [Fact]
-    public async Task Handle_UpdatesProduct_WhenValidProductIsProvided()
+    public async Task Handle_ReplaceProduct_WhenValidProductIsProvided()
     {
         var existingProduct = new ProductTestDataBuilder().WithCategory(Category.Beds).Build();
         var replacedProduct = new ProductTestDataBuilder().WithId(existingProduct.Id).WithCategory(Category.Beds)
@@ -34,7 +34,7 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
     }
 
     [Fact]
-    public async Task Handle_UpdatesPetFoodProduct_WhenPetFoodCategoryIsProvided()
+    public async Task Handle_ReplacePetFoodProduct_WhenPetFoodCategoryIsProvided()
     {
         var existingProduct = new ProductTestDataBuilder()
             .WithCategory(Category.PetFood)
@@ -58,7 +58,7 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
     }
 
     [Fact]
-    public async Task Handle_UpdatesGroomingProduct_WhenGroomingCategoryIsProvided()
+    public async Task Handle_ReplaceGroomingProduct_WhenGroomingCategoryIsProvided()
     {
         var existingProduct = new ProductTestDataBuilder()
             .WithCategory(Category.GroomingAndHygiene)
