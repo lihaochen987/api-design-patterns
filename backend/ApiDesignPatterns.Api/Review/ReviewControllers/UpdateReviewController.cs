@@ -28,16 +28,18 @@ public class UpdateReviewController(
         [FromRoute] long id,
         [FromBody] UpdateReviewRequest request)
     {
-        DomainModels.Review? review = await getReview.Handle(new GetReviewQuery { Id = id });
+        DomainModels.Review? existingReview = await getReview.Handle(new GetReviewQuery { Id = id });
 
-        if (review == null)
+        if (existingReview == null)
         {
             return NotFound();
         }
 
-        await updateReview.Handle(new UpdateReviewCommand { Request = request, Review = review });
+        await updateReview.Handle(new UpdateReviewCommand { Request = request, Review = existingReview });
 
-        var response = mapper.Map<UpdateReviewResponse>(review);
+        var updatedReview = await getReview.Handle(new GetReviewQuery { Id = id });
+
+        var response = mapper.Map<UpdateReviewResponse>(updatedReview);
         return Ok(response);
     }
 }
