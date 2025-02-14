@@ -7,8 +7,6 @@ namespace backend.Product.Tests.TestHelpers.Fakes;
 
 public class ProductPricingRepositoryFake : Collection<ProductPricingView>, IProductPricingRepository
 {
-    private Dictionary<string, int> CallCount { get; } = new();
-
     public Task<ProductPricingView?> GetProductPricingAsync(long id)
     {
         ProductPricingView? productPricingView = this.FirstOrDefault(p => p.Id == id);

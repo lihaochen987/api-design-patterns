@@ -351,6 +351,9 @@
     <Compile Update="Supplier\Tests\ApplicationLayerTests\UpdateSupplierHandlerTestBase.cs">
       <DependentUpon>UpdateSupplierHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\Tests\ApplicationLayerTests\ListSuppliersHandlerTestBase.cs">
+      <DependentUpon>ListSuppliersHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
