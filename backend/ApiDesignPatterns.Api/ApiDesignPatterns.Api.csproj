@@ -360,6 +360,9 @@
     <Compile Update="Supplier\Tests\ControllerLayerTests\CreateSupplierControllerTestBase.cs">
       <DependentUpon>CreateSupplierControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\Tests\ControllerLayerTests\DeleteSupplierControllerTestBase.cs">
+      <DependentUpon>DeleteSupplierControllerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
