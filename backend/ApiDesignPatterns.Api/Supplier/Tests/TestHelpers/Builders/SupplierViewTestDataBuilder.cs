@@ -102,4 +102,9 @@ public class SupplierViewTestDataBuilder
             PhoneNumber = _phoneNumber
         };
     }
+
+    public IEnumerable<SupplierView> CreateMany(int count)
+    {
+        return Enumerable.Range(0, count).Select(_ => new SupplierViewTestDataBuilder().Build());
+    }
 }
