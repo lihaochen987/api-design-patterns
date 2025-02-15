@@ -61,7 +61,9 @@ public partial class SqlFilterBuilder(IColumnMapper columnMapper)
             }
             else if (token.StartsWith('"') && token.EndsWith('"'))
             {
-                sql.Add($"'{token.Trim('"')}'");
+                string unquoted = token.Trim('"');
+                string escaped = unquoted.Replace("'", "''");
+                sql.Add($"'{escaped}'");
             }
             else if (decimal.TryParse(token, out _))
             {
