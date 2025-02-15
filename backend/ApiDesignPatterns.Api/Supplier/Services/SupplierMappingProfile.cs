@@ -25,5 +25,8 @@ public class SupplierMappingProfile : Profile
         CreateMap<ReplaceSupplierRequest, DomainModels.Supplier>();
         CreateMap<DomainModels.Supplier, UpdateSupplierResponse>();
         CreateMap<SupplierView, GetSupplierResponse>();
+
+        CreateMap<DomainModels.Supplier, CreateSupplierRequest>();
+        CreateMap<DomainModels.Supplier, CreateSupplierResponse>();
     }
 }

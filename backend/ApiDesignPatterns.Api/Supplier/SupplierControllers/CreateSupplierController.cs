@@ -3,7 +3,6 @@
 
 using AutoMapper;
 using backend.Shared.CommandHandler;
-using backend.Supplier.ApplicationLayer;
 using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

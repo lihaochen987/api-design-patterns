@@ -5,7 +5,6 @@
 using AutoMapper;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
-using backend.Supplier.ApplicationLayer;
 using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +37,9 @@ public class UpdateSupplierController(
 
         await updateSupplier.Handle(new UpdateSupplierCommand { Request = request, Supplier = existingSupplier });
 
-        var response = mapper.Map<UpdateSupplierResponse>(existingSupplier);
+        var updatedSupplier = await getSupplier.Handle(new GetSupplierQuery { Id = id });
+
+        var response = mapper.Map<UpdateSupplierResponse>(updatedSupplier);
         return Ok(response);
     }
 }

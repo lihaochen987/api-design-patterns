@@ -357,6 +357,9 @@
     <Compile Update="Shared\Tests\SqlFilterBuilderTestBase.cs">
       <DependentUpon>SqlFilterBuilderTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\Tests\ControllerLayerTests\CreateSupplierControllerTestBase.cs">
+      <DependentUpon>CreateSupplierControllerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
