@@ -1,9 +1,6 @@
 using System.Collections.ObjectModel;
-using System.Linq.Expressions;
-using AutoFixture;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
-using backend.Product.InfrastructureLayer;
 using backend.Product.InfrastructureLayer.Database.ProductView;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared;
@@ -19,30 +16,45 @@ public class ProductViewRepositoryFake(
         var productView = new ProductViewTestDataBuilder().WithId(id).WithCategory(category).Build();
         Add(productView);
     }
+
     public Task<ProductView?> GetProductView(long id)
     {
         ProductView? productView = this.FirstOrDefault(p => p.Id == id);
         return Task.FromResult(productView);
     }
 
-    public Task<(List<ProductView>, string?)> ListProductsAsync(string? pageToken, string? filter, int maxPageSize)
+    public Task<(List<ProductView>, string?)> ListProductsAsync(
+        string? pageToken,
+        string? filter,
+        int maxPageSize)
     {
-        IEnumerable<ProductView> query = this.AsEnumerable();
+        var query = this.AsEnumerable();
 
-        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenProductId))
+        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenProduct))
         {
-            query = query.Where(p => p.Id > lastSeenProductId);
+            query = query.Where(s => s.Id > lastSeenProduct);
         }
 
         if (!string.IsNullOrEmpty(filter))
         {
-            Expression<Func<ProductView, bool>> filterExpression = queryService.BuildFilterExpression(filter);
-            query = query.Where(filterExpression.Compile());
+            if (filter.Contains("Category =="))
+            {
+                string value = filter.Split('"')[1];
+                query = query.Where(s => s.Category == value);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
         }
 
-        List<ProductView> products = query.OrderBy(p => p.Id).ToList();
+        var products = query
+            .OrderBy(s => s.Id)
+            .Take(maxPageSize + 1)
+            .ToList();
 
-        List<ProductView> paginatedProducts = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
+        List<ProductView> paginatedProducts =
+            queryService.Paginate(products, maxPageSize, out string? nextPageToken);
 
         return Task.FromResult((paginatedProducts, nextPageToken));
     }

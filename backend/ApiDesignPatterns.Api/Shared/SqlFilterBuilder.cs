@@ -43,22 +43,15 @@ public partial class SqlFilterBuilder(IColumnMapper columnMapper)
     /// <summary>
     /// Converts tokens into a SQL WHERE clause.
     /// </summary>
-
     private string GenerateWhereClause(List<string> tokens)
     {
         var sql = new List<string>();
-        for (int i = 0; i < tokens.Count; i++)
+        foreach (string token in tokens)
         {
-            string token = tokens[i];
-
-            // Handle function calls like Email.endsWith("@example.com")
-            if (i + 2 < tokens.Count && tokens[i + 1] == "." && _validFunctions.ContainsKey(tokens[i + 2]))
+            string? functionResult = TryProcessCompleteFunction(token);
+            if (functionResult != null)
             {
-                string field = columnMapper.MapToColumnName(token);
-                string function = tokens[i + 2];
-                string argument = tokens[i + 3].Trim('"', '(', ')');
-                sql.Add(_validFunctions[function](field, argument));
-                i += 3; // Skip the next 3 tokens as we've handled them
+                sql.Add(functionResult);
                 continue;
             }
 
@@ -74,13 +67,38 @@ public partial class SqlFilterBuilder(IColumnMapper columnMapper)
             {
                 sql.Add(token);
             }
-            else if (!token.Contains('.')) // Skip if part of function call
+            else if (!token.Contains('.'))
             {
                 sql.Add(columnMapper.MapToColumnName(token));
             }
         }
 
         return string.Join(" ", sql);
+    }
+
+    private string? TryProcessCompleteFunction(string token)
+    {
+        // Match pattern: field.functionName("value")
+        var functionRegex = FunctionRegex();
+        var match = functionRegex.Match(token);
+
+        if (!match.Success)
+        {
+            return null;
+        }
+
+        string field = match.Groups[1].Value;
+        string functionName = match.Groups[2].Value.ToLower();
+        string argument = match.Groups[3].Value;
+
+        if (!_validFunctions.TryGetValue(functionName, out var formatter))
+        {
+            return null;
+        }
+
+        string mappedField = columnMapper.MapToColumnName(field);
+        string escapedArgument = argument.Replace("'", "''");
+        return formatter(mappedField, escapedArgument);
     }
 
     private readonly Dictionary<string, string> _validOperators = new()
@@ -97,8 +115,8 @@ public partial class SqlFilterBuilder(IColumnMapper columnMapper)
 
     private readonly Dictionary<string, Func<string, string, string>> _validFunctions = new()
     {
-        { "endsWith", (field, value) => $"{field} LIKE '%{value}'" },
-        { "startsWith", (field, value) => $"{field} LIKE '{value}%'" },
+        { "endswith", (field, value) => $"{field} LIKE '%{value}'" },
+        { "startswith", (field, value) => $"{field} LIKE '{value}%'" },
         { "contains", (field, value) => $"{field} LIKE '%{value}%'" }
     };
 
@@ -107,4 +125,7 @@ public partial class SqlFilterBuilder(IColumnMapper columnMapper)
     /// </summary>
     [GeneratedRegex("\"[^\"]+\"|\\w+(?:\\.\\w+)?(?:\\([^)]*\\))?|\\S+")]
     private static partial Regex FunctionOrQuotedStringOrWordRegex();
+
+    [GeneratedRegex("""^(\w+)\.(\w+)\("([^"]+)"\)$""")]
+    private static partial Regex FunctionRegex();
 }

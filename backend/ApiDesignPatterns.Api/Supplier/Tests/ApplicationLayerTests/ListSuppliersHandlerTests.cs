@@ -15,7 +15,7 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
     [Fact]
     public async Task Handle_ShouldReturnSuppliersAndNextPageToken()
     {
-        var request = new ListSuppliersRequest { Filter = "Email.EndsWith(@example.com)", MaxPageSize = 5 };
+        var request = new ListSuppliersRequest { Filter = "Email.endsWith(@example.com)", MaxPageSize = 5 };
         Repository.AddSupplierView("John", "Doe", "john@example.com");
         Repository.AddSupplierView("Jane", "Smith", "jane@example.com");
         IQueryHandler<ListSuppliersQuery, (List<SupplierView>, string?)> sut = ListSuppliersViewHandler();
@@ -70,5 +70,15 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
 
         result.Item1.Count.ShouldBe(2);
         result.Item2.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task Handle_ShouldThrowArgumentException_WhenRepositoryFails()
+    {
+        var request = new ListSuppliersRequest { Filter = "InvalidFilter == \"SomeValue\"", MaxPageSize = 5 };
+        IQueryHandler<ListSuppliersQuery, (List<SupplierView>, string?)> sut = ListSuppliersViewHandler();
+
+        await Should.ThrowAsync<ArgumentException>(() => sut.Handle(
+            new ListSuppliersQuery { Request = request }));
     }
 }

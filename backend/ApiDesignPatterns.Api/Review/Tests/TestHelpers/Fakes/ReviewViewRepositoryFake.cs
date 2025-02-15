@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.ObjectModel;
-using System.Linq.Expressions;
 using backend.Review.DomainModels;
 using backend.Review.InfrastructureLayer.Database.ReviewView;
 using backend.Review.Tests.TestHelpers.Builders;
@@ -41,26 +40,43 @@ public class ReviewViewRepositoryFake(
         string? pageToken,
         string? filter,
         int maxPageSize,
-        string parentId)
+        string? parent)
     {
-        IEnumerable<ReviewView> query = this.AsEnumerable();
+        var query = this.AsEnumerable();
 
-        query = query.Where(r => r.ProductId == long.Parse(parentId));
-
-        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenReviewId))
+        // Parent filter
+        if (!string.IsNullOrWhiteSpace(parent) && long.TryParse(parent, out long parentId))
         {
-            query = query.Where(r => r.Id > lastSeenReviewId);
+            query = query.Where(r => r.ProductId == parentId);
         }
 
+        // Pagination filter
+        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenReview))
+        {
+            query = query.Where(r => r.Id > lastSeenReview);
+        }
+
+        // Custom filter
         if (!string.IsNullOrEmpty(filter))
         {
-            Expression<Func<ReviewView, bool>> filterExpression = queryService.BuildFilterExpression(filter);
-            query = query.Where(filterExpression.Compile());
+            if (filter.Contains("Rating >="))
+            {
+                string value = filter.Split(">=")[1].Trim();
+                query = query.Where(s => s.Rating >= decimal.Parse(value));
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
         }
 
-        List<ReviewView> reviews = query.OrderBy(r => r.Id).ToList();
+        var reviews = query
+            .OrderBy(r => r.Id)
+            .Take(maxPageSize + 1)
+            .ToList();
 
-        List<ReviewView> paginatedReviews = queryService.Paginate(reviews, maxPageSize, out string? nextPageToken);
+        List<ReviewView> paginatedReviews =
+            queryService.Paginate(reviews, maxPageSize, out string? nextPageToken);
 
         return Task.FromResult((paginatedReviews, nextPageToken));
     }

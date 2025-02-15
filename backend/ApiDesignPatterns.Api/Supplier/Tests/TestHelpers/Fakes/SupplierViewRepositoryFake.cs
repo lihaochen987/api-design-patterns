@@ -44,13 +44,17 @@ public class SupplierViewRepositoryFake(
         {
             if (filter.Contains("Email.endsWith"))
             {
-                string value = filter.Split('"')[1];
+                string value = filter.Split('(', ')')[1];
                 query = query.Where(s => s.Email.EndsWith(value));
             }
             else if (filter.Contains("FullName =="))
             {
                 string value = filter.Split('"')[1];
                 query = query.Where(s => s.FullName == value);
+            }
+            else
+            {
+                throw new ArgumentException();
             }
         }
 
