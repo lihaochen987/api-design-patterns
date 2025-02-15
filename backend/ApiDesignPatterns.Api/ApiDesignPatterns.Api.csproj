@@ -369,6 +369,9 @@
     <Compile Update="Supplier\Tests\ControllerLayerTests\ListSuppliersControllerTestBase.cs">
       <DependentUpon>ListSuppliersControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\Tests\ControllerLayerTests\ReplaceSupplierControllerTestBase.cs">
+      <DependentUpon>ReplaceSupplierControllerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
