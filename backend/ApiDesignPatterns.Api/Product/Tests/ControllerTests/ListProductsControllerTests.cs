@@ -24,7 +24,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync((productViews, null));
+            .ReturnsAsync(new PagedProducts(productViews, null));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -50,7 +50,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync((expectedPageResults, null));
+            .ReturnsAsync(new PagedProducts(expectedPageResults, null));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -76,7 +76,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync((firstPageProducts, "2"));
+            .ReturnsAsync(new PagedProducts(firstPageProducts, "2"));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -102,7 +102,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync((defaultPageProducts, DefaultMaxPageSize.ToString()));
+            .ReturnsAsync(new PagedProducts(defaultPageProducts, DefaultMaxPageSize.ToString()));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -126,7 +126,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(([], null));
+            .ReturnsAsync(new PagedProducts([], null));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -152,7 +152,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync((firstPageProducts, DefaultMaxPageSize.ToString()));
+            .ReturnsAsync(new PagedProducts(firstPageProducts, DefaultMaxPageSize.ToString()));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -179,7 +179,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync((filteredProducts, null));
+            .ReturnsAsync(new PagedProducts(filteredProducts, null));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -208,7 +208,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync((filteredProducts, null));
+            .ReturnsAsync(new PagedProducts(filteredProducts, null));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -234,7 +234,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync((filteredProducts, null));
+            .ReturnsAsync(new PagedProducts(filteredProducts, null));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -261,7 +261,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync((filteredProducts, "2"));
+            .ReturnsAsync(new PagedProducts(filteredProducts, "2"));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -288,7 +288,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync((filteredProducts, null));
+            .ReturnsAsync(new PagedProducts(filteredProducts, null));
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);

@@ -11,6 +11,7 @@ using backend.Product.InfrastructureLayer.Database.ProductPricing;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
+using backend.Shared.CircuitBreaker;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -59,9 +60,12 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             var getPricingWithValidation =
                 new ValidationQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(
                     getProductPricingWithLogging);
+            var getPricingWithTransaction =
+                new TransactionQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(
+                    getPricingWithValidation, dbConnection);
 
             return new GetProductPricingController(
-                getPricingWithValidation,
+                getPricingWithTransaction,
                 _mapper,
                 _fieldMaskConverterFactory);
         }
@@ -88,10 +92,13 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             var updateProductPricingWithTransaction =
                 new TransactionCommandHandlerDecorator<UpdateProductPricingCommand>(updateProductPricingWithLogging,
                     dbConnection);
+            var updateProductPricingWithCircuitBreaker =
+                new CircuitBreakerCommandHandlerDecorator<UpdateProductPricingCommand>(
+                    new CircuitBreaker(TimeSpan.FromSeconds(30)), updateProductPricingWithTransaction);
 
             return new UpdateProductPricingController(
                 getProductWithLogging,
-                updateProductPricingWithTransaction,
+                updateProductPricingWithCircuitBreaker,
                 _mapper);
         }
 

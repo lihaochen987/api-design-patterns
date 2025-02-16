@@ -19,33 +19,33 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
         var request = new ListProductsRequest { Filter = "Category == \"Toys\"", MaxPageSize = 5 };
         Repository.AddProductView(1, Category.Toys);
         Repository.AddProductView(2, Category.Toys);
-        IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> sut = ListProductsViewHandler();
+        IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
 
-        (List<ProductView>, string?) result =
+        PagedProducts? result =
             await sut.Handle(
                 new ListProductsQuery
                 {
                     Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
                 });
 
-        result.Item1.ShouldNotBeEmpty();
-        result.Item1.Count.ShouldBe(2);
-        result.Item2.ShouldBe(null);
+        result!.Products.ShouldNotBeEmpty();
+        result.Products.Count.ShouldBe(2);
+        result.NextPageToken.ShouldBe(null);
     }
 
     [Fact]
     public async Task ListProductsAsync_ShouldReturnEmptyList_WhenNoProductsExist()
     {
         var request = new ListProductsRequest();
-        IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> sut = ListProductsViewHandler();
+        IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
 
-        (List<ProductView>, string?) result = await sut.Handle(new ListProductsQuery
+        PagedProducts? result = await sut.Handle(new ListProductsQuery
         {
             Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
         });
 
-        result.Item1.ShouldBeEmpty();
-        result.Item2.ShouldBeNull();
+        result!.Products.ShouldBeEmpty();
+        result.NextPageToken.ShouldBeNull();
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
         {
             PageToken = "1", Filter = "InvalidFilter == \"SomeValue\"", MaxPageSize = 5
         };
-        IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> sut = ListProductsViewHandler();
+        IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
 
         await Should.ThrowAsync<ArgumentException>(() => sut.Handle(new ListProductsQuery
         {

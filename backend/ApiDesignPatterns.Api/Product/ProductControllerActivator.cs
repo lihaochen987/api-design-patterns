@@ -19,7 +19,6 @@ using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared;
-using backend.Shared.CircuitBreaker;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -66,33 +65,29 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductRepository(dbConnection);
 
             // CreateProduct handler
-            var createProduct = new CreateProductHandler(repository);
-            var createProductWithAudit =
-                new AuditCommandHandlerDecorator<CreateProductCommand>(createProduct, dbConnection);
-            var createProductWithLogging = new LoggingCommandHandlerDecorator<CreateProductCommand>(
-                createProductWithAudit,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateProductCommand>>());
-            var createProductWithTransaction =
-                new TransactionCommandHandlerDecorator<CreateProductCommand>(createProductWithLogging, dbConnection);
-            var createProductWithCircuitBreaker =
-                new CircuitBreakerCommandHandlerDecorator<CreateProductCommand>(
-                    new CircuitBreaker(TimeSpan.FromSeconds(30)), createProductWithTransaction);
+            var createProductHandler = new CommandDecoratorBuilder<CreateProductCommand>(
+                    new CreateProductHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             // CreateProductResponse handler
-            var createProductResponse = new CreateProductResponseHandler(_mapper);
-            var createProductResponseWithLogging =
-                new LoggingQueryHandlerDecorator<CreateProductResponseQuery, CreateProductResponse>(
-                    createProductResponse,
-                    _loggerFactory
-                        .CreateLogger<
-                            LoggingQueryHandlerDecorator<CreateProductResponseQuery, CreateProductResponse>>());
-            var createProductResponseWithValidation =
-                new ValidationQueryHandlerDecorator<CreateProductResponseQuery, CreateProductResponse>(
-                    createProductResponseWithLogging);
+            var createProductResponseHandler =
+                new QueryDecoratorBuilder<CreateProductResponseQuery, CreateProductResponse>(
+                        new CreateProductResponseHandler(_mapper),
+                        _loggerFactory)
+                    .WithLogging()
+                    .WithValidation()
+                    .WithTransaction()
+                    .Build();
 
             return new CreateProductController(
-                createProductWithCircuitBreaker,
-                createProductResponseWithValidation,
+                createProductHandler,
+                createProductResponseHandler,
                 _mapper);
         }
 
@@ -103,24 +98,26 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductRepository(dbConnection);
 
             // DeleteProduct handler
-            var deleteProduct = new DeleteProductHandler(repository);
-            var deleteProductWithAudit =
-                new AuditCommandHandlerDecorator<DeleteProductCommand>(deleteProduct, dbConnection);
-            var deleteProductWithLogging = new LoggingCommandHandlerDecorator<DeleteProductCommand>(
-                deleteProductWithAudit,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteProductCommand>>());
-            var deleteProductWithTransaction =
-                new TransactionCommandHandlerDecorator<DeleteProductCommand>(deleteProductWithLogging, dbConnection);
-            var deleteProductWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<DeleteProductCommand>(
-                new CircuitBreaker(TimeSpan.FromSeconds(30)), deleteProductWithTransaction);
+            var deleteProductHandler = new CommandDecoratorBuilder<DeleteProductCommand>(
+                    new DeleteProductHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             // GetProduct handler
-            var getProduct = new GetProductHandler(repository);
-            var getProductWithLogging = new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(
-                getProduct,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
+            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
+                    new GetProductHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
 
-            return new DeleteProductController(deleteProductWithCircuitBreaker, getProductWithLogging);
+            return new DeleteProductController(deleteProductHandler, getProductHandler);
         }
 
         if (type == typeof(GetProductController))
@@ -130,18 +127,16 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductViewRepository(dbConnection, _productQueryService, _productSqlFilterBuilder);
 
             // GetProductResponse handler
-            var getProductResponse = new GetProductResponseHandler(repository, _mapper);
-            var getProductResponseWithLogging =
-                new LoggingQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>(
-                    getProductResponse,
-                    _loggerFactory
-                        .CreateLogger<LoggingQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>>());
-            var getProductResponseWithValidation =
-                new ValidationQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>(
-                    getProductResponseWithLogging);
+            var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse>(
+                    new GetProductResponseHandler(repository, _mapper),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
 
             return new GetProductController(
-                getProductResponseWithValidation,
+                getProductResponseHandler,
                 _fieldMaskConverterFactory);
         }
 
@@ -152,14 +147,14 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductViewRepository(dbConnection, _productQueryService, _productSqlFilterBuilder);
 
             // ListProducts handler
-            var listProducts = new ListProductsHandler(repository);
-            var listProductsWithLogging =
-                new LoggingQueryHandlerDecorator<ListProductsQuery, (List<ProductView>, string?)>(
-                    listProducts,
-                    _loggerFactory
-                        .CreateLogger<LoggingQueryHandlerDecorator<ListProductsQuery, (List<ProductView>, string?)>>());
+            var listProductsHandler = new QueryDecoratorBuilder<ListProductsQuery, PagedProducts>(
+                    new ListProductsHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithTransaction()
+                .Build();
 
-            return new ListProductsController(listProductsWithLogging, _mapper);
+            return new ListProductsController(listProductsHandler, _mapper);
         }
 
         if (type == typeof(ReplaceProductController))
@@ -169,39 +164,38 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductRepository(dbConnection);
 
             // GetProduct handler
-            var getProduct = new GetProductHandler(repository);
-            var getProductWithLogging = new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(
-                getProduct,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
+            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
+                    new GetProductHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
 
             // ReplaceProduct handler
-            var replaceProduct = new ReplaceProductHandler(repository, _mapper);
-            var replaceProductWithAuditing =
-                new AuditCommandHandlerDecorator<ReplaceProductCommand>(replaceProduct, dbConnection);
-            var replaceProductWithLogging = new LoggingCommandHandlerDecorator<ReplaceProductCommand>(
-                replaceProductWithAuditing,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceProductCommand>>());
-            var replaceProductWithTransaction =
-                new TransactionCommandHandlerDecorator<ReplaceProductCommand>(replaceProductWithLogging, dbConnection);
-            var replaceProductWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<ReplaceProductCommand>(
-                new CircuitBreaker(TimeSpan.FromSeconds(30)), replaceProductWithTransaction);
+            var replaceProductHandler = new CommandDecoratorBuilder<ReplaceProductCommand>(
+                    new ReplaceProductHandler(repository, _mapper),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             // ReplaceProductResponse handler
-            var replaceProductResponse = new ReplaceProductResponseHandler(_mapper);
-            var replaceProductResponseWithLogging =
-                new LoggingQueryHandlerDecorator<ReplaceProductResponseQuery, ReplaceProductResponse>(
-                    replaceProductResponse,
-                    _loggerFactory
-                        .CreateLogger<
-                            LoggingQueryHandlerDecorator<ReplaceProductResponseQuery, ReplaceProductResponse>>());
-            var replaceProductResponseWithValidation =
-                new ValidationQueryHandlerDecorator<ReplaceProductResponseQuery, ReplaceProductResponse>(
-                    replaceProductResponseWithLogging);
+            var replaceProductResponseHandler =
+                new QueryDecoratorBuilder<ReplaceProductResponseQuery, ReplaceProductResponse>(
+                        new ReplaceProductResponseHandler(_mapper),
+                        _loggerFactory)
+                    .WithLogging()
+                    .WithValidation()
+                    .Build();
 
             return new ReplaceProductController(
-                getProductWithLogging,
-                replaceProductWithCircuitBreaker,
-                replaceProductResponseWithValidation);
+                getProductHandler,
+                replaceProductHandler,
+                replaceProductResponseHandler);
         }
 
         if (type == typeof(UpdateProductController))
@@ -211,24 +205,26 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductRepository(dbConnection);
 
             // GetProduct handler
-            var getProduct = new GetProductHandler(repository);
-            var getProductWithLogging = new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(
-                getProduct,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
+            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
+                    new GetProductHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
 
             // UpdateProduct handler
-            var updateProduct = new UpdateProductHandler(repository);
-            var updateProductWithAuditing =
-                new AuditCommandHandlerDecorator<UpdateProductCommand>(updateProduct, dbConnection);
-            var updateProductWithLogging = new LoggingCommandHandlerDecorator<UpdateProductCommand>(
-                updateProductWithAuditing,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductCommand>>());
-            var updateProductWithTransaction =
-                new TransactionCommandHandlerDecorator<UpdateProductCommand>(updateProductWithLogging, dbConnection);
-            var updateProductWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<UpdateProductCommand>(
-                new CircuitBreaker(TimeSpan.FromSeconds(30)), updateProductWithTransaction);
+            var updateProductHandler = new CommandDecoratorBuilder<UpdateProductCommand>(
+                    new UpdateProductHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
-            return new UpdateProductController(getProductWithLogging, updateProductWithCircuitBreaker, _mapper);
+            return new UpdateProductController(getProductHandler, updateProductHandler, _mapper);
         }
 
         if (type == typeof(GetProductPricingController))
@@ -238,18 +234,16 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductViewRepository(dbConnection, _productQueryService, _productSqlFilterBuilder);
 
             // GetProductResponse handler
-            var getProductResponse = new GetProductResponseHandler(repository, _mapper);
-            var getProductResponseWithLogging =
-                new LoggingQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>(
-                    getProductResponse,
-                    _loggerFactory
-                        .CreateLogger<LoggingQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>>());
-            var getProductResponseWithValidation =
-                new ValidationQueryHandlerDecorator<GetProductResponseQuery, GetProductResponse>(
-                    getProductResponseWithLogging);
+            var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse>(
+                    new GetProductResponseHandler(repository, _mapper),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
 
             return new GetProductController(
-                getProductResponseWithValidation,
+                getProductResponseHandler,
                 _fieldMaskConverterFactory);
         }
 

@@ -11,7 +11,7 @@ namespace backend.Product.ProductControllers;
 [Route("products")]
 [ApiController]
 public class ListProductsController(
-    IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> listProducts,
+    IQueryHandler<ListProductsQuery, PagedProducts> listProducts,
     IMapper mapper)
     : ControllerBase
 {

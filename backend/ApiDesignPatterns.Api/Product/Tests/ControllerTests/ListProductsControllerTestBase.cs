@@ -14,13 +14,13 @@ namespace backend.Product.Tests.ControllerTests;
 
 public abstract class ListProductsControllerTestBase
 {
-    protected readonly IQueryHandler<ListProductsQuery, (List<ProductView>, string?)> MockListProducts;
+    protected readonly IQueryHandler<ListProductsQuery, PagedProducts> MockListProducts;
     private readonly IMapper _mapper;
     protected const int DefaultMaxPageSize = 10;
 
     protected ListProductsControllerTestBase()
     {
-        MockListProducts = Mock.Of<IQueryHandler<ListProductsQuery, (List<ProductView>, string?)>>();
+        MockListProducts = Mock.Of<IQueryHandler<ListProductsQuery, PagedProducts>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
     }
