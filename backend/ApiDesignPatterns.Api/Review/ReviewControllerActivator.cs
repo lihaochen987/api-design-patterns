@@ -15,6 +15,7 @@ using backend.Review.InfrastructureLayer.Database.ReviewView;
 using backend.Review.ReviewControllers;
 using backend.Review.Services;
 using backend.Shared;
+using backend.Shared.CircuitBreaker;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -93,10 +94,13 @@ public class ReviewControllerActivator : BaseControllerActivator
                 new AuditCommandHandlerDecorator<DeleteReviewCommand>(deleteReviewWithLogging, dbConnection);
             var deleteReviewWithTransaction =
                 new TransactionCommandHandlerDecorator<DeleteReviewCommand>(deleteReviewWithAudit, dbConnection);
+            var deleteReviewWithCircuitBreaker =
+                new CircuitBreakerCommandHandlerDecorator<DeleteReviewCommand>(
+                    new CircuitBreaker(TimeSpan.FromSeconds(30)), deleteReviewWithTransaction);
 
             return new DeleteReviewController(
                 getReviewWithValidation,
-                deleteReviewWithTransaction);
+                deleteReviewWithCircuitBreaker);
         }
 
 
@@ -161,10 +165,13 @@ public class ReviewControllerActivator : BaseControllerActivator
                 new AuditCommandHandlerDecorator<ReplaceReviewCommand>(replaceReviewWithLogging, dbConnection);
             var replaceReviewWithTransaction =
                 new TransactionCommandHandlerDecorator<ReplaceReviewCommand>(replaceReviewWithAudit, dbConnection);
+            var replaceReviewWithCircuitBreaker =
+                new CircuitBreakerCommandHandlerDecorator<ReplaceReviewCommand>(
+                    new CircuitBreaker(TimeSpan.FromSeconds(30)), replaceReviewWithTransaction);
 
             return new ReplaceReviewController(
                 getReviewWithValidation,
-                replaceReviewWithTransaction,
+                replaceReviewWithCircuitBreaker,
                 _mapper);
         }
 
@@ -190,10 +197,13 @@ public class ReviewControllerActivator : BaseControllerActivator
                 new AuditCommandHandlerDecorator<UpdateReviewCommand>(updateReviewWithLogging, dbConnection);
             var updateReviewWithTransaction =
                 new TransactionCommandHandlerDecorator<UpdateReviewCommand>(updateReviewWithAudit, dbConnection);
+            var updateReviewWithCircuitBreaker =
+                new CircuitBreakerCommandHandlerDecorator<UpdateReviewCommand>(
+                    new CircuitBreaker(TimeSpan.FromSeconds(30)), updateReviewWithTransaction);
 
             return new UpdateReviewController(
                 getReviewWithValidation,
-                updateReviewWithTransaction,
+                updateReviewWithCircuitBreaker,
                 _mapper);
         }
 

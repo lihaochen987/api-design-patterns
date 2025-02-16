@@ -19,6 +19,7 @@ using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared;
+using backend.Shared.CircuitBreaker;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -73,6 +74,9 @@ public class ProductControllerActivator : BaseControllerActivator
                 _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateProductCommand>>());
             var createProductWithTransaction =
                 new TransactionCommandHandlerDecorator<CreateProductCommand>(createProductWithLogging, dbConnection);
+            var createProductWithCircuitBreaker =
+                new CircuitBreakerCommandHandlerDecorator<CreateProductCommand>(
+                    new CircuitBreaker(TimeSpan.FromSeconds(30)), createProductWithTransaction);
 
             // CreateProductResponse handler
             var createProductResponse = new CreateProductResponseHandler(_mapper);
@@ -87,7 +91,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     createProductResponseWithLogging);
 
             return new CreateProductController(
-                createProductWithTransaction,
+                createProductWithCircuitBreaker,
                 createProductResponseWithValidation,
                 _mapper);
         }
@@ -105,6 +109,10 @@ public class ProductControllerActivator : BaseControllerActivator
             var deleteProductWithLogging = new LoggingCommandHandlerDecorator<DeleteProductCommand>(
                 deleteProductWithAudit,
                 _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteProductCommand>>());
+            var deleteProductWithTransaction =
+                new TransactionCommandHandlerDecorator<DeleteProductCommand>(deleteProductWithLogging, dbConnection);
+            var deleteProductWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<DeleteProductCommand>(
+                new CircuitBreaker(TimeSpan.FromSeconds(30)), deleteProductWithTransaction);
 
             // GetProduct handler
             var getProduct = new GetProductHandler(repository);
@@ -112,7 +120,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 getProduct,
                 _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
 
-            return new DeleteProductController(deleteProductWithLogging, getProductWithLogging);
+            return new DeleteProductController(deleteProductWithCircuitBreaker, getProductWithLogging);
         }
 
         if (type == typeof(GetProductController))
@@ -173,6 +181,10 @@ public class ProductControllerActivator : BaseControllerActivator
             var replaceProductWithLogging = new LoggingCommandHandlerDecorator<ReplaceProductCommand>(
                 replaceProductWithAuditing,
                 _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceProductCommand>>());
+            var replaceProductWithTransaction =
+                new TransactionCommandHandlerDecorator<ReplaceProductCommand>(replaceProductWithLogging, dbConnection);
+            var replaceProductWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<ReplaceProductCommand>(
+                new CircuitBreaker(TimeSpan.FromSeconds(30)), replaceProductWithTransaction);
 
             // ReplaceProductResponse handler
             var replaceProductResponse = new ReplaceProductResponseHandler(_mapper);
@@ -188,7 +200,7 @@ public class ProductControllerActivator : BaseControllerActivator
 
             return new ReplaceProductController(
                 getProductWithLogging,
-                replaceProductWithLogging,
+                replaceProductWithCircuitBreaker,
                 replaceProductResponseWithValidation);
         }
 
@@ -213,8 +225,10 @@ public class ProductControllerActivator : BaseControllerActivator
                 _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductCommand>>());
             var updateProductWithTransaction =
                 new TransactionCommandHandlerDecorator<UpdateProductCommand>(updateProductWithLogging, dbConnection);
+            var updateProductWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<UpdateProductCommand>(
+                new CircuitBreaker(TimeSpan.FromSeconds(30)), updateProductWithTransaction);
 
-            return new UpdateProductController(getProductWithLogging, updateProductWithTransaction, _mapper);
+            return new UpdateProductController(getProductWithLogging, updateProductWithCircuitBreaker, _mapper);
         }
 
         if (type == typeof(GetProductPricingController))

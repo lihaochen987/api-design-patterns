@@ -3,6 +3,7 @@
 
 using AutoMapper;
 using backend.Shared;
+using backend.Shared.CircuitBreaker;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -65,9 +66,11 @@ public class SupplierControllerActivator : BaseControllerActivator
                 new AuditCommandHandlerDecorator<CreateSupplierCommand>(createSupplierWithLogging, dbConnection);
             var createSupplierWithTransaction =
                 new TransactionCommandHandlerDecorator<CreateSupplierCommand>(createSupplierWithAudit, dbConnection);
+            var createSupplierWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<CreateSupplierCommand>(
+                new CircuitBreaker(TimeSpan.FromSeconds(30)), createSupplierWithTransaction);
 
             return new CreateSupplierController(
-                createSupplierWithTransaction,
+                createSupplierWithCircuitBreaker,
                 _mapper);
         }
 
@@ -93,10 +96,12 @@ public class SupplierControllerActivator : BaseControllerActivator
                 new AuditCommandHandlerDecorator<DeleteSupplierCommand>(deleteSupplierWithLogging, dbConnection);
             var deleteSupplierWithTransaction =
                 new TransactionCommandHandlerDecorator<DeleteSupplierCommand>(deleteSupplierWithAudit, dbConnection);
+            var deleteSupplierWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<DeleteSupplierCommand>(
+                new CircuitBreaker(TimeSpan.FromSeconds(30)), deleteSupplierWithTransaction);
 
             return new DeleteSupplierController(
                 getSupplierWithValidation,
-                deleteSupplierWithTransaction);
+                deleteSupplierWithCircuitBreaker);
         }
 
         if (type == typeof(GetSupplierController))
@@ -161,10 +166,12 @@ public class SupplierControllerActivator : BaseControllerActivator
                 new AuditCommandHandlerDecorator<ReplaceSupplierCommand>(replaceSupplierWithLogging, dbConnection);
             var replaceSupplierWithTransaction =
                 new TransactionCommandHandlerDecorator<ReplaceSupplierCommand>(replaceSupplierWithAudit, dbConnection);
+            var replaceSupplierWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<ReplaceSupplierCommand>(
+                new CircuitBreaker(TimeSpan.FromSeconds(30)), replaceSupplierWithTransaction);
 
             return new ReplaceSupplierController(
                 getSupplierWithValidation,
-                replaceSupplierWithTransaction,
+                replaceSupplierWithCircuitBreaker,
                 _mapper);
         }
 
@@ -190,10 +197,12 @@ public class SupplierControllerActivator : BaseControllerActivator
                 new AuditCommandHandlerDecorator<UpdateSupplierCommand>(updateSupplierWithLogging, dbConnection);
             var updateSupplierWithTransaction =
                 new TransactionCommandHandlerDecorator<UpdateSupplierCommand>(updateSupplierWithAudit, dbConnection);
+            var updateSupplierWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<UpdateSupplierCommand>(
+                new CircuitBreaker(TimeSpan.FromSeconds(30)), updateSupplierWithTransaction);
 
             return new UpdateSupplierController(
                 getSupplierWithValidation,
-                updateSupplierWithTransaction,
+                updateSupplierWithCircuitBreaker,
                 _mapper);
         }
 
