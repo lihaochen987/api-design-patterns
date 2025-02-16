@@ -65,7 +65,7 @@ public class CommandDecoratorBuilder<TCommand>(
             _handler = new TransactionCommandHandlerDecorator<TCommand>(_handler, dbConnection);
         }
 
-        if (_useCircuitBreaker)
+        if (_useCircuitBreaker && _useTransaction)
         {
             _handler = new CircuitBreakerCommandHandlerDecorator<TCommand>(
                 new CircuitBreaker.CircuitBreaker(_circuitBreakerTimeout),

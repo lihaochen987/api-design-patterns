@@ -11,7 +11,6 @@ using backend.Product.InfrastructureLayer.Database.ProductPricing;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
-using backend.Shared.CircuitBreaker;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -51,21 +50,16 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             var repository = new ProductPricingRepository(dbConnection);
 
             // GetProductPricing handler
-            var getProductPricing = new GetProductPricingHandler(repository);
-            var getProductPricingWithLogging =
-                new LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(
-                    getProductPricing,
-                    _loggerFactory
-                        .CreateLogger<LoggingQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>>());
-            var getPricingWithValidation =
-                new ValidationQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(
-                    getProductPricingWithLogging);
-            var getPricingWithTransaction =
-                new TransactionQueryHandlerDecorator<GetProductPricingQuery, ProductPricingView>(
-                    getPricingWithValidation, dbConnection);
-
+            var getProductPricingHandler = new QueryDecoratorBuilder<GetProductPricingQuery, ProductPricingView>(
+                    new GetProductPricingHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
             return new GetProductPricingController(
-                getPricingWithTransaction,
+                getProductPricingHandler,
                 _mapper,
                 _fieldMaskConverterFactory);
         }
@@ -77,28 +71,29 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             var repository = new ProductRepository(dbConnection);
 
             // GetProduct handler
-            var getProduct = new GetProductHandler(repository);
-            var getProductWithLogging = new LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>(
-                getProduct,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetProductQuery, DomainModels.Product>>());
+            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
+                    new GetProductHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             // UpdateProductPricing handler
-            var updateProduct = new UpdateProductPricingHandler(repository);
-            var updateProductPricingWithAuditing =
-                new AuditCommandHandlerDecorator<UpdateProductPricingCommand>(updateProduct, dbConnection);
-            var updateProductPricingWithLogging = new LoggingCommandHandlerDecorator<UpdateProductPricingCommand>(
-                updateProductPricingWithAuditing,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateProductPricingCommand>>());
-            var updateProductPricingWithTransaction =
-                new TransactionCommandHandlerDecorator<UpdateProductPricingCommand>(updateProductPricingWithLogging,
-                    dbConnection);
-            var updateProductPricingWithCircuitBreaker =
-                new CircuitBreakerCommandHandlerDecorator<UpdateProductPricingCommand>(
-                    new CircuitBreaker(TimeSpan.FromSeconds(30)), updateProductPricingWithTransaction);
+            var updateProductPricingHandler = new CommandDecoratorBuilder<UpdateProductPricingCommand>(
+                    new UpdateProductPricingHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new UpdateProductPricingController(
-                getProductWithLogging,
-                updateProductPricingWithCircuitBreaker,
+                getProductHandler,
+                updateProductPricingHandler,
                 _mapper);
         }
 

@@ -83,6 +83,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     .WithLogging()
                     .WithValidation()
                     .WithTransaction()
+                    .WithCircuitBreaker()
                     .Build();
 
             return new CreateProductController(
@@ -115,6 +116,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
+                .WithCircuitBreaker()
                 .Build();
 
             return new DeleteProductController(deleteProductHandler, getProductHandler);
@@ -133,6 +135,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
+                .WithCircuitBreaker()
                 .Build();
 
             return new GetProductController(
@@ -152,6 +155,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     _loggerFactory)
                 .WithLogging()
                 .WithTransaction()
+                .WithCircuitBreaker()
                 .Build();
 
             return new ListProductsController(listProductsHandler, _mapper);
@@ -170,6 +174,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
+                .WithCircuitBreaker()
                 .Build();
 
             // ReplaceProduct handler
@@ -211,6 +216,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
+                .WithCircuitBreaker()
                 .Build();
 
             // UpdateProduct handler
@@ -240,6 +246,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
+                .WithCircuitBreaker()
                 .Build();
 
             return new GetProductController(

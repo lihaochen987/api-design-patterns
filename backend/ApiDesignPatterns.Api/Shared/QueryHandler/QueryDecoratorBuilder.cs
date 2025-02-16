@@ -15,6 +15,8 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     private bool _useTransaction;
     private bool _useValidation;
     private bool _useLogging;
+    private bool _useCircuitBreaker;
+    private TimeSpan _circuitBreakerTimeout = TimeSpan.FromSeconds(30);
 
     public QueryDecoratorBuilder<TQuery, TResult> WithTransaction()
     {
@@ -39,6 +41,12 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         return this;
     }
 
+    public QueryDecoratorBuilder<TQuery, TResult> WithCircuitBreaker()
+    {
+        _useCircuitBreaker = true;
+        return this;
+    }
+
     public IQueryHandler<TQuery, TResult> Build()
     {
         if (_useLogging)
@@ -56,6 +64,13 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         if (_useTransaction && dbConnection != null)
         {
             _handler = new TransactionQueryHandlerDecorator<TQuery, TResult>(_handler, dbConnection);
+        }
+
+        if (_useCircuitBreaker && _useTransaction)
+        {
+            _handler = new CircuitBreakerQueryHandlerDecorator<TQuery, TResult>(
+                new CircuitBreaker.CircuitBreaker(_circuitBreakerTimeout),
+                _handler);
         }
 
         return _handler;

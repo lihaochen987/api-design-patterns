@@ -25,12 +25,3 @@ public class CircuitBreakerCommandHandlerDecorator<TCommand>(
         }
     }
 }
-
-public enum CircuitState
-{
-    Closed,
-    Open,
-    HalfOpen
-}
-
-public class CircuitBreakerOpenException(string message) : Exception(message);

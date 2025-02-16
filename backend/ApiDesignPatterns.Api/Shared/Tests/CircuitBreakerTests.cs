@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Shared.CircuitBreaker;
-using backend.Shared.CommandHandler;
 using Shouldly;
 using Xunit;
 
