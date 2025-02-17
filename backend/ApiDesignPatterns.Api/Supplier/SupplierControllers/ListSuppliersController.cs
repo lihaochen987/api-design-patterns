@@ -11,7 +11,7 @@ namespace backend.Supplier.SupplierControllers;
 [Route("suppliers")]
 [ApiController]
 public class ListSuppliersController(
-    IQueryHandler<ListSuppliersQuery, (List<SupplierView>, string?)> listSuppliers,
+    IQueryHandler<ListSuppliersQuery, PagedSuppliers> listSuppliers,
     IMapper mapper)
     : ControllerBase
 {

@@ -3,7 +3,6 @@
 
 using AutoMapper;
 using backend.Shared;
-using backend.Shared.CircuitBreaker;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -59,18 +58,18 @@ public class SupplierControllerActivator : BaseControllerActivator
             var repository = new SupplierRepository(dbConnection);
 
             // CreateSupplier handler
-            var createSupplier = new CreateSupplierHandler(repository);
-            var createSupplierWithLogging = new LoggingCommandHandlerDecorator<CreateSupplierCommand>(createSupplier,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateSupplierCommand>>());
-            var createSupplierWithAudit =
-                new AuditCommandHandlerDecorator<CreateSupplierCommand>(createSupplierWithLogging, dbConnection);
-            var createSupplierWithTransaction =
-                new TransactionCommandHandlerDecorator<CreateSupplierCommand>(createSupplierWithAudit, dbConnection);
-            var createSupplierWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<CreateSupplierCommand>(
-                new CircuitBreaker(TimeSpan.FromSeconds(30)), createSupplierWithTransaction);
+            var createSupplierHandler = new CommandDecoratorBuilder<CreateSupplierCommand>(
+                    new CreateSupplierHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new CreateSupplierController(
-                createSupplierWithCircuitBreaker,
+                createSupplierHandler,
                 _mapper);
         }
 
@@ -81,27 +80,29 @@ public class SupplierControllerActivator : BaseControllerActivator
             var repository = new SupplierRepository(dbConnection);
 
             // GetSupplier handler
-            var getSupplier = new GetSupplierHandler(repository);
-            var getSupplierWithLogging = new LoggingQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>(
-                getSupplier,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>>());
-            var getSupplierWithValidation =
-                new ValidationQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>(getSupplierWithLogging);
+            var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
+                    new GetSupplierHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             // DeleteSupplier handler
-            var deleteSupplier = new DeleteSupplierHandler(repository);
-            var deleteSupplierWithLogging = new LoggingCommandHandlerDecorator<DeleteSupplierCommand>(deleteSupplier,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteSupplierCommand>>());
-            var deleteSupplierWithAudit =
-                new AuditCommandHandlerDecorator<DeleteSupplierCommand>(deleteSupplierWithLogging, dbConnection);
-            var deleteSupplierWithTransaction =
-                new TransactionCommandHandlerDecorator<DeleteSupplierCommand>(deleteSupplierWithAudit, dbConnection);
-            var deleteSupplierWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<DeleteSupplierCommand>(
-                new CircuitBreaker(TimeSpan.FromSeconds(30)), deleteSupplierWithTransaction);
+            var deleteSupplierHandler = new CommandDecoratorBuilder<DeleteSupplierCommand>(
+                    new DeleteSupplierHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new DeleteSupplierController(
-                getSupplierWithValidation,
-                deleteSupplierWithCircuitBreaker);
+                getSupplierHandler,
+                deleteSupplierHandler);
         }
 
         if (type == typeof(GetSupplierController))
@@ -111,15 +112,17 @@ public class SupplierControllerActivator : BaseControllerActivator
             var repository = new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierQueryService);
 
             // GetSupplierView handler
-            var getSupplierView = new GetSupplierViewHandler(repository);
-            var getSupplierViewWithLogging = new LoggingQueryHandlerDecorator<GetSupplierViewQuery, SupplierView>(
-                getSupplierView,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetSupplierViewQuery, SupplierView>>());
-            var getSupplierViewWithValidation =
-                new ValidationQueryHandlerDecorator<GetSupplierViewQuery, SupplierView>(getSupplierViewWithLogging);
+            var getSupplierViewHandler = new QueryDecoratorBuilder<GetSupplierViewQuery, SupplierView>(
+                    new GetSupplierViewHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new GetSupplierController(
-                getSupplierViewWithValidation,
+                getSupplierViewHandler,
                 _fieldMaskConverterFactory,
                 _mapper);
         }
@@ -131,16 +134,16 @@ public class SupplierControllerActivator : BaseControllerActivator
             var repository = new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierQueryService);
 
             // ListSuppliers query handler
-            var listSuppliers = new ListSuppliersHandler(repository);
-            var listSuppliersWithLogging =
-                new LoggingQueryHandlerDecorator<ListSuppliersQuery, (List<SupplierView>, string?)>(
-                    listSuppliers,
-                    _loggerFactory
-                        .CreateLogger<LoggingQueryHandlerDecorator<ListSuppliersQuery, (List<SupplierView>, string?
-                            )>>());
+            var listSuppliersHandler = new QueryDecoratorBuilder<ListSuppliersQuery, PagedSuppliers>(
+                    new ListSuppliersHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new ListSuppliersController(
-                listSuppliersWithLogging,
+                listSuppliersHandler,
                 _mapper);
         }
 
@@ -151,27 +154,29 @@ public class SupplierControllerActivator : BaseControllerActivator
             var repository = new SupplierRepository(dbConnection);
 
             // GetSupplier handler
-            var getSupplier = new GetSupplierHandler(repository);
-            var getSupplierWithLogging = new LoggingQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>(
-                getSupplier,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>>());
-            var getSupplierWithValidation =
-                new ValidationQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>(getSupplierWithLogging);
+            var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
+                    new GetSupplierHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             // ReplaceSupplier handler
-            var replaceSupplier = new ReplaceSupplierHandler(repository);
-            var replaceSupplierWithLogging = new LoggingCommandHandlerDecorator<ReplaceSupplierCommand>(replaceSupplier,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceSupplierCommand>>());
-            var replaceSupplierWithAudit =
-                new AuditCommandHandlerDecorator<ReplaceSupplierCommand>(replaceSupplierWithLogging, dbConnection);
-            var replaceSupplierWithTransaction =
-                new TransactionCommandHandlerDecorator<ReplaceSupplierCommand>(replaceSupplierWithAudit, dbConnection);
-            var replaceSupplierWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<ReplaceSupplierCommand>(
-                new CircuitBreaker(TimeSpan.FromSeconds(30)), replaceSupplierWithTransaction);
+            var replaceSupplierHandler = new CommandDecoratorBuilder<ReplaceSupplierCommand>(
+                    new ReplaceSupplierHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new ReplaceSupplierController(
-                getSupplierWithValidation,
-                replaceSupplierWithCircuitBreaker,
+                getSupplierHandler,
+                replaceSupplierHandler,
                 _mapper);
         }
 
@@ -182,27 +187,29 @@ public class SupplierControllerActivator : BaseControllerActivator
             var repository = new SupplierRepository(dbConnection);
 
             // GetSupplier handler
-            var getSupplier = new GetSupplierHandler(repository);
-            var getSupplierWithLogging = new LoggingQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>(
-                getSupplier,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>>());
-            var getSupplierWithValidation =
-                new ValidationQueryHandlerDecorator<GetSupplierQuery, DomainModels.Supplier>(getSupplierWithLogging);
+            var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
+                    new GetSupplierHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             // UpdateSupplier handler
-            var updateSupplier = new UpdateSupplierHandler(repository);
-            var updateSupplierWithLogging = new LoggingCommandHandlerDecorator<UpdateSupplierCommand>(updateSupplier,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateSupplierCommand>>());
-            var updateSupplierWithAudit =
-                new AuditCommandHandlerDecorator<UpdateSupplierCommand>(updateSupplierWithLogging, dbConnection);
-            var updateSupplierWithTransaction =
-                new TransactionCommandHandlerDecorator<UpdateSupplierCommand>(updateSupplierWithAudit, dbConnection);
-            var updateSupplierWithCircuitBreaker = new CircuitBreakerCommandHandlerDecorator<UpdateSupplierCommand>(
-                new CircuitBreaker(TimeSpan.FromSeconds(30)), updateSupplierWithTransaction);
+            var updateSupplierHandler = new CommandDecoratorBuilder<UpdateSupplierCommand>(
+                    new UpdateSupplierHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new UpdateSupplierController(
-                getSupplierWithValidation,
-                updateSupplierWithCircuitBreaker,
+                getSupplierHandler,
+                updateSupplierHandler,
                 _mapper);
         }
 

@@ -25,7 +25,7 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
                 q.Request.Filter == request.Filter &&
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken)))
-            .ReturnsAsync((supplierViews, null));
+            .ReturnsAsync(new PagedSuppliers(supplierViews, null));
         ListSuppliersController sut = ListSuppliersController();
 
         var result = await sut.ListSuppliers(request);
@@ -51,7 +51,7 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
                 q.Request.Filter == request.Filter &&
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken)))
-            .ReturnsAsync((expectedPageResults, null));
+            .ReturnsAsync(new PagedSuppliers(expectedPageResults, null));
         ListSuppliersController sut = ListSuppliersController();
 
         var result = await sut.ListSuppliers(request);
@@ -77,7 +77,7 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
                 q.Request.Filter == request.Filter &&
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken)))
-            .ReturnsAsync((firstPageSuppliers, "2"));
+            .ReturnsAsync(new PagedSuppliers(firstPageSuppliers, "2"));
         ListSuppliersController sut = ListSuppliersController();
 
         var result = await sut.ListSuppliers(request);
@@ -103,7 +103,7 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
                 q.Request.Filter == request.Filter &&
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken)))
-            .ReturnsAsync((defaultPageSuppliers, DefaultMaxPageSize.ToString()));
+            .ReturnsAsync(new PagedSuppliers(defaultPageSuppliers, DefaultMaxPageSize.ToString()));
         ListSuppliersController sut = ListSuppliersController();
 
         var result = await sut.ListSuppliers(request);
@@ -127,7 +127,7 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
                 q.Request.Filter == request.Filter &&
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken)))
-            .ReturnsAsync(([], null));
+            .ReturnsAsync(new PagedSuppliers([], null));
         ListSuppliersController sut = ListSuppliersController();
 
         var result = await sut.ListSuppliers(request);
@@ -156,7 +156,7 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
                 q.Request.Filter == request.Filter &&
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken)))
-            .ReturnsAsync((filteredSuppliers, "2"));
+            .ReturnsAsync(new PagedSuppliers(filteredSuppliers, "2"));
         ListSuppliersController sut = ListSuppliersController();
 
         var result = await sut.ListSuppliers(request);

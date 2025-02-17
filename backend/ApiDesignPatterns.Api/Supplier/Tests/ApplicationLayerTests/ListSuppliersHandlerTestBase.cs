@@ -13,7 +13,7 @@ public abstract class ListSuppliersHandlerTestBase
 {
     protected readonly SupplierViewRepositoryFake Repository = new(new QueryService<SupplierView>());
 
-    protected IQueryHandler<ListSuppliersQuery, (List<SupplierView>, string?)> ListSuppliersViewHandler()
+    protected IQueryHandler<ListSuppliersQuery, PagedSuppliers> ListSuppliersViewHandler()
     {
         return new ListSuppliersHandler(Repository);
     }

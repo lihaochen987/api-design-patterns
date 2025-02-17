@@ -28,7 +28,7 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.ParentId == parentId)))
-            .ReturnsAsync((reviewViews, null));
+            .ReturnsAsync(new PagedReviews(reviewViews, null));
         ListReviewsController sut = ListReviewsController();
 
         var result = await sut.ListReviews(request, parentId);
@@ -56,7 +56,7 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.ParentId == parentId)))
-            .ReturnsAsync((expectedPageResults, null));
+            .ReturnsAsync(new PagedReviews(expectedPageResults, null));
         ListReviewsController sut = ListReviewsController();
 
         var result = await sut.ListReviews(request, parentId);
@@ -84,7 +84,7 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.ParentId == parentId)))
-            .ReturnsAsync((firstPageReviews, "2"));
+            .ReturnsAsync(new PagedReviews(firstPageReviews, "2"));
         ListReviewsController sut = ListReviewsController();
 
         var result = await sut.ListReviews(request, parentId);
@@ -112,7 +112,7 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.ParentId == parentId)))
-            .ReturnsAsync((defaultPageReviews, DefaultMaxPageSize.ToString()));
+            .ReturnsAsync(new PagedReviews(defaultPageReviews, DefaultMaxPageSize.ToString()));
         ListReviewsController sut = ListReviewsController();
 
         var result = await sut.ListReviews(request, parentId);
@@ -138,7 +138,7 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.ParentId == parentId)))
-            .ReturnsAsync(([], null));
+            .ReturnsAsync(new PagedReviews([], null));
         ListReviewsController sut = ListReviewsController();
 
         var result = await sut.ListReviews(request, parentId);
@@ -169,7 +169,7 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.ParentId == parentId)))
-            .ReturnsAsync((filteredReviews, "2"));
+            .ReturnsAsync(new PagedReviews(filteredReviews, "2"));
         ListReviewsController sut = ListReviewsController();
 
         var result = await sut.ListReviews(request, parentId);

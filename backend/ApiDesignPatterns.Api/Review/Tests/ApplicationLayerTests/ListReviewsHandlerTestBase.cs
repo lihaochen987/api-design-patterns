@@ -15,7 +15,7 @@ public abstract class ListReviewsHandlerTestBase
     protected readonly ReviewViewRepositoryFake Repository = new(new QueryService<ReviewView>());
     protected readonly Fixture Fixture = new();
 
-    protected IQueryHandler<ListReviewsQuery, (List<ReviewView>, string?)> ListReviewsViewHandler()
+    protected IQueryHandler<ListReviewsQuery, PagedReviews> ListReviewsViewHandler()
     {
         return new ListReviewsHandler(Repository);
     }

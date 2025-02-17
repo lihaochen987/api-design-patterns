@@ -3,7 +3,6 @@
 
 using AutoFixture;
 using backend.Review.ApplicationLayer.Queries.ListReviews;
-using backend.Review.DomainModels;
 using backend.Review.ReviewControllers;
 using backend.Shared.QueryHandler;
 using Shouldly;
@@ -20,15 +19,14 @@ public class ListReviewsHandlerTests : ListReviewsHandlerTestBase
         var request = new ListReviewsRequest { Filter = "Rating >= 4", MaxPageSize = 5 };
         Repository.AddReviewView(productId, 5);
         Repository.AddReviewView(productId, 4);
-        IQueryHandler<ListReviewsQuery, (List<ReviewView>, string?)> sut = ListReviewsViewHandler();
+        IQueryHandler<ListReviewsQuery, PagedReviews> sut = ListReviewsViewHandler();
 
-        (List<ReviewView>, string?) result = await sut.Handle(
-            new ListReviewsQuery { Request = request, ParentId = productId.ToString() });
+        PagedReviews? result = await sut.Handle(new ListReviewsQuery { Request = request, ParentId = productId.ToString() });
 
-        result.Item1.ShouldNotBeEmpty();
-        result.Item1.Count.ShouldBe(2);
-        result.Item2.ShouldBeNull();
-        result.Item1.ShouldAllBe(r => r.ProductId == productId);
+        result!.Reviews.ShouldNotBeEmpty();
+        result.Reviews.Count.ShouldBe(2);
+        result.NextPageToken.ShouldBeNull();
+        result.Reviews.ShouldAllBe(r => r.ProductId == productId);
     }
 
     [Fact]
@@ -36,13 +34,13 @@ public class ListReviewsHandlerTests : ListReviewsHandlerTestBase
     {
         long productId = Fixture.Create<long>();
         var request = new ListReviewsRequest();
-        IQueryHandler<ListReviewsQuery, (List<ReviewView>, string?)> sut = ListReviewsViewHandler();
+        IQueryHandler<ListReviewsQuery, PagedReviews> sut = ListReviewsViewHandler();
 
-        (List<ReviewView>, string?) result = await sut.Handle(
+        PagedReviews? result = await sut.Handle(
             new ListReviewsQuery { Request = request, ParentId = productId.ToString() });
 
-        result.Item1.ShouldBeEmpty();
-        result.Item2.ShouldBeNull();
+        result!.Reviews.ShouldBeEmpty();
+        result.NextPageToken.ShouldBeNull();
     }
 
     [Fact]
@@ -52,14 +50,14 @@ public class ListReviewsHandlerTests : ListReviewsHandlerTestBase
         var request = new ListReviewsRequest { MaxPageSize = 5 };
         Repository.AddReviewView(productId);
         Repository.AddReviewView(Fixture.Create<long>());
-        IQueryHandler<ListReviewsQuery, (List<ReviewView>, string?)> sut = ListReviewsViewHandler();
+        IQueryHandler<ListReviewsQuery, PagedReviews> sut = ListReviewsViewHandler();
 
-        (List<ReviewView>, string?) result = await sut.Handle(
+        PagedReviews? result = await sut.Handle(
             new ListReviewsQuery { Request = request, ParentId = productId.ToString() });
 
-        result.Item1.Count.ShouldBe(1);
-        result.Item1.ShouldAllBe(r => r.ProductId == productId);
-        result.Item2.ShouldBeNull();
+        result!.Reviews.Count.ShouldBe(1);
+        result.Reviews.ShouldAllBe(r => r.ProductId == productId);
+        result.NextPageToken.ShouldBeNull();
     }
 
     [Fact]
@@ -70,7 +68,7 @@ public class ListReviewsHandlerTests : ListReviewsHandlerTestBase
         {
             PageToken = "1", Filter = "InvalidFilter == \"SomeValue\"", MaxPageSize = 5
         };
-        IQueryHandler<ListReviewsQuery, (List<ReviewView>, string?)> sut = ListReviewsViewHandler();
+        IQueryHandler<ListReviewsQuery, PagedReviews> sut = ListReviewsViewHandler();
 
         await Should.ThrowAsync<ArgumentException>(() => sut.Handle(
             new ListReviewsQuery { Request = request, ParentId = productId.ToString() }));

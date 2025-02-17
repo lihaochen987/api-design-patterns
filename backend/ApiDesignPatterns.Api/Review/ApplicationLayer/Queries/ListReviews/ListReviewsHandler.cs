@@ -8,15 +8,15 @@ using backend.Shared.QueryHandler;
 namespace backend.Review.ApplicationLayer.Queries.ListReviews;
 
 public class ListReviewsHandler(IReviewViewRepository repository)
-    : IQueryHandler<ListReviewsQuery, (List<ReviewView>, string?)>
+    : IQueryHandler<ListReviewsQuery, PagedReviews>
 {
-    public async Task<(List<ReviewView>, string?)> Handle(ListReviewsQuery query)
+    public async Task<PagedReviews?> Handle(ListReviewsQuery query)
     {
         (List<ReviewView> reviews, string? nextPageToken) = await repository.ListReviewsAsync(
             query.Request.PageToken,
             query.Request.Filter,
             query.Request.MaxPageSize,
             query.ParentId);
-        return (reviews, nextPageToken);
+        return new PagedReviews(reviews, nextPageToken);
     }
 }

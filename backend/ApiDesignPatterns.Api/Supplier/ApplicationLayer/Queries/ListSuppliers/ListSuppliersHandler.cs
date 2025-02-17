@@ -8,14 +8,14 @@ using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 namespace backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
 
 public class ListSuppliersHandler(ISupplierViewRepository repository)
-    : IQueryHandler<ListSuppliersQuery, (List<SupplierView>, string?)>
+    : IQueryHandler<ListSuppliersQuery, PagedSuppliers>
 {
-    public async Task<(List<SupplierView>, string?)> Handle(ListSuppliersQuery query)
+    public async Task<PagedSuppliers?> Handle(ListSuppliersQuery query)
     {
         (List<SupplierView> suppliers, string? nextPageToken) = await repository.ListSuppliersAsync(
             query.Request.PageToken,
             query.Request.Filter,
             query.Request.MaxPageSize);
-        return (suppliers, nextPageToken);
+        return new PagedSuppliers(suppliers, nextPageToken);
     }
 }

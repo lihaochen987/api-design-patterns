@@ -15,16 +15,10 @@ public class CommandDecoratorBuilder<TCommand>(
     private bool _useTransaction;
     private bool _useAudit;
     private bool _useLogging;
-    private TimeSpan _circuitBreakerTimeout = TimeSpan.FromSeconds(30);
 
     public CommandDecoratorBuilder<TCommand> WithCircuitBreaker(TimeSpan? timeout = null)
     {
         _useCircuitBreaker = true;
-        if (timeout.HasValue)
-        {
-            _circuitBreakerTimeout = timeout.Value;
-        }
-
         return this;
     }
 
@@ -68,8 +62,8 @@ public class CommandDecoratorBuilder<TCommand>(
         if (_useCircuitBreaker && _useTransaction)
         {
             _handler = new CircuitBreakerCommandHandlerDecorator<TCommand>(
-                new CircuitBreaker.CircuitBreaker(_circuitBreakerTimeout),
-                _handler);
+                _handler,
+                loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<TCommand>>());
         }
 
         return _handler;

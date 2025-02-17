@@ -15,7 +15,6 @@ using backend.Review.InfrastructureLayer.Database.ReviewView;
 using backend.Review.ReviewControllers;
 using backend.Review.Services;
 using backend.Shared;
-using backend.Shared.CircuitBreaker;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -59,16 +58,18 @@ public class ReviewControllerActivator : BaseControllerActivator
             var repository = new ReviewRepository(dbConnection);
 
             // CreateReview handler
-            var createReview = new CreateReviewHandler(repository);
-            var createReviewWithLogging = new LoggingCommandHandlerDecorator<CreateReviewCommand>(createReview,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<CreateReviewCommand>>());
-            var createReviewWithAudit =
-                new AuditCommandHandlerDecorator<CreateReviewCommand>(createReviewWithLogging, dbConnection);
-            var createReviewWithTransaction =
-                new TransactionCommandHandlerDecorator<CreateReviewCommand>(createReviewWithAudit, dbConnection);
+            var createReviewHandler = new CommandDecoratorBuilder<CreateReviewCommand>(
+                    new CreateReviewHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new CreateReviewController(
-                createReviewWithTransaction,
+                createReviewHandler,
                 _mapper);
         }
 
@@ -79,28 +80,29 @@ public class ReviewControllerActivator : BaseControllerActivator
             var repository = new ReviewRepository(dbConnection);
 
             // GetReview handler
-            var getReview = new GetReviewHandler(repository);
-            var getReviewWithLogging = new LoggingQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>(
-                getReview,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>>());
-            var getReviewWithValidation =
-                new ValidationQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>(getReviewWithLogging);
+            var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
+                    new GetReviewHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             // DeleteReview handler
-            var deleteReview = new DeleteReviewHandler(repository);
-            var deleteReviewWithLogging = new LoggingCommandHandlerDecorator<DeleteReviewCommand>(deleteReview,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<DeleteReviewCommand>>());
-            var deleteReviewWithAudit =
-                new AuditCommandHandlerDecorator<DeleteReviewCommand>(deleteReviewWithLogging, dbConnection);
-            var deleteReviewWithTransaction =
-                new TransactionCommandHandlerDecorator<DeleteReviewCommand>(deleteReviewWithAudit, dbConnection);
-            var deleteReviewWithCircuitBreaker =
-                new CircuitBreakerCommandHandlerDecorator<DeleteReviewCommand>(
-                    new CircuitBreaker(TimeSpan.FromSeconds(30)), deleteReviewWithTransaction);
+            var deleteReviewHandler = new CommandDecoratorBuilder<DeleteReviewCommand>(
+                    new DeleteReviewHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new DeleteReviewController(
-                getReviewWithValidation,
-                deleteReviewWithCircuitBreaker);
+                getReviewHandler,
+                deleteReviewHandler);
         }
 
 
@@ -111,15 +113,17 @@ public class ReviewControllerActivator : BaseControllerActivator
             var repository = new ReviewViewRepository(dbConnection, _reviewSqlFilterBuilder, _reviewQueryService);
 
             // GetReviewView handler
-            var getReviewView = new GetReviewViewHandler(repository);
-            var getReviewViewWithLogging = new LoggingQueryHandlerDecorator<GetReviewViewQuery, ReviewView>(
-                getReviewView,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetReviewViewQuery, ReviewView>>());
-            var getReviewViewWithValidation =
-                new ValidationQueryHandlerDecorator<GetReviewViewQuery, ReviewView>(getReviewViewWithLogging);
+            var getReviewViewHandler = new QueryDecoratorBuilder<GetReviewViewQuery, ReviewView>(
+                    new GetReviewViewHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new GetReviewController(
-                getReviewViewWithValidation,
+                getReviewViewHandler,
                 _fieldMaskConverterFactory,
                 _mapper);
         }
@@ -131,15 +135,17 @@ public class ReviewControllerActivator : BaseControllerActivator
             var repository = new ReviewViewRepository(dbConnection, _reviewSqlFilterBuilder, _reviewQueryService);
 
             // ListReviews query handler
-            var listReviews = new ListReviewsHandler(repository);
-            var listReviewsWithLogging =
-                new LoggingQueryHandlerDecorator<ListReviewsQuery, (List<ReviewView>, string?)>(
-                    listReviews,
-                    _loggerFactory
-                        .CreateLogger<LoggingQueryHandlerDecorator<ListReviewsQuery, (List<ReviewView>, string?)>>());
+            var listReviewsHandler = new QueryDecoratorBuilder<ListReviewsQuery, PagedReviews>(
+                    new ListReviewsHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
+
 
             return new ListReviewsController(
-                listReviewsWithLogging,
+                listReviewsHandler,
                 _mapper);
         }
 
@@ -150,28 +156,29 @@ public class ReviewControllerActivator : BaseControllerActivator
             var repository = new ReviewRepository(dbConnection);
 
             // GetReview handler
-            var getReview = new GetReviewHandler(repository);
-            var getReviewWithLogging = new LoggingQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>(
-                getReview,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>>());
-            var getReviewWithValidation =
-                new ValidationQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>(getReviewWithLogging);
+            var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
+                    new GetReviewHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             // ReplaceReview handler
-            var replaceReview = new ReplaceReviewHandler(repository);
-            var replaceReviewWithLogging = new LoggingCommandHandlerDecorator<ReplaceReviewCommand>(replaceReview,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<ReplaceReviewCommand>>());
-            var replaceReviewWithAudit =
-                new AuditCommandHandlerDecorator<ReplaceReviewCommand>(replaceReviewWithLogging, dbConnection);
-            var replaceReviewWithTransaction =
-                new TransactionCommandHandlerDecorator<ReplaceReviewCommand>(replaceReviewWithAudit, dbConnection);
-            var replaceReviewWithCircuitBreaker =
-                new CircuitBreakerCommandHandlerDecorator<ReplaceReviewCommand>(
-                    new CircuitBreaker(TimeSpan.FromSeconds(30)), replaceReviewWithTransaction);
+            var replaceReviewHandler = new CommandDecoratorBuilder<ReplaceReviewCommand>(
+                    new ReplaceReviewHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new ReplaceReviewController(
-                getReviewWithValidation,
-                replaceReviewWithCircuitBreaker,
+                getReviewHandler,
+                replaceReviewHandler,
                 _mapper);
         }
 
@@ -182,28 +189,29 @@ public class ReviewControllerActivator : BaseControllerActivator
             var repository = new ReviewRepository(dbConnection);
 
             // GetReview handler
-            var getReview = new GetReviewHandler(repository);
-            var getReviewWithLogging = new LoggingQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>(
-                getReview,
-                _loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>>());
-            var getReviewWithValidation =
-                new ValidationQueryHandlerDecorator<GetReviewQuery, DomainModels.Review>(getReviewWithLogging);
+            var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
+                    new GetReviewHandler(repository),
+                    _loggerFactory)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             // UpdateReview handler
-            var updateReview = new UpdateReviewHandler(repository);
-            var updateReviewWithLogging = new LoggingCommandHandlerDecorator<UpdateReviewCommand>(updateReview,
-                _loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<UpdateReviewCommand>>());
-            var updateReviewWithAudit =
-                new AuditCommandHandlerDecorator<UpdateReviewCommand>(updateReviewWithLogging, dbConnection);
-            var updateReviewWithTransaction =
-                new TransactionCommandHandlerDecorator<UpdateReviewCommand>(updateReviewWithAudit, dbConnection);
-            var updateReviewWithCircuitBreaker =
-                new CircuitBreakerCommandHandlerDecorator<UpdateReviewCommand>(
-                    new CircuitBreaker(TimeSpan.FromSeconds(30)), updateReviewWithTransaction);
+            var updateReviewHandler = new CommandDecoratorBuilder<UpdateReviewCommand>(
+                    new UpdateReviewHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithAudit()
+                .WithLogging()
+                .WithTransaction()
+                .WithCircuitBreaker()
+                .Build();
 
             return new UpdateReviewController(
-                getReviewWithValidation,
-                updateReviewWithCircuitBreaker,
+                getReviewHandler,
+                updateReviewHandler,
                 _mapper);
         }
 
