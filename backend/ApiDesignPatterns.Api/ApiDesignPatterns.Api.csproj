@@ -376,8 +376,17 @@
     <Compile Update="Supplier\Tests\ControllerLayerTests\UpdateSupplierControllerTestBase.cs">
       <DependentUpon>UpdateSupplierControllerTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="Shared\Tests\CircuitBreakerTestBase.cs">
-      <DependentUpon>CircuitBreakerTests.cs</DependentUpon>
+    <Compile Update="Inventory\InventoryControllers\CreateInventoryRequest.cs">
+      <DependentUpon>CreateInventoryController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\InventoryControllers\CreateInventoryResponse.cs">
+      <DependentUpon>CreateInventoryController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\InventoryControllers\GetInventoryRequest.cs">
+      <DependentUpon>GetInventoryController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\InventoryControllers\GetInventoryResponse.cs">
+      <DependentUpon>GetInventoryController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

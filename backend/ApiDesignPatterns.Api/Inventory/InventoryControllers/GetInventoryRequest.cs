@@ -1,11 +1,9 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-namespace backend.Shared.CircuitBreaker;
+namespace backend.Inventory.InventoryControllers;
 
-public enum CircuitState
+public record GetInventoryRequest
 {
-    Closed,
-    Open,
-    HalfOpen
+    public List<string> FieldMask { get; set; } = ["*"];
 }

@@ -1,5 +1,6 @@
 using System.Data;
 using System.Text.Json.Serialization;
+using backend.Inventory;
 using backend.Product;
 using backend.Review;
 using backend.Shared;
@@ -36,6 +37,8 @@ builder.Services.AddSingleton<BaseControllerActivator>(
     new ReviewControllerActivator(builder.Configuration, loggerFactory));
 builder.Services.AddSingleton<BaseControllerActivator>(
     new SupplierControllerActivator(builder.Configuration, loggerFactory));
+builder.Services.AddSingleton<BaseControllerActivator>(
+    new InventoryControllerActivator(builder.Configuration, loggerFactory));
 
 builder.Services.AddSingleton<IControllerActivator>(sp =>
 {

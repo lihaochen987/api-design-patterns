@@ -7,7 +7,7 @@ $$
             supplier_id            INT NOT NULL,
             product_id             INT NOT NULL,
             inventory_quantity     INT DEFAULT 0,
-            inventory_restock_date DATE,
+            inventory_restock_date TIMESTAMPTZ,
 
             CONSTRAINT fk_supplier
                 FOREIGN KEY (supplier_id) REFERENCES suppliers (supplier_id)

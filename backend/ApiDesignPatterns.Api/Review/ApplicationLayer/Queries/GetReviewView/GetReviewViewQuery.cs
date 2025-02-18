@@ -6,7 +6,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Review.ApplicationLayer.Queries.GetReviewView;
 
-public class GetReviewViewQuery: IQuery<ReviewView>
+public record GetReviewViewQuery: IQuery<ReviewView>
 {
-    public long Id { get; set; }
+    public long Id { get; init; }
 }
