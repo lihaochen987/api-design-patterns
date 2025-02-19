@@ -8,14 +8,16 @@ namespace backend.Shared.QueryHandler;
 
 public class CircuitBreakerQueryHandlerDecorator<TQuery, TResult>(
     IQueryHandler<TQuery, TResult> queryHandler,
-    ILogger<LoggingQueryHandlerDecorator<TQuery, TResult>> logger)
+    ILogger<LoggingQueryHandlerDecorator<TQuery, TResult>> logger,
+    TimeSpan durationOfBreak,
+    int exceptionsAllowedBeforeBreaking)
     : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {
     private readonly AsyncCircuitBreakerPolicy _circuitBreakerPolicy = Policy
         .Handle<Exception>()
         .CircuitBreakerAsync(
-            exceptionsAllowedBeforeBreaking: 3,
-            durationOfBreak: TimeSpan.FromSeconds(30),
+            exceptionsAllowedBeforeBreaking: exceptionsAllowedBeforeBreaking,
+            durationOfBreak: durationOfBreak,
             onBreak: (exception, duration) =>
             {
                 logger.LogCritical("Executing command: {Operation} with data: {CommandDetails}",

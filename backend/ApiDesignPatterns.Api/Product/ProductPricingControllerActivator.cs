@@ -57,7 +57,7 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
             return new GetProductPricingController(
                 getProductPricingHandler,
@@ -79,7 +79,7 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // UpdateProductPricing handler

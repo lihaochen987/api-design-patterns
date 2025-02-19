@@ -87,7 +87,7 @@ public class ReviewControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // DeleteReview handler
@@ -121,7 +121,7 @@ public class ReviewControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new GetReviewController(
@@ -143,7 +143,7 @@ public class ReviewControllerActivator : BaseControllerActivator
                     dbConnection)
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
 
@@ -166,7 +166,7 @@ public class ReviewControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // ReplaceReview handler
@@ -200,7 +200,7 @@ public class ReviewControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // UpdateReview handler

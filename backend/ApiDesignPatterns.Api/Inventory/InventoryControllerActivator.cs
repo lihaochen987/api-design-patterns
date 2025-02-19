@@ -77,7 +77,7 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new GetInventoryController(

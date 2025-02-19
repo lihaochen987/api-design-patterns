@@ -84,7 +84,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     .WithLogging()
                     .WithValidation()
                     .WithTransaction()
-                    .WithCircuitBreaker()
+                    .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                     .Build();
 
             return new CreateProductController(
@@ -118,7 +118,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new DeleteProductController(deleteProductHandler, getProductHandler);
@@ -138,7 +138,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new GetProductController(
@@ -159,7 +159,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     dbConnection)
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new ListProductsController(listProductsHandler, _mapper);
@@ -179,7 +179,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // ReplaceProduct handler
@@ -223,7 +223,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // UpdateProduct handler
@@ -254,7 +254,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new GetProductController(

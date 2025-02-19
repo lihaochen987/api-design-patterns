@@ -16,6 +16,8 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     private bool _useValidation;
     private bool _useLogging;
     private bool _useCircuitBreaker;
+    private TimeSpan _durationOfBreak;
+    private int _exceptionsAllowedBeforeBreaking;
 
     public QueryDecoratorBuilder<TQuery, TResult> WithTransaction()
     {
@@ -40,9 +42,12 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         return this;
     }
 
-    public QueryDecoratorBuilder<TQuery, TResult> WithCircuitBreaker()
+    public QueryDecoratorBuilder<TQuery, TResult> WithCircuitBreaker(TimeSpan durationOfBreak,
+        int exceptionsAllowedBeforeBreaking)
     {
         _useCircuitBreaker = true;
+        _durationOfBreak = durationOfBreak;
+        _exceptionsAllowedBeforeBreaking = exceptionsAllowedBeforeBreaking;
         return this;
     }
 
@@ -69,7 +74,9 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         {
             _handler = new CircuitBreakerQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
-                loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>());
+                loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>(),
+                _durationOfBreak,
+                _exceptionsAllowedBeforeBreaking);
         }
 
         return _handler;
