@@ -18,12 +18,12 @@ public class CircuitBreakerQueryHandlerDecorator<TQuery, TResult>(
             durationOfBreak: TimeSpan.FromSeconds(30),
             onBreak: (exception, duration) =>
             {
-                logger.LogInformation("Executing command: {Operation} with data: {CommandDetails}",
+                logger.LogCritical("Executing command: {Operation} with data: {CommandDetails}",
                     duration.TotalSeconds,
                     exception.Message);
             },
-            onReset: () => { logger.LogInformation("Circuit breaker reset"); },
-            onHalfOpen: () => { logger.LogInformation("Circuit breaker half-opened"); });
+            onReset: () => { logger.LogCritical("Circuit breaker reset"); },
+            onHalfOpen: () => { logger.LogCritical("Circuit breaker half-opened"); });
 
     public async Task<TResult?> Handle(TQuery query)
     {

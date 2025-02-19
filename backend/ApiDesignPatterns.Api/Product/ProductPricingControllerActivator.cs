@@ -52,7 +52,8 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             // GetProductPricing handler
             var getProductPricingHandler = new QueryDecoratorBuilder<GetProductPricingQuery, ProductPricingView>(
                     new GetProductPricingHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -73,7 +74,8 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             // GetProduct handler
             var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
                     new GetProductHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()

@@ -82,7 +82,8 @@ public class SupplierControllerActivator : BaseControllerActivator
             // GetSupplier handler
             var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
                     new GetSupplierHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -114,7 +115,8 @@ public class SupplierControllerActivator : BaseControllerActivator
             // GetSupplierView handler
             var getSupplierViewHandler = new QueryDecoratorBuilder<GetSupplierViewQuery, SupplierView>(
                     new GetSupplierViewHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -136,7 +138,8 @@ public class SupplierControllerActivator : BaseControllerActivator
             // ListSuppliers query handler
             var listSuppliersHandler = new QueryDecoratorBuilder<ListSuppliersQuery, PagedSuppliers>(
                     new ListSuppliersHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithTransaction()
                 .WithCircuitBreaker()
@@ -156,7 +159,8 @@ public class SupplierControllerActivator : BaseControllerActivator
             // GetSupplier handler
             var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
                     new GetSupplierHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -189,7 +193,8 @@ public class SupplierControllerActivator : BaseControllerActivator
             // GetSupplier handler
             var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
                     new GetSupplierHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()

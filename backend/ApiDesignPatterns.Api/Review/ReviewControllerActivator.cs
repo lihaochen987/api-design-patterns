@@ -82,7 +82,8 @@ public class ReviewControllerActivator : BaseControllerActivator
             // GetReview handler
             var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
                     new GetReviewHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -115,7 +116,8 @@ public class ReviewControllerActivator : BaseControllerActivator
             // GetReviewView handler
             var getReviewViewHandler = new QueryDecoratorBuilder<GetReviewViewQuery, ReviewView>(
                     new GetReviewViewHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -137,7 +139,8 @@ public class ReviewControllerActivator : BaseControllerActivator
             // ListReviews query handler
             var listReviewsHandler = new QueryDecoratorBuilder<ListReviewsQuery, PagedReviews>(
                     new ListReviewsHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithTransaction()
                 .WithCircuitBreaker()
@@ -158,7 +161,8 @@ public class ReviewControllerActivator : BaseControllerActivator
             // GetReview handler
             var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
                     new GetReviewHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -191,7 +195,8 @@ public class ReviewControllerActivator : BaseControllerActivator
             // GetReview handler
             var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
                     new GetReviewHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()

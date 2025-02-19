@@ -79,7 +79,8 @@ public class ProductControllerActivator : BaseControllerActivator
             var createProductResponseHandler =
                 new QueryDecoratorBuilder<CreateProductResponseQuery, CreateProductResponse>(
                         new CreateProductResponseHandler(_mapper),
-                        _loggerFactory)
+                        _loggerFactory,
+                        null)
                     .WithLogging()
                     .WithValidation()
                     .WithTransaction()
@@ -112,7 +113,8 @@ public class ProductControllerActivator : BaseControllerActivator
             // GetProduct handler
             var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
                     new GetProductHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -131,7 +133,8 @@ public class ProductControllerActivator : BaseControllerActivator
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse>(
                     new GetProductResponseHandler(repository, _mapper),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -152,7 +155,8 @@ public class ProductControllerActivator : BaseControllerActivator
             // ListProducts handler
             var listProductsHandler = new QueryDecoratorBuilder<ListProductsQuery, PagedProducts>(
                     new ListProductsHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithTransaction()
                 .WithCircuitBreaker()
@@ -170,7 +174,8 @@ public class ProductControllerActivator : BaseControllerActivator
             // GetProduct handler
             var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
                     new GetProductHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -192,7 +197,8 @@ public class ProductControllerActivator : BaseControllerActivator
             var replaceProductResponseHandler =
                 new QueryDecoratorBuilder<ReplaceProductResponseQuery, ReplaceProductResponse>(
                         new ReplaceProductResponseHandler(_mapper),
-                        _loggerFactory)
+                        _loggerFactory,
+                        dbConnection)
                     .WithLogging()
                     .WithValidation()
                     .Build();
@@ -212,7 +218,8 @@ public class ProductControllerActivator : BaseControllerActivator
             // GetProduct handler
             var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
                     new GetProductHandler(repository),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -242,7 +249,8 @@ public class ProductControllerActivator : BaseControllerActivator
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse>(
                     new GetProductResponseHandler(repository, _mapper),
-                    _loggerFactory)
+                    _loggerFactory,
+                    dbConnection)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()

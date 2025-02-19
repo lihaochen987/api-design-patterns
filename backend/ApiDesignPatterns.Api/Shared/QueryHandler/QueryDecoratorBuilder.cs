@@ -8,7 +8,7 @@ namespace backend.Shared.QueryHandler;
 public class QueryDecoratorBuilder<TQuery, TResult>(
     IQueryHandler<TQuery, TResult> handler,
     ILoggerFactory loggerFactory,
-    IDbConnection? dbConnection = null)
+    IDbConnection? dbConnection)
     where TQuery : IQuery<TResult> where TResult : class
 {
     private IQueryHandler<TQuery, TResult> _handler = handler;

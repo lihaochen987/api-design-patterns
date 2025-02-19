@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Inventory.DomainModels;
 using backend.Inventory.InventoryControllers;
 
 namespace backend.Inventory.Services;
@@ -12,5 +13,6 @@ public class InventoryMappingProfile : Profile
     {
         CreateMap<CreateInventoryRequest, DomainModels.Inventory>();
         CreateMap<DomainModels.Inventory, CreateInventoryResponse>();
+        CreateMap<InventoryView, GetInventoryResponse>();
     }
 }
