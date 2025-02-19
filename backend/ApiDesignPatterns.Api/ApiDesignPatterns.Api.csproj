@@ -397,6 +397,9 @@
     <Compile Update="Inventory\Tests\ControllerTests\CreateInventoryControllerTestBase.cs">
       <DependentUpon>CreateInventoryControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Inventory\Tests\ControllerTests\GetInventoryControllerTestBase.cs">
+      <DependentUpon>GetInventoryControllerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
