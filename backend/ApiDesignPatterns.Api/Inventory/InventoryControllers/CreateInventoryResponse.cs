@@ -7,7 +7,6 @@ namespace backend.Inventory.InventoryControllers;
 
 public record CreateInventoryResponse
 {
-    [Required] public required string Id { get; init; }
     [Required] public required string SupplierId { get; init; }
     [Required] public required string ProductId { get; init; }
     [Required] public required string Quantity { get; init; }
