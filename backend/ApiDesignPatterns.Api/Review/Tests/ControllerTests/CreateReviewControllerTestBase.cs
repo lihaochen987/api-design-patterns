@@ -18,7 +18,7 @@ public abstract class CreateReviewControllerTestBase
 
     protected readonly IMapper Mapper;
 
-    protected Fixture Fixture = new();
+    protected readonly Fixture Fixture = new();
 
     protected CreateReviewControllerTestBase()
     {

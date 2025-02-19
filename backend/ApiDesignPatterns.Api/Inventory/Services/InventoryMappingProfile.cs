@@ -14,5 +14,6 @@ public class InventoryMappingProfile : Profile
         CreateMap<CreateInventoryRequest, DomainModels.Inventory>();
         CreateMap<DomainModels.Inventory, CreateInventoryResponse>();
         CreateMap<InventoryView, GetInventoryResponse>();
+        CreateMap<DomainModels.Inventory, CreateInventoryRequest>();
     }
 }
