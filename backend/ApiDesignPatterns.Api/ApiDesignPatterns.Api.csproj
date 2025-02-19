@@ -388,6 +388,12 @@
     <Compile Update="Inventory\InventoryControllers\GetInventoryResponse.cs">
       <DependentUpon>GetInventoryController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Inventory\Tests\ApplicationLayerTests\CreateInventoryHandlerTestBase.cs">
+      <DependentUpon>CreateInventoryHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\Tests\ApplicationLayerTests\GetInventoryViewHandlerTestBase.cs">
+      <DependentUpon>GetInventoryViewHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
