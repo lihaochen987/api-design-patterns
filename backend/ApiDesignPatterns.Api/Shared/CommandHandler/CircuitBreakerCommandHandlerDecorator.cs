@@ -8,14 +8,16 @@ namespace backend.Shared.CommandHandler;
 
 public class CircuitBreakerCommandHandlerDecorator<TCommand>(
     ICommandHandler<TCommand> commandHandler,
-    ILogger<LoggingCommandHandlerDecorator<TCommand>> logger)
+    ILogger<LoggingCommandHandlerDecorator<TCommand>> logger,
+    TimeSpan durationOfBreak,
+    int exceptionsAllowedBeforeBreaking)
     : ICommandHandler<TCommand>
 {
     private readonly AsyncCircuitBreakerPolicy _circuitBreakerPolicy = Policy
         .Handle<Exception>()
         .CircuitBreakerAsync(
-            exceptionsAllowedBeforeBreaking: 3,
-            durationOfBreak: TimeSpan.FromSeconds(30),
+            exceptionsAllowedBeforeBreaking: exceptionsAllowedBeforeBreaking,
+            durationOfBreak: durationOfBreak,
             onBreak: (exception, duration) =>
             {
                 logger.LogCritical("Executing command: {Operation} with data: {CommandDetails}",

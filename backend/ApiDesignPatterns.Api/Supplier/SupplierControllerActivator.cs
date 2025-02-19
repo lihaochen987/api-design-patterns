@@ -65,7 +65,7 @@ public class SupplierControllerActivator : BaseControllerActivator
                 .WithAudit()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new CreateSupplierController(
@@ -98,7 +98,7 @@ public class SupplierControllerActivator : BaseControllerActivator
                 .WithAudit()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new DeleteSupplierController(
@@ -175,7 +175,7 @@ public class SupplierControllerActivator : BaseControllerActivator
                 .WithAudit()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new ReplaceSupplierController(
@@ -209,7 +209,7 @@ public class SupplierControllerActivator : BaseControllerActivator
                 .WithAudit()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new UpdateSupplierController(

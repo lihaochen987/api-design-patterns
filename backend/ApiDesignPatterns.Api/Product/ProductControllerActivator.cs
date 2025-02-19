@@ -72,7 +72,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithAudit()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // CreateProductResponse handler
@@ -107,7 +107,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithAudit()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // GetProduct handler
@@ -190,7 +190,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithAudit()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // ReplaceProductResponse handler
@@ -234,7 +234,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithAudit()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new UpdateProductController(getProductHandler, updateProductHandler, _mapper);

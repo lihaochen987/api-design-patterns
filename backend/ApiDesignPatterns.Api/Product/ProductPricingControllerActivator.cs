@@ -90,7 +90,7 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                 .WithAudit()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker()
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new UpdateProductPricingController(
