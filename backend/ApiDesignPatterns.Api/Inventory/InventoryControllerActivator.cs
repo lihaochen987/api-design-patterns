@@ -54,6 +54,7 @@ public class InventoryControllerActivator : BaseControllerActivator
                     _loggerFactory)
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .WithHandshaking()
+                .WithTimeout(TimeSpan.FromSeconds(5))
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()

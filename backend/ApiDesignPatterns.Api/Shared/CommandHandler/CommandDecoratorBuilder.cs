@@ -18,6 +18,8 @@ public class CommandDecoratorBuilder<TCommand>(
     private bool _useHandshaking;
     private TimeSpan _durationOfBreak;
     private int _exceptionsAllowedBeforeBreaking;
+    private bool _useTimeout;
+    private TimeSpan _timeout;
 
     public CommandDecoratorBuilder<TCommand> WithCircuitBreaker(
         TimeSpan durationOfBreak,
@@ -50,6 +52,13 @@ public class CommandDecoratorBuilder<TCommand>(
     public CommandDecoratorBuilder<TCommand> WithHandshaking()
     {
         _useHandshaking = true;
+        return this;
+    }
+
+    public CommandDecoratorBuilder<TCommand> WithTimeout(TimeSpan timeout)
+    {
+        _useTimeout = true;
+        _timeout = timeout;
         return this;
     }
 
@@ -87,6 +96,14 @@ public class CommandDecoratorBuilder<TCommand>(
                 loggerFactory.CreateLogger<LoggingCommandHandlerDecorator<TCommand>>(),
                 _durationOfBreak,
                 _exceptionsAllowedBeforeBreaking);
+        }
+
+        if (_useTimeout)
+        {
+            _handler = new TimeoutCommandHandlerDecorator<TCommand>(
+                _handler,
+                loggerFactory.CreateLogger<TimeoutCommandHandlerDecorator<TCommand>>(),
+                _timeout);
         }
 
         return _handler;
