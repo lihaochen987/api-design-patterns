@@ -52,10 +52,11 @@ public class InventoryControllerActivator : BaseControllerActivator
                     new CreateInventoryHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new CreateInventoryController(

@@ -15,6 +15,7 @@ public class CommandDecoratorBuilder<TCommand>(
     private bool _useTransaction;
     private bool _useAudit;
     private bool _useLogging;
+    private bool _useHandshaking;
     private TimeSpan _durationOfBreak;
     private int _exceptionsAllowedBeforeBreaking;
 
@@ -46,6 +47,12 @@ public class CommandDecoratorBuilder<TCommand>(
         return this;
     }
 
+    public CommandDecoratorBuilder<TCommand> WithHandshaking()
+    {
+        _useHandshaking = true;
+        return this;
+    }
+
     public ICommandHandler<TCommand> Build()
     {
         if (_useAudit)
@@ -65,7 +72,15 @@ public class CommandDecoratorBuilder<TCommand>(
             _handler = new TransactionCommandHandlerDecorator<TCommand>(_handler, dbConnection);
         }
 
-        if (_useCircuitBreaker && _useTransaction)
+        if (_useHandshaking)
+        {
+            _handler = new HandshakingCommandHandlerDecorator<TCommand>(
+                _handler,
+                dbConnection,
+                loggerFactory.CreateLogger<HandshakingCommandHandlerDecorator<TCommand>>());
+        }
+
+        if (_useCircuitBreaker)
         {
             _handler = new CircuitBreakerCommandHandlerDecorator<TCommand>(
                 _handler,

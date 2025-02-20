@@ -69,10 +69,11 @@ public class ProductControllerActivator : BaseControllerActivator
                     new CreateProductHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             // CreateProductResponse handler
@@ -104,10 +105,11 @@ public class ProductControllerActivator : BaseControllerActivator
                     new DeleteProductHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             // GetProduct handler
@@ -187,10 +189,11 @@ public class ProductControllerActivator : BaseControllerActivator
                     new ReplaceProductHandler(repository, _mapper),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             // ReplaceProductResponse handler
@@ -231,10 +234,11 @@ public class ProductControllerActivator : BaseControllerActivator
                     new UpdateProductHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new UpdateProductController(getProductHandler, updateProductHandler, _mapper);

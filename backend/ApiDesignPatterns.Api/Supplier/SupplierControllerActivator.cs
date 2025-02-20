@@ -62,10 +62,11 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new CreateSupplierHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new CreateSupplierController(
@@ -95,10 +96,11 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new DeleteSupplierHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new DeleteSupplierController(
@@ -172,10 +174,11 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new ReplaceSupplierHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new ReplaceSupplierController(
@@ -206,10 +209,11 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new UpdateSupplierHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new UpdateSupplierController(

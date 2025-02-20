@@ -62,10 +62,11 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new CreateReviewHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new CreateReviewController(
@@ -95,10 +96,11 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new DeleteReviewHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new DeleteReviewController(
@@ -174,10 +176,11 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new ReplaceReviewHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new ReplaceReviewController(
@@ -208,10 +211,11 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new UpdateReviewHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new UpdateReviewController(

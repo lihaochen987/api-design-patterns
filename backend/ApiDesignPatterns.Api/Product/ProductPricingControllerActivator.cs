@@ -87,10 +87,11 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                     new UpdateProductPricingHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithAudit()
-                .WithLogging()
-                .WithTransaction()
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
                 .Build();
 
             return new UpdateProductPricingController(
