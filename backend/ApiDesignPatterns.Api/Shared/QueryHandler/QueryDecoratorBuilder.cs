@@ -19,6 +19,8 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     private bool _useHandshaking;
     private TimeSpan _durationOfBreak;
     private int _exceptionsAllowedBeforeBreaking;
+    private bool _useTimeout;
+    private TimeSpan _timeout;
 
     public QueryDecoratorBuilder<TQuery, TResult> WithTransaction()
     {
@@ -58,6 +60,13 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         return this;
     }
 
+    public QueryDecoratorBuilder<TQuery, TResult> WithTimeout(TimeSpan timeout)
+    {
+        _useTimeout = true;
+        _timeout = timeout;
+        return this;
+    }
+
     public IQueryHandler<TQuery, TResult> Build()
     {
         if (_useLogging)
@@ -84,6 +93,14 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
                 loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>(),
                 _durationOfBreak,
                 _exceptionsAllowedBeforeBreaking);
+        }
+
+        if (_useTimeout)
+        {
+            _handler = new TimeoutQueryHandlerDecorator<TQuery, TResult>(
+                _handler,
+                loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>(),
+                _timeout);
         }
 
         if (_useHandshaking && dbConnection != null)
