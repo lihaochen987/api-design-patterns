@@ -75,10 +75,11 @@ public class InventoryControllerActivator : BaseControllerActivator
                     new GetInventoryViewHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new GetInventoryController(

@@ -85,10 +85,11 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new GetSupplierHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // DeleteSupplier handler
@@ -119,10 +120,11 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new GetSupplierViewHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new GetSupplierController(
@@ -142,9 +144,10 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new ListSuppliersHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new ListSuppliersController(
@@ -163,10 +166,11 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new GetSupplierHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // ReplaceSupplier handler
@@ -198,10 +202,11 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new GetSupplierHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // UpdateSupplier handler

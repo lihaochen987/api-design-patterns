@@ -85,10 +85,11 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new GetReviewHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // DeleteReview handler
@@ -120,10 +121,11 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new GetReviewViewHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             return new GetReviewController(
@@ -143,11 +145,11 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new ListReviewsHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
-
 
             return new ListReviewsController(
                 listReviewsHandler,
@@ -165,10 +167,11 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new GetReviewHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // ReplaceReview handler
@@ -200,10 +203,11 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new GetReviewHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // UpdateReview handler

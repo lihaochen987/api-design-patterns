@@ -54,11 +54,13 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                     new GetProductPricingHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
+
             return new GetProductPricingController(
                 getProductPricingHandler,
                 _mapper,
@@ -76,10 +78,11 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                     new GetProductHandler(repository),
                     _loggerFactory,
                     dbConnection)
+                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithHandshaking()
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .Build();
 
             // UpdateProductPricing handler

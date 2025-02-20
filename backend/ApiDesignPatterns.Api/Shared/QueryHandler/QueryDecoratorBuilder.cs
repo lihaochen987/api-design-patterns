@@ -16,6 +16,7 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     private bool _useValidation;
     private bool _useLogging;
     private bool _useCircuitBreaker;
+    private bool _useHandshaking;
     private TimeSpan _durationOfBreak;
     private int _exceptionsAllowedBeforeBreaking;
 
@@ -51,6 +52,12 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         return this;
     }
 
+    public QueryDecoratorBuilder<TQuery, TResult> WithHandshaking()
+    {
+        _useHandshaking = true;
+        return this;
+    }
+
     public IQueryHandler<TQuery, TResult> Build()
     {
         if (_useLogging)
@@ -70,13 +77,21 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
             _handler = new TransactionQueryHandlerDecorator<TQuery, TResult>(_handler, dbConnection);
         }
 
-        if (_useCircuitBreaker && _useTransaction)
+        if (_useCircuitBreaker)
         {
             _handler = new CircuitBreakerQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
                 loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>(),
                 _durationOfBreak,
                 _exceptionsAllowedBeforeBreaking);
+        }
+
+        if (_useHandshaking && dbConnection != null)
+        {
+            _handler = new HandShakingQueryHandlerDecorator<TQuery, TResult>(
+                _handler,
+                dbConnection,
+                loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>());
         }
 
         return _handler;
