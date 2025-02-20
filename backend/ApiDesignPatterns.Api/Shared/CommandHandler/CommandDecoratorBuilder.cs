@@ -20,6 +20,9 @@ public class CommandDecoratorBuilder<TCommand>(
     private int _exceptionsAllowedBeforeBreaking;
     private bool _useTimeout;
     private TimeSpan _timeout;
+    private bool _useBulkhead;
+    private int _maxParallelization;
+    private int _maxQueuingActions;
 
     public CommandDecoratorBuilder<TCommand> WithCircuitBreaker(
         TimeSpan durationOfBreak,
@@ -59,6 +62,16 @@ public class CommandDecoratorBuilder<TCommand>(
     {
         _useTimeout = true;
         _timeout = timeout;
+        return this;
+    }
+
+    public CommandDecoratorBuilder<TCommand> WithBulkhead(
+        int maxParallelization,
+        int maxQueuingActions)
+    {
+        _useBulkhead = true;
+        _maxParallelization = maxParallelization;
+        _maxQueuingActions = maxQueuingActions;
         return this;
     }
 
@@ -104,6 +117,15 @@ public class CommandDecoratorBuilder<TCommand>(
                 _handler,
                 loggerFactory.CreateLogger<TimeoutCommandHandlerDecorator<TCommand>>(),
                 _timeout);
+        }
+
+        if (_useBulkhead)
+        {
+            _handler = new BulkheadCommandHandlerDecorator<TCommand>(
+                _handler,
+                loggerFactory.CreateLogger<BulkheadCommandHandlerDecorator<TCommand>>(),
+                _maxParallelization,
+                _maxQueuingActions);
         }
 
         return _handler;

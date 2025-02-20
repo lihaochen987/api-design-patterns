@@ -95,6 +95,7 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
                 .WithHandshaking()
                 .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
