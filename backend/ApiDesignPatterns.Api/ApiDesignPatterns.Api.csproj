@@ -400,6 +400,8 @@
     <Compile Update="Inventory\Tests\ControllerTests\GetInventoryControllerTestBase.cs">
       <DependentUpon>GetInventoryControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Remove="Shared\Resilience\ServiceResilienceSettings.cs" />
+    <Compile Remove="Shared\Resilience\ResilienceProfile.cs" />
   </ItemGroup>
 
   <ItemGroup>

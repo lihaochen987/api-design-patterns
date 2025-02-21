@@ -69,9 +69,9 @@ public class ProductControllerActivator : BaseControllerActivator
                     new CreateProductHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -84,9 +84,9 @@ public class ProductControllerActivator : BaseControllerActivator
                         new CreateProductResponseHandler(_mapper),
                         _loggerFactory,
                         null)
-                    .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                     .WithHandshaking()
-                    .WithTimeout(TimeSpan.FromSeconds(5))
+                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                     .WithLogging()
                     .WithValidation()
                     .WithTransaction()
@@ -109,9 +109,9 @@ public class ProductControllerActivator : BaseControllerActivator
                     new DeleteProductHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -123,9 +123,9 @@ public class ProductControllerActivator : BaseControllerActivator
                     new GetProductHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -145,9 +145,9 @@ public class ProductControllerActivator : BaseControllerActivator
                     new GetProductResponseHandler(repository, _mapper),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -169,9 +169,9 @@ public class ProductControllerActivator : BaseControllerActivator
                     new ListProductsHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithTransaction()
                 .Build();
@@ -190,9 +190,9 @@ public class ProductControllerActivator : BaseControllerActivator
                     new GetProductHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -203,9 +203,9 @@ public class ProductControllerActivator : BaseControllerActivator
                     new ReplaceProductHandler(repository, _mapper),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -218,9 +218,9 @@ public class ProductControllerActivator : BaseControllerActivator
                         new ReplaceProductResponseHandler(_mapper),
                         _loggerFactory,
                         dbConnection)
-                    .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                     .WithHandshaking()
-                    .WithTimeout(TimeSpan.FromSeconds(5))
+                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                     .WithLogging()
                     .WithValidation()
                     .WithTransaction()
@@ -243,9 +243,9 @@ public class ProductControllerActivator : BaseControllerActivator
                     new GetProductHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -256,9 +256,9 @@ public class ProductControllerActivator : BaseControllerActivator
                     new UpdateProductHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -279,9 +279,9 @@ public class ProductControllerActivator : BaseControllerActivator
                     new GetProductResponseHandler(repository, _mapper),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()

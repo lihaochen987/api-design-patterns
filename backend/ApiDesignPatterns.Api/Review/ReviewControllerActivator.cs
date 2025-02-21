@@ -62,9 +62,9 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new CreateReviewHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -87,9 +87,9 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new GetReviewHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -100,9 +100,9 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new DeleteReviewHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -126,9 +126,9 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new GetReviewViewHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -151,9 +151,9 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new ListReviewsHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithTransaction()
                 .Build();
@@ -174,9 +174,9 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new GetReviewHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -187,9 +187,9 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new ReplaceReviewHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -213,9 +213,9 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new GetReviewHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -226,9 +226,9 @@ public class ReviewControllerActivator : BaseControllerActivator
                     new UpdateReviewHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()

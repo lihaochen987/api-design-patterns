@@ -9,6 +9,7 @@ using backend.Inventory.InfrastructureLayer.Database.Inventory;
 using backend.Inventory.InfrastructureLayer.Database.InventoryView;
 using backend.Inventory.InventoryControllers;
 using backend.Inventory.Services;
+using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -52,9 +53,9 @@ public class InventoryControllerActivator : BaseControllerActivator
                     new CreateInventoryHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -77,9 +78,9 @@ public class InventoryControllerActivator : BaseControllerActivator
                     new GetInventoryViewHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()

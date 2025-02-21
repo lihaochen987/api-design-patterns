@@ -11,6 +11,7 @@ using backend.Product.InfrastructureLayer.Database.ProductPricing;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
+using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -54,9 +55,9 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                     new GetProductPricingHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -79,9 +80,9 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                     new GetProductHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -92,9 +93,9 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                     new UpdateProductPricingHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()

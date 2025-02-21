@@ -45,7 +45,8 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         return this;
     }
 
-    public QueryDecoratorBuilder<TQuery, TResult> WithCircuitBreaker(TimeSpan durationOfBreak,
+    public QueryDecoratorBuilder<TQuery, TResult> WithCircuitBreaker(
+        TimeSpan durationOfBreak,
         int exceptionsAllowedBeforeBreaking)
     {
         _useCircuitBreaker = true;

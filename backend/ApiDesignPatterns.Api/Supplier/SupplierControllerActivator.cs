@@ -62,9 +62,9 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new CreateSupplierHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -87,9 +87,9 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new GetSupplierHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -100,9 +100,9 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new DeleteSupplierHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -125,9 +125,9 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new GetSupplierViewHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -150,9 +150,9 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new ListSuppliersHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithTransaction()
                 .Build();
@@ -173,9 +173,9 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new GetSupplierHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -186,9 +186,9 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new ReplaceSupplierHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
@@ -212,9 +212,9 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new GetSupplierHandler(repository),
                     _loggerFactory,
                     dbConnection)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -225,9 +225,9 @@ public class SupplierControllerActivator : BaseControllerActivator
                     new UpdateSupplierHandler(repository),
                     dbConnection,
                     _loggerFactory)
-                .WithCircuitBreaker(TimeSpan.FromSeconds(30), 3)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
-                .WithTimeout(TimeSpan.FromSeconds(5))
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(100, 500)
                 .WithLogging()
                 .WithAudit()
