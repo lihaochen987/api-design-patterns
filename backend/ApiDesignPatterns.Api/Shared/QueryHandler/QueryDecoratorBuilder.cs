@@ -21,6 +21,9 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     private int _exceptionsAllowedBeforeBreaking;
     private bool _useTimeout;
     private TimeSpan _timeout;
+    private bool _useBulkhead;
+    private int _maxParallelization;
+    private int _maxQueuingActions;
 
     public QueryDecoratorBuilder<TQuery, TResult> WithTransaction()
     {
@@ -68,6 +71,16 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         return this;
     }
 
+    public QueryDecoratorBuilder<TQuery, TResult> WithBulkhead(
+        int maxParallelization,
+        int maxQueuingActions)
+    {
+        _useBulkhead = true;
+        _maxParallelization = maxParallelization;
+        _maxQueuingActions = maxQueuingActions;
+        return this;
+    }
+
     public IQueryHandler<TQuery, TResult> Build()
     {
         if (_useLogging)
@@ -110,6 +123,15 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
                 _handler,
                 dbConnection,
                 loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>());
+        }
+
+        if (_useBulkhead)
+        {
+            _handler = new BulkheadQueryHandlerDecorator<TQuery, TResult>(
+                _handler,
+                loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>(),
+                _maxParallelization,
+                _maxQueuingActions);
         }
 
         return _handler;
