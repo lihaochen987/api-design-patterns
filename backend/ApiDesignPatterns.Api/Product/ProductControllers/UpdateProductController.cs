@@ -2,7 +2,6 @@ using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.DomainModels;
-using backend.Product.DomainModels.Enums;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -36,11 +35,13 @@ public class UpdateProductController(
 
         await updateProduct.Handle(new UpdateProductCommand { Request = request, Product = product });
 
-        return product switch
+        DomainModels.Product? updatedProduct = await getProduct.Handle(new GetProductQuery { Id = id });
+
+        return updatedProduct switch
         {
-            PetFood => Ok(mapper.Map<UpdatePetFoodResponse>(product)),
-            GroomingAndHygiene => Ok(mapper.Map<UpdateGroomingAndHygieneResponse>(product)),
-            _ => Ok(mapper.Map<UpdateProductResponse>(product))
+            PetFood => Ok(mapper.Map<UpdatePetFoodResponse>(updatedProduct)),
+            GroomingAndHygiene => Ok(mapper.Map<UpdateGroomingAndHygieneResponse>(updatedProduct)),
+            _ => Ok(mapper.Map<UpdateProductResponse>(updatedProduct))
         };
     }
 }
