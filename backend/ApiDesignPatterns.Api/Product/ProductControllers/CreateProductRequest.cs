@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using backend.Product.DomainModels.ValueObjects;
+using backend.Shared.Caching;
 
 namespace backend.Product.ProductControllers;
 
-public record CreateProductRequest
+public record CreateProductRequest : ICachedCommand
 {
+    public string? RequestId { get; init; }
     [Required] public required string Name { get; init; }
     [Required] public required ProductPricingRequest Pricing { get; init; }
     [Required] public required string Category { get; init; }

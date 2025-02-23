@@ -15,7 +15,7 @@ using Npgsql;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Allow CORS to frontend application
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -24,7 +24,12 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });
 
-builder.Services.AddMassTransit(ConfigureMessageQueue<GetProductRequest, GetProductResponse>);
+// Add caching
+builder.Services.AddMemoryCache(options =>
+{
+    options.SizeLimit = 1024;
+    options.CompactionPercentage = 0.1;
+});
 
 var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 {
