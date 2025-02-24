@@ -24,31 +24,47 @@ public class LoggingQueryHandlerDecorator<TQuery, TResult>(
         try
         {
             string commandDetails = JsonConvert.SerializeObject(query, Formatting.Indented);
-            logger.LogInformation(
-                "Executing query: {Operation} with data: {CommandDetails}",
-                operation,
-                commandDetails);
+            LogQueryExecution(operation, commandDetails);
 
             TResult? result = await queryHandler.Handle(query);
 
             stopwatch.Stop();
-            string queryResult = JsonConvert.SerializeObject(result, Formatting.Indented);
-            logger.LogInformation(
-                "Successfully executed query: {Operation} with data: {commandResult} in {ElapsedMilliseconds}ms",
-                operation,
-                queryResult,
-                stopwatch.ElapsedMilliseconds);
+            LogSuccessfulExecution(operation, result, stopwatch.ElapsedMilliseconds);
+
             return result;
         }
         catch (Exception ex)
         {
             stopwatch.Stop();
-            logger.LogError(
-                ex,
-                "Error while executing query: {Operation} after {ElapsedMilliseconds}ms",
-                operation,
-                stopwatch.ElapsedMilliseconds);
+            LogFailedExecution(ex, operation, stopwatch.ElapsedMilliseconds);
             throw;
         }
+    }
+
+    private void LogQueryExecution(string operation, string commandDetails)
+    {
+        logger.LogInformation(
+            "Executing query: {Operation} with data: {CommandDetails}",
+            operation,
+            commandDetails);
+    }
+
+    private void LogSuccessfulExecution(string operation, TResult? result, long elapsedMilliseconds)
+    {
+        string queryResult = JsonConvert.SerializeObject(result, Formatting.Indented);
+        logger.LogInformation(
+            "Successfully executed query: {Operation} with data: {commandResult} in {ElapsedMilliseconds}ms",
+            operation,
+            queryResult,
+            elapsedMilliseconds);
+    }
+
+    private void LogFailedExecution(Exception ex, string operation, long elapsedMilliseconds)
+    {
+        logger.LogError(
+            ex,
+            "Error while executing query: {Operation} after {ElapsedMilliseconds}ms",
+            operation,
+            elapsedMilliseconds);
     }
 }

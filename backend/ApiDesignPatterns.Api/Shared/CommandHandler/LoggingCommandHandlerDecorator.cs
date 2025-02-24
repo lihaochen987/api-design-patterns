@@ -24,26 +24,43 @@ public class LoggingCommandHandlerDecorator<TCommand>(
         try
         {
             string commandDetails = JsonConvert.SerializeObject(command, Formatting.Indented);
-            logger.LogInformation("Executing command: {Operation} with data: {CommandDetails}", operation,
-                commandDetails);
+            LogCommandExecution(operation, commandDetails);
 
             await commandHandler.Handle(command);
 
             stopwatch.Stop();
-            logger.LogInformation(
-                "Successfully executed command: {Operation} in {ElapsedMilliseconds}ms",
-                operation,
-                stopwatch.ElapsedMilliseconds);
+            LogSuccessfulExecution(operation, stopwatch.ElapsedMilliseconds);
         }
         catch (Exception ex)
         {
             stopwatch.Stop();
-            logger.LogError(
-                ex,
-                "Error while executing command: {Operation} after {ElapsedMilliseconds}ms",
-                operation,
-                stopwatch.ElapsedMilliseconds);
+            LogFailedExecution(ex, operation, stopwatch.ElapsedMilliseconds);
             throw;
         }
+    }
+
+    private void LogCommandExecution(string operation, string commandDetails)
+    {
+        logger.LogInformation(
+            "Executing command: {Operation} with data: {CommandDetails}",
+            operation,
+            commandDetails);
+    }
+
+    private void LogSuccessfulExecution(string operation, long elapsedMilliseconds)
+    {
+        logger.LogInformation(
+            "Successfully executed command: {Operation} in {ElapsedMilliseconds}ms",
+            operation,
+            elapsedMilliseconds);
+    }
+
+    private void LogFailedExecution(Exception ex, string operation, long elapsedMilliseconds)
+    {
+        logger.LogError(
+            ex,
+            "Error while executing command: {Operation} after {ElapsedMilliseconds}ms",
+            operation,
+            elapsedMilliseconds);
     }
 }
