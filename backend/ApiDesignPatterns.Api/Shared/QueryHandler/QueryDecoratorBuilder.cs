@@ -2,13 +2,16 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Data;
+using backend.Shared.Caching;
+using StackExchange.Redis;
 
 namespace backend.Shared.QueryHandler;
 
 public class QueryDecoratorBuilder<TQuery, TResult>(
     IQueryHandler<TQuery, TResult> handler,
     ILoggerFactory loggerFactory,
-    IDbConnection? dbConnection)
+    IDbConnection? dbConnection,
+    IDatabase? redisCache)
     where TQuery : IQuery<TResult> where TResult : class
 {
     private IQueryHandler<TQuery, TResult> _handler = handler;
@@ -24,6 +27,8 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     private bool _useBulkhead;
     private int _maxParallelization;
     private int _maxQueuingActions;
+    private bool _useRedisCache;
+    private CacheStalenessOptions? _cacheStalenessOptions;
 
     public QueryDecoratorBuilder<TQuery, TResult> WithTransaction()
     {
@@ -81,6 +86,13 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         return this;
     }
 
+    public QueryDecoratorBuilder<TQuery, TResult> WithRedisCache(CacheStalenessOptions cacheStalenessOptions)
+    {
+        _useRedisCache = true;
+        _cacheStalenessOptions = cacheStalenessOptions;
+        return this;
+    }
+
     public IQueryHandler<TQuery, TResult> Build()
     {
         if (_useLogging)
@@ -104,7 +116,7 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         {
             _handler = new CircuitBreakerQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
-                loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>(),
+                loggerFactory.CreateLogger<CircuitBreakerQueryHandlerDecorator<TQuery, TResult>>(),
                 _durationOfBreak,
                 _exceptionsAllowedBeforeBreaking);
         }
@@ -113,7 +125,7 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         {
             _handler = new TimeoutQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
-                loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>(),
+                loggerFactory.CreateLogger<TimeoutQueryHandlerDecorator<TQuery, TResult>>(),
                 _timeout);
         }
 
@@ -122,16 +134,37 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
             _handler = new HandShakingQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
                 dbConnection,
-                loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>());
+                loggerFactory.CreateLogger<HandShakingQueryHandlerDecorator<TQuery, TResult>>());
         }
 
         if (_useBulkhead)
         {
             _handler = new BulkheadQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
-                loggerFactory.CreateLogger<LoggingQueryHandlerDecorator<TQuery, TResult>>(),
+                loggerFactory.CreateLogger<BulkheadQueryHandlerDecorator<TQuery, TResult>>(),
                 _maxParallelization,
                 _maxQueuingActions);
+        }
+
+        if (_useRedisCache)
+        {
+            if (redisCache == null)
+            {
+                throw new InvalidOperationException("Redis connection is required for RedisCachingQuery decorator");
+            }
+
+            if (_cacheStalenessOptions == null)
+            {
+                throw new InvalidOperationException(
+                    "Cache staleness options is required for RedisCachingQuery decorator");
+            }
+
+            _handler = new RedisCacheQueryHandlerDecorator<TQuery, TResult>(
+                _handler,
+                redisCache,
+                loggerFactory.CreateLogger<RedisCacheQueryHandlerDecorator<TQuery, TResult>>(),
+                _cacheStalenessOptions
+            );
         }
 
         return _handler;

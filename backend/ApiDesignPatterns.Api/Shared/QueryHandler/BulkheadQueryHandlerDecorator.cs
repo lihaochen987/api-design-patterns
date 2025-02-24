@@ -8,7 +8,7 @@ namespace backend.Shared.QueryHandler;
 
 public class BulkheadQueryHandlerDecorator<TQuery, TResult>(
     IQueryHandler<TQuery, TResult> queryHandler,
-    ILogger<LoggingQueryHandlerDecorator<TQuery, TResult>> logger,
+    ILogger<BulkheadQueryHandlerDecorator<TQuery, TResult>> logger,
     int maxParallelization,
     int maxQueuingActions)
     : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>

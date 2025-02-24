@@ -8,7 +8,7 @@ namespace backend.Shared.QueryHandler;
 
 public class TimeoutQueryHandlerDecorator<TQuery, TResult>(
     IQueryHandler<TQuery, TResult> queryHandler,
-    ILogger<LoggingQueryHandlerDecorator<TQuery, TResult>> logger,
+    ILogger<TimeoutQueryHandlerDecorator<TQuery, TResult>> logger,
     TimeSpan timeout)
     : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {

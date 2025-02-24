@@ -5,15 +5,15 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using backend.Shared.Caching;
-using Microsoft.Extensions.Caching.Memory;
+using StackExchange.Redis;
 
 namespace backend.Shared.CommandHandler;
 
-public class CacheCommandHandlerDecorator<TCommand>(
+public class RedisCacheCommandHandlerDecorator<TCommand>(
     ICommandHandler<TCommand> commandHandler,
-    IMemoryCache cache,
+    IDatabase redisCache,
     TimeSpan cacheExpiration,
-    ILogger<CacheCommandHandlerDecorator<TCommand>> logger)
+    ILogger<RedisCacheCommandHandlerDecorator<TCommand>> logger)
     : ICommandHandler<TCommand> where TCommand : ICachedCommand
 {
     public async Task Handle(TCommand command)
@@ -27,32 +27,55 @@ public class CacheCommandHandlerDecorator<TCommand>(
         string requestHash = CalculateHash(command);
         string cacheKey = $"command:{command.RequestId}";
 
-        if (cache.TryGetValue<CachedResponse<object>>(cacheKey, out var cachedResponse))
+        redisCache.CreateTransaction();
+
+        var existingValue = await redisCache.StringGetAsync(cacheKey);
+        if (existingValue.HasValue)
         {
+            var cachedResponse = JsonSerializer.Deserialize<CachedResponse<object>>(existingValue.ToString());
             if (cachedResponse?.RequestHash != requestHash)
             {
                 logger.LogWarning("Request ID collision detected for command {CommandType}", typeof(TCommand).Name);
                 throw new RequestIdCollisionException("Request ID collision detected");
             }
 
-            var refreshedResponse = cachedResponse with { LastAccessed = DateTime.UtcNow };
-            var options = new MemoryCacheEntryOptions().SetSlidingExpiration(cacheExpiration);
-            cache.Set(cacheKey, refreshedResponse, options);
-
-            logger.LogInformation("Skipping duplicate command execution for {CommandType}", typeof(TCommand).Name);
-            return;
+            await RefreshCacheEntry(cacheKey, cachedResponse);
         }
 
         await commandHandler.Handle(command);
 
+        await CacheCommandResponse(cacheKey, requestHash);
+    }
+
+    private async Task RefreshCacheEntry(string cacheKey, CachedResponse<object> cachedResponse)
+    {
+        var refreshedResponse = cachedResponse with { LastAccessed = DateTime.UtcNow };
+        var transaction = redisCache.CreateTransaction();
+
+        _ = transaction.StringSetAsync(
+            cacheKey,
+            JsonSerializer.Serialize(refreshedResponse),
+            cacheExpiration
+        );
+
+        if (await transaction.ExecuteAsync())
+        {
+            logger.LogInformation("Skipping duplicate command execution for {CommandType}", typeof(TCommand).Name);
+        }
+    }
+
+    private async Task CacheCommandResponse(string cacheKey, string requestHash)
+    {
         var responseToCache = new CachedResponse<object>
         {
             Response = null, RequestHash = requestHash, LastAccessed = DateTime.UtcNow
         };
 
-        var cacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(cacheExpiration);
-
-        cache.Set(cacheKey, responseToCache, cacheOptions);
+        await redisCache.StringSetAsync(
+            cacheKey,
+            JsonSerializer.Serialize(responseToCache),
+            cacheExpiration
+        );
     }
 
     private static string CalculateHash(TCommand command)

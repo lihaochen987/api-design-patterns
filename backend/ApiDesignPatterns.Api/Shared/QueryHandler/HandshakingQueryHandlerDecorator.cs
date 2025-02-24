@@ -9,7 +9,7 @@ namespace backend.Shared.QueryHandler;
 public class HandShakingQueryHandlerDecorator<TQuery, TResult>(
     IQueryHandler<TQuery, TResult> queryHandler,
     IDbConnection dbConnection,
-    ILogger<LoggingQueryHandlerDecorator<TQuery, TResult>> logger)
+    ILogger<HandShakingQueryHandlerDecorator<TQuery, TResult>> logger)
     : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {
 

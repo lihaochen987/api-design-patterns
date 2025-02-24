@@ -6,6 +6,7 @@ using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
+using backend.Shared.Infrastructure;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
 using backend.Supplier.ApplicationLayer.Commands.DeleteSupplier;
@@ -20,6 +21,7 @@ using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 using backend.Supplier.Services;
 using backend.Supplier.SupplierControllers;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
 namespace backend.Supplier;
 
@@ -30,6 +32,7 @@ public class SupplierControllerActivator : BaseControllerActivator
     private readonly ILoggerFactory _loggerFactory;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
 
     public SupplierControllerActivator(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration)
     {
@@ -45,6 +48,8 @@ public class SupplierControllerActivator : BaseControllerActivator
 
         var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<SupplierMappingProfile>(); });
         _mapper = mapperConfig.CreateMapper();
+
+        _configuration = configuration;
     }
 
     public override object? Create(ControllerContext context)
@@ -86,7 +91,8 @@ public class SupplierControllerActivator : BaseControllerActivator
             var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
                     new GetSupplierHandler(repository),
                     _loggerFactory,
-                    dbConnection)
+                    dbConnection,
+                    null)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -125,7 +131,8 @@ public class SupplierControllerActivator : BaseControllerActivator
             var getSupplierViewHandler = new QueryDecoratorBuilder<GetSupplierViewQuery, SupplierView>(
                     new GetSupplierViewHandler(repository),
                     _loggerFactory,
-                    dbConnection)
+                    dbConnection,
+                    null)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -146,12 +153,14 @@ public class SupplierControllerActivator : BaseControllerActivator
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierQueryService);
+            IDatabase redisCache = new RedisService(_configuration).GetDatabase();
 
             // ListSuppliers query handler
             var listSuppliersHandler = new QueryDecoratorBuilder<ListSuppliersQuery, PagedSuppliers>(
                     new ListSuppliersHandler(repository),
                     _loggerFactory,
-                    dbConnection)
+                    dbConnection,
+                    redisCache)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -175,7 +184,8 @@ public class SupplierControllerActivator : BaseControllerActivator
             var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
                     new GetSupplierHandler(repository),
                     _loggerFactory,
-                    dbConnection)
+                    dbConnection,
+                    null)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -215,7 +225,8 @@ public class SupplierControllerActivator : BaseControllerActivator
             var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
                     new GetSupplierHandler(repository),
                     _loggerFactory,
-                    dbConnection)
+                    dbConnection,
+                    null)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))

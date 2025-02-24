@@ -8,7 +8,7 @@ namespace backend.Shared.QueryHandler;
 
 public class CircuitBreakerQueryHandlerDecorator<TQuery, TResult>(
     IQueryHandler<TQuery, TResult> queryHandler,
-    ILogger<LoggingQueryHandlerDecorator<TQuery, TResult>> logger,
+    ILogger<CircuitBreakerQueryHandlerDecorator<TQuery, TResult>> logger,
     TimeSpan durationOfBreak,
     int exceptionsAllowedBeforeBreaking)
     : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
