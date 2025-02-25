@@ -29,7 +29,20 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
 
             if (!cached.HasValue)
             {
-                return await SetValue(query, cacheKey);
+                var result = await queryHandler.Handle(query);
+
+                try
+                {
+                    string serialized = JsonSerializer.Serialize(result);
+                    TimeSpan ttlWithJitter = JitterUtility.AddJitter(stalenessOptions.Ttl);
+                    await redisCache.StringSetAsync(cacheKey, serialized, ttlWithJitter);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Error caching query result");
+                }
+
+                return result;
             }
 
             var cachedResult = JsonSerializer.Deserialize<TResult>(cached!);
@@ -96,7 +109,16 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
                         }
                     }
 
-                    await SetValue(query, cacheKey, freshResult);
+                    try
+                    {
+                        string serialized = JsonSerializer.Serialize(freshResult);
+                        TimeSpan ttlWithJitter = JitterUtility.AddJitter(stalenessOptions.Ttl);
+                        await redisCache.StringSetAsync(cacheKey, serialized, ttlWithJitter);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "Error caching query result");
+                    }
                 }
 
                 batch.Execute();
@@ -113,24 +135,6 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
             logger.LogError(ex, "Error accessing cache for query {QueryType}", typeof(TQuery).Name);
             return await queryHandler.Handle(query);
         }
-    }
-
-    private async Task<TResult?> SetValue(TQuery query, string cacheKey, TResult? result = default)
-    {
-        result ??= await queryHandler.Handle(query);
-
-        try
-        {
-            string serialized = JsonSerializer.Serialize(result);
-            TimeSpan ttlWithJitter = JitterUtility.AddJitter(stalenessOptions.Ttl);
-            await redisCache.StringSetAsync(cacheKey, serialized, ttlWithJitter);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error caching query result");
-        }
-
-        return result;
     }
 
     private static bool ResultsEqual(TResult? a, TResult? b)
