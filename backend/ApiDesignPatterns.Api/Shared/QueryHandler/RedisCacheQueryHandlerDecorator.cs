@@ -19,9 +19,7 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
     public async Task<TResult?> Handle(TQuery query)
     {
         Random random = new();
-        string queryType = typeof(TQuery).Name;
-        string queryHash = JsonSerializer.Serialize(query);
-        string cacheKey = $"query:{queryType}:{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(queryHash))}";
+        string cacheKey = GenerateCacheKey(query);
 
         try
         {
@@ -66,47 +64,23 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
 
                     // Get current stats and calculate rate
                     HashEntry[] stats = await redisCache.HashGetAllAsync(StatsKey);
-                    long total = stats.FirstOrDefault(x => x.Name == "total_checks").Value.TryParse(out long t)
+                    long totalChecks = stats.FirstOrDefault(x => x.Name == "total_checks").Value.TryParse(out long t)
                         ? t
                         : 0;
-                    long stale = stats.FirstOrDefault(x => x.Name == "stale_hits").Value.TryParse(out long s)
+                    long staleHits = stats.FirstOrDefault(x => x.Name == "stale_hits").Value.TryParse(out long s)
                         ? s
                         : 0;
 
-                    if (total >= 100) // Only start warning after we have enough samples
+                    if (totalChecks >= 100) // Only start warning after we have enough samples
                     {
-                        double staleRate = (double)stale / total;
-                        double stalePercentage = staleRate * 100;
-
-                        if (staleRate > stalenessOptions.MaxAcceptableRate)
-                        {
-                            logger.LogWarning(
-                                "High stale rate detected for {QueryType}. Current rate: {StaleRate}% exceeds maximum acceptable {MaxRate}%. " +
-                                "Consider decreasing TTL by 50% (current TTL: {CurrentTTL})",
-                                typeof(TQuery).Name,
-                                stalePercentage.ToString("F2"),
-                                (stalenessOptions.MaxAcceptableRate * 100).ToString("F2"),
-                                stalenessOptions.Ttl.TotalMinutes);
-                        }
-                        else if (staleRate < stalenessOptions.MinAcceptableRate)
-                        {
-                            logger.LogWarning(
-                                "Low stale rate detected for {QueryType}. Current rate: {StaleRate}% below minimum threshold {MinRate}%. " +
-                                "Consider increasing TTL by 25% (current TTL: {CurrentTTL})",
-                                typeof(TQuery).Name,
-                                stalePercentage.ToString("F2"),
-                                (stalenessOptions.MinAcceptableRate * 100).ToString("F2"),
-                                stalenessOptions.Ttl.TotalMinutes);
-                        }
-                        else
-                        {
-                            logger.LogInformation(
-                                "Stale data detected for {QueryType}. Current rate: {StaleRate}% (within acceptable range of {MinRate}% - {MaxRate}%)",
-                                typeof(TQuery).Name,
-                                stalePercentage.ToString("F2"),
-                                (stalenessOptions.MinAcceptableRate * 100).ToString("F2"),
-                                (stalenessOptions.MaxAcceptableRate * 100).ToString("F2"));
-                        }
+                        LogStalenessStatistics(
+                            typeof(TQuery).Name,
+                            new StalenessRates(
+                                stalenessOptions.MinAcceptableRate,
+                                stalenessOptions.MaxAcceptableRate,
+                                (double)staleHits / totalChecks),
+                            stalenessOptions.Ttl,
+                            logger);
                     }
 
                     try
@@ -135,6 +109,84 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
             logger.LogError(ex, "Error accessing cache for query {QueryType}", typeof(TQuery).Name);
             return await queryHandler.Handle(query);
         }
+    }
+
+    private record StalenessRates(
+        double MinAcceptableRate,
+        double MaxAcceptableRate,
+        double Rate)
+    {
+        public double Percentage => Rate * 100;
+    }
+
+    private static void LogStalenessStatistics(
+        string queryTypeName,
+        StalenessRates stalenessRates,
+        TimeSpan ttl,
+        ILogger logger)
+    {
+        if (stalenessRates.Rate > stalenessRates.MaxAcceptableRate)
+        {
+            LogHighStalenessRate(queryTypeName, stalenessRates, ttl, logger);
+        }
+        else if (stalenessRates.Rate < stalenessRates.MinAcceptableRate)
+        {
+            LogLowStalenessRate(queryTypeName, stalenessRates, ttl, logger);
+        }
+        else
+        {
+            LogAcceptableStalenessRate(queryTypeName, stalenessRates, logger);
+        }
+    }
+
+    private static void LogHighStalenessRate(
+        string queryTypeName,
+        StalenessRates stalenessRates,
+        TimeSpan ttl,
+        ILogger logger)
+    {
+        logger.LogWarning(
+            "High stale rate detected for {QueryType}. Current rate: {StaleRate}% exceeds maximum acceptable {MaxRate}%. " +
+            "Consider decreasing TTL by 50% (current TTL: {CurrentTTL})",
+            queryTypeName,
+            stalenessRates.Percentage.ToString("F2"),
+            (stalenessRates.MaxAcceptableRate * 100).ToString("F2"),
+            ttl.TotalMinutes);
+    }
+
+    private static void LogLowStalenessRate(
+        string queryTypeName,
+        StalenessRates stalenessRates,
+        TimeSpan ttl,
+        ILogger logger)
+    {
+        logger.LogWarning(
+            "Low stale rate detected for {QueryType}. Current rate: {StaleRate}% below minimum threshold {MinRate}%. " +
+            "Consider increasing TTL by 25% (current TTL: {CurrentTTL})",
+            queryTypeName,
+            stalenessRates.Percentage.ToString("F2"),
+            (stalenessRates.MinAcceptableRate * 100).ToString("F2"),
+            ttl.TotalMinutes);
+    }
+
+    private static void LogAcceptableStalenessRate(
+        string queryTypeName,
+        StalenessRates stalenessRates,
+        ILogger logger)
+    {
+        logger.LogInformation(
+            "Stale data detected for {QueryType}. Current rate: {StaleRate}% (within acceptable range of {MinRate}% - {MaxRate}%)",
+            queryTypeName,
+            stalenessRates.Percentage.ToString("F2"),
+            (stalenessRates.MinAcceptableRate * 100).ToString("F2"),
+            (stalenessRates.MaxAcceptableRate * 100).ToString("F2"));
+    }
+
+    private static string GenerateCacheKey(TQuery query)
+    {
+        string queryType = typeof(TQuery).Name;
+        string queryHash = JsonSerializer.Serialize(query);
+        return $"query:{queryType}:{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(queryHash))}";
     }
 
     private static bool ResultsEqual(TResult? a, TResult? b)
