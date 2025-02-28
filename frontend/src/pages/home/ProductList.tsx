@@ -1,7 +1,7 @@
 import { components } from "../../shared/types";
 import { $api } from "../../shared/fetch-client.ts";
 import {PetFoodCard} from "./cards/PetFoodCard.tsx";
-import {GroomingCard} from "./cards/GroomingAndHygieneCard.tsx";
+import {GroomingAndHygieneCard} from "./cards/GroomingAndHygieneCard.tsx";
 import {DefaultProductCard} from "./cards/DefaultProductCard.tsx";
 import {ProductListContainer} from "./ProductList.styles.ts";
 
@@ -20,7 +20,7 @@ export const ProductList = () => {
             case "PetFood":
                 return <PetFoodCard product={product as components["schemas"]["GetPetFoodResponse"]} />;
             case "GroomingAndHygiene":
-                return <GroomingCard product={product as components["schemas"]["GetGroomingAndHygieneResponse"]} />;
+                return <GroomingAndHygieneCard product={product as components["schemas"]["GetGroomingAndHygieneResponse"]} />;
             default:
                 return <DefaultProductCard product={product} />;
         }

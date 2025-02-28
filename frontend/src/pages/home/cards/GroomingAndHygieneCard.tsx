@@ -12,7 +12,7 @@ interface GroomingCardProps {
     product: components["schemas"]["GetGroomingAndHygieneResponse"];
 }
 
-export const GroomingCard = ({product}: GroomingCardProps) => {
+export const GroomingAndHygieneCard = ({product}: GroomingCardProps) => {
     return (
         <ProductCard variant="grooming">
             <ProductHeader>
