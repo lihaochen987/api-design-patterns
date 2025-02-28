@@ -1,7 +1,9 @@
-import React from "react";
-import {$api} from "@repo/product-data-access/api";
-import {components} from "@repo/api-types";
-import {PetProductItem} from "./PetProductItem/pet-product-item.tsx";
+import {components} from "./shared/types";
+import {$api} from "./shared/fetch-client.ts";
+
+export interface PetProductItemProps {
+    product: components["schemas"]["GetPetFoodResponse"]
+}
 
 export const ProductList = () => {
     const {data, isLoading} = $api.useQuery("get", "/products");
@@ -29,7 +31,7 @@ export const ProductList = () => {
         switch (product.category) {
             case "PetFood":
                 if (isPetFoodResponse(product)) {
-                    return (<PetProductItem product={product}/>)
+                    return (<div>{product.name}</div>)
                 }
                 break;
             case "GroomingAndHygiene":

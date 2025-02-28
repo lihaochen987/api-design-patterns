@@ -1,5 +1,4 @@
-import React from 'react';
-import {ProductList} from "./ProductList/product-list.tsx";
+import {ProductList} from "./product-list.tsx";
 
 function App() {
     return (
