@@ -4,6 +4,61 @@
  */
 
 export interface paths {
+    "/inventory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Associate Inventory between a Supplier and a Product */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateInventoryRequest"];
+                    "text/json": components["schemas"]["CreateInventoryRequest"];
+                    "application/*+json": components["schemas"]["CreateInventoryRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["CreateInventoryResponse"];
+                        "application/json": components["schemas"]["CreateInventoryResponse"];
+                        "text/json": components["schemas"]["CreateInventoryResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/product": {
         parameters: {
             query?: never;
@@ -35,9 +90,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["CreateProductResponse"];
-                        "application/json": components["schemas"]["CreateProductResponse"];
-                        "text/json": components["schemas"]["CreateProductResponse"];
+                        "text/plain": components["schemas"]["CreateProductResponse"] | components["schemas"]["CreateGroomingAndHygieneResponse"] | components["schemas"]["CreatePetFoodResponse"];
+                        "application/json": components["schemas"]["CreateProductResponse"] | components["schemas"]["CreateGroomingAndHygieneResponse"] | components["schemas"]["CreatePetFoodResponse"];
+                        "text/json": components["schemas"]["CreateProductResponse"] | components["schemas"]["CreateGroomingAndHygieneResponse"] | components["schemas"]["CreatePetFoodResponse"];
                     };
                 };
                 /** @description Not Found */
@@ -46,9 +101,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -59,7 +114,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/review": {
+    "/{productId}/review": {
         parameters: {
             query?: never;
             header?: never;
@@ -73,7 +128,9 @@ export interface paths {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    productId: number;
+                };
                 cookie?: never;
             };
             requestBody?: {
@@ -101,9 +158,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -156,9 +213,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -196,9 +253,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"];
-                        "application/json": components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"];
-                        "text/json": components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"];
+                        "text/plain": components["schemas"]["GetProductResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"] | components["schemas"]["GetPetFoodResponse"];
+                        "application/json": components["schemas"]["GetProductResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"] | components["schemas"]["GetPetFoodResponse"];
+                        "text/json": components["schemas"]["GetProductResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"] | components["schemas"]["GetPetFoodResponse"];
                     };
                 };
                 /** @description Not Found */
@@ -207,9 +264,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -238,9 +295,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ReplaceProductResponse"];
-                        "application/json": components["schemas"]["ReplaceProductResponse"];
-                        "text/json": components["schemas"]["ReplaceProductResponse"];
+                        "text/plain": components["schemas"]["ReplaceProductResponse"] | components["schemas"]["ReplaceGroomingAndHygieneResponse"] | components["schemas"]["ReplacePetFoodResponse"];
+                        "application/json": components["schemas"]["ReplaceProductResponse"] | components["schemas"]["ReplaceGroomingAndHygieneResponse"] | components["schemas"]["ReplacePetFoodResponse"];
+                        "text/json": components["schemas"]["ReplaceProductResponse"] | components["schemas"]["ReplaceGroomingAndHygieneResponse"] | components["schemas"]["ReplacePetFoodResponse"];
                     };
                 };
                 /** @description Not Found */
@@ -249,9 +306,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -306,9 +363,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["UpdateProductResponse"];
-                        "application/json": components["schemas"]["UpdateProductResponse"];
-                        "text/json": components["schemas"]["UpdateProductResponse"];
+                        "text/plain": components["schemas"]["UpdateProductResponse"] | components["schemas"]["UpdateGroomingAndHygieneResponse"] | components["schemas"]["UpdatePetFoodResponse"];
+                        "application/json": components["schemas"]["UpdateProductResponse"] | components["schemas"]["UpdateGroomingAndHygieneResponse"] | components["schemas"]["UpdatePetFoodResponse"];
+                        "text/json": components["schemas"]["UpdateProductResponse"] | components["schemas"]["UpdateGroomingAndHygieneResponse"] | components["schemas"]["UpdatePetFoodResponse"];
                     };
                 };
                 /** @description Not Found */
@@ -317,9 +374,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -364,9 +421,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -406,9 +463,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -474,9 +531,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -521,9 +578,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -563,9 +620,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
@@ -631,13 +688,66 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
                     };
                 };
             };
         };
+        trace?: never;
+    };
+    "/inventory/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get inventory */
+        get: {
+            parameters: {
+                query?: {
+                    FieldMask?: string[];
+                };
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GetInventoryResponse"];
+                        "application/json": components["schemas"]["GetInventoryResponse"];
+                        "text/json": components["schemas"]["GetInventoryResponse"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/product/{id}/pricing": {
@@ -754,7 +864,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/reviews": {
+    "/{parentId}/reviews": {
         parameters: {
             query?: never;
             header?: never;
@@ -765,13 +875,14 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    Parent?: string;
                     Filter?: string;
                     PageToken?: string;
                     MaxPageSize?: number;
                 };
                 header?: never;
-                path?: never;
+                path: {
+                    parentId: string;
+                };
                 cookie?: never;
             };
             requestBody?: never;
@@ -808,7 +919,6 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    Parent?: string;
                     Filter?: string;
                     PageToken?: string;
                     MaxPageSize?: number;
@@ -856,10 +966,38 @@ export interface components {
             postalCode: string;
             country: string;
         };
+        CreateGroomingAndHygieneResponse: {
+            isNatural: boolean;
+            isHypoAllergenic: boolean;
+            usageInstructions: string;
+            isCrueltyFree: boolean;
+            safetyWarnings: string;
+        } & components["schemas"]["CreateProductResponse"];
+        CreateInventoryRequest: {
+            supplierId: string;
+            productId: string;
+            quantity: string;
+            restockDate?: string;
+        };
+        CreateInventoryResponse: {
+            supplierId: string;
+            productId: string;
+            quantity: string;
+            restockDate?: string;
+        };
+        CreatePetFoodResponse: {
+            ageGroup: string;
+            breedSize: string;
+            ingredients: string;
+            nutritionalInfo: string;
+            storageInstructions: string;
+            weightKg: string;
+        } & components["schemas"]["CreateProductResponse"];
         CreateProductRequest: {
-            name?: string;
+            requestId?: string;
+            name: string;
             pricing: components["schemas"]["ProductPricingRequest"];
-            category?: string;
+            category: string;
             dimensions: components["schemas"]["DimensionsRequest"];
             ageGroup?: string;
             breedSize?: string;
@@ -883,12 +1021,10 @@ export interface components {
             dimensions: components["schemas"]["DimensionsResponse"];
         };
         CreateReviewRequest: {
-            productId?: string;
-            rating?: string;
-            text?: string;
+            rating: string;
+            text: string;
         };
         CreateReviewResponse: {
-            id: string;
             productId: string;
             rating: string;
             text: string;
@@ -896,14 +1032,13 @@ export interface components {
             updatedAt: string;
         };
         CreateSupplierRequest: {
-            firstName?: string;
-            lastName?: string;
-            email?: string;
+            firstName: string;
+            lastName: string;
+            email: string;
             address: components["schemas"]["AddressRequest"];
             phoneNumber: components["schemas"]["PhoneNumberRequest"];
         };
         CreateSupplierResponse: {
-            id: string;
             firstName: string;
             lastName: string;
             email: string;
@@ -931,6 +1066,13 @@ export interface components {
             isCrueltyFree: boolean;
             safetyWarnings: string;
         } & components["schemas"]["GetProductResponse"];
+        GetInventoryResponse: {
+            id: string;
+            supplierId: string;
+            productId: string;
+            quantity: string;
+            restockDate?: string;
+        };
         GetPetFoodResponse: {
             ageGroup: string;
             breedSize: string;
@@ -943,9 +1085,7 @@ export interface components {
         } & components["schemas"]["GetProductResponse"];
         GetProductPricingResponse: {
             id: string;
-            basePrice: string;
-            discountPercentage: string;
-            taxRate: string;
+            pricing: components["schemas"]["ProductPricingResponse"];
         };
         GetProductResponse: {
             id: string;
@@ -974,16 +1114,23 @@ export interface components {
             country: string;
             phoneNumber: string;
         };
+        HttpValidationProblemDetails: ({
+            errors?: {
+                [key: string]: string[];
+            };
+        } & {
+            [key: string]: unknown;
+        }) & components["schemas"]["ProblemDetails"];
         ListProductsResponse: {
-            results?: (components["schemas"]["GetProductResponse"] | components["schemas"]["GetPetFoodResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"])[];
+            results: (components["schemas"]["GetProductResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"] | components["schemas"]["GetPetFoodResponse"])[];
             nextPageToken?: string;
         };
         ListReviewsResponse: {
-            results?: components["schemas"]["GetReviewResponse"][];
+            results: components["schemas"]["GetReviewResponse"][];
             nextPageToken?: string;
         };
         ListSuppliersResponse: {
-            results?: components["schemas"]["GetSupplierResponse"][];
+            results: components["schemas"]["GetSupplierResponse"][];
             nextPageToken?: string;
         };
         PhoneNumberRequest: {
@@ -1016,10 +1163,25 @@ export interface components {
             discountPercentage: string;
             taxRate: string;
         };
+        ReplaceGroomingAndHygieneResponse: {
+            isNatural: boolean;
+            isHypoAllergenic: boolean;
+            usageInstructions: string;
+            isCrueltyFree: boolean;
+            safetyWarnings: string;
+        } & components["schemas"]["ReplaceProductResponse"];
+        ReplacePetFoodResponse: {
+            ageGroup: string;
+            breedSize: string;
+            ingredients: string;
+            nutritionalInfo: string;
+            storageInstructions: string;
+            weightKg: string;
+        } & components["schemas"]["ReplaceProductResponse"];
         ReplaceProductRequest: {
-            name?: string;
+            name: string;
             pricing: components["schemas"]["ProductPricingRequest"];
-            category?: string;
+            category: string;
             dimensions: components["schemas"]["DimensionsRequest"];
             ageGroup?: string;
             breedSize?: string;
@@ -1042,9 +1204,9 @@ export interface components {
             dimensions: components["schemas"]["DimensionsResponse"];
         };
         ReplaceReviewRequest: {
-            productId?: string;
-            rating?: string;
-            text?: string;
+            productId: string;
+            rating: string;
+            text: string;
         };
         ReplaceReviewResponse: {
             id: string;
@@ -1055,9 +1217,9 @@ export interface components {
             updatedAt: string;
         };
         ReplaceSupplierRequest: {
-            firstName?: string;
-            lastName?: string;
-            email?: string;
+            firstName: string;
+            lastName: string;
+            email: string;
             address: components["schemas"]["AddressRequest"];
             phoneNumber: components["schemas"]["PhoneNumberRequest"];
         };
@@ -1070,6 +1232,21 @@ export interface components {
             createdAt: string;
             phoneNumber: components["schemas"]["PhoneNumberResponse"];
         };
+        UpdateGroomingAndHygieneResponse: {
+            isNatural: boolean;
+            isHypoAllergenic: boolean;
+            usageInstructions: string;
+            isCrueltyFree: boolean;
+            safetyWarnings: string;
+        } & components["schemas"]["UpdateProductResponse"];
+        UpdatePetFoodResponse: {
+            ageGroup: string;
+            breedSize: string;
+            ingredients: string;
+            nutritionalInfo: string;
+            storageInstructions: string;
+            weightKg: string;
+        } & components["schemas"]["UpdateProductResponse"];
         UpdateProductPricingRequest: {
             basePrice?: string;
             discountPercentage?: string;
