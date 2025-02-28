@@ -1,11 +1,6 @@
 import {components} from "../../../shared/types";
 import {
-    AddToCartButton,
     Price,
-    ProductActions,
-    ProductCard,
-    ProductHeader,
-    ViewDetailsButton
 } from "../ProductList.styles.ts";
 import {
     IngredientsSection,
@@ -13,10 +8,10 @@ import {
     NutritionRow,
     NutritionSection,
     NutritionTable, NutritionValue,
-    ProductDetails,
     ProductDimensions,
     ProductSpecs, SectionTitle, StorageSection
 } from "./PetFoodCard.styles.ts";
+import {Button, Card, CardActions, CardContent, CardHeader} from "@mui/material";
 
 interface PetFoodCardProps {
     product: components["schemas"]["GetPetFoodResponse"];
@@ -24,13 +19,13 @@ interface PetFoodCardProps {
 
 export const PetFoodCard = ({product}: PetFoodCardProps) => {
     return (
-        <ProductCard variant="petFood">
-            <ProductHeader>
-                <h3>{product.name}</h3>
-                <Price>${product.price}</Price>
-            </ProductHeader>
+        <Card>
+            <CardHeader
+                title={<h3>{product.name}</h3>}
+                subheader={<Price>${product.price}</Price>}
+            />
 
-            <ProductDetails>
+            <CardContent>
                 <ProductSpecs>
                     <p><strong>Age Group:</strong> {product.ageGroup}</p>
                     <p><strong>Breed Size:</strong> {product.breedSize}</p>
@@ -64,12 +59,12 @@ export const PetFoodCard = ({product}: PetFoodCardProps) => {
                     <SectionTitle>Storage Instructions</SectionTitle>
                     <p>{product.storageInstructions}</p>
                 </StorageSection>
-            </ProductDetails>
+            </CardContent>
 
-            <ProductActions>
-                <AddToCartButton>Add to Cart</AddToCartButton>
-                <ViewDetailsButton>View Details</ViewDetailsButton>
-            </ProductActions>
-        </ProductCard>
+            <CardActions>
+                <Button variant="contained">Add to cart</Button>
+                <Button variant="outlined">View Details</Button>
+            </CardActions>
+        </Card>
     );
 };

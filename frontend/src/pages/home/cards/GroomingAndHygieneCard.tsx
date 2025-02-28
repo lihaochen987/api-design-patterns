@@ -1,12 +1,8 @@
 import {components} from "../../../shared/types";
 import {
-    AddToCartButton,
     Price,
-    ProductActions,
-    ProductCard,
-    ProductHeader,
-    ViewDetailsButton
 } from "../ProductList.styles.ts";
+import {Button, Card, CardActions, CardHeader} from "@mui/material";
 
 interface GroomingCardProps {
     product: components["schemas"]["GetGroomingAndHygieneResponse"];
@@ -14,21 +10,21 @@ interface GroomingCardProps {
 
 export const GroomingAndHygieneCard = ({product}: GroomingCardProps) => {
     return (
-        <ProductCard variant="grooming">
-            <ProductHeader>
-                <h3>{product.name}</h3>
-                <Price>${product.price}</Price>
-            </ProductHeader>
+        <Card>
+            <CardHeader
+                title={<h3>{product.name}</h3>}
+                subheader={<Price>${product.price}</Price>}
+            />
 
             <div>
                 <p>Grooming and Hygiene Product</p>
                 {/* Additional GroomingAndHygiene specific fields can be added here */}
             </div>
 
-            <ProductActions>
-                <AddToCartButton>Add to Cart</AddToCartButton>
-                <ViewDetailsButton>View Details</ViewDetailsButton>
-            </ProductActions>
-        </ProductCard>
+            <CardActions>
+                <Button variant="contained">Add to cart</Button>
+                <Button variant="outlined">View Details</Button>
+            </CardActions>
+        </Card>
     );
 };

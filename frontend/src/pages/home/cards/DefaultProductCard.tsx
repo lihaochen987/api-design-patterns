@@ -1,13 +1,9 @@
 import {components} from "../../../shared/types";
 import {
-    AddToCartButton,
     Price,
-    ProductActions,
-    ProductCard,
-    ProductHeader,
-    ViewDetailsButton
 } from "../ProductList.styles.ts";
-import {ProductDetails, ProductDimensions} from "./DefaultProductCard.styles.ts";
+import {ProductDimensions} from "./DefaultProductCard.styles.ts";
+import {Button, Card, CardActions, CardContent, CardHeader} from "@mui/material";
 
 interface DefaultProductCardProps {
     product: components["schemas"]["GetProductResponse"];
@@ -15,13 +11,13 @@ interface DefaultProductCardProps {
 
 export const DefaultProductCard = ({product}: DefaultProductCardProps) => {
     return (
-        <ProductCard variant="default">
-            <ProductHeader>
-                <h3>{product.name}</h3>
-                <Price>${product.price}</Price>
-            </ProductHeader>
+        <Card>
+            <CardHeader
+                title={<h3>{product.name}</h3>}
+                subheader={<Price>${product.price}</Price>}
+            />
 
-            <ProductDetails>
+            <CardContent>
                 <p><strong>Category:</strong> {product.category}</p>
 
                 <ProductDimensions>
@@ -29,12 +25,12 @@ export const DefaultProductCard = ({product}: DefaultProductCardProps) => {
                         <strong>Dimensions:</strong> {product.dimensions.length} x {product.dimensions.width} x {product.dimensions.height}
                     </p>
                 </ProductDimensions>
-            </ProductDetails>
+            </CardContent>
 
-            <ProductActions>
-                <AddToCartButton>Add to Cart</AddToCartButton>
-                <ViewDetailsButton>View Details</ViewDetailsButton>
-            </ProductActions>
-        </ProductCard>
+            <CardActions>
+                <Button variant="contained">Add to cart</Button>
+                <Button variant="outlined">View Details</Button>
+            </CardActions>
+        </Card>
     );
 };
