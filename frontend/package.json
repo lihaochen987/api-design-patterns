@@ -9,7 +9,7 @@
   "devDependencies": {
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",
-    "turbo": "^2.3.3"
+    "turbo": "^2.4.4"
   },
   "name": "frontend",
   "packageManager": "npm@11.0.0",
