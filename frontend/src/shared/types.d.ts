@@ -4,1324 +4,1452 @@
  */
 
 export interface paths {
-    "/inventory": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Associate Inventory between a Supplier and a Product */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["CreateInventoryRequest"];
-                    "text/json": components["schemas"]["CreateInventoryRequest"];
-                    "application/*+json": components["schemas"]["CreateInventoryRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["CreateInventoryResponse"];
-                        "application/json": components["schemas"]["CreateInventoryResponse"];
-                        "text/json": components["schemas"]["CreateInventoryResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  '/inventory': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/product": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Associate Inventory between a Supplier and a Product */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['CreateInventoryRequest'];
+          'text/json': components['schemas']['CreateInventoryRequest'];
+          'application/*+json': components['schemas']['CreateInventoryRequest'];
         };
-        get?: never;
-        put?: never;
-        /** Create a product */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["CreateProductRequest"];
-                    "text/json": components["schemas"]["CreateProductRequest"];
-                    "application/*+json": components["schemas"]["CreateProductRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["CreateProductResponse"] | components["schemas"]["CreateGroomingAndHygieneResponse"] | components["schemas"]["CreatePetFoodResponse"];
-                        "application/json": components["schemas"]["CreateProductResponse"] | components["schemas"]["CreateGroomingAndHygieneResponse"] | components["schemas"]["CreatePetFoodResponse"];
-                        "text/json": components["schemas"]["CreateProductResponse"] | components["schemas"]["CreateGroomingAndHygieneResponse"] | components["schemas"]["CreatePetFoodResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['CreateInventoryResponse'];
+            'application/json': components['schemas']['CreateInventoryResponse'];
+            'text/json': components['schemas']['CreateInventoryResponse'];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
     };
-    "/{productId}/review": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Create a review */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    productId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["CreateReviewRequest"];
-                    "text/json": components["schemas"]["CreateReviewRequest"];
-                    "application/*+json": components["schemas"]["CreateReviewRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["CreateReviewResponse"];
-                        "application/json": components["schemas"]["CreateReviewResponse"];
-                        "text/json": components["schemas"]["CreateReviewResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/product': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/supplier": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Create a product */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['CreateProductRequest'];
+          'text/json': components['schemas']['CreateProductRequest'];
+          'application/*+json': components['schemas']['CreateProductRequest'];
         };
-        get?: never;
-        put?: never;
-        /** Create a supplier */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["CreateSupplierRequest"];
-                    "text/json": components["schemas"]["CreateSupplierRequest"];
-                    "application/*+json": components["schemas"]["CreateSupplierRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["CreateSupplierResponse"];
-                        "application/json": components["schemas"]["CreateSupplierResponse"];
-                        "text/json": components["schemas"]["CreateSupplierResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['CreateProductResponse']
+              | components['schemas']['CreateGroomingAndHygieneResponse']
+              | components['schemas']['CreatePetFoodResponse'];
+            'application/json':
+              | components['schemas']['CreateProductResponse']
+              | components['schemas']['CreateGroomingAndHygieneResponse']
+              | components['schemas']['CreatePetFoodResponse'];
+            'text/json':
+              | components['schemas']['CreateProductResponse']
+              | components['schemas']['CreateGroomingAndHygieneResponse']
+              | components['schemas']['CreatePetFoodResponse'];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
     };
-    "/product/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get a product */
-        get: {
-            parameters: {
-                query?: {
-                    FieldMask?: string[];
-                };
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetProductResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"] | components["schemas"]["GetPetFoodResponse"];
-                        "application/json": components["schemas"]["GetProductResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"] | components["schemas"]["GetPetFoodResponse"];
-                        "text/json": components["schemas"]["GetProductResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"] | components["schemas"]["GetPetFoodResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        /** Replace a product */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["ReplaceProductRequest"];
-                    "text/json": components["schemas"]["ReplaceProductRequest"];
-                    "application/*+json": components["schemas"]["ReplaceProductRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ReplaceProductResponse"] | components["schemas"]["ReplaceGroomingAndHygieneResponse"] | components["schemas"]["ReplacePetFoodResponse"];
-                        "application/json": components["schemas"]["ReplaceProductResponse"] | components["schemas"]["ReplaceGroomingAndHygieneResponse"] | components["schemas"]["ReplacePetFoodResponse"];
-                        "text/json": components["schemas"]["ReplaceProductResponse"] | components["schemas"]["ReplaceGroomingAndHygieneResponse"] | components["schemas"]["ReplacePetFoodResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        post?: never;
-        /** Delete a product */
-        delete: {
-            parameters: {
-                query?: {
-                    request?: components["schemas"]["DeleteProductRequest"];
-                };
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        /** Update a product */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["UpdateProductRequest"];
-                    "text/json": components["schemas"]["UpdateProductRequest"];
-                    "application/*+json": components["schemas"]["UpdateProductRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["UpdateProductResponse"] | components["schemas"]["UpdateGroomingAndHygieneResponse"] | components["schemas"]["UpdatePetFoodResponse"];
-                        "application/json": components["schemas"]["UpdateProductResponse"] | components["schemas"]["UpdateGroomingAndHygieneResponse"] | components["schemas"]["UpdatePetFoodResponse"];
-                        "text/json": components["schemas"]["UpdateProductResponse"] | components["schemas"]["UpdateGroomingAndHygieneResponse"] | components["schemas"]["UpdatePetFoodResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/{productId}/review': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/review/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Create a review */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          productId: number;
         };
-        /** Get a review */
-        get: {
-            parameters: {
-                query?: {
-                    FieldMask?: string[];
-                };
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetReviewResponse"];
-                        "application/json": components["schemas"]["GetReviewResponse"];
-                        "text/json": components["schemas"]["GetReviewResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['CreateReviewRequest'];
+          'text/json': components['schemas']['CreateReviewRequest'];
+          'application/*+json': components['schemas']['CreateReviewRequest'];
         };
-        /** Replace a review */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["ReplaceReviewRequest"];
-                    "text/json": components["schemas"]["ReplaceReviewRequest"];
-                    "application/*+json": components["schemas"]["ReplaceReviewRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ReplaceReviewResponse"];
-                        "application/json": components["schemas"]["ReplaceReviewResponse"];
-                        "text/json": components["schemas"]["ReplaceReviewResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['CreateReviewResponse'];
+            'application/json': components['schemas']['CreateReviewResponse'];
+            'text/json': components['schemas']['CreateReviewResponse'];
+          };
         };
-        post?: never;
-        /** Delete a review */
-        delete: {
-            parameters: {
-                query?: {
-                    request?: components["schemas"]["DeleteReviewRequest"];
-                };
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
         };
-        options?: never;
-        head?: never;
-        /** Update a review */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["UpdateReviewRequest"];
-                    "text/json": components["schemas"]["UpdateReviewRequest"];
-                    "application/*+json": components["schemas"]["UpdateReviewRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["UpdateReviewResponse"];
-                        "application/json": components["schemas"]["UpdateReviewResponse"];
-                        "text/json": components["schemas"]["UpdateReviewResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        trace?: never;
+      };
     };
-    "/supplier/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get a supplier */
-        get: {
-            parameters: {
-                query?: {
-                    FieldMask?: string[];
-                };
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetSupplierResponse"];
-                        "application/json": components["schemas"]["GetSupplierResponse"];
-                        "text/json": components["schemas"]["GetSupplierResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        /** Replace a supplier */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["ReplaceSupplierRequest"];
-                    "text/json": components["schemas"]["ReplaceSupplierRequest"];
-                    "application/*+json": components["schemas"]["ReplaceSupplierRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ReplaceSupplierResponse"];
-                        "application/json": components["schemas"]["ReplaceSupplierResponse"];
-                        "text/json": components["schemas"]["ReplaceSupplierResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        post?: never;
-        /** Delete a supplier */
-        delete: {
-            parameters: {
-                query?: {
-                    request?: components["schemas"]["DeleteSupplierRequest"];
-                };
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        /** Update a supplier */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["UpdateSupplierRequest"];
-                    "text/json": components["schemas"]["UpdateSupplierRequest"];
-                    "application/*+json": components["schemas"]["UpdateSupplierRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["UpdateSupplierResponse"];
-                        "application/json": components["schemas"]["UpdateSupplierResponse"];
-                        "text/json": components["schemas"]["UpdateSupplierResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/supplier': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/inventory/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Create a supplier */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['CreateSupplierRequest'];
+          'text/json': components['schemas']['CreateSupplierRequest'];
+          'application/*+json': components['schemas']['CreateSupplierRequest'];
         };
-        /** Get inventory */
-        get: {
-            parameters: {
-                query?: {
-                    FieldMask?: string[];
-                };
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetInventoryResponse"];
-                        "application/json": components["schemas"]["GetInventoryResponse"];
-                        "text/json": components["schemas"]["GetInventoryResponse"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"] | components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['CreateSupplierResponse'];
+            'application/json': components['schemas']['CreateSupplierResponse'];
+            'text/json': components['schemas']['CreateSupplierResponse'];
+          };
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
     };
-    "/product/{id}/pricing": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get a product pricing */
-        get: {
-            parameters: {
-                query?: {
-                    FieldMask?: string[];
-                };
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetProductPricingResponse"];
-                        "application/json": components["schemas"]["GetProductPricingResponse"];
-                        "text/json": components["schemas"]["GetProductPricingResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update a product pricing */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["UpdateProductPricingRequest"];
-                    "text/json": components["schemas"]["UpdateProductPricingRequest"];
-                    "application/*+json": components["schemas"]["UpdateProductPricingRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["UpdateProductPricingResponse"];
-                        "application/json": components["schemas"]["UpdateProductPricingResponse"];
-                        "text/json": components["schemas"]["UpdateProductPricingResponse"];
-                    };
-                };
-            };
-        };
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/product/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/products": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Get a product */
+    get: {
+      parameters: {
+        query?: {
+          FieldMask?: string[];
         };
-        /** List products */
-        get: {
-            parameters: {
-                query?: {
-                    Filter?: string;
-                    PageToken?: string;
-                    MaxPageSize?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ListProductsResponse"];
-                        "application/json": components["schemas"]["ListProductsResponse"];
-                        "text/json": components["schemas"]["ListProductsResponse"];
-                    };
-                };
-            };
+        header?: never;
+        path: {
+          id: number;
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['GetProductResponse']
+              | components['schemas']['GetGroomingAndHygieneResponse']
+              | components['schemas']['GetPetFoodResponse'];
+            'application/json':
+              | components['schemas']['GetProductResponse']
+              | components['schemas']['GetGroomingAndHygieneResponse']
+              | components['schemas']['GetPetFoodResponse'];
+            'text/json':
+              | components['schemas']['GetProductResponse']
+              | components['schemas']['GetGroomingAndHygieneResponse']
+              | components['schemas']['GetPetFoodResponse'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
     };
-    "/{parentId}/reviews": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Replace a product */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
         };
-        /** List reviews */
-        get: {
-            parameters: {
-                query?: {
-                    Filter?: string;
-                    PageToken?: string;
-                    MaxPageSize?: number;
-                };
-                header?: never;
-                path: {
-                    parentId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ListReviewsResponse"];
-                        "application/json": components["schemas"]["ListReviewsResponse"];
-                        "text/json": components["schemas"]["ListReviewsResponse"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['ReplaceProductRequest'];
+          'text/json': components['schemas']['ReplaceProductRequest'];
+          'application/*+json': components['schemas']['ReplaceProductRequest'];
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ReplaceProductResponse']
+              | components['schemas']['ReplaceGroomingAndHygieneResponse']
+              | components['schemas']['ReplacePetFoodResponse'];
+            'application/json':
+              | components['schemas']['ReplaceProductResponse']
+              | components['schemas']['ReplaceGroomingAndHygieneResponse']
+              | components['schemas']['ReplacePetFoodResponse'];
+            'text/json':
+              | components['schemas']['ReplaceProductResponse']
+              | components['schemas']['ReplaceGroomingAndHygieneResponse']
+              | components['schemas']['ReplacePetFoodResponse'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
     };
-    "/suppliers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    post?: never;
+    /** Delete a product */
+    delete: {
+      parameters: {
+        query?: {
+          request?: components['schemas']['DeleteProductRequest'];
         };
-        /** List suppliers */
-        get: {
-            parameters: {
-                query?: {
-                    Filter?: string;
-                    PageToken?: string;
-                    MaxPageSize?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ListSuppliersResponse"];
-                        "application/json": components["schemas"]["ListSuppliersResponse"];
-                        "text/json": components["schemas"]["ListSuppliersResponse"];
-                    };
-                };
-            };
+        header?: never;
+        path: {
+          id: number;
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
     };
+    options?: never;
+    head?: never;
+    /** Update a product */
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['UpdateProductRequest'];
+          'text/json': components['schemas']['UpdateProductRequest'];
+          'application/*+json': components['schemas']['UpdateProductRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['UpdateProductResponse']
+              | components['schemas']['UpdateGroomingAndHygieneResponse']
+              | components['schemas']['UpdatePetFoodResponse'];
+            'application/json':
+              | components['schemas']['UpdateProductResponse']
+              | components['schemas']['UpdateGroomingAndHygieneResponse']
+              | components['schemas']['UpdatePetFoodResponse'];
+            'text/json':
+              | components['schemas']['UpdateProductResponse']
+              | components['schemas']['UpdateGroomingAndHygieneResponse']
+              | components['schemas']['UpdatePetFoodResponse'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
+    };
+    trace?: never;
+  };
+  '/review/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get a review */
+    get: {
+      parameters: {
+        query?: {
+          FieldMask?: string[];
+        };
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['GetReviewResponse'];
+            'application/json': components['schemas']['GetReviewResponse'];
+            'text/json': components['schemas']['GetReviewResponse'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
+    };
+    /** Replace a review */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['ReplaceReviewRequest'];
+          'text/json': components['schemas']['ReplaceReviewRequest'];
+          'application/*+json': components['schemas']['ReplaceReviewRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['ReplaceReviewResponse'];
+            'application/json': components['schemas']['ReplaceReviewResponse'];
+            'text/json': components['schemas']['ReplaceReviewResponse'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
+    };
+    post?: never;
+    /** Delete a review */
+    delete: {
+      parameters: {
+        query?: {
+          request?: components['schemas']['DeleteReviewRequest'];
+        };
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    /** Update a review */
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['UpdateReviewRequest'];
+          'text/json': components['schemas']['UpdateReviewRequest'];
+          'application/*+json': components['schemas']['UpdateReviewRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['UpdateReviewResponse'];
+            'application/json': components['schemas']['UpdateReviewResponse'];
+            'text/json': components['schemas']['UpdateReviewResponse'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
+    };
+    trace?: never;
+  };
+  '/supplier/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get a supplier */
+    get: {
+      parameters: {
+        query?: {
+          FieldMask?: string[];
+        };
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['GetSupplierResponse'];
+            'application/json': components['schemas']['GetSupplierResponse'];
+            'text/json': components['schemas']['GetSupplierResponse'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
+    };
+    /** Replace a supplier */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['ReplaceSupplierRequest'];
+          'text/json': components['schemas']['ReplaceSupplierRequest'];
+          'application/*+json': components['schemas']['ReplaceSupplierRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['ReplaceSupplierResponse'];
+            'application/json': components['schemas']['ReplaceSupplierResponse'];
+            'text/json': components['schemas']['ReplaceSupplierResponse'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
+    };
+    post?: never;
+    /** Delete a supplier */
+    delete: {
+      parameters: {
+        query?: {
+          request?: components['schemas']['DeleteSupplierRequest'];
+        };
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    /** Update a supplier */
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['UpdateSupplierRequest'];
+          'text/json': components['schemas']['UpdateSupplierRequest'];
+          'application/*+json': components['schemas']['UpdateSupplierRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['UpdateSupplierResponse'];
+            'application/json': components['schemas']['UpdateSupplierResponse'];
+            'text/json': components['schemas']['UpdateSupplierResponse'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
+    };
+    trace?: never;
+  };
+  '/inventory/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get inventory */
+    get: {
+      parameters: {
+        query?: {
+          FieldMask?: string[];
+        };
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['GetInventoryResponse'];
+            'application/json': components['schemas']['GetInventoryResponse'];
+            'text/json': components['schemas']['GetInventoryResponse'];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'application/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+            'text/json':
+              | components['schemas']['ProblemDetails']
+              | components['schemas']['HttpValidationProblemDetails'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/product/{id}/pricing': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get a product pricing */
+    get: {
+      parameters: {
+        query?: {
+          FieldMask?: string[];
+        };
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['GetProductPricingResponse'];
+            'application/json': components['schemas']['GetProductPricingResponse'];
+            'text/json': components['schemas']['GetProductPricingResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Update a product pricing */
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['UpdateProductPricingRequest'];
+          'text/json': components['schemas']['UpdateProductPricingRequest'];
+          'application/*+json': components['schemas']['UpdateProductPricingRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['UpdateProductPricingResponse'];
+            'application/json': components['schemas']['UpdateProductPricingResponse'];
+            'text/json': components['schemas']['UpdateProductPricingResponse'];
+          };
+        };
+      };
+    };
+    trace?: never;
+  };
+  '/products': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List products */
+    get: {
+      parameters: {
+        query?: {
+          Filter?: string;
+          PageToken?: string;
+          MaxPageSize?: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['ListProductsResponse'];
+            'application/json': components['schemas']['ListProductsResponse'];
+            'text/json': components['schemas']['ListProductsResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/{parentId}/reviews': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List reviews */
+    get: {
+      parameters: {
+        query?: {
+          Filter?: string;
+          PageToken?: string;
+          MaxPageSize?: number;
+        };
+        header?: never;
+        path: {
+          parentId: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['ListReviewsResponse'];
+            'application/json': components['schemas']['ListReviewsResponse'];
+            'text/json': components['schemas']['ListReviewsResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/suppliers': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List suppliers */
+    get: {
+      parameters: {
+        query?: {
+          Filter?: string;
+          PageToken?: string;
+          MaxPageSize?: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'text/plain': components['schemas']['ListSuppliersResponse'];
+            'application/json': components['schemas']['ListSuppliersResponse'];
+            'text/json': components['schemas']['ListSuppliersResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
+
 export type webhooks = Record<string, never>;
+
 export interface components {
-    schemas: {
-        AddressRequest: {
-            street?: string;
-            city?: string;
-            postalCode?: string;
-            country?: string;
-        };
-        AddressResponse: {
-            street: string;
-            city: string;
-            postalCode: string;
-            country: string;
-        };
-        CreateGroomingAndHygieneResponse: {
-            isNatural: boolean;
-            isHypoAllergenic: boolean;
-            usageInstructions: string;
-            isCrueltyFree: boolean;
-            safetyWarnings: string;
-        } & components["schemas"]["CreateProductResponse"];
-        CreateInventoryRequest: {
-            supplierId: string;
-            productId: string;
-            quantity: string;
-            restockDate?: string;
-        };
-        CreateInventoryResponse: {
-            supplierId: string;
-            productId: string;
-            quantity: string;
-            restockDate?: string;
-        };
-        CreatePetFoodResponse: {
-            ageGroup: string;
-            breedSize: string;
-            ingredients: string;
-            nutritionalInfo: string;
-            storageInstructions: string;
-            weightKg: string;
-        } & components["schemas"]["CreateProductResponse"];
-        CreateProductRequest: {
-            requestId?: string;
-            name: string;
-            pricing: components["schemas"]["ProductPricingRequest"];
-            category: string;
-            dimensions: components["schemas"]["DimensionsRequest"];
-            ageGroup?: string;
-            breedSize?: string;
-            ingredients?: string;
-            nutritionalInfo?: {
-                [key: string]: unknown;
-            };
-            storageInstructions?: string;
-            weightKg?: string;
-            isNatural?: boolean;
-            isHypoAllergenic?: boolean;
-            usageInstructions?: string;
-            isCrueltyFree?: boolean;
-            safetyWarnings?: string;
-        };
-        CreateProductResponse: {
-            id: string;
-            name: string;
-            pricing: components["schemas"]["ProductPricingResponse"];
-            category: string;
-            dimensions: components["schemas"]["DimensionsResponse"];
-        };
-        CreateReviewRequest: {
-            rating: string;
-            text: string;
-        };
-        CreateReviewResponse: {
-            productId: string;
-            rating: string;
-            text: string;
-            createdAt: string;
-            updatedAt: string;
-        };
-        CreateSupplierRequest: {
-            firstName: string;
-            lastName: string;
-            email: string;
-            address: components["schemas"]["AddressRequest"];
-            phoneNumber: components["schemas"]["PhoneNumberRequest"];
-        };
-        CreateSupplierResponse: {
-            firstName: string;
-            lastName: string;
-            email: string;
-            address: components["schemas"]["AddressResponse"];
-            createdAt: string;
-            phoneNumber: components["schemas"]["PhoneNumberResponse"];
-        };
-        DeleteProductRequest: Record<string, never>;
-        DeleteReviewRequest: Record<string, never>;
-        DeleteSupplierRequest: Record<string, never>;
-        DimensionsRequest: {
-            length?: string;
-            width?: string;
-            height?: string;
-        };
-        DimensionsResponse: {
-            length: string;
-            width: string;
-            height: string;
-        };
-        GetGroomingAndHygieneResponse: {
-            isNatural: boolean;
-            isHypoAllergenic: boolean;
-            usageInstructions: string;
-            isCrueltyFree: boolean;
-            safetyWarnings: string;
-        } & components["schemas"]["GetProductResponse"];
-        GetInventoryResponse: {
-            id: string;
-            supplierId: string;
-            productId: string;
-            quantity: string;
-            restockDate?: string;
-        };
-        GetPetFoodResponse: {
-            ageGroup: string;
-            breedSize: string;
-            ingredients: string;
-            nutritionalInfo: {
-                [key: string]: string;
-            };
-            storageInstructions: string;
-            weightKg: string;
-        } & components["schemas"]["GetProductResponse"];
-        GetProductPricingResponse: {
-            id: string;
-            pricing: components["schemas"]["ProductPricingResponse"];
-        };
-        GetProductResponse: {
-            id: string;
-            name: string;
-            price: string;
-            category: string;
-            dimensions: components["schemas"]["DimensionsResponse"];
-        };
-        GetReviewResponse: {
-            id: string;
-            productId: string;
-            rating: string;
-            text: string;
-            createdAt: string;
-            updatedAt: string;
-        };
-        GetSupplierResponse: {
-            /** Format: int64 */
-            id: number;
-            fullName: string;
-            email: string;
-            createdAt: string;
-            street: string;
-            city: string;
-            postalCode: string;
-            country: string;
-            phoneNumber: string;
-        };
-        HttpValidationProblemDetails: ({
-            errors?: {
-                [key: string]: string[];
-            };
-        } & {
-            [key: string]: unknown;
-        }) & components["schemas"]["ProblemDetails"];
-        ListProductsResponse: {
-            results: (components["schemas"]["GetProductResponse"] | components["schemas"]["GetGroomingAndHygieneResponse"] | components["schemas"]["GetPetFoodResponse"])[];
-            nextPageToken?: string;
-        };
-        ListReviewsResponse: {
-            results: components["schemas"]["GetReviewResponse"][];
-            nextPageToken?: string;
-        };
-        ListSuppliersResponse: {
-            results: components["schemas"]["GetSupplierResponse"][];
-            nextPageToken?: string;
-        };
-        PhoneNumberRequest: {
-            countryCode?: string;
-            areaCode?: string;
-            number?: string;
-        };
-        PhoneNumberResponse: {
-            countryCode: string;
-            areaCode: string;
-            number: string;
-        };
-        ProblemDetails: {
-            type?: string;
-            title?: string;
-            /** Format: int32 */
-            status?: number;
-            detail?: string;
-            instance?: string;
-        } & {
-            [key: string]: unknown;
-        };
-        ProductPricingRequest: {
-            basePrice?: string;
-            discountPercentage?: string;
-            taxRate?: string;
-        };
-        ProductPricingResponse: {
-            basePrice: string;
-            discountPercentage: string;
-            taxRate: string;
-        };
-        ReplaceGroomingAndHygieneResponse: {
-            isNatural: boolean;
-            isHypoAllergenic: boolean;
-            usageInstructions: string;
-            isCrueltyFree: boolean;
-            safetyWarnings: string;
-        } & components["schemas"]["ReplaceProductResponse"];
-        ReplacePetFoodResponse: {
-            ageGroup: string;
-            breedSize: string;
-            ingredients: string;
-            nutritionalInfo: string;
-            storageInstructions: string;
-            weightKg: string;
-        } & components["schemas"]["ReplaceProductResponse"];
-        ReplaceProductRequest: {
-            name: string;
-            pricing: components["schemas"]["ProductPricingRequest"];
-            category: string;
-            dimensions: components["schemas"]["DimensionsRequest"];
-            ageGroup?: string;
-            breedSize?: string;
-            ingredients?: string;
-            nutritionalInfo?: {
-                [key: string]: unknown;
-            };
-            storageInstructions?: string;
-            weightKg?: string;
-            isNatural?: boolean;
-            isHypoAllergenic?: boolean;
-            usageInstructions?: string;
-            isCrueltyFree?: boolean;
-            safetyWarnings?: string;
-        };
-        ReplaceProductResponse: {
-            name: string;
-            pricing: components["schemas"]["ProductPricingResponse"];
-            category: string;
-            dimensions: components["schemas"]["DimensionsResponse"];
-        };
-        ReplaceReviewRequest: {
-            productId: string;
-            rating: string;
-            text: string;
-        };
-        ReplaceReviewResponse: {
-            id: string;
-            productId: string;
-            rating: string;
-            text: string;
-            createdAt: string;
-            updatedAt: string;
-        };
-        ReplaceSupplierRequest: {
-            firstName: string;
-            lastName: string;
-            email: string;
-            address: components["schemas"]["AddressRequest"];
-            phoneNumber: components["schemas"]["PhoneNumberRequest"];
-        };
-        ReplaceSupplierResponse: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            email: string;
-            address: components["schemas"]["AddressResponse"];
-            createdAt: string;
-            phoneNumber: components["schemas"]["PhoneNumberResponse"];
-        };
-        UpdateGroomingAndHygieneResponse: {
-            isNatural: boolean;
-            isHypoAllergenic: boolean;
-            usageInstructions: string;
-            isCrueltyFree: boolean;
-            safetyWarnings: string;
-        } & components["schemas"]["UpdateProductResponse"];
-        UpdatePetFoodResponse: {
-            ageGroup: string;
-            breedSize: string;
-            ingredients: string;
-            nutritionalInfo: string;
-            storageInstructions: string;
-            weightKg: string;
-        } & components["schemas"]["UpdateProductResponse"];
-        UpdateProductPricingRequest: {
-            basePrice?: string;
-            discountPercentage?: string;
-            taxRate?: string;
-            fieldMask?: string[];
-        };
-        UpdateProductPricingResponse: {
-            id: string;
-            basePrice: string;
-            discountPercentage: string;
-            taxRate: string;
-        };
-        UpdateProductRequest: {
-            name?: string;
-            pricing: components["schemas"]["ProductPricingRequest"];
-            category?: string;
-            dimensions: components["schemas"]["DimensionsRequest"];
-            ageGroup?: string;
-            breedSize?: string;
-            ingredients?: string;
-            nutritionalInfo?: {
-                [key: string]: unknown;
-            };
-            storageInstructions?: string;
-            weightKg?: string;
-            isNatural?: boolean;
-            isHypoAllergenic?: boolean;
-            usageInstructions?: string;
-            isCrueltyFree?: boolean;
-            safetyWarnings?: string;
-            fieldMask?: string[];
-        };
-        UpdateProductResponse: {
-            id: string;
-            name: string;
-            pricing: components["schemas"]["ProductPricingResponse"];
-            category: string;
-            dimensions: components["schemas"]["DimensionsResponse"];
-        };
-        UpdateReviewRequest: {
-            productId?: string;
-            rating?: string;
-            text?: string;
-            fieldMask?: string[];
-        };
-        UpdateReviewResponse: {
-            id: string;
-            productId: string;
-            rating: string;
-            text: string;
-            createdAt: string;
-            updatedAt: string;
-        };
-        UpdateSupplierRequest: {
-            firstName?: string;
-            lastName?: string;
-            email?: string;
-            address: components["schemas"]["AddressRequest"];
-            phoneNumber: components["schemas"]["PhoneNumberRequest"];
-            fieldMask?: string[];
-        };
-        UpdateSupplierResponse: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            email: string;
-            address: components["schemas"]["AddressResponse"];
-            phoneNumber: components["schemas"]["PhoneNumberResponse"];
-        };
+  schemas: {
+    AddressRequest: {
+      street?: string;
+      city?: string;
+      postalCode?: string;
+      country?: string;
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    AddressResponse: {
+      street: string;
+      city: string;
+      postalCode: string;
+      country: string;
+    };
+    CreateGroomingAndHygieneResponse: {
+      isNatural: boolean;
+      isHypoAllergenic: boolean;
+      usageInstructions: string;
+      isCrueltyFree: boolean;
+      safetyWarnings: string;
+    } & components['schemas']['CreateProductResponse'];
+    CreateInventoryRequest: {
+      supplierId: string;
+      productId: string;
+      quantity: string;
+      restockDate?: string;
+    };
+    CreateInventoryResponse: {
+      supplierId: string;
+      productId: string;
+      quantity: string;
+      restockDate?: string;
+    };
+    CreatePetFoodResponse: {
+      ageGroup: string;
+      breedSize: string;
+      ingredients: string;
+      nutritionalInfo: string;
+      storageInstructions: string;
+      weightKg: string;
+    } & components['schemas']['CreateProductResponse'];
+    CreateProductRequest: {
+      requestId?: string;
+      name: string;
+      pricing: components['schemas']['ProductPricingRequest'];
+      category: string;
+      dimensions: components['schemas']['DimensionsRequest'];
+      ageGroup?: string;
+      breedSize?: string;
+      ingredients?: string;
+      nutritionalInfo?: {
+        [key: string]: unknown;
+      };
+      storageInstructions?: string;
+      weightKg?: string;
+      isNatural?: boolean;
+      isHypoAllergenic?: boolean;
+      usageInstructions?: string;
+      isCrueltyFree?: boolean;
+      safetyWarnings?: string;
+    };
+    CreateProductResponse: {
+      id: string;
+      name: string;
+      pricing: components['schemas']['ProductPricingResponse'];
+      category: string;
+      dimensions: components['schemas']['DimensionsResponse'];
+    };
+    CreateReviewRequest: {
+      rating: string;
+      text: string;
+    };
+    CreateReviewResponse: {
+      productId: string;
+      rating: string;
+      text: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+    CreateSupplierRequest: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      address: components['schemas']['AddressRequest'];
+      phoneNumber: components['schemas']['PhoneNumberRequest'];
+    };
+    CreateSupplierResponse: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      address: components['schemas']['AddressResponse'];
+      createdAt: string;
+      phoneNumber: components['schemas']['PhoneNumberResponse'];
+    };
+    DeleteProductRequest: Record<string, never>;
+    DeleteReviewRequest: Record<string, never>;
+    DeleteSupplierRequest: Record<string, never>;
+    DimensionsRequest: {
+      length?: string;
+      width?: string;
+      height?: string;
+    };
+    DimensionsResponse: {
+      length: string;
+      width: string;
+      height: string;
+    };
+    GetGroomingAndHygieneResponse: {
+      isNatural: boolean;
+      isHypoAllergenic: boolean;
+      usageInstructions: string;
+      isCrueltyFree: boolean;
+      safetyWarnings: string;
+    } & components['schemas']['GetProductResponse'];
+    GetInventoryResponse: {
+      id: string;
+      supplierId: string;
+      productId: string;
+      quantity: string;
+      restockDate?: string;
+    };
+    GetPetFoodResponse: {
+      ageGroup: string;
+      breedSize: string;
+      ingredients: string;
+      nutritionalInfo: {
+        [key: string]: string;
+      };
+      storageInstructions: string;
+      weightKg: string;
+    } & components['schemas']['GetProductResponse'];
+    GetProductPricingResponse: {
+      id: string;
+      pricing: components['schemas']['ProductPricingResponse'];
+    };
+    GetProductResponse: {
+      id: string;
+      name: string;
+      price: string;
+      category: string;
+      dimensions: components['schemas']['DimensionsResponse'];
+    };
+    GetReviewResponse: {
+      id: string;
+      productId: string;
+      rating: string;
+      text: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+    GetSupplierResponse: {
+      /** Format: int64 */
+      id: number;
+      fullName: string;
+      email: string;
+      createdAt: string;
+      street: string;
+      city: string;
+      postalCode: string;
+      country: string;
+      phoneNumber: string;
+    };
+    HttpValidationProblemDetails: ({
+      errors?: {
+        [key: string]: string[];
+      };
+    } & {
+      [key: string]: unknown;
+    }) &
+      components['schemas']['ProblemDetails'];
+    ListProductsResponse: {
+      results: (
+        | components['schemas']['GetProductResponse']
+        | components['schemas']['GetGroomingAndHygieneResponse']
+        | components['schemas']['GetPetFoodResponse']
+      )[];
+      nextPageToken?: string;
+    };
+    ListReviewsResponse: {
+      results: components['schemas']['GetReviewResponse'][];
+      nextPageToken?: string;
+    };
+    ListSuppliersResponse: {
+      results: components['schemas']['GetSupplierResponse'][];
+      nextPageToken?: string;
+    };
+    PhoneNumberRequest: {
+      countryCode?: string;
+      areaCode?: string;
+      number?: string;
+    };
+    PhoneNumberResponse: {
+      countryCode: string;
+      areaCode: string;
+      number: string;
+    };
+    ProblemDetails: {
+      type?: string;
+      title?: string;
+      /** Format: int32 */
+      status?: number;
+      detail?: string;
+      instance?: string;
+    } & {
+      [key: string]: unknown;
+    };
+    ProductPricingRequest: {
+      basePrice?: string;
+      discountPercentage?: string;
+      taxRate?: string;
+    };
+    ProductPricingResponse: {
+      basePrice: string;
+      discountPercentage: string;
+      taxRate: string;
+    };
+    ReplaceGroomingAndHygieneResponse: {
+      isNatural: boolean;
+      isHypoAllergenic: boolean;
+      usageInstructions: string;
+      isCrueltyFree: boolean;
+      safetyWarnings: string;
+    } & components['schemas']['ReplaceProductResponse'];
+    ReplacePetFoodResponse: {
+      ageGroup: string;
+      breedSize: string;
+      ingredients: string;
+      nutritionalInfo: string;
+      storageInstructions: string;
+      weightKg: string;
+    } & components['schemas']['ReplaceProductResponse'];
+    ReplaceProductRequest: {
+      name: string;
+      pricing: components['schemas']['ProductPricingRequest'];
+      category: string;
+      dimensions: components['schemas']['DimensionsRequest'];
+      ageGroup?: string;
+      breedSize?: string;
+      ingredients?: string;
+      nutritionalInfo?: {
+        [key: string]: unknown;
+      };
+      storageInstructions?: string;
+      weightKg?: string;
+      isNatural?: boolean;
+      isHypoAllergenic?: boolean;
+      usageInstructions?: string;
+      isCrueltyFree?: boolean;
+      safetyWarnings?: string;
+    };
+    ReplaceProductResponse: {
+      name: string;
+      pricing: components['schemas']['ProductPricingResponse'];
+      category: string;
+      dimensions: components['schemas']['DimensionsResponse'];
+    };
+    ReplaceReviewRequest: {
+      productId: string;
+      rating: string;
+      text: string;
+    };
+    ReplaceReviewResponse: {
+      id: string;
+      productId: string;
+      rating: string;
+      text: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+    ReplaceSupplierRequest: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      address: components['schemas']['AddressRequest'];
+      phoneNumber: components['schemas']['PhoneNumberRequest'];
+    };
+    ReplaceSupplierResponse: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      address: components['schemas']['AddressResponse'];
+      createdAt: string;
+      phoneNumber: components['schemas']['PhoneNumberResponse'];
+    };
+    UpdateGroomingAndHygieneResponse: {
+      isNatural: boolean;
+      isHypoAllergenic: boolean;
+      usageInstructions: string;
+      isCrueltyFree: boolean;
+      safetyWarnings: string;
+    } & components['schemas']['UpdateProductResponse'];
+    UpdatePetFoodResponse: {
+      ageGroup: string;
+      breedSize: string;
+      ingredients: string;
+      nutritionalInfo: string;
+      storageInstructions: string;
+      weightKg: string;
+    } & components['schemas']['UpdateProductResponse'];
+    UpdateProductPricingRequest: {
+      basePrice?: string;
+      discountPercentage?: string;
+      taxRate?: string;
+      fieldMask?: string[];
+    };
+    UpdateProductPricingResponse: {
+      id: string;
+      basePrice: string;
+      discountPercentage: string;
+      taxRate: string;
+    };
+    UpdateProductRequest: {
+      name?: string;
+      pricing: components['schemas']['ProductPricingRequest'];
+      category?: string;
+      dimensions: components['schemas']['DimensionsRequest'];
+      ageGroup?: string;
+      breedSize?: string;
+      ingredients?: string;
+      nutritionalInfo?: {
+        [key: string]: unknown;
+      };
+      storageInstructions?: string;
+      weightKg?: string;
+      isNatural?: boolean;
+      isHypoAllergenic?: boolean;
+      usageInstructions?: string;
+      isCrueltyFree?: boolean;
+      safetyWarnings?: string;
+      fieldMask?: string[];
+    };
+    UpdateProductResponse: {
+      id: string;
+      name: string;
+      pricing: components['schemas']['ProductPricingResponse'];
+      category: string;
+      dimensions: components['schemas']['DimensionsResponse'];
+    };
+    UpdateReviewRequest: {
+      productId?: string;
+      rating?: string;
+      text?: string;
+      fieldMask?: string[];
+    };
+    UpdateReviewResponse: {
+      id: string;
+      productId: string;
+      rating: string;
+      text: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+    UpdateSupplierRequest: {
+      firstName?: string;
+      lastName?: string;
+      email?: string;
+      address: components['schemas']['AddressRequest'];
+      phoneNumber: components['schemas']['PhoneNumberRequest'];
+      fieldMask?: string[];
+    };
+    UpdateSupplierResponse: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      address: components['schemas']['AddressResponse'];
+      phoneNumber: components['schemas']['PhoneNumberResponse'];
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
+
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;
