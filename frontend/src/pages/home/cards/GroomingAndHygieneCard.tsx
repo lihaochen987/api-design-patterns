@@ -21,7 +21,7 @@ export const GroomingAndHygieneCard = ({product}: GroomingCardProps) => {
                 {/* Additional GroomingAndHygiene specific fields can be added here */}
             </div>
 
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'space-evenly' }}>
                 <Button variant="contained">Add to cart</Button>
                 <Button variant="outlined">View Details</Button>
             </CardActions>

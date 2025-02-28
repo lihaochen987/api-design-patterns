@@ -61,7 +61,7 @@ export const PetFoodCard = ({product}: PetFoodCardProps) => {
                 </StorageSection>
             </CardContent>
 
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'space-evenly' }}>
                 <Button variant="contained">Add to cart</Button>
                 <Button variant="outlined">View Details</Button>
             </CardActions>
