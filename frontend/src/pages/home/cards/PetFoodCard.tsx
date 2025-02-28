@@ -1,29 +1,28 @@
-import { components } from "../../../shared/types";
+import {components} from "../../../shared/types";
 import {
+    AddToCartButton,
+    Price,
+    ProductActions,
     ProductCard,
     ProductHeader,
-    Price,
-    ProductDetails,
-    ProductSpecs,
-    ProductDimensions,
-    NutritionSection,
-    NutritionTable,
-    NutritionRow,
-    NutritionKey,
-    NutritionValue,
-    IngredientsSection,
-    StorageSection,
-    ProductActions,
-    AddToCartButton,
     ViewDetailsButton
-} from "./ProductCard.styles.ts";
-import { SectionTitle } from "./Typography.styles.ts";
+} from "../ProductList.styles.ts";
+import {
+    IngredientsSection,
+    NutritionKey,
+    NutritionRow,
+    NutritionSection,
+    NutritionTable, NutritionValue,
+    ProductDetails,
+    ProductDimensions,
+    ProductSpecs, SectionTitle, StorageSection
+} from "./PetFoodCard.styles.ts";
 
 interface PetFoodCardProps {
     product: components["schemas"]["GetPetFoodResponse"];
 }
 
-export const PetFoodCard: React.FC<PetFoodCardProps> = ({ product }) => {
+export const PetFoodCard = ({product}: PetFoodCardProps) => {
     return (
         <ProductCard variant="petFood">
             <ProductHeader>
@@ -39,7 +38,9 @@ export const PetFoodCard: React.FC<PetFoodCardProps> = ({ product }) => {
                 </ProductSpecs>
 
                 <ProductDimensions>
-                    <p><strong>Dimensions:</strong> {product.dimensions.length} x {product.dimensions.width} x {product.dimensions.height}</p>
+                    <p>
+                        <strong>Dimensions:</strong> {product.dimensions.length} x {product.dimensions.width} x {product.dimensions.height}
+                    </p>
                 </ProductDimensions>
 
                 <NutritionSection>

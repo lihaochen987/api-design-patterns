@@ -1,20 +1,19 @@
-import { components } from "../../../shared/types";
+import {components} from "../../../shared/types";
 import {
+    AddToCartButton,
+    Price,
+    ProductActions,
     ProductCard,
     ProductHeader,
-    Price,
-    ProductDetails,
-    ProductDimensions,
-    ProductActions,
-    AddToCartButton,
     ViewDetailsButton
-} from "./ProductCard.styles.ts";
+} from "../ProductList.styles.ts";
+import {ProductDetails, ProductDimensions} from "./PetFoodCard.styles.ts";
 
 interface DefaultProductCardProps {
     product: components["schemas"]["GetProductResponse"];
 }
 
-export const DefaultProductCard: React.FC<DefaultProductCardProps> = ({ product }) => {
+export const DefaultProductCard = ({product}: DefaultProductCardProps) => {
     return (
         <ProductCard variant="default">
             <ProductHeader>
@@ -26,7 +25,9 @@ export const DefaultProductCard: React.FC<DefaultProductCardProps> = ({ product 
                 <p><strong>Category:</strong> {product.category}</p>
 
                 <ProductDimensions>
-                    <p><strong>Dimensions:</strong> {product.dimensions.length} x {product.dimensions.width} x {product.dimensions.height}</p>
+                    <p>
+                        <strong>Dimensions:</strong> {product.dimensions.length} x {product.dimensions.width} x {product.dimensions.height}
+                    </p>
                 </ProductDimensions>
             </ProductDetails>
 

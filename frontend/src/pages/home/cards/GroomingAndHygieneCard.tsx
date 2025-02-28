@@ -1,18 +1,18 @@
-import { components } from "../../../shared/types";
+import {components} from "../../../shared/types";
 import {
-    ProductCard,
-    ProductHeader,
+    AddToCartButton,
     Price,
     ProductActions,
-    AddToCartButton,
+    ProductCard,
+    ProductHeader,
     ViewDetailsButton
-} from "./ProductCard.styles.ts";
+} from "../ProductList.styles.ts";
 
 interface GroomingCardProps {
     product: components["schemas"]["GetGroomingAndHygieneResponse"];
 }
 
-export const GroomingCard: React.FC<GroomingCardProps> = ({ product }) => {
+export const GroomingCard = ({product}: GroomingCardProps) => {
     return (
         <ProductCard variant="grooming">
             <ProductHeader>
