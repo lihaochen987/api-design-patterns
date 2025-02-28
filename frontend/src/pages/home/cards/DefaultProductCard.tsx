@@ -7,7 +7,7 @@ import {
     ProductHeader,
     ViewDetailsButton
 } from "../ProductList.styles.ts";
-import {ProductDetails, ProductDimensions} from "./PetFoodCard.styles.ts";
+import {ProductDetails, ProductDimensions} from "./DefaultProductCard.styles.ts";
 
 interface DefaultProductCardProps {
     product: components["schemas"]["GetProductResponse"];

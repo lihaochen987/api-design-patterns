@@ -9,8 +9,8 @@ interface ProductCardProps {
 export const ProductListContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
+    gap: 1.25rem;
+    padding: 1.25rem;
 `;
 
 const getCardVariantStyles = (variant: ProductCardVariant) => {
@@ -31,7 +31,7 @@ const getCardVariantStyles = (variant: ProductCardVariant) => {
 };
 
 export const Button = styled.button`
-    padding: 8px 16px;
+    padding: 0.5rem 1rem;
     border-radius: 4px;
     border: none;
     cursor: pointer;
@@ -43,7 +43,7 @@ export const Button = styled.button`
 export const ProductCard = styled.div<ProductCardProps>`
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 16px;
+    padding: 1rem;
     transition: box-shadow 0.3s ease;
     
     &:hover {
@@ -57,22 +57,22 @@ export const ProductHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
     border-bottom: 1px solid #f0f0f0;
-    padding-bottom: 8px;
+    padding-bottom: 0.5rem;
 `;
 
 export const Price = styled.span`
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     color: #e53935;
 `;
 
 export const ProductActions = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-top: 16px;
-    gap: 12px;
+    margin-top: 1rem;
+    gap: 0.75rem;
 `;
 
 export const AddToCartButton = styled(Button)`
