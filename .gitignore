@@ -401,5 +401,6 @@ dist-ssr
 *.sln
 *.sw?
 
-*.turbo
 *.dotTrace
+coverage/
+.nyc_output/
