@@ -3,7 +3,4 @@
 
 namespace backend.Shared;
 
-public class DatabaseNotAvailableException(
-    string message,
-    Exception innerException)
-    : Exception(message, innerException);
+public class DatabaseNotAvailableException(string message) : Exception(message);

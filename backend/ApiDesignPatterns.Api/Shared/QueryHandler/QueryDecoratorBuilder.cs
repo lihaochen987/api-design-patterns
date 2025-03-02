@@ -131,10 +131,10 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
 
         if (_useHandshaking && dbConnection != null)
         {
-            _handler = new HandShakingQueryHandlerDecorator<TQuery, TResult>(
+            _handler = new HandshakingQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
                 dbConnection,
-                loggerFactory.CreateLogger<HandShakingQueryHandlerDecorator<TQuery, TResult>>());
+                loggerFactory.CreateLogger<HandshakingQueryHandlerDecorator<TQuery, TResult>>());
         }
 
         if (_useBulkhead)
