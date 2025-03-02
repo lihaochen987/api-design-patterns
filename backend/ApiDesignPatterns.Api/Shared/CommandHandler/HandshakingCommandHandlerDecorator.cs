@@ -12,50 +12,33 @@ public class HandshakingCommandHandlerDecorator<TCommand>(
     ILogger<HandshakingCommandHandlerDecorator<TCommand>> logger)
     : ICommandHandler<TCommand>
 {
-    private const string SynHandshakeQuery =
-        "SELECT pg_backend_pid() as ServerSequence, " +
+    private const string HealthCheckQuery =
+        "SELECT " +
         "(SELECT COUNT(*) < (setting::int * 0.8) FROM pg_stat_activity, pg_settings " +
         "WHERE pg_settings.name = 'max_connections' AND state = 'active' group by setting) as IsReady";
 
-    private const string AckHandshakeQuery =
-        "SELECT @ClientSequence IS NOT NULL AND @ServerSequence = pg_backend_pid() as ConnectionEstablished";
-
     public async Task Handle(TCommand command)
     {
-        string clientSequence = Guid.NewGuid().ToString();
-        logger.LogDebug("Initiating database handshake with sequence {ClientSequence}", clientSequence);
+        logger.LogDebug("Performing database health check before executing command");
 
         try
         {
-            // Step 1 (SYN): Client initiates handshake with sequence identifier (clientSequence)
-            // Step 2 (SYN+ACK): Server acknowledges and responds with its own sequence (serverSequence)
-            (int serverSequence, bool isReady) =
-                await dbConnection.QueryFirstOrDefaultAsync<(int ServerSequence, bool IsReady)>(SynHandshakeQuery);
+            bool isReady = await dbConnection.QueryFirstOrDefaultAsync<bool>(HealthCheckQuery);
 
             if (!isReady)
             {
-                logger.LogWarning("Database rejected handshake during SYN - at capacity");
+                logger.LogWarning("Database rejected command - server at capacity");
                 throw new DatabaseNotAvailableException("Database is at capacity and cannot accept more connections");
             }
 
-            // Step 3 (ACK): Client confirms the handshake by acknowledging server's sequence
-            bool ackResult = await dbConnection.QueryFirstOrDefaultAsync<bool>(AckHandshakeQuery,
-                new { ClientSequence = clientSequence, ServerSequence = serverSequence });
-
-            if (!ackResult)
-            {
-                logger.LogWarning("Database handshake failed at ACK phase");
-                throw new DatabaseNotAvailableException("Failed to establish reliable connection with database");
-            }
-
-            logger.LogDebug("Handshake successful, connection established");
+            logger.LogDebug("Health check successful, proceeding with command");
 
             await commandHandler.Handle(command);
         }
         catch (Exception ex) when (ex is not DatabaseNotAvailableException)
         {
-            logger.LogError("Database handshake failed with error: {Error}", ex.Message);
-            throw new DatabaseNotAvailableException("Database handshake failed");
+            logger.LogError("Database health check failed with error: {Error}", ex.Message);
+            throw new DatabaseNotAvailableException("Database health check failed: " + ex.Message);
         }
     }
 }
