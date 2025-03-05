@@ -37,18 +37,7 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
         if (!cached.HasValue)
         {
             var result = await queryHandler.Handle(query);
-
-            try
-            {
-                string serialized = JsonSerializer.Serialize(result);
-                TimeSpan ttlWithJitter = JitterUtility.AddJitter(stalenessOptions.Ttl);
-                await redisCache.StringSetAsync(cacheKey, serialized, ttlWithJitter);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error caching query result");
-            }
-
+            await CacheResult(result, cacheKey, stalenessOptions.Ttl);
             return result;
         }
 
@@ -61,57 +50,54 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
         }
 
         // Check for staleness
-        try
+        var freshResult = await queryHandler.Handle(query);
+        var batch = redisCache.CreateBatch();
+        await batch.HashIncrementAsync(StatsKey, "total_checks");
+
+        if (!ResultsEqual(cachedResult, freshResult))
         {
-            var freshResult = await queryHandler.Handle(query);
-            var batch = redisCache.CreateBatch();
-            await batch.HashIncrementAsync(StatsKey, "total_checks");
-
-            if (!ResultsEqual(cachedResult, freshResult))
-            {
-                await batch.HashIncrementAsync(StatsKey, "stale_hits");
-
-                // Get current stats and calculate rate
-                HashEntry[] stats = await redisCache.HashGetAllAsync(StatsKey);
-                long totalChecks = stats.FirstOrDefault(x => x.Name == "total_checks").Value.TryParse(out long t)
-                    ? t
-                    : 0;
-                long staleHits = stats.FirstOrDefault(x => x.Name == "stale_hits").Value.TryParse(out long s)
-                    ? s
-                    : 0;
-
-                if (totalChecks >= 100) // Only start warning after we have enough samples
-                {
-                    LogStalenessStatistics(
-                        typeof(TQuery).Name,
-                        new StalenessRates(
-                            stalenessOptions.MinAcceptableRate,
-                            stalenessOptions.MaxAcceptableRate,
-                            (double)staleHits / totalChecks),
-                        stalenessOptions.Ttl,
-                        logger);
-                }
-
-                try
-                {
-                    string serialized = JsonSerializer.Serialize(freshResult);
-                    TimeSpan ttlWithJitter = JitterUtility.AddJitter(stalenessOptions.Ttl);
-                    await redisCache.StringSetAsync(cacheKey, serialized, ttlWithJitter);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Error caching query result");
-                }
-            }
-
-            batch.Execute();
+            await batch.HashIncrementAsync(StatsKey, "stale_hits");
+            await GetCacheStatistics(redisCache, stalenessOptions, logger);
+            await CacheResult(freshResult, cacheKey, stalenessOptions.Ttl);
         }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error checking for stale data");
-        }
+
+        batch.Execute();
 
         return cachedResult;
+    }
+
+    private static async Task GetCacheStatistics(
+        IDatabase cache,
+        CacheStalenessOptions options,
+        ILogger<RedisCacheQueryHandlerDecorator<TQuery, TResult>> statsLogger)
+    {
+        // Get current stats and calculate rate
+        HashEntry[] stats = await cache.HashGetAllAsync(StatsKey);
+        long totalChecks = stats.FirstOrDefault(x => x.Name == "total_checks").Value.TryParse(out long t)
+            ? t
+            : 0;
+        long staleHits = stats.FirstOrDefault(x => x.Name == "stale_hits").Value.TryParse(out long s)
+            ? s
+            : 0;
+
+        if (totalChecks >= 100) // Only start warning after we have enough samples
+        {
+            LogStalenessStatistics(
+                typeof(TQuery).Name,
+                new StalenessRates(
+                    options.MinAcceptableRate,
+                    options.MaxAcceptableRate,
+                    (double)staleHits / totalChecks),
+                options.Ttl,
+                statsLogger);
+        }
+    }
+
+    private async Task CacheResult(TResult? result, string cacheKey, TimeSpan ttl)
+    {
+        string serialized = JsonSerializer.Serialize(result);
+        TimeSpan ttlWithJitter = JitterUtility.AddJitter(ttl);
+        await redisCache.StringSetAsync(cacheKey, serialized, ttlWithJitter);
     }
 
     private record StalenessRates(
