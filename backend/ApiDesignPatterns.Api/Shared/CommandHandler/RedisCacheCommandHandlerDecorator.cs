@@ -27,7 +27,7 @@ public class RedisCacheCommandHandlerDecorator<TCommand>(
         string requestHash = CalculateHash(command);
         string cacheKey = $"command:{command.RequestId}";
 
-        redisCache.CreateTransaction();
+        var transaction = redisCache.CreateTransaction();
 
         var existingValue = await redisCache.StringGetAsync(cacheKey);
         if (existingValue.HasValue)
@@ -39,23 +39,26 @@ public class RedisCacheCommandHandlerDecorator<TCommand>(
                 throw new RequestIdCollisionException("Request ID collision detected");
             }
 
-            await RefreshCacheEntry(cacheKey, cachedResponse);
+            await RefreshCacheEntry(cacheKey, cachedResponse, transaction,cacheExpiration);
         }
 
         await commandHandler.Handle(command);
 
-        await CacheCommandResponse(cacheKey, requestHash);
+        await CacheCommandResponse(cacheKey, requestHash, cacheExpiration);
     }
 
-    private async Task RefreshCacheEntry(string cacheKey, CachedResponse<object> cachedResponse)
+    private async Task RefreshCacheEntry(
+        string cacheKey,
+        CachedResponse<object> cachedResponse,
+        ITransaction transaction,
+        TimeSpan expiration)
     {
         var refreshedResponse = cachedResponse with { LastAccessed = DateTime.UtcNow };
-        var transaction = redisCache.CreateTransaction();
 
         _ = transaction.StringSetAsync(
             cacheKey,
             JsonSerializer.Serialize(refreshedResponse),
-            cacheExpiration
+            expiration
         );
 
         if (await transaction.ExecuteAsync())
@@ -64,7 +67,7 @@ public class RedisCacheCommandHandlerDecorator<TCommand>(
         }
     }
 
-    private async Task CacheCommandResponse(string cacheKey, string requestHash)
+    private async Task CacheCommandResponse(string cacheKey, string requestHash, TimeSpan expiration)
     {
         var responseToCache = new CachedResponse<object>
         {
@@ -74,7 +77,7 @@ public class RedisCacheCommandHandlerDecorator<TCommand>(
         await redisCache.StringSetAsync(
             cacheKey,
             JsonSerializer.Serialize(responseToCache),
-            cacheExpiration
+            expiration
         );
     }
 
