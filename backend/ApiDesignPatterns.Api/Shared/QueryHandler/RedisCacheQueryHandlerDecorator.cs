@@ -18,7 +18,6 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
 
     public async Task<TResult?> Handle(TQuery query)
     {
-        Random random = new();
         string cacheKey = GenerateCacheKey(query);
 
         // Try to get from cache
@@ -43,8 +42,8 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
 
         var cachedResult = JsonSerializer.Deserialize<TResult>(cached!);
 
-        // Not checking for staleness - return cached result immediately
-        if (random.NextDouble() >= stalenessOptions.CheckRate)
+        // Determine if we should check for staleness
+        if (!ShouldCheckStaleness(stalenessOptions.CheckRate))
         {
             return cachedResult;
         }
@@ -64,6 +63,11 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
         batch.Execute();
 
         return cachedResult;
+    }
+
+    private static bool ShouldCheckStaleness(double checkRate)
+    {
+        return RandomUtility.CheckProbability(checkRate);
     }
 
     private static async Task GetCacheStatistics(
