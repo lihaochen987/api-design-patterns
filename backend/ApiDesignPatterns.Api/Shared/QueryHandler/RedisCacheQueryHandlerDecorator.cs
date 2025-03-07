@@ -35,9 +35,7 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
         // Cache miss - get fresh result and cache it
         if (!cached.HasValue)
         {
-            var result = await queryHandler.Handle(query);
-            await CacheResult(result, cacheKey, stalenessOptions.Ttl);
-            return result;
+            return await HandleCacheMiss(query, cacheKey, queryHandler, stalenessOptions.Ttl);
         }
 
         var cachedResult = JsonSerializer.Deserialize<TResult>(cached!);
@@ -63,6 +61,17 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
         batch.Execute();
 
         return cachedResult;
+    }
+
+    private async Task<TResult?> HandleCacheMiss(
+        TQuery query,
+        string cacheKey,
+        IQueryHandler<TQuery, TResult> handler,
+        TimeSpan ttl)
+    {
+        var result = await handler.Handle(query);
+        await CacheResult(result, cacheKey, ttl);
+        return result;
     }
 
     private static bool ShouldCheckStaleness(double checkRate)
