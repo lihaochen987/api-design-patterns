@@ -11,6 +11,11 @@ public abstract class BaseControllerActivator(IConfiguration configuration) : IC
 {
     public abstract object? Create(ControllerContext context);
 
+    object IControllerActivator.Create(ControllerContext context)
+    {
+        return Create(context) ?? throw new InvalidOperationException("Controller creation returned null");
+    }
+
     public virtual void Release(ControllerContext context, object controller)
     {
         if (context.HttpContext.Items["Disposables"] is not List<IDisposable> disposables)
