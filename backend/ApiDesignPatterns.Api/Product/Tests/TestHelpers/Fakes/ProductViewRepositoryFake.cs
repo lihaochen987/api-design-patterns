@@ -8,7 +8,7 @@ using backend.Shared;
 namespace backend.Product.Tests.TestHelpers.Fakes;
 
 public class ProductViewRepositoryFake(
-    QueryService<ProductView> queryService)
+    PaginateService<ProductView> paginateService)
     : Collection<ProductView>, IProductViewRepository
 {
     public void AddProductView(int id, Category category)
@@ -54,7 +54,7 @@ public class ProductViewRepositoryFake(
             .ToList();
 
         List<ProductView> paginatedProducts =
-            queryService.Paginate(products, maxPageSize, out string? nextPageToken);
+            paginateService.Paginate(products, maxPageSize, out string? nextPageToken);
 
         return Task.FromResult((paginatedProducts, nextPageToken));
     }

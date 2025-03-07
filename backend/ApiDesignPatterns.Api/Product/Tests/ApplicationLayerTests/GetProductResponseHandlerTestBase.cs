@@ -15,7 +15,7 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 
 public abstract class GetProductResponseHandlerTestBase
 {
-    protected readonly ProductViewRepositoryFake Repository = new(new QueryService<ProductView>());
+    protected readonly ProductViewRepositoryFake Repository = new(new PaginateService<ProductView>());
     protected readonly IMapper Mapper;
 
     protected GetProductResponseHandlerTestBase()

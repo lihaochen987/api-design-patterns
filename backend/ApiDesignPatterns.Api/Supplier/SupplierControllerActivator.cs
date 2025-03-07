@@ -27,7 +27,7 @@ namespace backend.Supplier;
 
 public class SupplierControllerActivator : BaseControllerActivator
 {
-    private readonly QueryService<SupplierView> _supplierQueryService;
+    private readonly PaginateService<SupplierView> _supplierPaginateService;
     private readonly SqlFilterBuilder _supplierSqlFilterBuilder;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
@@ -36,7 +36,7 @@ public class SupplierControllerActivator : BaseControllerActivator
 
     public SupplierControllerActivator(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration)
     {
-        _supplierQueryService = new QueryService<SupplierView>();
+        _supplierPaginateService = new PaginateService<SupplierView>();
 
         SupplierColumnMapper supplierColumnMapper = new();
         _supplierSqlFilterBuilder = new SqlFilterBuilder(supplierColumnMapper);
@@ -70,7 +70,7 @@ public class SupplierControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.SupplierWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -110,7 +110,7 @@ public class SupplierControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.SupplierWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -125,7 +125,7 @@ public class SupplierControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierQueryService);
+            var repository = new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierPaginateService);
 
             // GetSupplierView handler
             var getSupplierViewHandler = new QueryDecoratorBuilder<GetSupplierViewQuery, SupplierView>(
@@ -152,7 +152,7 @@ public class SupplierControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierQueryService);
+            var repository = new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierPaginateService);
             IDatabase redisCache = new RedisService(_configuration).GetDatabase();
 
             // ListSuppliers query handler
@@ -203,7 +203,7 @@ public class SupplierControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.SupplierWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -244,7 +244,7 @@ public class SupplierControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.SupplierWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()

@@ -32,7 +32,7 @@ namespace backend.Product;
 
 public class ProductControllerActivator : BaseControllerActivator
 {
-    private readonly QueryService<ProductView> _productQueryService;
+    private readonly PaginateService<ProductView> _productPaginateService;
     private readonly SqlFilterBuilder _productSqlFilterBuilder;
     private readonly IMapper _mapper;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
@@ -44,7 +44,7 @@ public class ProductControllerActivator : BaseControllerActivator
         ILoggerFactory loggerFactory)
         : base(configuration)
     {
-        _productQueryService = new QueryService<ProductView>();
+        _productPaginateService = new PaginateService<ProductView>();
 
         ProductColumnMapper productColumnMapper = new();
         _productSqlFilterBuilder = new SqlFilterBuilder(productColumnMapper);
@@ -78,7 +78,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -116,7 +116,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -144,7 +144,7 @@ public class ProductControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new ProductViewRepository(dbConnection, _productQueryService, _productSqlFilterBuilder);
+            var repository = new ProductViewRepository(dbConnection, _productPaginateService, _productSqlFilterBuilder);
 
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse>(
@@ -170,7 +170,7 @@ public class ProductControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new ProductViewRepository(dbConnection, _productQueryService, _productSqlFilterBuilder);
+            var repository = new ProductViewRepository(dbConnection, _productPaginateService, _productSqlFilterBuilder);
             IDatabase redisCache = new RedisService(_configuration).GetDatabase();
 
             // ListProducts handler
@@ -224,7 +224,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -277,7 +277,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -290,7 +290,7 @@ public class ProductControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new ProductViewRepository(dbConnection, _productQueryService, _productSqlFilterBuilder);
+            var repository = new ProductViewRepository(dbConnection, _productPaginateService, _productSqlFilterBuilder);
 
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse>(

@@ -10,7 +10,7 @@ using backend.Supplier.Tests.TestHelpers.Builders;
 namespace backend.Supplier.Tests.TestHelpers.Fakes;
 
 public class SupplierViewRepositoryFake(
-    QueryService<SupplierView> queryService)
+    PaginateService<SupplierView> paginateService)
     : Collection<SupplierView>, ISupplierViewRepository
 {
     public void AddSupplierView(string firstName, string lastName, string email)
@@ -64,7 +64,7 @@ public class SupplierViewRepositoryFake(
             .ToList();
 
         List<SupplierView> paginatedSuppliers =
-            queryService.Paginate(suppliers, maxPageSize, out string? nextPageToken);
+            paginateService.Paginate(suppliers, maxPageSize, out string? nextPageToken);
 
         return Task.FromResult((paginatedSuppliers, nextPageToken));
     }

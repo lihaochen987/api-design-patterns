@@ -3,7 +3,7 @@
 
 namespace backend.Shared;
 
-public class QueryService<TEntity> where TEntity : Identifier
+public class PaginateService<TEntity> where TEntity : Identifier
 {
     public List<TEntity> Paginate(
         List<TEntity> existingItems,

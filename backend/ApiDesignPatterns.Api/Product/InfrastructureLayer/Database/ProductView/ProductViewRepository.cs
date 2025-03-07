@@ -9,7 +9,7 @@ namespace backend.Product.InfrastructureLayer.Database.ProductView;
 
 public class ProductViewRepository(
     IDbConnection dbConnection,
-    QueryService<DomainModels.Views.ProductView> queryService,
+    PaginateService<DomainModels.Views.ProductView> paginateService,
     SqlFilterBuilder productSqlFilterBuilder)
     : IProductViewRepository
 {
@@ -65,7 +65,7 @@ public class ProductViewRepository(
             parameters,
             splitOn: "Length"
         )).ToList();
-        List<DomainModels.Views.ProductView> paginatedProducts = queryService.Paginate(products, maxPageSize, out string? nextPageToken);
+        List<DomainModels.Views.ProductView> paginatedProducts = paginateService.Paginate(products, maxPageSize, out string? nextPageToken);
 
         return (paginatedProducts, nextPageToken);
     }

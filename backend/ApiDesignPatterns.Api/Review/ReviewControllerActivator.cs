@@ -27,7 +27,7 @@ namespace backend.Review;
 
 public class ReviewControllerActivator : BaseControllerActivator
 {
-    private readonly QueryService<ReviewView> _reviewQueryService;
+    private readonly PaginateService<ReviewView> _reviewPaginateService;
     private readonly SqlFilterBuilder _reviewSqlFilterBuilder;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
@@ -36,7 +36,7 @@ public class ReviewControllerActivator : BaseControllerActivator
 
     public ReviewControllerActivator(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration)
     {
-        _reviewQueryService = new QueryService<ReviewView>();
+        _reviewPaginateService = new PaginateService<ReviewView>();
 
         ReviewColumnMapper reviewColumnMapper = new();
         _reviewSqlFilterBuilder = new SqlFilterBuilder(reviewColumnMapper);
@@ -70,7 +70,7 @@ public class ReviewControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -110,7 +110,7 @@ public class ReviewControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -126,7 +126,7 @@ public class ReviewControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new ReviewViewRepository(dbConnection, _reviewSqlFilterBuilder, _reviewQueryService);
+            var repository = new ReviewViewRepository(dbConnection, _reviewSqlFilterBuilder, _reviewPaginateService);
 
             // GetReviewView handler
             var getReviewViewHandler = new QueryDecoratorBuilder<GetReviewViewQuery, ReviewView>(
@@ -153,7 +153,7 @@ public class ReviewControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new ReviewViewRepository(dbConnection, _reviewSqlFilterBuilder, _reviewQueryService);
+            var repository = new ReviewViewRepository(dbConnection, _reviewSqlFilterBuilder, _reviewPaginateService);
             IDatabase redisCache = new RedisService(_configuration).GetDatabase();
 
             // ListReviews query handler
@@ -204,7 +204,7 @@ public class ReviewControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -245,7 +245,7 @@ public class ReviewControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()

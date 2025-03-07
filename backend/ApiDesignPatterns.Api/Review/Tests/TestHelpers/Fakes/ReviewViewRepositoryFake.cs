@@ -10,7 +10,7 @@ using backend.Shared;
 namespace backend.Review.Tests.TestHelpers.Fakes;
 
 public class ReviewViewRepositoryFake(
-    QueryService<ReviewView> queryService)
+    PaginateService<ReviewView> paginateService)
     : Collection<ReviewView>, IReviewViewRepository
 {
     public void AddReviewView(long productId)
@@ -76,7 +76,7 @@ public class ReviewViewRepositoryFake(
             .ToList();
 
         List<ReviewView> paginatedReviews =
-            queryService.Paginate(reviews, maxPageSize, out string? nextPageToken);
+            paginateService.Paginate(reviews, maxPageSize, out string? nextPageToken);
 
         return Task.FromResult((paginatedReviews, nextPageToken));
     }

@@ -11,7 +11,7 @@ namespace backend.Supplier.Tests.ApplicationLayerTests;
 
 public abstract class ListSuppliersHandlerTestBase
 {
-    protected readonly SupplierViewRepositoryFake Repository = new(new QueryService<SupplierView>());
+    protected readonly SupplierViewRepositoryFake Repository = new(new PaginateService<SupplierView>());
 
     protected IQueryHandler<ListSuppliersQuery, PagedSuppliers> ListSuppliersViewHandler()
     {

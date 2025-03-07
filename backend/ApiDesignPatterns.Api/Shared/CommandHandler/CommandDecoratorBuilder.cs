@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Data;
+using Polly.Bulkhead;
 
 namespace backend.Shared.CommandHandler;
 
@@ -21,8 +22,7 @@ public class CommandDecoratorBuilder<TCommand>(
     private bool _useTimeout;
     private TimeSpan _timeout;
     private bool _useBulkhead;
-    private int _maxParallelization;
-    private int _maxQueuingActions;
+    private AsyncBulkheadPolicy _bulkheadPolicy;
 
     public CommandDecoratorBuilder<TCommand> WithCircuitBreaker(
         TimeSpan durationOfBreak,
@@ -65,13 +65,10 @@ public class CommandDecoratorBuilder<TCommand>(
         return this;
     }
 
-    public CommandDecoratorBuilder<TCommand> WithBulkhead(
-        int maxParallelization,
-        int maxQueuingActions)
+    public CommandDecoratorBuilder<TCommand> WithBulkhead(AsyncBulkheadPolicy policy)
     {
         _useBulkhead = true;
-        _maxParallelization = maxParallelization;
-        _maxQueuingActions = maxQueuingActions;
+        _bulkheadPolicy = policy;
         return this;
     }
 
@@ -123,9 +120,7 @@ public class CommandDecoratorBuilder<TCommand>(
         {
             _handler = new BulkheadCommandHandlerDecorator<TCommand>(
                 _handler,
-                loggerFactory.CreateLogger<BulkheadCommandHandlerDecorator<TCommand>>(),
-                _maxParallelization,
-                _maxQueuingActions);
+                _bulkheadPolicy);
         }
 
         return _handler;

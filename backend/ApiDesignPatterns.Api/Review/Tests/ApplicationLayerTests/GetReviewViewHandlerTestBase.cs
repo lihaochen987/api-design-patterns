@@ -12,7 +12,7 @@ namespace backend.Review.Tests.ApplicationLayerTests;
 public abstract class GetReviewViewHandlerTestBase
 {
     protected readonly ReviewViewRepositoryFake Repository =
-        new ReviewViewRepositoryFake(new QueryService<ReviewView>());
+        new ReviewViewRepositoryFake(new PaginateService<ReviewView>());
 
     protected IQueryHandler<GetReviewViewQuery, ReviewView> GetReviewViewHandler()
     {

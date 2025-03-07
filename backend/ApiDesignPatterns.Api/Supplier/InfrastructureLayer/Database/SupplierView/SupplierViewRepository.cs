@@ -12,7 +12,7 @@ namespace backend.Supplier.InfrastructureLayer.Database.SupplierView;
 public class SupplierViewRepository(
     IDbConnection dbConnection,
     SqlFilterBuilder sqlFilterBuilder,
-    QueryService<DomainModels.SupplierView> queryService)
+    PaginateService<DomainModels.SupplierView> paginateService)
     : ISupplierViewRepository
 {
     public async Task<DomainModels.SupplierView?> GetSupplierView(long id)
@@ -50,7 +50,7 @@ public class SupplierViewRepository(
         List<DomainModels.SupplierView> suppliers =
             (await dbConnection.QueryAsync<DomainModels.SupplierView>(sql.ToString(), parameters)).ToList();
         List<DomainModels.SupplierView> paginatedSuppliers =
-            queryService.Paginate(suppliers, maxPageSize, out string? nextPageToken);
+            paginateService.Paginate(suppliers, maxPageSize, out string? nextPageToken);
 
         return (paginatedSuppliers, nextPageToken);
     }

@@ -12,7 +12,7 @@ namespace backend.Review.InfrastructureLayer.Database.ReviewView;
 public class ReviewViewRepository(
     IDbConnection dbConnection,
     SqlFilterBuilder reviewSqlFilterBuilder,
-    QueryService<DomainModels.ReviewView> queryService)
+    PaginateService<DomainModels.ReviewView> paginateService)
     : IReviewViewRepository
 {
     public async Task<DomainModels.ReviewView?> GetReviewView(long id)
@@ -56,7 +56,7 @@ public class ReviewViewRepository(
         parameters.Add("PageSizePlusOne", maxPageSize + 1);
 
         List<DomainModels.ReviewView> reviews = (await dbConnection.QueryAsync<DomainModels.ReviewView>(sql.ToString(), parameters)).ToList();
-        List<DomainModels.ReviewView> paginatedReviews = queryService.Paginate(reviews, maxPageSize, out string? nextPageToken);
+        List<DomainModels.ReviewView> paginatedReviews = paginateService.Paginate(reviews, maxPageSize, out string? nextPageToken);
 
         return (paginatedReviews, nextPageToken);
     }

@@ -100,7 +100,7 @@ public class ProductPricingControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(100, 500)
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()

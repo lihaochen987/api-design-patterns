@@ -11,7 +11,7 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 
 public abstract class ListProductHandlerTestBase
 {
-    protected readonly ProductViewRepositoryFake Repository = new(new QueryService<ProductView>());
+    protected readonly ProductViewRepositoryFake Repository = new(new PaginateService<ProductView>());
 
     protected IQueryHandler<ListProductsQuery, PagedProducts> ListProductsViewHandler()
     {
