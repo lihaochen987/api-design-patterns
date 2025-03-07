@@ -112,28 +112,28 @@ app.MapControllers();
 app.Run();
 return;
 
-static void ConfigureMessageQueue<TRequest, TResponse>(IBusRegistrationConfigurator x)
-    where TRequest : class
-    where TResponse : class
-{
-    x.UsingRabbitMq((_, cfg) =>
-    {
-        cfg.Host("rabbitmq", "/", h =>
-        {
-            h.Username("guest");
-            h.Password("guest");
-        });
-        cfg.UseMessageRetry(r =>
-        {
-            r.Intervals(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
-            r.Handle<RabbitMQ.Client.Exceptions.BrokerUnreachableException>();
-        });
-        cfg.UseScheduledRedelivery(r => r.Intervals(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15)));
-
-        cfg.Message<TRequest>(e => e.SetEntityName($"{typeof(TRequest).Name.ToLower()}-queue"));
-        cfg.Message<TResponse>(e => e.SetEntityName($"{typeof(TResponse).Name.ToLower()}-queue"));
-    });
-}
+// static void ConfigureMessageQueue<TRequest, TResponse>(IBusRegistrationConfigurator x)
+//     where TRequest : class
+//     where TResponse : class
+// {
+//     x.UsingRabbitMq((_, cfg) =>
+//     {
+//         cfg.Host("rabbitmq", "/", h =>
+//         {
+//             h.Username("guest");
+//             h.Password("guest");
+//         });
+//         cfg.UseMessageRetry(r =>
+//         {
+//             r.Intervals(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
+//             r.Handle<RabbitMQ.Client.Exceptions.BrokerUnreachableException>();
+//         });
+//         cfg.UseScheduledRedelivery(r => r.Intervals(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15)));
+//
+//         cfg.Message<TRequest>(e => e.SetEntityName($"{typeof(TRequest).Name.ToLower()}-queue"));
+//         cfg.Message<TResponse>(e => e.SetEntityName($"{typeof(TResponse).Name.ToLower()}-queue"));
+//     });
+// }
 
 void ApplyMigrations(
     string connectionString,

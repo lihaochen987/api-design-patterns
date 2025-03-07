@@ -26,7 +26,7 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     private bool _useTimeout;
     private TimeSpan _timeout;
     private bool _useBulkhead;
-    private AsyncBulkheadPolicy _bulkheadPolicy;
+    private AsyncBulkheadPolicy? _bulkheadPolicy;
     private bool _useRedisCache;
     private CacheStalenessOptions? _cacheStalenessOptions;
 
@@ -136,6 +136,12 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
 
         if (_useBulkhead)
         {
+            if (_bulkheadPolicy == null)
+            {
+                throw new InvalidOperationException(
+                    "Bulkhead policy is required for BulkheadQuery decorator");
+            }
+
             _handler = new BulkheadQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
                 _bulkheadPolicy);

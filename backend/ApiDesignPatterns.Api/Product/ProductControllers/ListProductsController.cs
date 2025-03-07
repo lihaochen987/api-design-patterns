@@ -21,12 +21,17 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        (List<ProductView> products, string? nextPageToken) = await listProducts.Handle(new ListProductsQuery
+        PagedProducts? result = await listProducts.Handle(new ListProductsQuery
         {
             Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
         });
 
-        IEnumerable<GetProductResponse> productResponses = products.Select(product =>
+        if (result == null)
+        {
+            return NotFound();
+        }
+
+        IEnumerable<GetProductResponse> productResponses = result.Products.Select(product =>
             Enum.Parse<Category>(product.Category) switch
             {
                 Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
@@ -34,7 +39,7 @@ public class ListProductsController(
                 _ => mapper.Map<GetProductResponse>(product)
             }).ToList();
 
-        ListProductsResponse response = new() { Results = productResponses, NextPageToken = nextPageToken };
+        ListProductsResponse response = new() { Results = productResponses, NextPageToken = result.NextPageToken };
 
         return Ok(response);
     }

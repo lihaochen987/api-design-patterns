@@ -21,12 +21,16 @@ public class ListReviewsController(
         [FromQuery] ListReviewsRequest request,
         string parentId)
     {
-        (List<ReviewView> reviews, string? nextPageToken) =
-            await listReviews.Handle(new ListReviewsQuery { ParentId = parentId, Request = request });
+        PagedReviews? result = await listReviews.Handle(new ListReviewsQuery { ParentId = parentId, Request = request });
+
+        if (result == null)
+        {
+            return NotFound();
+        }
 
         ListReviewsResponse response = new()
         {
-            Results = mapper.Map<List<GetReviewResponse>>(reviews), NextPageToken = nextPageToken
+            Results = mapper.Map<List<GetReviewResponse>>(result.Reviews), NextPageToken = result.NextPageToken
         };
 
         return Ok(response);

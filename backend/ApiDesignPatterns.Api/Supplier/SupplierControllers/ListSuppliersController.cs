@@ -1,8 +1,6 @@
 using AutoMapper;
 using backend.Shared.QueryHandler;
-using backend.Supplier.ApplicationLayer;
 using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
-using backend.Supplier.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -21,12 +19,16 @@ public class ListSuppliersController(
     public async Task<ActionResult<IEnumerable<ListSuppliersResponse>>> ListSuppliers(
         [FromQuery] ListSuppliersRequest request)
     {
-        (List<SupplierView> suppliers, string? nextPageToken) =
-            await listSuppliers.Handle(new ListSuppliersQuery { Request = request });
+        PagedSuppliers? result = await listSuppliers.Handle(new ListSuppliersQuery { Request = request });
+
+        if (result == null)
+        {
+            return NotFound();
+        }
 
         ListSuppliersResponse response = new()
         {
-            Results = mapper.Map<List<GetSupplierResponse>>(suppliers), NextPageToken = nextPageToken
+            Results = mapper.Map<List<GetSupplierResponse>>(result.Suppliers), NextPageToken = result.NextPageToken
         };
 
         return Ok(response);

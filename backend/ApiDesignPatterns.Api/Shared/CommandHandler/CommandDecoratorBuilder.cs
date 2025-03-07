@@ -22,7 +22,7 @@ public class CommandDecoratorBuilder<TCommand>(
     private bool _useTimeout;
     private TimeSpan _timeout;
     private bool _useBulkhead;
-    private AsyncBulkheadPolicy _bulkheadPolicy;
+    private AsyncBulkheadPolicy? _bulkheadPolicy;
 
     public CommandDecoratorBuilder<TCommand> WithCircuitBreaker(
         TimeSpan durationOfBreak,
@@ -118,6 +118,12 @@ public class CommandDecoratorBuilder<TCommand>(
 
         if (_useBulkhead)
         {
+            if (_bulkheadPolicy == null)
+            {
+                throw new InvalidOperationException(
+                    "Bulkhead policy is required for BulkheadCommand decorator");
+            }
+
             _handler = new BulkheadCommandHandlerDecorator<TCommand>(
                 _handler,
                 _bulkheadPolicy);
