@@ -3,6 +3,7 @@
 
 using System.Data;
 using backend.Shared.Caching;
+using Polly.Bulkhead;
 using StackExchange.Redis;
 
 namespace backend.Shared.QueryHandler;
@@ -25,8 +26,7 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     private bool _useTimeout;
     private TimeSpan _timeout;
     private bool _useBulkhead;
-    private int _maxParallelization;
-    private int _maxQueuingActions;
+    private AsyncBulkheadPolicy _bulkheadPolicy;
     private bool _useRedisCache;
     private CacheStalenessOptions? _cacheStalenessOptions;
 
@@ -76,13 +76,10 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         return this;
     }
 
-    public QueryDecoratorBuilder<TQuery, TResult> WithBulkhead(
-        int maxParallelization,
-        int maxQueuingActions)
+    public QueryDecoratorBuilder<TQuery, TResult> WithBulkhead(AsyncBulkheadPolicy policy)
     {
         _useBulkhead = true;
-        _maxParallelization = maxParallelization;
-        _maxQueuingActions = maxQueuingActions;
+        _bulkheadPolicy = policy;
         return this;
     }
 
@@ -141,9 +138,7 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         {
             _handler = new BulkheadQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
-                loggerFactory.CreateLogger<BulkheadQueryHandlerDecorator<TQuery, TResult>>(),
-                _maxParallelization,
-                _maxQueuingActions);
+                _bulkheadPolicy);
         }
 
         if (_useRedisCache)
