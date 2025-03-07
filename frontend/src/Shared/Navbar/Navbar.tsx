@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
 import PetsIcon from '@mui/icons-material/Pets';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import MenuIcon from '@mui/icons-material/Menu';
 import {
   NavbarContainer,
   LogoContainer,
@@ -10,57 +8,37 @@ import {
   NavItem,
   CartIconWrapper,
   CartBadge,
-  MobileMenuButton,
-  NavbarToolbar,
+  NavbarContent,
+  NavigationControls,
 } from './Navbar.styles';
 
 interface NavbarProps {
-  onMenuClick?: () => void;
   cartItemsCount?: number;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ onMenuClick, cartItemsCount = 0 }) => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
+const Navbar = ({ cartItemsCount = 0 }: NavbarProps) => {
   return (
     <NavbarContainer>
-      <NavbarToolbar>
-        {isMobile && (
-          <MobileMenuButton onClick={onMenuClick}>
-            <MenuIcon />
-          </MobileMenuButton>
-        )}
-
+      <NavbarContent>
         <LogoContainer>
           <PetsIcon />
-          <Title>The Pet store</Title>
+          <Title>The Petstore</Title>
         </LogoContainer>
 
-        {!isMobile && (
+        <NavigationControls>
           <NavItems>
             <NavItem>Products</NavItem>
             <NavItem>Services</NavItem>
             <NavItem>About Us</NavItem>
             <NavItem>Contact</NavItem>
           </NavItems>
-        )}
 
-        <CartIconWrapper>
-          <ShoppingCartIcon />
-          {cartItemsCount > 0 && <CartBadge>{cartItemsCount}</CartBadge>}
-        </CartIconWrapper>
-      </NavbarToolbar>
+          <CartIconWrapper>
+            <ShoppingCartIcon />
+            {cartItemsCount > 0 && <CartBadge>{cartItemsCount}</CartBadge>}
+          </CartIconWrapper>
+        </NavigationControls>
+      </NavbarContent>
     </NavbarContainer>
   );
 };

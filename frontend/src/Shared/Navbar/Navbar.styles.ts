@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const NavbarContainer = styled.header`
+  display: flex;
+  padding: 0.75rem;
   background-color: #1976d2;
   color: white;
   box-shadow:
@@ -12,23 +14,14 @@ export const NavbarContainer = styled.header`
   z-index: 1100;
 `;
 
-export const NavbarToolbar = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-`;
-
 export const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   flex-grow: 1;
 
   svg {
-    margin-right: 8px;
-    font-size: 24px;
+    margin-right: 0.5rem;
+    font-size: 1.5rem;
   }
 `;
 
@@ -42,8 +35,12 @@ export const Title = styled.h1`
 
 export const NavItems = styled.nav`
   display: flex;
-  gap: 16px;
-  margin-right: 16px;
+  gap: 1rem;
+  margin-right: 1rem;
+
+  a {
+    transform: translateY(3px);
+  }
 `;
 
 export const NavItem = styled.a`
@@ -51,26 +48,8 @@ export const NavItem = styled.a`
   cursor: pointer;
   font-weight: 500;
   text-decoration: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-`;
-
-export const MobileMenuButton = styled.button`
-  background: none;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  margin-right: 16px;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
   transition: background-color 0.3s;
 
   &:hover {
@@ -81,7 +60,7 @@ export const MobileMenuButton = styled.button`
 export const CartIconWrapper = styled.div`
   position: relative;
   cursor: pointer;
-  padding: 8px;
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,10 +79,20 @@ export const CartBadge = styled.div`
   background-color: #f50057;
   color: white;
   border-radius: 50%;
-  width: 18px;
+  width: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: bold;
+`;
+
+export const NavbarContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+export const NavigationControls = styled.div`
+  display: flex;
 `;
