@@ -7,6 +7,7 @@ using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
 using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
+using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
@@ -19,7 +20,6 @@ using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared;
-using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -184,15 +184,22 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(BulkheadPolicies.ProductRead)
                 .WithLogging()
-                .WithRedisCache(new CacheStalenessOptions(
-                    JitterUtility.AddJitter(TimeSpan.FromMinutes(5)),
-                    0.05,
-                    0.01,
-                    0.05))
                 .WithTransaction()
                 .Build();
 
-            return new ListProductsController(listProductsHandler, _mapper);
+            // GetListProductsFromCache handler
+            var getListProductsFromCacheHandler = new QueryDecoratorBuilder<GetListProductsFromCacheQuery, ListProductsResponse>(
+                    new GetListProductsFromCacheHandler(redisCache),
+                    _loggerFactory,
+                    null,
+                    redisCache)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.ProductRead)
+                .WithLogging()
+                .Build();
+
+            return new ListProductsController(listProductsHandler, getListProductsFromCacheHandler, _mapper);
         }
 
         if (type == typeof(ReplaceProductController))
