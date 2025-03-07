@@ -1,9 +1,10 @@
 import { ProductList } from './Pages/Home/ProductList/ProductList.tsx';
+import Navbar from './Shared/Navbar/Navbar.tsx';
 
 function App() {
   return (
     <>
-      <h1>Welcome to the Pet store</h1>
+      <Navbar />
       <ProductList />
     </>
   );
