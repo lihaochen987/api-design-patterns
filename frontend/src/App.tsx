@@ -1,4 +1,4 @@
-import { ProductList } from './pages/home/ProductList.tsx';
+import { ProductList } from './Pages/Home/ProductList/ProductList.tsx';
 
 function App() {
   return (

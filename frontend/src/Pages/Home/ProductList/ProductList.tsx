@@ -1,8 +1,8 @@
-import { components } from '../../shared/types';
-import { $api } from '../../shared/fetch-client.ts';
-import { PetFoodCard } from './cards/PetFoodCard.tsx';
-import { GroomingAndHygieneCard } from './cards/GroomingAndHygieneCard.tsx';
-import { DefaultProductCard } from './cards/DefaultProductCard.tsx';
+import { components } from '../../../shared/types';
+import { $api } from '../../../shared/fetch-client.ts';
+import { PetFoodCard } from './Cards/PetFoodCard/PetFoodCard.tsx';
+import { GroomingAndHygieneCard } from './Cards/GroomingAndHygieneCard/GroomingAndHygieneCard.tsx';
+import { DefaultProductCard } from './Cards/DefaultProductCard/DefaultProductCard.tsx';
 import { ProductListContainer } from './ProductList.styles.ts';
 
 export const ProductList = () => {
