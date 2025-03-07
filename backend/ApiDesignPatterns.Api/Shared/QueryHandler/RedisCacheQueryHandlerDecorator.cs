@@ -21,14 +21,9 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
         string cacheKey = GenerateCacheKey(query);
 
         // Try to get from cache
-        RedisValue cached;
-        try
+        RedisValue cached = await GetFromCache(cacheKey, logger, redisCache);
+        if (cached.IsNull)
         {
-            cached = await redisCache.StringGetAsync(cacheKey);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error accessing cache for query {QueryType}", typeof(TQuery).Name);
             return await queryHandler.Handle(query);
         }
 
@@ -61,6 +56,22 @@ public class RedisCacheQueryHandlerDecorator<TQuery, TResult>(
         batch.Execute();
 
         return cachedResult;
+    }
+
+    private static async Task<RedisValue> GetFromCache(
+        string cacheKey,
+        ILogger<RedisCacheQueryHandlerDecorator<TQuery, TResult>> errorLogger,
+        IDatabase cache)
+    {
+        try
+        {
+            return await cache.StringGetAsync(cacheKey);
+        }
+        catch (Exception ex)
+        {
+            errorLogger.LogError(ex, "Error accessing cache for query {QueryType}", typeof(TQuery).Name);
+            return RedisValue.Null;
+        }
     }
 
     private async Task<TResult?> HandleCacheMiss(
