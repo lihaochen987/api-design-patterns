@@ -1,5 +1,5 @@
-import { components } from '../../../shared/types';
-import { $api } from '../../../shared/fetch-client.ts';
+import { components } from '../../../Shared/types';
+import { $api } from '../../../Shared/fetch-client.ts';
 import { PetFoodCard } from './Cards/PetFoodCard/PetFoodCard.tsx';
 import { GroomingAndHygieneCard } from './Cards/GroomingAndHygieneCard/GroomingAndHygieneCard.tsx';
 import { DefaultProductCard } from './Cards/DefaultProductCard/DefaultProductCard.tsx';

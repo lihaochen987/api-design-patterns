@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ProductList } from './ProductList.tsx';
-import { $api } from '../../../shared/fetch-client.ts';
+import { $api } from '../../../Shared/fetch-client.ts';
 
-jest.mock('../../../shared/fetch-client.ts', () => ({
+jest.mock('../../../Shared/fetch-client.ts', () => ({
   $api: {
     useQuery: jest.fn(),
   },

@@ -1,4 +1,4 @@
-import { components } from '../../../../../shared/types';
+import { components } from '../../../../../Shared/types';
 import { Price } from '../../ProductList.styles.ts';
 import {
   IngredientsSection,
