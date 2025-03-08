@@ -8,11 +8,11 @@ using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
-using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
+using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.DomainModels.Views;
@@ -91,8 +91,8 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // CreateProductResponse handler
             var createProductResponseHandler =
-                new QueryDecoratorBuilder<CreateProductResponseQuery, CreateProductResponse>(
-                        new CreateProductResponseHandler(_mapper),
+                new QueryDecoratorBuilder<MapCreateProductResponseQuery, CreateProductResponse>(
+                        new MapCreateProductResponseHandler(_mapper),
                         _loggerFactory,
                         null)
                     .WithLogging()

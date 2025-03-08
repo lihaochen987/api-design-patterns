@@ -281,8 +281,8 @@
     <Compile Update="Product\Tests\ApplicationLayerTests\UpdateProductPricingHandlerTestBase.cs">
       <DependentUpon>UpdateProductPricingHandlerTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\CreateProductResponseHandlerTestBase.cs">
-      <DependentUpon>CreateProductResponseHandlerTests.cs</DependentUpon>
+    <Compile Update="Product\Tests\ApplicationLayerTests\MapCreateProductResponseHandlerTestBase.cs">
+      <DependentUpon>MapCreateProductResponseHandlerTests.cs</DependentUpon>
     </Compile>
     <Compile Update="Product\Tests\ControllerTests\CreateProductControllerTestBase.cs">
       <DependentUpon>CreateProductControllerTests.cs</DependentUpon>

@@ -3,7 +3,7 @@
 
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
-using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
@@ -18,8 +18,8 @@ public abstract class CreateProductControllerTestBase
     protected readonly ICommandHandler<CreateProductCommand> CreateProduct =
         Mock.Of<ICommandHandler<CreateProductCommand>>();
 
-    protected readonly IQueryHandler<CreateProductResponseQuery, CreateProductResponse> CreateProductResponse =
-        Mock.Of<IQueryHandler<CreateProductResponseQuery, CreateProductResponse>>();
+    protected readonly IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> CreateProductResponse =
+        Mock.Of<IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse>>();
 
     protected readonly IMapper Mapper;
 

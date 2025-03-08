@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
-using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
@@ -23,7 +23,7 @@ public class CreateProductControllerTests : CreateProductControllerTestBase
         var expectedResponse = Mapper.Map<CreateProductResponse>(product);
         Mock
             .Get(CreateProductResponse)
-            .Setup(x => x.Handle(It.IsAny<CreateProductResponseQuery>()))
+            .Setup(x => x.Handle(It.IsAny<MapCreateProductResponseQuery>()))
             .ReturnsAsync(expectedResponse);
         var sut = GetCreateProductController();
 
@@ -47,7 +47,7 @@ public class CreateProductControllerTests : CreateProductControllerTestBase
         var expectedResponse = Mapper.Map<CreatePetFoodResponse>(product);
         Mock
             .Get(CreateProductResponse)
-            .Setup(x => x.Handle(It.IsAny<CreateProductResponseQuery>()))
+            .Setup(x => x.Handle(It.IsAny<MapCreateProductResponseQuery>()))
             .ReturnsAsync(expectedResponse);
         CreateProductController sut = GetCreateProductController();
 
@@ -66,7 +66,7 @@ public class CreateProductControllerTests : CreateProductControllerTestBase
         var expectedResponse = Mapper.Map<CreateGroomingAndHygieneResponse>(product);
         Mock
             .Get(CreateProductResponse)
-            .Setup(x => x.Handle(It.IsAny<CreateProductResponseQuery>()))
+            .Setup(x => x.Handle(It.IsAny<MapCreateProductResponseQuery>()))
             .ReturnsAsync(expectedResponse);
         CreateProductController sut = GetCreateProductController();
 

@@ -1,6 +1,6 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
-using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ namespace backend.Product.ProductControllers;
 [Route("product")]
 public class CreateProductController(
     ICommandHandler<CreateProductCommand> createProduct,
-    IQueryHandler<CreateProductResponseQuery, CreateProductResponse> createProductResponse,
+    IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> createProductResponse,
     IMapper mapper)
     : ControllerBase
 {
@@ -25,7 +25,7 @@ public class CreateProductController(
         DomainModels.Product product = mapper.Map<DomainModels.Product>(request);
         await createProduct.Handle(new CreateProductCommand { Product = product });
 
-        var response = await createProductResponse.Handle(new CreateProductResponseQuery { Product = product });
+        var response = await createProductResponse.Handle(new MapCreateProductResponseQuery { Product = product });
 
         return CreatedAtAction(
             "GetProduct",

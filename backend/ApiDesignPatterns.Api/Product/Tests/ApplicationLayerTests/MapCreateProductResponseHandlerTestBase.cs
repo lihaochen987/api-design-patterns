@@ -2,26 +2,25 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ProductControllers;
-using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public abstract class CreateProductResponseHandlerTestBase
+public abstract class MapCreateProductResponseHandlerTestBase
 {
     protected readonly IMapper Mapper;
 
-    protected CreateProductResponseHandlerTestBase()
+    protected MapCreateProductResponseHandlerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
     }
 
-    protected IQueryHandler<CreateProductResponseQuery, CreateProductResponse> GetCreateProductResponseHandler()
+    protected IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> GetCreateProductResponseHandler()
     {
-        return new CreateProductResponseHandler(Mapper);
+        return new MapCreateProductResponseHandler(Mapper);
     }
 }

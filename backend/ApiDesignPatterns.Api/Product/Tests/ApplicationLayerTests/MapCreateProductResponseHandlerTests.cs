@@ -1,7 +1,7 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
@@ -11,7 +11,7 @@ using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public class CreateProductResponseHandlerTests : CreateProductResponseHandlerTestBase
+public class MapCreateProductResponseHandlerTests : MapCreateProductResponseHandlerTestBase
 {
     [Fact]
     public async Task Handle_ReturnsPetFoodResponse_WhenCategoryIsPetFood()
@@ -21,8 +21,8 @@ public class CreateProductResponseHandlerTests : CreateProductResponseHandlerTes
             .Build();
 
         var expectedResponse = Mapper.Map<CreatePetFoodResponse>(product);
-        var query = new CreateProductResponseQuery { Product = product };
-        IQueryHandler<CreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
+        var query = new MapCreateProductResponseQuery { Product = product };
+        IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
 
         CreateProductResponse? result = await sut.Handle(query);
 
@@ -38,8 +38,8 @@ public class CreateProductResponseHandlerTests : CreateProductResponseHandlerTes
             .WithCategory(Category.GroomingAndHygiene)
             .Build();
         var expectedResponse = Mapper.Map<CreateGroomingAndHygieneResponse>(product);
-        var query = new CreateProductResponseQuery { Product = product };
-        IQueryHandler<CreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
+        var query = new MapCreateProductResponseQuery { Product = product };
+        IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
 
         CreateProductResponse? result = await sut.Handle(query);
 
@@ -55,8 +55,8 @@ public class CreateProductResponseHandlerTests : CreateProductResponseHandlerTes
             .WithCategory(Category.Beds)
             .Build();
         var expectedResponse = Mapper.Map<CreateProductResponse>(product);
-        var query = new CreateProductResponseQuery { Product = product };
-        IQueryHandler<CreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
+        var query = new MapCreateProductResponseQuery { Product = product };
+        IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
 
         CreateProductResponse? result = await sut.Handle(query);
 
