@@ -400,6 +400,9 @@
     </Compile>
     <Compile Remove="Shared\Resilience\ServiceResilienceSettings.cs" />
     <Compile Remove="Shared\Resilience\ResilienceProfile.cs" />
+    <Compile Update="Product\Tests\ApplicationLayerTests\GetListProductFromCacheHandlerTestBase.cs">
+      <DependentUpon>GetListProductFromCacheHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

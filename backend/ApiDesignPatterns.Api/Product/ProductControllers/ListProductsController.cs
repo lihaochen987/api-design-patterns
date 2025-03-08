@@ -53,10 +53,13 @@ public class ListProductsController(
 
         ListProductsResponse response = new() { Results = productResponses, NextPageToken = result.NextPageToken };
 
-        await persistListProductsToCache.Handle(new PersistListProductsToCacheCommand
+        if (cachedResult?.cacheKey != null)
         {
-            CacheKey = cachedResult!.cacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
-        });
+            await persistListProductsToCache.Handle(new PersistListProductsToCacheCommand
+            {
+                CacheKey = cachedResult.cacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
+            });
+        }
 
         return Ok(response);
     }
