@@ -22,7 +22,7 @@ public class ExceptionThrowingCache : ICache
         return Task.FromResult<T?>(null);
     }
 
-    public Task SetAsync<T>(string key, T value, TimeSpan? expiry = null) where T : class
+    public Task SetAsync<T>(string key, T value, TimeSpan expiry) where T : class
     {
         if (_keysToThrowOn.Contains(key))
         {

@@ -41,33 +41,6 @@ public class PersistListProductsToCacheCommandHandlerTests : PersistListProducts
     }
 
     [Fact]
-    public async Task Handle_ShouldPersistProductsToCache_WithNoExpiry()
-    {
-        var products = new ListProductsResponse
-        {
-            Results = Fixture.CreateMany<GetProductResponse>(3).ToList(),
-            NextPageToken = null
-        };
-        const string cacheKey = "products:maxsize:20";
-        var command = new PersistListProductsToCacheCommand
-        {
-            Products = products,
-            CacheKey = cacheKey,
-            Expiry = null
-        };
-        ICommandHandler<PersistListProductsToCacheCommand> sut = PersistListProductsToCacheHandler();
-
-        await sut.Handle(command);
-
-        var cachedResult = await Cache.GetAsync<CachedItem<ListProductsResponse>>(cacheKey);
-        cachedResult.ShouldNotBeNull();
-        cachedResult.Item.ShouldNotBeNull();
-        cachedResult.Item.Results.Count().ShouldBe(3);
-        cachedResult.Item.Results.ToList().ShouldBeEquivalentTo(products.Results.ToList());
-        cachedResult.Item.NextPageToken.ShouldBeNull();
-    }
-
-    [Fact]
     public async Task Handle_ShouldHandleEmptyProductsList()
     {
         var products = new ListProductsResponse

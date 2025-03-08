@@ -21,7 +21,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         {
             Results = Fixture.CreateMany<GetProductResponse>(10), NextPageToken = "11"
         };
-        await SetupCacheWithData("products:maxsize:10", expectedResponse);
+        await Cache.SetAsync("products:maxsize:10", expectedResponse, TimeSpan.FromMinutes(10));
         IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult? result = await sut.Handle(query);
@@ -38,7 +38,6 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
     {
         var request = new ListProductsRequest { MaxPageSize = 10 };
         var query = new GetListProductsFromCacheQuery { Request = request };
-        SetupCacheWithNoData("products:maxsize:10");
         IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult? result = await sut.Handle(query);
@@ -53,7 +52,6 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
     {
         var request = new ListProductsRequest { MaxPageSize = 10 };
         var query = new GetListProductsFromCacheQuery { Request = request };
-        SetupCacheToThrowException("products:maxsize:10");
         IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetExceptionThrowingHandler();
 
         CacheQueryResult? result = await sut.Handle(query);
@@ -68,7 +66,6 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
     {
         var request = new ListProductsRequest { MaxPageSize = 10, PageToken = "token123" };
         var query = new GetListProductsFromCacheQuery { Request = request };
-        SetupCacheWithNoData("products:maxsize:10:page-token:token123");
         IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult? result = await sut.Handle(query);
@@ -82,7 +79,6 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
     {
         var request = new ListProductsRequest { MaxPageSize = 10, Filter = "Category == \"Toys\"" };
         var query = new GetListProductsFromCacheQuery { Request = request };
-        SetupCacheWithNoData("products:maxsize:10:filter:category == \"toys\"");
         IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult? result = await sut.Handle(query);
@@ -99,7 +95,6 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
             MaxPageSize = 10, PageToken = "token123", Filter = "Category == \"Toys\""
         };
         var query = new GetListProductsFromCacheQuery { Request = request };
-        SetupCacheWithNoData("products:maxsize:10:page-token:token123:filter:category == \"toys\"");
         IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult? result = await sut.Handle(query);

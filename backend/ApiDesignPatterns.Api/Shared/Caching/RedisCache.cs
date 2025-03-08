@@ -20,9 +20,10 @@ public class RedisCache(IDatabase redisDatabase) : ICache
         return JsonSerializer.Deserialize<T>(cachedValue!);
     }
 
-    public async Task SetAsync<T>(string key, T value, TimeSpan? expiry = null) where T : class
+    public async Task SetAsync<T>(string key, T value, TimeSpan expiry) where T : class
     {
         string serializedValue = JsonSerializer.Serialize(value);
-        await redisDatabase.StringSetAsync(key, serializedValue, expiry);
+        TimeSpan expiryWithJitter = JitterUtility.AddJitter(expiry);
+        await redisDatabase.StringSetAsync(key, serializedValue, expiryWithJitter);
     }
 }

@@ -9,5 +9,5 @@ public record PersistListProductsToCacheCommand
 {
     public required string CacheKey { get; init; }
     public required ListProductsResponse Products { get; init; }
-    public TimeSpan? Expiry { get; init; }
+    public TimeSpan Expiry { get; init; }
 }

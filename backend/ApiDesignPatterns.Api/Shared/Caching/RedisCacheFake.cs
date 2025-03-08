@@ -25,27 +25,16 @@ public class RedisCacheFake : ICache
         return Task.FromResult(JsonSerializer.Deserialize<T>(entry.SerializedValue)!)!;
     }
 
-    public Task SetAsync<T>(string key, T value, TimeSpan? expiry = null) where T : class
+    public Task SetAsync<T>(string key, T value, TimeSpan expiry) where T : class
     {
         var entry = new CacheEntry
         {
             SerializedValue = JsonSerializer.Serialize(value),
-            ExpiryTime = expiry.HasValue ? DateTime.UtcNow.Add(expiry.Value) : null
+            ExpiryTime = DateTime.UtcNow.Add(expiry)
         };
 
         _cache[key] = entry;
         return Task.CompletedTask;
-    }
-
-    // Helper methods for testing
-    public void Clear()
-    {
-        _cache.Clear();
-    }
-
-    public bool HasKey(string key)
-    {
-        return _cache.ContainsKey(key);
     }
 
     private class CacheEntry
