@@ -3,9 +3,9 @@
 
 using backend.Shared.QueryHandler;
 
-namespace backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
+namespace backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 
-public record ReplaceProductResponseQuery : IQuery<ReplaceProductResponseQuery>,
+public record MapReplaceProductResponseQuery : IQuery<MapReplaceProductResponseQuery>,
     IQuery<ProductControllers.ReplaceProductResponse>
 {
     public required DomainModels.Product Product { get; init; }

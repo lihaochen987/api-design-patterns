@@ -35,7 +35,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         result.ProductsResponse.ShouldNotBeNull();
         result.ProductsResponse.Results.Count().ShouldBe(10);
         result.ProductsResponse.Results.ShouldBeEquivalentTo(expectedResponse.Item.Results);
-        result.cacheKey.ShouldBe("products:maxsize:10");
+        result.CacheKey.ShouldBe("products:maxsize:10");
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
 
         result.ShouldNotBeNull();
         result.ProductsResponse.ShouldBeNull();
-        result.cacheKey.ShouldBe("products:maxsize:10");
+        result.CacheKey.ShouldBe("products:maxsize:10");
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
 
         result.ShouldNotBeNull();
         result.ProductsResponse.ShouldBeNull();
-        result.cacheKey.ShouldBe("products:maxsize:10");
+        result.CacheKey.ShouldBe("products:maxsize:10");
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         CacheQueryResult? result = await sut.Handle(query);
 
         result.ShouldNotBeNull();
-        result.cacheKey.ShouldBe("products:maxsize:10:page-token:token123");
+        result.CacheKey.ShouldBe("products:maxsize:10:page-token:token123");
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         CacheQueryResult? result = await sut.Handle(query);
 
         result.ShouldNotBeNull();
-        result.cacheKey.ShouldBe("products:maxsize:10:filter:category == \"toys\"");
+        result.CacheKey.ShouldBe("products:maxsize:10:filter:category == \"toys\"");
     }
 
     [Fact]
@@ -106,6 +106,6 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         CacheQueryResult? result = await sut.Handle(query);
 
         result.ShouldNotBeNull();
-        result.cacheKey.ShouldBe("products:maxsize:10:page-token:token123:filter:category == \"toys\"");
+        result.CacheKey.ShouldBe("products:maxsize:10:page-token:token123:filter:category == \"toys\"");
     }
 }

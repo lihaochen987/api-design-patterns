@@ -2,12 +2,15 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.ProductControllers;
+using backend.Shared;
 using backend.Shared.Caching;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 
-public class GetListProductsFromCacheHandler(ICache<CachedItem<ListProductsResponse>> cache)
+public class GetListProductsFromCacheHandler(
+    ICache<CachedItem<ListProductsResponse>> cache,
+    CacheStalenessOptions stalenessOptions)
     : IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>
 {
     public async Task<CacheQueryResult?> Handle(GetListProductsFromCacheQuery query)
@@ -16,11 +19,23 @@ public class GetListProductsFromCacheHandler(ICache<CachedItem<ListProductsRespo
         try
         {
             CachedItem<ListProductsResponse>? cachedData = await cache.GetAsync(cacheKey);
-            return new CacheQueryResult { ProductsResponse = cachedData?.Item, cacheKey = cacheKey };
+
+            if (ShouldCheckStaleness(stalenessOptions.CheckRate))
+            {
+                return new CacheQueryResult
+                {
+                    ProductsResponse = cachedData?.Item, CacheKey = cacheKey, SelectedForStalenessCheck = true
+                };
+            }
+
+            return new CacheQueryResult
+            {
+                ProductsResponse = cachedData?.Item, CacheKey = cacheKey, SelectedForStalenessCheck = false
+            };
         }
         catch
         {
-            return new CacheQueryResult { ProductsResponse = null, cacheKey = cacheKey };
+            return new CacheQueryResult { ProductsResponse = null, CacheKey = cacheKey };
         }
     }
 
@@ -40,5 +55,10 @@ public class GetListProductsFromCacheHandler(ICache<CachedItem<ListProductsRespo
         }
 
         return string.Join(":", keyParts);
+    }
+
+    private static bool ShouldCheckStaleness(double checkRate)
+    {
+        return RandomUtility.CheckProbability(checkRate);
     }
 }

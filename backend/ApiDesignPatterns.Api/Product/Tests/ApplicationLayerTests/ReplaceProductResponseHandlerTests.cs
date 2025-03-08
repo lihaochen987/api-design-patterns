@@ -1,7 +1,7 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
@@ -21,8 +21,8 @@ public class ReplaceProductResponseHandlerTests : ReplaceProductResponseHandlerT
             .Build();
 
         var expectedResponse = Mapper.Map<ReplacePetFoodResponse>(product);
-        var query = new ReplaceProductResponseQuery { Product = product };
-        IQueryHandler<ReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
+        var query = new MapReplaceProductResponseQuery { Product = product };
+        IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
 
         ReplaceProductResponse? result = await sut.Handle(query);
 
@@ -38,8 +38,8 @@ public class ReplaceProductResponseHandlerTests : ReplaceProductResponseHandlerT
             .WithCategory(Category.GroomingAndHygiene)
             .Build();
         var expectedResponse = Mapper.Map<ReplaceGroomingAndHygieneResponse>(product);
-        var query = new ReplaceProductResponseQuery { Product = product };
-        IQueryHandler<ReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
+        var query = new MapReplaceProductResponseQuery { Product = product };
+        IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
 
         ReplaceProductResponse? result = await sut.Handle(query);
 
@@ -55,8 +55,8 @@ public class ReplaceProductResponseHandlerTests : ReplaceProductResponseHandlerT
             .WithCategory(Category.Beds)
             .Build();
         var expectedResponse = Mapper.Map<ReplaceProductResponse>(product);
-        var query = new ReplaceProductResponseQuery { Product = product };
-        IQueryHandler<ReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
+        var query = new MapReplaceProductResponseQuery { Product = product };
+        IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
 
         ReplaceProductResponse? result = await sut.Handle(query);
 

@@ -12,7 +12,7 @@ using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
-using backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Cache;
 using backend.Product.InfrastructureLayer.Database.Product;
@@ -192,9 +192,11 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // GetListProductsFromCache handler
+            // Todo: Give CacheStalenessOptions legit values
             var getListProductsFromCacheHandler =
                 new QueryDecoratorBuilder<GetListProductsFromCacheQuery, CacheQueryResult>(
-                        new GetListProductsFromCacheHandler(redisCache),
+                        new GetListProductsFromCacheHandler(redisCache,
+                            new CacheStalenessOptions(TimeSpan.FromDays(1), 5, 5, 5)),
                         _loggerFactory,
                         null,
                         null)
@@ -257,8 +259,8 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // ReplaceProductResponse handler
             var replaceProductResponseHandler =
-                new QueryDecoratorBuilder<ReplaceProductResponseQuery, ReplaceProductResponse>(
-                        new ReplaceProductResponseHandler(_mapper),
+                new QueryDecoratorBuilder<MapReplaceProductResponseQuery, ReplaceProductResponse>(
+                        new MapReplaceProductResponseHandler(_mapper),
                         _loggerFactory,
                         null,
                         null)

@@ -1,6 +1,6 @@
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
-using backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,7 @@ namespace backend.Product.ProductControllers;
 public class ReplaceProductController(
     IQueryHandler<GetProductQuery, DomainModels.Product> getProduct,
     ICommandHandler<ReplaceProductCommand> replaceProduct,
-    IQueryHandler<ReplaceProductResponseQuery, ReplaceProductResponse> replaceProductResponse)
+    IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> replaceProductResponse)
     : ControllerBase
 {
     [HttpPut("{id:long}")]
@@ -41,7 +41,7 @@ public class ReplaceProductController(
         }
 
         var response =
-            await replaceProductResponse.Handle(new ReplaceProductResponseQuery { Product = replacedProduct });
+            await replaceProductResponse.Handle(new MapReplaceProductResponseQuery { Product = replacedProduct });
 
         return Ok(response);
     }

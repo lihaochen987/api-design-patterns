@@ -3,7 +3,7 @@
 
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
-using backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
@@ -28,7 +28,7 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
             .ReturnsAsync(product);
         Mock
             .Get(ReplaceProductResponse)
-            .Setup(x => x.Handle(It.IsAny<ReplaceProductResponseQuery>()))
+            .Setup(x => x.Handle(It.IsAny<MapReplaceProductResponseQuery>()))
             .ReturnsAsync(expectedResponse);
         ReplaceProductController sut = GetReplaceProductController();
 
@@ -74,7 +74,7 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
             .ReturnsAsync(product);
         Mock
             .Get(ReplaceProductResponse)
-            .Setup(x => x.Handle(It.IsAny<ReplaceProductResponseQuery>()))
+            .Setup(x => x.Handle(It.IsAny<MapReplaceProductResponseQuery>()))
             .ReturnsAsync(expectedResponse);
         var sut = GetReplaceProductController();
 
@@ -97,7 +97,7 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
             .ReturnsAsync(product);
         Mock
             .Get(ReplaceProductResponse)
-            .Setup(x => x.Handle(It.IsAny<ReplaceProductResponseQuery>()))
+            .Setup(x => x.Handle(It.IsAny<MapReplaceProductResponseQuery>()))
             .ReturnsAsync(expectedResponse);
         var sut = GetReplaceProductController();
 
@@ -128,6 +128,6 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
             .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Once);
         Mock
             .Get(ReplaceProductResponse)
-            .Verify(x => x.Handle(It.IsAny<ReplaceProductResponseQuery>()), Times.Never);
+            .Verify(x => x.Handle(It.IsAny<MapReplaceProductResponseQuery>()), Times.Never);
     }
 }

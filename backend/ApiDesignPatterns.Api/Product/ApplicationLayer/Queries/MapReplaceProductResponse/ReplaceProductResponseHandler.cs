@@ -6,13 +6,13 @@ using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Shared.QueryHandler;
 
-namespace backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
+namespace backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 
 public class
-    ReplaceProductResponseHandler(IMapper mapper)
-    : IQueryHandler<ReplaceProductResponseQuery, ProductControllers.ReplaceProductResponse>
+    MapReplaceProductResponseHandler(IMapper mapper)
+    : IQueryHandler<MapReplaceProductResponseQuery, ProductControllers.ReplaceProductResponse>
 {
-    public Task<ProductControllers.ReplaceProductResponse?> Handle(ReplaceProductResponseQuery query)
+    public Task<ProductControllers.ReplaceProductResponse?> Handle(MapReplaceProductResponseQuery query)
     {
         ProductControllers.ReplaceProductResponse response = query.Product.Category switch
         {

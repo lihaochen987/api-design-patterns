@@ -4,7 +4,7 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
-using backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.ProductControllers;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
@@ -22,8 +22,8 @@ public abstract class ReplaceProductControllerTestBase
     protected readonly ICommandHandler<ReplaceProductCommand> ReplaceProduct =
         Mock.Of<ICommandHandler<ReplaceProductCommand>>();
 
-    protected readonly IQueryHandler<ReplaceProductResponseQuery, ReplaceProductResponse> ReplaceProductResponse =
-        Mock.Of<IQueryHandler<ReplaceProductResponseQuery, ReplaceProductResponse>>();
+    protected readonly IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> ReplaceProductResponse =
+        Mock.Of<IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse>>();
 
     protected readonly IMapper Mapper;
 

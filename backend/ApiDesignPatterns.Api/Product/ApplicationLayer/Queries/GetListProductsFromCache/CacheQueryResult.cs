@@ -8,5 +8,6 @@ namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 public record CacheQueryResult
 {
     public ListProductsResponse? ProductsResponse { get; init; }
-    public required string cacheKey { get; init; }
+    public required string CacheKey { get; init; }
+    public bool SelectedForStalenessCheck { get; init; } = false;
 }

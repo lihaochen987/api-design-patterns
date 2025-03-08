@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
+using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared.QueryHandler;
@@ -19,9 +19,9 @@ public abstract class ReplaceProductResponseHandlerTestBase
         Mapper = mapperConfiguration.CreateMapper();
     }
 
-    protected IQueryHandler<ReplaceProductResponseQuery, ProductControllers.ReplaceProductResponse>
+    protected IQueryHandler<MapReplaceProductResponseQuery, ProductControllers.ReplaceProductResponse>
         GetReplaceProductResponseHandler()
     {
-        return new ReplaceProductResponseHandler(Mapper);
+        return new MapReplaceProductResponseHandler(Mapper);
     }
 }

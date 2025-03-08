@@ -28,7 +28,7 @@ public class ListProductsController(
         CacheQueryResult? cachedResult =
             await getListProductsFromCache.Handle(new GetListProductsFromCacheQuery { Request = request });
 
-        if (cachedResult?.ProductsResponse != null)
+        if (cachedResult is { ProductsResponse: not null, SelectedForStalenessCheck: false })
         {
             return Ok(cachedResult.ProductsResponse);
         }
@@ -37,6 +37,11 @@ public class ListProductsController(
         {
             Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
         });
+
+        if (cachedResult?.SelectedForStalenessCheck == true)
+        {
+
+        }
 
         if (result == null)
         {
@@ -53,11 +58,11 @@ public class ListProductsController(
 
         ListProductsResponse response = new() { Results = productResponses, NextPageToken = result.NextPageToken };
 
-        if (cachedResult?.cacheKey != null)
+        if (cachedResult is not null)
         {
             await persistListProductsToCache.Handle(new PersistListProductsToCacheCommand
             {
-                CacheKey = cachedResult.cacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
+                CacheKey = cachedResult.CacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
             });
         }
 
