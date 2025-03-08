@@ -10,4 +10,5 @@ public interface ICache<T> where T : class
     Task<T?> GetAsync(string key);
     Task SetAsync(string key, T value, TimeSpan expiry);
     IBatch CreateBatch();
+    Task<HashEntry[]> HashGetAllAsync(RedisKey key, CommandFlags flags = CommandFlags.None);
 }

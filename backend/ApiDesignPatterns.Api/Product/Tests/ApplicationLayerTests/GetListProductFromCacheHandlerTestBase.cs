@@ -17,11 +17,11 @@ public abstract class GetListProductsFromCacheHandlerTestBase
 
     protected IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> GetListProductsFromCacheHandler()
     {
-        return new GetListProductsFromCacheHandler(Cache, Fixture.Create<CacheStalenessOptions>());
+        return new GetListProductsFromCacheHandler(Cache);
     }
 
     protected IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> GetExceptionThrowingHandler()
     {
-        return new GetListProductsFromCacheHandler(ThrowingCache, Fixture.Create<CacheStalenessOptions>());
+        return new GetListProductsFromCacheHandler(ThrowingCache);
     }
 }

@@ -27,6 +27,8 @@ public class ListProductsExceptionThrowingCacheFake : ICache<CachedItem<ListProd
     }
 
     public IBatch CreateBatch() => throw new NotImplementedException();
+    public Task<HashEntry[]> HashGetAllAsync(RedisKey key, CommandFlags flags = CommandFlags.None) =>
+        throw new NotImplementedException();
 
     public Task<CachedItem<ListProductsResponse>?> GetAsync(string key)
     {

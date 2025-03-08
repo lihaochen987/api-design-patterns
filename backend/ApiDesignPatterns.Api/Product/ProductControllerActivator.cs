@@ -6,6 +6,7 @@ using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
+using backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
 using backend.Product.ApplicationLayer.Queries.CreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
@@ -178,6 +179,9 @@ public class ProductControllerActivator : BaseControllerActivator
             IDatabase redisDatabase = new RedisService(_configuration).GetDatabase();
             var redisCache = new ListProductsCache(redisDatabase);
 
+            // Todo: Give CacheStalenessOptions legit values
+            var cacheStalenessOptions = new CacheStalenessOptions(TimeSpan.FromDays(1), 5, 5, 5);
+
             // ListProducts handler
             var listProductsHandler = new QueryDecoratorBuilder<ListProductsQuery, PagedProducts>(
                     new ListProductsHandler(repository),
@@ -193,11 +197,9 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // GetListProductsFromCache handler
-            // Todo: Give CacheStalenessOptions legit values
             var getListProductsFromCacheHandler =
                 new QueryDecoratorBuilder<GetListProductsFromCacheQuery, CacheQueryResult>(
-                        new GetListProductsFromCacheHandler(redisCache,
-                            new CacheStalenessOptions(TimeSpan.FromDays(1), 5, 5, 5)),
+                        new GetListProductsFromCacheHandler(redisCache),
                         _loggerFactory,
                         null,
                         null)
@@ -227,11 +229,23 @@ public class ProductControllerActivator : BaseControllerActivator
                     .WithValidation()
                     .Build();
 
+            // UpdateListProductsStaleness handler
+            var updateListProductStalenessHandler = new CommandDecoratorBuilder<UpdateListProductStalenessCommand>(
+                    new UpdateListProductStalenessHandler(redisCache,
+                        _loggerFactory.CreateLogger<UpdateListProductStalenessHandler>()),
+                    null,
+                    _loggerFactory)
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.RedisWrite)
+                .Build();
+
             return new ListProductsController(
                 listProductsHandler,
                 getListProductsFromCacheHandler,
                 mapListProductsResponseHandler,
-                persistListProductsToCacheHandler);
+                updateListProductStalenessHandler,
+                persistListProductsToCacheHandler,
+                cacheStalenessOptions);
         }
 
         if (type == typeof(ReplaceProductController))

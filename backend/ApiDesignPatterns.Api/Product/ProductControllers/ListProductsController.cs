@@ -1,7 +1,9 @@
 using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
+using backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
+using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +17,9 @@ public class ListProductsController(
     IQueryHandler<ListProductsQuery, PagedProducts> listProducts,
     IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> getListProductsFromCache,
     IQueryHandler<MapListProductsResponseQuery, ListProductsResponse> mapListProducts,
-    ICommandHandler<PersistListProductsToCacheCommand> persistListProductsToCache)
+    ICommandHandler<UpdateListProductStalenessCommand> updateListProductStaleness,
+    ICommandHandler<PersistListProductsToCacheCommand> persistListProductsToCache,
+    CacheStalenessOptions stalenessOptions)
     : ControllerBase
 {
     [HttpGet]
@@ -25,7 +29,8 @@ public class ListProductsController(
         [FromQuery] ListProductsRequest request)
     {
         CacheQueryResult? cachedResult =
-            await getListProductsFromCache.Handle(new GetListProductsFromCacheQuery { Request = request });
+            await getListProductsFromCache.Handle(
+                new GetListProductsFromCacheQuery { Request = request, CheckRate = stalenessOptions.CheckRate });
 
         if (cachedResult is { ProductsResponse: not null, SelectedForStalenessCheck: false })
         {
@@ -37,10 +42,6 @@ public class ListProductsController(
             Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
         });
 
-        if (cachedResult?.SelectedForStalenessCheck == true)
-        {
-        }
-
         if (result == null)
         {
             return NotFound();
@@ -48,6 +49,17 @@ public class ListProductsController(
 
         ListProductsResponse? response =
             await mapListProducts.Handle(new MapListProductsResponseQuery { PagedProducts = result });
+
+        if (cachedResult?.SelectedForStalenessCheck == true && response is not null &&
+            cachedResult.ProductsResponse is not null)
+        {
+            await updateListProductStaleness.Handle(new UpdateListProductStalenessCommand
+            {
+                FreshResult = response,
+                CachedResult = cachedResult.ProductsResponse,
+                StalenessOptions = stalenessOptions
+            });
+        }
 
         if (response != null)
         {

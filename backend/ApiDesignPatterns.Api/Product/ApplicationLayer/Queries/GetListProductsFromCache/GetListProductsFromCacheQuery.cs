@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.ProductControllers;
+using backend.Shared.Caching;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
@@ -9,4 +10,6 @@ namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 public record GetListProductsFromCacheQuery : IQuery<CacheQueryResult>
 {
     public required ListProductsRequest Request { get; init; }
+
+    public required double CheckRate { get; init; }
 }

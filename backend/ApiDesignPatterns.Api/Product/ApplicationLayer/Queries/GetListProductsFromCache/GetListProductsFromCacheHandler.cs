@@ -9,8 +9,7 @@ using backend.Shared.QueryHandler;
 namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 
 public class GetListProductsFromCacheHandler(
-    ICache<CachedItem<ListProductsResponse>> cache,
-    CacheStalenessOptions stalenessOptions)
+    ICache<CachedItem<ListProductsResponse>> cache)
     : IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>
 {
     public async Task<CacheQueryResult?> Handle(GetListProductsFromCacheQuery query)
@@ -20,7 +19,7 @@ public class GetListProductsFromCacheHandler(
         {
             CachedItem<ListProductsResponse>? cachedData = await cache.GetAsync(cacheKey);
 
-            if (ShouldCheckStaleness(stalenessOptions.CheckRate))
+            if (ShouldCheckStaleness(query.CheckRate))
             {
                 return new CacheQueryResult
                 {

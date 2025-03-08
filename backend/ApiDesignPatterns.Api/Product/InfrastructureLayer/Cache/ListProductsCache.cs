@@ -27,4 +27,9 @@ public class ListProductsCache(IDatabase redisDatabase) : ICache<CachedItem<List
     {
         return redisDatabase.CreateBatch();
     }
+
+    public Task<HashEntry[]> HashGetAllAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
+    {
+        return redisDatabase.HashGetAllAsync(key, flags);
+    }
 }
