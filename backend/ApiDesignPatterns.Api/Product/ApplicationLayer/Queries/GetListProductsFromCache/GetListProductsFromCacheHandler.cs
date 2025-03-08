@@ -7,7 +7,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 
-public class GetListProductsFromCacheHandler(ICache cache)
+public class GetListProductsFromCacheHandler(ICache<CachedItem<ListProductsResponse>> cache)
     : IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>
 {
     public async Task<CacheQueryResult?> Handle(GetListProductsFromCacheQuery query)
@@ -15,7 +15,7 @@ public class GetListProductsFromCacheHandler(ICache cache)
         string cacheKey = GenerateCacheKey(query.Request);
         try
         {
-            var cachedData = await cache.GetAsync<CachedItem<ListProductsResponse>>(cacheKey);
+            CachedItem<ListProductsResponse>? cachedData = await cache.GetAsync(cacheKey);
             return new CacheQueryResult { ProductsResponse = cachedData?.Item, cacheKey = cacheKey };
         }
         catch

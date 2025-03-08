@@ -3,8 +3,8 @@
 
 namespace backend.Shared.Caching;
 
-public interface ICache
+public interface ICache<T> where T : class
 {
-    Task<T?> GetAsync<T>(string key) where T : class;
-    Task SetAsync<T>(string key, T value, TimeSpan expiry) where T : class;
+    Task<T?> GetAsync(string key);
+    Task SetAsync(string key, T value, TimeSpan expiry);
 }

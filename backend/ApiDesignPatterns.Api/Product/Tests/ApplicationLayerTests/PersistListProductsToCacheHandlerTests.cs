@@ -32,7 +32,7 @@ public class PersistListProductsToCacheCommandHandlerTests : PersistListProducts
 
         await sut.Handle(command);
 
-        var cachedResult = await Cache.GetAsync<CachedItem<ListProductsResponse>>(cacheKey);
+        CachedItem<ListProductsResponse>? cachedResult = await Cache.GetAsync(cacheKey);
         cachedResult.ShouldNotBeNull();
         cachedResult.Item.ShouldNotBeNull();
         cachedResult.Item.Results.Count().ShouldBe(5);
@@ -59,7 +59,7 @@ public class PersistListProductsToCacheCommandHandlerTests : PersistListProducts
 
         await sut.Handle(command);
 
-        var cachedResult = await Cache.GetAsync<CachedItem<ListProductsResponse>>(cacheKey);
+        CachedItem<ListProductsResponse>? cachedResult = await Cache.GetAsync(cacheKey);
         cachedResult.ShouldNotBeNull();
         cachedResult.Item.ShouldNotBeNull();
         cachedResult.Item.Results.ShouldBeEmpty();

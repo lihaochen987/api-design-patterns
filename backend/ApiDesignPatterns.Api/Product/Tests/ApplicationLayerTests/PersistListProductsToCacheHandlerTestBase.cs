@@ -3,7 +3,7 @@
 
 using AutoFixture;
 using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
-using backend.Shared.Caching;
+using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared.CommandHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -11,8 +11,8 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public abstract class PersistListProductsToCacheHandlerTestBase
 {
     protected readonly Fixture Fixture = new();
-    protected readonly RedisCacheFake Cache = new();
-    protected readonly ExceptionThrowingCache ThrowingCache = new();
+    protected readonly ListProductsCacheFake Cache = new();
+    private readonly ListProductsExceptionThrowingCacheFake _throwingCache = new();
 
     protected ICommandHandler<PersistListProductsToCacheCommand> PersistListProductsToCacheHandler()
     {
@@ -21,11 +21,11 @@ public abstract class PersistListProductsToCacheHandlerTestBase
 
     protected ICommandHandler<PersistListProductsToCacheCommand> GetExceptionThrowingHandler()
     {
-        return new PersistListProductsToCacheCommandHandler(ThrowingCache);
+        return new PersistListProductsToCacheCommandHandler(_throwingCache);
     }
 
     protected void SetupCacheToThrowException(string cacheKey)
     {
-        ThrowingCache.SetKeyToThrowOn(cacheKey);
+        _throwingCache.SetKeyToThrowOn(cacheKey);
     }
 }

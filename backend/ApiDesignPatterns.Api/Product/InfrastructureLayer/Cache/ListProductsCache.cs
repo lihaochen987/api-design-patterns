@@ -2,13 +2,16 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Text.Json;
+using backend.Product.ProductControllers;
+using backend.Shared;
+using backend.Shared.Caching;
 using StackExchange.Redis;
 
-namespace backend.Shared.Caching;
+namespace backend.Product.InfrastructureLayer.Cache;
 
-public class RedisCache(IDatabase redisDatabase) : ICache
+public class ListProductsCache(IDatabase redisDatabase) : ICache<CachedItem<ListProductsResponse>>
 {
-    public async Task<T?> GetAsync<T>(string key) where T : class
+    public async Task<CachedItem<ListProductsResponse>?> GetAsync(string key)
     {
         RedisValue cachedValue = await redisDatabase.StringGetAsync(key);
 
@@ -17,10 +20,10 @@ public class RedisCache(IDatabase redisDatabase) : ICache
             return null;
         }
 
-        return JsonSerializer.Deserialize<T>(cachedValue!);
+        return JsonSerializer.Deserialize<CachedItem<ListProductsResponse>>(cachedValue!);
     }
 
-    public async Task SetAsync<T>(string key, T value, TimeSpan expiry) where T : class
+    public async Task SetAsync(string key, CachedItem<ListProductsResponse> value, TimeSpan expiry)
     {
         string serializedValue = JsonSerializer.Serialize(value);
         TimeSpan expiryWithJitter = JitterUtility.AddJitter(expiry);

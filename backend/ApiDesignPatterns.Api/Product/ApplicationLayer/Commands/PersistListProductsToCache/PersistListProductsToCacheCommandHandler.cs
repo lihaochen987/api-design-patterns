@@ -8,7 +8,7 @@ using backend.Shared.CommandHandler;
 namespace backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 
 public class PersistListProductsToCacheCommandHandler(
-    ICache cache)
+    ICache<CachedItem<ListProductsResponse>> cache)
     : ICommandHandler<PersistListProductsToCacheCommand>
 {
     public async Task Handle(PersistListProductsToCacheCommand command)

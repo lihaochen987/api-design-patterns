@@ -4,6 +4,7 @@
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ProductControllers;
+using backend.Shared.Caching;
 using backend.Shared.QueryHandler;
 using Shouldly;
 using Xunit;
@@ -17,9 +18,13 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
     {
         var request = new ListProductsRequest { MaxPageSize = 10 };
         var query = new GetListProductsFromCacheQuery { Request = request };
-        var expectedResponse = new ListProductsResponse
+        var expectedResults = new ListProductsResponse
         {
             Results = Fixture.CreateMany<GetProductResponse>(10), NextPageToken = "11"
+        };
+        var expectedResponse = new CachedItem<ListProductsResponse>
+        {
+            Item = expectedResults, Timestamp = DateTime.UtcNow + TimeSpan.FromMinutes(10)
         };
         await Cache.SetAsync("products:maxsize:10", expectedResponse, TimeSpan.FromMinutes(10));
         IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
@@ -29,7 +34,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         result.ShouldNotBeNull();
         result.ProductsResponse.ShouldNotBeNull();
         result.ProductsResponse.Results.Count().ShouldBe(10);
-        result.ProductsResponse.Results.ShouldBeEquivalentTo(expectedResponse.Results.ToList());
+        result.ProductsResponse.Results.ShouldBeEquivalentTo(expectedResponse.Item.Results);
         result.cacheKey.ShouldBe("products:maxsize:10");
     }
 

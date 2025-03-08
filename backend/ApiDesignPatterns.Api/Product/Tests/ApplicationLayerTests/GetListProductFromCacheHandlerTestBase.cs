@@ -3,7 +3,7 @@
 
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
-using backend.Product.ProductControllers;
+using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared.Caching;
 using backend.Shared.QueryHandler;
 
@@ -11,8 +11,8 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 
 public abstract class GetListProductsFromCacheHandlerTestBase
 {
-    protected readonly RedisCacheFake Cache = new();
-    private readonly ExceptionThrowingCache _throwingCache = new();
+    protected readonly ListProductsCacheFake Cache = new();
+    private readonly ListProductsExceptionThrowingCacheFake _throwingCache = new();
     protected readonly Fixture Fixture = new();
 
     protected IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> GetListProductsFromCacheHandler()

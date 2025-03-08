@@ -14,6 +14,7 @@ using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.ApplicationLayer.Queries.ReplaceProductResponse;
 using backend.Product.DomainModels.Views;
+using backend.Product.InfrastructureLayer.Cache;
 using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Product.InfrastructureLayer.Database.ProductView;
 using backend.Product.ProductControllers;
@@ -174,7 +175,7 @@ public class ProductControllerActivator : BaseControllerActivator
             TrackDisposable(context, dbConnection);
             var repository = new ProductViewRepository(dbConnection, _productPaginateService, _productSqlFilterBuilder);
             IDatabase redisDatabase = new RedisService(_configuration).GetDatabase();
-            var redisCache = new RedisCache(redisDatabase);
+            var redisCache = new ListProductsCache(redisDatabase);
 
             // ListProducts handler
             var listProductsHandler = new QueryDecoratorBuilder<ListProductsQuery, PagedProducts>(

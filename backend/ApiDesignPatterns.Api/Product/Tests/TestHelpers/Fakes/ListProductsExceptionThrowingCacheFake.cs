@@ -1,9 +1,12 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-namespace backend.Shared.Caching;
+using backend.Product.ProductControllers;
+using backend.Shared.Caching;
 
-public class ExceptionThrowingCache : ICache
+namespace backend.Product.Tests.TestHelpers.Fakes;
+
+public class ListProductsExceptionThrowingCacheFake : ICache<CachedItem<ListProductsResponse>>
 {
     private readonly HashSet<string> _keysToThrowOn = [];
 
@@ -12,17 +15,7 @@ public class ExceptionThrowingCache : ICache
         _keysToThrowOn.Add(key);
     }
 
-    public Task<T?> GetAsync<T>(string key) where T : class
-    {
-        if (_keysToThrowOn.Contains(key))
-        {
-            throw new Exception($"Simulated cache error for key: {key}");
-        }
-
-        return Task.FromResult<T?>(null);
-    }
-
-    public Task SetAsync<T>(string key, T value, TimeSpan expiry) where T : class
+    public Task SetAsync(string key, CachedItem<ListProductsResponse> value, TimeSpan expiry)
     {
         if (_keysToThrowOn.Contains(key))
         {
@@ -30,5 +23,15 @@ public class ExceptionThrowingCache : ICache
         }
 
         return Task.CompletedTask;
+    }
+
+    public Task<CachedItem<ListProductsResponse>?> GetAsync(string key)
+    {
+        if (_keysToThrowOn.Contains(key))
+        {
+            throw new Exception($"Simulated cache error for key: {key}");
+        }
+
+        return Task.FromResult<CachedItem<ListProductsResponse>?>(null);
     }
 }
