@@ -49,14 +49,25 @@ public class ListProductsController(
         ListProductsResponse? response =
             await mapListProducts.Handle(new MapListProductsResponseQuery { PagedProducts = result });
 
-        if (cachedResult is not null && response != null)
+        if (response != null)
         {
-            await persistListProductsToCache.Handle(new PersistListProductsToCacheCommand
+            await UpdateCacheIfNeeded(cachedResult, response, persistListProductsToCache);
+        }
+
+        return Ok(response);
+    }
+
+    private static async Task UpdateCacheIfNeeded(
+        CacheQueryResult? cachedResult,
+        ListProductsResponse response,
+        ICommandHandler<PersistListProductsToCacheCommand> handler)
+    {
+        if (cachedResult is not null)
+        {
+            await handler.Handle(new PersistListProductsToCacheCommand
             {
                 CacheKey = cachedResult.CacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
             });
         }
-
-        return Ok(response);
     }
 }
