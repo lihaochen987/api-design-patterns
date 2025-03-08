@@ -1,7 +1,9 @@
 using AutoMapper;
+using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.DomainModels.Enums;
+using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -13,6 +15,7 @@ namespace backend.Product.ProductControllers;
 public class ListProductsController(
     IQueryHandler<ListProductsQuery, PagedProducts> listProducts,
     IQueryHandler<GetListProductsFromCacheQuery, ListProductsResponse> getListProductsFromCache,
+    ICommandHandler<PersistListProductsToCacheCommand> persistListProductsToCache,
     IMapper mapper)
     : ControllerBase
 {
@@ -51,6 +54,21 @@ public class ListProductsController(
             }).ToList();
 
         ListProductsResponse response = new() { Results = productResponses, NextPageToken = result.NextPageToken };
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await persistListProductsToCache.Handle(new PersistListProductsToCacheCommand
+                {
+                    CacheKey = cacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
+                });
+            }
+            catch
+            {
+                // Swallow exceptions from cache writing to prevent affecting the response
+            }
+        });
 
         return Ok(response);
     }

@@ -2,10 +2,12 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.ProductControllers;
 using backend.Product.Services.Mappers;
+using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Moq;
 
@@ -15,6 +17,7 @@ public abstract class ListProductsControllerTestBase
 {
     protected readonly IQueryHandler<ListProductsQuery, PagedProducts> MockListProducts;
     protected readonly IQueryHandler<GetListProductsFromCacheQuery, ListProductsResponse> MockGetListProductsFromCache;
+    protected readonly ICommandHandler<PersistListProductsToCacheCommand> MockPersistListProductsToCache;
     private readonly IMapper _mapper;
     protected const int DefaultMaxPageSize = 10;
 
@@ -22,12 +25,17 @@ public abstract class ListProductsControllerTestBase
     {
         MockListProducts = Mock.Of<IQueryHandler<ListProductsQuery, PagedProducts>>();
         MockGetListProductsFromCache = Mock.Of<IQueryHandler<GetListProductsFromCacheQuery, ListProductsResponse>>();
+        MockPersistListProductsToCache = Mock.Of<ICommandHandler<PersistListProductsToCacheCommand>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
     }
 
     protected ListProductsController ListProductsController()
     {
-        return new ListProductsController(MockListProducts, MockGetListProductsFromCache, _mapper);
+        return new ListProductsController(
+            MockListProducts,
+            MockGetListProductsFromCache,
+            MockPersistListProductsToCache,
+            _mapper);
     }
 }

@@ -126,8 +126,13 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
                 _timeout);
         }
 
-        if (_useHandshaking && dbConnection != null)
+        if (_useHandshaking)
         {
+            if (dbConnection == null)
+            {
+                throw new InvalidOperationException("Database connection is required for handshaking decorator");
+            }
+
             _handler = new HandshakingQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
                 dbConnection,

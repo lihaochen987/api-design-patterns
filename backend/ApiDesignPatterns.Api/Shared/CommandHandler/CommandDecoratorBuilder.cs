@@ -8,7 +8,7 @@ namespace backend.Shared.CommandHandler;
 
 public class CommandDecoratorBuilder<TCommand>(
     ICommandHandler<TCommand> handler,
-    IDbConnection dbConnection,
+    IDbConnection? dbConnection,
     ILoggerFactory loggerFactory)
 {
     private ICommandHandler<TCommand> _handler = handler;
@@ -76,6 +76,11 @@ public class CommandDecoratorBuilder<TCommand>(
     {
         if (_useAudit)
         {
+            if (dbConnection == null)
+            {
+                throw new InvalidOperationException("Database connection is required for audit decorator");
+            }
+
             _handler = new AuditCommandHandlerDecorator<TCommand>(_handler, dbConnection);
         }
 
@@ -88,11 +93,21 @@ public class CommandDecoratorBuilder<TCommand>(
 
         if (_useTransaction)
         {
+            if (dbConnection == null)
+            {
+                throw new InvalidOperationException("Database connection is required for transaction decorator");
+            }
+
             _handler = new TransactionCommandHandlerDecorator<TCommand>(_handler, dbConnection);
         }
 
         if (_useHandshaking)
         {
+            if (dbConnection == null)
+            {
+                throw new InvalidOperationException("Database connection is required for handshaking decorator");
+            }
+
             _handler = new HandshakingCommandHandlerDecorator<TCommand>(
                 _handler,
                 dbConnection,
