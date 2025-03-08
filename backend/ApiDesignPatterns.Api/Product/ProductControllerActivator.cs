@@ -180,7 +180,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var redisCache = new ListProductsCache(redisDatabase);
 
             // Todo: Give CacheStalenessOptions legit values
-            var cacheStalenessOptions = new CacheStalenessOptions(TimeSpan.FromDays(1), 5, 5, 5);
+            var cacheStalenessOptions = new CacheStalenessOptions(TimeSpan.FromDays(1), 0.2, 5, 5);
 
             // ListProducts handler
             var listProductsHandler = new QueryDecoratorBuilder<ListProductsQuery, PagedProducts>(
