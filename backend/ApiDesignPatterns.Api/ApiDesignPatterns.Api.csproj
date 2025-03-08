@@ -403,6 +403,9 @@
     <Compile Update="Product\Tests\ApplicationLayerTests\GetListProductFromCacheHandlerTestBase.cs">
       <DependentUpon>GetListProductFromCacheHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\PersistListProductsToCacheHandlerTestBase.cs">
+      <DependentUpon>PersistListProductsToCacheHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
