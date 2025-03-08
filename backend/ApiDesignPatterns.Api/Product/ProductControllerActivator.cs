@@ -12,6 +12,7 @@ using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
+using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Cache;
@@ -215,11 +216,22 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .Build();
 
+            // MapListProductsResponse handler
+            var mapListProductsResponseHandler =
+                new QueryDecoratorBuilder<MapListProductsResponseQuery, ListProductsResponse>(
+                        new MapListProductsResponseHandler(_mapper),
+                        _loggerFactory,
+                        null,
+                        null)
+                    .WithLogging()
+                    .WithValidation()
+                    .Build();
+
             return new ListProductsController(
                 listProductsHandler,
                 getListProductsFromCacheHandler,
-                persistListProductsToCacheHandler,
-                _mapper);
+                mapListProductsResponseHandler,
+                persistListProductsToCacheHandler);
         }
 
         if (type == typeof(ReplaceProductController))
@@ -257,8 +269,8 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            // ReplaceProductResponse handler
-            var replaceProductResponseHandler =
+            // MapReplaceProductResponse handler
+            var mapReplaceProductResponseHandler =
                 new QueryDecoratorBuilder<MapReplaceProductResponseQuery, ReplaceProductResponse>(
                         new MapReplaceProductResponseHandler(_mapper),
                         _loggerFactory,
@@ -266,13 +278,12 @@ public class ProductControllerActivator : BaseControllerActivator
                         null)
                     .WithLogging()
                     .WithValidation()
-                    .WithTransaction()
                     .Build();
 
             return new ReplaceProductController(
                 getProductHandler,
                 replaceProductHandler,
-                replaceProductResponseHandler);
+                mapReplaceProductResponseHandler);
         }
 
         if (type == typeof(UpdateProductController))

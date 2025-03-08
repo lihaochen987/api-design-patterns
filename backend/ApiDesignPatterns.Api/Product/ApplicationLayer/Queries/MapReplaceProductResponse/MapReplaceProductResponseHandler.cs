@@ -8,17 +8,16 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 
-public class
-    MapReplaceProductResponseHandler(IMapper mapper)
-    : IQueryHandler<MapReplaceProductResponseQuery, ProductControllers.ReplaceProductResponse>
+public class MapReplaceProductResponseHandler(IMapper mapper)
+    : IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse>
 {
-    public Task<ProductControllers.ReplaceProductResponse?> Handle(MapReplaceProductResponseQuery query)
+    public Task<ReplaceProductResponse?> Handle(MapReplaceProductResponseQuery query)
     {
-        ProductControllers.ReplaceProductResponse response = query.Product.Category switch
+        ReplaceProductResponse response = query.Product.Category switch
         {
             Category.PetFood => mapper.Map<ReplacePetFoodResponse>(query.Product),
             Category.GroomingAndHygiene => mapper.Map<ReplaceGroomingAndHygieneResponse>(query.Product),
-            _ => mapper.Map<ProductControllers.ReplaceProductResponse>(query.Product)
+            _ => mapper.Map<ReplaceProductResponse>(query.Product)
         };
         return Task.FromResult(response)!;
     }

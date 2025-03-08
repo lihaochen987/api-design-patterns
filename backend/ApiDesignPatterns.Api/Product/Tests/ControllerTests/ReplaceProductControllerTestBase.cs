@@ -6,7 +6,6 @@ using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.ProductControllers;
-using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
@@ -22,8 +21,7 @@ public abstract class ReplaceProductControllerTestBase
     protected readonly ICommandHandler<ReplaceProductCommand> ReplaceProduct =
         Mock.Of<ICommandHandler<ReplaceProductCommand>>();
 
-    protected readonly IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> ReplaceProductResponse =
-        Mock.Of<IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse>>();
+    protected readonly IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> MapReplaceProductResponse;
 
     protected readonly IMapper Mapper;
 
@@ -31,6 +29,7 @@ public abstract class ReplaceProductControllerTestBase
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
+        MapReplaceProductResponse = new MapReplaceProductResponseHandler(Mapper);
     }
 
     protected ReplaceProductController GetReplaceProductController()
@@ -38,6 +37,6 @@ public abstract class ReplaceProductControllerTestBase
         return new ReplaceProductController(
             GetProduct,
             ReplaceProduct,
-            ReplaceProductResponse);
+            MapReplaceProductResponse);
     }
 }

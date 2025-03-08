@@ -3,7 +3,6 @@
 
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
-using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
@@ -26,10 +25,6 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
             .Get(GetProduct)
             .Setup(x => x.Handle(It.Is<GetProductQuery>(q => q.Id == product.Id)))
             .ReturnsAsync(product);
-        Mock
-            .Get(ReplaceProductResponse)
-            .Setup(x => x.Handle(It.IsAny<MapReplaceProductResponseQuery>()))
-            .ReturnsAsync(expectedResponse);
         ReplaceProductController sut = GetReplaceProductController();
 
         var result = await sut.ReplaceProduct(product.Id, request);
@@ -67,15 +62,10 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
     {
         var product = new ProductTestDataBuilder().WithCategory(Category.PetFood).Build();
         var request = Mapper.Map<ReplaceProductRequest>(product);
-        var expectedResponse = Mapper.Map<ReplacePetFoodResponse>(product);
         Mock
             .Get(GetProduct)
             .Setup(x => x.Handle(It.Is<GetProductQuery>(q => q.Id == product.Id)))
             .ReturnsAsync(product);
-        Mock
-            .Get(ReplaceProductResponse)
-            .Setup(x => x.Handle(It.IsAny<MapReplaceProductResponseQuery>()))
-            .ReturnsAsync(expectedResponse);
         var sut = GetReplaceProductController();
 
         await sut.ReplaceProduct(product.Id, request);
@@ -90,15 +80,10 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
     {
         var product = new ProductTestDataBuilder().WithCategory(Category.GroomingAndHygiene).Build();
         var request = Mapper.Map<ReplaceProductRequest>(product);
-        var expectedResponse = Mapper.Map<ReplaceGroomingAndHygieneResponse>(product);
         Mock
             .Get(GetProduct)
             .Setup(x => x.Handle(It.Is<GetProductQuery>(q => q.Id == product.Id)))
             .ReturnsAsync(product);
-        Mock
-            .Get(ReplaceProductResponse)
-            .Setup(x => x.Handle(It.IsAny<MapReplaceProductResponseQuery>()))
-            .ReturnsAsync(expectedResponse);
         var sut = GetReplaceProductController();
 
         await sut.ReplaceProduct(product.Id, request);
@@ -126,8 +111,5 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
         Mock
             .Get(ReplaceProduct)
             .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Once);
-        Mock
-            .Get(ReplaceProductResponse)
-            .Verify(x => x.Handle(It.IsAny<MapReplaceProductResponseQuery>()), Times.Never);
     }
 }

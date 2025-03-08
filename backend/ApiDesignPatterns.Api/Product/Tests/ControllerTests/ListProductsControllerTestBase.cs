@@ -5,6 +5,7 @@ using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
+using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Product.ProductControllers;
 using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;
@@ -16,26 +17,27 @@ namespace backend.Product.Tests.ControllerTests;
 public abstract class ListProductsControllerTestBase
 {
     protected readonly IQueryHandler<ListProductsQuery, PagedProducts> MockListProducts;
-    protected readonly IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> MockGetListProductsFromCache;
-    protected readonly ICommandHandler<PersistListProductsToCacheCommand> MockPersistListProductsToCache;
-    private readonly IMapper _mapper;
+    private readonly IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> _mockGetListProductsFromCache;
+    private readonly IQueryHandler<MapListProductsResponseQuery, ListProductsResponse> _mapListProducts;
+    private readonly ICommandHandler<PersistListProductsToCacheCommand> _mockPersistListProductsToCache;
     protected const int DefaultMaxPageSize = 10;
 
     protected ListProductsControllerTestBase()
     {
         MockListProducts = Mock.Of<IQueryHandler<ListProductsQuery, PagedProducts>>();
-        MockGetListProductsFromCache = Mock.Of<IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>>();
-        MockPersistListProductsToCache = Mock.Of<ICommandHandler<PersistListProductsToCacheCommand>>();
+        _mockGetListProductsFromCache = Mock.Of<IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>>();
+        _mockPersistListProductsToCache = Mock.Of<ICommandHandler<PersistListProductsToCacheCommand>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
-        _mapper = mapperConfiguration.CreateMapper();
+        IMapper mapper = mapperConfiguration.CreateMapper();
+        _mapListProducts = new MapListProductsResponseHandler(mapper);
     }
 
     protected ListProductsController ListProductsController()
     {
         return new ListProductsController(
             MockListProducts,
-            MockGetListProductsFromCache,
-            MockPersistListProductsToCache,
-            _mapper);
+            _mockGetListProductsFromCache,
+            _mapListProducts,
+            _mockPersistListProductsToCache);
     }
 }

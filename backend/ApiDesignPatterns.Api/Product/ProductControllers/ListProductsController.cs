@@ -1,8 +1,7 @@
-using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
-using backend.Product.DomainModels.Enums;
+using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +14,8 @@ namespace backend.Product.ProductControllers;
 public class ListProductsController(
     IQueryHandler<ListProductsQuery, PagedProducts> listProducts,
     IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> getListProductsFromCache,
-    ICommandHandler<PersistListProductsToCacheCommand> persistListProductsToCache,
-    IMapper mapper)
+    IQueryHandler<MapListProductsResponseQuery, ListProductsResponse> mapListProducts,
+    ICommandHandler<PersistListProductsToCacheCommand> persistListProductsToCache)
     : ControllerBase
 {
     [HttpGet]
@@ -40,7 +39,6 @@ public class ListProductsController(
 
         if (cachedResult?.SelectedForStalenessCheck == true)
         {
-
         }
 
         if (result == null)
@@ -48,17 +46,10 @@ public class ListProductsController(
             return NotFound();
         }
 
-        IEnumerable<GetProductResponse> productResponses = result.Products.Select(product =>
-            Enum.Parse<Category>(product.Category) switch
-            {
-                Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
-                Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(product),
-                _ => mapper.Map<GetProductResponse>(product)
-            }).ToList();
+        ListProductsResponse? response =
+            await mapListProducts.Handle(new MapListProductsResponseQuery { PagedProducts = result });
 
-        ListProductsResponse response = new() { Results = productResponses, NextPageToken = result.NextPageToken };
-
-        if (cachedResult is not null)
+        if (cachedResult is not null && response != null)
         {
             await persistListProductsToCache.Handle(new PersistListProductsToCacheCommand
             {
