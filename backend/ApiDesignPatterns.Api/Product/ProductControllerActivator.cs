@@ -179,7 +179,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     new ListProductsHandler(repository),
                     _loggerFactory,
                     dbConnection,
-                    redisCache)
+                    null)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -194,9 +194,9 @@ public class ProductControllerActivator : BaseControllerActivator
                         new GetListProductsFromCacheHandler(redisCache),
                         _loggerFactory,
                         null,
-                        redisCache)
+                        null)
                     .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                    .WithBulkhead(BulkheadPolicies.ProductRead)
+                    .WithBulkhead(BulkheadPolicies.RedisRead)
                     .WithLogging()
                     .Build();
 
@@ -206,7 +206,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     null,
                     _loggerFactory)
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.ProductWrite)
+                .WithBulkhead(BulkheadPolicies.RedisWrite)
                 .WithLogging()
                 .Build();
 

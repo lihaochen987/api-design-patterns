@@ -8,6 +8,7 @@ namespace backend.Shared;
 
 public static class BulkheadPolicies
 {
+    // 100 Max connection pool for PostGres -> Best to move this to a configuration file.
     public static readonly AsyncBulkheadPolicy ProductRead = Policy
         .BulkheadAsync(maxParallelization: 25, maxQueuingActions: 150);
 
@@ -31,5 +32,12 @@ public static class BulkheadPolicies
 
     public static readonly AsyncBulkheadPolicy SupplierWrite = Policy
         .BulkheadAsync(maxParallelization: 5, maxQueuingActions: 25);
+
+    // 10,000 MaxClients for Redis -> Best to move this to a configuration file
+    public static readonly AsyncBulkheadPolicy RedisRead = Policy
+        .BulkheadAsync(maxParallelization: 6300, maxQueuingActions: 31500);
+
+    public static readonly AsyncBulkheadPolicy RedisWrite = Policy
+        .BulkheadAsync(maxParallelization: 3150, maxQueuingActions: 15750);
 
 }
