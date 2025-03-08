@@ -3,6 +3,7 @@
 
 using backend.Product.ProductControllers;
 using backend.Shared.Caching;
+using StackExchange.Redis;
 
 namespace backend.Product.Tests.TestHelpers.Fakes;
 
@@ -24,6 +25,8 @@ public class ListProductsExceptionThrowingCacheFake : ICache<CachedItem<ListProd
 
         return Task.CompletedTask;
     }
+
+    public IBatch CreateBatch() => throw new NotImplementedException();
 
     public Task<CachedItem<ListProductsResponse>?> GetAsync(string key)
     {

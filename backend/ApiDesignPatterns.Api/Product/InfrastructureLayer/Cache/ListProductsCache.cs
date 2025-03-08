@@ -3,7 +3,6 @@
 
 using System.Text.Json;
 using backend.Product.ProductControllers;
-using backend.Shared;
 using backend.Shared.Caching;
 using StackExchange.Redis;
 
@@ -15,18 +14,17 @@ public class ListProductsCache(IDatabase redisDatabase) : ICache<CachedItem<List
     {
         RedisValue cachedValue = await redisDatabase.StringGetAsync(key);
 
-        if (cachedValue.IsNull)
-        {
-            return null;
-        }
-
-        return JsonSerializer.Deserialize<CachedItem<ListProductsResponse>>(cachedValue!);
+        return cachedValue.IsNull ? null : JsonSerializer.Deserialize<CachedItem<ListProductsResponse>>(cachedValue!);
     }
 
     public async Task SetAsync(string key, CachedItem<ListProductsResponse> value, TimeSpan expiry)
     {
         string serializedValue = JsonSerializer.Serialize(value);
-        TimeSpan expiryWithJitter = JitterUtility.AddJitter(expiry);
-        await redisDatabase.StringSetAsync(key, serializedValue, expiryWithJitter);
+        await redisDatabase.StringSetAsync(key, serializedValue, expiry);
+    }
+
+    public IBatch CreateBatch()
+    {
+        return redisDatabase.CreateBatch();
     }
 }
