@@ -77,8 +77,7 @@ public class InventoryControllerActivator : BaseControllerActivator
             var getInventoryViewHandler = new QueryDecoratorBuilder<GetInventoryViewQuery, InventoryView>(
                     new GetInventoryViewHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))

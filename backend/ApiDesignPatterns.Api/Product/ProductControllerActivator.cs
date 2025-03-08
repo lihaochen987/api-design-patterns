@@ -94,7 +94,6 @@ public class ProductControllerActivator : BaseControllerActivator
                 new QueryDecoratorBuilder<CreateProductResponseQuery, CreateProductResponse>(
                         new CreateProductResponseHandler(_mapper),
                         _loggerFactory,
-                        null,
                         null)
                     .WithLogging()
                     .WithValidation()
@@ -131,8 +130,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
                     new GetProductHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -155,8 +153,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse>(
                     new GetProductResponseHandler(repository, _mapper),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -186,8 +183,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var listProductsHandler = new QueryDecoratorBuilder<ListProductsQuery, PagedProducts>(
                     new ListProductsHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -201,7 +197,6 @@ public class ProductControllerActivator : BaseControllerActivator
                 new QueryDecoratorBuilder<GetListProductsFromCacheQuery, CacheQueryResult>(
                         new GetListProductsFromCacheHandler(redisCache),
                         _loggerFactory,
-                        null,
                         null)
                     .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                     .WithBulkhead(BulkheadPolicies.RedisRead)
@@ -223,7 +218,6 @@ public class ProductControllerActivator : BaseControllerActivator
                 new QueryDecoratorBuilder<MapListProductsResponseQuery, ListProductsResponse>(
                         new MapListProductsResponseHandler(_mapper),
                         _loggerFactory,
-                        null,
                         null)
                     .WithLogging()
                     .WithValidation()
@@ -258,8 +252,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
                     new GetProductHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -288,7 +281,6 @@ public class ProductControllerActivator : BaseControllerActivator
                 new QueryDecoratorBuilder<MapReplaceProductResponseQuery, ReplaceProductResponse>(
                         new MapReplaceProductResponseHandler(_mapper),
                         _loggerFactory,
-                        null,
                         null)
                     .WithLogging()
                     .WithValidation()
@@ -310,8 +302,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
                     new GetProductHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -348,8 +339,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse>(
                     new GetProductResponseHandler(repository, _mapper),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))

@@ -86,8 +86,7 @@ public class ReviewControllerActivator : BaseControllerActivator
             var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
                     new GetReviewHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -127,8 +126,7 @@ public class ReviewControllerActivator : BaseControllerActivator
             var getReviewViewHandler = new QueryDecoratorBuilder<GetReviewViewQuery, ReviewView>(
                     new GetReviewViewHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -154,8 +152,7 @@ public class ReviewControllerActivator : BaseControllerActivator
             var listReviewsHandler = new QueryDecoratorBuilder<ListReviewsQuery, PagedReviews>(
                     new ListReviewsHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -179,8 +176,7 @@ public class ReviewControllerActivator : BaseControllerActivator
             var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
                     new GetReviewHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -220,8 +216,7 @@ public class ReviewControllerActivator : BaseControllerActivator
             var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
                     new GetReviewHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))

@@ -2,17 +2,14 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Data;
-using backend.Shared.Caching;
 using Polly.Bulkhead;
-using StackExchange.Redis;
 
 namespace backend.Shared.QueryHandler;
 
 public class QueryDecoratorBuilder<TQuery, TResult>(
     IQueryHandler<TQuery, TResult> handler,
     ILoggerFactory loggerFactory,
-    IDbConnection? dbConnection,
-    IDatabase? redisCache)
+    IDbConnection? dbConnection)
     where TQuery : IQuery<TResult> where TResult : class
 {
     private IQueryHandler<TQuery, TResult> _handler = handler;
@@ -27,8 +24,6 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     private TimeSpan _timeout;
     private bool _useBulkhead;
     private AsyncBulkheadPolicy? _bulkheadPolicy;
-    private bool _useRedisCache;
-    private CacheStalenessOptions? _cacheStalenessOptions;
 
     public QueryDecoratorBuilder<TQuery, TResult> WithTransaction()
     {
@@ -80,13 +75,6 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     {
         _useBulkhead = true;
         _bulkheadPolicy = policy;
-        return this;
-    }
-
-    public QueryDecoratorBuilder<TQuery, TResult> WithRedisCache(CacheStalenessOptions cacheStalenessOptions)
-    {
-        _useRedisCache = true;
-        _cacheStalenessOptions = cacheStalenessOptions;
         return this;
     }
 
@@ -150,27 +138,6 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
             _handler = new BulkheadQueryHandlerDecorator<TQuery, TResult>(
                 _handler,
                 _bulkheadPolicy);
-        }
-
-        if (_useRedisCache)
-        {
-            if (redisCache == null)
-            {
-                throw new InvalidOperationException("Redis connection is required for RedisCachingQuery decorator");
-            }
-
-            if (_cacheStalenessOptions == null)
-            {
-                throw new InvalidOperationException(
-                    "Cache staleness options is required for RedisCachingQuery decorator");
-            }
-
-            _handler = new RedisCacheQueryHandlerDecorator<TQuery, TResult>(
-                _handler,
-                redisCache,
-                loggerFactory.CreateLogger<RedisCacheQueryHandlerDecorator<TQuery, TResult>>(),
-                _cacheStalenessOptions
-            );
         }
 
         return _handler;

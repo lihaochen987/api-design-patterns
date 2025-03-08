@@ -54,8 +54,7 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             var getProductPricingHandler = new QueryDecoratorBuilder<GetProductPricingQuery, ProductPricingView>(
                     new GetProductPricingHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -81,8 +80,7 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
                     new GetProductHandler(repository),
                     _loggerFactory,
-                    dbConnection,
-                    null)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
