@@ -406,6 +406,9 @@
     <Compile Update="Product\Tests\ApplicationLayerTests\PersistListProductsToCacheHandlerTestBase.cs">
       <DependentUpon>PersistListProductsToCacheHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\MapListProductsResponseHandlerTestBase.cs">
+      <DependentUpon>MapListProductsResponseHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
