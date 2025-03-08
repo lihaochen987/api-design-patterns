@@ -4,7 +4,6 @@
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.Tests.TestHelpers.Fakes;
-using backend.Shared.Caching;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -12,7 +11,7 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public abstract class GetListProductsFromCacheHandlerTestBase
 {
     protected readonly ListProductsCacheFake Cache = new();
-    private readonly ListProductsExceptionThrowingCacheFake _throwingCache = new();
+    protected readonly ListProductsExceptionThrowingCacheFake ThrowingCache = new();
     protected readonly Fixture Fixture = new();
 
     protected IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> GetListProductsFromCacheHandler()
@@ -22,6 +21,6 @@ public abstract class GetListProductsFromCacheHandlerTestBase
 
     protected IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> GetExceptionThrowingHandler()
     {
-        return new GetListProductsFromCacheHandler(_throwingCache);
+        return new GetListProductsFromCacheHandler(ThrowingCache);
     }
 }

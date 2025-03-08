@@ -58,6 +58,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         var request = new ListProductsRequest { MaxPageSize = 10 };
         var query = new GetListProductsFromCacheQuery { Request = request };
         IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetExceptionThrowingHandler();
+        ThrowingCache.SetKeyToThrowOn("products:maxsize:10");
 
         CacheQueryResult? result = await sut.Handle(query);
 
