@@ -14,7 +14,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 public class ListProductsController(
     IQueryHandler<ListProductsQuery, PagedProducts> listProducts,
-    IQueryHandler<GetListProductsFromCacheQuery, ListProductsResponse> getListProductsFromCache,
+    IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> getListProductsFromCache,
     ICommandHandler<PersistListProductsToCacheCommand> persistListProductsToCache,
     IMapper mapper)
     : ControllerBase
@@ -25,14 +25,12 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        string cacheKey = GenerateCacheKey(request);
+        CacheQueryResult? cachedResult =
+            await getListProductsFromCache.Handle(new GetListProductsFromCacheQuery { Request = request });
 
-        ListProductsResponse? cachedResult =
-            await getListProductsFromCache.Handle(new GetListProductsFromCacheQuery { CacheKey = cacheKey });
-
-        if (cachedResult != null)
+        if (cachedResult?.ProductsResponse != null)
         {
-            return Ok(cachedResult);
+            return Ok(cachedResult.ProductsResponse);
         }
 
         PagedProducts? result = await listProducts.Handle(new ListProductsQuery
@@ -55,39 +53,11 @@ public class ListProductsController(
 
         ListProductsResponse response = new() { Results = productResponses, NextPageToken = result.NextPageToken };
 
-        _ = Task.Run(async () =>
+        await persistListProductsToCache.Handle(new PersistListProductsToCacheCommand
         {
-            try
-            {
-                await persistListProductsToCache.Handle(new PersistListProductsToCacheCommand
-                {
-                    CacheKey = cacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
-                });
-            }
-            catch
-            {
-                // Swallow exceptions from cache writing to prevent affecting the response
-            }
+            CacheKey = cachedResult!.cacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
         });
 
         return Ok(response);
-    }
-
-    private static string GenerateCacheKey(ListProductsRequest request)
-    {
-        var keyParts = new List<string> { "products", $"maxsize:{request.MaxPageSize}" };
-
-        if (!string.IsNullOrEmpty(request.PageToken))
-        {
-            keyParts.Add($"page-token:{request.PageToken}");
-        }
-
-        if (!string.IsNullOrEmpty(request.Filter))
-        {
-            string normalizedFilter = request.Filter.Trim().ToLowerInvariant();
-            keyParts.Add($"filter:{normalizedFilter}");
-        }
-
-        return string.Join(":", keyParts);
     }
 }

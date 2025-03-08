@@ -1,33 +1,44 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using System.Text.Json;
 using backend.Product.ProductControllers;
 using backend.Shared.Caching;
 using backend.Shared.QueryHandler;
-using StackExchange.Redis;
 
 namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 
-public class GetListProductsFromCacheHandler(IDatabase redisCache) : IQueryHandler<GetListProductsFromCacheQuery, ListProductsResponse>
+public class GetListProductsFromCacheHandler(ICache cache)
+    : IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>
 {
-    public async Task<ListProductsResponse?> Handle(GetListProductsFromCacheQuery query)
+    public async Task<CacheQueryResult?> Handle(GetListProductsFromCacheQuery query)
     {
+        string cacheKey = GenerateCacheKey(query.Request);
         try
         {
-            RedisValue cachedValue = await redisCache.StringGetAsync(query.CacheKey);
-
-            if (cachedValue.IsNull)
-            {
-                return null;
-            }
-
-            var cachedData = JsonSerializer.Deserialize<CachedItem<ListProductsResponse>>(cachedValue!);
-            return cachedData?.Item;
+            var cachedData = await cache.GetAsync<CachedItem<ListProductsResponse>>(cacheKey);
+            return new CacheQueryResult { ProductsResponse = cachedData?.Item, cacheKey = cacheKey };
         }
         catch
         {
-            return null;
+            return new CacheQueryResult { ProductsResponse = null, cacheKey = cacheKey };
         }
+    }
+
+    private static string GenerateCacheKey(ListProductsRequest request)
+    {
+        var keyParts = new List<string> { "products", $"maxsize:{request.MaxPageSize}" };
+
+        if (!string.IsNullOrEmpty(request.PageToken))
+        {
+            keyParts.Add($"page-token:{request.PageToken}");
+        }
+
+        if (!string.IsNullOrEmpty(request.Filter))
+        {
+            string normalizedFilter = request.Filter.Trim().ToLowerInvariant();
+            keyParts.Add($"filter:{normalizedFilter}");
+        }
+
+        return string.Join(":", keyParts);
     }
 }

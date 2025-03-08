@@ -16,7 +16,7 @@ namespace backend.Product.Tests.ControllerTests;
 public abstract class ListProductsControllerTestBase
 {
     protected readonly IQueryHandler<ListProductsQuery, PagedProducts> MockListProducts;
-    protected readonly IQueryHandler<GetListProductsFromCacheQuery, ListProductsResponse> MockGetListProductsFromCache;
+    protected readonly IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> MockGetListProductsFromCache;
     protected readonly ICommandHandler<PersistListProductsToCacheCommand> MockPersistListProductsToCache;
     private readonly IMapper _mapper;
     protected const int DefaultMaxPageSize = 10;
@@ -24,7 +24,7 @@ public abstract class ListProductsControllerTestBase
     protected ListProductsControllerTestBase()
     {
         MockListProducts = Mock.Of<IQueryHandler<ListProductsQuery, PagedProducts>>();
-        MockGetListProductsFromCache = Mock.Of<IQueryHandler<GetListProductsFromCacheQuery, ListProductsResponse>>();
+        MockGetListProductsFromCache = Mock.Of<IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>>();
         MockPersistListProductsToCache = Mock.Of<ICommandHandler<PersistListProductsToCacheCommand>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();

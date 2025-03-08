@@ -2,11 +2,11 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.ProductControllers;
-using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 
-public record GetListProductsFromCacheQuery : IQuery<CacheQueryResult>
+public record CacheQueryResult
 {
-    public required ListProductsRequest Request { get; init; }
+    public ListProductsResponse? ProductsResponse { get; init; }
+    public required string cacheKey { get; init; }
 }

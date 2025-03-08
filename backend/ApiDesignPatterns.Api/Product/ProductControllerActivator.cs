@@ -21,6 +21,7 @@ using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared;
+using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
@@ -172,7 +173,8 @@ public class ProductControllerActivator : BaseControllerActivator
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new ProductViewRepository(dbConnection, _productPaginateService, _productSqlFilterBuilder);
-            IDatabase redisCache = new RedisService(_configuration).GetDatabase();
+            IDatabase redisDatabase = new RedisService(_configuration).GetDatabase();
+            var redisCache = new RedisCache(redisDatabase);
 
             // ListProducts handler
             var listProductsHandler = new QueryDecoratorBuilder<ListProductsQuery, PagedProducts>(
@@ -190,7 +192,7 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // GetListProductsFromCache handler
             var getListProductsFromCacheHandler =
-                new QueryDecoratorBuilder<GetListProductsFromCacheQuery, ListProductsResponse>(
+                new QueryDecoratorBuilder<GetListProductsFromCacheQuery, CacheQueryResult>(
                         new GetListProductsFromCacheHandler(redisCache),
                         _loggerFactory,
                         null,
