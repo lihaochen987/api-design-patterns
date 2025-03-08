@@ -3,7 +3,6 @@
 
 using backend.Product.ProductControllers;
 using backend.Shared.Caching;
-using MassTransit.Caching.Internals;
 
 namespace backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
 

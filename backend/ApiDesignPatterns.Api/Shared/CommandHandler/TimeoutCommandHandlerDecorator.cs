@@ -13,7 +13,7 @@ public class TimeoutCommandHandlerDecorator<TCommand>(
     : ICommandHandler<TCommand>
 {
     private readonly AsyncTimeoutPolicy _timeoutPolicy = Policy
-        .TimeoutAsync(timeout, onTimeoutAsync: (_, timespan, _) =>
+        .TimeoutAsync(timeout, TimeoutStrategy.Pessimistic, onTimeoutAsync: (_, timespan, _) =>
         {
             logger.LogError("Operation timed out after {Timeout} seconds", timespan.TotalSeconds);
             return Task.CompletedTask;
