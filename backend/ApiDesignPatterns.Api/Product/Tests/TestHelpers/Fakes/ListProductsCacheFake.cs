@@ -12,7 +12,7 @@ public class ListProductsCacheFake : ICache<CachedItem<ListProductsResponse>>
 
     public Task SetAsync(string key, CachedItem<ListProductsResponse> value, TimeSpan expiry)
     {
-        var entry = new CachedItem<ListProductsResponse> { Item = value.Item, Timestamp = DateTime.UtcNow.Add(expiry) };
+        CachedItem<ListProductsResponse> entry = value with { Timestamp = DateTime.UtcNow.Add(expiry) };
 
         _cache[key] = entry;
         return Task.CompletedTask;

@@ -3,20 +3,8 @@
 
 namespace backend.Shared.Caching;
 
-public class CachedItem<T>
+public record CachedItem<T>
 {
-    public T? Item { get; set; }
-    public DateTime Timestamp { get; set; }
-
-    public CachedItem(T item)
-    {
-        Item = item;
-        Timestamp = DateTime.UtcNow;
-    }
-
-    // Required for deserialization
-    public CachedItem()
-    {
-        Timestamp = DateTime.UtcNow;
-    }
+    public T? Item { get; init; }
+    public DateTime Timestamp { get; init; }
 }

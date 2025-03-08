@@ -13,7 +13,12 @@ public class PersistListProductsToCacheCommandHandler(
 {
     public async Task Handle(PersistListProductsToCacheCommand command)
     {
-        var cachedItem = new CachedItem<ListProductsResponse>(command.Products);
+        var cachedItem =
+            new CachedItem<ListProductsResponse>
+            {
+                Item = command.Products,
+                Timestamp = DateTime.UtcNow + command.Expiry
+            };
 
         await cache.SetAsync(
             command.CacheKey,
