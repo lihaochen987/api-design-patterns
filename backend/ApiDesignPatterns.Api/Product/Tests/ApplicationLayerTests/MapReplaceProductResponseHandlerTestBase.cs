@@ -9,11 +9,11 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public abstract class ReplaceProductResponseHandlerTestBase
+public abstract class MapReplaceProductResponseHandlerTestBase
 {
     protected readonly IMapper Mapper;
 
-    protected ReplaceProductResponseHandlerTestBase()
+    protected MapReplaceProductResponseHandlerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();

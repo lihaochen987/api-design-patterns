@@ -11,7 +11,7 @@ using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
-public class ReplaceProductResponseHandlerTests : ReplaceProductResponseHandlerTestBase
+public class MapReplaceProductResponseHandlerTests : MapReplaceProductResponseHandlerTestBase
 {
     [Fact]
     public async Task Handle_ReturnsPetFoodResponse_WhenCategoryIsPetFood()
