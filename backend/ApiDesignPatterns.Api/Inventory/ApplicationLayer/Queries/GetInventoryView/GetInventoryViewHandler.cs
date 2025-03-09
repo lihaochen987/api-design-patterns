@@ -8,7 +8,7 @@ using backend.Shared.QueryHandler;
 namespace backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
 
 public class GetInventoryViewHandler(IInventoryViewRepository repository)
-    : IQueryHandler<GetInventoryViewQuery, InventoryView>
+    : IQueryHandler<GetInventoryViewQuery, InventoryView?>
 {
     public async Task<InventoryView?> Handle(GetInventoryViewQuery query)
     {

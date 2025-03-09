@@ -18,7 +18,7 @@ public class GetInventoryViewHandlerTests : GetInventoryViewHandlerTestBase
     {
         InventoryView expectedInventory = new InventoryViewTestDataBuilder().Build();
         Repository.Add(expectedInventory);
-        IQueryHandler<GetInventoryViewQuery, InventoryView> sut = GetInventoryViewHandler();
+        IQueryHandler<GetInventoryViewQuery, InventoryView?> sut = GetInventoryViewHandler();
 
         InventoryView? result = await sut.Handle(new GetInventoryViewQuery { Id = expectedInventory.Id });
 
@@ -31,7 +31,7 @@ public class GetInventoryViewHandlerTests : GetInventoryViewHandlerTestBase
     public async Task Handle_ReturnsNull_WhenInventoryDoesNotExist()
     {
         InventoryView nonExistentInventory = new InventoryViewTestDataBuilder().Build();
-        IQueryHandler<GetInventoryViewQuery, InventoryView> sut = GetInventoryViewHandler();
+        IQueryHandler<GetInventoryViewQuery, InventoryView?> sut = GetInventoryViewHandler();
 
         InventoryView? result = await sut.Handle(new GetInventoryViewQuery { Id = nonExistentInventory.Id });
 

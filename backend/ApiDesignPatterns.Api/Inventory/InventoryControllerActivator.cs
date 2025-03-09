@@ -74,7 +74,7 @@ public class InventoryControllerActivator : BaseControllerActivator
             var repository = new InventoryViewRepository(dbConnection);
 
             // GetInventoryView handler
-            var getInventoryViewHandler = new QueryDecoratorBuilder<GetInventoryViewQuery, InventoryView>(
+            var getInventoryViewHandler = new QueryDecoratorBuilder<GetInventoryViewQuery, InventoryView?>(
                     new GetInventoryViewHandler(repository),
                     _loggerFactory,
                     dbConnection)

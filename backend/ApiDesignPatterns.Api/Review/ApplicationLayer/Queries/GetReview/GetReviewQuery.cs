@@ -5,7 +5,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Review.ApplicationLayer.Queries.GetReview;
 
-public class GetReviewQuery : IQuery<DomainModels.Review>
+public class GetReviewQuery : IQuery<DomainModels.Review?>
 {
     public required long Id { get; init; }
 }

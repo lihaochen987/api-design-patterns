@@ -16,7 +16,7 @@ public class GetReviewViewHandlerTests : GetReviewViewHandlerTestBase
     public async Task Handle_ReturnsNull_WhenReviewDoesNotExist()
     {
         ReviewView expectedReview = new ReviewViewTestDataBuilder().Build();
-        IQueryHandler<GetReviewViewQuery, ReviewView> sut = GetReviewViewHandler();
+        IQueryHandler<GetReviewViewQuery, ReviewView?> sut = GetReviewViewHandler();
 
         ReviewView? result = await sut.Handle(new GetReviewViewQuery { Id = expectedReview.Id });
 
@@ -28,7 +28,7 @@ public class GetReviewViewHandlerTests : GetReviewViewHandlerTestBase
     {
         ReviewView expectedReview = new ReviewViewTestDataBuilder().Build();
         Repository.Add(expectedReview);
-        IQueryHandler<GetReviewViewQuery, ReviewView> sut = GetReviewViewHandler();
+        IQueryHandler<GetReviewViewQuery, ReviewView?> sut = GetReviewViewHandler();
 
         ReviewView? result = await sut.Handle(new GetReviewViewQuery { Id = expectedReview.Id });
 

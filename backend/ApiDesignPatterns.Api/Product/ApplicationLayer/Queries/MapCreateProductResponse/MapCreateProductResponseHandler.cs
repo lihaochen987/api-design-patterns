@@ -12,7 +12,7 @@ public class MapCreateProductResponseHandler(
     IMapper mapper)
     : IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse>
 {
-    public Task<CreateProductResponse?> Handle(MapCreateProductResponseQuery query)
+    public Task<CreateProductResponse> Handle(MapCreateProductResponseQuery query)
     {
         CreateProductResponse response = query.Product.Category switch
         {

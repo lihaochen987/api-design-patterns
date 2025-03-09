@@ -13,7 +13,7 @@ namespace backend.Supplier.SupplierControllers;
 [ApiController]
 [Route("supplier")]
 public class DeleteSupplierController(
-    IQueryHandler<GetSupplierQuery, DomainModels.Supplier> getSupplier,
+    IQueryHandler<GetSupplierQuery, DomainModels.Supplier?> getSupplier,
     ICommandHandler<DeleteSupplierCommand> deleteSupplier)
     : ControllerBase
 {

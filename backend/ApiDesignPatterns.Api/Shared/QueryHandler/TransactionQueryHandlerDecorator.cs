@@ -10,13 +10,13 @@ public class TransactionQueryHandlerDecorator<TQuery, TResult>(
     IDbConnection dbConnection)
     : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {
-    public async Task<TResult?> Handle(TQuery query)
+    public async Task<TResult> Handle(TQuery query)
     {
         dbConnection.Open();
         using var transaction = dbConnection.BeginTransaction();
         try
         {
-            TResult? result = await queryHandler.Handle(query);
+            TResult result = await queryHandler.Handle(query);
             transaction.Commit();
             return result;
         }

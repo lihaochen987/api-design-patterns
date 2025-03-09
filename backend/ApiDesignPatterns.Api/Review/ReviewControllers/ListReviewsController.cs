@@ -1,6 +1,5 @@
 using AutoMapper;
 using backend.Review.ApplicationLayer.Queries.ListReviews;
-using backend.Review.DomainModels;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -21,12 +20,8 @@ public class ListReviewsController(
         [FromQuery] ListReviewsRequest request,
         string parentId)
     {
-        PagedReviews? result = await listReviews.Handle(new ListReviewsQuery { ParentId = parentId, Request = request });
-
-        if (result == null)
-        {
-            return NotFound();
-        }
+        PagedReviews result =
+            await listReviews.Handle(new ListReviewsQuery { ParentId = parentId, Request = request });
 
         ListReviewsResponse response = new()
         {

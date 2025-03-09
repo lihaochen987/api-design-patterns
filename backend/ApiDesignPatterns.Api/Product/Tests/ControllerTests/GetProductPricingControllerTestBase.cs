@@ -19,8 +19,8 @@ public abstract class GetProductPricingControllerTestBase
     protected readonly IMapper Mapper;
     protected readonly Fixture Fixture = new();
 
-    protected readonly IQueryHandler<GetProductPricingQuery, ProductPricingView> MockGetProductPricing =
-        Mock.Of<IQueryHandler<GetProductPricingQuery, ProductPricingView>>();
+    protected readonly IQueryHandler<GetProductPricingQuery, ProductPricingView?> MockGetProductPricing =
+        Mock.Of<IQueryHandler<GetProductPricingQuery, ProductPricingView?>>();
 
     private readonly FieldMaskConverterFactory _fieldMaskConverterFactory =
         new(new ProductPricingFieldPaths().ValidPaths);

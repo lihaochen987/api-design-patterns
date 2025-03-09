@@ -10,7 +10,7 @@ namespace backend.Review.ApplicationLayer.Queries.ListReviews;
 public class ListReviewsHandler(IReviewViewRepository repository)
     : IQueryHandler<ListReviewsQuery, PagedReviews>
 {
-    public async Task<PagedReviews?> Handle(ListReviewsQuery query)
+    public async Task<PagedReviews> Handle(ListReviewsQuery query)
     {
         (List<ReviewView> reviews, string? nextPageToken) = await repository.ListReviewsAsync(
             query.Request.PageToken,

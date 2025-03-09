@@ -12,8 +12,8 @@ namespace backend.Supplier.Tests.ControllerLayerTests;
 
 public abstract class DeleteSupplierControllerTestBase
 {
-    protected readonly IQueryHandler<GetSupplierQuery, DomainModels.Supplier> MockGetSupplierHandler =
-        Mock.Of<IQueryHandler<GetSupplierQuery, DomainModels.Supplier>>();
+    protected readonly IQueryHandler<GetSupplierQuery, DomainModels.Supplier?> MockGetSupplierHandler =
+        Mock.Of<IQueryHandler<GetSupplierQuery, DomainModels.Supplier?>>();
 
     protected readonly ICommandHandler<DeleteSupplierCommand> MockDeleteSupplierHandler =
         Mock.Of<ICommandHandler<DeleteSupplierCommand>>();

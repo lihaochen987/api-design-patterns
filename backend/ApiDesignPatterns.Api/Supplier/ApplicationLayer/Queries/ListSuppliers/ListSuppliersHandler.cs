@@ -10,7 +10,7 @@ namespace backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
 public class ListSuppliersHandler(ISupplierViewRepository repository)
     : IQueryHandler<ListSuppliersQuery, PagedSuppliers>
 {
-    public async Task<PagedSuppliers?> Handle(ListSuppliersQuery query)
+    public async Task<PagedSuppliers> Handle(ListSuppliersQuery query)
     {
         (List<SupplierView> suppliers, string? nextPageToken) = await repository.ListSuppliersAsync(
             query.Request.PageToken,

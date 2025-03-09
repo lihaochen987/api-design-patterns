@@ -12,7 +12,7 @@ public abstract class GetInventoryViewHandlerTestBase
 {
     protected readonly InventoryViewRepositoryFake Repository = [];
 
-    protected IQueryHandler<GetInventoryViewQuery, InventoryView> GetInventoryViewHandler()
+    protected IQueryHandler<GetInventoryViewQuery, InventoryView?> GetInventoryViewHandler()
     {
         return new GetInventoryViewHandler(Repository);
     }

@@ -83,7 +83,7 @@ public class SupplierControllerActivator : BaseControllerActivator
             var repository = new SupplierRepository(dbConnection);
 
             // GetSupplier handler
-            var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
+            var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier?>(
                     new GetSupplierHandler(repository),
                     _loggerFactory,
                     dbConnection)
@@ -122,7 +122,7 @@ public class SupplierControllerActivator : BaseControllerActivator
             var repository = new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierPaginateService);
 
             // GetSupplierView handler
-            var getSupplierViewHandler = new QueryDecoratorBuilder<GetSupplierViewQuery, SupplierView>(
+            var getSupplierViewHandler = new QueryDecoratorBuilder<GetSupplierViewQuery, SupplierView?>(
                     new GetSupplierViewHandler(repository),
                     _loggerFactory,
                     dbConnection)
@@ -172,7 +172,7 @@ public class SupplierControllerActivator : BaseControllerActivator
             var repository = new SupplierRepository(dbConnection);
 
             // GetSupplier handler
-            var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
+            var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier?>(
                     new GetSupplierHandler(repository),
                     _loggerFactory,
                     dbConnection)
@@ -212,7 +212,7 @@ public class SupplierControllerActivator : BaseControllerActivator
             var repository = new SupplierRepository(dbConnection);
 
             // GetSupplier handler
-            var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier>(
+            var getSupplierHandler = new QueryDecoratorBuilder<GetSupplierQuery, DomainModels.Supplier?>(
                     new GetSupplierHandler(repository),
                     _loggerFactory,
                     dbConnection)

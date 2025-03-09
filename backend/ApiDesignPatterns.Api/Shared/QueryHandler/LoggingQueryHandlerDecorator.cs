@@ -11,7 +11,7 @@ public class LoggingQueryHandlerDecorator<TQuery, TResult>(
     ILogger<LoggingQueryHandlerDecorator<TQuery, TResult>> logger)
     : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {
-    public async Task<TResult?> Handle(TQuery query)
+    public async Task<TResult> Handle(TQuery query)
     {
         if (query == null)
         {
@@ -26,7 +26,7 @@ public class LoggingQueryHandlerDecorator<TQuery, TResult>(
             string commandDetails = JsonConvert.SerializeObject(query, Formatting.Indented);
             LogQueryExecution(operation, commandDetails);
 
-            TResult? result = await queryHandler.Handle(query);
+            TResult result = await queryHandler.Handle(query);
 
             stopwatch.Stop();
             LogSuccessfulExecution(operation, result, stopwatch.ElapsedMilliseconds);

@@ -8,7 +8,7 @@ using backend.Shared.QueryHandler;
 namespace backend.Product.ApplicationLayer.Queries.GetProductPricing;
 
 public class GetProductPricingHandler(IProductPricingRepository repository)
-    : IQueryHandler<GetProductPricingQuery, ProductPricingView>
+    : IQueryHandler<GetProductPricingQuery, ProductPricingView?>
 {
     public async Task<ProductPricingView?> Handle(GetProductPricingQuery query)
     {

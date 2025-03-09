@@ -51,7 +51,7 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             var repository = new ProductPricingRepository(dbConnection);
 
             // GetProductPricing handler
-            var getProductPricingHandler = new QueryDecoratorBuilder<GetProductPricingQuery, ProductPricingView>(
+            var getProductPricingHandler = new QueryDecoratorBuilder<GetProductPricingQuery, ProductPricingView?>(
                     new GetProductPricingHandler(repository),
                     _loggerFactory,
                     dbConnection)
@@ -77,7 +77,7 @@ public class ProductPricingControllerActivator : BaseControllerActivator
             var repository = new ProductRepository(dbConnection);
 
             // GetProduct handler
-            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
+            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product?>(
                     new GetProductHandler(repository),
                     _loggerFactory,
                     dbConnection)

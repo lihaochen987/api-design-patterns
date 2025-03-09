@@ -11,7 +11,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class ReplaceProductController(
-    IQueryHandler<GetProductQuery, DomainModels.Product> getProduct,
+    IQueryHandler<GetProductQuery, DomainModels.Product?> getProduct,
     ICommandHandler<ReplaceProductCommand> replaceProduct,
     IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> replaceProductResponse)
     : ControllerBase

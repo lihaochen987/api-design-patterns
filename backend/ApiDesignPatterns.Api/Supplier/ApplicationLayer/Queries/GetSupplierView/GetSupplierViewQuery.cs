@@ -6,7 +6,7 @@ using backend.Supplier.DomainModels;
 
 namespace backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 
-public record GetSupplierViewQuery : IQuery<SupplierView>
+public record GetSupplierViewQuery : IQuery<SupplierView?>
 {
     public long Id { get; init; }
 }

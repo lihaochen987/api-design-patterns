@@ -16,7 +16,7 @@ public class GetProductHandlerTests : GetProductHandlerTestBase
     {
         DomainModels.Product expectedProduct = new ProductTestDataBuilder().Build();
         Repository.Add(expectedProduct);
-        IQueryHandler<GetProductQuery, DomainModels.Product> sut = GetProductHandler();
+        IQueryHandler<GetProductQuery, DomainModels.Product?> sut = GetProductHandler();
 
         DomainModels.Product? result = await sut.Handle(new GetProductQuery { Id = expectedProduct.Id });
 
@@ -28,7 +28,7 @@ public class GetProductHandlerTests : GetProductHandlerTestBase
     public async Task GetProductAsync_ReturnsNull_WhenProductDoesNotExist()
     {
         DomainModels.Product expectedProduct = new ProductTestDataBuilder().Build();
-        IQueryHandler<GetProductQuery, DomainModels.Product> sut = GetProductHandler();
+        IQueryHandler<GetProductQuery, DomainModels.Product?> sut = GetProductHandler();
 
         DomainModels.Product? result = await sut.Handle(new GetProductQuery { Id = expectedProduct.Id });
 

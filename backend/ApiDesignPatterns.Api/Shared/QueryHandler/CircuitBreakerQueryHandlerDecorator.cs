@@ -27,7 +27,7 @@ public class CircuitBreakerQueryHandlerDecorator<TQuery, TResult>(
             onReset: () => { logger.LogCritical("Circuit breaker reset"); },
             onHalfOpen: () => { logger.LogCritical("Circuit breaker half-opened"); });
 
-    public async Task<TResult?> Handle(TQuery query)
+    public async Task<TResult> Handle(TQuery query)
     {
         return await _circuitBreakerPolicy.ExecuteAsync(async () =>
             await queryHandler.Handle(query));

@@ -9,19 +9,18 @@ public class ValidationQueryHandlerDecorator<TQuery, TResult>(
     IQueryHandler<TQuery, TResult> queryHandler)
     : IQueryHandler<TQuery, TResult>
     where TQuery : IQuery<TResult>
-    where TResult : class
 {
-    public async Task<TResult?> Handle(TQuery query)
+    public async Task<TResult> Handle(TQuery query)
     {
         if (query == null)
         {
             throw new ArgumentNullException(nameof(query));
         }
 
-        TResult? result = await queryHandler.Handle(query);
-        if (result != null)
+        TResult result = await queryHandler.Handle(query);
+        if (result is object obj && !obj.GetType().IsValueType)
         {
-            ValidateModel(result);
+            ValidateModel(obj);
         }
 
         return result;

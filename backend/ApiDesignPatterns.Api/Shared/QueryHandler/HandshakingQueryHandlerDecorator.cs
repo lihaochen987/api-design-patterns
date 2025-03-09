@@ -17,7 +17,7 @@ public class HandshakingQueryHandlerDecorator<TQuery, TResult>(
         "(SELECT COUNT(*) < (setting::int * 0.8) FROM pg_stat_activity, pg_settings " +
         "WHERE pg_settings.name = 'max_connections' AND state = 'active' group by setting) as IsReady";
 
-    public async Task<TResult?> Handle(TQuery query)
+    public async Task<TResult> Handle(TQuery query)
     {
         logger.LogDebug("Performing database health check before executing query");
 
@@ -33,7 +33,7 @@ public class HandshakingQueryHandlerDecorator<TQuery, TResult>(
 
             logger.LogDebug("Health check successful, proceeding with query");
 
-            TResult? result = await queryHandler.Handle(query);
+            TResult result = await queryHandler.Handle(query);
             return result;
         }
         catch (Exception ex) when (ex is not DatabaseNotAvailableException)

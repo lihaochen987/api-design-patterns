@@ -12,7 +12,7 @@ namespace backend.Supplier.SupplierControllers;
 [ApiController]
 [Route("supplier")]
 public class ReplaceSupplierController(
-    IQueryHandler<GetSupplierQuery, DomainModels.Supplier> getSupplier,
+    IQueryHandler<GetSupplierQuery, DomainModels.Supplier?> getSupplier,
     ICommandHandler<ReplaceSupplierCommand> replaceSupplier,
     IMapper mapper)
     : ControllerBase

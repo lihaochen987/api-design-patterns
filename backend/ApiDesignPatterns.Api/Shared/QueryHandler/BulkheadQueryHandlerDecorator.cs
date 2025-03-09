@@ -10,7 +10,7 @@ public class BulkheadQueryHandlerDecorator<TQuery, TResult>(
     AsyncBulkheadPolicy bulkheadPolicy)
     : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {
-    public async Task<TResult?> Handle(TQuery query)
+    public async Task<TResult> Handle(TQuery query)
     {
         return await bulkheadPolicy.ExecuteAsync(async () =>
             await queryHandler.Handle(query));

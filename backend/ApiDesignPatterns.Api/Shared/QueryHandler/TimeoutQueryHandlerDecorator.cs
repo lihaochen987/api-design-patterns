@@ -19,7 +19,7 @@ public class TimeoutQueryHandlerDecorator<TQuery, TResult>(
             return Task.CompletedTask;
         });
 
-    public async Task<TResult?> Handle(TQuery query)
+    public async Task<TResult> Handle(TQuery query)
     {
         return await _timeoutPolicy.ExecuteAsync(async () =>
             await queryHandler.Handle(query));

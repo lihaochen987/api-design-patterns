@@ -12,7 +12,7 @@ namespace backend.Product.ProductControllers;
 [ApiController]
 [Route("product")]
 public class UpdateProductController(
-    IQueryHandler<GetProductQuery, DomainModels.Product> getProduct,
+    IQueryHandler<GetProductQuery, DomainModels.Product?> getProduct,
     ICommandHandler<UpdateProductCommand> updateProduct,
     IMapper mapper)
     : ControllerBase

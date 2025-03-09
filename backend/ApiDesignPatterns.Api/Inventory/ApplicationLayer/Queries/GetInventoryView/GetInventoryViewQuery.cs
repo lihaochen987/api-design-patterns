@@ -7,7 +7,7 @@ using backend.Supplier.DomainModels;
 
 namespace backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
 
-public record GetInventoryViewQuery : IQuery<SupplierView>, IQuery<InventoryView>
+public record GetInventoryViewQuery : IQuery<SupplierView>, IQuery<InventoryView?>
 {
     public long Id { get; init; }
 }

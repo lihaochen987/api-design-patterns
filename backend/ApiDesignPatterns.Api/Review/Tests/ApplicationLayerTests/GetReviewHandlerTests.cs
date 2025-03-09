@@ -16,7 +16,7 @@ public class GetReviewHandlerTests : GetReviewHandlerTestBase
     {
         DomainModels.Review expectedReview = new ReviewTestDataBuilder().Build();
         Repository.Add(expectedReview);
-        IQueryHandler<GetReviewQuery, DomainModels.Review> sut = GetReviewHandler();
+        IQueryHandler<GetReviewQuery, DomainModels.Review?> sut = GetReviewHandler();
 
         DomainModels.Review? result = await sut.Handle(new GetReviewQuery { Id = expectedReview.Id });
 
@@ -29,7 +29,7 @@ public class GetReviewHandlerTests : GetReviewHandlerTestBase
     public async Task Handle_ReturnsNull_WhenReviewDoesNotExist()
     {
         DomainModels.Review nonExistentReview = new ReviewTestDataBuilder().Build();
-        IQueryHandler<GetReviewQuery, DomainModels.Review> sut = GetReviewHandler();
+        IQueryHandler<GetReviewQuery, DomainModels.Review?> sut = GetReviewHandler();
 
         DomainModels.Review? result = await sut.Handle(new GetReviewQuery { Id = nonExistentReview.Id });
 

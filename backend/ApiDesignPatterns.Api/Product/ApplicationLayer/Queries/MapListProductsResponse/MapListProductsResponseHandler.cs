@@ -11,7 +11,7 @@ namespace backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 public class MapListProductsResponseHandler(IMapper mapper)
     : IQueryHandler<MapListProductsResponseQuery, ListProductsResponse>
 {
-    public Task<ListProductsResponse?> Handle(MapListProductsResponseQuery query)
+    public Task<ListProductsResponse> Handle(MapListProductsResponseQuery query)
     {
         IEnumerable<ProductControllers.GetProductResponse> productResponses = query.PagedProducts.Products.Select(
             product =>

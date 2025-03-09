@@ -11,7 +11,7 @@ namespace backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 public class MapReplaceProductResponseHandler(IMapper mapper)
     : IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse>
 {
-    public Task<ReplaceProductResponse?> Handle(MapReplaceProductResponseQuery query)
+    public Task<ReplaceProductResponse> Handle(MapReplaceProductResponseQuery query)
     {
         ReplaceProductResponse response = query.Product.Category switch
         {

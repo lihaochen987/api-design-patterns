@@ -16,7 +16,7 @@ namespace backend.Supplier.SupplierControllers;
 [ApiController]
 [Route("supplier")]
 public class GetSupplierController(
-    IQueryHandler<GetSupplierViewQuery, SupplierView> getSupplierView,
+    IQueryHandler<GetSupplierViewQuery, SupplierView?> getSupplierView,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase

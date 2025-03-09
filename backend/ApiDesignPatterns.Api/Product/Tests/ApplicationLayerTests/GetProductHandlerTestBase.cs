@@ -11,7 +11,7 @@ public abstract class GetProductHandlerTestBase
 {
     protected readonly ProductRepositoryFake Repository = [];
 
-    protected IQueryHandler<GetProductQuery, DomainModels.Product> GetProductHandler()
+    protected IQueryHandler<GetProductQuery, DomainModels.Product?> GetProductHandler()
     {
         return new GetProductHandler(Repository);
     }

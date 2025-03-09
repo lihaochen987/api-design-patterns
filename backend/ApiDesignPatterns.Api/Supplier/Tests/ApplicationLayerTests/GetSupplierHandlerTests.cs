@@ -16,7 +16,7 @@ public class GetSupplierHandlerTests : GetSupplierHandlerTestBase
     {
         DomainModels.Supplier expectedSupplier = new SupplierTestDataBuilder().Build();
         Repository.Add(expectedSupplier);
-        IQueryHandler<GetSupplierQuery, DomainModels.Supplier> sut = GetSupplierHandler();
+        IQueryHandler<GetSupplierQuery, DomainModels.Supplier?> sut = GetSupplierHandler();
 
         DomainModels.Supplier? result = await sut.Handle(new GetSupplierQuery { Id = expectedSupplier.Id });
 
@@ -29,7 +29,7 @@ public class GetSupplierHandlerTests : GetSupplierHandlerTestBase
     public async Task Handle_ReturnsNull_WhenSupplierDoesNotExist()
     {
         DomainModels.Supplier nonExistentSupplier = new SupplierTestDataBuilder().Build();
-        IQueryHandler<GetSupplierQuery, DomainModels.Supplier> sut = GetSupplierHandler();
+        IQueryHandler<GetSupplierQuery, DomainModels.Supplier?> sut = GetSupplierHandler();
 
         DomainModels.Supplier? result = await sut.Handle(new GetSupplierQuery { Id = nonExistentSupplier.Id });
 

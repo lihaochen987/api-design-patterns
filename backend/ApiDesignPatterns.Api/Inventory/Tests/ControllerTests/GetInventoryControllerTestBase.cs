@@ -17,8 +17,8 @@ public abstract class GetInventoryControllerTestBase
 {
     protected readonly Fixture Fixture = new();
 
-    protected readonly IQueryHandler<GetInventoryViewQuery, InventoryView> MockGetInventoryView =
-        Mock.Of<IQueryHandler<GetInventoryViewQuery, InventoryView>>();
+    protected readonly IQueryHandler<GetInventoryViewQuery, InventoryView?> MockGetInventoryView =
+        Mock.Of<IQueryHandler<GetInventoryViewQuery, InventoryView?>>();
 
     protected readonly IMapper Mapper;
 

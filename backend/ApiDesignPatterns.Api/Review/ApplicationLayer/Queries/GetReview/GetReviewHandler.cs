@@ -6,7 +6,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Review.ApplicationLayer.Queries.GetReview;
 
-public class GetReviewHandler(IReviewRepository repository) : IQueryHandler<GetReviewQuery, DomainModels.Review>
+public class GetReviewHandler(IReviewRepository repository) : IQueryHandler<GetReviewQuery, DomainModels.Review?>
 {
     public async Task<DomainModels.Review?> Handle(GetReviewQuery query)
     {

@@ -15,7 +15,7 @@ namespace backend.Supplier.SupplierControllers;
 [ApiController]
 [Route("supplier")]
 public class UpdateSupplierController(
-    IQueryHandler<GetSupplierQuery, DomainModels.Supplier> getSupplier,
+    IQueryHandler<GetSupplierQuery, DomainModels.Supplier?> getSupplier,
     ICommandHandler<UpdateSupplierCommand> updateSupplier,
     IMapper mapper)
     : ControllerBase

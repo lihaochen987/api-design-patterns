@@ -17,8 +17,8 @@ public abstract class GetReviewControllerTestBase
 {
     protected readonly Fixture Fixture = new();
 
-    protected readonly IQueryHandler<GetReviewViewQuery, ReviewView> MockGetReviewView =
-        Mock.Of<IQueryHandler<GetReviewViewQuery, ReviewView>>();
+    protected readonly IQueryHandler<GetReviewViewQuery, ReviewView?> MockGetReviewView =
+        Mock.Of<IQueryHandler<GetReviewViewQuery, ReviewView?>>();
 
     protected readonly IMapper Mapper;
 

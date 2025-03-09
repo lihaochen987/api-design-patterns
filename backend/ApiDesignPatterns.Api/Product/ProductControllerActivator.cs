@@ -127,7 +127,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // GetProduct handler
-            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
+            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product?>(
                     new GetProductHandler(repository),
                     _loggerFactory,
                     dbConnection)
@@ -150,7 +150,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductViewRepository(dbConnection, _productPaginateService, _productSqlFilterBuilder);
 
             // GetProductResponse handler
-            var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse>(
+            var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
                     new GetProductResponseHandler(repository, _mapper),
                     _loggerFactory,
                     dbConnection)
@@ -249,7 +249,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductRepository(dbConnection);
 
             // GetProduct handler
-            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
+            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product?>(
                     new GetProductHandler(repository),
                     _loggerFactory,
                     dbConnection)
@@ -299,7 +299,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductRepository(dbConnection);
 
             // GetProduct handler
-            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product>(
+            var getProductHandler = new QueryDecoratorBuilder<GetProductQuery, DomainModels.Product?>(
                     new GetProductHandler(repository),
                     _loggerFactory,
                     dbConnection)
@@ -336,7 +336,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductViewRepository(dbConnection, _productPaginateService, _productSqlFilterBuilder);
 
             // GetProductResponse handler
-            var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse>(
+            var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
                     new GetProductResponseHandler(repository, _mapper),
                     _loggerFactory,
                     dbConnection)

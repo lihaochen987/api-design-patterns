@@ -83,7 +83,7 @@ public class ReviewControllerActivator : BaseControllerActivator
             var repository = new ReviewRepository(dbConnection);
 
             // GetReview handler
-            var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
+            var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review?>(
                     new GetReviewHandler(repository),
                     _loggerFactory,
                     dbConnection)
@@ -123,7 +123,7 @@ public class ReviewControllerActivator : BaseControllerActivator
             var repository = new ReviewViewRepository(dbConnection, _reviewSqlFilterBuilder, _reviewPaginateService);
 
             // GetReviewView handler
-            var getReviewViewHandler = new QueryDecoratorBuilder<GetReviewViewQuery, ReviewView>(
+            var getReviewViewHandler = new QueryDecoratorBuilder<GetReviewViewQuery, ReviewView?>(
                     new GetReviewViewHandler(repository),
                     _loggerFactory,
                     dbConnection)
@@ -173,7 +173,7 @@ public class ReviewControllerActivator : BaseControllerActivator
             var repository = new ReviewRepository(dbConnection);
 
             // GetReview handler
-            var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
+            var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review?>(
                     new GetReviewHandler(repository),
                     _loggerFactory,
                     dbConnection)
@@ -213,7 +213,7 @@ public class ReviewControllerActivator : BaseControllerActivator
             var repository = new ReviewRepository(dbConnection);
 
             // GetReview handler
-            var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review>(
+            var getReviewHandler = new QueryDecoratorBuilder<GetReviewQuery, DomainModels.Review?>(
                     new GetReviewHandler(repository),
                     _loggerFactory,
                     dbConnection)

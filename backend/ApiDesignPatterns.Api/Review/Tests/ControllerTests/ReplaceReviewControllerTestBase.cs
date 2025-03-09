@@ -15,8 +15,8 @@ namespace backend.Review.Tests.ControllerTests;
 
 public abstract class ReplaceReviewControllerTestBase
 {
-    protected readonly IQueryHandler<GetReviewQuery, DomainModels.Review> GetReview =
-        Mock.Of<IQueryHandler<GetReviewQuery, DomainModels.Review>>();
+    protected readonly IQueryHandler<GetReviewQuery, DomainModels.Review?> GetReview =
+        Mock.Of<IQueryHandler<GetReviewQuery, DomainModels.Review?>>();
 
     protected readonly ICommandHandler<ReplaceReviewCommand> ReplaceReview =
         Mock.Of<ICommandHandler<ReplaceReviewCommand>>();

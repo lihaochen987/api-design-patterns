@@ -12,7 +12,7 @@ public class GetListProductsFromCacheHandler(
     ICache<CachedItem<ListProductsResponse>> cache)
     : IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>
 {
-    public async Task<CacheQueryResult?> Handle(GetListProductsFromCacheQuery query)
+    public async Task<CacheQueryResult> Handle(GetListProductsFromCacheQuery query)
     {
         string cacheKey = GenerateCacheKey(query.Request);
         try

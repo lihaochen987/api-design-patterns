@@ -10,7 +10,7 @@ namespace backend.Product.ApplicationLayer.Queries.ListProducts;
 public class ListProductsHandler(IProductViewRepository repository)
     : IQueryHandler<ListProductsQuery, PagedProducts>
 {
-    public async Task<PagedProducts?> Handle(ListProductsQuery query)
+    public async Task<PagedProducts> Handle(ListProductsQuery query)
     {
         (List<ProductView> products, string? nextPageToken) = await repository.ListProductsAsync(
             query.PageToken,

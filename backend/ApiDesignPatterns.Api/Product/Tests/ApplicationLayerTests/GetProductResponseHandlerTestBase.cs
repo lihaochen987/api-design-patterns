@@ -24,7 +24,7 @@ public abstract class GetProductResponseHandlerTestBase
         Mapper = mapperConfiguration.CreateMapper();
     }
 
-    protected IQueryHandler<GetProductResponseQuery, GetProductResponse> GetProductResponseHandler()
+    protected IQueryHandler<GetProductResponseQuery, GetProductResponse?> GetProductResponseHandler()
     {
         return new GetProductResponseHandler(Repository, Mapper);
     }

@@ -12,7 +12,7 @@ namespace backend.Product.ProductPricingControllers;
 [ApiController]
 [Route("product")]
 public class GetProductPricingController(
-    IQueryHandler<GetProductPricingQuery, ProductPricingView> getProductPricing,
+    IQueryHandler<GetProductPricingQuery, ProductPricingView?> getProductPricing,
     IMapper mapper,
     IFieldMaskConverterFactory fieldMaskConverterFactory)
     : ControllerBase

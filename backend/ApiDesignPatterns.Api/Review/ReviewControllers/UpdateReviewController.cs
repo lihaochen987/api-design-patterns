@@ -15,7 +15,7 @@ namespace backend.Review.ReviewControllers;
 [ApiController]
 [Route("review")]
 public class UpdateReviewController(
-    IQueryHandler<GetReviewQuery, DomainModels.Review> getReview,
+    IQueryHandler<GetReviewQuery, DomainModels.Review?> getReview,
     ICommandHandler<UpdateReviewCommand> updateReview,
     IMapper mapper)
     : ControllerBase

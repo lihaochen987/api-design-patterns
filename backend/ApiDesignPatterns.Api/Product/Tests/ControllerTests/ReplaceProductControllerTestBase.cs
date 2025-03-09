@@ -15,8 +15,8 @@ namespace backend.Product.Tests.ControllerTests;
 
 public abstract class ReplaceProductControllerTestBase
 {
-    protected readonly IQueryHandler<GetProductQuery, DomainModels.Product> GetProduct =
-        Mock.Of<IQueryHandler<GetProductQuery, DomainModels.Product>>();
+    protected readonly IQueryHandler<GetProductQuery, DomainModels.Product?> GetProduct =
+        Mock.Of<IQueryHandler<GetProductQuery, DomainModels.Product?>>();
 
     protected readonly ICommandHandler<ReplaceProductCommand> ReplaceProduct =
         Mock.Of<ICommandHandler<ReplaceProductCommand>>();

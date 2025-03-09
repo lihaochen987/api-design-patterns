@@ -9,7 +9,7 @@ namespace backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 
 public class GetSupplierViewHandler(
     ISupplierViewRepository repository)
-    : IQueryHandler<GetSupplierViewQuery, SupplierView>
+    : IQueryHandler<GetSupplierViewQuery, SupplierView?>
 {
     public async Task<SupplierView?> Handle(GetSupplierViewQuery query)
     {

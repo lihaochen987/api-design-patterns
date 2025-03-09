@@ -5,7 +5,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 
-public record GetSupplierQuery : IQuery<DomainModels.Supplier>
+public record GetSupplierQuery : IQuery<DomainModels.Supplier?>
 {
     public long Id { get; init; }
 }

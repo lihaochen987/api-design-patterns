@@ -13,7 +13,7 @@ public abstract class GetSupplierViewHandlerTestBase
 {
     protected readonly SupplierViewRepositoryFake Repository = new(new PaginateService<SupplierView>());
 
-    protected IQueryHandler<GetSupplierViewQuery, SupplierView> GetSupplierViewHandler()
+    protected IQueryHandler<GetSupplierViewQuery, SupplierView?> GetSupplierViewHandler()
     {
         return new GetSupplierViewHandler(Repository);
     }

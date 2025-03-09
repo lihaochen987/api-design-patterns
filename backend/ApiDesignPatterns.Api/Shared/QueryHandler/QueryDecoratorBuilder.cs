@@ -10,7 +10,7 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
     IQueryHandler<TQuery, TResult> handler,
     ILoggerFactory loggerFactory,
     IDbConnection? dbConnection)
-    where TQuery : IQuery<TResult> where TResult : class
+    where TQuery : IQuery<TResult>
 {
     private IQueryHandler<TQuery, TResult> _handler = handler;
     private bool _useTransaction;

@@ -11,7 +11,7 @@ public abstract class GetSupplierHandlerTestBase
 {
     protected readonly SupplierRepositoryFake Repository = [];
 
-    protected IQueryHandler<GetSupplierQuery, DomainModels.Supplier> GetSupplierHandler()
+    protected IQueryHandler<GetSupplierQuery, DomainModels.Supplier?> GetSupplierHandler()
     {
         return new GetSupplierHandler(Repository);
     }
