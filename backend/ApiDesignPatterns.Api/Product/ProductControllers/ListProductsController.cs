@@ -28,7 +28,7 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        CacheQueryResult? cachedResult =
+        CacheQueryResult cachedResult =
             await getListProductsFromCache.Handle(
                 new GetListProductsFromCacheQuery { Request = request, CheckRate = stalenessOptions.CheckRate });
 
@@ -37,21 +37,15 @@ public class ListProductsController(
             return Ok(cachedResult.ProductsResponse);
         }
 
-        PagedProducts? result = await listProducts.Handle(new ListProductsQuery
+        PagedProducts result = await listProducts.Handle(new ListProductsQuery
         {
             Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
         });
 
-        if (result == null)
-        {
-            return NotFound();
-        }
-
-        ListProductsResponse? response =
+        ListProductsResponse response =
             await mapListProducts.Handle(new MapListProductsResponseQuery { PagedProducts = result });
 
-        if (cachedResult?.SelectedForStalenessCheck == true && response is not null &&
-            cachedResult.ProductsResponse is not null)
+        if (cachedResult is { SelectedForStalenessCheck: true, ProductsResponse: not null })
         {
             await updateListProductStaleness.Handle(new UpdateListProductStalenessCommand
             {
@@ -61,25 +55,11 @@ public class ListProductsController(
             });
         }
 
-        if (response != null)
+        await persistListProductsToCache.Handle(new PersistListProductsToCacheCommand
         {
-            await UpdateCacheIfNeeded(cachedResult, response, persistListProductsToCache);
-        }
+            CacheKey = cachedResult.CacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
+        });
 
         return Ok(response);
-    }
-
-    private static async Task UpdateCacheIfNeeded(
-        CacheQueryResult? cachedResult,
-        ListProductsResponse response,
-        ICommandHandler<PersistListProductsToCacheCommand> handler)
-    {
-        if (cachedResult is not null)
-        {
-            await handler.Handle(new PersistListProductsToCacheCommand
-            {
-                CacheKey = cachedResult.CacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
-            });
-        }
     }
 }

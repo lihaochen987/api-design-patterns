@@ -1,3 +1,6 @@
+using AutoFixture;
+using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
+using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
@@ -26,6 +29,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts(productViews, null));
         ListProductsController sut = ListProductsController();
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
 
         var result = await sut.ListProducts(request);
 
@@ -36,6 +49,46 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var listProductsResponse = response.Value as ListProductsResponse;
         listProductsResponse!.Results.Count().ShouldBe(4);
         listProductsResponse.NextPageToken.ShouldBeNull();
+        Mock.Get(MockPersistListProductsToCache)
+            .Verify(svc => svc.Handle(It.Is<PersistListProductsToCacheCommand>(c =>
+                    c.CacheKey == "products-cache-key" &&
+                    c.Products == listProductsResponse)),
+                Times.Once);
+    }
+
+    [Fact]
+    public async Task ListProducts_ShouldReturnCachedResponse_WhenValidCacheExists()
+    {
+        ListProductsRequest request = new() { MaxPageSize = 4 };
+        var cachedResponse = new ListProductsResponse
+        {
+            Results = Fixture.CreateMany<GetProductResponse>(),
+            NextPageToken = null
+        };
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = cachedResponse,
+                SelectedForStalenessCheck = false,
+                CacheKey = "products-cache-key"
+            });
+
+        ListProductsController sut = ListProductsController();
+
+        var result = await sut.ListProducts(request);
+
+        result.Result.ShouldNotBeNull();
+        result.Result.ShouldBeOfType<OkObjectResult>();
+        var response = result.Result as OkObjectResult;
+        response.ShouldNotBeNull();
+        response.Value.ShouldBe(cachedResponse);
+        Mock.Get(MockListProducts)
+            .Verify(svc => svc.Handle(It.IsAny<ListProductsQuery>()), Times.Never);
     }
 
     [Fact]
@@ -51,6 +104,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts(expectedPageResults, null));
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -77,6 +140,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts(firstPageProducts, "2"));
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -103,6 +176,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts(defaultPageProducts, DefaultMaxPageSize.ToString()));
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -127,6 +210,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts([], null));
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -153,6 +246,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts(firstPageProducts, DefaultMaxPageSize.ToString()));
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -180,6 +283,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts(filteredProducts, null));
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -209,6 +322,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts(filteredProducts, null));
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -235,6 +358,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts(filteredProducts, null));
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -262,6 +395,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts(filteredProducts, "2"));
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);
@@ -289,6 +432,16 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedProducts(filteredProducts, null));
+        Mock
+            .Get(MockGetListProductsFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
+                q.Request.MaxPageSize == request.MaxPageSize &&
+                q.Request.PageToken == request.PageToken &&
+                q.Request.Filter == request.Filter)))
+            .ReturnsAsync(new CacheQueryResult
+            {
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+            });
         ListProductsController sut = ListProductsController();
 
         var result = await sut.ListProducts(request);

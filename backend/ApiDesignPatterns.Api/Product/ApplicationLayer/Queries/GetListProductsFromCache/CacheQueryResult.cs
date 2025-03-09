@@ -9,5 +9,5 @@ public record CacheQueryResult
 {
     public ListProductsResponse? ProductsResponse { get; init; }
     public required string CacheKey { get; init; }
-    public bool SelectedForStalenessCheck { get; init; } = false;
+    public bool SelectedForStalenessCheck { get; init; }
 }
