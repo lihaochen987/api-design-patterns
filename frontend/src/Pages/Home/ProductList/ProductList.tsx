@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { components } from '../../../Shared/types';
 import { $api } from '../../../Shared/fetch-client.ts';
 import { PetFoodCard } from './Cards/PetFoodCard/PetFoodCard.tsx';
 import { GroomingAndHygieneCard } from './Cards/GroomingAndHygieneCard/GroomingAndHygieneCard.tsx';
 import { DefaultProductCard } from './Cards/DefaultProductCard/DefaultProductCard.tsx';
 import styled from 'styled-components';
-import { Pagination, Stack, Box } from '@mui/material';
+import { Pagination, Stack, Box, CircularProgress } from '@mui/material';
 
 type Product =
   | components['schemas']['GetProductResponse']
@@ -16,13 +16,20 @@ export const ProductList = () => {
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
 
-  const { data, isLoading } = $api.useQuery('get', '/products');
+  const { data, isLoading, refetch } = $api.useQuery('get', '/products', {
+    params: {
+      query: {
+        PageToken: String(page),
+        MaxPageSize: ITEMS_PER_PAGE,
+      },
+    },
+  });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    void refetch();
+  }, [page, refetch]);
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -42,20 +49,31 @@ export const ProductList = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <LoadingContainer>
+        <CircularProgress />
+      </LoadingContainer>
+    );
+  }
+
   const totalProducts = data?.totalCount || 0;
   const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
 
-  const currentProducts: Array<Product> =
-    data?.results?.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE) || [];
+  const products: Array<Product> = data?.results || [];
 
   return (
     <>
       <ProductListContainer>
-        {currentProducts.map(product => (
-          <div key={product.id} className="product-item">
-            {renderProduct(product)}
-          </div>
-        ))}
+        {products.length === 0 ? (
+          <NoProductsMessage>No products found</NoProductsMessage>
+        ) : (
+          products.map(product => (
+            <div key={product.id} className="product-item">
+              {renderProduct(product)}
+            </div>
+          ))
+        )}
       </ProductListContainer>
 
       {totalPages > 1 && (
@@ -88,4 +106,20 @@ const PaginationContainer = styled(Box)`
   display: flex;
   justify-content: center;
   padding: 2rem 0;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  width: 100%;
+`;
+
+const NoProductsMessage = styled.div`
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
 `;
