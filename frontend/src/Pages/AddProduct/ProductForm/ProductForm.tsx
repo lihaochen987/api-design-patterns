@@ -1,103 +1,150 @@
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { components } from '../../../../types';
 
-interface ProductFormData {
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  imageUrl: string;
-  stockQuantity: number;
-}
+type CreateProductRequest = components['schemas']['CreateProductRequest'];
 
-const AddProductPage: React.FC = () => {
+const productSchema = z.object({
+  name: z.string().min(1, 'Product name is required'),
+  pricing: z.object({
+    basePrice: z.number().positive('Base price must be positive'),
+    taxRate: z.number().positive('Tax rate must be positive'),
+  }),
+  dimensions: z.object({
+    width: z.number().positive('Width must be positive'),
+    height: z.number().positive('Height must be positive'),
+    length: z.number().positive('Length must be positive'),
+  }),
+  category: z.enum(['food', 'toys', 'accessories', 'health', 'grooming'], {
+    errorMap: () => ({ message: 'Please select a valid category' }),
+  }),
+});
+
+type ProductFormData = z.infer<typeof productSchema>;
+
+const AddProductPage = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<ProductFormData>({
-    name: '',
-    price: 0,
-    description: '',
-    category: '',
-    imageUrl: '',
-    stockQuantity: 0,
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      name: '',
+      pricing: {
+        basePrice: undefined,
+        taxRate: undefined,
+      },
+      dimensions: {
+        width: undefined,
+        height: undefined,
+        length: undefined,
+      },
+      category: undefined,
+    },
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'price' || name === 'stockQuantity' ? parseFloat(value) : value,
-    }));
-  };
+  const onSubmit = async (data: ProductFormData) => {
+    try {
+      const apiData: CreateProductRequest = {
+        ...data,
+      };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+      console.log('Submitting product:', apiData);
 
-    // Here you would typically send the data to your API
-    console.log('Submitting product:', formData);
-
-    // Simulate successful product creation
-    alert('Product added successfully!');
-    navigate('/products');
+      alert('Product added successfully!');
+      navigate('/');
+    } catch (err) {
+      console.error('Error creating product:', err);
+      alert('Failed to create product. Please try again.');
+    }
   };
 
   const handleCancel = () => {
-    navigate('/products');
+    navigate('/');
   };
 
   return (
     <PageContainer>
       <PageTitle>Add New Product</PageTitle>
 
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
           <Label htmlFor="name">Product Name</Label>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+          <Input id="name" {...register('name')} />
+          {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
         </FormGroup>
 
         <FormGroup>
-          <Label htmlFor="price">Price ($)</Label>
+          <Label htmlFor="basePrice">Base Price ($)</Label>
           <Input
             type="number"
-            id="price"
-            name="price"
+            id="basePrice"
             min="0.01"
             step="0.01"
-            value={formData.price || ''}
-            onChange={handleChange}
-            required
+            {...register('pricing.basePrice', { valueAsNumber: true })}
           />
+          {errors.pricing?.basePrice && (
+            <ErrorMessage>{errors.pricing.basePrice.message}</ErrorMessage>
+          )}
         </FormGroup>
 
         <FormGroup>
-          <Label htmlFor="description">Description</Label>
-          <TextArea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
+          <Label htmlFor="taxRate">Tax Rate ($)</Label>
+          <Input
+            type="number"
+            id="taxRate"
+            min="0.01"
+            step="0.01"
+            {...register('pricing.taxRate', { valueAsNumber: true })}
           />
+          {errors.pricing?.taxRate && <ErrorMessage>{errors.pricing.taxRate.message}</ErrorMessage>}
+        </FormGroup>
+
+        <FormGroup>
+          <Label htmlFor="width">Product Width</Label>
+          <Input
+            type="number"
+            id="width"
+            {...register('dimensions.width', { valueAsNumber: true })}
+          />
+          {errors.dimensions?.width && (
+            <ErrorMessage>{errors.dimensions.width.message}</ErrorMessage>
+          )}
+        </FormGroup>
+
+        <FormGroup>
+          <Label htmlFor="height">Product Height</Label>
+          <Input
+            type="number"
+            id="height"
+            {...register('dimensions.height', { valueAsNumber: true })}
+          />
+          {errors.dimensions?.height && (
+            <ErrorMessage>{errors.dimensions.height.message}</ErrorMessage>
+          )}
+        </FormGroup>
+
+        <FormGroup>
+          <Label htmlFor="length">Product Length</Label>
+          <Input
+            type="number"
+            id="length"
+            {...register('dimensions.length', { valueAsNumber: true })}
+          />
+          {errors.dimensions?.length && (
+            <ErrorMessage>{errors.dimensions.length.message}</ErrorMessage>
+          )}
         </FormGroup>
 
         <FormGroup>
           <Label htmlFor="category">Category</Label>
-          <Select
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          >
+          <Select id="category" {...register('category')}>
             <option value="">Select a category</option>
             <option value="food">Pet Food</option>
             <option value="toys">Toys</option>
@@ -105,32 +152,7 @@ const AddProductPage: React.FC = () => {
             <option value="health">Health & Wellness</option>
             <option value="grooming">Grooming</option>
           </Select>
-        </FormGroup>
-
-        <FormGroup>
-          <Label htmlFor="imageUrl">Image URL</Label>
-          <Input
-            type="url"
-            id="imageUrl"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <Label htmlFor="stockQuantity">Stock Quantity</Label>
-          <Input
-            type="number"
-            id="stockQuantity"
-            name="stockQuantity"
-            min="0"
-            step="1"
-            value={formData.stockQuantity || ''}
-            onChange={handleChange}
-            required
-          />
+          {errors.category && <ErrorMessage>{errors.category.message}</ErrorMessage>}
         </FormGroup>
 
         <ButtonGroup>
@@ -146,6 +168,7 @@ const AddProductPage: React.FC = () => {
 
 export default AddProductPage;
 
+// Styled components remain the same
 const PageContainer = styled.div`
   max-width: 800px;
   margin: 100px auto 50px;
@@ -182,21 +205,6 @@ const Input = styled.input`
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
-  transition: border-color 0.3s;
-
-  &:focus {
-    border-color: #4a90e2;
-    outline: none;
-  }
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  min-height: 120px;
   transition: border-color 0.3s;
 
   &:focus {
@@ -252,4 +260,10 @@ const SecondaryButton = styled(Button)`
   &:hover {
     background-color: #e5e5e5;
   }
+`;
+
+const ErrorMessage = styled.p`
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 `;
