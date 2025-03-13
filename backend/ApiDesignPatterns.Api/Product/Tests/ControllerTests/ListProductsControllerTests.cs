@@ -27,7 +27,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts(productViews, null));
+            .ReturnsAsync(new PagedProducts(productViews, null, 10));
         ListProductsController sut = ListProductsController();
         Mock
             .Get(MockGetListProductsFromCache)
@@ -62,8 +62,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         ListProductsRequest request = new() { MaxPageSize = 4 };
         var cachedResponse = new ListProductsResponse
         {
-            Results = Fixture.CreateMany<GetProductResponse>(),
-            NextPageToken = null
+            Results = Fixture.CreateMany<GetProductResponse>(), NextPageToken = null
         };
         Mock
             .Get(MockGetListProductsFromCache)
@@ -103,7 +102,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts(expectedPageResults, null));
+            .ReturnsAsync(new PagedProducts(expectedPageResults, null, 10));
         Mock
             .Get(MockGetListProductsFromCache)
             .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
@@ -139,7 +138,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts(firstPageProducts, "2"));
+            .ReturnsAsync(new PagedProducts(firstPageProducts, "2", 10));
         Mock
             .Get(MockGetListProductsFromCache)
             .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
@@ -175,7 +174,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts(defaultPageProducts, DefaultMaxPageSize.ToString()));
+            .ReturnsAsync(new PagedProducts(defaultPageProducts, DefaultMaxPageSize.ToString(), 10));
         Mock
             .Get(MockGetListProductsFromCache)
             .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
@@ -209,7 +208,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts([], null));
+            .ReturnsAsync(new PagedProducts([], null, 10));
         Mock
             .Get(MockGetListProductsFromCache)
             .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
@@ -245,7 +244,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts(firstPageProducts, DefaultMaxPageSize.ToString()));
+            .ReturnsAsync(new PagedProducts(firstPageProducts, DefaultMaxPageSize.ToString(), 10));
         Mock
             .Get(MockGetListProductsFromCache)
             .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
@@ -282,7 +281,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts(filteredProducts, null));
+            .ReturnsAsync(new PagedProducts(filteredProducts, null, 10));
         Mock
             .Get(MockGetListProductsFromCache)
             .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
@@ -321,7 +320,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts(filteredProducts, null));
+            .ReturnsAsync(new PagedProducts(filteredProducts, null, 10));
         Mock
             .Get(MockGetListProductsFromCache)
             .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
@@ -357,7 +356,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts(filteredProducts, null));
+            .ReturnsAsync(new PagedProducts(filteredProducts, null, 10));
         Mock
             .Get(MockGetListProductsFromCache)
             .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
@@ -394,7 +393,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts(filteredProducts, "2"));
+            .ReturnsAsync(new PagedProducts(filteredProducts, "2", 10));
         Mock
             .Get(MockGetListProductsFromCache)
             .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>
@@ -431,7 +430,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Filter == request.Filter &&
                 q.MaxPageSize == request.MaxPageSize &&
                 q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedProducts(filteredProducts, null));
+            .ReturnsAsync(new PagedProducts(filteredProducts, null, 10));
         Mock
             .Get(MockGetListProductsFromCache)
             .Setup(svc => svc.Handle(It.Is<GetListProductsFromCacheQuery>(q =>

@@ -5,4 +5,4 @@ using backend.Product.DomainModels.Views;
 
 namespace backend.Product.ApplicationLayer.Queries.ListProducts;
 
-public record PagedProducts(List<ProductView> Products, string? NextPageToken);
+public record PagedProducts(List<ProductView> Products, string? NextPageToken, int TotalCount);

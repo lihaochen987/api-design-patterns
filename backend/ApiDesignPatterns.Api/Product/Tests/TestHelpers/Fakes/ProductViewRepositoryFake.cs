@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Database.ProductView;
@@ -23,7 +24,7 @@ public class ProductViewRepositoryFake(
         return Task.FromResult(productView);
     }
 
-    public Task<(List<ProductView>, string?)> ListProductsAsync(
+    public Task<PagedProducts> ListProductsAsync(
         string? pageToken,
         string? filter,
         int maxPageSize)
@@ -56,6 +57,6 @@ public class ProductViewRepositoryFake(
         List<ProductView> paginatedProducts =
             paginateService.Paginate(products, maxPageSize, out string? nextPageToken);
 
-        return Task.FromResult((paginatedProducts, nextPageToken));
+        return Task.FromResult(new PagedProducts(paginatedProducts, nextPageToken, Count));
     }
 }

@@ -12,10 +12,10 @@ public class ListProductsHandler(IProductViewRepository repository)
 {
     public async Task<PagedProducts> Handle(ListProductsQuery query)
     {
-        (List<ProductView> products, string? nextPageToken) = await repository.ListProductsAsync(
+        var pagedProducts = await repository.ListProductsAsync(
             query.PageToken,
             query.Filter,
             query.MaxPageSize);
-        return new PagedProducts(products, nextPageToken);
+        return pagedProducts;
     }
 }

@@ -22,7 +22,12 @@ public class MapListProductsResponseHandler(IMapper mapper)
                     _ => mapper.Map<ProductControllers.GetProductResponse>(product)
                 }).ToList();
         ListProductsResponse response =
-            new() { Results = productResponses, NextPageToken = query.PagedProducts.NextPageToken };
+            new()
+            {
+                Results = productResponses,
+                NextPageToken = query.PagedProducts.NextPageToken,
+                TotalCount = query.PagedProducts.TotalCount
+            };
         return Task.FromResult(response)!;
     }
 }
