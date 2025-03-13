@@ -1,6 +1,5 @@
 import { components } from '../../../../../Shared/types';
-import { Price } from '../../ProductList.styles.ts';
-import { ProductDimensions } from './DefaultProductCard.styles.ts';
+import { Price, ProductDimensions } from '../../ProductList.styles.ts';
 import { Button, Card, CardActions, CardContent, CardHeader } from '@mui/material';
 
 interface DefaultProductCardProps {

@@ -3,7 +3,7 @@ import { $api } from '../../../Shared/fetch-client.ts';
 import { PetFoodCard } from './Cards/PetFoodCard/PetFoodCard.tsx';
 import { GroomingAndHygieneCard } from './Cards/GroomingAndHygieneCard/GroomingAndHygieneCard.tsx';
 import { DefaultProductCard } from './Cards/DefaultProductCard/DefaultProductCard.tsx';
-import { ProductListContainer } from './ProductList.styles.ts';
+import styled from 'styled-components';
 
 export const ProductList = () => {
   const { data, isLoading } = $api.useQuery('get', '/products');
@@ -42,3 +42,10 @@ export const ProductList = () => {
     </ProductListContainer>
   );
 };
+
+const ProductListContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  padding: 1.25rem;
+`;

@@ -1,9 +1,7 @@
 import { components } from '../../../../../Shared/types';
-import { Price } from '../../ProductList.styles.ts';
+import { Price, ProductDimensions, ProductSpecs, SectionTitle } from '../../ProductList.styles.ts';
 import { Button, Card, CardActions, CardContent, CardHeader } from '@mui/material';
-import { ProductSpecs, SectionTitle } from '../PetFoodCard/PetFoodCard.styles.ts';
-import { ProductDimensions } from '../DefaultProductCard/DefaultProductCard.styles.ts';
-import { UsageSection, WarningSection } from './GroomingAndHygieneCard.styles.ts';
+import styled from 'styled-components';
 
 interface GroomingCardProps {
   product: components['schemas']['GetGroomingAndHygieneResponse'];
@@ -46,3 +44,11 @@ export const GroomingAndHygieneCard = ({ product }: GroomingCardProps) => {
     </Card>
   );
 };
+
+const WarningSection = styled.div`
+  margin-top: 0.75rem;
+`;
+
+const UsageSection = styled.div`
+  margin-top: 0.75rem;
+`;
