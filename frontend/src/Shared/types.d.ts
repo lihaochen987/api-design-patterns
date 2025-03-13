@@ -1071,9 +1071,7 @@ export interface paths {
     trace?: never;
   };
 }
-
 export type webhooks = Record<string, never>;
-
 export interface components {
   schemas: {
     AddressRequest: {
@@ -1251,6 +1249,8 @@ export interface components {
         | components['schemas']['GetPetFoodResponse']
       )[];
       nextPageToken?: string;
+      /** Format: int32 */
+      totalCount: number;
     };
     ListReviewsResponse: {
       results: components['schemas']['GetReviewResponse'][];
@@ -1450,6 +1450,5 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;
