@@ -29,12 +29,6 @@ const Navbar = ({ cartItemsCount = 0 }: NavbarProps) => {
             <NavItem as={Link} to="/products/add">
               Add Product
             </NavItem>
-            <NavItem as={Link} to="/about">
-              About Us
-            </NavItem>
-            <NavItem as={Link} to="/contact">
-              Contact
-            </NavItem>
           </NavItems>
 
           <CartIconWrapper onClick={handleCartClick}>
@@ -67,6 +61,15 @@ const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   flex-grow: 1;
+  text-decoration: none;
+
+  &:visited,
+  &:hover,
+  &:active,
+  &:link {
+    text-decoration: none;
+    color: white;
+  }
 
   svg {
     margin-right: 0.5rem;
