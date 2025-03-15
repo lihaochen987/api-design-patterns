@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import PetsIcon from '@mui/icons-material/Pets';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import styled from 'styled-components';
+import { FaPaw, FaShoppingCart } from 'react-icons/fa';
 
 interface NavbarProps {
   cartItemsCount?: number;
@@ -18,7 +17,7 @@ const Navbar = ({ cartItemsCount = 0 }: NavbarProps) => {
     <NavbarContainer>
       <NavbarContent>
         <LogoContainer as={Link} to="/">
-          <PetsIcon />
+          <FaPaw />
           <Title>The Petstore</Title>
         </LogoContainer>
 
@@ -39,7 +38,7 @@ const Navbar = ({ cartItemsCount = 0 }: NavbarProps) => {
           </NavItems>
 
           <CartIconWrapper onClick={handleCartClick}>
-            <ShoppingCartIcon />
+            <FaShoppingCart />
             {cartItemsCount > 0 && <CartBadge>{cartItemsCount}</CartBadge>}
           </CartIconWrapper>
         </NavigationControls>

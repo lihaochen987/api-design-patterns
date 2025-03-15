@@ -100,7 +100,6 @@ const AddProductPage = () => {
         ...data,
       };
       await createProduct.mutateAsync(apiData);
-      console.log('Product created successfully');
       navigate('/');
     } catch (err) {
       console.error('Error creating product:', err);
