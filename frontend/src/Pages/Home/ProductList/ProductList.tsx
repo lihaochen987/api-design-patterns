@@ -1,36 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { components } from '../../../Shared/types';
-import { $api } from '../../../Shared/fetch-client.ts';
+import { fetchClient } from '../../../Shared/fetch-client.ts';
 import { PetFoodCard } from './Cards/PetFoodCard/PetFoodCard.tsx';
 import { GroomingAndHygieneCard } from './Cards/GroomingAndHygieneCard/GroomingAndHygieneCard.tsx';
 import { DefaultProductCard } from './Cards/DefaultProductCard/DefaultProductCard.tsx';
 import styled from 'styled-components';
-import { Pagination, Stack, Box, CircularProgress } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { Pagination } from './Pagination/Pagination.tsx';
 
 type Product =
   | components['schemas']['GetProductResponse']
   | components['schemas']['GetPetFoodResponse']
   | components['schemas']['GetGroomingAndHygieneResponse'];
 
-export const ProductList = () => {
-  const [page, setPage] = useState(1);
-  const ITEMS_PER_PAGE = 12;
+const useProducts = (page: number, pageSize: number) => {
+  return useQuery({
+    queryKey: ['products', page, pageSize],
+    queryFn: async () => {
+      const { data, error } = await fetchClient.GET('/products', {
+        params: {
+          query: {
+            PageToken: String(page),
+            MaxPageSize: pageSize,
+          },
+        },
+      });
 
-  const { data, isLoading, refetch } = $api.useQuery('get', '/products', {
-    params: {
-      query: {
-        PageToken: String(page),
-        MaxPageSize: ITEMS_PER_PAGE,
-      },
+      if (error) throw error;
+      return data;
     },
   });
+};
 
-  useEffect(() => {
-    void refetch();
-  }, [page, refetch]);
+export const ProductList = () => {
+  const [page, setPage] = useState(1); // Changed to start from 1 for better UX
+  const ITEMS_PER_PAGE = 12;
+  const { data, isLoading } = useProducts((page - 1) * ITEMS_PER_PAGE, ITEMS_PER_PAGE);
 
-  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -52,7 +60,9 @@ export const ProductList = () => {
   if (isLoading) {
     return (
       <LoadingContainer>
-        <CircularProgress />
+        <SpinnerContainer>
+          <Spinner />
+        </SpinnerContainer>
       </LoadingContainer>
     );
   }
@@ -78,17 +88,7 @@ export const ProductList = () => {
 
       {totalPages > 1 && (
         <PaginationContainer>
-          <Stack spacing={2}>
-            <Pagination
-              count={totalPages}
-              page={page}
-              onChange={handlePageChange}
-              color="primary"
-              size="large"
-              showFirstButton
-              showLastButton
-            />
-          </Stack>
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
         </PaginationContainer>
       )}
     </>
@@ -102,7 +102,7 @@ const ProductListContainer = styled.div`
   padding: 1.25rem;
 `;
 
-const PaginationContainer = styled(Box)`
+const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   padding: 2rem 0;
@@ -122,4 +122,29 @@ const NoProductsMessage = styled.div`
   padding: 2rem;
   font-size: 1.2rem;
   color: #666;
+`;
+
+const SpinnerContainer = styled.div`
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 40px;
+`;
+
+const Spinner = styled.div`
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #1976d2;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;

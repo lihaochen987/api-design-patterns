@@ -1170,9 +1170,12 @@ export interface components {
     DeleteReviewRequest: Record<string, never>;
     DeleteSupplierRequest: Record<string, never>;
     DimensionsRequest: {
-      length?: string;
-      width?: string;
-      height?: string;
+      /** Format: double */
+      length?: number;
+      /** Format: double */
+      width?: number;
+      /** Format: double */
+      height?: number;
     };
     DimensionsResponse: {
       length: string;
@@ -1281,9 +1284,12 @@ export interface components {
       [key: string]: unknown;
     };
     ProductPricingRequest: {
-      basePrice?: string;
-      discountPercentage?: string;
-      taxRate?: string;
+      /** Format: double */
+      basePrice?: number;
+      /** Format: double */
+      discountPercentage?: number;
+      /** Format: double */
+      taxRate?: number;
     };
     ProductPricingResponse: {
       basePrice: string;

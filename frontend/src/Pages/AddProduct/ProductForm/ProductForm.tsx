@@ -3,30 +3,75 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { components } from '../../../../types';
+import { components } from '../../../Shared/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { fetchClient } from '../../../Shared/fetch-client.ts';
 
 type CreateProductRequest = components['schemas']['CreateProductRequest'];
+type CreateProductResponse = components['schemas']['CreateProductResponse'];
 
 const productSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
   pricing: z.object({
     basePrice: z.number().positive('Base price must be positive'),
+    discountPercentage: z.number().positive('Discount Percentage must be positive'),
     taxRate: z.number().positive('Tax rate must be positive'),
   }),
+  category: z.enum(
+    [
+      'petfood',
+      'toys',
+      'collarsAndLeashes',
+      'groomingAndHygiene',
+      'beds',
+      'feeders',
+      'travelAccessories',
+      'clothing',
+    ],
+    {
+      errorMap: () => ({ message: 'Please select a valid category' }),
+    }
+  ),
   dimensions: z.object({
     width: z.number().positive('Width must be positive'),
     height: z.number().positive('Height must be positive'),
     length: z.number().positive('Length must be positive'),
   }),
-  category: z.enum(['food', 'toys', 'accessories', 'health', 'grooming'], {
-    errorMap: () => ({ message: 'Please select a valid category' }),
-  }),
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
 
+const useCreateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (newProduct: CreateProductRequest): Promise<CreateProductResponse> => {
+      console.log('Creating product:', newProduct);
+
+      const { data, error } = await fetchClient.POST('/product', {
+        body: newProduct,
+      });
+
+      if (error) {
+        console.error('API error:', error);
+        throw new Error(String(error.message) || 'Failed to create product');
+      }
+
+      if (!data) {
+        throw new Error('No data returned from the server');
+      }
+
+      return data;
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
+  });
+};
+
 const AddProductPage = () => {
   const navigate = useNavigate();
+  const createProduct = useCreateProduct();
 
   const {
     register,
@@ -34,19 +79,6 @@ const AddProductPage = () => {
     formState: { errors },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
-    defaultValues: {
-      name: '',
-      pricing: {
-        basePrice: undefined,
-        taxRate: undefined,
-      },
-      dimensions: {
-        width: undefined,
-        height: undefined,
-        length: undefined,
-      },
-      category: undefined,
-    },
   });
 
   const onSubmit = async (data: ProductFormData) => {
@@ -54,10 +86,8 @@ const AddProductPage = () => {
       const apiData: CreateProductRequest = {
         ...data,
       };
-
-      console.log('Submitting product:', apiData);
-
-      alert('Product added successfully!');
+      await createProduct.mutateAsync(apiData);
+      console.log('Product created successfully');
       navigate('/');
     } catch (err) {
       console.error('Error creating product:', err);
@@ -74,6 +104,9 @@ const AddProductPage = () => {
       <PageTitle>Add New Product</PageTitle>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
+        {createProduct.isPending && <LoadingMessage>Creating product...</LoadingMessage>}
+        {createProduct.isError && <ErrorBanner>Error: {createProduct.error.message}</ErrorBanner>}
+
         <FormGroup>
           <Label htmlFor="name">Product Name</Label>
           <Input id="name" {...register('name')} />
@@ -95,13 +128,25 @@ const AddProductPage = () => {
         </FormGroup>
 
         <FormGroup>
-          <Label htmlFor="taxRate">Tax Rate ($)</Label>
+          <Label htmlFor="taxRate">Tax Rate (%)</Label>
           <Input
             type="number"
             id="taxRate"
-            min="0.01"
+            max="100"
             step="0.01"
             {...register('pricing.taxRate', { valueAsNumber: true })}
+          />
+          {errors.pricing?.taxRate && <ErrorMessage>{errors.pricing.taxRate.message}</ErrorMessage>}
+        </FormGroup>
+
+        <FormGroup>
+          <Label htmlFor="discountPercentage">Discount Percentage (%)</Label>
+          <Input
+            type="number"
+            id="discountPercentage"
+            max="100"
+            step="0.01"
+            {...register('pricing.discountPercentage', { valueAsNumber: true })}
           />
           {errors.pricing?.taxRate && <ErrorMessage>{errors.pricing.taxRate.message}</ErrorMessage>}
         </FormGroup>
@@ -146,11 +191,14 @@ const AddProductPage = () => {
           <Label htmlFor="category">Category</Label>
           <Select id="category" {...register('category')}>
             <option value="">Select a category</option>
-            <option value="food">Pet Food</option>
+            <option value="petFood">Pet Food</option>
             <option value="toys">Toys</option>
-            <option value="accessories">Accessories</option>
-            <option value="health">Health & Wellness</option>
-            <option value="grooming">Grooming</option>
+            <option value="collarsAndLeashes">Collars and Leashes</option>
+            <option value="groomingAndHygiene">Grooming and Hygiene</option>
+            <option value="beds">Beds</option>
+            <option value="feeders">Feeders</option>
+            <option value="travelAccessories">Travel Accessories</option>
+            <option value="clothing">Clothing</option>
           </Select>
           {errors.category && <ErrorMessage>{errors.category.message}</ErrorMessage>}
         </FormGroup>
@@ -266,4 +314,21 @@ const ErrorMessage = styled.p`
   color: #e53e3e;
   font-size: 0.875rem;
   margin-top: 0.5rem;
+`;
+
+const LoadingMessage = styled.div`
+  background-color: #e8f4fd;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  color: #2c7cb0;
+`;
+
+const ErrorBanner = styled.div`
+  background-color: #fff5f5;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  color: #e53e3e;
+  border-left: 3px solid #e53e3e;
 `;

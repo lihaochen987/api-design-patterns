@@ -1,9 +1,9 @@
 import createFetchClient from 'openapi-fetch';
-import createClient from 'openapi-react-query';
 import { paths } from './types';
+import { QueryClient } from '@tanstack/react-query';
 
-const fetchClient = createFetchClient<paths>({
+export const fetchClient = createFetchClient<paths>({
   baseUrl: 'http://localhost:8080/',
 });
 
-export const $api = createClient(fetchClient);
+export const queryClient = new QueryClient();

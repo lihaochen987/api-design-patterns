@@ -55,7 +55,7 @@ public record Dimensions
     /// <param name="width">The width to validate.</param>
     /// <param name="height">The height to validate.</param>
     /// <returns>True if all dimensions are within valid ranges and volume is acceptable; otherwise false.</returns>
-    private bool IsValid(decimal length, decimal width, decimal height)
+    private static bool IsValid(decimal length, decimal width, decimal height)
     {
         if (length is < 0 or > 100)
         {

@@ -37,27 +37,31 @@ public class ProductViewRepository(
         int maxPageSize)
     {
         var parameters = new DynamicParameters();
-        var whereClause = new StringBuilder();
+        var filterClause = new StringBuilder();
+        var paginationClause = new StringBuilder();
 
-        // Pagination filter
+        // Pagination filter - now separate from the main filter
         if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenProduct))
         {
-            whereClause.Append(" AND product_id > @LastSeenProduct");
+            paginationClause.Append(" AND product_id > @LastSeenProduct");
             parameters.Add("LastSeenProduct", lastSeenProduct);
         }
 
         // Custom filter
         if (!string.IsNullOrEmpty(filter))
         {
-            string filterClause = productSqlFilterBuilder.BuildSqlWhereClause(filter);
-            whereClause.Append($" AND {filterClause}");
+            string sqlFilterClause = productSqlFilterBuilder.BuildSqlWhereClause(filter);
+            filterClause.Append($" AND {sqlFilterClause}");
         }
 
-        string countSql = $"SELECT COUNT(*) FROM products_view WHERE 1=1{whereClause}";
+        // Count query should only use the filter clause, not the pagination clause
+        string countSql = $"SELECT COUNT(*) FROM products_view WHERE 1=1{filterClause}";
         int totalCount = await dbConnection.ExecuteScalarAsync<int>(countSql, parameters);
 
+        // Data query uses both filter and pagination
         var dataSql = new StringBuilder(ProductViewQueries.ListProductsBase);
-        dataSql.Append(whereClause);
+        dataSql.Append(filterClause);
+        dataSql.Append(paginationClause);
 
         dataSql.Append(" ORDER BY product_id LIMIT @PageSizePlusOne");
         parameters.Add("PageSizePlusOne", maxPageSize + 1);

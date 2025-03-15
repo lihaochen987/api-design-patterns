@@ -57,7 +57,7 @@ public class ListProductsController(
 
         await persistListProductsToCache.Handle(new PersistListProductsToCacheCommand
         {
-            CacheKey = cachedResult.CacheKey, Expiry = TimeSpan.FromMinutes(10), Products = response
+            CacheKey = cachedResult.CacheKey, Expiry = TimeSpan.FromSeconds(1), Products = response
         });
 
         return Ok(response);
