@@ -86,10 +86,6 @@ const NavItems = styled.nav`
   display: flex;
   gap: 1rem;
   margin-right: 1rem;
-
-  a {
-    transform: translateY(3px);
-  }
 `;
 
 const NavItem = styled.a`
@@ -143,5 +139,6 @@ const NavbarContent = styled.div`
 `;
 
 const NavigationControls = styled.div`
+  padding-top: 0.25rem;
   display: flex;
 `;

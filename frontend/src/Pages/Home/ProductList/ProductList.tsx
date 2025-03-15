@@ -112,7 +112,7 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 300px;
+  height: 18.75rem;
   width: 100%;
 `;
 
@@ -127,16 +127,16 @@ const NoProductsMessage = styled.div`
 const SpinnerContainer = styled.div`
   display: inline-block;
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
 `;
 
 const Spinner = styled.div`
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   border-top: 4px solid #1976d2;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   animation: spin 1s linear infinite;
 
   @keyframes spin {

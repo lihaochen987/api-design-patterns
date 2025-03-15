@@ -1,38 +1,38 @@
 import styled from 'styled-components';
 
 export const PageContainer = styled.div`
-  max-width: 800px;
   margin: 100px auto 50px;
-  padding: 0 20px;
+  padding: 0 25rem;
 `;
 
 export const PageTitle = styled.h1`
   font-size: 2rem;
   color: #333;
-  margin-bottom: 30px;
+  margin-bottom: 1.75rem;
 `;
 
 export const Form = styled.form`
   background-color: #fff;
-  padding: 30px;
+  padding: 1.75rem;
   border-radius: 8px;
+  border: 1px solid red;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
 export const FormGroup = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 `;
 
 export const Label = styled.label`
   display: block;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
   color: #333;
 `;
 
 export const Input = styled.input`
   width: 100%;
-  padding: 10px 15px;
+  padding: 0.5rem 1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
@@ -46,7 +46,7 @@ export const Input = styled.input`
 
 export const Select = styled.select`
   width: 100%;
-  padding: 10px 15px;
+  padding: 0.5rem 1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
@@ -61,12 +61,12 @@ export const Select = styled.select`
 export const ButtonGroup = styled.div`
   display: flex;
   justify-content: flex-end;
-  gap: 15px;
-  margin-top: 30px;
+  gap: 1rem;
+  margin-top: 1.75rem;
 `;
 
 export const Button = styled.button`
-  padding: 10px 20px;
+  padding: 0.5rem 1.25rem;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
@@ -95,23 +95,23 @@ export const SecondaryButton = styled(Button)`
 
 export const ErrorMessage = styled.p`
   color: #e53e3e;
-  font-size: 0.875rem;
+  font-size: 1rem;
   margin-top: 0.5rem;
 `;
 
 export const LoadingMessage = styled.div`
   background-color: #e8f4fd;
-  padding: 10px 15px;
+  padding: 0.75rem 1rem;
   border-radius: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
   color: #2c7cb0;
 `;
 
 export const ErrorBanner = styled.div`
   background-color: #fff5f5;
-  padding: 10px 15px;
+  padding: 0.5rem 1rem;
   border-radius: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
   color: #e53e3e;
   border-left: 3px solid #e53e3e;
 `;

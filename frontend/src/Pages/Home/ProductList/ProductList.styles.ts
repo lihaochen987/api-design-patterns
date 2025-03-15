@@ -29,22 +29,22 @@ export const Card = styled.div`
 `;
 
 export const CardHeader = styled.div`
-  padding: 16px;
+  padding: 1rem;
   border-bottom: 1px solid #f0f0f0;
 `;
 
 export const CardContent = styled.div`
-  padding: 16px;
+  padding: 1rem;
 `;
 
 export const CardActions = styled.div`
   display: flex;
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   justify-content: space-evenly;
 `;
 
 export const CardButton = styled.button<{ variant?: 'contained' | 'outlined' }>`
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   border-radius: 4px;
   font-weight: 500;
   cursor: pointer;

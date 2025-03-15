@@ -118,8 +118,7 @@ const PaginationWrapper = styled.div`
 
 const PaginationButton = styled.button<PaginationButtonProps>`
   min-width: 2.5rem;
-  height: 2.5rem;
-  padding: 0 0.5rem;
+  padding: 0.5rem 0 0.5rem 0;
   border-radius: 4px;
   border: 1px solid ${props => (props.$isActive ? '#1976d2' : '#ddd')};
   background-color: ${props => (props.$isActive ? '#1976d2' : 'white')};
@@ -147,6 +146,6 @@ const PaginationEllipsis = styled.span`
   align-items: center;
   justify-content: center;
   min-width: 2.5rem;
-  height: 2.5rem;
+  padding: 0.5rem 0 0.5rem 0;
   color: #666;
 `;

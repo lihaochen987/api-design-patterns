@@ -1,4 +1,4 @@
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -9,6 +9,7 @@ import {
   ButtonGroup,
   ErrorBanner,
   ErrorMessage,
+  Form,
   FormGroup,
   Input,
   Label,
@@ -131,7 +132,6 @@ const AddProductPage = () => {
             type="number"
             id="basePrice"
             min="0.01"
-            step="0.01"
             {...register('pricing.basePrice', { valueAsNumber: true })}
           />
           {errors.pricing?.basePrice && (
@@ -144,8 +144,8 @@ const AddProductPage = () => {
           <Input
             type="number"
             id="taxRate"
+            min="0"
             max="100"
-            step="0.01"
             {...register('pricing.taxRate', { valueAsNumber: true })}
           />
           {errors.pricing?.taxRate && <ErrorMessage>{errors.pricing.taxRate.message}</ErrorMessage>}
@@ -156,8 +156,8 @@ const AddProductPage = () => {
           <Input
             type="number"
             id="discountPercentage"
+            min="0"
             max="100"
-            step="0.01"
             {...register('pricing.discountPercentage', { valueAsNumber: true })}
           />
           {errors.pricing?.taxRate && <ErrorMessage>{errors.pricing.taxRate.message}</ErrorMessage>}
@@ -168,6 +168,7 @@ const AddProductPage = () => {
           <Input
             type="number"
             id="width"
+            min="0"
             {...register('dimensions.width', { valueAsNumber: true })}
           />
           {errors.dimensions?.width && (
@@ -180,6 +181,7 @@ const AddProductPage = () => {
           <Input
             type="number"
             id="height"
+            min={'0'}
             {...register('dimensions.height', { valueAsNumber: true })}
           />
           {errors.dimensions?.height && (
@@ -192,6 +194,7 @@ const AddProductPage = () => {
           <Input
             type="number"
             id="length"
+            min={'0'}
             {...register('dimensions.length', { valueAsNumber: true })}
           />
           {errors.dimensions?.length && (
