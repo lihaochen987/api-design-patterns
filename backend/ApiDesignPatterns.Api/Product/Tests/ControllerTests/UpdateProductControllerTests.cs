@@ -18,7 +18,7 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
         DomainModels.Product product = new ProductTestDataBuilder().Build();
         UpdateProductRequest request = new()
         {
-            Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = "1.99" }, Category = "Toys"
+            Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = 1.99m }, Category = "Toys"
         };
         Mock
             .Get(MockGetProductHandler)

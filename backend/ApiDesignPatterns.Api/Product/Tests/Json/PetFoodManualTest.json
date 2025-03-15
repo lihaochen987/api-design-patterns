@@ -1,9 +1,9 @@
 {
     "name": "Premium Dog Food",
     "pricing": {
-        "basePrice": "19.99",
-        "discountPercentage": "10",
-        "taxRate": "5"
+        "basePrice": 19.99,
+        "discountPercentage": 10,
+        "taxRate": 5
     },
     "category": "PetFood",
     "dimensions": {

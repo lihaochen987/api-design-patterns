@@ -147,20 +147,20 @@ public class UpdateProductHandler(
             UpdateProductRequest request,
             Pricing product)
     {
-        decimal basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase)
-                            && decimal.TryParse(request.Pricing?.BasePrice, out decimal parsedBasePrice)
-            ? parsedBasePrice
+        decimal basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase) &&
+                             request.Pricing is { BasePrice: not null }
+            ? request.Pricing.BasePrice ?? product.BasePrice
             : product.BasePrice;
 
-        decimal discountPercentage = request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase)
-                                     && decimal.TryParse(request.Pricing?.DiscountPercentage,
-                                         out decimal parsedDiscountPercentage)
-            ? parsedDiscountPercentage
-            : product.DiscountPercentage;
+        decimal discountPercentage =
+            request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase) &&
+            request.Pricing is { DiscountPercentage: not null }
+                ? request.Pricing.DiscountPercentage ?? product.DiscountPercentage
+                : product.DiscountPercentage;
 
-        decimal taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase)
-                          && decimal.TryParse(request.Pricing?.TaxRate, out decimal parsedTaxRate)
-            ? parsedTaxRate
+        decimal taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase) &&
+                          request.Pricing is { TaxRate: not null }
+            ? request.Pricing.TaxRate ?? product.TaxRate
             : product.TaxRate;
 
         return new Pricing(basePrice, discountPercentage, taxRate);

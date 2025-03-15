@@ -1,7 +1,7 @@
 {
-    "basePrice": "68",
-    "discountPercentage": "2.6",
-    "taxRate": "3",
+    "basePrice": 68,
+    "discountPercentage": 2.6,
+    "taxRate": 3,
     "fieldMask": [
         "baseprice", "taxrate"
     ]

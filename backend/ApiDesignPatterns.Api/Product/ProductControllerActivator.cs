@@ -97,7 +97,6 @@ public class ProductControllerActivator : BaseControllerActivator
                         null)
                     .WithLogging()
                     .WithValidation()
-                    .WithTransaction()
                     .Build();
 
             return new CreateProductController(

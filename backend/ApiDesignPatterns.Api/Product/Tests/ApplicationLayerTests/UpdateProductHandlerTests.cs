@@ -26,7 +26,7 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         UpdateProductRequest request = new()
         {
             Name = "Updated Name",
-            Pricing = new ProductPricingRequest { BasePrice = "25.50", DiscountPercentage = "50", TaxRate = "15" },
+            Pricing = new ProductPricingRequest { BasePrice = 25.50m, DiscountPercentage = 50, TaxRate = 15 },
             Category = "Toys",
             FieldMask = ["name", "category", "discountpercentage", "taxrate"]
         };
@@ -39,8 +39,8 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         Repository.First().Name.ShouldBeEquivalentTo(request.Name);
         Repository.First().Category.ShouldBeEquivalentTo((Category)Enum.Parse(typeof(Category), request.Category));
         Repository.First().Pricing.DiscountPercentage
-            .ShouldBeEquivalentTo(decimal.Parse(request.Pricing.DiscountPercentage));
-        Repository.First().Pricing.TaxRate.ShouldBeEquivalentTo(decimal.Parse(request.Pricing.TaxRate));
+            .ShouldBeEquivalentTo(request.Pricing.DiscountPercentage);
+        Repository.First().Pricing.TaxRate.ShouldBeEquivalentTo(request.Pricing.TaxRate);
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         Repository.IsDirty = false;
         UpdateProductRequest request = new()
         {
-            Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = "1.99" }, FieldMask = ["name"]
+            Name = "Updated Name", Pricing = new ProductPricingRequest { BasePrice = 1.99m }, FieldMask = ["name"]
         };
         ICommandHandler<UpdateProductCommand> sut = UpdateProductService();
 

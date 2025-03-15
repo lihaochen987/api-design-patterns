@@ -1,9 +1,9 @@
 {
     "name": "Hao",
     "pricing": {
-        "basePrice": "125",
-        "discountPercentage": "5",
-        "taxRate": "5"
+        "basePrice": 125,
+        "discountPercentage": 5,
+        "taxRate": 5
     },
     "category": "Toys",
     "dimensions": {

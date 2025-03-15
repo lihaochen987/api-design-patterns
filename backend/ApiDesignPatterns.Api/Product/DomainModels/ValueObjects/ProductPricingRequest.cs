@@ -5,7 +5,7 @@ namespace backend.Product.DomainModels.ValueObjects;
 
 public class ProductPricingRequest
 {
-    public string? BasePrice { get; init; }
-    public string? DiscountPercentage { get; init; }
-    public string? TaxRate { get; init; }
+    public decimal? BasePrice { get; init; }
+    public decimal? DiscountPercentage { get; init; }
+    public decimal? TaxRate { get; init; }
 }
