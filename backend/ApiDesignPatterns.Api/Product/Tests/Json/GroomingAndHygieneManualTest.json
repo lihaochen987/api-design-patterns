@@ -7,9 +7,9 @@
     },
     "category": "GroomingAndHygiene",
     "dimensions": {
-        "length": "20.0",
-        "width": "15.0",
-        "height": "10.0"
+        "length": 20.0,
+        "width": 15.0,
+        "height": 10.0
     },
     "isNatural": true,
     "isHypoallergenic": true,

@@ -52,7 +52,7 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         Repository.IsDirty = false;
         UpdateProductRequest request = new()
         {
-            Dimensions = new DimensionsRequest { Length = "20", Width = "10", Height = "2" },
+            Dimensions = new DimensionsRequest { Length = 20, Width = 10, Height = 2 },
             FieldMask = ["dimensions.width", "dimensions.height"]
         };
         ICommandHandler<UpdateProductCommand> sut = UpdateProductService();
@@ -62,8 +62,8 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         Repository.IsDirty.ShouldBeTrue();
         Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
         Repository.First().Dimensions.Length.ShouldBeEquivalentTo(product.Dimensions.Length);
-        Repository.First().Dimensions.Width.ShouldBeEquivalentTo(decimal.Parse(request.Dimensions.Width));
-        Repository.First().Dimensions.Height.ShouldBeEquivalentTo(decimal.Parse(request.Dimensions.Height));
+        Repository.First().Dimensions.Width.ShouldBeEquivalentTo(request.Dimensions.Width);
+        Repository.First().Dimensions.Height.ShouldBeEquivalentTo(request.Dimensions.Height);
     }
 
     [Fact]

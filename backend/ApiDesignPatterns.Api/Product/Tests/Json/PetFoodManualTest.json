@@ -7,9 +7,9 @@
     },
     "category": "PetFood",
     "dimensions": {
-        "length": "30.0",
-        "width": "15.0",
-        "height": "10.0"
+        "length": 30.0,
+        "width": 15.0,
+        "height": 10.0
     },
     "ageGroup": "Adult",
     "breedSize": "Large",

@@ -5,7 +5,7 @@ namespace backend.Product.DomainModels.ValueObjects;
 
 public class DimensionsRequest
 {
-    public string? Length { get; init; }
-    public string? Width { get; init; }
-    public string? Height { get; init; }
+    public decimal? Length { get; init; }
+    public decimal? Width { get; init; }
+    public decimal? Height { get; init; }
 }

@@ -174,18 +174,18 @@ public class UpdateProductHandler(
         Dimensions currentDimensions)
     {
         decimal length = request.FieldMask.Contains("dimensions.length", StringComparer.OrdinalIgnoreCase)
-                         && !string.IsNullOrEmpty(request.Dimensions?.Length)
-            ? decimal.Parse(request.Dimensions.Length)
+                         && request.Dimensions is {Length: not null}
+            ? request.Dimensions.Length ?? currentDimensions.Length
             : currentDimensions.Length;
 
         decimal width = request.FieldMask.Contains("dimensions.width", StringComparer.OrdinalIgnoreCase)
-                        && !string.IsNullOrEmpty(request.Dimensions?.Width)
-            ? decimal.Parse(request.Dimensions.Width)
+                        && request.Dimensions is {Width: not null}
+            ? request.Dimensions.Width ?? currentDimensions.Width
             : currentDimensions.Width;
 
         decimal height = request.FieldMask.Contains("dimensions.height", StringComparer.OrdinalIgnoreCase)
-                         && !string.IsNullOrEmpty(request.Dimensions?.Height)
-            ? decimal.Parse(request.Dimensions.Height)
+                         && request.Dimensions is {Height: not null}
+            ? request.Dimensions.Height ?? currentDimensions.Height
             : currentDimensions.Height;
 
         return new Dimensions(length, width, height);
