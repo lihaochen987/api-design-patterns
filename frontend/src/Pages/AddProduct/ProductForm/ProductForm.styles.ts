@@ -2,7 +2,10 @@ import styled from 'styled-components';
 
 export const PageContainer = styled.div`
   margin: 100px auto 50px;
-  padding: 0 25rem;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid orange;
 `;
 
 export const PageTitle = styled.h1`
@@ -12,10 +15,10 @@ export const PageTitle = styled.h1`
 `;
 
 export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   padding: 1.75rem;
-  border-radius: 8px;
-  border: 1px solid red;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
@@ -31,16 +34,27 @@ export const Label = styled.label`
 `;
 
 export const Input = styled.input`
-  width: 100%;
   padding: 0.5rem 1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.3s;
+  box-sizing: border-box;
+  width: 100%;
 
   &:focus {
     border-color: #4a90e2;
     outline: none;
+  }
+
+  &[type='number'] {
+    -moz-appearance: textfield;
+  }
+
+  &[type='number']::-webkit-inner-spin-button,
+  &[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 `;
 
