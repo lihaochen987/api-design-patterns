@@ -1,6 +1,15 @@
 import { components } from '../../../../../Shared/types';
-import { Price, ProductDimensions, ProductSpecs, SectionTitle } from '../../ProductList.styles.ts';
-import { Button, Card, CardActions, CardContent, CardHeader } from '@mui/material';
+import {
+  Card,
+  CardActions,
+  CardButton,
+  CardContent,
+  CardHeader,
+  Price,
+  ProductDimensions,
+  ProductSpecs,
+  SectionTitle,
+} from '../../ProductList.styles.ts';
 import styled from 'styled-components';
 
 interface PetFoodCardProps {
@@ -10,7 +19,10 @@ interface PetFoodCardProps {
 export const PetFoodCard = ({ product }: PetFoodCardProps) => {
   return (
     <Card>
-      <CardHeader title={<h3>{product.name}</h3>} subheader={<Price>${product.price}</Price>} />
+      <CardHeader>
+        <h1>{product.name}</h1>
+        <Price>${product.price}</Price>
+      </CardHeader>
 
       <CardContent>
         <ProductSpecs>
@@ -55,9 +67,9 @@ export const PetFoodCard = ({ product }: PetFoodCardProps) => {
         </StorageSection>
       </CardContent>
 
-      <CardActions sx={{ justifyContent: 'space-evenly' }}>
-        <Button variant="contained">Add to cart</Button>
-        <Button variant="outlined">View Details</Button>
+      <CardActions>
+        <CardButton variant="contained">Add to cart</CardButton>
+        <CardButton variant="outlined">View Details</CardButton>
       </CardActions>
     </Card>
   );

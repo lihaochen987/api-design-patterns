@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
+// Updated interface to use transient props
 interface PaginationButtonProps {
-  active?: boolean;
-  disabled?: boolean;
+  $isActive?: boolean;
+  $isDisabled?: boolean;
 }
 
 interface PaginationProps {
@@ -54,6 +55,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
     <PaginationWrapper>
       <PaginationButton
         onClick={() => onPageChange(1)}
+        $isDisabled={currentPage === 1}
         disabled={currentPage === 1}
         aria-label="Go to first page"
       >
@@ -62,6 +64,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
 
       <PaginationButton
         onClick={() => onPageChange(currentPage - 1)}
+        $isDisabled={currentPage === 1}
         disabled={currentPage === 1}
         aria-label="Go to previous page"
       >
@@ -76,7 +79,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
         return (
           <PaginationButton
             key={`page-${page}`}
-            active={currentPage === page}
+            $isActive={currentPage === page}
             onClick={() => onPageChange(Number(page))}
             aria-label={`Go to page ${page}`}
             aria-current={currentPage === page ? 'page' : undefined}
@@ -88,6 +91,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
 
       <PaginationButton
         onClick={() => onPageChange(currentPage + 1)}
+        $isDisabled={currentPage === totalPages}
         disabled={currentPage === totalPages}
         aria-label="Go to next page"
       >
@@ -96,6 +100,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
 
       <PaginationButton
         onClick={() => onPageChange(totalPages)}
+        $isDisabled={currentPage === totalPages}
         disabled={currentPage === totalPages}
         aria-label="Go to last page"
       >
@@ -116,18 +121,19 @@ const PaginationButton = styled.button<PaginationButtonProps>`
   height: 2.5rem;
   padding: 0 0.5rem;
   border-radius: 4px;
-  border: 1px solid ${props => (props.active ? '#1976d2' : '#ddd')};
-  background-color: ${props => (props.active ? '#1976d2' : 'white')};
-  color: ${props => (props.active ? 'white' : props.disabled ? '#ccc' : '#333')};
+  border: 1px solid ${props => (props.$isActive ? '#1976d2' : '#ddd')};
+  background-color: ${props => (props.$isActive ? '#1976d2' : 'white')};
+  color: ${props => (props.$isActive ? 'white' : props.$isDisabled ? '#ccc' : '#333')};
   font-size: 1rem;
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  cursor: ${props => (props.$isDisabled ? 'not-allowed' : 'pointer')};
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: ${props => (props.disabled ? 'white' : props.active ? '#1565c0' : '#f5f5f5')};
+    background-color: ${props =>
+      props.$isDisabled ? 'white' : props.$isActive ? '#1565c0' : '#f5f5f5'};
   }
 
   &:focus {
