@@ -1,11 +1,5 @@
 import styled from 'styled-components';
 
-// Updated interface to use transient props
-interface PaginationButtonProps {
-  $isActive?: boolean;
-  $isDisabled?: boolean;
-}
-
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -116,7 +110,7 @@ const PaginationWrapper = styled.div`
   gap: 0.5rem;
 `;
 
-const PaginationButton = styled.button<PaginationButtonProps>`
+const PaginationButton = styled.button<{ $isActive?: boolean; $isDisabled?: boolean }>`
   min-width: 2.5rem;
   padding: 0.5rem 0 0.5rem 0;
   border-radius: 4px;

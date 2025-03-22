@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Price = styled.span`
   font-weight: bold;
@@ -52,23 +52,23 @@ export const CardButton = styled.button<{ variant?: 'contained' | 'outlined' }>`
 
   ${props =>
     props.variant === 'contained' &&
-    `
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    &:hover {
-      background-color: #1565c0;
-    }
-  `}
+    css`
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      &:hover {
+        background-color: #1565c0;
+      }
+    `}
 
   ${props =>
     props.variant === 'outlined' &&
-    `
-    background-color: transparent;
-    color: #1976d2;
-    border: 1px solid #1976d2;
-    &:hover {
-      background-color: rgba(25, 118, 210, 0.04);
-    }
-  `}
+    css`
+      background-color: transparent;
+      color: #1976d2;
+      border: 1px solid #1976d2;
+      &:hover {
+        background-color: rgba(25, 118, 210, 0.04);
+      }
+    `}
 `;

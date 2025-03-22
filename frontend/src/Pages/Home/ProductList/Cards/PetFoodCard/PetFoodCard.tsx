@@ -12,6 +12,7 @@ import {
 } from '../../ProductList.styles.ts';
 import styled from 'styled-components';
 import React from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface PetFoodCardProps {
   product: components['schemas']['GetPetFoodResponse'];
@@ -38,43 +39,54 @@ export const PetFoodCard = ({ product }: PetFoodCardProps) => {
           </p>
         </ProductDimensions>
 
-        {isExpanded && (
-          <>
-            <ProductSpecs>
-              <p>
-                <strong>Age Group:</strong> {product.ageGroup}
-              </p>
-              <p>
-                <strong>Breed Size:</strong> {product.breedSize}
-              </p>
-              <p>
-                <strong>Weight:</strong> {product.weightKg} kg
-              </p>
-            </ProductSpecs>
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{
+                opacity: { duration: 0.3, ease: 'easeOut' },
+                height: { duration: 0.4, ease: 'easeOut' },
+              }}
+              style={{ overflow: 'hidden' }}
+            >
+              <ProductSpecs>
+                <p>
+                  <strong>Age Group:</strong> {product.ageGroup}
+                </p>
+                <p>
+                  <strong>Breed Size:</strong> {product.breedSize}
+                </p>
+                <p>
+                  <strong>Weight:</strong> {product.weightKg} kg
+                </p>
+              </ProductSpecs>
 
-            <NutritionSection>
-              <SectionTitle>Nutritional Information</SectionTitle>
-              <NutritionTable>
-                {Object.entries(product.nutritionalInfo).map(([key, value]) => (
-                  <NutritionRow key={key}>
-                    <NutritionKey>{key}:</NutritionKey>
-                    <NutritionValue>{value}</NutritionValue>
-                  </NutritionRow>
-                ))}
-              </NutritionTable>
-            </NutritionSection>
+              <NutritionSection>
+                <SectionTitle>Nutritional Information</SectionTitle>
+                <NutritionTable>
+                  {Object.entries(product.nutritionalInfo).map(([key, value]) => (
+                    <NutritionRow key={key}>
+                      <NutritionKey>{key}:</NutritionKey>
+                      <NutritionValue>{value}</NutritionValue>
+                    </NutritionRow>
+                  ))}
+                </NutritionTable>
+              </NutritionSection>
 
-            <IngredientsSection>
-              <SectionTitle>Ingredients</SectionTitle>
-              <p>{product.ingredients}</p>
-            </IngredientsSection>
+              <IngredientsSection>
+                <SectionTitle>Ingredients</SectionTitle>
+                <p>{product.ingredients}</p>
+              </IngredientsSection>
 
-            <StorageSection>
-              <SectionTitle>Storage Instructions</SectionTitle>
-              <p>{product.storageInstructions}</p>
-            </StorageSection>
-          </>
-        )}
+              <StorageSection>
+                <SectionTitle>Storage Instructions</SectionTitle>
+                <p>{product.storageInstructions}</p>
+              </StorageSection>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </CardContent>
 
       <CardActions>
