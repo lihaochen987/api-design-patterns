@@ -11,12 +11,15 @@ import {
   SectionTitle,
 } from '../../ProductList.styles.ts';
 import styled from 'styled-components';
+import React from 'react';
 
 interface GroomingCardProps {
   product: components['schemas']['GetGroomingAndHygieneResponse'];
 }
 
 export const GroomingAndHygieneCard = ({ product }: GroomingCardProps) => {
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
   return (
     <Card>
       <CardHeader>
@@ -25,11 +28,9 @@ export const GroomingAndHygieneCard = ({ product }: GroomingCardProps) => {
       </CardHeader>
 
       <CardContent>
-        <ProductSpecs>
-          <p>{product.isCrueltyFree && <strong>Is Cruelty Free</strong>}</p>
-          <p>{product.isHypoAllergenic && <strong>Is Hypoallergenic</strong>}</p>
-          <p>{product.isNatural && <strong>Made from natural ingredients</strong>}</p>
-        </ProductSpecs>
+        <p>
+          <strong>Category:</strong> {product.category}
+        </p>
 
         <ProductDimensions>
           <p>
@@ -38,20 +39,30 @@ export const GroomingAndHygieneCard = ({ product }: GroomingCardProps) => {
           </p>
         </ProductDimensions>
 
-        <WarningSection>
-          <SectionTitle>Safety Warnings:</SectionTitle>
-          <p>{product.safetyWarnings}</p>
-        </WarningSection>
-
-        <UsageSection>
-          <SectionTitle>Usage Instructions:</SectionTitle>
-          <p>{product.usageInstructions}</p>
-        </UsageSection>
+        {isExpanded && (
+          <>
+            <ProductSpecs>
+              <p>{product.isCrueltyFree && <strong>Is Cruelty Free</strong>}</p>
+              <p>{product.isHypoAllergenic && <strong>Is Hypoallergenic</strong>}</p>
+              <p>{product.isNatural && <strong>Made from natural ingredients</strong>}</p>
+            </ProductSpecs>
+            <WarningSection>
+              <SectionTitle>Safety Warnings:</SectionTitle>
+              <p>{product.safetyWarnings}</p>
+            </WarningSection>
+            <UsageSection>
+              <SectionTitle>Usage Instructions:</SectionTitle>
+              <p>{product.usageInstructions}</p>
+            </UsageSection>
+          </>
+        )}
       </CardContent>
 
       <CardActions>
         <CardButton variant="contained">Add to cart</CardButton>
-        <CardButton variant="outlined">View Details</CardButton>
+        <CardButton onClick={() => setIsExpanded(!isExpanded)} variant="outlined">
+          View Details
+        </CardButton>
       </CardActions>
     </Card>
   );

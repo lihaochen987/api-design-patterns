@@ -11,12 +11,14 @@ import {
   SectionTitle,
 } from '../../ProductList.styles.ts';
 import styled from 'styled-components';
+import React from 'react';
 
 interface PetFoodCardProps {
   product: components['schemas']['GetPetFoodResponse'];
 }
 
 export const PetFoodCard = ({ product }: PetFoodCardProps) => {
+  const [isExpanded, setIsExpanded] = React.useState(false);
   return (
     <Card>
       <CardHeader>
@@ -25,17 +27,9 @@ export const PetFoodCard = ({ product }: PetFoodCardProps) => {
       </CardHeader>
 
       <CardContent>
-        <ProductSpecs>
-          <p>
-            <strong>Age Group:</strong> {product.ageGroup}
-          </p>
-          <p>
-            <strong>Breed Size:</strong> {product.breedSize}
-          </p>
-          <p>
-            <strong>Weight:</strong> {product.weightKg} kg
-          </p>
-        </ProductSpecs>
+        <p>
+          <strong>Category:</strong> {product.category}
+        </p>
 
         <ProductDimensions>
           <p>
@@ -44,32 +38,50 @@ export const PetFoodCard = ({ product }: PetFoodCardProps) => {
           </p>
         </ProductDimensions>
 
-        <NutritionSection>
-          <SectionTitle>Nutritional Information</SectionTitle>
-          <NutritionTable>
-            {Object.entries(product.nutritionalInfo).map(([key, value]) => (
-              <NutritionRow key={key}>
-                <NutritionKey>{key}:</NutritionKey>
-                <NutritionValue>{value}</NutritionValue>
-              </NutritionRow>
-            ))}
-          </NutritionTable>
-        </NutritionSection>
+        {isExpanded && (
+          <>
+            <ProductSpecs>
+              <p>
+                <strong>Age Group:</strong> {product.ageGroup}
+              </p>
+              <p>
+                <strong>Breed Size:</strong> {product.breedSize}
+              </p>
+              <p>
+                <strong>Weight:</strong> {product.weightKg} kg
+              </p>
+            </ProductSpecs>
 
-        <IngredientsSection>
-          <SectionTitle>Ingredients</SectionTitle>
-          <p>{product.ingredients}</p>
-        </IngredientsSection>
+            <NutritionSection>
+              <SectionTitle>Nutritional Information</SectionTitle>
+              <NutritionTable>
+                {Object.entries(product.nutritionalInfo).map(([key, value]) => (
+                  <NutritionRow key={key}>
+                    <NutritionKey>{key}:</NutritionKey>
+                    <NutritionValue>{value}</NutritionValue>
+                  </NutritionRow>
+                ))}
+              </NutritionTable>
+            </NutritionSection>
 
-        <StorageSection>
-          <SectionTitle>Storage Instructions</SectionTitle>
-          <p>{product.storageInstructions}</p>
-        </StorageSection>
+            <IngredientsSection>
+              <SectionTitle>Ingredients</SectionTitle>
+              <p>{product.ingredients}</p>
+            </IngredientsSection>
+
+            <StorageSection>
+              <SectionTitle>Storage Instructions</SectionTitle>
+              <p>{product.storageInstructions}</p>
+            </StorageSection>
+          </>
+        )}
       </CardContent>
 
       <CardActions>
         <CardButton variant="contained">Add to cart</CardButton>
-        <CardButton variant="outlined">View Details</CardButton>
+        <CardButton variant="outlined" onClick={() => setIsExpanded(!isExpanded)}>
+          View Details
+        </CardButton>
       </CardActions>
     </Card>
   );
