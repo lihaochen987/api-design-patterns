@@ -24,34 +24,89 @@ import {
 type CreateProductRequest = components['schemas']['CreateProductRequest'];
 type CreateProductResponse = components['schemas']['CreateProductResponse'];
 
-const productSchema = z.object({
-  name: z.string().min(1, 'Product name is required'),
-  pricing: z.object({
-    basePrice: z.number().positive('Base price must be positive'),
-    discountPercentage: z.number().positive('Discount Percentage must be positive'),
-    taxRate: z.number().positive('Tax rate must be positive'),
-  }),
-  category: z.enum(
-    [
-      'petfood',
-      'toys',
-      'collarsAndLeashes',
-      'groomingAndHygiene',
-      'beds',
-      'feeders',
-      'travelAccessories',
-      'clothing',
-    ],
-    {
-      errorMap: () => ({ message: 'Please select a valid category' }),
-    }
-  ),
-  dimensions: z.object({
-    width: z.number().positive('Width must be positive'),
-    height: z.number().positive('Height must be positive'),
-    length: z.number().positive('Length must be positive'),
-  }),
-});
+const productSchema = z.object(
+  {
+    name: z
+      .string({
+        errorMap: () => ({ message: 'Product name must be text' }),
+      })
+      .min(1, 'Product name is required'),
+
+    pricing: z.object(
+      {
+        basePrice: z
+          .number({
+            errorMap: () => ({ message: 'Base price must be a number' }),
+          })
+          .positive('Base price must be positive'),
+
+        discountPercentage: z
+          .number({
+            errorMap: () => ({ message: 'Discount percentage must be a number' }),
+          })
+          .positive('Discount percentage must be positive')
+          .max(100, 'Discount percentage cannot exceed 100%'),
+
+        taxRate: z
+          .number({
+            errorMap: () => ({ message: 'Tax rate must be a number' }),
+          })
+          .positive('Tax rate must be positive')
+          .max(100, 'Tax rate cannot exceed 100%'),
+      },
+      {
+        errorMap: () => ({ message: 'All pricing information is required' }),
+      }
+    ),
+
+    category: z.enum(
+      [
+        'petfood',
+        'toys',
+        'collarsAndLeashes',
+        'groomingAndHygiene',
+        'beds',
+        'feeders',
+        'travelAccessories',
+        'clothing',
+      ],
+      {
+        errorMap: () => ({ message: 'Please select a valid category' }),
+      }
+    ),
+
+    dimensions: z.object(
+      {
+        width: z
+          .number({
+            errorMap: () => ({ message: 'Width must be a number' }),
+          })
+          .positive('Width must be positive')
+          .max(50, 'Width cannot exceed 50 units'),
+
+        height: z
+          .number({
+            errorMap: () => ({ message: 'Height must be a number' }),
+          })
+          .positive('Height must be positive')
+          .max(50, 'Height cannot exceed 50 units'),
+
+        length: z
+          .number({
+            errorMap: () => ({ message: 'Length must be a number' }),
+          })
+          .positive('Length must be positive')
+          .max(100, 'Length cannot exceed 100 units'),
+      },
+      {
+        errorMap: () => ({ message: 'All dimension information is required' }),
+      }
+    ),
+  },
+  {
+    errorMap: () => ({ message: 'Product information is incomplete or invalid' }),
+  }
+);
 
 type ProductFormData = z.infer<typeof productSchema>;
 
@@ -60,8 +115,6 @@ const useCreateProduct = () => {
 
   return useMutation({
     mutationFn: async (newProduct: CreateProductRequest): Promise<CreateProductResponse> => {
-      console.log('Creating product:', newProduct);
-
       const { data, error } = await fetchClient.POST('/product', {
         body: newProduct,
       });
