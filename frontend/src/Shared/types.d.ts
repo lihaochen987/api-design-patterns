@@ -1096,7 +1096,8 @@ export interface components {
     CreateInventoryRequest: {
       supplierId: string;
       productId: string;
-      quantity: string;
+      /** Format: double */
+      quantity: number;
       restockDate?: string;
     };
     CreateInventoryResponse: {
@@ -1126,7 +1127,8 @@ export interface components {
         [key: string]: unknown;
       };
       storageInstructions?: string;
-      weightKg?: string;
+      /** Format: double */
+      weightKg?: number;
       isNatural?: boolean;
       isHypoAllergenic?: boolean;
       usageInstructions?: string;
@@ -1141,7 +1143,8 @@ export interface components {
       dimensions: components['schemas']['DimensionsResponse'];
     };
     CreateReviewRequest: {
-      rating: string;
+      /** Format: double */
+      rating: number;
       text: string;
     };
     CreateReviewResponse: {
@@ -1323,7 +1326,8 @@ export interface components {
         [key: string]: unknown;
       };
       storageInstructions?: string;
-      weightKg?: string;
+      /** Format: double */
+      weightKg?: number;
       isNatural?: boolean;
       isHypoAllergenic?: boolean;
       usageInstructions?: string;
@@ -1338,7 +1342,8 @@ export interface components {
     };
     ReplaceReviewRequest: {
       productId: string;
-      rating: string;
+      /** Format: double */
+      rating: number;
       text: string;
     };
     ReplaceReviewResponse: {
@@ -1404,7 +1409,8 @@ export interface components {
         [key: string]: unknown;
       };
       storageInstructions?: string;
-      weightKg?: string;
+      /** Format: double */
+      weightKg?: number;
       isNatural?: boolean;
       isHypoAllergenic?: boolean;
       usageInstructions?: string;
@@ -1421,7 +1427,8 @@ export interface components {
     };
     UpdateReviewRequest: {
       productId?: string;
-      rating?: string;
+      /** Format: double */
+      rating?: number;
       text?: string;
       fieldMask?: string[];
     };
