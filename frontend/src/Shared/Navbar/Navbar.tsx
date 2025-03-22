@@ -23,7 +23,7 @@ const Navbar = ({ cartItemsCount = 0 }: NavbarProps) => {
 
         <NavigationControls>
           <NavItems>
-            <NavItem as={Link} to="/products">
+            <NavItem as={Link} to="/">
               Products
             </NavItem>
             <NavItem as={Link} to="/products/add">

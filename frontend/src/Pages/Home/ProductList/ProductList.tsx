@@ -33,7 +33,7 @@ const useProducts = (page: number, pageSize: number) => {
 };
 
 export const ProductList = () => {
-  const [page, setPage] = useState(1); // Changed to start from 1 for better UX
+  const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
   const { data, isLoading } = useProducts((page - 1) * ITEMS_PER_PAGE, ITEMS_PER_PAGE);
 
