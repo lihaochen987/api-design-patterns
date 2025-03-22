@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.DomainModels;
-using backend.Product.InfrastructureLayer;
+using backend.Product.DomainModels.Enums;
 using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Shared.CommandHandler;
 
@@ -14,14 +14,30 @@ public class CreateProductHandler(IProductRepository repository) : ICommandHandl
     {
         long id = await repository.CreateProductAsync(command.Product);
         var updatedProduct = command.Product with { Id = id };
-        switch (updatedProduct)
+
+        await (updatedProduct.Category switch
         {
-            case PetFood petFood:
-                await repository.CreatePetFoodProductAsync(petFood);
-                break;
-            case GroomingAndHygiene groomingAndHygiene:
-                await repository.CreateGroomingAndHygieneProductAsync(groomingAndHygiene);
-                break;
+            Category.PetFood =>
+                ProcessSpecializedProduct<PetFood>(updatedProduct, repository.CreatePetFoodProductAsync),
+            Category.GroomingAndHygiene => ProcessSpecializedProduct<GroomingAndHygiene>(updatedProduct,
+                repository.CreateGroomingAndHygieneProductAsync),
+            Category.Toys or Category.CollarsAndLeashes or Category.Beds or
+                Category.Feeders or Category.TravelAccessories or Category.Clothing => Task.CompletedTask,
+            _ => throw new ArgumentOutOfRangeException(updatedProduct.Category.ToString())
+        });
+    }
+
+    private static async Task ProcessSpecializedProduct<T>(DomainModels.Product product, Func<T, Task> createAction)
+        where T : DomainModels.Product
+    {
+        if (product is T specializedProduct)
+        {
+            await createAction(specializedProduct);
+        }
+        else
+        {
+            throw new InvalidOperationException(
+                $"Product with category {product.Category} must be of type {typeof(T).Name}");
         }
     }
 }
