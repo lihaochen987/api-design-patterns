@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { components } from '../../../Shared/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchClient } from '../../../Shared/fetch-client.ts';
 import {
@@ -20,95 +18,12 @@ import {
   SecondaryButton,
   Select,
 } from './ProductForm.styles.ts';
-
-type CreateProductRequest = components['schemas']['CreateProductRequest'];
-type CreateProductResponse = components['schemas']['CreateProductResponse'];
-
-const productSchema = z.object(
-  {
-    name: z
-      .string({
-        errorMap: () => ({ message: 'Product name must be text' }),
-      })
-      .min(1, 'Product name is required'),
-
-    pricing: z.object(
-      {
-        basePrice: z
-          .number({
-            errorMap: () => ({ message: 'Base price must be a number' }),
-          })
-          .positive('Base price must be positive'),
-
-        discountPercentage: z
-          .number({
-            errorMap: () => ({ message: 'Discount percentage must be a number' }),
-          })
-          .positive('Discount percentage must be positive')
-          .max(100, 'Discount percentage cannot exceed 100%'),
-
-        taxRate: z
-          .number({
-            errorMap: () => ({ message: 'Tax rate must be a number' }),
-          })
-          .positive('Tax rate must be positive')
-          .max(100, 'Tax rate cannot exceed 100%'),
-      },
-      {
-        errorMap: () => ({ message: 'All pricing information is required' }),
-      }
-    ),
-
-    category: z.enum(
-      [
-        'petfood',
-        'toys',
-        'collarsAndLeashes',
-        'groomingAndHygiene',
-        'beds',
-        'feeders',
-        'travelAccessories',
-        'clothing',
-      ],
-      {
-        errorMap: () => ({ message: 'Please select a valid category' }),
-      }
-    ),
-
-    dimensions: z.object(
-      {
-        width: z
-          .number({
-            errorMap: () => ({ message: 'Width must be a number' }),
-          })
-          .positive('Width must be positive')
-          .max(50, 'Width cannot exceed 50 units'),
-
-        height: z
-          .number({
-            errorMap: () => ({ message: 'Height must be a number' }),
-          })
-          .positive('Height must be positive')
-          .max(50, 'Height cannot exceed 50 units'),
-
-        length: z
-          .number({
-            errorMap: () => ({ message: 'Length must be a number' }),
-          })
-          .positive('Length must be positive')
-          .max(100, 'Length cannot exceed 100 units'),
-      },
-      {
-        errorMap: () => ({ message: 'All dimension information is required' }),
-      }
-    ),
-  },
-  {
-    errorMap: () => ({ message: 'Product information is incomplete or invalid' }),
-  }
-);
-
-type ProductFormData = z.infer<typeof productSchema>;
+import {
+  CreateProductRequest,
+  CreateProductResponse,
+  ProductFormData,
+  productSchema,
+} from './ProductForm.types.ts';
 
 const useCreateProduct = () => {
   const queryClient = useQueryClient();
@@ -172,6 +87,22 @@ const AddProductPage = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         {createProduct.isPending && <LoadingMessage>Creating product...</LoadingMessage>}
         {createProduct.isError && <ErrorBanner>Error: {createProduct.error.message}</ErrorBanner>}
+
+        <FormGroup>
+          <Label htmlFor="category">Category</Label>
+          <Select id="category" {...register('category')}>
+            <option value="">Select a category</option>
+            <option value="petFood">Pet Food</option>
+            <option value="toys">Toys</option>
+            <option value="collarsAndLeashes">Collars and Leashes</option>
+            <option value="groomingAndHygiene">Grooming and Hygiene</option>
+            <option value="beds">Beds</option>
+            <option value="feeders">Feeders</option>
+            <option value="travelAccessories">Travel Accessories</option>
+            <option value="clothing">Clothing</option>
+          </Select>
+          {errors.category && <ErrorMessage>{errors.category.message}</ErrorMessage>}
+        </FormGroup>
 
         <FormGroup>
           <Label htmlFor="name">Product Name</Label>
@@ -253,22 +184,6 @@ const AddProductPage = () => {
           {errors.dimensions?.length && (
             <ErrorMessage>{errors.dimensions.length.message}</ErrorMessage>
           )}
-        </FormGroup>
-
-        <FormGroup>
-          <Label htmlFor="category">Category</Label>
-          <Select id="category" {...register('category')}>
-            <option value="">Select a category</option>
-            <option value="petFood">Pet Food</option>
-            <option value="toys">Toys</option>
-            <option value="collarsAndLeashes">Collars and Leashes</option>
-            <option value="groomingAndHygiene">Grooming and Hygiene</option>
-            <option value="beds">Beds</option>
-            <option value="feeders">Feeders</option>
-            <option value="travelAccessories">Travel Accessories</option>
-            <option value="clothing">Clothing</option>
-          </Select>
-          {errors.category && <ErrorMessage>{errors.category.message}</ErrorMessage>}
         </FormGroup>
 
         <ButtonGroup>
