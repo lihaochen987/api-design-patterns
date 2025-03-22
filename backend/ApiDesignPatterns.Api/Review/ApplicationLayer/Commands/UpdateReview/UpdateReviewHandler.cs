@@ -37,8 +37,8 @@ public class UpdateReviewHandler(IReviewRepository repository) : ICommandHandler
             : review.ProductId;
 
         decimal rating = request.FieldMask.Contains("rating", StringComparer.OrdinalIgnoreCase)
-                         && !string.IsNullOrEmpty(request.Rating)
-            ? decimal.Parse(request.Rating)
+                         && request.Rating != null
+            ? request.Rating ?? review.Rating
             : review.Rating;
 
         string text = request.FieldMask.Contains("text", StringComparer.OrdinalIgnoreCase)

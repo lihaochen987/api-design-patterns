@@ -6,7 +6,7 @@ namespace backend.Review.ReviewControllers;
 public record UpdateReviewRequest
 {
     public string? ProductId { get; init; }
-    public string? Rating { get; init; }
+    public decimal? Rating { get; init; }
     public string? Text { get; init; }
     public List<string> FieldMask { get; init; } = ["*"];
 }

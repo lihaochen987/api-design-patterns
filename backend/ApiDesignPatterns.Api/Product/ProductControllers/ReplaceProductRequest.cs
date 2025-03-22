@@ -14,7 +14,7 @@ public record ReplaceProductRequest
     public string? Ingredients { get; init; }
     public Dictionary<string, object>? NutritionalInfo { get; init; }
     public string? StorageInstructions { get; init; }
-    public string? WeightKg { get; init; }
+    public decimal? WeightKg { get; init; }
     public bool? IsNatural { get; init; }
     public bool? IsHypoAllergenic { get; init; }
     public string? UsageInstructions { get; init; }

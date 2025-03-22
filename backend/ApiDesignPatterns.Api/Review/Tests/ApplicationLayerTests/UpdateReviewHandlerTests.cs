@@ -26,7 +26,7 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
         UpdateReviewRequest request = new()
         {
             ProductId = "55",
-            Rating = "4.5",
+            Rating = 4.5m,
             Text = "Updated review text",
             FieldMask = ["productid", "rating", "text"]
         };
@@ -55,7 +55,7 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
         Repository.IsDirty = false;
         UpdateReviewRequest request = new()
         {
-            ProductId = "55", Rating = "4.5", Text = "Updated review text", FieldMask = ["rating"]
+            ProductId = "55", Rating = 4.5m, Text = "Updated review text", FieldMask = ["rating"]
         };
         ICommandHandler<UpdateReviewCommand> sut = UpdateReviewService();
 
@@ -82,7 +82,7 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
         Repository.IsDirty = false;
         UpdateReviewRequest request = new()
         {
-            ProductId = "", Rating = "", Text = "", FieldMask = ["productid", "rating", "text"]
+            ProductId = "", Rating = null, Text = "", FieldMask = ["productid", "rating", "text"]
         };
         ICommandHandler<UpdateReviewCommand> sut = UpdateReviewService();
 
@@ -108,7 +108,7 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
         Repository.IsDirty = false;
         UpdateReviewRequest request = new()
         {
-            Rating = "4.5", Text = "Updated review text", FieldMask = ["RATING", "TEXT"]
+            Rating = 4.5m, Text = "Updated review text", FieldMask = ["RATING", "TEXT"]
         };
         ICommandHandler<UpdateReviewCommand> sut = UpdateReviewService();
 

@@ -19,7 +19,7 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
     public async Task UpdateReview_WithValidRequest_ShouldReturnUpdatedReview()
     {
         var review = new ReviewTestDataBuilder().Build();
-        UpdateReviewRequest request = new() { Rating = "5.0", Text = "Updated review text" };
+        UpdateReviewRequest request = new() { Rating = 5, Text = "Updated review text" };
         Mock
             .Get(MockGetReviewHandler)
             .Setup(svc => svc.Handle(It.Is<GetReviewQuery>(q => q.Id == review.Id)))
@@ -42,7 +42,7 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
     [Fact]
     public async Task UpdateReview_NonExistentReview_ShouldReturnNotFound()
     {
-        UpdateReviewRequest request = new() { Rating = "3", Text = "This review doesn't exist" };
+        UpdateReviewRequest request = new() { Rating = 3, Text = "This review doesn't exist" };
         long nonExistentId = Fixture.Create<long>();
         Mock
             .Get(MockGetReviewHandler)
@@ -65,7 +65,7 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
     public async Task UpdateReview_WhenUpdateSucceeds_ShouldReturnMappedResponse()
     {
         var review = new ReviewTestDataBuilder().Build();
-        UpdateReviewRequest request = new() { Rating = "4", Text = "Updated review content" };
+        UpdateReviewRequest request = new() { Rating = 4, Text = "Updated review content" };
 
         Mock
             .Get(MockGetReviewHandler)
@@ -85,7 +85,7 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
     public async Task UpdateReview_WithInvalidRating_ShouldStillCallHandler()
     {
         var review = new ReviewTestDataBuilder().Build();
-        UpdateReviewRequest request = new() { Rating = "6", Text = "Updated text" };
+        UpdateReviewRequest request = new() { Rating = 6, Text = "Updated text" };
         Mock
             .Get(MockGetReviewHandler)
             .Setup(svc => svc.Handle(It.Is<GetReviewQuery>(q => q.Id == review.Id)))

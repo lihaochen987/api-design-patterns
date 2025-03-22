@@ -8,6 +8,6 @@ namespace backend.Review.ReviewControllers;
 public record ReplaceReviewRequest
 {
     [Required] public required string ProductId { get; init; }
-    [Required] public required string Rating { get; init; }
+    [Required] public required decimal Rating { get; init; }
     [Required] public required string Text { get; init; }
 }

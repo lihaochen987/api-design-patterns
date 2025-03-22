@@ -7,6 +7,6 @@ namespace backend.Review.ReviewControllers;
 
 public record CreateReviewRequest
 {
-    [Required] public required string Rating { get; init; }
+    [Required] public required decimal Rating { get; init; }
     [Required] public required string Text { get; init; }
 }

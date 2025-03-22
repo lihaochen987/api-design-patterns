@@ -277,11 +277,10 @@ public class UpdateProductHandler(
                 ? request.StorageInstructions
                 : petFood.StorageInstructions;
 
-        decimal weight =
-            request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase) &&
-            !string.IsNullOrEmpty(request.WeightKg)
-                ? decimal.Parse(request.WeightKg)
-                : petFood.WeightKg;
+        decimal weight = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase)
+                        && request.WeightKg != null
+            ? request.WeightKg ?? petFood.WeightKg
+            : petFood.WeightKg;
 
         return (ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions, weight);
     }
