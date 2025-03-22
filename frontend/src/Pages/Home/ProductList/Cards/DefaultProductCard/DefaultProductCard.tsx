@@ -36,7 +36,6 @@ export const DefaultProductCard = ({ product }: DefaultProductCardProps) => {
 
       <CardActions>
         <CardButton variant="contained">Add to cart</CardButton>
-        <CardButton variant="outlined">View Details</CardButton>
       </CardActions>
     </Card>
   );
