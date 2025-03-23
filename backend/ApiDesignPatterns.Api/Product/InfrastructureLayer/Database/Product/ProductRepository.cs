@@ -87,7 +87,6 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                 product.AgeGroup,
                 product.BreedSize,
                 product.Ingredients,
-                product.NutritionalInfo,
                 product.StorageInstructions,
                 product.WeightKg
             }

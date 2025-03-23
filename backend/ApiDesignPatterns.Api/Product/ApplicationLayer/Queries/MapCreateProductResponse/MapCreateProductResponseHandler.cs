@@ -20,6 +20,6 @@ public class MapCreateProductResponseHandler(
             Category.GroomingAndHygiene => mapper.Map<CreateGroomingAndHygieneResponse>(query.Product),
             _ => mapper.Map<CreateProductResponse>(query.Product)
         };
-        return Task.FromResult(response)!;
+        return Task.FromResult(response);
     }
 }

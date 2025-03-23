@@ -91,7 +91,6 @@ public static class ProductQueries
                                                product_id,
                                                product_pet_foods_age_group_id,
                                                product_pet_foods_breed_size_id,
-                                               product_pet_foods_nutritional_info,
                                                product_pet_foods_ingredients,
                                                product_pet_foods_weight_kg,
                                                product_pet_foods_storage_instructions
@@ -101,9 +100,8 @@ public static class ProductQueries
                                                    @AgeGroup,
                                                    @BreedSize,
                                                    @Ingredients,
-                                                   @NutritionalInfo,
-                                                   @StorageInstructions,
-                                                   @WeightKg
+                                                   @WeightKg,
+                                                   @StorageInstructions
                                                    );
                                                """;
 
