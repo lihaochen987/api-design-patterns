@@ -40,7 +40,7 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = (string) okResult.Value;
         jsonResult.ShouldContain("100");
         jsonResult.ShouldContain("42");
     }
@@ -85,7 +85,7 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = (string)okResult.Value;
         jsonResult.ShouldContain("100");
         jsonResult.ShouldNotContain("42");
         jsonResult.ShouldNotContain("24");

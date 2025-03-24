@@ -27,14 +27,14 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
     public Task<PetFood?> GetPetFoodProductAsync(long id)
     {
         IncrementCallCount(nameof(GetPetFoodProductAsync));
-        PetFood? product = this.FirstOrDefault(p => p.Id == id) as PetFood;
+        PetFood? product = (PetFood?)this.FirstOrDefault(p => p.Id == id);
         return Task.FromResult(product);
     }
 
     public Task<GroomingAndHygiene?> GetGroomingAndHygieneProductAsync(long id)
     {
         IncrementCallCount(nameof(GetGroomingAndHygieneProductAsync));
-        GroomingAndHygiene? product = this.FirstOrDefault(p => p.Id == id) as GroomingAndHygiene;
+        GroomingAndHygiene? product = (GroomingAndHygiene?)this.FirstOrDefault(p => p.Id == id);
         return Task.FromResult(product);
     }
 

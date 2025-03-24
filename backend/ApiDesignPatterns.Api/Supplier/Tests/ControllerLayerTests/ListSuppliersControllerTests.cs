@@ -32,9 +32,9 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         result.Result.ShouldNotBeNull();
         result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = result.Result as OkObjectResult;
+        var response = (OkObjectResult)result.Result;
         response.ShouldNotBeNull();
-        var listSuppliersResponse = response.Value as ListSuppliersResponse;
+        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
         listSuppliersResponse!.Results.Count().ShouldBe(4);
         listSuppliersResponse.NextPageToken.ShouldBeNull();
     }
@@ -58,9 +58,9 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         result.Result.ShouldNotBeNull();
         result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = result.Result as OkObjectResult;
+        var response = (OkObjectResult)result.Result;
         response.ShouldNotBeNull();
-        var listSuppliersResponse = response.Value as ListSuppliersResponse;
+        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
         listSuppliersResponse!.Results.Count().ShouldBe(2);
         listSuppliersResponse.NextPageToken.ShouldBeNull();
     }
@@ -84,9 +84,9 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         result.Result.ShouldNotBeNull();
         result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = result.Result as OkObjectResult;
+        var response = (OkObjectResult)result.Result;
         response.ShouldNotBeNull();
-        var listSuppliersResponse = response.Value as ListSuppliersResponse;
+        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
         listSuppliersResponse!.Results.Count().ShouldBe(2);
         listSuppliersResponse.NextPageToken.ShouldBeEquivalentTo("2");
     }
@@ -110,9 +110,9 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         result.Result.ShouldNotBeNull();
         result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = result.Result as OkObjectResult;
+        var response = (OkObjectResult)result.Result;
         response.ShouldNotBeNull();
-        var listSuppliersResponse = response.Value as ListSuppliersResponse;
+        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
         listSuppliersResponse!.Results.Count().ShouldBe(DefaultMaxPageSize);
         listSuppliersResponse.NextPageToken.ShouldBeEquivalentTo(DefaultMaxPageSize.ToString());
     }
@@ -134,9 +134,9 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         result.Result.ShouldNotBeNull();
         result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = result.Result as OkObjectResult;
+        var response = (OkObjectResult)result.Result;
         response.ShouldNotBeNull();
-        var listSuppliersResponse = response.Value as ListSuppliersResponse;
+        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
         listSuppliersResponse!.Results.ShouldBeEmpty();
         listSuppliersResponse.NextPageToken.ShouldBeNull();
     }
@@ -162,8 +162,8 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
         var result = await sut.ListSuppliers(request);
 
         result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = result.Result as OkObjectResult;
-        var listSuppliersResponse = response!.Value as ListSuppliersResponse;
+        var response = (OkObjectResult)result.Result;
+        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
         listSuppliersResponse!.Results.Count().ShouldBe(1);
         listSuppliersResponse.NextPageToken.ShouldBe("2");
     }

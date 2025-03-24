@@ -40,7 +40,7 @@ public class GetSupplierControllerTests : GetSupplierControllerTestBase
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = ((string)okResult.Value);
         jsonResult.ShouldContain("John Doe");
         jsonResult.ShouldContain("john.doe@example.com");
     }
@@ -84,7 +84,7 @@ public class GetSupplierControllerTests : GetSupplierControllerTestBase
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = ((string)okResult.Value);
         jsonResult.ShouldContain("John Doe");
         jsonResult.ShouldNotContain("john.doe@example.com");
     }

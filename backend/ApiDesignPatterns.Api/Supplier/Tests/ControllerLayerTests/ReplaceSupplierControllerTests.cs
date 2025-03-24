@@ -72,7 +72,7 @@ public class ReplaceSupplierControllerTests : ReplaceSupplierControllerTestBase
 
         result.ShouldNotBeNull();
         var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = okResult.Value as ReplaceSupplierResponse;
+        var response = (ReplaceSupplierResponse)okResult.Value!;
         response.ShouldNotBeNull();
         response.FirstName.ShouldBe("John");
         response.LastName.ShouldBe("Doe");

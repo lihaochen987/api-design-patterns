@@ -29,8 +29,8 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
         ActionResult<UpdateProductResponse> actionResult = await sut.UpdateProduct(product.Id, request);
 
         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
-        UpdateProductResponse? response = contentResult!.Value as UpdateProductResponse;
+        OkObjectResult? contentResult = (OkObjectResult) actionResult.Result;
+        UpdateProductResponse response = (UpdateProductResponse) contentResult.Value!;
         response.ShouldBeEquivalentTo(Mapper.Map<UpdateProductResponse>(product));
         Mock
             .Get(MockUpdateProductHandler)

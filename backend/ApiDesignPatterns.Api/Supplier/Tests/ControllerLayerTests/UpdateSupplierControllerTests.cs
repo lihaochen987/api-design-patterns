@@ -29,8 +29,8 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
         ActionResult<UpdateSupplierResponse> actionResult = await sut.UpdateSupplier(supplier.Id, request);
 
         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
-        UpdateSupplierResponse? response = contentResult!.Value as UpdateSupplierResponse;
+        OkObjectResult? contentResult = (OkObjectResult)actionResult.Result;
+        UpdateSupplierResponse response = (UpdateSupplierResponse)contentResult.Value!;
         response.ShouldBeEquivalentTo(Mapper.Map<UpdateSupplierResponse>(supplier));
         Mock
             .Get(MockUpdateSupplierHandler)
@@ -104,7 +104,7 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
                 svc => svc.Handle(It.Is<GetSupplierQuery>(q => q.Id == supplier.Id)),
                 Times.Exactly(2));
         var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = okResult.Value as UpdateSupplierResponse;
+        var response = (UpdateSupplierResponse)okResult.Value!;
         response.ShouldNotBeNull();
         response.FirstName.ShouldBe("Updated");
     }

@@ -32,7 +32,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
         ActionResult<GetProductPricingResponse> actionResult = await sut.GetProductPricing(product.Id, request);
 
         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
+        OkObjectResult? contentResult = (OkObjectResult) actionResult.Result;
         GetProductPricingResponse response =
             JsonConvert.DeserializeObject<GetProductPricingResponse>(contentResult!.Value!.ToString()!)!;
         response.pricing.ShouldBeEquivalentTo(Mapper.Map<ProductPricingResponse>(product.Pricing));
@@ -67,7 +67,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = (string)okResult.Value;
         jsonResult.ShouldContain("BasePrice");
     }
 
@@ -89,7 +89,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = (string)okResult.Value;
         jsonResult.ShouldContain("BasePrice");
         jsonResult.ShouldContain("DiscountPercentage");
         jsonResult.ShouldContain("TaxRate");
@@ -113,7 +113,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = (string)okResult.Value;
         jsonResult.ShouldContain("BasePrice");
         jsonResult.ShouldContain("TaxRate");
         jsonResult.ShouldNotContain("DiscountPercentage");

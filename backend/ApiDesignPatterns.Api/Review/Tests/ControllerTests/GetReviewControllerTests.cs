@@ -40,7 +40,7 @@ public class GetReviewControllerTests : GetReviewControllerTestBase
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = ((string)okResult.Value);
         jsonResult.ShouldContain("Great product!");
     }
 
@@ -83,7 +83,7 @@ public class GetReviewControllerTests : GetReviewControllerTestBase
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = ((string)okResult.Value);
         jsonResult.ShouldContain("Masked Review");
         jsonResult.ShouldNotContain("Rating");
     }

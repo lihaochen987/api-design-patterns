@@ -41,7 +41,7 @@ public abstract class BaseControllerActivator(IConfiguration configuration) : IC
             items["Disposables"] = list;
         }
 
-        (list as List<IDisposable>)?.Add(disposable);
+        ((List<IDisposable>?)list)?.Add(disposable);
     }
 
     protected NpgsqlConnection CreateDbConnection()

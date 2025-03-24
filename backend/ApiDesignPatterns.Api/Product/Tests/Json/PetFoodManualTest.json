@@ -14,10 +14,6 @@
     "ageGroup": "Adult",
     "breedSize": "Large",
     "ingredients": "Chicken, Rice",
-    "nutritionalInfo": {
-        "proteinContent": "High",
-        "fatContent": "Low"
-    },
     "storageInstructions": "Store in a cool, dry place",
-    "weightKg": "2.5"
+    "weightKg": 2.5
 }

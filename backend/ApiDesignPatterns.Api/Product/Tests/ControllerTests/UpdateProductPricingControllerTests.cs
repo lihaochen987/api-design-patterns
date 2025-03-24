@@ -44,9 +44,9 @@ public class UpdateProductPricingControllerTests : UpdateProductPricingControlle
 
         actionResult.Result.ShouldNotBeNull();
         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
+        OkObjectResult? contentResult = (OkObjectResult) actionResult.Result;
         contentResult.ShouldNotBeNull();
-        UpdateProductPricingResponse? response = contentResult.Value as UpdateProductPricingResponse;
+        UpdateProductPricingResponse response = (UpdateProductPricingResponse) contentResult.Value!;
         response.ShouldBeEquivalentTo(Mapper.Map<UpdateProductPricingResponse>(product));
     }
 }

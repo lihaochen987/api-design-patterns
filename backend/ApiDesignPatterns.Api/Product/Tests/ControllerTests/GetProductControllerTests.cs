@@ -37,7 +37,7 @@ public class GetProductControllerTests : GetProductControllerTestBase
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = (string)okResult.Value;
         jsonResult.ShouldContain("Dog Food");
     }
 
@@ -82,7 +82,7 @@ public class GetProductControllerTests : GetProductControllerTestBase
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = (string)okResult.Value;
         jsonResult.ShouldContain("Shampoo");
     }
 
@@ -107,7 +107,7 @@ public class GetProductControllerTests : GetProductControllerTestBase
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = (string)okResult.Value;
         jsonResult.ShouldContain("Other Product");
     }
 
@@ -134,7 +134,7 @@ public class GetProductControllerTests : GetProductControllerTestBase
         OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
         okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
         okResult.Value.ShouldNotBeNull();
-        string jsonResult = (okResult.Value as string)!;
+        string jsonResult = (string)okResult.Value;
         jsonResult.ShouldContain("Masked Product");
         jsonResult.ShouldNotContain("Price");
     }

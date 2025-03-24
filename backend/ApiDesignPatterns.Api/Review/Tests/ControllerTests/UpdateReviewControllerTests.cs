@@ -29,8 +29,8 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
         ActionResult<UpdateReviewResponse> actionResult = await sut.UpdateReview(review.Id, request);
 
         actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = actionResult.Result as OkObjectResult;
-        UpdateReviewResponse? response = contentResult!.Value as UpdateReviewResponse;
+        OkObjectResult? contentResult = (OkObjectResult) actionResult.Result;
+        UpdateReviewResponse response = (UpdateReviewResponse) contentResult.Value!;
         response.ShouldBeEquivalentTo(Mapper.Map<UpdateReviewResponse>(review));
         Mock
             .Get(MockUpdateReviewHandler)
