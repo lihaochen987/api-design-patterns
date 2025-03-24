@@ -3,9 +3,9 @@
 
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
+using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ProductControllers;
-using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
@@ -18,8 +18,8 @@ public abstract class CreateProductControllerTestBase
     protected readonly ICommandHandler<CreateProductCommand> CreateProduct =
         Mock.Of<ICommandHandler<CreateProductCommand>>();
 
-    protected readonly IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> CreateProductResponse =
-        Mock.Of<IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse>>();
+    protected readonly IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> CreateProductResponse;
+    protected readonly IQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> CreateProductRequest;
 
     protected readonly IMapper Mapper;
 
@@ -27,6 +27,9 @@ public abstract class CreateProductControllerTestBase
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
+        CreateProductResponse = new MapCreateProductResponseHandler(Mapper);
+        CreateProductRequest = new MapCreateProductRequestHandler(Mapper);
+
     }
 
     protected CreateProductController GetCreateProductController()
@@ -34,6 +37,6 @@ public abstract class CreateProductControllerTestBase
         return new CreateProductController(
             CreateProduct,
             CreateProductResponse,
-            Mapper);
+            CreateProductRequest);
     }
 }

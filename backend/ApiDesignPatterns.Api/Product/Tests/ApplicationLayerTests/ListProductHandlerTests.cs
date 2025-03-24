@@ -5,7 +5,7 @@ using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Shared.QueryHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -27,9 +27,9 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
                     Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
                 });
 
-        result.Products.ShouldNotBeEmpty();
-        result.Products.Count.ShouldBe(2);
-        result.NextPageToken.ShouldBe(null);
+        result.Products.Should().NotBeEmpty();
+        result.Products.Count.Should().Be(2);
+        result.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
             Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
         });
 
-        result.Products.ShouldBeEmpty();
-        result.NextPageToken.ShouldBeNull();
+        result.Products.Should().BeEmpty();
+        result.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -56,10 +56,12 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
         };
         IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
 
-        await Should.ThrowAsync<ArgumentException>(() => sut.Handle(new ListProductsQuery
+        Func<Task> act = async () => await sut.Handle(new ListProductsQuery
         {
             Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
-        }));
+        });
+
+        await act.Should().ThrowAsync<ArgumentException>();
     }
 
     [Fact]
@@ -70,16 +72,11 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
         IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
 
         PagedProducts result = await sut.Handle(
-            new ListProductsQuery
-            {
-                Filter = request.Filter,
-                MaxPageSize = request.MaxPageSize,
-                PageToken = null
-            });
+            new ListProductsQuery { Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = null });
 
-        result.Products.Count.ShouldBe(2);
-        result.TotalCount.ShouldBe(5);
-        result.NextPageToken.ShouldNotBeNull();
+        result.Products.Count.Should().Be(2);
+        result.TotalCount.Should().Be(5);
+        result.NextPageToken.Should().NotBeNull();
     }
 
     [Fact]
@@ -93,14 +90,12 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
         PagedProducts result = await sut.Handle(
             new ListProductsQuery
             {
-                Filter = request.Filter,
-                MaxPageSize = request.MaxPageSize,
-                PageToken = secondPageToken
+                Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = secondPageToken
             });
 
-        result.Products.Count.ShouldBe(2);
-        result.TotalCount.ShouldBe(5);
-        result.NextPageToken.ShouldNotBeNull();
+        result.Products.Count.Should().Be(2);
+        result.TotalCount.Should().Be(5);
+        result.NextPageToken.Should().NotBeNull();
     }
 
     [Fact]
@@ -114,14 +109,12 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
         PagedProducts result = await sut.Handle(
             new ListProductsQuery
             {
-                Filter = request.Filter,
-                MaxPageSize = request.MaxPageSize,
-                PageToken = lastPageToken
+                Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = lastPageToken
             });
 
-        result.Products.Count.ShouldBe(1);
-        result.TotalCount.ShouldBe(5);
-        result.NextPageToken.ShouldBeNull();
+        result.Products.Count.Should().Be(1);
+        result.TotalCount.Should().Be(5);
+        result.NextPageToken.Should().BeNull();
     }
 
     private void SetupToyProducts(int count)
@@ -143,12 +136,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
         for (int i = 0; i < targetPage; i++)
         {
             PagedProducts result = await handler.Handle(
-                new ListProductsQuery
-                {
-                    Filter = filter,
-                    MaxPageSize = maxPageSize,
-                    PageToken = token
-                });
+                new ListProductsQuery { Filter = filter, MaxPageSize = maxPageSize, PageToken = token });
 
             token = result.NextPageToken;
 
@@ -159,4 +147,3 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
         return token!;
     }
 }
-

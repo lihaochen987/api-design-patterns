@@ -5,7 +5,7 @@ using backend.Review.ApplicationLayer.Queries.GetReviewView;
 using backend.Review.DomainModels;
 using backend.Review.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Review.Tests.ApplicationLayerTests;
@@ -20,7 +20,7 @@ public class GetReviewViewHandlerTests : GetReviewViewHandlerTestBase
 
         ReviewView? result = await sut.Handle(new GetReviewViewQuery { Id = expectedReview.Id });
 
-        result.ShouldBeNull();
+        result.Should().BeNull();
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class GetReviewViewHandlerTests : GetReviewViewHandlerTestBase
 
         ReviewView? result = await sut.Handle(new GetReviewViewQuery { Id = expectedReview.Id });
 
-        result.ShouldNotBeNull();
-        result.ShouldBeEquivalentTo(expectedReview);
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedReview);
     }
 }

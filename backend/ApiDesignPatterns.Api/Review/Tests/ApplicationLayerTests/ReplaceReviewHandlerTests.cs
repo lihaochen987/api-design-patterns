@@ -1,11 +1,10 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoFixture;
 using backend.Review.ApplicationLayer.Commands.ReplaceReview;
 using backend.Review.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Review.Tests.ApplicationLayerTests;
@@ -31,11 +30,11 @@ public class ReplaceReviewHandlerTests : ReplaceReviewHandlerTestBase
 
         await sut.Handle(command);
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateReviewAsync", 1);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateReviewAsync").And.ContainValue(1);
         var updatedReview = Repository.First();
-        updatedReview.Rating.ShouldBe(replacementReview.Rating);
-        updatedReview.Text.ShouldBe(replacementReview.Text);
+        updatedReview.Rating.Should().Be(replacementReview.Rating);
+        updatedReview.Text.Should().Be(replacementReview.Text);
     }
 
     [Fact]
@@ -58,8 +57,8 @@ public class ReplaceReviewHandlerTests : ReplaceReviewHandlerTestBase
         await sut.Handle(command);
 
         var updatedReview = Repository.First();
-        updatedReview.CreatedAt.ShouldBeGreaterThan(oldCreatedAt);
-        updatedReview.UpdatedAt.ShouldBeNull();
+        updatedReview.CreatedAt.Should().BeAfter(oldCreatedAt);
+        updatedReview.UpdatedAt.Should().BeNull();
     }
 
     [Fact]
@@ -78,7 +77,7 @@ public class ReplaceReviewHandlerTests : ReplaceReviewHandlerTestBase
 
         await sut.Handle(command);
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateReviewAsync", 1);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateReviewAsync").And.ContainValue(1);
     }
 }

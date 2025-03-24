@@ -1,5 +1,6 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
+using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
@@ -15,7 +16,7 @@ namespace backend.Product.ProductControllers;
 public class CreateProductController(
     ICommandHandler<CreateProductCommand> createProduct,
     IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> createProductResponse,
-    IMapper mapper)
+    IQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> mapProductRequest)
     : ControllerBase
 {
     [HttpPost]
@@ -24,12 +25,8 @@ public class CreateProductController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
-        DomainModels.Product product = request.Category switch
-        {
-            nameof(Category.PetFood) => mapper.Map<PetFood>(request),
-            nameof(Category.GroomingAndHygiene) => mapper.Map<GroomingAndHygiene>(request),
-            _ => mapper.Map<DomainModels.Product>(request)
-        };
+        var product = await mapProductRequest.Handle(new MapCreateProductRequestQuery { Request = request });
+
         await createProduct.Handle(new CreateProductCommand { Product = product });
 
         var response = await createProductResponse.Handle(new MapCreateProductResponseQuery { Product = product });

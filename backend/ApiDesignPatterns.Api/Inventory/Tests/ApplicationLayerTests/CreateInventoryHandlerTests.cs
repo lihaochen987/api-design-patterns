@@ -4,7 +4,7 @@
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
 using backend.Inventory.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Inventory.Tests.ApplicationLayerTests;
@@ -19,9 +19,9 @@ public class CreateInventoryHandlerTests : CreateInventoryHandlerTestBase
 
         await sut.Handle(new CreateInventoryCommand { Inventory = inventoryToCreate });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("CreateInventoryAsync", 1);
-        Repository.First().ShouldBeEquivalentTo(inventoryToCreate);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("CreateInventoryAsync").WhoseValue.Should().Be(1);
+        Repository.First().Should().BeEquivalentTo(inventoryToCreate);
     }
 
     [Fact]
@@ -34,11 +34,11 @@ public class CreateInventoryHandlerTests : CreateInventoryHandlerTestBase
         await sut.Handle(new CreateInventoryCommand { Inventory = firstInventoryToCreate });
         await sut.Handle(new CreateInventoryCommand { Inventory = secondInventoryToCreate });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("CreateInventoryAsync", 2);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("CreateInventoryAsync").WhoseValue.Should().Be(2);
         var firstInventory = Repository.First(x => x.Id == firstInventoryToCreate.Id);
-        firstInventory.ShouldBeEquivalentTo(firstInventoryToCreate);
+        firstInventory.Should().BeEquivalentTo(firstInventoryToCreate);
         var secondInventory = Repository.First(x => x.Id == secondInventoryToCreate.Id);
-        secondInventory.ShouldBeEquivalentTo(secondInventoryToCreate);
+        secondInventory.Should().BeEquivalentTo(secondInventoryToCreate);
     }
 }

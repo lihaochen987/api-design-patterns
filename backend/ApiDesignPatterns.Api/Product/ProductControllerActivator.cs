@@ -12,6 +12,7 @@ using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
+using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
@@ -75,6 +76,16 @@ public class ProductControllerActivator : BaseControllerActivator
             TrackDisposable(context, dbConnection);
             var repository = new ProductRepository(dbConnection);
 
+            // CreateProductRequest handler
+            var createProductRequestHandler =
+                new QueryDecoratorBuilder<MapCreateProductRequestQuery, DomainModels.Product>(
+                        new MapCreateProductRequestHandler(_mapper),
+                        _loggerFactory,
+                        null)
+                    .WithLogging()
+                    .WithValidation()
+                    .Build();
+
             // CreateProduct handler
             var createProductHandler = new CommandDecoratorBuilder<CreateProductCommand>(
                     new CreateProductHandler(repository),
@@ -102,7 +113,7 @@ public class ProductControllerActivator : BaseControllerActivator
             return new CreateProductController(
                 createProductHandler,
                 createProductResponseHandler,
-                _mapper);
+                createProductRequestHandler);
         }
 
         if (type == typeof(DeleteProductController))

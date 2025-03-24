@@ -5,7 +5,7 @@ using backend.Review.ApplicationLayer.Commands.UpdateReview;
 using backend.Review.ReviewControllers;
 using backend.Review.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Review.Tests.ApplicationLayerTests;
@@ -34,12 +34,12 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
 
         await sut.Handle(new UpdateReviewCommand { Review = review, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateReviewAsync", 1);
-        Repository.First().ProductId.ShouldBe(55);
-        Repository.First().Rating.ShouldBe(4.5m);
-        Repository.First().Text.ShouldBe("Updated review text");
-        Repository.First().UpdatedAt.ShouldNotBeNull();
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateReviewAsync").And.ContainValue(1);
+        Repository.First().ProductId.Should().Be(55);
+        Repository.First().Rating.Should().Be(4.5m);
+        Repository.First().Text.Should().Be("Updated review text");
+        Repository.First().UpdatedAt.Should().NotBeNull();
     }
 
     [Fact]
@@ -61,12 +61,12 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
 
         await sut.Handle(new UpdateReviewCommand { Review = review, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateReviewAsync", 1);
-        Repository.First().ProductId.ShouldBe(42);
-        Repository.First().Rating.ShouldBe(4.5m);
-        Repository.First().Text.ShouldBe("Original review text");
-        Repository.First().UpdatedAt.ShouldNotBeNull();
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateReviewAsync").And.ContainValue(1);
+        Repository.First().ProductId.Should().Be(42);
+        Repository.First().Rating.Should().Be(4.5m);
+        Repository.First().Text.Should().Be("Original review text");
+        Repository.First().UpdatedAt.Should().NotBeNull();
     }
 
     [Fact]
@@ -88,12 +88,12 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
 
         await sut.Handle(new UpdateReviewCommand { Review = review, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateReviewAsync", 1);
-        Repository.First().ProductId.ShouldBe(42);
-        Repository.First().Rating.ShouldBe(3.5m);
-        Repository.First().Text.ShouldBe("Original review text");
-        Repository.First().UpdatedAt.ShouldNotBeNull();
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateReviewAsync").And.ContainValue(1);
+        Repository.First().ProductId.Should().Be(42);
+        Repository.First().Rating.Should().Be(3.5m);
+        Repository.First().Text.Should().Be("Original review text");
+        Repository.First().UpdatedAt.Should().NotBeNull();
     }
 
     [Fact]
@@ -114,10 +114,10 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
 
         await sut.Handle(new UpdateReviewCommand { Review = review, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateReviewAsync", 1);
-        Repository.First().Rating.ShouldBe(4.5m);
-        Repository.First().Text.ShouldBe("Updated review text");
-        Repository.First().UpdatedAt.ShouldNotBeNull();
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateReviewAsync").And.ContainValue(1);
+        Repository.First().Rating.Should().Be(4.5m);
+        Repository.First().Text.Should().Be("Updated review text");
+        Repository.First().UpdatedAt.Should().NotBeNull();
     }
 }

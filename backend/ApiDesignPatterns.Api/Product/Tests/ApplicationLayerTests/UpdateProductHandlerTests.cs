@@ -8,7 +8,7 @@ using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -34,13 +34,12 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
 
         await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
-        Repository.First().Name.ShouldBeEquivalentTo(request.Name);
-        Repository.First().Category.ShouldBeEquivalentTo((Category)Enum.Parse(typeof(Category), request.Category));
-        Repository.First().Pricing.DiscountPercentage
-            .ShouldBeEquivalentTo(request.Pricing.DiscountPercentage);
-        Repository.First().Pricing.TaxRate.ShouldBeEquivalentTo(request.Pricing.TaxRate);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
+        Repository.First().Name.Should().Be(request.Name);
+        Repository.First().Category.Should().Be((Category)Enum.Parse(typeof(Category), request.Category));
+        Repository.First().Pricing.DiscountPercentage.Should().Be(request.Pricing.DiscountPercentage);
+        Repository.First().Pricing.TaxRate.Should().Be(request.Pricing.TaxRate);
     }
 
     [Fact]
@@ -59,11 +58,11 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
 
         await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
-        Repository.First().Dimensions.Length.ShouldBeEquivalentTo(product.Dimensions.Length);
-        Repository.First().Dimensions.Width.ShouldBeEquivalentTo(request.Dimensions.Width);
-        Repository.First().Dimensions.Height.ShouldBeEquivalentTo(request.Dimensions.Height);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
+        Repository.First().Dimensions.Length.Should().Be(product.Dimensions.Length);
+        Repository.First().Dimensions.Width.Should().Be(request.Dimensions.Width);
+        Repository.First().Dimensions.Height.Should().Be(request.Dimensions.Height);
     }
 
     [Fact]
@@ -80,9 +79,9 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
 
         await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
-        Repository.First().Name.ShouldBeEquivalentTo(request.Name);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
+        Repository.First().Name.Should().Be(request.Name);
     }
 
     [Fact]
@@ -104,13 +103,13 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
 
         await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
         var groomingAndHygiene = (GroomingAndHygiene)Repository.First();
-        groomingAndHygiene.UsageInstructions.ShouldBeEquivalentTo(request.UsageInstructions);
-        groomingAndHygiene.IsNatural.ShouldBeEquivalentTo(request.IsNatural);
-        groomingAndHygiene.IsHypoallergenic.ShouldBeEquivalentTo(request.IsHypoAllergenic);
-        groomingAndHygiene.SafetyWarnings.ShouldBeEquivalentTo(request.SafetyWarnings);
-        groomingAndHygiene.IsCrueltyFree.ShouldBeEquivalentTo(request.IsCrueltyFree);
+        groomingAndHygiene.UsageInstructions.Should().Be(request.UsageInstructions);
+        groomingAndHygiene.IsNatural.Should().Be((bool)request.IsNatural);
+        groomingAndHygiene.IsHypoallergenic.Should().Be((bool)request.IsHypoAllergenic);
+        groomingAndHygiene.SafetyWarnings.Should().Be(request.SafetyWarnings);
+        groomingAndHygiene.IsCrueltyFree.Should().Be((bool)request.IsCrueltyFree);
     }
 }

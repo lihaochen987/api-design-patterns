@@ -2,9 +2,9 @@ using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -20,7 +20,7 @@ public class UpdateProductPricingControllerTests : UpdateProductPricingControlle
 
         ActionResult<UpdateProductPricingResponse> actionResult = await sut.UpdateProductPricing(id, request);
 
-        actionResult.Result.ShouldBeOfType<NotFoundResult>();
+        actionResult.Result.Should().BeOfType<NotFoundResult>();
     }
 
     [Fact]
@@ -42,11 +42,11 @@ public class UpdateProductPricingControllerTests : UpdateProductPricingControlle
 
         ActionResult<UpdateProductPricingResponse> actionResult = await sut.UpdateProductPricing(product.Id, request);
 
-        actionResult.Result.ShouldNotBeNull();
-        actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = (OkObjectResult) actionResult.Result;
-        contentResult.ShouldNotBeNull();
-        UpdateProductPricingResponse response = (UpdateProductPricingResponse) contentResult.Value!;
-        response.ShouldBeEquivalentTo(Mapper.Map<UpdateProductPricingResponse>(product));
+        actionResult.Result.Should().NotBeNull();
+        actionResult.Result.Should().BeOfType<OkObjectResult>();
+        OkObjectResult? contentResult = (OkObjectResult)actionResult.Result;
+        contentResult.Should().NotBeNull();
+        UpdateProductPricingResponse response = (UpdateProductPricingResponse)contentResult.Value!;
+        response.Should().BeEquivalentTo(Mapper.Map<UpdateProductPricingResponse>(product));
     }
 }

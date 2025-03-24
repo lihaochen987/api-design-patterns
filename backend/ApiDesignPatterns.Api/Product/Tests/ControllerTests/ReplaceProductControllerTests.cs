@@ -6,9 +6,9 @@ using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -29,9 +29,9 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
 
         var result = await sut.ReplaceProduct(product.Id, request);
 
-        result.ShouldNotBeNull();
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.Value.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.Value.Should().BeEquivalentTo(expectedResponse);
         Mock
             .Get(ReplaceProduct)
             .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Once);
@@ -51,7 +51,7 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
 
         var result = await sut.ReplaceProduct(nonExistentId, request);
 
-        result.Result.ShouldBeOfType<NotFoundResult>();
+        result.Result.Should().BeOfType<NotFoundResult>();
         Mock
             .Get(ReplaceProduct)
             .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Never);
@@ -107,7 +107,7 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
 
         var result = await sut.ReplaceProduct(product.Id, request);
 
-        result.Result.ShouldBeOfType<NotFoundResult>();
+        result.Result.Should().BeOfType<NotFoundResult>();
         Mock
             .Get(ReplaceProduct)
             .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Once);

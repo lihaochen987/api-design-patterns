@@ -4,9 +4,9 @@
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
 using backend.Inventory.InventoryControllers;
 using backend.Inventory.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Inventory.Tests.ControllerTests;
@@ -22,10 +22,10 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
 
         var result = await sut.CreateInventory(request);
 
-        result.ShouldNotBeNull();
-        var createdResult = result.Result.ShouldBeOfType<CreatedAtActionResult>();
-        createdResult.ActionName.ShouldBe("GetInventory");
-        createdResult.ControllerName.ShouldBe("GetInventory");
+        result.Should().NotBeNull();
+        var createdResult = result.Result.Should().BeOfType<CreatedAtActionResult>().Subject;
+        createdResult.ActionName.Should().Be("GetInventory");
+        createdResult.ControllerName.Should().Be("GetInventory");
         Mock
             .Get(CreateInventory)
             .Verify(x => x.Handle(It.Is<CreateInventoryCommand>(c =>
@@ -45,6 +45,7 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
             .ThrowsAsync(new Exception("Failed to create inventory"));
         var sut = GetCreateInventoryController();
 
-        await Should.ThrowAsync<Exception>(() => sut.CreateInventory(request));
+        Func<Task> act = async () => await sut.CreateInventory(request);
+        await act.Should().ThrowAsync<Exception>();
     }
 }

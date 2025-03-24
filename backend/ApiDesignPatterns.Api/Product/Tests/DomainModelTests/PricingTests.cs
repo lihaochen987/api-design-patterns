@@ -1,5 +1,5 @@
 using backend.Product.DomainModels.ValueObjects;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.DomainModelTests;
@@ -15,10 +15,10 @@ public class PricingTests
 
         var pricing = new Pricing(basePrice, discountPercentage, taxRate);
 
-        pricing.ShouldNotBeNull();
-        pricing.BasePrice.ShouldBe(basePrice);
-        pricing.DiscountPercentage.ShouldBe(discountPercentage);
-        pricing.TaxRate.ShouldBe(taxRate);
+        pricing.Should().NotBeNull();
+        pricing.BasePrice.Should().Be(basePrice);
+        pricing.DiscountPercentage.Should().Be(discountPercentage);
+        pricing.TaxRate.Should().Be(taxRate);
     }
 
     [Theory]
@@ -31,7 +31,9 @@ public class PricingTests
     public void Constructor_InvalidValues_ShouldThrowArgumentException(decimal basePrice,
         decimal discountPercentage, decimal taxRate)
     {
-        Should.Throw<ArgumentException>(() => new Pricing(basePrice, discountPercentage, taxRate));
+        Action act = () => _ = new Pricing(basePrice, discountPercentage, taxRate);
+
+        act.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -43,10 +45,10 @@ public class PricingTests
 
         var pricing = new Pricing(basePrice, discountPercentage, taxRate);
 
-        pricing.ShouldNotBeNull();
-        pricing.BasePrice.ShouldBe(basePrice);
-        pricing.DiscountPercentage.ShouldBe(discountPercentage);
-        pricing.TaxRate.ShouldBe(taxRate);
+        pricing.Should().NotBeNull();
+        pricing.BasePrice.Should().Be(basePrice);
+        pricing.DiscountPercentage.Should().Be(discountPercentage);
+        pricing.TaxRate.Should().Be(taxRate);
     }
 
     [Theory]
@@ -60,9 +62,9 @@ public class PricingTests
     {
         var pricing = new Pricing(basePrice, discountPercentage, taxRate);
 
-        pricing.ShouldNotBeNull();
-        pricing.BasePrice.ShouldBe(basePrice);
-        pricing.DiscountPercentage.ShouldBe(discountPercentage);
-        pricing.TaxRate.ShouldBe(taxRate);
+        pricing.Should().NotBeNull();
+        pricing.BasePrice.Should().Be(basePrice);
+        pricing.DiscountPercentage.Should().Be(discountPercentage);
+        pricing.TaxRate.Should().Be(taxRate);
     }
 }

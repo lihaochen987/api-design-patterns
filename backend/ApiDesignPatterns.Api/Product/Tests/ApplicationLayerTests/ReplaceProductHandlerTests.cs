@@ -7,7 +7,7 @@ using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -28,9 +28,9 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
 
         await sut.Handle(command);
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
-        Repository.First().ShouldBeEquivalentTo(replacedProduct);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
+        Repository.First().Should().BeEquivalentTo(replacedProduct);
     }
 
     [Fact]
@@ -51,10 +51,10 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
 
         await sut.Handle(command);
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
-        Repository.CallCount.ShouldContainKeyAndValue("UpdatePetFoodProductAsync", 1);
-        Repository.First().ShouldBeEquivalentTo(replacedProduct);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
+        Repository.CallCount.Should().ContainKey("UpdatePetFoodProductAsync").WhoseValue.Should().Be(1);
+        Repository.First().Should().BeEquivalentTo(replacedProduct);
     }
 
     [Fact]
@@ -75,10 +75,10 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
 
         await sut.Handle(command);
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateProductAsync", 1);
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateGroomingAndHygieneProductAsync", 1);
-        Repository.First().ShouldBeEquivalentTo(replacedProduct);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
+        Repository.CallCount.Should().ContainKey("UpdateGroomingAndHygieneProductAsync").WhoseValue.Should().Be(1);
+        Repository.First().Should().BeEquivalentTo(replacedProduct);
     }
 
     [Fact]
@@ -99,6 +99,6 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
 
         await sut.Handle(command);
 
-        Repository.First().Id.ShouldBe(existingId);
+        Repository.First().Id.Should().Be(existingId);
     }
 }

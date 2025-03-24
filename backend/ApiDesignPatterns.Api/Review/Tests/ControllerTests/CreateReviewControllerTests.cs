@@ -5,9 +5,9 @@ using AutoFixture;
 using backend.Review.ApplicationLayer.Commands.CreateReview;
 using backend.Review.ReviewControllers;
 using backend.Review.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Review.Tests.ControllerTests;
@@ -24,10 +24,10 @@ public class CreateReviewControllerTests : CreateReviewControllerTestBase
 
         var result = await sut.CreateReview(request, productId);
 
-        result.ShouldNotBeNull();
-        var createdResult = result.Result.ShouldBeOfType<CreatedAtActionResult>();
-        createdResult.ActionName.ShouldBe("GetReview");
-        createdResult.ControllerName.ShouldBe("GetReview");
+        result.Should().NotBeNull();
+        var createdResult = result.Result.Should().BeOfType<CreatedAtActionResult>().Subject;
+        createdResult.ActionName.Should().Be("GetReview");
+        createdResult.ControllerName.Should().Be("GetReview");
         Mock
             .Get(CreateReview)
             .Verify(x => x.Handle(It.Is<CreateReviewCommand>(c =>
@@ -47,6 +47,7 @@ public class CreateReviewControllerTests : CreateReviewControllerTestBase
             .ThrowsAsync(new Exception("Failed to create review"));
         var sut = GetCreateReviewController();
 
-        await Should.ThrowAsync<Exception>(() => sut.CreateReview(request, productId));
+        Func<Task> act = async () => await sut.CreateReview(request, productId);
+        await act.Should().ThrowAsync<Exception>();
     }
 }

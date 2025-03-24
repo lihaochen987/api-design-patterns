@@ -2,9 +2,9 @@ using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -23,7 +23,7 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
 
         ActionResult result = await sut.DeleteProduct(product.Id, new DeleteProductRequest());
 
-        result.ShouldBeOfType<NoContentResult>();
+        result.Should().BeOfType<NoContentResult>();
         Mock
             .Get(MockDeleteProductHandler)
             .Verify(svc => svc.Handle(new DeleteProductCommand { Id = product.Id }), Times.Once);
@@ -41,7 +41,7 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
 
         ActionResult result = await sut.DeleteProduct(product.Id, new DeleteProductRequest());
 
-        result.ShouldBeOfType<NotFoundResult>();
+        result.Should().BeOfType<NotFoundResult>();
         Mock
             .Get(MockDeleteProductHandler)
             .Verify(svc => svc.Handle(new DeleteProductCommand { Id = product.Id }), Times.Never);

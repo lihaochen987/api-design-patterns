@@ -6,9 +6,9 @@ using backend.Review.ApplicationLayer.Commands.UpdateReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Review.ReviewControllers;
 using backend.Review.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Review.Tests.ControllerTests;
@@ -28,10 +28,10 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
 
         ActionResult<UpdateReviewResponse> actionResult = await sut.UpdateReview(review.Id, request);
 
-        actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = (OkObjectResult) actionResult.Result;
-        UpdateReviewResponse response = (UpdateReviewResponse) contentResult.Value!;
-        response.ShouldBeEquivalentTo(Mapper.Map<UpdateReviewResponse>(review));
+        actionResult.Result.Should().BeOfType<OkObjectResult>();
+        OkObjectResult? contentResult = (OkObjectResult)actionResult.Result;
+        UpdateReviewResponse response = (UpdateReviewResponse)contentResult.Value!;
+        response.Should().BeEquivalentTo(Mapper.Map<UpdateReviewResponse>(review));
         Mock
             .Get(MockUpdateReviewHandler)
             .Verify(
@@ -52,8 +52,8 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
 
         ActionResult<UpdateReviewResponse> actionResult = await sut.UpdateReview(nonExistentId, request);
 
-        actionResult.Result.ShouldNotBeNull();
-        actionResult.Result.ShouldBeOfType<NotFoundResult>();
+        actionResult.Result.Should().NotBeNull();
+        actionResult.Result.Should().BeOfType<NotFoundResult>();
         Mock
             .Get(MockUpdateReviewHandler)
             .Verify(
@@ -76,9 +76,9 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
 
         var result = await sut.UpdateReview(review.Id, request);
 
-        result.ShouldNotBeNull();
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.Value.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.Value.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
@@ -94,7 +94,7 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
 
         var result = await sut.UpdateReview(review.Id, request);
 
-        result.ShouldNotBeNull();
+        result.Should().NotBeNull();
         Mock
             .Get(MockUpdateReviewHandler)
             .Verify(

@@ -4,9 +4,9 @@ using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -34,11 +34,11 @@ public class GetProductControllerTests : GetProductControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetProduct(productId, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
         string jsonResult = (string)okResult.Value;
-        jsonResult.ShouldContain("Dog Food");
+        jsonResult.Should().Contain("Dog Food");
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class GetProductControllerTests : GetProductControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetProduct(productId, request);
 
-        result.Result.ShouldBeOfType<NotFoundResult>();
+        result.Result.Should().BeOfType<NotFoundResult>();
     }
 
 
@@ -79,11 +79,11 @@ public class GetProductControllerTests : GetProductControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetProduct(productId, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
         string jsonResult = (string)okResult.Value;
-        jsonResult.ShouldContain("Shampoo");
+        jsonResult.Should().Contain("Shampoo");
     }
 
     [Fact]
@@ -104,11 +104,11 @@ public class GetProductControllerTests : GetProductControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetProduct(productId, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
         string jsonResult = (string)okResult.Value;
-        jsonResult.ShouldContain("Other Product");
+        jsonResult.Should().Contain("Other Product");
     }
 
 
@@ -131,11 +131,11 @@ public class GetProductControllerTests : GetProductControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetProduct(productId, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
         string jsonResult = (string)okResult.Value;
-        jsonResult.ShouldContain("Masked Product");
-        jsonResult.ShouldNotContain("Price");
+        jsonResult.Should().Contain("Masked Product");
+        jsonResult.Should().NotContain("Price");
     }
 }

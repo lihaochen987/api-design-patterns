@@ -1,11 +1,10 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoFixture;
 using backend.Shared.CommandHandler;
 using backend.Supplier.ApplicationLayer.Commands.ReplaceSupplier;
 using backend.Supplier.Tests.TestHelpers.Builders;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Supplier.Tests.ApplicationLayerTests;
@@ -24,10 +23,10 @@ public class ReplaceSupplierHandlerTests : ReplaceSupplierHandlerTestBase
 
         await sut.Handle(command);
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateSupplierAsync", 1);
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateSupplierAddressAsync", 1);
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateSupplierPhoneNumberAsync", 1);
-        Repository.First().ShouldBeEquivalentTo(replacedSupplier);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateSupplierAsync").WhoseValue.Should().Be(1);
+        Repository.CallCount.Should().ContainKey("UpdateSupplierAddressAsync").WhoseValue.Should().Be(1);
+        Repository.CallCount.Should().ContainKey("UpdateSupplierPhoneNumberAsync").WhoseValue.Should().Be(1);
+        Repository.First().Should().BeEquivalentTo(replacedSupplier);
     }
 }

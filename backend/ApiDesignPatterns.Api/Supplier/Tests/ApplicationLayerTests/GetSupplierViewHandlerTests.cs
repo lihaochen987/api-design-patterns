@@ -5,7 +5,7 @@ using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 using backend.Supplier.DomainModels;
 using backend.Supplier.Tests.TestHelpers.Builders;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Supplier.Tests.ApplicationLayerTests;
@@ -20,7 +20,7 @@ public class GetSupplierViewHandlerTests : GetSupplierViewHandlerTestBase
 
         SupplierView? result = await sut.Handle(new GetSupplierViewQuery { Id = expectedSupplier.Id });
 
-        result.ShouldBeNull();
+        result.Should().BeNull();
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class GetSupplierViewHandlerTests : GetSupplierViewHandlerTestBase
 
         SupplierView? result = await sut.Handle(new GetSupplierViewQuery { Id = expectedSupplier.Id });
 
-        result.ShouldNotBeNull();
-        result.ShouldBeEquivalentTo(expectedSupplier);
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedSupplier);
     }
 }

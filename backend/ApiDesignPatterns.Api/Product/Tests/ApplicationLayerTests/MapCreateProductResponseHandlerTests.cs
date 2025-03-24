@@ -6,7 +6,7 @@ using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -24,11 +24,11 @@ public class MapCreateProductResponseHandlerTests : MapCreateProductResponseHand
         var query = new MapCreateProductResponseQuery { Product = product };
         IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
 
-        CreateProductResponse? result = await sut.Handle(query);
+        CreateProductResponse result = await sut.Handle(query);
 
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType<CreatePetFoodResponse>();
-        result.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        result.Should().BeOfType<CreatePetFoodResponse>();
+        result.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
@@ -41,11 +41,11 @@ public class MapCreateProductResponseHandlerTests : MapCreateProductResponseHand
         var query = new MapCreateProductResponseQuery { Product = product };
         IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
 
-        CreateProductResponse? result = await sut.Handle(query);
+        CreateProductResponse result = await sut.Handle(query);
 
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType<CreateGroomingAndHygieneResponse>();
-        result.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        result.Should().BeOfType<CreateGroomingAndHygieneResponse>();
+        result.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
@@ -58,10 +58,10 @@ public class MapCreateProductResponseHandlerTests : MapCreateProductResponseHand
         var query = new MapCreateProductResponseQuery { Product = product };
         IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
 
-        CreateProductResponse? result = await sut.Handle(query);
+        CreateProductResponse result = await sut.Handle(query);
 
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType<CreateProductResponse>();
-        result.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        result.Should().BeOfType<CreateProductResponse>();
+        result.Should().BeEquivalentTo(expectedResponse);
     }
 }

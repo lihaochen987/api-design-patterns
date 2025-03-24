@@ -4,7 +4,7 @@
 using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -20,7 +20,7 @@ public class DeleteProductHandlerTests : DeleteProductHandlerTestBase
 
         await sut.Handle(new DeleteProductCommand { Id = productToDelete.Id });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("DeleteProductAsync", 1);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("DeleteProductAsync").And.ContainValue(1);
     }
 }

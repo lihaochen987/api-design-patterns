@@ -5,7 +5,7 @@ using AutoFixture;
 using backend.Shared.CommandHandler;
 using backend.Supplier.ApplicationLayer.Commands.DeleteSupplier;
 using backend.Supplier.Tests.TestHelpers.Builders;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Supplier.Tests.ApplicationLayerTests;
@@ -21,8 +21,8 @@ public class DeleteSupplierHandlerTests : DeleteSupplierHandlerTestBase
 
         await sut.Handle(new DeleteSupplierCommand { Id = supplierToDelete.Id });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("DeleteSupplierAsync", 1);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("DeleteSupplierAsync").And.ContainValue(1);
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class DeleteSupplierHandlerTests : DeleteSupplierHandlerTestBase
 
         await sut.Handle(new DeleteSupplierCommand { Id = nonExistentId });
 
-        Repository.IsDirty.ShouldBeFalse();
-        Repository.CallCount.ShouldContainKeyAndValue("DeleteSupplierAsync", 1);
+        Repository.IsDirty.Should().BeFalse();
+        Repository.CallCount.Should().ContainKey("DeleteSupplierAsync").And.ContainValue(1);
     }
 }

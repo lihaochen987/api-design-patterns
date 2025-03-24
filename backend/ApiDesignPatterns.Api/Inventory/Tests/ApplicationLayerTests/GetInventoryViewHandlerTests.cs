@@ -5,11 +5,10 @@ using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
 using backend.Inventory.DomainModels;
 using backend.Inventory.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Inventory.Tests.ApplicationLayerTests;
-
 
 public class GetInventoryViewHandlerTests : GetInventoryViewHandlerTestBase
 {
@@ -22,9 +21,9 @@ public class GetInventoryViewHandlerTests : GetInventoryViewHandlerTestBase
 
         InventoryView? result = await sut.Handle(new GetInventoryViewQuery { Id = expectedInventory.Id });
 
-        result.ShouldNotBeNull();
-        result.ShouldBeEquivalentTo(expectedInventory);
-        Repository.CallCount.ShouldContainKeyAndValue("GetInventoryView", 1);
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedInventory);
+        Repository.CallCount.Should().ContainKey("GetInventoryView").WhoseValue.Should().Be(1);
     }
 
     [Fact]
@@ -35,7 +34,7 @@ public class GetInventoryViewHandlerTests : GetInventoryViewHandlerTestBase
 
         InventoryView? result = await sut.Handle(new GetInventoryViewQuery { Id = nonExistentInventory.Id });
 
-        result.ShouldBeNull();
-        Repository.CallCount.ShouldContainKeyAndValue("GetInventoryView", 1);
+        result.Should().BeNull();
+        Repository.CallCount.Should().ContainKey("GetInventoryView").WhoseValue.Should().Be(1);
     }
 }

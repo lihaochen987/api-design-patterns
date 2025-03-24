@@ -6,9 +6,9 @@ using backend.Review.ApplicationLayer.Queries.ListReviews;
 using backend.Review.DomainModels;
 using backend.Review.ReviewControllers;
 using backend.Review.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Review.Tests.ControllerTests;
@@ -33,13 +33,13 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
 
         var result = await sut.ListReviews(request, parentId);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listReviewsResponse = (ListReviewsResponse)response.Value!;
-        listReviewsResponse!.Results.Count().ShouldBe(4);
-        listReviewsResponse.NextPageToken.ShouldBeNull();
+        listReviewsResponse.Results.Count().Should().Be(4);
+        listReviewsResponse.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -61,13 +61,13 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
 
         var result = await sut.ListReviews(request, parentId);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listReviewsResponse = (ListReviewsResponse)response.Value!;
-        listReviewsResponse!.Results.Count().ShouldBe(2);
-        listReviewsResponse.NextPageToken.ShouldBeNull();
+        listReviewsResponse.Results.Count().Should().Be(2);
+        listReviewsResponse.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -89,13 +89,13 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
 
         var result = await sut.ListReviews(request, parentId);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listReviewsResponse = (ListReviewsResponse)response.Value!;
-        listReviewsResponse!.Results.Count().ShouldBe(2);
-        listReviewsResponse.NextPageToken.ShouldBeEquivalentTo("2");
+        listReviewsResponse.Results.Count().Should().Be(2);
+        listReviewsResponse.NextPageToken.Should().BeEquivalentTo("2");
     }
 
     [Fact]
@@ -117,13 +117,13 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
 
         var result = await sut.ListReviews(request, parentId);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listReviewsResponse = (ListReviewsResponse)response.Value!;
-        listReviewsResponse!.Results.Count().ShouldBe(DefaultMaxPageSize);
-        listReviewsResponse.NextPageToken.ShouldBeEquivalentTo(DefaultMaxPageSize.ToString());
+        listReviewsResponse.Results.Count().Should().Be(DefaultMaxPageSize);
+        listReviewsResponse.NextPageToken.Should().BeEquivalentTo(DefaultMaxPageSize.ToString());
     }
 
     [Fact]
@@ -143,13 +143,13 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
 
         var result = await sut.ListReviews(request, parentId);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listReviewsResponse = (ListReviewsResponse)response.Value!;
-        listReviewsResponse!.Results.ShouldBeEmpty();
-        listReviewsResponse.NextPageToken.ShouldBeNull();
+        listReviewsResponse.Results.Should().BeEmpty();
+        listReviewsResponse.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -174,10 +174,10 @@ public class ListReviewsControllerTests : ListReviewsControllerTestBase
 
         var result = await sut.ListReviews(request, parentId);
 
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
         var listReviewsResponse = (ListReviewsResponse)response.Value!;
-        listReviewsResponse!.Results.Count().ShouldBe(1);
-        listReviewsResponse.NextPageToken.ShouldBe("2");
+        listReviewsResponse.Results.Count().Should().Be(1);
+        listReviewsResponse.NextPageToken.Should().Be("2");
     }
 }

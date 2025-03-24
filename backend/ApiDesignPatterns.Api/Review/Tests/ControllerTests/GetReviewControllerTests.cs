@@ -8,9 +8,9 @@ using backend.Review.ApplicationLayer.Queries.GetReviewView;
 using backend.Review.DomainModels;
 using backend.Review.ReviewControllers;
 using backend.Review.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Review.Tests.ControllerTests;
@@ -37,11 +37,11 @@ public class GetReviewControllerTests : GetReviewControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetReview(reviewId, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
         string jsonResult = ((string)okResult.Value);
-        jsonResult.ShouldContain("Great product!");
+        jsonResult.Should().Contain("Great product!");
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class GetReviewControllerTests : GetReviewControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetReview(reviewId, request);
 
-        result.Result.ShouldBeOfType<NotFoundResult>();
+        result.Result.Should().BeOfType<NotFoundResult>();
     }
 
     [Fact]
@@ -80,11 +80,11 @@ public class GetReviewControllerTests : GetReviewControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetReview(reviewId, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
         string jsonResult = ((string)okResult.Value);
-        jsonResult.ShouldContain("Masked Review");
-        jsonResult.ShouldNotContain("Rating");
+        jsonResult.Should().Contain("Masked Review");
+        jsonResult.Should().NotContain("Rating");
     }
 }

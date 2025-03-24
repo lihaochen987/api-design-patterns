@@ -5,9 +5,9 @@ using backend.Review.ApplicationLayer.Commands.DeleteReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Review.ReviewControllers;
 using backend.Review.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Review.Tests.ControllerTests;
@@ -26,7 +26,7 @@ public class DeleteReviewControllerTests : DeleteReviewControllerTestBase
 
         ActionResult result = await sut.DeleteReview(review.Id, new DeleteReviewRequest());
 
-        result.ShouldBeOfType<NoContentResult>();
+        result.Should().BeOfType<NoContentResult>();
         Mock
             .Get(MockDeleteReviewHandler)
             .Verify(svc => svc.Handle(new DeleteReviewCommand { Id = review.Id }), Times.Once);
@@ -44,7 +44,7 @@ public class DeleteReviewControllerTests : DeleteReviewControllerTestBase
 
         ActionResult result = await sut.DeleteReview(review.Id, new DeleteReviewRequest());
 
-        result.ShouldBeOfType<NotFoundResult>();
+        result.Should().BeOfType<NotFoundResult>();
         Mock
             .Get(MockDeleteReviewHandler)
             .Verify(svc => svc.Handle(new DeleteReviewCommand { Id = review.Id }), Times.Never);

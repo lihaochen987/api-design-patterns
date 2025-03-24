@@ -4,7 +4,7 @@
 using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Review.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Review.Tests.ApplicationLayerTests;
@@ -20,9 +20,9 @@ public class GetReviewHandlerTests : GetReviewHandlerTestBase
 
         DomainModels.Review? result = await sut.Handle(new GetReviewQuery { Id = expectedReview.Id });
 
-        result.ShouldNotBeNull();
-        result.ShouldBeEquivalentTo(expectedReview);
-        Repository.CallCount.ShouldContainKeyAndValue("GetReviewAsync", 1);
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedReview);
+        Repository.CallCount.Should().ContainKey("GetReviewAsync").WhoseValue.Should().Be(1);
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class GetReviewHandlerTests : GetReviewHandlerTestBase
 
         DomainModels.Review? result = await sut.Handle(new GetReviewQuery { Id = nonExistentReview.Id });
 
-        result.ShouldBeNull();
-        Repository.CallCount.ShouldContainKeyAndValue("GetReviewAsync", 1);
+        result.Should().BeNull();
+        Repository.CallCount.Should().ContainKey("GetReviewAsync").WhoseValue.Should().Be(1);
     }
 }

@@ -6,9 +6,9 @@ using backend.Review.ApplicationLayer.Commands.ReplaceReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Review.ReviewControllers;
 using backend.Review.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Review.Tests.ControllerTests;
@@ -29,9 +29,9 @@ public class ReplaceReviewControllerTests : ReplaceReviewControllerTestBase
 
         var result = await sut.ReplaceReview(review.Id, request);
 
-        result.ShouldNotBeNull();
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.Value.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.Value.Should().BeEquivalentTo(expectedResponse);
         Mock
             .Get(ReplaceReview)
             .Verify(x => x.Handle(It.IsAny<ReplaceReviewCommand>()), Times.Once);
@@ -51,7 +51,7 @@ public class ReplaceReviewControllerTests : ReplaceReviewControllerTestBase
 
         var result = await sut.ReplaceReview(nonExistentId, request);
 
-        result.Result.ShouldBeOfType<NotFoundResult>();
+        result.Result.Should().BeOfType<NotFoundResult>();
         Mock
             .Get(ReplaceReview)
             .Verify(x => x.Handle(It.IsAny<ReplaceReviewCommand>()), Times.Never);

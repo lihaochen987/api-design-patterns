@@ -5,7 +5,7 @@ using AutoFixture;
 using backend.Review.ApplicationLayer.Commands.CreateReview;
 using backend.Review.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Review.Tests.ApplicationLayerTests;
@@ -21,9 +21,9 @@ public class CreateReviewHandlerTests : CreateReviewHandlerTestBase
 
         await sut.Handle(new CreateReviewCommand { Review = reviewToCreate, ProductId = productId });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("CreateReviewAsync", 1);
-        Repository.First().ProductId.ShouldBeEquivalentTo(productId);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("CreateReviewAsync").WhoseValue.Should().Be(1);
+        Repository.First().ProductId.Should().Be(productId);
     }
 
     [Fact]
@@ -38,11 +38,11 @@ public class CreateReviewHandlerTests : CreateReviewHandlerTestBase
         await sut.Handle(new CreateReviewCommand { Review = firstReviewToCreate, ProductId = firstProductId });
         await sut.Handle(new CreateReviewCommand { Review = secondReviewToCreate, ProductId = secondProductId });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("CreateReviewAsync", 2);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("CreateReviewAsync").WhoseValue.Should().Be(2);
         var firstReview = Repository.First(x => x.Id == firstReviewToCreate.Id);
-        firstReview.ProductId.ShouldBeEquivalentTo(firstProductId);
+        firstReview.ProductId.Should().Be(firstProductId);
         var secondReview = Repository.First(x => x.Id == secondReviewToCreate.Id);
-        secondReview.ProductId.ShouldBeEquivalentTo(secondProductId);
+        secondReview.ProductId.Should().Be(secondProductId);
     }
 }

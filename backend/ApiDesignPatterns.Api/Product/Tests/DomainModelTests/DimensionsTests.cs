@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.DomainModels.ValueObjects;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.DomainModelTests;
@@ -18,9 +18,9 @@ public class DimensionsTests
 
         var dimensions = new Dimensions(length, width, height);
 
-        dimensions.Length.ShouldBeEquivalentTo(length);
-        dimensions.Width.ShouldBeEquivalentTo(width);
-        dimensions.Height.ShouldBeEquivalentTo(height);
+        dimensions.Length.Should().Be(length);
+        dimensions.Width.Should().Be(width);
+        dimensions.Height.Should().Be(height);
     }
 
     [Fact]
@@ -30,7 +30,9 @@ public class DimensionsTests
         const decimal width = 25;
         const decimal height = 20;
 
-        Should.Throw<ArgumentException>(() => new Dimensions(length, width, height));
+        Action act = () => _ = new Dimensions(length, width, height);
+
+        act.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -40,7 +42,9 @@ public class DimensionsTests
         const decimal width = -1;
         const decimal height = 20;
 
-        Should.Throw<ArgumentException>(() => new Dimensions(length, width, height));
+        Action act = () => _ = new Dimensions(length, width, height);
+
+        act.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -50,7 +54,9 @@ public class DimensionsTests
         const decimal width = 25;
         const decimal height = -1;
 
-        Should.Throw<ArgumentException>(() => new Dimensions(length, width, height));
+        Action act = () => _ = new Dimensions(length, width, height);
+
+        act.Should().Throw<ArgumentException>();
     }
 
     [Theory]
@@ -62,7 +68,9 @@ public class DimensionsTests
         decimal width,
         decimal height)
     {
-        Should.Throw<ArgumentException>(() => new Dimensions(length, width, height));
+        Action act = () => _ = new Dimensions(length, width, height);
+
+        act.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -72,7 +80,9 @@ public class DimensionsTests
         const decimal width = 50;
         const decimal height = 50;
 
-        Should.Throw<ArgumentException>(() => new Dimensions(length, width, height));
+        Action act = () => _ = new Dimensions(length, width, height);
+
+        act.Should().Throw<ArgumentException>();
     }
 
     [Theory]
@@ -80,6 +90,8 @@ public class DimensionsTests
     [InlineData(50, 25, 10)]
     public void Constructor_ValidDimensions_ShouldNotThrowException(decimal length, decimal width, decimal height)
     {
-        Should.NotThrow(() => new Dimensions(length, width, height));
+        Action act = () => _ = new Dimensions(length, width, height);
+
+        act.Should().NotThrow();
     }
 }

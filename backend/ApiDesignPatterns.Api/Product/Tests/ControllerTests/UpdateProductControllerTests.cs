@@ -3,9 +3,9 @@ using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -28,10 +28,10 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
 
         ActionResult<UpdateProductResponse> actionResult = await sut.UpdateProduct(product.Id, request);
 
-        actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = (OkObjectResult) actionResult.Result;
-        UpdateProductResponse response = (UpdateProductResponse) contentResult.Value!;
-        response.ShouldBeEquivalentTo(Mapper.Map<UpdateProductResponse>(product));
+        actionResult.Result.Should().BeOfType<OkObjectResult>();
+        OkObjectResult? contentResult = (OkObjectResult)actionResult.Result;
+        UpdateProductResponse response = (UpdateProductResponse)contentResult.Value!;
+        response.Should().BeEquivalentTo(Mapper.Map<UpdateProductResponse>(product));
         Mock
             .Get(MockUpdateProductHandler)
             .Verify(
@@ -47,7 +47,7 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
 
         ActionResult<UpdateProductResponse> actionResult = await sut.UpdateProduct(nonExistentId, request);
 
-        actionResult.Result.ShouldNotBeNull();
-        actionResult.Result.ShouldBeOfType<NotFoundResult>();
+        actionResult.Result.Should().NotBeNull();
+        actionResult.Result.Should().BeOfType<NotFoundResult>();
     }
 }

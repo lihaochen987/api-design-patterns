@@ -10,7 +10,7 @@ using backend.Inventory.Tests.TestHelpers.Builders;
 using backend.Product.ProductControllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Inventory.Tests.ControllerTests;
@@ -37,12 +37,12 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetInventory(inventoryId, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
-        string jsonResult = (string) okResult.Value;
-        jsonResult.ShouldContain("100");
-        jsonResult.ShouldContain("42");
+        OkObjectResult okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
+        string jsonResult = (string)okResult.Value;
+        jsonResult.Should().Contain("100");
+        jsonResult.Should().Contain("42");
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetInventory(inventoryId, request);
 
-        result.Result.ShouldBeOfType<NotFoundResult>();
+        result.Result.Should().BeOfType<NotFoundResult>();
     }
 
     [Fact]
@@ -82,13 +82,13 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetInventory(inventoryId, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
+        OkObjectResult okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
         string jsonResult = (string)okResult.Value;
-        jsonResult.ShouldContain("100");
-        jsonResult.ShouldNotContain("42");
-        jsonResult.ShouldNotContain("24");
+        jsonResult.Should().Contain("100");
+        jsonResult.Should().NotContain("42");
+        jsonResult.Should().NotContain("24");
     }
 
     [Fact]

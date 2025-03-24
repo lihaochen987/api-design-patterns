@@ -6,7 +6,7 @@ using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.DomainModels;
 using backend.Supplier.SupplierControllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Supplier.Tests.ApplicationLayerTests;
@@ -32,13 +32,13 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
 
         await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateSupplierAsync", 1);
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateSupplierAddressAsync", 1);
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateSupplierPhoneNumberAsync", 1);
-        Repository.First().FirstName.ShouldBeEquivalentTo(request.FirstName);
-        Repository.First().LastName.ShouldBeEquivalentTo(supplier.LastName);
-        Repository.First().Email.ShouldBeEquivalentTo(request.Email);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateSupplierAsync").WhoseValue.Should().Be(1);
+        Repository.CallCount.Should().ContainKey("UpdateSupplierAddressAsync").WhoseValue.Should().Be(1);
+        Repository.CallCount.Should().ContainKey("UpdateSupplierPhoneNumberAsync").WhoseValue.Should().Be(1);
+        Repository.First().FirstName.Should().BeEquivalentTo(request.FirstName);
+        Repository.First().LastName.Should().BeEquivalentTo(supplier.LastName);
+        Repository.First().Email.Should().BeEquivalentTo(request.Email);
     }
 
     [Fact]
@@ -59,12 +59,12 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
 
         await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateSupplierAddressAsync", 1);
-        Repository.First().Address.Street.ShouldBeEquivalentTo(request.Address.Street);
-        Repository.First().Address.City.ShouldBeEquivalentTo(supplier.Address.City);
-        Repository.First().Address.PostalCode.ShouldBeEquivalentTo(request.Address.PostalCode);
-        Repository.First().Address.Country.ShouldBeEquivalentTo(supplier.Address.Country);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateSupplierAddressAsync").WhoseValue.Should().Be(1);
+        Repository.First().Address.Street.Should().BeEquivalentTo(request.Address.Street);
+        Repository.First().Address.City.Should().BeEquivalentTo(supplier.Address.City);
+        Repository.First().Address.PostalCode.Should().BeEquivalentTo(request.Address.PostalCode);
+        Repository.First().Address.Country.Should().BeEquivalentTo(supplier.Address.Country);
     }
 
     [Fact]
@@ -85,10 +85,10 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
 
         await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("UpdateSupplierPhoneNumberAsync", 1);
-        Repository.First().PhoneNumber.CountryCode.ShouldBeEquivalentTo(request.PhoneNumber.CountryCode);
-        Repository.First().PhoneNumber.AreaCode.ShouldBeEquivalentTo(supplier.PhoneNumber.AreaCode);
-        Repository.First().PhoneNumber.Number.ShouldBeEquivalentTo(long.Parse(request.PhoneNumber.Number));
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("UpdateSupplierPhoneNumberAsync").WhoseValue.Should().Be(1);
+        Repository.First().PhoneNumber.CountryCode.Should().BeEquivalentTo(request.PhoneNumber.CountryCode);
+        Repository.First().PhoneNumber.AreaCode.Should().BeEquivalentTo(supplier.PhoneNumber.AreaCode);
+        Repository.First().PhoneNumber.Number.Should().Be(long.Parse(request.PhoneNumber.Number));
     }
 }

@@ -6,9 +6,9 @@ using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.SupplierControllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;
@@ -28,10 +28,10 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
 
         ActionResult<UpdateSupplierResponse> actionResult = await sut.UpdateSupplier(supplier.Id, request);
 
-        actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = (OkObjectResult)actionResult.Result;
-        UpdateSupplierResponse response = (UpdateSupplierResponse)contentResult.Value!;
-        response.ShouldBeEquivalentTo(Mapper.Map<UpdateSupplierResponse>(supplier));
+        actionResult.Result.Should().BeOfType<OkObjectResult>();
+        var contentResult = actionResult.Result.As<OkObjectResult>();
+        var response = contentResult.Value.Should().BeOfType<UpdateSupplierResponse>().Subject;
+        response.Should().BeEquivalentTo(Mapper.Map<UpdateSupplierResponse>(supplier));
         Mock
             .Get(MockUpdateSupplierHandler)
             .Verify(
@@ -52,8 +52,8 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
 
         ActionResult<UpdateSupplierResponse> actionResult = await sut.UpdateSupplier(nonExistentId, request);
 
-        actionResult.Result.ShouldNotBeNull();
-        actionResult.Result.ShouldBeOfType<NotFoundResult>();
+        actionResult.Result.Should().NotBeNull();
+        actionResult.Result.Should().BeOfType<NotFoundResult>();
         Mock
             .Get(MockUpdateSupplierHandler)
             .Verify(
@@ -75,9 +75,9 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
 
         var result = await sut.UpdateSupplier(supplier.Id, request);
 
-        result.ShouldNotBeNull();
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.Value.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.Value.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
@@ -103,10 +103,10 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
             .Verify(
                 svc => svc.Handle(It.Is<GetSupplierQuery>(q => q.Id == supplier.Id)),
                 Times.Exactly(2));
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = (UpdateSupplierResponse)okResult.Value!;
-        response.ShouldNotBeNull();
-        response.FirstName.ShouldBe("Updated");
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        var response = okResult.Value.Should().BeOfType<UpdateSupplierResponse>().Subject;
+        response.Should().NotBeNull();
+        response.FirstName.Should().Be("Updated");
     }
 
     [Fact]

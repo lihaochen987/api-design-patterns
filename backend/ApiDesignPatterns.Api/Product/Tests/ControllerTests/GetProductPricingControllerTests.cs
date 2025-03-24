@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Net;
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
@@ -6,10 +5,10 @@ using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
-using Shouldly;
 using Xunit;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -31,11 +30,11 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
 
         ActionResult<GetProductPricingResponse> actionResult = await sut.GetProductPricing(product.Id, request);
 
-        actionResult.Result.ShouldBeOfType<OkObjectResult>();
-        OkObjectResult? contentResult = (OkObjectResult) actionResult.Result;
+        actionResult.Result.Should().BeOfType<OkObjectResult>();
+        OkObjectResult? contentResult = (OkObjectResult)actionResult.Result;
         GetProductPricingResponse response =
-            JsonConvert.DeserializeObject<GetProductPricingResponse>(contentResult!.Value!.ToString()!)!;
-        response.pricing.ShouldBeEquivalentTo(Mapper.Map<ProductPricingResponse>(product.Pricing));
+            JsonConvert.DeserializeObject<GetProductPricingResponse>(contentResult.Value!.ToString()!)!;
+        response.pricing.Should().BeEquivalentTo(Mapper.Map<ProductPricingResponse>(product.Pricing));
     }
 
     [Fact]
@@ -46,7 +45,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
 
         ActionResult<GetProductPricingResponse> result = await sut.GetProductPricing(999, request);
 
-        result.Result.ShouldBeOfType<NotFoundResult>();
+        result.Result.Should().BeOfType<NotFoundResult>();
     }
 
     [Fact]
@@ -64,11 +63,11 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
 
         ActionResult<GetProductPricingResponse> result = await sut.GetProductPricing(product.Id, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
         string jsonResult = (string)okResult.Value;
-        jsonResult.ShouldContain("BasePrice");
+        jsonResult.Should().Contain("BasePrice");
     }
 
     [Fact]
@@ -86,13 +85,13 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
 
         ActionResult<GetProductPricingResponse> result = await sut.GetProductPricing(product.Id, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
         string jsonResult = (string)okResult.Value;
-        jsonResult.ShouldContain("BasePrice");
-        jsonResult.ShouldContain("DiscountPercentage");
-        jsonResult.ShouldContain("TaxRate");
+        jsonResult.Should().Contain("BasePrice");
+        jsonResult.Should().Contain("DiscountPercentage");
+        jsonResult.Should().Contain("TaxRate");
     }
 
     [Fact]
@@ -110,12 +109,12 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
 
         ActionResult<GetProductPricingResponse> result = await sut.GetProductPricing(product.Id, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
         string jsonResult = (string)okResult.Value;
-        jsonResult.ShouldContain("BasePrice");
-        jsonResult.ShouldContain("TaxRate");
-        jsonResult.ShouldNotContain("DiscountPercentage");
+        jsonResult.Should().Contain("BasePrice");
+        jsonResult.Should().Contain("TaxRate");
+        jsonResult.Should().NotContain("DiscountPercentage");
     }
 }

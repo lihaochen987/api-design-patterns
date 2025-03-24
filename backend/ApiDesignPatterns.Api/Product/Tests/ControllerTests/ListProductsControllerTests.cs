@@ -7,13 +7,15 @@ using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
+using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Product.Tests.ControllerTests;
 
+// Todo: Refactor some tests in this file
 public class ListProductsControllerTests : ListProductsControllerTestBase
 {
     [Fact]
@@ -42,13 +44,13 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var result = await sut.ListProducts(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse!.Results.Count().ShouldBe(4);
-        listProductsResponse.NextPageToken.ShouldBeNull();
+        listProductsResponse.Results.Should().HaveCount(4);
+        listProductsResponse.NextPageToken.Should().BeNull();
         Mock.Get(MockPersistListProductsToCache)
             .Verify(svc => svc.Handle(It.Is<PersistListProductsToCacheCommand>(c =>
                     c.CacheKey == "products-cache-key" &&
@@ -81,11 +83,11 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var result = await sut.ListProducts(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
-        response.Value.ShouldBe(cachedResponse);
+        response.Should().NotBeNull();
+        response.Value.Should().Be(cachedResponse);
         Mock.Get(MockListProducts)
             .Verify(svc => svc.Handle(It.IsAny<ListProductsQuery>()), Times.Never);
     }
@@ -117,13 +119,13 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var result = await sut.ListProducts(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse!.Results.Count().ShouldBe(2);
-        listProductsResponse.NextPageToken.ShouldBeNull();
+        listProductsResponse.Results.Should().HaveCount(2);
+        listProductsResponse.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -153,13 +155,13 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var result = await sut.ListProducts(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse!.Results.Count().ShouldBe(2);
-        listProductsResponse.NextPageToken.ShouldBeEquivalentTo("2");
+        listProductsResponse.Results.Should().HaveCount(2);
+        listProductsResponse.NextPageToken.Should().BeEquivalentTo("2");
     }
 
     [Fact]
@@ -189,13 +191,13 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var result = await sut.ListProducts(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse!.Results.Count().ShouldBe(DefaultMaxPageSize);
-        listProductsResponse.NextPageToken.ShouldBeEquivalentTo(DefaultMaxPageSize.ToString());
+        listProductsResponse.Results.Should().HaveCount(DefaultMaxPageSize);
+        listProductsResponse.NextPageToken.Should().BeEquivalentTo(DefaultMaxPageSize.ToString());
     }
 
     [Fact]
@@ -223,13 +225,13 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var result = await sut.ListProducts(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse!.Results.ShouldBeEmpty();
-        listProductsResponse.NextPageToken.ShouldBeNull();
+        listProductsResponse.Results.Should().BeEmpty();
+        listProductsResponse.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -259,13 +261,13 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var result = await sut.ListProducts(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse.ShouldNotBeNull();
-        listProductsResponse.Results.Count().ShouldBe(DefaultMaxPageSize);
-        listProductsResponse.NextPageToken.ShouldBeEquivalentTo(DefaultMaxPageSize.ToString());
+        listProductsResponse.Should().NotBeNull();
+        listProductsResponse.Results.Should().HaveCount(DefaultMaxPageSize);
+        listProductsResponse.NextPageToken.Should().BeEquivalentTo(DefaultMaxPageSize.ToString());
     }
 
 
@@ -298,11 +300,14 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var response = (OkObjectResult)result.Result!;
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse.ShouldNotBeNull();
-        listProductsResponse.Results.ShouldHaveSingleItem()
-            .ShouldSatisfyAllConditions(
-                p => ((GetPetFoodResponse)p).Category.ShouldBe(product.Category),
-                p => decimal.Parse(((GetPetFoodResponse)p).Price).ShouldBeLessThan(20));
+        listProductsResponse.Should().NotBeNull();
+
+        var singleItem = listProductsResponse.Results.Should().ContainSingle().Subject;
+        using (new AssertionScope())
+        {
+            ((GetPetFoodResponse)singleItem).Category.Should().Be(product.Category);
+            decimal.Parse(((GetPetFoodResponse)singleItem).Price).Should().BeLessThan(20);
+        }
     }
 
     [Fact]
@@ -337,10 +342,13 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var response = (OkObjectResult)result.Result!;
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse!.Results.ShouldHaveSingleItem()
-            .ShouldSatisfyAllConditions(
-                p => int.Parse(p.Dimensions.Length).ShouldBe(5),
-                p => int.Parse(p.Dimensions.Width).ShouldBeLessThan(20));
+
+        GetProductResponse? singleItem = listProductsResponse.Results.Should().ContainSingle().Subject;
+        using (new AssertionScope())
+        {
+            int.Parse(singleItem.Dimensions.Length).Should().Be(5);
+            int.Parse(singleItem.Dimensions.Width).Should().BeLessThan(20);
+        }
     }
 
 
@@ -372,12 +380,12 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var result = await sut.ListProducts(request);
 
         var response = (OkObjectResult)result.Result!;
-        response.ShouldNotBeNull();
+        response.Should().NotBeNull();
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse.ShouldNotBeNull();
-        listProductsResponse.Results.ShouldHaveSingleItem()
-            .ShouldSatisfyAllConditions(
-                p => p.Name.ShouldBe(product.Name));
+        listProductsResponse.Should().NotBeNull();
+
+        var singleItem = listProductsResponse.Results.Should().ContainSingle().Subject;
+        singleItem.Name.Should().Be(product.Name);
     }
 
 
@@ -408,13 +416,13 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var result = await sut.ListProducts(request);
 
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse!.Results.Count().ShouldBe(1);
+        listProductsResponse.Results.Should().HaveCount(1);
         listProductsResponse.Results
             .All(p => p.Category == product.Category)
-            .ShouldBeTrue();
+            .Should().BeTrue();
     }
 
     [Fact]
@@ -445,10 +453,10 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         var result = await sut.ListProducts(request);
 
-        result.Result.ShouldBeOfType<OkObjectResult>();
+        result.Result.Should().BeOfType<OkObjectResult>();
         var response = (OkObjectResult)result.Result;
         var listProductsResponse = (ListProductsResponse)response.Value!;
-        listProductsResponse!.Results.Count().ShouldBe(2);
+        listProductsResponse.Results.Should().HaveCount(2);
     }
 
     [Fact]
@@ -465,6 +473,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
 
         ListProductsController sut = ListProductsController();
 
-        await sut.ListProducts(request).ShouldThrowAsync<ArgumentException>();
+        Func<Task> act = async () => await sut.ListProducts(request);
+        await act.Should().ThrowAsync<ArgumentException>();
     }
 }

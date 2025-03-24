@@ -5,9 +5,9 @@ using backend.Supplier.ApplicationLayer.Commands.DeleteSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.SupplierControllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;
@@ -26,7 +26,7 @@ public class DeleteSupplierControllerTests : DeleteSupplierControllerTestBase
 
         ActionResult result = await sut.DeleteSupplier(supplier.Id, new DeleteSupplierRequest());
 
-        result.ShouldBeOfType<NoContentResult>();
+        result.Should().BeOfType<NoContentResult>();
         Mock
             .Get(MockDeleteSupplierHandler)
             .Verify(svc => svc.Handle(new DeleteSupplierCommand { Id = supplier.Id }), Times.Once);
@@ -44,7 +44,7 @@ public class DeleteSupplierControllerTests : DeleteSupplierControllerTestBase
 
         ActionResult result = await sut.DeleteSupplier(supplier.Id, new DeleteSupplierRequest());
 
-        result.ShouldBeOfType<NotFoundResult>();
+        result.Should().BeOfType<NotFoundResult>();
         Mock
             .Get(MockDeleteSupplierHandler)
             .Verify(svc => svc.Handle(new DeleteSupplierCommand { Id = supplier.Id }), Times.Never);
@@ -64,7 +64,8 @@ public class DeleteSupplierControllerTests : DeleteSupplierControllerTestBase
             .ThrowsAsync(new Exception("Failed to delete supplier"));
         DeleteSupplierController sut = DeleteSupplierController();
 
-        await Should.ThrowAsync<Exception>(() =>
-            sut.DeleteSupplier(supplier.Id, new DeleteSupplierRequest()));
+        Func<Task> act = async () => await sut.DeleteSupplier(supplier.Id, new DeleteSupplierRequest());
+
+        await act.Should().ThrowAsync<Exception>();
     }
 }

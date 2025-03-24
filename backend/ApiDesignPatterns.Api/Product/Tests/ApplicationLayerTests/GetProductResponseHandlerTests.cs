@@ -7,7 +7,7 @@ using backend.Product.DomainModels.Views;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -23,7 +23,7 @@ public class GetProductResponseHandlerTests : GetProductResponseHandlerTestBase
         GetProductResponse? result =
             await sut.Handle(new GetProductResponseQuery { Id = expectedProduct.Id });
 
-        result.ShouldBeNull();
+        result.Should().BeNull();
     }
 
     [Fact]
@@ -39,9 +39,9 @@ public class GetProductResponseHandlerTests : GetProductResponseHandlerTestBase
         GetProductResponse? result =
             await sut.Handle(new GetProductResponseQuery { Id = productView.Id });
 
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType<GetPetFoodResponse>();
-        result.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        result.Should().BeOfType<GetPetFoodResponse>();
+        result.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
@@ -57,9 +57,9 @@ public class GetProductResponseHandlerTests : GetProductResponseHandlerTestBase
         GetProductResponse? result =
             await sut.Handle(new GetProductResponseQuery { Id = productView.Id });
 
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType<GetGroomingAndHygieneResponse>();
-        result.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        result.Should().BeOfType<GetGroomingAndHygieneResponse>();
+        result.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
@@ -75,8 +75,8 @@ public class GetProductResponseHandlerTests : GetProductResponseHandlerTestBase
         GetProductResponse? result =
             await sut.Handle(new GetProductResponseQuery { Id = productView.Id });
 
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType<GetProductResponse>();
-        result.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        result.Should().BeOfType<GetProductResponse>();
+        result.Should().BeEquivalentTo(expectedResponse);
     }
 }

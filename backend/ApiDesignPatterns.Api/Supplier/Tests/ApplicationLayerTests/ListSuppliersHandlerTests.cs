@@ -4,7 +4,7 @@
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
 using backend.Supplier.SupplierControllers;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Supplier.Tests.ApplicationLayerTests;
@@ -19,13 +19,13 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
         Repository.AddSupplierView("Jane", "Smith", "jane@example.com");
         IQueryHandler<ListSuppliersQuery, PagedSuppliers> sut = ListSuppliersViewHandler();
 
-        PagedSuppliers? result = await sut.Handle(new ListSuppliersQuery { Request = request });
+        PagedSuppliers result = await sut.Handle(new ListSuppliersQuery { Request = request });
 
-        result!.Suppliers.ShouldNotBeEmpty();
-        result.Suppliers.Count.ShouldBe(2);
-        result.NextPageToken.ShouldBeNull();
-        result.Suppliers.ShouldContain(s => s.Email == "john@example.com");
-        result.Suppliers.ShouldContain(s => s.Email == "jane@example.com");
+        result.Suppliers.Should().NotBeEmpty();
+        result.Suppliers.Should().HaveCount(2);
+        result.NextPageToken.Should().BeNull();
+        result.Suppliers.Should().Contain(s => s.Email == "john@example.com");
+        result.Suppliers.Should().Contain(s => s.Email == "jane@example.com");
     }
 
     [Fact]
@@ -34,10 +34,10 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
         var request = new ListSuppliersRequest();
         IQueryHandler<ListSuppliersQuery, PagedSuppliers> sut = ListSuppliersViewHandler();
 
-        PagedSuppliers? result = await sut.Handle(new ListSuppliersQuery { Request = request });
+        PagedSuppliers result = await sut.Handle(new ListSuppliersQuery { Request = request });
 
-        result!.Suppliers.ShouldBeEmpty();
-        result.NextPageToken.ShouldBeNull();
+        result.Suppliers.Should().BeEmpty();
+        result.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -48,11 +48,11 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
         Repository.AddSupplierView("Jane", "Smith", "jane@example.com");
         IQueryHandler<ListSuppliersQuery, PagedSuppliers> sut = ListSuppliersViewHandler();
 
-        PagedSuppliers? result = await sut.Handle(new ListSuppliersQuery { Request = request });
+        PagedSuppliers result = await sut.Handle(new ListSuppliersQuery { Request = request });
 
-        result!.Suppliers.Count.ShouldBe(1);
-        result.Suppliers.Single().FullName.ShouldBe("John Doe");
-        result.NextPageToken.ShouldBeNull();
+        result.Suppliers.Should().HaveCount(1);
+        result.Suppliers.Single().FullName.Should().Be("John Doe");
+        result.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -64,10 +64,10 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
         Repository.AddSupplierView("Bob", "Johnson", "bob@example.com");
         IQueryHandler<ListSuppliersQuery, PagedSuppliers> sut = ListSuppliersViewHandler();
 
-        PagedSuppliers? result = await sut.Handle(new ListSuppliersQuery { Request = request });
+        PagedSuppliers result = await sut.Handle(new ListSuppliersQuery { Request = request });
 
-        result!.Suppliers.Count.ShouldBe(2);
-        result.NextPageToken.ShouldNotBeNull();
+        result.Suppliers.Should().HaveCount(2);
+        result.NextPageToken.Should().NotBeNull();
     }
 
     [Fact]
@@ -76,7 +76,8 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
         var request = new ListSuppliersRequest { Filter = "InvalidFilter == \"SomeValue\"", MaxPageSize = 5 };
         IQueryHandler<ListSuppliersQuery, PagedSuppliers> sut = ListSuppliersViewHandler();
 
-        await Should.ThrowAsync<ArgumentException>(() => sut.Handle(
-            new ListSuppliersQuery { Request = request }));
+        Func<Task> act = async () => await sut.Handle(new ListSuppliersQuery { Request = request });
+
+        await act.Should().ThrowAsync<ArgumentException>();
     }
 }

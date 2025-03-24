@@ -6,7 +6,7 @@ using backend.Product.DomainModels.ValueObjects;
 using backend.Product.ProductPricingControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -33,10 +33,10 @@ public class UpdateProductPricingHandlerTests : UpdateProductPricingHandlerTestB
         await sut.Handle(command);
 
         var updatedProduct = await Repository.GetProductAsync(product.Id);
-        updatedProduct.ShouldNotBeNull();
-        updatedProduct.Pricing.BasePrice.ShouldBe(199.99m);
-        updatedProduct.Pricing.DiscountPercentage.ShouldBe(15.5m);
-        updatedProduct.Pricing.TaxRate.ShouldBe(9.5m);
+        updatedProduct.Should().NotBeNull();
+        updatedProduct.Pricing.BasePrice.Should().Be(199.99m);
+        updatedProduct.Pricing.DiscountPercentage.Should().Be(15.5m);
+        updatedProduct.Pricing.TaxRate.Should().Be(9.5m);
     }
 
     [Fact]
@@ -59,10 +59,10 @@ public class UpdateProductPricingHandlerTests : UpdateProductPricingHandlerTestB
         await sut.Handle(command);
 
         var updatedProduct = await Repository.GetProductAsync(product.Id);
-        updatedProduct.ShouldNotBeNull();
-        updatedProduct.Pricing.BasePrice.ShouldBe(199.99m);
-        updatedProduct.Pricing.DiscountPercentage.ShouldBe(10m); // Unchanged
-        updatedProduct.Pricing.TaxRate.ShouldBe(9.5m);
+        updatedProduct.Should().NotBeNull();
+        updatedProduct.Pricing.BasePrice.Should().Be(199.99m);
+        updatedProduct.Pricing.DiscountPercentage.Should().Be(10m); // Unchanged
+        updatedProduct.Pricing.TaxRate.Should().Be(9.5m);
     }
 
     [Fact]
@@ -83,10 +83,10 @@ public class UpdateProductPricingHandlerTests : UpdateProductPricingHandlerTestB
         await sut.Handle(command);
 
         var updatedProduct = await Repository.GetProductAsync(product.Id);
-        updatedProduct.ShouldNotBeNull();
-        updatedProduct.Pricing.BasePrice.ShouldBe(100m);
-        updatedProduct.Pricing.DiscountPercentage.ShouldBe(10m);
-        updatedProduct.Pricing.TaxRate.ShouldBe(8m);
+        updatedProduct.Should().NotBeNull();
+        updatedProduct.Pricing.BasePrice.Should().Be(100m);
+        updatedProduct.Pricing.DiscountPercentage.Should().Be(10m);
+        updatedProduct.Pricing.TaxRate.Should().Be(8m);
     }
 
     [Fact]
@@ -109,9 +109,9 @@ public class UpdateProductPricingHandlerTests : UpdateProductPricingHandlerTestB
         await sut.Handle(command);
 
         var updatedProduct = await Repository.GetProductAsync(product.Id);
-        updatedProduct.ShouldNotBeNull();
-        updatedProduct.Pricing.BasePrice.ShouldBe(100m);
-        updatedProduct.Pricing.DiscountPercentage.ShouldBe(10m);
-        updatedProduct.Pricing.TaxRate.ShouldBe(8m);
+        updatedProduct.Should().NotBeNull();
+        updatedProduct.Pricing.BasePrice.Should().Be(100m);
+        updatedProduct.Pricing.DiscountPercentage.Should().Be(10m);
+        updatedProduct.Pricing.TaxRate.Should().Be(8m);
     }
 }

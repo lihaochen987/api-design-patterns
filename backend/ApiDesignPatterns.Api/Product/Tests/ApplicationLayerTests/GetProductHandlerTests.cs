@@ -4,7 +4,7 @@
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -20,8 +20,8 @@ public class GetProductHandlerTests : GetProductHandlerTestBase
 
         DomainModels.Product? result = await sut.Handle(new GetProductQuery { Id = expectedProduct.Id });
 
-        result.ShouldNotBeNull();
-        result.ShouldBeEquivalentTo(expectedProduct);
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedProduct);
     }
 
     [Fact]
@@ -32,6 +32,6 @@ public class GetProductHandlerTests : GetProductHandlerTestBase
 
         DomainModels.Product? result = await sut.Handle(new GetProductQuery { Id = expectedProduct.Id });
 
-        result.ShouldBeNull();
+        result.Should().BeNull();
     }
 }

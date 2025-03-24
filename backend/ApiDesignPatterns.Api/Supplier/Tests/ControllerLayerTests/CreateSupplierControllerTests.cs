@@ -4,9 +4,9 @@
 using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
 using backend.Supplier.SupplierControllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;
@@ -22,9 +22,9 @@ public class CreateSupplierControllerTests : CreateSupplierControllerTestBase
 
         var result = await sut.CreateSupplier(request);
 
-        result.ShouldNotBeNull();
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.Value.ShouldBeOfType<CreateSupplierResponse>();
+        result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>()
+            .Which.Value.Should().BeOfType<CreateSupplierResponse>();
         Mock
             .Get(CreateSupplier)
             .Verify(x => x.Handle(It.IsAny<CreateSupplierCommand>()),
@@ -42,7 +42,9 @@ public class CreateSupplierControllerTests : CreateSupplierControllerTestBase
             .ThrowsAsync(new Exception("Failed to create supplier"));
         var sut = GetCreateSupplierController();
 
-        await Should.ThrowAsync<Exception>(() => sut.CreateSupplier(request));
+        Func<Task> act = async () => await sut.CreateSupplier(request);
+
+        await act.Should().ThrowAsync<Exception>();
     }
 
     [Theory]
@@ -61,10 +63,10 @@ public class CreateSupplierControllerTests : CreateSupplierControllerTestBase
 
         var result = await sut.CreateSupplier(request);
 
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = okResult.Value.ShouldBeOfType<CreateSupplierResponse>();
-        response.FirstName.ShouldBe(firstName);
-        response.LastName.ShouldBe(lastName);
-        response.Email.ShouldBe(email);
+        var response = result.Result.Should().BeOfType<OkObjectResult>()
+            .Which.Value.Should().BeOfType<CreateSupplierResponse>().Subject;
+        response.FirstName.Should().Be(firstName);
+        response.LastName.Should().Be(lastName);
+        response.Email.Should().Be(email);
     }
 }

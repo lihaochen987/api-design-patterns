@@ -5,7 +5,7 @@ using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.DomainModels.Views;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -21,8 +21,8 @@ public class GetProductPricingHandlerTests : GetProductPricingHandlerTestBase
 
         ProductPricingView? result = await sut.Handle(new GetProductPricingQuery { Id = expectedPricing.Id });
 
-        result.ShouldNotBeNull();
-        result.ShouldBeEquivalentTo(expectedPricing);
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedPricing);
     }
 
     [Fact]
@@ -33,6 +33,6 @@ public class GetProductPricingHandlerTests : GetProductPricingHandlerTestBase
 
         ProductPricingView? result = await sut.Handle(new GetProductPricingQuery { Id = expectedPricing.Id });
 
-        result.ShouldBeNull();
+        result.Should().BeNull();
     }
 }

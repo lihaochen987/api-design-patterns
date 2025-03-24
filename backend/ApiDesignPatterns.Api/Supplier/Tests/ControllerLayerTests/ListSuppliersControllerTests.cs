@@ -5,9 +5,9 @@ using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
 using backend.Supplier.DomainModels;
 using backend.Supplier.SupplierControllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;
@@ -30,13 +30,13 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         var result = await sut.ListSuppliers(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
-        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
-        listSuppliersResponse!.Results.Count().ShouldBe(4);
-        listSuppliersResponse.NextPageToken.ShouldBeNull();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
+        var response = result.Result.As<OkObjectResult>();
+        response.Should().NotBeNull();
+        var listSuppliersResponse = response.Value.Should().BeOfType<ListSuppliersResponse>().Subject;
+        listSuppliersResponse.Results.Should().HaveCount(4);
+        listSuppliersResponse.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -56,13 +56,13 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         var result = await sut.ListSuppliers(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
-        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
-        listSuppliersResponse!.Results.Count().ShouldBe(2);
-        listSuppliersResponse.NextPageToken.ShouldBeNull();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
+        var response = result.Result.As<OkObjectResult>();
+        response.Should().NotBeNull();
+        var listSuppliersResponse = response.Value.Should().BeOfType<ListSuppliersResponse>().Subject;
+        listSuppliersResponse.Results.Should().HaveCount(2);
+        listSuppliersResponse.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -82,13 +82,13 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         var result = await sut.ListSuppliers(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
-        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
-        listSuppliersResponse!.Results.Count().ShouldBe(2);
-        listSuppliersResponse.NextPageToken.ShouldBeEquivalentTo("2");
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
+        var response = result.Result.As<OkObjectResult>();
+        response.Should().NotBeNull();
+        var listSuppliersResponse = response.Value.Should().BeOfType<ListSuppliersResponse>().Subject;
+        listSuppliersResponse.Results.Should().HaveCount(2);
+        listSuppliersResponse.NextPageToken.Should().BeEquivalentTo("2");
     }
 
     [Fact]
@@ -108,13 +108,13 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         var result = await sut.ListSuppliers(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
-        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
-        listSuppliersResponse!.Results.Count().ShouldBe(DefaultMaxPageSize);
-        listSuppliersResponse.NextPageToken.ShouldBeEquivalentTo(DefaultMaxPageSize.ToString());
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
+        var response = result.Result.As<OkObjectResult>();
+        response.Should().NotBeNull();
+        var listSuppliersResponse = response.Value.Should().BeOfType<ListSuppliersResponse>().Subject;
+        listSuppliersResponse.Results.Should().HaveCount(DefaultMaxPageSize);
+        listSuppliersResponse.NextPageToken.Should().BeEquivalentTo(DefaultMaxPageSize.ToString());
     }
 
     [Fact]
@@ -132,13 +132,13 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         var result = await sut.ListSuppliers(request);
 
-        result.Result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = (OkObjectResult)result.Result;
-        response.ShouldNotBeNull();
-        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
-        listSuppliersResponse!.Results.ShouldBeEmpty();
-        listSuppliersResponse.NextPageToken.ShouldBeNull();
+        result.Result.Should().NotBeNull();
+        result.Result.Should().BeOfType<OkObjectResult>();
+        var response = result.Result.As<OkObjectResult>();
+        response.Should().NotBeNull();
+        var listSuppliersResponse = response.Value.Should().BeOfType<ListSuppliersResponse>().Subject;
+        listSuppliersResponse.Results.Should().BeEmpty();
+        listSuppliersResponse.NextPageToken.Should().BeNull();
     }
 
     [Fact]
@@ -161,10 +161,10 @@ public class ListSuppliersControllerTests : ListSuppliersControllerTestBase
 
         var result = await sut.ListSuppliers(request);
 
-        result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = (OkObjectResult)result.Result;
-        var listSuppliersResponse = (ListSuppliersResponse)response.Value!;
-        listSuppliersResponse!.Results.Count().ShouldBe(1);
-        listSuppliersResponse.NextPageToken.ShouldBe("2");
+        result.Result.Should().BeOfType<OkObjectResult>();
+        var response = result.Result.As<OkObjectResult>();
+        var listSuppliersResponse = response.Value.Should().BeOfType<ListSuppliersResponse>().Subject;
+        listSuppliersResponse.Results.Should().HaveCount(1);
+        listSuppliersResponse.NextPageToken.Should().Be("2");
     }
 }

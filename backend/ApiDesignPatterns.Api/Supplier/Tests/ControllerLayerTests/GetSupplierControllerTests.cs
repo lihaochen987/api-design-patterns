@@ -8,9 +8,9 @@ using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 using backend.Supplier.DomainModels;
 using backend.Supplier.SupplierControllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;
@@ -37,12 +37,12 @@ public class GetSupplierControllerTests : GetSupplierControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetSupplier(supplierId, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
-        string jsonResult = ((string)okResult.Value);
-        jsonResult.ShouldContain("John Doe");
-        jsonResult.ShouldContain("john.doe@example.com");
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
+        string? jsonResult = ((string)okResult.Value);
+        jsonResult.Should().Contain("John Doe");
+        jsonResult.Should().Contain("john.doe@example.com");
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class GetSupplierControllerTests : GetSupplierControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetSupplier(supplierId, request);
 
-        result.Result.ShouldBeOfType<NotFoundResult>();
+        result.Result.Should().BeOfType<NotFoundResult>();
     }
 
     [Fact]
@@ -81,11 +81,11 @@ public class GetSupplierControllerTests : GetSupplierControllerTestBase
 
         ActionResult<GetProductResponse> result = await sut.GetSupplier(supplierId, request);
 
-        OkObjectResult okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        okResult.StatusCode.ShouldBe((int)HttpStatusCode.OK);
-        okResult.Value.ShouldNotBeNull();
-        string jsonResult = ((string)okResult.Value);
-        jsonResult.ShouldContain("John Doe");
-        jsonResult.ShouldNotContain("john.doe@example.com");
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        okResult.Value.Should().NotBeNull();
+        string? jsonResult = (string)okResult.Value;
+        jsonResult.Should().Contain("John Doe");
+        jsonResult.Should().NotContain("john.doe@example.com");
     }
 }

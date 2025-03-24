@@ -4,7 +4,7 @@
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.Tests.TestHelpers.Builders;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Supplier.Tests.ApplicationLayerTests;
@@ -20,9 +20,9 @@ public class GetSupplierHandlerTests : GetSupplierHandlerTestBase
 
         DomainModels.Supplier? result = await sut.Handle(new GetSupplierQuery { Id = expectedSupplier.Id });
 
-        result.ShouldNotBeNull();
-        result.ShouldBeEquivalentTo(expectedSupplier);
-        Repository.CallCount.ShouldContainKeyAndValue("GetSupplierAsync", 1);
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedSupplier);
+        Repository.CallCount.Should().ContainKey("GetSupplierAsync").And.ContainValue(1);
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class GetSupplierHandlerTests : GetSupplierHandlerTestBase
 
         DomainModels.Supplier? result = await sut.Handle(new GetSupplierQuery { Id = nonExistentSupplier.Id });
 
-        result.ShouldBeNull();
-        Repository.CallCount.ShouldContainKeyAndValue("GetSupplierAsync", 1);
+        result.Should().BeNull();
+        Repository.CallCount.Should().ContainKey("GetSupplierAsync").And.ContainValue(1);
     }
 }

@@ -6,7 +6,7 @@ using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -24,11 +24,11 @@ public class MapReplaceProductResponseHandlerTests : MapReplaceProductResponseHa
         var query = new MapReplaceProductResponseQuery { Product = product };
         IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
 
-        ReplaceProductResponse? result = await sut.Handle(query);
+        ReplaceProductResponse result = await sut.Handle(query);
 
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType<ReplacePetFoodResponse>();
-        result.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        result.Should().BeOfType<ReplacePetFoodResponse>();
+        result.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
@@ -41,11 +41,11 @@ public class MapReplaceProductResponseHandlerTests : MapReplaceProductResponseHa
         var query = new MapReplaceProductResponseQuery { Product = product };
         IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
 
-        ReplaceProductResponse? result = await sut.Handle(query);
+        ReplaceProductResponse result = await sut.Handle(query);
 
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType<ReplaceGroomingAndHygieneResponse>();
-        result.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        result.Should().BeOfType<ReplaceGroomingAndHygieneResponse>();
+        result.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
@@ -58,10 +58,10 @@ public class MapReplaceProductResponseHandlerTests : MapReplaceProductResponseHa
         var query = new MapReplaceProductResponseQuery { Product = product };
         IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
 
-        ReplaceProductResponse? result = await sut.Handle(query);
+        ReplaceProductResponse result = await sut.Handle(query);
 
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType<ReplaceProductResponse>();
-        result.ShouldBeEquivalentTo(expectedResponse);
+        result.Should().NotBeNull();
+        result.Should().BeOfType<ReplaceProductResponse>();
+        result.Should().BeEquivalentTo(expectedResponse);
     }
 }

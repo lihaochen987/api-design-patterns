@@ -4,7 +4,7 @@
 using backend.Shared.CommandHandler;
 using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
 using backend.Supplier.Tests.TestHelpers.Builders;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Supplier.Tests.ApplicationLayerTests;
@@ -20,14 +20,14 @@ public class CreateSupplierHandlerTests : CreateSupplierHandlerTestBase
 
         await sut.Handle(command);
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("CreateSupplierAsync", 1);
-        Repository.CallCount.ShouldContainKeyAndValue("CreateSupplierAddressAsync", 1);
-        Repository.CallCount.ShouldContainKeyAndValue("CreateSupplierPhoneNumberAsync", 1);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("CreateSupplierAsync").And.ContainValue(1);
+        Repository.CallCount.Should().ContainKey("CreateSupplierAddressAsync").And.ContainValue(1);
+        Repository.CallCount.Should().ContainKey("CreateSupplierPhoneNumberAsync").And.ContainValue(1);
 
         var createdSupplier = Repository.First();
-        createdSupplier.Id.ShouldNotBe(0);
-        createdSupplier.CreatedAt.ShouldBe(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
+        createdSupplier.Id.Should().NotBe(0);
+        createdSupplier.CreatedAt.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
     }
 
     [Fact]
@@ -42,16 +42,16 @@ public class CreateSupplierHandlerTests : CreateSupplierHandlerTestBase
         await sut.Handle(firstCommand);
         await sut.Handle(secondCommand);
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("CreateSupplierAsync", 2);
-        Repository.CallCount.ShouldContainKeyAndValue("CreateSupplierAddressAsync", 2);
-        Repository.CallCount.ShouldContainKeyAndValue("CreateSupplierPhoneNumberAsync", 2);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("CreateSupplierAsync").And.ContainValue(2);
+        Repository.CallCount.Should().ContainKey("CreateSupplierAddressAsync").And.ContainValue(2);
+        Repository.CallCount.Should().ContainKey("CreateSupplierPhoneNumberAsync").And.ContainValue(2);
 
         var firstSupplier = Repository.First(x => x.Id == firstSupplierToCreate.Id);
-        firstSupplier.CreatedAt.ShouldBe(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
+        firstSupplier.CreatedAt.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
 
         var secondSupplier = Repository.First(x => x.Id == secondSupplierToCreate.Id);
-        secondSupplier.CreatedAt.ShouldBe(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
+        secondSupplier.CreatedAt.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
     }
 
     private static readonly string[] s_expected =
@@ -68,6 +68,6 @@ public class CreateSupplierHandlerTests : CreateSupplierHandlerTestBase
 
         await sut.Handle(command);
 
-        Repository.CallOrder.ShouldBe(s_expected);
+        Repository.CallOrder.Should().Equal(s_expected);
     }
 }

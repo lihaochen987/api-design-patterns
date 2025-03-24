@@ -7,7 +7,7 @@ using backend.Product.DomainModels.Enums;
 using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
@@ -27,11 +27,11 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
 
         ListProductsResponse result = await sut.Handle(query);
 
-        result.ShouldNotBeNull();
-        result.Results.ShouldNotBeNull();
-        result.Results.Count().ShouldBe(1);
-        result.Results.First().ShouldBeOfType<GetPetFoodResponse>();
-        result.Results.First().ShouldBeEquivalentTo(expectedProductResponse);
+        result.Should().NotBeNull();
+        result.Results.Should().NotBeNull();
+        result.Results.Count().Should().Be(1);
+        result.Results.First().Should().BeOfType<GetPetFoodResponse>();
+        result.Results.First().Should().BeEquivalentTo(expectedProductResponse);
     }
 
     [Fact]
@@ -47,11 +47,11 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
 
         ListProductsResponse result = await sut.Handle(query);
 
-        result.ShouldNotBeNull();
-        result.Results.ShouldNotBeNull();
-        result.Results.Count().ShouldBe(1);
-        result.Results.First().ShouldBeOfType<GetGroomingAndHygieneResponse>();
-        result.Results.First().ShouldBeEquivalentTo(expectedProductResponse);
+        result.Should().NotBeNull();
+        result.Results.Should().NotBeNull();
+        result.Results.Count().Should().Be(1);
+        result.Results.First().Should().BeOfType<GetGroomingAndHygieneResponse>();
+        result.Results.First().Should().BeEquivalentTo(expectedProductResponse);
     }
 
     [Fact]
@@ -67,11 +67,11 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
 
         ListProductsResponse result = await sut.Handle(query);
 
-        result.ShouldNotBeNull();
-        result.Results.ShouldNotBeNull();
-        result.Results.Count().ShouldBe(1);
-        result.Results.First().ShouldBeOfType<GetProductResponse>();
-        result.Results.First().ShouldBeEquivalentTo(expectedProductResponse);
+        result.Should().NotBeNull();
+        result.Results.Should().NotBeNull();
+        result.Results.Count().Should().Be(1);
+        result.Results.First().Should().BeOfType<GetProductResponse>();
+        result.Results.First().Should().BeEquivalentTo(expectedProductResponse);
     }
 
     [Fact]
@@ -92,11 +92,11 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
 
         ListProductsResponse result = await sut.Handle(query);
 
-        result.ShouldNotBeNull();
-        result.Results.ShouldNotBeNull();
-        result.Results.Count().ShouldBe(3);
-        result.Results.ElementAt(0).ShouldBeOfType<GetPetFoodResponse>();
-        result.Results.ElementAt(1).ShouldBeOfType<GetGroomingAndHygieneResponse>();
-        result.Results.ElementAt(2).ShouldBeOfType<GetProductResponse>();
+        result.Should().NotBeNull();
+        result.Results.Should().NotBeNull();
+        result.Results.Count().Should().Be(3);
+        result.Results.ElementAt(0).Should().BeOfType<GetPetFoodResponse>();
+        result.Results.ElementAt(1).Should().BeOfType<GetGroomingAndHygieneResponse>();
+        result.Results.ElementAt(2).Should().BeOfType<GetProductResponse>();
     }
 }

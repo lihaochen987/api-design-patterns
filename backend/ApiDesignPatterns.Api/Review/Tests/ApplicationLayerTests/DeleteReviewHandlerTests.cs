@@ -5,7 +5,7 @@ using AutoFixture;
 using backend.Review.ApplicationLayer.Commands.DeleteReview;
 using backend.Review.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace backend.Review.Tests.ApplicationLayerTests;
@@ -21,8 +21,8 @@ public class DeleteReviewHandlerTests : DeleteReviewHandlerTestBase
 
         await sut.Handle(new DeleteReviewCommand { Id = reviewToDelete.Id });
 
-        Repository.IsDirty.ShouldBeTrue();
-        Repository.CallCount.ShouldContainKeyAndValue("DeleteReviewAsync", 1);
+        Repository.IsDirty.Should().BeTrue();
+        Repository.CallCount.Should().ContainKey("DeleteReviewAsync").WhoseValue.Should().Be(1);
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class DeleteReviewHandlerTests : DeleteReviewHandlerTestBase
 
         await sut.Handle(new DeleteReviewCommand { Id = nonExistentId });
 
-        Repository.IsDirty.ShouldBeFalse();
-        Repository.CallCount.ShouldContainKeyAndValue("DeleteReviewAsync", 1);
+        Repository.IsDirty.Should().BeFalse();
+        Repository.CallCount.Should().ContainKey("DeleteReviewAsync").WhoseValue.Should().Be(1);
     }
 }

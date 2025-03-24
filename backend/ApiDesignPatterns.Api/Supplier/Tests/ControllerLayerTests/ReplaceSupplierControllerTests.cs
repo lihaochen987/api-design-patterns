@@ -6,9 +6,9 @@ using backend.Supplier.ApplicationLayer.Commands.ReplaceSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.SupplierControllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Shouldly;
 using Xunit;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;
@@ -47,7 +47,7 @@ public class ReplaceSupplierControllerTests : ReplaceSupplierControllerTestBase
 
         var result = await sut.ReplaceSupplier(nonExistentId, request);
 
-        result.Result.ShouldBeOfType<NotFoundResult>();
+        result.Result.Should().BeOfType<NotFoundResult>();
         Mock
             .Get(ReplaceSupplier)
             .Verify(x => x.Handle(It.IsAny<ReplaceSupplierCommand>()), Times.Never);
@@ -70,13 +70,13 @@ public class ReplaceSupplierControllerTests : ReplaceSupplierControllerTestBase
 
         var result = await sut.ReplaceSupplier(supplier.Id, request);
 
-        result.ShouldNotBeNull();
-        var okResult = result.Result.ShouldBeOfType<OkObjectResult>();
-        var response = (ReplaceSupplierResponse)okResult.Value!;
-        response.ShouldNotBeNull();
-        response.FirstName.ShouldBe("John");
-        response.LastName.ShouldBe("Doe");
-        response.Email.ShouldBe("john.doe@example.com");
+        result.Should().NotBeNull();
+        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+        var response = okResult.Value.Should().BeOfType<ReplaceSupplierResponse>().Subject;
+        response.Should().NotBeNull();
+        response.FirstName.Should().Be("John");
+        response.LastName.Should().Be("Doe");
+        response.Email.Should().Be("john.doe@example.com");
         Mock
             .Get(ReplaceSupplier)
             .Verify(x => x.Handle(It.Is<ReplaceSupplierCommand>(c =>
