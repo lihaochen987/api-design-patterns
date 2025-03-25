@@ -157,7 +157,7 @@ public class ProductControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new ProductViewRepository(dbConnection, _productPaginateService, _productSqlFilterBuilder);
+            var repository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
 
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
@@ -182,7 +182,7 @@ public class ProductControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new ProductViewRepository(dbConnection, _productPaginateService, _productSqlFilterBuilder);
+            var repository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
             IDatabase redisDatabase = new RedisService(_configuration).GetDatabase();
             var redisCache = new ListProductsCache(redisDatabase);
 
@@ -343,7 +343,7 @@ public class ProductControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new ProductViewRepository(dbConnection, _productPaginateService, _productSqlFilterBuilder);
+            var repository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
 
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(

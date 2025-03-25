@@ -10,7 +10,6 @@ namespace backend.Product.InfrastructureLayer.Database.ProductView;
 
 public class ProductViewRepository(
     IDbConnection dbConnection,
-    PaginateService<DomainModels.Views.ProductView> paginateService,
     SqlFilterBuilder productSqlFilterBuilder)
     : IProductViewRepository
 {
@@ -31,6 +30,7 @@ public class ProductViewRepository(
         return product.SingleOrDefault();
     }
 
+    // Todo: Refactor this
     public async Task<PagedProducts> ListProductsAsync(
         string? pageToken,
         string? filter,
@@ -38,33 +38,36 @@ public class ProductViewRepository(
     {
         var parameters = new DynamicParameters();
         var filterClause = new StringBuilder();
-        var paginationClause = new StringBuilder();
 
-        // Pagination filter - now separate from the main filter
-        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenProduct))
-        {
-            paginationClause.Append(" AND product_id > @LastSeenProduct");
-            parameters.Add("LastSeenProduct", lastSeenProduct);
-        }
-
-        // Custom filter
+        // Add Filter SQL query
         if (!string.IsNullOrEmpty(filter))
         {
             string sqlFilterClause = productSqlFilterBuilder.BuildSqlWhereClause(filter);
             filterClause.Append($" AND {sqlFilterClause}");
         }
 
-        // Count query should only use the filter clause, not the pagination clause
+        // Add Page Token SQL query
+        string seekClause = string.Empty;
+        if (!string.IsNullOrEmpty(pageToken))
+        {
+            if (long.TryParse(pageToken, out long lastSeenId))
+            {
+                seekClause = " AND product_id > @LastSeenId";
+                parameters.Add("LastSeenId", lastSeenId);
+            }
+        }
+
+        // Get count based on filter
         string countSql = $"SELECT COUNT(*) FROM products_view WHERE 1=1{filterClause}";
         int totalCount = await dbConnection.ExecuteScalarAsync<int>(countSql, parameters);
 
-        // Data query uses both filter and pagination
+        // Build the data query with both filter and seek pagination
         var dataSql = new StringBuilder(ProductViewQueries.ListProductsBase);
         dataSql.Append(filterClause);
-        dataSql.Append(paginationClause);
-
-        dataSql.Append(" ORDER BY product_id LIMIT @PageSizePlusOne");
-        parameters.Add("PageSizePlusOne", maxPageSize + 1);
+        dataSql.Append(seekClause);
+        dataSql.Append(" ORDER BY product_id");
+        dataSql.Append(" LIMIT @PageSize");
+        parameters.Add("PageSize", maxPageSize + 1);
 
         var products = (await dbConnection
             .QueryAsync<DomainModels.Views.ProductView, Dimensions, DomainModels.Views.ProductView>(
@@ -78,9 +81,14 @@ public class ProductViewRepository(
                 splitOn: "Length"
             )).ToList();
 
-        List<DomainModels.Views.ProductView> paginatedProducts =
-            paginateService.Paginate(products, maxPageSize, out string? nextPageToken);
+        string? nextPageToken = null;
+        var resultProducts = products.Take(maxPageSize).ToList();
 
-        return new PagedProducts(paginatedProducts, nextPageToken, totalCount);
+        if (products.Count > maxPageSize)
+        {
+            nextPageToken = resultProducts.Last().Id.ToString();
+        }
+
+        return new PagedProducts(resultProducts, nextPageToken, totalCount);
     }
 }
