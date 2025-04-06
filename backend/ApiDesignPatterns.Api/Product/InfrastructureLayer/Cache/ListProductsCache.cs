@@ -8,7 +8,7 @@ using StackExchange.Redis;
 
 namespace backend.Product.InfrastructureLayer.Cache;
 
-public class ListProductsCache(IDatabase redisDatabase) : ICache<CachedItem<ListProductsResponse>>
+public class ListProductsCache(IDatabase redisDatabase) : IListProductsCache
 {
     public async Task<CachedItem<ListProductsResponse>?> GetAsync(string key)
     {

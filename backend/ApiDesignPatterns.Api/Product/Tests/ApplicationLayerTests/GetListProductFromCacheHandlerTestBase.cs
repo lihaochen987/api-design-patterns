@@ -4,7 +4,6 @@
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.Tests.TestHelpers.Fakes;
-using backend.Shared.Caching;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;

@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Text.Json;
+using backend.Product.InfrastructureLayer.Cache;
 using backend.Product.ProductControllers;
 using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
@@ -10,7 +11,7 @@ using StackExchange.Redis;
 namespace backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
 
 public class UpdateListProductStalenessHandler(
-    ICache<CachedItem<ListProductsResponse>> cache,
+    IListProductsCache cache,
     ILogger<UpdateListProductStalenessHandler> logger)
     : ICommandHandler<UpdateListProductStalenessCommand>
 {
@@ -36,7 +37,7 @@ public class UpdateListProductStalenessHandler(
     }
 
     private static async Task GetCacheStatistics(
-        ICache<CachedItem<ListProductsResponse>> redisCache,
+        IListProductsCache redisCache,
         CacheStalenessOptions options,
         ILogger<UpdateListProductStalenessHandler> statsLogger)
     {
