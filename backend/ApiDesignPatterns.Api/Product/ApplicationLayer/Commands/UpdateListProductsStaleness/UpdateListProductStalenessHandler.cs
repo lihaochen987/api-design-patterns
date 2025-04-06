@@ -19,21 +19,21 @@ public class UpdateListProductStalenessHandler(
 
     public async Task Handle(UpdateListProductStalenessCommand command)
     {
-        var batch = cache.CreateBatch();
-        var totalChecksTask = batch.HashIncrementAsync(StatsKey, "total_checks");
+        bool areResultsEqual = ResultsEqual(command.CachedResult, command.FreshResult);
 
-        Task? staleHitsTask = null;
-        if (!ResultsEqual(command.CachedResult, command.FreshResult))
+        await cache.ExecuteBatchAsync(batch =>
         {
-            await batch.HashIncrementAsync(StatsKey, "stale_hits");
+            batch.HashIncrementAsync(StatsKey, "total_checks");
+            if (!areResultsEqual)
+            {
+                batch.HashIncrementAsync(StatsKey, "stale_hits");
+            }
+        });
+
+        if (!areResultsEqual)
+        {
             await GetCacheStatistics(cache, command.StalenessOptions, logger);
         }
-
-        batch.Execute();
-
-        await totalChecksTask;
-        if (staleHitsTask != null)
-            await staleHitsTask;
     }
 
     private static async Task GetCacheStatistics(

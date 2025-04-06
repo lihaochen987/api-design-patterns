@@ -408,6 +408,9 @@
     <Compile Update="Product\Tests\ApplicationLayerTests\MapCreateProductRequestHandlerTestBase.cs">
       <DependentUpon>MapCreateProductRequestHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\UpdateListProductStalenessHandlerTestBase.cs">
+      <DependentUpon>UpdateListProductStalenessHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

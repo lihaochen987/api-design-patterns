@@ -4,6 +4,8 @@
 using AutoFixture;
 using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.Tests.TestHelpers.Fakes;
+using backend.Product.Tests.TestHelpers.Fakes.ListProductsCacheFake;
+using backend.Product.Tests.TestHelpers.Fakes.ListProductsExceptionThrowingCacheFake;
 using backend.Shared.CommandHandler;
 
 namespace backend.Product.Tests.ApplicationLayerTests;

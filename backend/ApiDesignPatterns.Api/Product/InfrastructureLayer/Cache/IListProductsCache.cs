@@ -11,6 +11,7 @@ public interface IListProductsCache
 {
     Task<CachedItem<ListProductsResponse>?> GetAsync(string key);
     Task SetAsync(string key, CachedItem<ListProductsResponse> value, TimeSpan expiry);
-    IBatch CreateBatch();
     Task<HashEntry[]> HashGetAllAsync(RedisKey key, CommandFlags flags = CommandFlags.None);
+    Task<long> HashIncrementAsync(string key, string field);
+    Task<BatchResult> ExecuteBatchAsync(Action<IBatchOperations> batchAction);
 }
