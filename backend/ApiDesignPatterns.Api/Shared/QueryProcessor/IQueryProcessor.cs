@@ -7,5 +7,5 @@ namespace backend.Shared.QueryProcessor;
 
 public interface IQueryProcessor
 {
-    Task<TResult?> Process<TResult>(IQuery<TResult> query);
+    Task<TResult> Process<TResult>(IQuery<TResult> query);
 }

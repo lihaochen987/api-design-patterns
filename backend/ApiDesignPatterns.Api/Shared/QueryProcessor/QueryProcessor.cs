@@ -6,10 +6,10 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Shared.QueryProcessor;
 
-sealed class QueryProcessor(IServiceProvider serviceProvider) : IQueryProcessor
+internal sealed class QueryProcessor(IServiceProvider serviceProvider) : IQueryProcessor
 {
     [DebuggerStepThrough]
-    public Task<TResult?> Process<TResult>(IQuery<TResult> query)
+    public Task<TResult> Process<TResult>(IQuery<TResult> query)
     {
         var handlerType = typeof(IQueryHandler<,>)
             .MakeGenericType(query.GetType(), typeof(TResult));

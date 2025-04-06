@@ -30,6 +30,7 @@ using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.Infrastructure;
 using backend.Shared.QueryHandler;
+using backend.Shared.QueryProcessor;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
 
@@ -181,6 +182,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
             IDatabase redisDatabase = new RedisService(_configuration).GetDatabase();
             var redisCache = new ListProductsCache(redisDatabase);
+            var services = new Dictionary<Type, object>();
 
             // Todo: Give CacheStalenessOptions legit values
             var cacheStalenessOptions = new CacheStalenessOptions(TimeSpan.FromDays(1), 0.2, 5, 5);
@@ -197,6 +199,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithTransaction()
                 .Build();
+            services[typeof(IQueryHandler<ListProductsQuery, PagedProducts>)] = listProductsHandler;
 
             // GetListProductsFromCache handler
             var getListProductsFromCacheHandler =
@@ -208,6 +211,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     .WithBulkhead(BulkheadPolicies.RedisRead)
                     .WithLogging()
                     .Build();
+            services[typeof(IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>)] = getListProductsFromCacheHandler;
 
             // persistListProductsToCacheHandler handler
             var persistListProductsToCacheHandler = new CommandDecoratorBuilder<PersistListProductsToCacheCommand>(
@@ -228,6 +232,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     .WithLogging()
                     .WithValidation()
                     .Build();
+            services[typeof(IQueryHandler<MapListProductsResponseQuery, ListProductsResponse>)] = mapListProductsResponseHandler;
 
             // UpdateListProductsStaleness handler
             var updateListProductStalenessHandler = new CommandDecoratorBuilder<UpdateListProductStalenessCommand>(
@@ -239,10 +244,12 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithBulkhead(BulkheadPolicies.RedisWrite)
                 .Build();
 
+            // Queries Processor
+            IServiceProvider serviceProvider = new DictionaryServiceProvider(services);
+            var queryProcessor = new QueryProcessor(serviceProvider);
+
             return new ListProductsController(
-                listProductsHandler,
-                getListProductsFromCacheHandler,
-                mapListProductsResponseHandler,
+                queryProcessor,
                 updateListProductStalenessHandler,
                 persistListProductsToCacheHandler,
                 cacheStalenessOptions);

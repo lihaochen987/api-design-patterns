@@ -5,7 +5,7 @@ using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
-using backend.Shared.QueryHandler;
+using backend.Shared.QueryProcessor;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -14,9 +14,7 @@ namespace backend.Product.ProductControllers;
 [Route("products")]
 [ApiController]
 public class ListProductsController(
-    IQueryHandler<ListProductsQuery, PagedProducts> listProducts,
-    IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> getListProductsFromCache,
-    IQueryHandler<MapListProductsResponseQuery, ListProductsResponse> mapListProducts,
+    IQueryProcessor queries,
     ICommandHandler<UpdateListProductStalenessCommand> updateListProductStaleness,
     ICommandHandler<PersistListProductsToCacheCommand> persistListProductsToCache,
     CacheStalenessOptions stalenessOptions)
@@ -28,22 +26,23 @@ public class ListProductsController(
     public async Task<ActionResult<IEnumerable<ListProductsResponse>>> ListProducts(
         [FromQuery] ListProductsRequest request)
     {
-        CacheQueryResult cachedResult =
-            await getListProductsFromCache.Handle(
-                new GetListProductsFromCacheQuery { Request = request, CheckRate = stalenessOptions.CheckRate });
+        var getListProductsFromCacheQuery =
+            new GetListProductsFromCacheQuery { Request = request, CheckRate = stalenessOptions.CheckRate };
+        CacheQueryResult cachedResult = await queries.Process(getListProductsFromCacheQuery);
 
         if (cachedResult is { ProductsResponse: not null, SelectedForStalenessCheck: false })
         {
             return Ok(cachedResult.ProductsResponse);
         }
 
-        PagedProducts result = await listProducts.Handle(new ListProductsQuery
+        var listProductsQuery = new ListProductsQuery
         {
             Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = request.PageToken
-        });
+        };
+        PagedProducts result = await queries.Process(listProductsQuery);
 
-        ListProductsResponse response =
-            await mapListProducts.Handle(new MapListProductsResponseQuery { PagedProducts = result });
+        var mapListProductsResponseQuery = new MapListProductsResponseQuery { PagedProducts = result };
+        ListProductsResponse response = await queries.Process(mapListProductsResponseQuery);
 
         if (cachedResult is { SelectedForStalenessCheck: true, ProductsResponse: not null })
         {
