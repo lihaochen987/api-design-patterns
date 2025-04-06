@@ -134,11 +134,8 @@ public class UpdateListProductStalenessHandler(
         public double Percentage => Rate * 100;
     }
 
-    private static bool ResultsEqual(ListProductsResponse? a, ListProductsResponse? b)
+    private static bool ResultsEqual(ListProductsResponse a, ListProductsResponse b)
     {
-        if (a == null && b == null) return true;
-        if (a == null || b == null) return false;
-
         string jsonA = JsonSerializer.Serialize(a);
         string jsonB = JsonSerializer.Serialize(b);
         return jsonA == jsonB;
