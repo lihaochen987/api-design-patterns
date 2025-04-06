@@ -3,7 +3,6 @@
 
 using AutoFixture;
 using backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
-using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Product.Tests.TestHelpers.Fakes.ListProductsCacheFake;
 using backend.Product.Tests.TestHelpers.Fakes.ListProductsExceptionThrowingCacheFake;
 using backend.Shared.CommandHandler;
@@ -18,7 +17,7 @@ public abstract class UpdateListProductStalenessHandlerTestBase
 
     protected readonly ILogger<UpdateListProductStalenessHandler> Logger =
         Mock.Of<ILogger<UpdateListProductStalenessHandler>>();
-
+    protected const string StatsKey = $"cache:stats:{nameof(UpdateListProductStalenessHandler)}";
     protected readonly Fixture Fixture = new();
 
     protected ICommandHandler<UpdateListProductStalenessCommand> GetUpdateListProductStalenessHandler()

@@ -15,8 +15,6 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 
 public class UpdateListProductStalenessHandlerTests : UpdateListProductStalenessHandlerTestBase
 {
-    private const string StatsKey = $"cache:stats:{nameof(UpdateListProductStalenessHandler)}";
-
     [Fact]
     public async Task Handle_ShouldIncrementTotalChecksCounter_Always()
     {

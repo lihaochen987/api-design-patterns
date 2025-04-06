@@ -37,7 +37,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
 
         var result = await sut.ListProducts(request);
@@ -51,7 +51,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         listProductsResponse.NextPageToken.Should().BeNull();
         Mock.Get(MockPersistListProductsToCache)
             .Verify(svc => svc.Handle(It.Is<PersistListProductsToCacheCommand>(c =>
-                    c.CacheKey == "products-cache-key" &&
+                    c.CacheKey == CacheKey &&
                     c.Products == listProductsResponse)),
                 Times.Once);
     }
@@ -71,9 +71,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = cachedResponse,
-                SelectedForStalenessCheck = false,
-                CacheKey = "products-cache-key"
+                ProductsResponse = cachedResponse, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
 
         ListProductsController sut = ListProductsController();
@@ -108,7 +106,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
         ListProductsController sut = ListProductsController();
 
@@ -142,7 +140,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
         ListProductsController sut = ListProductsController();
 
@@ -176,7 +174,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
         ListProductsController sut = ListProductsController();
 
@@ -208,7 +206,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
         ListProductsController sut = ListProductsController();
 
@@ -242,7 +240,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
         ListProductsController sut = ListProductsController();
 
@@ -277,7 +275,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
         ListProductsController sut = ListProductsController();
 
@@ -317,7 +315,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
         ListProductsController sut = ListProductsController();
 
@@ -354,7 +352,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
         ListProductsController sut = ListProductsController();
 
@@ -389,7 +387,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
         ListProductsController sut = ListProductsController();
 
@@ -424,7 +422,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.Filter == request.Filter)))
             .ReturnsAsync(new CacheQueryResult
             {
-                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = "products-cache-key"
+                ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
         ListProductsController sut = ListProductsController();
 
