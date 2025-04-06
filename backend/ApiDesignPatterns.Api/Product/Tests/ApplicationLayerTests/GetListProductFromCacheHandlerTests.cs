@@ -4,6 +4,7 @@
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ProductControllers;
+using backend.Shared;
 using backend.Shared.Caching;
 using backend.Shared.QueryHandler;
 using FluentAssertions;
@@ -107,5 +108,32 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
 
         result.Should().NotBeNull();
         result.CacheKey.Should().Be("products:maxsize:10:page-token:token123:filter:category == \"toys\"");
+    }
+
+    [Fact]
+    public async Task Handle_ShouldSetSelectedForStalenessCheckToTrue_WhenRandomCheckPasses()
+    {
+        var request = new ListProductsRequest { MaxPageSize = 10 };
+        var query = new GetListProductsFromCacheQuery { Request = request, CheckRate = 0 };
+        var expectedResults = new ListProductsResponse
+        {
+            Results = Fixture.CreateMany<GetProductResponse>(10),
+            NextPageToken = "11"
+        };
+        var expectedResponse = new CachedItem<ListProductsResponse>
+        {
+            Item = expectedResults,
+            Timestamp = DateTime.UtcNow + TimeSpan.FromMinutes(10)
+        };
+        await Cache.SetAsync("products:maxsize:10", expectedResponse, TimeSpan.FromMinutes(10));
+        RandomUtility.CheckProbability(0);
+        IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
+
+        CacheQueryResult result = await sut.Handle(query);
+
+        result.Should().NotBeNull();
+        result.ProductsResponse.Should().NotBeNull();
+        result.CacheKey.Should().Be("products:maxsize:10");
+        result.SelectedForStalenessCheck.Should().BeFalse();
     }
 }

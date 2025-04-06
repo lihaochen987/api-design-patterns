@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.DomainModels.Enums;
-using backend.Product.InfrastructureLayer;
 using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Shared.QueryHandler;
 

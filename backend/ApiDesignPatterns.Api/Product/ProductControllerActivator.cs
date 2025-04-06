@@ -16,7 +16,6 @@ using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
-using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Cache;
 using backend.Product.InfrastructureLayer.Database.Product;
 using backend.Product.InfrastructureLayer.Database.ProductView;
@@ -38,7 +37,6 @@ namespace backend.Product;
 
 public class ProductControllerActivator : BaseControllerActivator
 {
-    private readonly PaginateService<ProductView> _productPaginateService;
     private readonly SqlFilterBuilder _productSqlFilterBuilder;
     private readonly IMapper _mapper;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
@@ -50,8 +48,6 @@ public class ProductControllerActivator : BaseControllerActivator
         ILoggerFactory loggerFactory)
         : base(configuration)
     {
-        _productPaginateService = new PaginateService<ProductView>();
-
         ProductColumnMapper productColumnMapper = new();
         _productSqlFilterBuilder = new SqlFilterBuilder(productColumnMapper);
 
