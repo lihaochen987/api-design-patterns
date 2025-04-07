@@ -146,7 +146,7 @@ const AddProductPage = () => {
               <option value="travelAccessories">Travel Accessories</option>
               <option value="clothing">Clothing</option>
             </select>
-            {errors.category && <p className={'form-error-message'}>{errors.category.message}</p>}
+            {errors.category && <p className={'form-error-message'}>hello</p>}
           </div>
 
           <div className={'l-constrained'}>
