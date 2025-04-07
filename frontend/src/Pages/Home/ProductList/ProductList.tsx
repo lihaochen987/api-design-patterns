@@ -4,7 +4,6 @@ import { fetchClient } from '../../../Shared/fetch-client.ts';
 import { PetFoodCard } from './Cards/PetFoodCard/PetFoodCard.tsx';
 import { GroomingAndHygieneCard } from './Cards/GroomingAndHygieneCard/GroomingAndHygieneCard.tsx';
 import { DefaultProductCard } from './Cards/DefaultProductCard/DefaultProductCard.tsx';
-import styled from 'styled-components';
 import { useQuery } from '@tanstack/react-query';
 import { Pagination } from './Pagination/Pagination.tsx';
 
@@ -59,11 +58,11 @@ export const ProductList = () => {
 
   if (isLoading) {
     return (
-      <LoadingContainer>
-        <SpinnerContainer>
-          <Spinner />
-        </SpinnerContainer>
-      </LoadingContainer>
+      <div className={'l-loading-spinner'}>
+        <div>
+          <div className={'loading-spinner'} />
+        </div>
+      </div>
     );
   }
 
@@ -74,9 +73,9 @@ export const ProductList = () => {
 
   return (
     <>
-      <ProductListContainer>
+      <div className={'l-product-list'}>
         {products.length === 0 ? (
-          <NoProductsMessage>No products found</NoProductsMessage>
+          <div className={'no-products-message'}>No products found</div>
         ) : (
           products.map(product => (
             <div key={product.id} className="product-item">
@@ -84,67 +83,13 @@ export const ProductList = () => {
             </div>
           ))
         )}
-      </ProductListContainer>
+      </div>
 
       {totalPages > 1 && (
-        <PaginationContainer>
+        <div className={'l-pagination'}>
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
-        </PaginationContainer>
+        </div>
       )}
     </>
   );
 };
-
-const ProductListContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.25rem;
-  padding: 1.25rem;
-`;
-
-const PaginationContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 2rem 0;
-`;
-
-const LoadingContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 18.75rem;
-  width: 100%;
-`;
-
-const NoProductsMessage = styled.div`
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 2rem;
-  font-size: 1.2rem;
-  color: #666;
-`;
-
-const SpinnerContainer = styled.div`
-  display: inline-block;
-  position: relative;
-  width: 2.5rem;
-  height: 2.5rem;
-`;
-
-const Spinner = styled.div`
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  border-top: 4px solid #1976d2;
-  width: 2.5rem;
-  height: 2.5rem;
-  animation: spin 1s linear infinite;
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-`;

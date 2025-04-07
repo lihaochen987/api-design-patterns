@@ -1,0 +1,34 @@
+.l-product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+    padding: 1.25rem;
+}
+
+.l-pagination {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.l-pagination-wrapper{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.l-loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    overflow:hidden;
+}
+
+.l-loading-spinner > div {
+    display: inline-block;
+    position: relative;
+    width: 10rem;
+    height: 10rem;
+}

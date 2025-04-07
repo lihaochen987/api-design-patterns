@@ -46,24 +46,24 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
   };
 
   return (
-    <PaginationWrapper>
-      <PaginationButton
+    <div className={'l-pagination-wrapper'}>
+      <button
+        className={`pagination-button ${currentPage === 1 ? 'is-disabled' : ''}`}
         onClick={() => onPageChange(1)}
-        $isDisabled={currentPage === 1}
         disabled={currentPage === 1}
         aria-label="Go to first page"
       >
         &laquo;
-      </PaginationButton>
+      </button>
 
-      <PaginationButton
+      <button
+        className={`pagination-button ${currentPage === 1 ? 'is-disabled' : ''}`}
         onClick={() => onPageChange(currentPage - 1)}
-        $isDisabled={currentPage === 1}
         disabled={currentPage === 1}
         aria-label="Go to previous page"
       >
         &lsaquo;
-      </PaginationButton>
+      </button>
 
       {getPageNumbers().map((page, index) => {
         if (page === 'ellipsis-start' || page === 'ellipsis-end') {
@@ -71,69 +71,39 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
         }
 
         return (
-          <PaginationButton
-            key={`page-${page}`}
-            $isActive={currentPage === page}
-            onClick={() => onPageChange(Number(page))}
-            aria-label={`Go to page ${page}`}
-            aria-current={currentPage === page ? 'page' : undefined}
-          >
-            {page}
-          </PaginationButton>
+          <>
+            <button
+              className={`pagination-button ${currentPage === page ? 'is-active' : ''}`}
+              onClick={() => onPageChange(Number(page))}
+              aria-label={`Go to page ${page}`}
+              aria-current={currentPage === page ? 'page' : undefined}
+            >
+              {page}
+            </button>
+          </>
         );
       })}
 
-      <PaginationButton
+      <button
+        className={`pagination-button ${currentPage === totalPages ? 'is-disabled' : ''}`}
         onClick={() => onPageChange(currentPage + 1)}
-        $isDisabled={currentPage === totalPages}
         disabled={currentPage === totalPages}
         aria-label="Go to next page"
       >
         &rsaquo;
-      </PaginationButton>
+      </button>
 
-      <PaginationButton
+      <button
+        className={`pagination-button ${currentPage === totalPages ? 'is-disabled' : ''}`}
         onClick={() => onPageChange(totalPages)}
-        $isDisabled={currentPage === totalPages}
         disabled={currentPage === totalPages}
         aria-label="Go to last page"
       >
         &raquo;
-      </PaginationButton>
-    </PaginationWrapper>
+      </button>
+    </div>
   );
 };
-
-const PaginationWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const PaginationButton = styled.button<{ $isActive?: boolean; $isDisabled?: boolean }>`
-  min-width: 2.5rem;
-  padding: 0.5rem 0 0.5rem 0;
-  border-radius: 4px;
-  border: 1px solid ${props => (props.$isActive ? '#1976d2' : '#ddd')};
-  background-color: ${props => (props.$isActive ? '#1976d2' : 'white')};
-  color: ${props => (props.$isActive ? 'white' : props.$isDisabled ? '#ccc' : '#333')};
-  font-size: 1rem;
-  cursor: ${props => (props.$isDisabled ? 'not-allowed' : 'pointer')};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: ${props =>
-      props.$isDisabled ? 'white' : props.$isActive ? '#1565c0' : '#f5f5f5'};
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.3);
-  }
-`;
 
 const PaginationEllipsis = styled.span`
   display: flex;
