@@ -5,16 +5,10 @@ import {
   ButtonGroup,
   ErrorBanner,
   ErrorMessage,
-  Form,
-  FormGroup,
   Input,
-  Label,
   LoadingMessage,
-  PageContainer,
-  PageTitle,
   PrimaryButton,
   SecondaryButton,
-  Select,
 } from './ProductForm.styles.ts';
 import {
   CreateProductRequest,
@@ -27,13 +21,11 @@ import {
 import { useCreateProduct } from './ProductForm.hooks.ts';
 import { PetFoodForm } from './PetFoodProductForm/PetFoodProductForm.tsx';
 import { GroomingAndHygieneForm } from './GroomingAndHygieneForm/GroomingAndHygieneForm.tsx';
-import { z } from 'zod';
 
 const AddProductPage = () => {
   const navigate = useNavigate();
   const createProduct = useCreateProduct();
 
-  // Create a specialized form based on the selected category
   const methods = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -49,7 +41,6 @@ const AddProductPage = () => {
         length: undefined,
       },
     },
-    // This is important - it ensures all fields are included in the form data
     shouldUnregister: false,
   });
 
@@ -57,7 +48,6 @@ const AddProductPage = () => {
     handleSubmit,
     register,
     watch,
-    setValue,
     formState: { errors },
   } = methods;
 
@@ -65,15 +55,10 @@ const AddProductPage = () => {
 
   const onSubmit = async (formData: ProductFormData) => {
     try {
-      console.log('Raw form data:', formData);
-
-      // Create a properly typed API request based on the category
       let apiData: CreateProductRequest;
 
       switch (formData.category) {
         case 'petFood': {
-          // We need to ensure we're working with the complete pet food schema
-          // First, validate it against the petFoodSchema
           const result = petFoodSchema.safeParse(formData);
 
           if (!result.success) {
@@ -81,17 +66,14 @@ const AddProductPage = () => {
             throw new Error(`Validation failed: ${result.error.message}`);
           }
 
-          // Use the validated data which should have all the required fields
           const petFoodData = result.data;
           console.log('Validated pet food data:', petFoodData);
 
-          // Create the API request with all the required fields
           apiData = {
             category: petFoodData.category,
             name: petFoodData.name,
             pricing: petFoodData.pricing,
             dimensions: petFoodData.dimensions,
-            // Explicitly include all pet food specific fields
             ageGroup: petFoodData.ageGroup,
             breedSize: petFoodData.breedSize,
             ingredients: petFoodData.ingredients,
@@ -102,7 +84,6 @@ const AddProductPage = () => {
         }
 
         case 'groomingAndHygiene': {
-          // Similar process for grooming and hygiene products
           const result = groomingAndHygieneSchema.safeParse(formData);
           if (!result.success) {
             throw new Error(`Validation failed: ${result.error.message}`);
@@ -112,7 +93,6 @@ const AddProductPage = () => {
         }
 
         default: {
-          // For other product types
           const result = otherProductSchema.safeParse(formData);
           if (!result.success) {
             throw new Error(`Validation failed: ${result.error.message}`);
@@ -122,7 +102,6 @@ const AddProductPage = () => {
         }
       }
 
-      console.log('Final API data being sent:', apiData);
       await createProduct.mutateAsync(apiData);
       navigate('/');
     } catch (err) {
@@ -149,17 +128,19 @@ const AddProductPage = () => {
   };
 
   return (
-    <PageContainer>
-      <PageTitle>Add New Product</PageTitle>
+    <div className={'l-page-container'}>
+      <h1 className={'page-title'}>Add New Product</h1>
 
       <FormProvider {...methods}>
-        <Form id={'add-product-form'} onSubmit={handleSubmit(onSubmit)}>
+        <form className={'l-form'} id={'add-product-form'} onSubmit={handleSubmit(onSubmit)}>
           {createProduct.isPending && <LoadingMessage>Creating product...</LoadingMessage>}
           {createProduct.isError && <ErrorBanner>Error: {createProduct.error.message}</ErrorBanner>}
 
-          <FormGroup>
-            <Label htmlFor="category">Category</Label>
-            <Select id="category" {...register('category')}>
+          <div className={'l-constrained'}>
+            <label className={'form-label'} htmlFor="category">
+              Category
+            </label>
+            <select className={'form-select'} id="category" {...register('category')}>
               <option value="">Select a category</option>
               <option value="petFood">Pet Food</option>
               <option value="toys">Toys</option>
@@ -169,18 +150,22 @@ const AddProductPage = () => {
               <option value="feeders">Feeders</option>
               <option value="travelAccessories">Travel Accessories</option>
               <option value="clothing">Clothing</option>
-            </Select>
+            </select>
             {errors.category && <ErrorMessage>{errors.category.message}</ErrorMessage>}
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <Label htmlFor="name">Product Name</Label>
+          <div className={'l-constrained'}>
+            <label className={'form-label'} htmlFor="name">
+              Product Name
+            </label>
             <Input id="name" {...register('name')} />
             {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <Label htmlFor="basePrice">Base Price ($)</Label>
+          <div className="l-constrained">
+            <label className={'form-label'} htmlFor="basePrice">
+              Base Price ($)
+            </label>
             <Input
               type="number"
               id="basePrice"
@@ -191,10 +176,12 @@ const AddProductPage = () => {
             {errors.pricing?.basePrice && (
               <ErrorMessage>{errors.pricing.basePrice.message}</ErrorMessage>
             )}
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <Label htmlFor="taxRate">Tax Rate (%)</Label>
+          <div className={'l-constrained'}>
+            <label className={'form-label'} htmlFor="taxRate">
+              Tax Rate (%)
+            </label>
             <Input
               type="number"
               id="taxRate"
@@ -206,10 +193,12 @@ const AddProductPage = () => {
             {errors.pricing?.taxRate && (
               <ErrorMessage>{errors.pricing.taxRate.message}</ErrorMessage>
             )}
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <Label htmlFor="discountPercentage">Discount Percentage (%)</Label>
+          <div className={'l-constrained'}>
+            <label className={'form-label'} htmlFor="discountPercentage">
+              Discount Percentage (%)
+            </label>
             <Input
               type="number"
               id="discountPercentage"
@@ -221,10 +210,12 @@ const AddProductPage = () => {
             {errors.pricing?.discountPercentage && (
               <ErrorMessage>{errors.pricing.discountPercentage.message}</ErrorMessage>
             )}
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <Label htmlFor="width">Product Width</Label>
+          <div className={'l-constrained'}>
+            <label className={'form-label'} htmlFor="width">
+              Product Width
+            </label>
             <Input
               type="number"
               id="width"
@@ -235,10 +226,12 @@ const AddProductPage = () => {
             {errors.dimensions?.width && (
               <ErrorMessage>{errors.dimensions.width.message}</ErrorMessage>
             )}
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <Label htmlFor="height">Product Height</Label>
+          <div className={'l-constrained'}>
+            <label className={'form-label'} htmlFor="height">
+              Product Height
+            </label>
             <Input
               type="number"
               id="height"
@@ -249,10 +242,12 @@ const AddProductPage = () => {
             {errors.dimensions?.height && (
               <ErrorMessage>{errors.dimensions.height.message}</ErrorMessage>
             )}
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <Label htmlFor="length">Product Length</Label>
+          <div className={'l-constrained'}>
+            <label className={'form-label'} htmlFor="length">
+              Product Length
+            </label>
             <Input
               type="number"
               id="length"
@@ -263,7 +258,7 @@ const AddProductPage = () => {
             {errors.dimensions?.length && (
               <ErrorMessage>{errors.dimensions.length.message}</ErrorMessage>
             )}
-          </FormGroup>
+          </div>
 
           {selectedCategory && renderCategoryFields()}
 
@@ -275,9 +270,9 @@ const AddProductPage = () => {
               Add Product
             </PrimaryButton>
           </ButtonGroup>
-        </Form>
+        </form>
       </FormProvider>
-    </PageContainer>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { ErrorMessage, FormGroup, Input, Label, Select } from '../ProductForm.styles.ts';
+import { ErrorMessage, Input, Select } from '../ProductForm.styles.ts';
 import { useFormContext } from 'react-hook-form';
 import { petFoodSchema } from '../ProductForm.types.ts';
 import { z } from 'zod';
@@ -11,8 +11,10 @@ export const PetFoodForm = () => {
 
   return (
     <>
-      <FormGroup>
-        <Label htmlFor="ageGroup">Age Group</Label>
+      <div className={'l-constrained'}>
+        <label className={'form-label'} htmlFor="ageGroup">
+          Age Group
+        </label>
         <Select id="ageGroup" {...register('ageGroup')}>
           <option value="">Select age group</option>
           <option value="puppy">Puppy</option>
@@ -20,10 +22,12 @@ export const PetFoodForm = () => {
           <option value="senior">Senior</option>
         </Select>
         {errors.ageGroup && <ErrorMessage>{errors.ageGroup.message}</ErrorMessage>}
-      </FormGroup>
+      </div>
 
-      <FormGroup>
-        <Label htmlFor="breedSize">Breed Size</Label>
+      <div className={'l-constrained'}>
+        <label className={'form-label'} htmlFor="breedSize">
+          Breed Size
+        </label>
         <Select id="breedSize" {...register('breedSize')}>
           <option value="">Select breed size</option>
           <option value="small">Small</option>
@@ -31,24 +35,30 @@ export const PetFoodForm = () => {
           <option value="large">Large</option>
         </Select>
         {errors.breedSize && <ErrorMessage>{errors.breedSize.message}</ErrorMessage>}
-      </FormGroup>
+      </div>
 
-      <FormGroup>
-        <Label htmlFor="ingredients">Ingredients</Label>
+      <div className={'l-constrained'}>
+        <label className={'form-label'} htmlFor="ingredients">
+          Ingredients
+        </label>
         <Input id="ingredients" {...register('ingredients')} />
         {errors.ingredients && <ErrorMessage>{errors.ingredients.message}</ErrorMessage>}
-      </FormGroup>
+      </div>
 
-      <FormGroup>
-        <Label htmlFor="storageInstructions">Storage Instructions</Label>
+      <div className={'l-constrained'}>
+        <label className={'form-label'} htmlFor="storageInstructions">
+          Storage Instructions
+        </label>
         <Input id="storageInstructions" {...register('storageInstructions')} />
         {errors.storageInstructions && (
           <ErrorMessage>{errors.storageInstructions.message}</ErrorMessage>
         )}
-      </FormGroup>
+      </div>
 
-      <FormGroup>
-        <Label htmlFor="weightKg">Weight (kg)</Label>
+      <div className={'l-constrained'}>
+        <label className={'form-label'} htmlFor="weightKg">
+          Weight (kg)
+        </label>
         <Input
           type="number"
           id="weightKg"
@@ -57,7 +67,7 @@ export const PetFoodForm = () => {
           {...register('weightKg', { valueAsNumber: true })}
         />
         {errors.weightKg && <ErrorMessage>{errors.weightKg.message}</ErrorMessage>}
-      </FormGroup>
+      </div>
     </>
   );
 };

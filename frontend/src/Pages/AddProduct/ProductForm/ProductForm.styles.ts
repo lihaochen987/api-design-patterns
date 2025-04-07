@@ -1,37 +1,5 @@
 import styled from 'styled-components';
 
-export const PageContainer = styled.div`
-  margin: 100px auto 50px;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-`;
-
-export const PageTitle = styled.h1`
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 1.75rem;
-`;
-
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  padding: 1.75rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-`;
-
-export const FormGroup = styled.div`
-  margin-bottom: 1.25rem;
-`;
-
-export const Label = styled.label`
-  display: block;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  color: #333;
-`;
-
 export const Input = styled.input`
   padding: 0.5rem 1rem;
   border: 1px solid #ddd;
