@@ -1,5 +1,6 @@
 import ProductForm from './ProductForm/ProductForm.tsx';
-import './AddProductPage.css';
+import './AddProductPage.modules.css';
+import './AddProductPage.layout.css';
 
 export const AddProductPage = () => {
   return (
