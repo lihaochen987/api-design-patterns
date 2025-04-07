@@ -10,8 +10,8 @@ import {
   otherProductSchema,
 } from './ProductForm.types.ts';
 import { useCreateProduct } from './ProductForm.hooks.ts';
-import { PetFoodForm } from './PetFoodProductForm/PetFoodProductForm.tsx';
-import { GroomingAndHygieneForm } from './GroomingAndHygieneForm/GroomingAndHygieneForm.tsx';
+import { PetFoodForm } from './SubForms/PetFoodProductForm.tsx';
+import { GroomingAndHygieneForm } from './SubForms/GroomingAndHygieneForm.tsx';
 
 const AddProductPage = () => {
   const navigate = useNavigate();
