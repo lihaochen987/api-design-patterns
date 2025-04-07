@@ -2,15 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  ButtonGroup,
-  ErrorBanner,
-  ErrorMessage,
-  Input,
-  LoadingMessage,
-  PrimaryButton,
-  SecondaryButton,
-} from './ProductForm.styles.ts';
-import {
   CreateProductRequest,
   ProductFormData,
   productSchema,
@@ -133,8 +124,12 @@ const AddProductPage = () => {
 
       <FormProvider {...methods}>
         <form className={'l-form'} id={'add-product-form'} onSubmit={handleSubmit(onSubmit)}>
-          {createProduct.isPending && <LoadingMessage>Creating product...</LoadingMessage>}
-          {createProduct.isError && <ErrorBanner>Error: {createProduct.error.message}</ErrorBanner>}
+          {createProduct.isPending && (
+            <div className={'form-loading-message'}>Creating product...</div>
+          )}
+          {createProduct.isError && (
+            <div className={'form-error-banner'}>Error: {createProduct.error.message}</div>
+          )}
 
           <div className={'l-constrained'}>
             <label className={'form-label'} htmlFor="category">
@@ -151,22 +146,23 @@ const AddProductPage = () => {
               <option value="travelAccessories">Travel Accessories</option>
               <option value="clothing">Clothing</option>
             </select>
-            {errors.category && <ErrorMessage>{errors.category.message}</ErrorMessage>}
+            {errors.category && <p className={'form-error-message'}>{errors.category.message}</p>}
           </div>
 
           <div className={'l-constrained'}>
             <label className={'form-label'} htmlFor="name">
               Product Name
             </label>
-            <Input id="name" {...register('name')} />
-            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+            <input className={'form-input'} id="name" {...register('name')} />
+            {errors.name && <p className={'form-error-message'}>{errors.name.message}</p>}
           </div>
 
           <div className="l-constrained">
             <label className={'form-label'} htmlFor="basePrice">
               Base Price ($)
             </label>
-            <Input
+            <input
+              className={'form-input'}
               type="number"
               id="basePrice"
               min="0.01"
@@ -174,7 +170,7 @@ const AddProductPage = () => {
               {...register('pricing.basePrice', { valueAsNumber: true })}
             />
             {errors.pricing?.basePrice && (
-              <ErrorMessage>{errors.pricing.basePrice.message}</ErrorMessage>
+              <p className={'form-error-message'}>{errors.pricing.basePrice.message}</p>
             )}
           </div>
 
@@ -182,7 +178,8 @@ const AddProductPage = () => {
             <label className={'form-label'} htmlFor="taxRate">
               Tax Rate (%)
             </label>
-            <Input
+            <input
+              className={'form-input'}
               type="number"
               id="taxRate"
               min="0"
@@ -191,7 +188,7 @@ const AddProductPage = () => {
               {...register('pricing.taxRate', { valueAsNumber: true })}
             />
             {errors.pricing?.taxRate && (
-              <ErrorMessage>{errors.pricing.taxRate.message}</ErrorMessage>
+              <p className={'form-error-message'}>{errors.pricing.taxRate.message}</p>
             )}
           </div>
 
@@ -199,7 +196,8 @@ const AddProductPage = () => {
             <label className={'form-label'} htmlFor="discountPercentage">
               Discount Percentage (%)
             </label>
-            <Input
+            <input
+              className={'form-input'}
               type="number"
               id="discountPercentage"
               min="0"
@@ -208,7 +206,7 @@ const AddProductPage = () => {
               {...register('pricing.discountPercentage', { valueAsNumber: true })}
             />
             {errors.pricing?.discountPercentage && (
-              <ErrorMessage>{errors.pricing.discountPercentage.message}</ErrorMessage>
+              <p className={'form-error-message'}>{errors.pricing.discountPercentage.message}</p>
             )}
           </div>
 
@@ -216,7 +214,8 @@ const AddProductPage = () => {
             <label className={'form-label'} htmlFor="width">
               Product Width
             </label>
-            <Input
+            <input
+              className={'form-input'}
               type="number"
               id="width"
               min="0"
@@ -224,7 +223,7 @@ const AddProductPage = () => {
               {...register('dimensions.width', { valueAsNumber: true })}
             />
             {errors.dimensions?.width && (
-              <ErrorMessage>{errors.dimensions.width.message}</ErrorMessage>
+              <p className={'form-error-message'}>{errors.dimensions.width.message}</p>
             )}
           </div>
 
@@ -232,7 +231,8 @@ const AddProductPage = () => {
             <label className={'form-label'} htmlFor="height">
               Product Height
             </label>
-            <Input
+            <input
+              className={'form-input'}
               type="number"
               id="height"
               min="0"
@@ -240,7 +240,7 @@ const AddProductPage = () => {
               {...register('dimensions.height', { valueAsNumber: true })}
             />
             {errors.dimensions?.height && (
-              <ErrorMessage>{errors.dimensions.height.message}</ErrorMessage>
+              <p className={'form-error-message'}>{errors.dimensions.height.message}</p>
             )}
           </div>
 
@@ -248,7 +248,8 @@ const AddProductPage = () => {
             <label className={'form-label'} htmlFor="length">
               Product Length
             </label>
-            <Input
+            <input
+              className={'form-input'}
               type="number"
               id="length"
               min="0"
@@ -256,20 +257,20 @@ const AddProductPage = () => {
               {...register('dimensions.length', { valueAsNumber: true })}
             />
             {errors.dimensions?.length && (
-              <ErrorMessage>{errors.dimensions.length.message}</ErrorMessage>
+              <p className={'form-error-message'}>{errors.dimensions.length.message}</p>
             )}
           </div>
 
           {selectedCategory && renderCategoryFields()}
 
-          <ButtonGroup>
-            <SecondaryButton type="button" onClick={handleCancel}>
+          <div className={'l-button-group'}>
+            <button className={'form-button-primary'} type="button" onClick={handleCancel}>
               Cancel
-            </SecondaryButton>
-            <PrimaryButton id={'add-product-form'} type="submit">
+            </button>
+            <button className={'form-button-secondary'} id={'add-product-form'} type="submit">
               Add Product
-            </PrimaryButton>
-          </ButtonGroup>
+            </button>
+          </div>
         </form>
       </FormProvider>
     </div>

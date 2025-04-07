@@ -1,4 +1,3 @@
-import { ErrorMessage, Input, Select } from '../ProductForm.styles.ts';
 import { useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 import { groomingAndHygieneSchema } from '../ProductForm.types.ts';
@@ -15,51 +14,58 @@ export const GroomingAndHygieneForm = () => {
         <label className={'form-label'} htmlFor="isNatural">
           Natural Product
         </label>
-        <Select
+        <select
+          className={'form-select'}
           id="isNatural"
           {...register('isNatural', { setValueAs: value => value === 'true' })}
         >
           <option value="true">Yes</option>
           <option value="false">No</option>
-        </Select>
-        {errors.isNatural && <ErrorMessage>{errors.isNatural.message}</ErrorMessage>}
+        </select>
+        {errors.isNatural && <p className={'form-error-message'}>{errors.isNatural.message}</p>}
       </div>
 
       <div className={'l-constrained'}>
         <label className={'form-label'} htmlFor="isHypoAllergenic">
           Hypoallergenic
         </label>
-        <Select
+        <select
+          className={'form-select'}
           id="isHypoAllergenic"
           {...register('isHypoAllergenic', { setValueAs: value => value === 'true' })}
         >
           <option value="true">Yes</option>
           <option value="false">No</option>
-        </Select>
-        {errors.isHypoAllergenic && <ErrorMessage>{errors.isHypoAllergenic.message}</ErrorMessage>}
+        </select>
+        {errors.isHypoAllergenic && (
+          <p className={'form-error-message'}>{errors.isHypoAllergenic.message}</p>
+        )}
       </div>
 
       <div className={'l-constrained'}>
         <label className={'form-label'} htmlFor="isCrueltyFree">
           Cruelty Free
         </label>
-        <Select
+        <select
+          className={'form-select'}
           id="isCrueltyFree"
           {...register('isCrueltyFree', { setValueAs: value => value === 'true' })}
         >
           <option value="true">Yes</option>
           <option value="false">No</option>
-        </Select>
-        {errors.isCrueltyFree && <ErrorMessage>{errors.isCrueltyFree.message}</ErrorMessage>}
+        </select>
+        {errors.isCrueltyFree && (
+          <p className={'form-error-message'}>{errors.isCrueltyFree.message}</p>
+        )}
       </div>
 
       <div className={'l-constrained'}>
         <label className={'form-label'} htmlFor="usageInstructions">
           Usage Instructions
         </label>
-        <Input id="usageInstructions" {...register('usageInstructions')} />
+        <input className={'form-input'} id="usageInstructions" {...register('usageInstructions')} />
         {errors.usageInstructions && (
-          <ErrorMessage>{errors.usageInstructions.message}</ErrorMessage>
+          <p className={'form-error-message'}>{errors.usageInstructions.message}</p>
         )}
       </div>
 
@@ -67,8 +73,10 @@ export const GroomingAndHygieneForm = () => {
         <label className={'form-label'} htmlFor="safetyWarnings">
           Safety Warnings
         </label>
-        <Input id="safetyWarnings" {...register('safetyWarnings')} />
-        {errors.safetyWarnings && <ErrorMessage>{errors.safetyWarnings.message}</ErrorMessage>}
+        <input className={'form-input'} id="safetyWarnings" {...register('safetyWarnings')} />
+        {errors.safetyWarnings && (
+          <p className={'form-error-message'}>{errors.safetyWarnings.message}</p>
+        )}
       </div>
     </>
   );

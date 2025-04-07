@@ -1,4 +1,3 @@
-import { ErrorMessage, Input, Select } from '../ProductForm.styles.ts';
 import { useFormContext } from 'react-hook-form';
 import { petFoodSchema } from '../ProductForm.types.ts';
 import { z } from 'zod';
@@ -15,43 +14,47 @@ export const PetFoodForm = () => {
         <label className={'form-label'} htmlFor="ageGroup">
           Age Group
         </label>
-        <Select id="ageGroup" {...register('ageGroup')}>
+        <select className={'form-select'} id="ageGroup" {...register('ageGroup')}>
           <option value="">Select age group</option>
           <option value="puppy">Puppy</option>
           <option value="adult">Adult</option>
           <option value="senior">Senior</option>
-        </Select>
-        {errors.ageGroup && <ErrorMessage>{errors.ageGroup.message}</ErrorMessage>}
+        </select>
+        {errors.ageGroup && <p className={'form-error-message'}>{errors.ageGroup.message}</p>}
       </div>
 
       <div className={'l-constrained'}>
         <label className={'form-label'} htmlFor="breedSize">
           Breed Size
         </label>
-        <Select id="breedSize" {...register('breedSize')}>
+        <select className={'form-select'} id="breedSize" {...register('breedSize')}>
           <option value="">Select breed size</option>
           <option value="small">Small</option>
           <option value="medium">Medium</option>
           <option value="large">Large</option>
-        </Select>
-        {errors.breedSize && <ErrorMessage>{errors.breedSize.message}</ErrorMessage>}
+        </select>
+        {errors.breedSize && <p className={'form-error-message'}>{errors.breedSize.message}</p>}
       </div>
 
       <div className={'l-constrained'}>
         <label className={'form-label'} htmlFor="ingredients">
           Ingredients
         </label>
-        <Input id="ingredients" {...register('ingredients')} />
-        {errors.ingredients && <ErrorMessage>{errors.ingredients.message}</ErrorMessage>}
+        <input className={'form-input'} id="ingredients" {...register('ingredients')} />
+        {errors.ingredients && <p className={'form-error-message'}>{errors.ingredients.message}</p>}
       </div>
 
       <div className={'l-constrained'}>
         <label className={'form-label'} htmlFor="storageInstructions">
           Storage Instructions
         </label>
-        <Input id="storageInstructions" {...register('storageInstructions')} />
+        <input
+          className={'form-input'}
+          id="storageInstructions"
+          {...register('storageInstructions')}
+        />
         {errors.storageInstructions && (
-          <ErrorMessage>{errors.storageInstructions.message}</ErrorMessage>
+          <p className={'form-error-message'}>{errors.storageInstructions.message}</p>
         )}
       </div>
 
@@ -59,14 +62,15 @@ export const PetFoodForm = () => {
         <label className={'form-label'} htmlFor="weightKg">
           Weight (kg)
         </label>
-        <Input
+        <input
+          className={'form-input'}
           type="number"
           id="weightKg"
           min="0"
           step="0.01"
           {...register('weightKg', { valueAsNumber: true })}
         />
-        {errors.weightKg && <ErrorMessage>{errors.weightKg.message}</ErrorMessage>}
+        {errors.weightKg && <p className={'form-error-message'}>{errors.weightKg.message}</p>}
       </div>
     </>
   );
