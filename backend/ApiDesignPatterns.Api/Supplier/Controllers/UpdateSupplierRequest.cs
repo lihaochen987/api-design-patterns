@@ -5,7 +5,7 @@ using backend.Supplier.DomainModels;
 
 namespace backend.Supplier.Controllers;
 
-public record UpdateSupplierRequest
+public class UpdateSupplierRequest
 {
     public string? FirstName { get; init; }
     public string? LastName { get; init; }

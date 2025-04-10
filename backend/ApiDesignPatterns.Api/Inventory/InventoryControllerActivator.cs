@@ -3,6 +3,8 @@
 
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
+using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
+using backend.Inventory.ApplicationLayer.Queries.GetInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
 using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
@@ -90,6 +92,46 @@ public class InventoryControllerActivator : BaseControllerActivator
             return new GetInventoryController(
                 getInventoryViewHandler,
                 _fieldMaskConverterFactory,
+                _mapper);
+        }
+
+        if (type == typeof(UpdateInventoryController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new InventoryRepository(dbConnection);
+
+            // GetInventory handler
+            var getInventoryHandler = new QueryDecoratorBuilder<GetInventoryQuery, DomainModels.Inventory?>(
+                    new GetInventoryHandler(repository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.InventoryRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            // UpdateInventory handler
+            var updateInventoryHandler = new CommandDecoratorBuilder<UpdateInventoryCommand>(
+                    new UpdateInventoryHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.InventoryWrite)
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
+                .Build();
+
+            return new UpdateInventoryController(
+                getInventoryHandler,
+                updateInventoryHandler,
                 _mapper);
         }
 

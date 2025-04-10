@@ -3,11 +3,9 @@
 
 namespace backend.Inventory.Controllers;
 
-public class UpdateInventoryControllerRequest
+public class UpdateInventoryRequest
 {
-    public string? SupplierId { get; init; }
-    public string? ProductId { get; init; }
     public decimal? Quantity { get; init; }
-    public string? RestockDate { get; init; }
+    public DateTimeOffset? RestockDate { get; init; }
     public List<string> FieldMask { get; init; } = ["*"];
 }

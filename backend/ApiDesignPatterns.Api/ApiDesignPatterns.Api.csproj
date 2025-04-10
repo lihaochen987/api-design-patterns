@@ -373,6 +373,12 @@
     <Compile Update="Inventory\InventoryControllers\UpdateInventoryControllerResponse.cs">
       <DependentUpon>UpdateInventoryController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Inventory\Controllers\UpdateInventoryRequest.cs">
+      <DependentUpon>UpdateInventoryController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\Controllers\UpdateInventoryResponse.cs">
+      <DependentUpon>UpdateInventoryController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

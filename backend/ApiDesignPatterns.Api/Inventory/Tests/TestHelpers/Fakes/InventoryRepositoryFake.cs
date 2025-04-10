@@ -17,6 +17,22 @@ public class InventoryRepositoryFake : Collection<DomainModels.Inventory>, IInve
         return Task.CompletedTask;
     }
 
+    public Task<DomainModels.Inventory?> GetInventoryAsync(long id)
+    {
+        DomainModels.Inventory? inventory = this.FirstOrDefault(r => r.Id == id);
+        return Task.FromResult(inventory);
+    }
+
+    public Task UpdateInventoryAsync(DomainModels.Inventory inventory)
+    {
+        int index = IndexOf(this.FirstOrDefault(r => r.Id == inventory.Id) ??
+                            throw new InvalidOperationException());
+        this[index] = inventory;
+        IsDirty = true;
+
+        return Task.CompletedTask;
+    }
+
     // public Task<DomainModels.Review?> GetReviewAsync(long id)
     // {
     //     IncrementCallCount(nameof(GetReviewAsync));

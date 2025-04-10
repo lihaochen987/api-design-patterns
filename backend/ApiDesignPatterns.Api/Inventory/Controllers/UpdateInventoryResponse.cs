@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Inventory.Controllers;
 
-public class UpdateInventoryControllerResponse
+public class UpdateInventoryResponse
 {
     [Required] public required string SupplierId { get; init; }
     [Required] public required string ProductId { get; init; }

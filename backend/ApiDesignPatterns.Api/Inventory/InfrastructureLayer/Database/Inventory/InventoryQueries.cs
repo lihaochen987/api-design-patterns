@@ -19,4 +19,24 @@ public class InventoryQueries
                                                       )
                                                   RETURNING inventory_id;
                                           """;
+
+    public const string GetInventory = """
+                                       SELECT
+                                           inventory_id AS Id,
+                                           supplier_id AS SupplierId,
+                                           product_id AS ProductId,
+                                           inventory_quantity AS Quantity,
+                                           inventory_restock_date AS RestockDate
+                                       FROM inventory
+                                       WHERE inventory_id = @Id;
+                                       """;
+
+    public const string UpdateInventory = """
+
+                                                  UPDATE inventory
+                                                  SET
+                                                      inventory_quantity = @Quantity,
+                                                      inventory_restock_date = @RestockDate
+                                                  WHERE inventory_id = @Id;
+                                          """;
 }

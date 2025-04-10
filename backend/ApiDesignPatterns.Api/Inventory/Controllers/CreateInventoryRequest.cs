@@ -10,5 +10,5 @@ public record CreateInventoryRequest
     [Required] public required string SupplierId { get; init; }
     [Required] public required string ProductId { get; init; }
     [Required] public required decimal Quantity { get; init; }
-    public string? RestockDate { get; init; }
+    public DateTimeOffset? RestockDate { get; init; }
 }
