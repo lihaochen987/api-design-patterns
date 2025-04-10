@@ -13,8 +13,5 @@ $$
                 CONSTRAINT unique_product_id UNIQUE (product_id)
             );
         END IF;
-
-        ALTER TABLE product_pricing
-            OWNER TO myusername;
     END
 $$;

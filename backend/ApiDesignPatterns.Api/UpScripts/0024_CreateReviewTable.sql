@@ -15,9 +15,5 @@ $$
                 review_updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
             );
         END IF;
-
-        -- Set table owner
-        ALTER TABLE public.reviews
-            OWNER TO myusername;
     END
 $$;

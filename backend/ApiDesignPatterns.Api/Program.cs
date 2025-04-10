@@ -76,7 +76,8 @@ using (IServiceScope scope = app.Services.CreateScope())
     {
         if (connectionString != null)
         {
-            DatabaseMigrations.Apply(connectionString, 5, 2000);
+            string migrationPath = Path.Combine(Directory.GetCurrentDirectory(), "UpScripts");
+            DatabaseMigrations.Apply(connectionString, 5, 2000, migrationPath);
         }
         else
         {

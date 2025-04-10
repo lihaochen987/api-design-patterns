@@ -9,16 +9,16 @@ namespace backend;
 public static class DatabaseMigrations
 {
     public static void Apply(
-        string connectionString,
+        string? connectionString,
         int retryCount,
-        int delayInSeconds)
+        int delayInSeconds,
+        string migrationPath)
     {
-        string migrationPath = Path.Combine(Directory.GetCurrentDirectory(), "UpScripts");
-
         if (!Directory.Exists(migrationPath))
         {
-            Console.WriteLine($"Migration path does not exist: {migrationPath}");
-            return;
+            string errorMessage = $"Migration path does not exist: {migrationPath}";
+            Console.WriteLine(errorMessage);
+            throw new DirectoryNotFoundException(errorMessage);
         }
 
         for (int attempt = 1; attempt <= retryCount; attempt++)
