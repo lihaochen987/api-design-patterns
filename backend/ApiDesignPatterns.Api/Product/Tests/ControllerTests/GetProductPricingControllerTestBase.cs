@@ -4,8 +4,8 @@
 using AutoFixture;
 using AutoMapper;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
+using backend.Product.Controllers.ProductPricing;
 using backend.Product.DomainModels.Views;
-using backend.Product.ProductPricingControllers;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared.FieldMask;

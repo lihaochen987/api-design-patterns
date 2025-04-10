@@ -3,10 +3,10 @@
 
 using AutoFixture;
 using System.Net;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
+using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
-using backend.Supplier.SupplierControllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

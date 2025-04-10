@@ -4,8 +4,8 @@
 using AutoMapper;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
+using backend.Supplier.Controllers;
 using backend.Supplier.Services;
-using backend.Supplier.SupplierControllers;
 using Moq;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;

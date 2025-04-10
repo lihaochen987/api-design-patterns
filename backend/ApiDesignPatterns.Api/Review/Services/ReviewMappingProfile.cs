@@ -2,8 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Review.Controllers;
 using backend.Review.DomainModels;
-using backend.Review.ReviewControllers;
 
 namespace backend.Review.Services;
 

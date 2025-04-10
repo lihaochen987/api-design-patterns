@@ -3,7 +3,7 @@
 
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using backend.Shared;
 using backend.Shared.Caching;
 using backend.Shared.QueryHandler;

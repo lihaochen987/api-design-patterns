@@ -2,8 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
+using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
-using backend.Supplier.SupplierControllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

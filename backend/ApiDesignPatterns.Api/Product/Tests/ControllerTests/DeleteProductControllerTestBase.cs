@@ -3,7 +3,7 @@
 
 using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Moq;

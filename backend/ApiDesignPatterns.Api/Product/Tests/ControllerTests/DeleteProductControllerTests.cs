@@ -1,6 +1,6 @@
 using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using backend.Product.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

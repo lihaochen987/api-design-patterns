@@ -14,11 +14,11 @@ using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
+using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer.Database.Supplier;
 using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 using backend.Supplier.Services;
-using backend.Supplier.SupplierControllers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Supplier;

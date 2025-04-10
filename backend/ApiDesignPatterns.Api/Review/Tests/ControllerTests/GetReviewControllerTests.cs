@@ -3,10 +3,10 @@
 
 using AutoFixture;
 using System.Net;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using backend.Review.ApplicationLayer.Queries.GetReviewView;
+using backend.Review.Controllers;
 using backend.Review.DomainModels;
-using backend.Review.ReviewControllers;
 using backend.Review.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

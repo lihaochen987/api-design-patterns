@@ -2,8 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Text.Json;
+using backend.Product.Controllers.Product;
 using backend.Product.InfrastructureLayer.Cache;
-using backend.Product.ProductControllers;
 using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
 using StackExchange.Redis;

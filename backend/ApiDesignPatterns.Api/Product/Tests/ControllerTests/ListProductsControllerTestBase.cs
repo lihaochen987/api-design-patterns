@@ -8,7 +8,7 @@ using backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using backend.Product.Services.Mappers;
 using backend.Shared.Caching;
 using backend.Shared.CommandHandler;

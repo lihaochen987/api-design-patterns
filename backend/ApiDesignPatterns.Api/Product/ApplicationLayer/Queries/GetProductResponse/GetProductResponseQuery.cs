@@ -5,7 +5,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.GetProductResponse;
 
-public record GetProductResponseQuery : IQuery<ProductControllers.GetProductResponse?>
+public record GetProductResponseQuery : IQuery<Controllers.Product.GetProductResponse?>
 {
     public required long Id { get; init; }
 }

@@ -5,8 +5,8 @@ using AutoFixture;
 using AutoMapper;
 using backend.Shared.CommandHandler;
 using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
+using backend.Supplier.Controllers;
 using backend.Supplier.Services;
-using backend.Supplier.SupplierControllers;
 using Moq;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;

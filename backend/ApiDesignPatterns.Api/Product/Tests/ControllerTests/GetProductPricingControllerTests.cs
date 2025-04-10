@@ -1,9 +1,9 @@
 using System.Net;
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
+using backend.Product.Controllers.ProductPricing;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
-using backend.Product.ProductPricingControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

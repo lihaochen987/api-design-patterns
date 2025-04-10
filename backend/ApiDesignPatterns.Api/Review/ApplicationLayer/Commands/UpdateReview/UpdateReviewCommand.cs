@@ -1,7 +1,7 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Review.ReviewControllers;
+using backend.Review.Controllers;
 
 namespace backend.Review.ApplicationLayer.Commands.UpdateReview;
 

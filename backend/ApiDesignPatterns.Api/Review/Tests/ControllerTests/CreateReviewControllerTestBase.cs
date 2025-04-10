@@ -4,7 +4,7 @@
 using AutoFixture;
 using AutoMapper;
 using backend.Review.ApplicationLayer.Commands.CreateReview;
-using backend.Review.ReviewControllers;
+using backend.Review.Controllers;
 using backend.Review.Services;
 using backend.Shared.CommandHandler;
 using Moq;

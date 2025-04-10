@@ -7,8 +7,8 @@ using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
+using backend.Supplier.Controllers;
 using backend.Supplier.Services;
-using backend.Supplier.SupplierControllers;
 using Moq;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;

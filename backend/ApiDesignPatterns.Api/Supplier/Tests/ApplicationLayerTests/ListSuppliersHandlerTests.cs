@@ -3,7 +3,7 @@
 
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
-using backend.Supplier.SupplierControllers;
+using backend.Supplier.Controllers;
 using FluentAssertions;
 using Xunit;
 

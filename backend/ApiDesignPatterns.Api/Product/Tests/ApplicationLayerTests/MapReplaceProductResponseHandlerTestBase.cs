@@ -3,6 +3,7 @@
 
 using AutoMapper;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
+using backend.Product.Controllers.Product;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared.QueryHandler;
@@ -19,7 +20,7 @@ public abstract class MapReplaceProductResponseHandlerTestBase
         Mapper = mapperConfiguration.CreateMapper();
     }
 
-    protected IQueryHandler<MapReplaceProductResponseQuery, ProductControllers.ReplaceProductResponse>
+    protected IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse>
         GetReplaceProductResponseHandler()
     {
         return new MapReplaceProductResponseHandler(Mapper);

@@ -4,8 +4,8 @@
 using AutoFixture;
 using AutoMapper;
 using backend.Review.ApplicationLayer.Queries.ListReviews;
+using backend.Review.Controllers;
 using backend.Review.DomainModels;
-using backend.Review.ReviewControllers;
 using backend.Review.Services;
 using backend.Shared.QueryHandler;
 using Moq;

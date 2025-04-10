@@ -3,7 +3,7 @@
 
 using backend.Review.ApplicationLayer.Commands.DeleteReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
-using backend.Review.ReviewControllers;
+using backend.Review.Controllers;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Moq;

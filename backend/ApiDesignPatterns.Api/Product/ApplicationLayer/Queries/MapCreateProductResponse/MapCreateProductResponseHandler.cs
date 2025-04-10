@@ -2,8 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
-using backend.Product.ProductControllers;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;

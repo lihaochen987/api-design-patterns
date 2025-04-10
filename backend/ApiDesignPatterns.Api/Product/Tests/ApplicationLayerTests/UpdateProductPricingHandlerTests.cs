@@ -2,8 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
+using backend.Product.Controllers.ProductPricing;
 using backend.Product.DomainModels.ValueObjects;
-using backend.Product.ProductPricingControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
 using FluentAssertions;

@@ -2,8 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
+using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
-using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
 using FluentAssertions;

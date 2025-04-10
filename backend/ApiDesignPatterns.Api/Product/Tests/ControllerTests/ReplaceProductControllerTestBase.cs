@@ -5,7 +5,7 @@ using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;

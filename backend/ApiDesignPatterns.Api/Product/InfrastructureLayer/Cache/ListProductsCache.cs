@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Text.Json;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using backend.Shared.Caching;
 using StackExchange.Redis;
 

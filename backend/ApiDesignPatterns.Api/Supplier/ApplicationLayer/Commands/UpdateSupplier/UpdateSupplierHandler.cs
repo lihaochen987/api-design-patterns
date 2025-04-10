@@ -2,9 +2,9 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Shared.CommandHandler;
+using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer.Database.Supplier;
-using backend.Supplier.SupplierControllers;
 
 namespace backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 

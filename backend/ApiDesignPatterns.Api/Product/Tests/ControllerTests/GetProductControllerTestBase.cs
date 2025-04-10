@@ -3,7 +3,7 @@
 
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using backend.Product.Services;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;

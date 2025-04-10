@@ -4,8 +4,8 @@
 using AutoFixture;
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
+using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
-using backend.Inventory.InventoryControllers;
 using backend.Inventory.Services;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;

@@ -32,39 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Product\Controllers\CreateProductRequest.cs">
-      <DependentUpon>CreateProductController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\Controllers\GetProductRequest.cs">
-      <DependentUpon>GetProductController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\Controllers\ListProductsRequest.cs">
-      <DependentUpon>ListProductsController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\Controllers\ListProductsResponse.cs">
-      <DependentUpon>ListProductsController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\Controllers\UpdateProductRequest.cs">
-      <DependentUpon>UpdateProductController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\Controllers\DeleteProductRequest.cs">
-      <DependentUpon>DeleteProductController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\Controllers\ReplaceProductRequest.cs">
-      <DependentUpon>ReplaceProductController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\Controllers\CreateProductResponse.cs">
-      <DependentUpon>CreateProductController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\Controllers\GetProductResponse.cs">
-      <DependentUpon>GetProductController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\Controllers\ReplaceProductResponse.cs">
-      <DependentUpon>ReplaceProductController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\Controllers\UpdateProductResponse.cs">
-      <DependentUpon>UpdateProductController.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\Controllers\CreateProductExtensions.cs">
       <DependentUpon>CreateProductController.cs</DependentUpon>
     </Compile>
@@ -109,18 +76,6 @@
     </Compile>
     <Compile Update="Product\ProductControllers\UpdateProductResponse.cs">
       <DependentUpon>UpdateProductController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\ProductPricingControllers\GetProductPricingRequest.cs">
-      <DependentUpon>GetProductPricingController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\ProductPricingControllers\GetProductPricingResponse.cs">
-      <DependentUpon>GetProductPricingController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\ProductPricingControllers\UpdateProductPricingRequest.cs">
-      <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Product\ProductPricingControllers\UpdateProductPricingResponse.cs">
-      <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
     </Compile>
     <Compile Update="Review\ReviewControllers\CreateReviewRequest.cs">
       <DependentUpon>CreateReviewController.cs</DependentUpon>
@@ -411,6 +366,12 @@
     </Compile>
     <Compile Update="Product\Tests\ApplicationLayerTests\UpdateListProductStalenessHandlerTestBase.cs">
       <DependentUpon>UpdateListProductStalenessHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\InventoryControllers\UpdateInventoryControllerRequest.cs">
+      <DependentUpon>UpdateInventoryController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\InventoryControllers\UpdateInventoryControllerResponse.cs">
+      <DependentUpon>UpdateInventoryController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

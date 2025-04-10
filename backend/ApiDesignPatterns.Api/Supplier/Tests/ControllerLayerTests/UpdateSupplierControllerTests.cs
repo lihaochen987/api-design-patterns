@@ -4,7 +4,7 @@
 using AutoFixture;
 using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
-using backend.Supplier.SupplierControllers;
+using backend.Supplier.Controllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

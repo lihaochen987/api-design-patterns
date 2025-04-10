@@ -1,6 +1,6 @@
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
-using backend.Product.ProductPricingControllers;
+using backend.Product.Controllers.ProductPricing;
 using backend.Product.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

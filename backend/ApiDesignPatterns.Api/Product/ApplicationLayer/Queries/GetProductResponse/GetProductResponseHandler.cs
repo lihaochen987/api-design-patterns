@@ -2,10 +2,10 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Database.ProductView;
-using backend.Product.ProductControllers;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.GetProductResponse;
@@ -13,9 +13,9 @@ namespace backend.Product.ApplicationLayer.Queries.GetProductResponse;
 public class GetProductResponseHandler(
     IProductViewRepository repository,
     IMapper mapper)
-    : IQueryHandler<GetProductResponseQuery, ProductControllers.GetProductResponse?>
+    : IQueryHandler<GetProductResponseQuery, Controllers.Product.GetProductResponse?>
 {
-    public async Task<ProductControllers.GetProductResponse?> Handle(GetProductResponseQuery query)
+    public async Task<Controllers.Product.GetProductResponse?> Handle(GetProductResponseQuery query)
     {
         ProductView? productView = await repository.GetProductView(query.Id);
 
@@ -24,11 +24,11 @@ public class GetProductResponseHandler(
             return null;
         }
 
-        ProductControllers.GetProductResponse response = Enum.Parse<Category>(productView.Category) switch
+        Controllers.Product.GetProductResponse response = Enum.Parse<Category>(productView.Category) switch
         {
             Category.PetFood => mapper.Map<GetPetFoodResponse>(productView),
             Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(productView),
-            _ => mapper.Map<ProductControllers.GetProductResponse>(productView)
+            _ => mapper.Map<Controllers.Product.GetProductResponse>(productView)
         };
 
         return response;

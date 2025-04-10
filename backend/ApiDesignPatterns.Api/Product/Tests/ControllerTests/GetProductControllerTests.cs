@@ -1,8 +1,8 @@
 using System.Net;
 using AutoFixture;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
+using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
-using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

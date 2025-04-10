@@ -5,7 +5,7 @@ using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Commands.DeleteSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
-using backend.Supplier.SupplierControllers;
+using backend.Supplier.Controllers;
 using Moq;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;

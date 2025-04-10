@@ -5,7 +5,7 @@ using AutoFixture;
 using AutoMapper;
 using backend.Review.ApplicationLayer.Commands.UpdateReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
-using backend.Review.ReviewControllers;
+using backend.Review.Controllers;
 using backend.Review.Services;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;

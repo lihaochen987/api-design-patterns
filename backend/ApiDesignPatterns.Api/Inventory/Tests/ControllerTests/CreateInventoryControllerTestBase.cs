@@ -4,7 +4,7 @@
 using AutoFixture;
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
-using backend.Inventory.InventoryControllers;
+using backend.Inventory.Controllers;
 using backend.Inventory.Services;
 using backend.Shared.CommandHandler;
 using Moq;

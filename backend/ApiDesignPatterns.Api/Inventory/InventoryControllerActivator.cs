@@ -4,10 +4,10 @@
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
+using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
 using backend.Inventory.InfrastructureLayer.Database.Inventory;
 using backend.Inventory.InfrastructureLayer.Database.InventoryView;
-using backend.Inventory.InventoryControllers;
 using backend.Inventory.Services;
 using backend.Shared;
 using backend.Shared.CommandHandler;

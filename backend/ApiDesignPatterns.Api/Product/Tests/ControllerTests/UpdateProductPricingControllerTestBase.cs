@@ -5,7 +5,7 @@ using AutoFixture;
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
-using backend.Product.ProductPricingControllers;
+using backend.Product.Controllers.ProductPricing;
 using backend.Product.Services.Mappers;
 using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared.CommandHandler;

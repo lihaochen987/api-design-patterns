@@ -2,8 +2,8 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Shared.QueryHandler;
+using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
-using backend.Supplier.SupplierControllers;
 
 namespace backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
 

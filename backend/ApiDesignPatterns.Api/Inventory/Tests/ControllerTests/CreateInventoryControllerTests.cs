@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
-using backend.Inventory.InventoryControllers;
+using backend.Inventory.Controllers;
 using backend.Inventory.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

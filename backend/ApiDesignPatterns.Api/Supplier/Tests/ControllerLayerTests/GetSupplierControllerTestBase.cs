@@ -6,9 +6,9 @@ using AutoMapper;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
+using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
 using backend.Supplier.Services;
-using backend.Supplier.SupplierControllers;
 using Moq;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;

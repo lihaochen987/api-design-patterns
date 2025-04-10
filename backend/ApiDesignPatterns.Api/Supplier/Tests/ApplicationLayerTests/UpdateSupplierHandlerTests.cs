@@ -3,8 +3,8 @@
 
 using backend.Shared.CommandHandler;
 using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
+using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
-using backend.Supplier.SupplierControllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Xunit;

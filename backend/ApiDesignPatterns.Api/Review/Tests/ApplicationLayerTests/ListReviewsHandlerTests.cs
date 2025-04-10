@@ -3,7 +3,7 @@
 
 using AutoFixture;
 using backend.Review.ApplicationLayer.Queries.ListReviews;
-using backend.Review.ReviewControllers;
+using backend.Review.Controllers;
 using backend.Shared.QueryHandler;
 using FluentAssertions;
 using Xunit;

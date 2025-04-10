@@ -3,8 +3,8 @@
 
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
+using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
-using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.QueryHandler;
 using FluentAssertions;

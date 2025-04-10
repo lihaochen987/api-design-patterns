@@ -2,10 +2,10 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
+using backend.Product.Controllers.Product;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
-using backend.Product.ProductControllers;
 using backend.Product.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
 using FluentAssertions;

@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Review.ApplicationLayer.Commands.UpdateReview;
-using backend.Review.ReviewControllers;
+using backend.Review.Controllers;
 using backend.Review.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
 using FluentAssertions;

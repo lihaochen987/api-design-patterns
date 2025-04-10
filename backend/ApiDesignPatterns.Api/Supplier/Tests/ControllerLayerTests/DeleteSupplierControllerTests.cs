@@ -3,7 +3,7 @@
 
 using backend.Supplier.ApplicationLayer.Commands.DeleteSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
-using backend.Supplier.SupplierControllers;
+using backend.Supplier.Controllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

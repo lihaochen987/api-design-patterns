@@ -2,10 +2,10 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Product.Controllers.Product;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
-using backend.Product.ProductControllers;
 
 namespace backend.Product.Services.Mappers;
 

@@ -3,7 +3,7 @@
 
 using AutoFixture;
 using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
 using FluentAssertions;

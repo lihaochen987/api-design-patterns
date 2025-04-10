@@ -4,10 +4,10 @@
 using AutoFixture;
 using System.Net;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
+using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
-using backend.Inventory.InventoryControllers;
 using backend.Inventory.Tests.TestHelpers.Builders;
-using backend.Product.ProductControllers;
+using backend.Product.Controllers.Product;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using FluentAssertions;

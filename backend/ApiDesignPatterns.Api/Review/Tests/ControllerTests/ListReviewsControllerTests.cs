@@ -3,8 +3,8 @@
 
 using AutoFixture;
 using backend.Review.ApplicationLayer.Queries.ListReviews;
+using backend.Review.Controllers;
 using backend.Review.DomainModels;
-using backend.Review.ReviewControllers;
 using backend.Review.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
