@@ -9,19 +9,8 @@ namespace backend.Inventory.Tests.TestHelpers.Fakes;
 
 public class InventoryViewRepositoryFake : Collection<InventoryView>, IInventoryViewRepository
 {
-    public Dictionary<string, int> CallCount { get; } = new();
-
-    private void IncrementCallCount(string methodName)
-    {
-        if (!CallCount.TryAdd(methodName, 1))
-        {
-            CallCount[methodName]++;
-        }
-    }
-
     public Task<InventoryView?> GetInventoryView(long id)
     {
-        IncrementCallCount(nameof(GetInventoryView));
         InventoryView? inventoryView = this.FirstOrDefault(r => r.Id == id);
         return Task.FromResult(inventoryView);
     }

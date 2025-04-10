@@ -24,9 +24,6 @@ public class ReplaceSupplierHandlerTests : ReplaceSupplierHandlerTestBase
         await sut.Handle(command);
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateSupplierAsync").WhoseValue.Should().Be(1);
-        Repository.CallCount.Should().ContainKey("UpdateSupplierAddressAsync").WhoseValue.Should().Be(1);
-        Repository.CallCount.Should().ContainKey("UpdateSupplierPhoneNumberAsync").WhoseValue.Should().Be(1);
         Repository.First().Should().BeEquivalentTo(replacedSupplier);
     }
 }

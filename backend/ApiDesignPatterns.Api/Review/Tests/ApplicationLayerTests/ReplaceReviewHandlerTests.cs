@@ -31,7 +31,6 @@ public class ReplaceReviewHandlerTests : ReplaceReviewHandlerTestBase
         await sut.Handle(command);
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateReviewAsync").And.ContainValue(1);
         var updatedReview = Repository.First();
         updatedReview.Rating.Should().Be(replacementReview.Rating);
         updatedReview.Text.Should().Be(replacementReview.Text);
@@ -78,6 +77,10 @@ public class ReplaceReviewHandlerTests : ReplaceReviewHandlerTestBase
         await sut.Handle(command);
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateReviewAsync").And.ContainValue(1);
+        var updatedReview = Repository.Single(r => r.Id == firstReview.Id);
+        updatedReview.Id.Should().Be(replacementReview.Id);
+        updatedReview.ProductId.Should().Be(replacementReview.ProductId);
+        updatedReview.Rating.Should().Be(replacementReview.Rating);
+        updatedReview.Text.Should().Be(replacementReview.Text);
     }
 }

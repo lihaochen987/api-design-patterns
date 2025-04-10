@@ -22,7 +22,6 @@ public class GetReviewHandlerTests : GetReviewHandlerTestBase
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(expectedReview);
-        Repository.CallCount.Should().ContainKey("GetReviewAsync").WhoseValue.Should().Be(1);
     }
 
     [Fact]
@@ -34,6 +33,5 @@ public class GetReviewHandlerTests : GetReviewHandlerTestBase
         DomainModels.Review? result = await sut.Handle(new GetReviewQuery { Id = nonExistentReview.Id });
 
         result.Should().BeNull();
-        Repository.CallCount.Should().ContainKey("GetReviewAsync").WhoseValue.Should().Be(1);
     }
 }

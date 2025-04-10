@@ -9,19 +9,9 @@ namespace backend.Inventory.Tests.TestHelpers.Fakes;
 public class InventoryRepositoryFake : Collection<DomainModels.Inventory>, IInventoryRepository
 {
     public bool IsDirty { get; set; }
-    public Dictionary<string, int> CallCount { get; } = new();
-
-    private void IncrementCallCount(string methodName)
-    {
-        if (!CallCount.TryAdd(methodName, 1))
-        {
-            CallCount[methodName]++;
-        }
-    }
 
     public Task CreateInventoryAsync(DomainModels.Inventory inventory)
     {
-        IncrementCallCount(nameof(CreateInventoryAsync));
         IsDirty = true;
         Add(inventory);
         return Task.CompletedTask;

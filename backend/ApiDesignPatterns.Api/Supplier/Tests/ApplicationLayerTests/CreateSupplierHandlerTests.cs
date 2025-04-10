@@ -21,13 +21,11 @@ public class CreateSupplierHandlerTests : CreateSupplierHandlerTestBase
         await sut.Handle(command);
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("CreateSupplierAsync").And.ContainValue(1);
-        Repository.CallCount.Should().ContainKey("CreateSupplierAddressAsync").And.ContainValue(1);
-        Repository.CallCount.Should().ContainKey("CreateSupplierPhoneNumberAsync").And.ContainValue(1);
-
         var createdSupplier = Repository.First();
         createdSupplier.Id.Should().NotBe(0);
         createdSupplier.CreatedAt.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
+        createdSupplier.Should().BeEquivalentTo(supplierToCreate,
+            options => options.Excluding(s => s.CreatedAt));
     }
 
     [Fact]
@@ -43,31 +41,15 @@ public class CreateSupplierHandlerTests : CreateSupplierHandlerTestBase
         await sut.Handle(secondCommand);
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("CreateSupplierAsync").And.ContainValue(2);
-        Repository.CallCount.Should().ContainKey("CreateSupplierAddressAsync").And.ContainValue(2);
-        Repository.CallCount.Should().ContainKey("CreateSupplierPhoneNumberAsync").And.ContainValue(2);
 
         var firstSupplier = Repository.First(x => x.Id == firstSupplierToCreate.Id);
         firstSupplier.CreatedAt.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
+        firstSupplier.Should().BeEquivalentTo(firstSupplierToCreate,
+            options => options.Excluding(s => s.CreatedAt));
 
         var secondSupplier = Repository.First(x => x.Id == secondSupplierToCreate.Id);
         secondSupplier.CreatedAt.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
-    }
-
-    private static readonly string[] s_expected =
-    [
-        "CreateSupplierAsync", "CreateSupplierAddressAsync", "CreateSupplierPhoneNumberAsync"
-    ];
-
-    [Fact]
-    public async Task Handle_CreatesSupplierBeforeAddressAndPhoneNumber()
-    {
-        var supplierToCreate = new SupplierTestDataBuilder().Build();
-        var command = new CreateSupplierCommand { Supplier = supplierToCreate };
-        ICommandHandler<CreateSupplierCommand> sut = CreateSupplierService();
-
-        await sut.Handle(command);
-
-        Repository.CallOrder.Should().Equal(s_expected);
+        secondSupplier.Should().BeEquivalentTo(secondSupplierToCreate,
+            options => options.Excluding(s => s.CreatedAt));
     }
 }

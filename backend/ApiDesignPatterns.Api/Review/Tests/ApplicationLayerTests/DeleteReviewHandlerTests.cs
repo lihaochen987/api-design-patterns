@@ -22,7 +22,7 @@ public class DeleteReviewHandlerTests : DeleteReviewHandlerTestBase
         await sut.Handle(new DeleteReviewCommand { Id = reviewToDelete.Id });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("DeleteReviewAsync").WhoseValue.Should().Be(1);
+        Repository.Should().BeEmpty();
     }
 
     [Fact]
@@ -34,6 +34,6 @@ public class DeleteReviewHandlerTests : DeleteReviewHandlerTestBase
         await sut.Handle(new DeleteReviewCommand { Id = nonExistentId });
 
         Repository.IsDirty.Should().BeFalse();
-        Repository.CallCount.Should().ContainKey("DeleteReviewAsync").WhoseValue.Should().Be(1);
+        Repository.Should().BeEmpty();
     }
 }

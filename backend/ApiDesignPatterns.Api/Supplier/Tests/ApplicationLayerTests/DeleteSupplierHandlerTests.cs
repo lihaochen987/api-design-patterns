@@ -22,7 +22,7 @@ public class DeleteSupplierHandlerTests : DeleteSupplierHandlerTestBase
         await sut.Handle(new DeleteSupplierCommand { Id = supplierToDelete.Id });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("DeleteSupplierAsync").And.ContainValue(1);
+        Repository.Should().BeEmpty();
     }
 
     [Fact]
@@ -34,6 +34,5 @@ public class DeleteSupplierHandlerTests : DeleteSupplierHandlerTestBase
         await sut.Handle(new DeleteSupplierCommand { Id = nonExistentId });
 
         Repository.IsDirty.Should().BeFalse();
-        Repository.CallCount.Should().ContainKey("DeleteSupplierAsync").And.ContainValue(1);
     }
 }

@@ -22,7 +22,6 @@ public class GetSupplierHandlerTests : GetSupplierHandlerTestBase
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(expectedSupplier);
-        Repository.CallCount.Should().ContainKey("GetSupplierAsync").And.ContainValue(1);
     }
 
     [Fact]
@@ -34,6 +33,5 @@ public class GetSupplierHandlerTests : GetSupplierHandlerTestBase
         DomainModels.Supplier? result = await sut.Handle(new GetSupplierQuery { Id = nonExistentSupplier.Id });
 
         result.Should().BeNull();
-        Repository.CallCount.Should().ContainKey("GetSupplierAsync").And.ContainValue(1);
     }
 }

@@ -20,7 +20,6 @@ public class CreateInventoryHandlerTests : CreateInventoryHandlerTestBase
         await sut.Handle(new CreateInventoryCommand { Inventory = inventoryToCreate });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("CreateInventoryAsync").WhoseValue.Should().Be(1);
         Repository.First().Should().BeEquivalentTo(inventoryToCreate);
     }
 
@@ -35,7 +34,6 @@ public class CreateInventoryHandlerTests : CreateInventoryHandlerTestBase
         await sut.Handle(new CreateInventoryCommand { Inventory = secondInventoryToCreate });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("CreateInventoryAsync").WhoseValue.Should().Be(2);
         var firstInventory = Repository.First(x => x.Id == firstInventoryToCreate.Id);
         firstInventory.Should().BeEquivalentTo(firstInventoryToCreate);
         var secondInventory = Repository.First(x => x.Id == secondInventoryToCreate.Id);

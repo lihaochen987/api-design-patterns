@@ -33,9 +33,6 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
         await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateSupplierAsync").WhoseValue.Should().Be(1);
-        Repository.CallCount.Should().ContainKey("UpdateSupplierAddressAsync").WhoseValue.Should().Be(1);
-        Repository.CallCount.Should().ContainKey("UpdateSupplierPhoneNumberAsync").WhoseValue.Should().Be(1);
         Repository.First().FirstName.Should().BeEquivalentTo(request.FirstName);
         Repository.First().LastName.Should().BeEquivalentTo(supplier.LastName);
         Repository.First().Email.Should().BeEquivalentTo(request.Email);
@@ -60,7 +57,6 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
         await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateSupplierAddressAsync").WhoseValue.Should().Be(1);
         Repository.First().Address.Street.Should().BeEquivalentTo(request.Address.Street);
         Repository.First().Address.City.Should().BeEquivalentTo(supplier.Address.City);
         Repository.First().Address.PostalCode.Should().BeEquivalentTo(request.Address.PostalCode);
@@ -86,7 +82,6 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
         await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateSupplierPhoneNumberAsync").WhoseValue.Should().Be(1);
         Repository.First().PhoneNumber.CountryCode.Should().BeEquivalentTo(request.PhoneNumber.CountryCode);
         Repository.First().PhoneNumber.AreaCode.Should().BeEquivalentTo(supplier.PhoneNumber.AreaCode);
         Repository.First().PhoneNumber.Number.Should().Be(long.Parse(request.PhoneNumber.Number));

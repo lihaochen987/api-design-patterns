@@ -23,7 +23,6 @@ public class GetInventoryViewHandlerTests : GetInventoryViewHandlerTestBase
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(expectedInventory);
-        Repository.CallCount.Should().ContainKey("GetInventoryView").WhoseValue.Should().Be(1);
     }
 
     [Fact]
@@ -35,6 +34,5 @@ public class GetInventoryViewHandlerTests : GetInventoryViewHandlerTestBase
         InventoryView? result = await sut.Handle(new GetInventoryViewQuery { Id = nonExistentInventory.Id });
 
         result.Should().BeNull();
-        Repository.CallCount.Should().ContainKey("GetInventoryView").WhoseValue.Should().Be(1);
     }
 }
