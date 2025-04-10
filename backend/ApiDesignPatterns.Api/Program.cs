@@ -1,13 +1,12 @@
 using System.Data;
 using System.Text.Json.Serialization;
+using backend;
 using backend.Inventory;
 using backend.Product;
 using backend.Review;
 using backend.Shared;
 using backend.Shared.ControllerActivators;
 using backend.Supplier;
-using DbUp;
-using DbUp.Engine;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Npgsql;
 
@@ -75,11 +74,9 @@ using (IServiceScope scope = app.Services.CreateScope())
 
     try
     {
-        string migrationPath = Path.Combine(Directory.GetCurrentDirectory(), "UpScripts");
-
-        if (connectionString != null && Directory.Exists(migrationPath))
+        if (connectionString != null)
         {
-            ApplyMigrations(connectionString, 5, 2000, migrationPath);
+            DatabaseMigrations.Apply(connectionString, 5, 2000);
         }
         else
         {
@@ -108,52 +105,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-return;
-
-void ApplyMigrations(
-    string connectionString,
-    int retryCount,
-    int delayInSeconds,
-    string migrationPath)
-{
-    if (!Directory.Exists(migrationPath))
-    {
-        Console.WriteLine($"Migration path does not exist: {migrationPath}");
-        return;
-    }
-
-    for (int attempt = 1; attempt <= retryCount; attempt++)
-    {
-        try
-        {
-            EnsureDatabase.For.PostgresqlDatabase(connectionString);
-            UpgradeEngine? upgrader = DeployChanges.To
-                .PostgresqlDatabase(connectionString)
-                .WithScriptsFromFileSystem(migrationPath)
-                .LogToConsole()
-                .Build();
-
-            DatabaseUpgradeResult? result = upgrader.PerformUpgrade();
-            if (!result.Successful)
-            {
-                throw new Exception("Migration failed: " + result.Error);
-            }
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("All migrations applied successfully.");
-            Console.ResetColor();
-            return;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Attempt {attempt} failed: {ex.Message}");
-            if (attempt == retryCount)
-            {
-                throw;
-            }
-
-            Console.WriteLine("Retrying in 2 seconds...");
-            Thread.Sleep(delayInSeconds);
-        }
-    }
-}

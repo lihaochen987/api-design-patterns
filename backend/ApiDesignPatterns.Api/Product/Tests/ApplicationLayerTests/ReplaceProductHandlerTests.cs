@@ -29,8 +29,7 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
         await sut.Handle(command);
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
-        Repository.First().Should().BeEquivalentTo(replacedProduct);
+        Repository.Should().Contain(replacedProduct);
     }
 
     [Fact]
@@ -52,9 +51,7 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
         await sut.Handle(command);
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
-        Repository.CallCount.Should().ContainKey("UpdatePetFoodProductAsync").WhoseValue.Should().Be(1);
-        Repository.First().Should().BeEquivalentTo(replacedProduct);
+        Repository.Should().ContainEquivalentOf(replacedProduct);
     }
 
     [Fact]
@@ -76,9 +73,7 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
         await sut.Handle(command);
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
-        Repository.CallCount.Should().ContainKey("UpdateGroomingAndHygieneProductAsync").WhoseValue.Should().Be(1);
-        Repository.First().Should().BeEquivalentTo(replacedProduct);
+        Repository.Should().Contain(replacedProduct);
     }
 
     [Fact]

@@ -21,6 +21,6 @@ public class DeleteProductHandlerTests : DeleteProductHandlerTestBase
         await sut.Handle(new DeleteProductCommand { Id = productToDelete.Id });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("DeleteProductAsync").And.ContainValue(1);
+        Repository.Should().BeEmpty();
     }
 }

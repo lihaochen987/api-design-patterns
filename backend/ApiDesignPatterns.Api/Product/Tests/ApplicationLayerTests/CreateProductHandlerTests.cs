@@ -21,7 +21,7 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
         await sut.Handle(new CreateProductCommand { Product = productToCreate });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("CreateProductAsync").And.ContainValue(1);
+        Repository.Should().Contain(productToCreate);
     }
 
     [Fact]
@@ -36,7 +36,9 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
         await sut.Handle(new CreateProductCommand { Product = secondProductToCreate });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("CreateProductAsync").And.ContainValue(2);
+        Repository.Count.Should().Be(2);
+        Repository.Should().Contain(firstProductToCreate);
+        Repository.Should().Contain(secondProductToCreate);
     }
 
     [Fact]
@@ -50,8 +52,7 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
         await sut.Handle(new CreateProductCommand { Product = petFoodProduct });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("CreateProductAsync").And.ContainValue(1);
-        Repository.CallCount.Should().ContainKey("CreatePetFoodProductAsync").And.ContainValue(1);
+        Repository.Should().Contain(petFoodProduct);
     }
 
     [Fact]
@@ -79,8 +80,7 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
         await sut.Handle(new CreateProductCommand { Product = groomingProduct });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("CreateProductAsync").And.ContainValue(1);
-        Repository.CallCount.Should().ContainKey("CreateGroomingAndHygieneProductAsync").And.ContainValue(1);
+        Repository.Should().Contain(groomingProduct);
     }
 
     [Fact]
@@ -108,8 +108,6 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
         await sut.Handle(new CreateProductCommand { Product = genericProduct });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("CreateProductAsync").And.ContainValue(1);
-        Repository.CallCount.Should().NotContainKey("CreatePetFoodProductAsync");
-        Repository.CallCount.Should().NotContainKey("CreateGroomingAndHygieneProductAsync");
+        Repository.Should().Contain(genericProduct);
     }
 }

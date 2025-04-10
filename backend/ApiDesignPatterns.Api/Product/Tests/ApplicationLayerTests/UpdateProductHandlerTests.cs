@@ -35,7 +35,6 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
         Repository.First().Name.Should().Be(request.Name);
         Repository.First().Category.Should().Be((Category)Enum.Parse(typeof(Category), request.Category));
         Repository.First().Pricing.DiscountPercentage.Should().Be(request.Pricing.DiscountPercentage);
@@ -59,7 +58,6 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
         Repository.First().Dimensions.Length.Should().Be(product.Dimensions.Length);
         Repository.First().Dimensions.Width.Should().Be(request.Dimensions.Width);
         Repository.First().Dimensions.Height.Should().Be(request.Dimensions.Height);
@@ -80,7 +78,6 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
         Repository.First().Name.Should().Be(request.Name);
     }
 
@@ -104,7 +101,6 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.CallCount.Should().ContainKey("UpdateProductAsync").WhoseValue.Should().Be(1);
         var groomingAndHygiene = (GroomingAndHygiene)Repository.First();
         groomingAndHygiene.UsageInstructions.Should().Be(request.UsageInstructions);
         groomingAndHygiene.IsNatural.Should().Be((bool)request.IsNatural);
