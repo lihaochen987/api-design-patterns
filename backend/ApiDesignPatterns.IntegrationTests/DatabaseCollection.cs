@@ -1,6 +1,4 @@
-using Xunit;
-
-namespace backend.Shared;
+namespace IntegrationTests;
 
 [CollectionDefinition("Database collection")]
 public class DatabaseCollection : ICollectionFixture<ProductRepositoryTests>;

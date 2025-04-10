@@ -5,9 +5,8 @@ using DbUp;
 using FluentAssertions;
 using Npgsql;
 using Testcontainers.PostgreSql;
-using Xunit;
 
-namespace backend.Shared;
+namespace IntegrationTests;
 
 public class ProductRepositoryTests : IAsyncLifetime
 {
@@ -54,22 +53,39 @@ public class ProductRepositoryTests : IAsyncLifetime
         }
     }
 
-    private string FindProjectRoot(string startDir)
+    private static string FindProjectRoot(string startDir)
     {
         string? directory = startDir;
 
         while (!string.IsNullOrEmpty(directory))
         {
-            if (File.Exists(Path.Combine(directory, "ApiDesignPatterns.Api.csproj")) ||
-                Directory.Exists(Path.Combine(directory, "UpScripts")))
+            string? fullName = Directory.GetParent(directory)?.FullName;
+            if (fullName != null)
             {
-                return directory;
+                string apiProjectDir = Path.Combine(
+                    fullName,
+                    "ApiDesignPatterns.Api");
+
+                if (Directory.Exists(apiProjectDir))
+                {
+                    string upScriptsDir = Path.Combine(apiProjectDir, "UpScripts");
+                    if (Directory.Exists(upScriptsDir))
+                    {
+                        return apiProjectDir;
+                    }
+                }
             }
 
             directory = Directory.GetParent(directory)?.FullName;
+
+            if (directory == null ||
+                Path.GetPathRoot(directory) == directory)
+            {
+                break;
+            }
         }
 
-        throw new DirectoryNotFoundException("Could not find project root directory");
+        throw new DirectoryNotFoundException("Could not find ApiDesignPatterns.Api directory with UpScripts");
     }
 
     public async Task DisposeAsync()
