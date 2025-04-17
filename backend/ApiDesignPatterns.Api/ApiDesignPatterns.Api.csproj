@@ -385,6 +385,117 @@
     <Compile Update="Inventory\Tests\ApplicationLayerTests\UpdateInventoryHandlerTestBase.cs">
       <DependentUpon>UpdateInventoryHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Controllers\Product\CreateProductRequest.cs">
+      <DependentUpon>CreateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\CreateProductResponse.cs">
+      <DependentUpon>CreateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\DeleteProductRequest.cs">
+      <DependentUpon>DeleteProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\GetProductRequest.cs">
+      <DependentUpon>GetProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\GetProductResponse.cs">
+      <DependentUpon>GetProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\ListProductsRequest.cs">
+      <DependentUpon>ListProductsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\ListProductsResponse.cs">
+      <DependentUpon>ListProductsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\ReplaceProductRequest.cs">
+      <DependentUpon>ReplaceProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\ReplaceProductResponse.cs">
+      <DependentUpon>ReplaceProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\UpdateProductRequest.cs">
+      <DependentUpon>UpdateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\UpdateProductResponse.cs">
+      <DependentUpon>UpdateProductController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\Controllers\CreateInventoryRequest.cs">
+      <DependentUpon>CreateInventoryController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\Controllers\CreateInventoryResponse.cs">
+      <DependentUpon>CreateInventoryController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\Controllers\GetInventoryRequest.cs">
+      <DependentUpon>GetInventoryController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\Controllers\GetInventoryResponse.cs">
+      <DependentUpon>GetInventoryController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\CreateReviewRequest.cs">
+      <DependentUpon>CreateReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\CreateReviewResponse.cs">
+      <DependentUpon>CreateReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\DeleteReviewRequest.cs">
+      <DependentUpon>DeleteReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\GetReviewRequest.cs">
+      <DependentUpon>GetReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\GetReviewResponse.cs">
+      <DependentUpon>GetReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\ListReviewsRequest.cs">
+      <DependentUpon>ListReviewsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\ListReviewsResponse.cs">
+      <DependentUpon>ListReviewsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\ReplaceReviewRequest.cs">
+      <DependentUpon>ReplaceReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\ReplaceReviewResponse.cs">
+      <DependentUpon>ReplaceReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\UpdateReviewRequest.cs">
+      <DependentUpon>UpdateReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\Controllers\UpdateReviewResponse.cs">
+      <DependentUpon>UpdateReviewController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\CreateSupplierRequest.cs">
+      <DependentUpon>CreateSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\CreateSupplierResponse.cs">
+      <DependentUpon>CreateSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\DeleteSupplierRequest.cs">
+      <DependentUpon>DeleteSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\GetSupplierRequest.cs">
+      <DependentUpon>GetSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\GetSupplierResponse.cs">
+      <DependentUpon>GetSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\ListSuppliersRequest.cs">
+      <DependentUpon>ListSuppliersController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\ListSuppliersResponse.cs">
+      <DependentUpon>ListSuppliersController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\ReplaceSupplierRequest.cs">
+      <DependentUpon>ReplaceSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\ReplaceSupplierResponse.cs">
+      <DependentUpon>ReplaceSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\UpdateSupplierRequest.cs">
+      <DependentUpon>UpdateSupplierController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\Controllers\UpdateSupplierResponse.cs">
+      <DependentUpon>UpdateSupplierController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
