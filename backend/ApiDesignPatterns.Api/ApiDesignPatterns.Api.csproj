@@ -505,6 +505,9 @@
     <Compile Update="Inventory\Controllers\DeleteInventoryResponse.cs">
       <DependentUpon>DeleteInventoryController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Inventory\Tests\ApplicationLayerTests\DeleteInventoryHandlerTestBase.cs">
+      <DependentUpon>DeleteInventoryHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

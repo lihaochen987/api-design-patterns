@@ -3,7 +3,7 @@
 
 namespace backend.Inventory.ApplicationLayer.Commands.DeleteInventory;
 
-public class DeleteInventoryCommand
+public record DeleteInventoryCommand
 {
-    public long Id { get; set; }
+    public long Id { get; init; }
 }
