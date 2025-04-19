@@ -42,7 +42,15 @@ public class InventoryViewRepositoryFake(PaginateService<InventoryView> paginate
         // Custom filter
         if (!string.IsNullOrEmpty(filter))
         {
-            throw new ArgumentException();
+            if (filter.Contains("ProductId =="))
+            {
+                string value = filter.Split("==")[1].Trim();
+                query = query.Where(s => s.ProductId == decimal.Parse(value));
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
         }
 
         var reviews = query
