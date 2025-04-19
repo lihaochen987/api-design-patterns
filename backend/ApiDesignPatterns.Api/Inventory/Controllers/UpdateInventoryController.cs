@@ -14,7 +14,7 @@ namespace backend.Inventory.Controllers;
 [ApiController]
 [Route("inventory")]
 public class UpdateInventoryController(
-    IQueryHandler<GetInventoryQuery, DomainModels.Inventory?> getInventory,
+    IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> getInventory,
     ICommandHandler<UpdateInventoryCommand> updateInventory,
     IMapper mapper)
     : ControllerBase
@@ -27,7 +27,7 @@ public class UpdateInventoryController(
         [FromRoute] long id,
         [FromBody] UpdateInventoryRequest request)
     {
-        DomainModels.Inventory? existingInventory = await getInventory.Handle(new GetInventoryQuery { Id = id });
+        DomainModels.Inventory? existingInventory = await getInventory.Handle(new GetInventoryByIdQuery { Id = id });
 
         if (existingInventory == null)
         {
@@ -36,7 +36,7 @@ public class UpdateInventoryController(
 
         await updateInventory.Handle(new UpdateInventoryCommand { Request = request, Inventory = existingInventory });
 
-        var updatedInventory = await getInventory.Handle(new GetInventoryQuery { Id = id });
+        var updatedInventory = await getInventory.Handle(new GetInventoryByIdQuery { Id = id });
 
         var response = mapper.Map<UpdateInventoryResponse>(updatedInventory);
         return Ok(response);

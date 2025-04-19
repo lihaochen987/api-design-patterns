@@ -7,12 +7,12 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Inventory.Tests.ApplicationLayerTests;
 
-public abstract class GetInventoryHandlerTestBase
+public abstract class GetInventoryByIdHandlerTestBase
 {
     protected readonly InventoryRepositoryFake Repository = [];
 
-    protected IQueryHandler<GetInventoryQuery, DomainModels.Inventory?> GetInventoryHandler()
+    protected IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> GetInventoryHandler()
     {
-        return new GetInventoryHandler(Repository);
+        return new GetInventoryByIdByIdHandler(Repository);
     }
 }

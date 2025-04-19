@@ -1,24 +1,27 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoFixture;
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
+using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Inventory.Controllers;
 using backend.Inventory.Services;
 using backend.Shared.CommandHandler;
+using backend.Shared.QueryHandler;
 using Moq;
 
 namespace backend.Inventory.Tests.ControllerTests;
 
 public abstract class CreateInventoryControllerTestBase
 {
-    protected readonly Fixture Fixture = new();
-
     protected readonly IMapper Mapper;
 
     protected readonly ICommandHandler<CreateInventoryCommand> CreateInventory =
         Mock.Of<ICommandHandler<CreateInventoryCommand>>();
+
+    protected readonly IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>
+        GetInventoryByProductAndSupplier =
+            Mock.Of<IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>>();
 
     protected CreateInventoryControllerTestBase()
     {
@@ -28,6 +31,6 @@ public abstract class CreateInventoryControllerTestBase
 
     protected CreateInventoryController GetCreateInventoryController()
     {
-        return new CreateInventoryController(CreateInventory, Mapper);
+        return new CreateInventoryController(CreateInventory, GetInventoryByProductAndSupplier, Mapper);
     }
 }

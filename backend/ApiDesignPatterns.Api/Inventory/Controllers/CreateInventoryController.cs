@@ -3,7 +3,9 @@
 
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
+using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Shared.CommandHandler;
+using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -13,6 +15,7 @@ namespace backend.Inventory.Controllers;
 [Route("inventory")]
 public class CreateInventoryController(
     ICommandHandler<CreateInventoryCommand> createInventory,
+    IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?> getInventoryByProductAndSupplier,
     IMapper mapper)
     : ControllerBase
 {
@@ -22,6 +25,16 @@ public class CreateInventoryController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CreateInventoryResponse>> CreateInventory([FromBody] CreateInventoryRequest request)
     {
+        var existingInventory = await getInventoryByProductAndSupplier.Handle(new GetInventoryByProductAndSupplierQuery
+        {
+            ProductId = request.ProductId, SupplierId = request.SupplierId
+        });
+
+        if (existingInventory != null)
+        {
+            return Conflict();
+        }
+
         DomainModels.Inventory inventory = mapper.Map<DomainModels.Inventory>(request);
         await createInventory.Handle(new CreateInventoryCommand { Inventory = inventory });
         var response = mapper.Map<CreateInventoryResponse>(inventory);

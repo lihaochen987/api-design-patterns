@@ -5,7 +5,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 
-public record GetInventoryQuery : IQuery<DomainModels.Inventory?>
+public record GetInventoryByIdQuery : IQuery<DomainModels.Inventory?>
 {
     public long Id { get; init; }
 }

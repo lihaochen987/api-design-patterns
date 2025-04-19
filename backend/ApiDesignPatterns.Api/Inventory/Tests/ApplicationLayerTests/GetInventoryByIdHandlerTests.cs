@@ -9,16 +9,16 @@ using Xunit;
 
 namespace backend.Inventory.Tests.ApplicationLayerTests;
 
-public class GetInventoryHandlerTests : GetInventoryHandlerTestBase
+public class GetInventoryByIdByIdHandlerTests : GetInventoryByIdHandlerTestBase
 {
     [Fact]
     public async Task Handle_ReturnsInventory_WhenInventoryExists()
     {
         DomainModels.Inventory expectedInventory = new InventoryTestDataBuilder().Build();
         Repository.Add(expectedInventory);
-        IQueryHandler<GetInventoryQuery, DomainModels.Inventory?> sut = GetInventoryHandler();
+        IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> sut = GetInventoryHandler();
 
-        DomainModels.Inventory? result = await sut.Handle(new GetInventoryQuery { Id = expectedInventory.Id });
+        DomainModels.Inventory? result = await sut.Handle(new GetInventoryByIdQuery { Id = expectedInventory.Id });
 
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(expectedInventory);
@@ -28,9 +28,9 @@ public class GetInventoryHandlerTests : GetInventoryHandlerTestBase
     public async Task Handle_ReturnsNull_WhenInventoryDoesNotExist()
     {
         DomainModels.Inventory nonExistentInventory = new InventoryTestDataBuilder().Build();
-        IQueryHandler<GetInventoryQuery, DomainModels.Inventory?> sut = GetInventoryHandler();
+        IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> sut = GetInventoryHandler();
 
-        DomainModels.Inventory? result = await sut.Handle(new GetInventoryQuery { Id = nonExistentInventory.Id });
+        DomainModels.Inventory? result = await sut.Handle(new GetInventoryByIdQuery { Id = nonExistentInventory.Id });
 
         result.Should().BeNull();
     }

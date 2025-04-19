@@ -7,8 +7,8 @@ namespace backend.Inventory.Controllers;
 
 public record CreateInventoryRequest
 {
-    [Required] public required string SupplierId { get; init; }
-    [Required] public required string ProductId { get; init; }
+    [Required] public required long SupplierId { get; init; }
+    [Required] public required long ProductId { get; init; }
     [Required] public required decimal Quantity { get; init; }
     public DateTimeOffset? RestockDate { get; init; }
 }

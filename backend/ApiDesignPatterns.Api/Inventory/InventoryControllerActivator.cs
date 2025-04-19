@@ -5,6 +5,7 @@ using AutoMapper;
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
 using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
+using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
 using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
@@ -64,8 +65,23 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
+            // GetByProductAndSupplier handler
+            var getInventoryByProductAndSupplier = new QueryDecoratorBuilder<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>(
+                    new GetInventoryByProductAndSupplierHandler(repository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.InventoryRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
             return new CreateInventoryController(
                 createInventoryHandler,
+                getInventoryByProductAndSupplier,
                 _mapper);
         }
 
@@ -101,9 +117,9 @@ public class InventoryControllerActivator : BaseControllerActivator
             TrackDisposable(context, dbConnection);
             var repository = new InventoryRepository(dbConnection);
 
-            // GetInventory handler
-            var getInventoryHandler = new QueryDecoratorBuilder<GetInventoryQuery, DomainModels.Inventory?>(
-                    new GetInventoryHandler(repository),
+            // GetByIdInventory handler
+            var getInventoryByIdHandler = new QueryDecoratorBuilder<GetInventoryByIdQuery, DomainModels.Inventory?>(
+                    new GetInventoryByIdByIdHandler(repository),
                     _loggerFactory,
                     dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -130,7 +146,7 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .Build();
 
             return new UpdateInventoryController(
-                getInventoryHandler,
+                getInventoryByIdHandler,
                 updateInventoryHandler,
                 _mapper);
         }
