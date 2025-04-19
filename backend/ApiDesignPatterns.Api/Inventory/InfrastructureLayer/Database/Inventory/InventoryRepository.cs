@@ -14,10 +14,16 @@ public class InventoryRepository(IDbConnection dbConnection) : IInventoryReposit
             new { inventory.SupplierId, inventory.ProductId, inventory.Quantity, inventory.RestockDate });
     }
 
-    public async Task<DomainModels.Inventory?> GetInventoryAsync(long id)
+    public async Task<DomainModels.Inventory?> GetInventoryByIdAsync(long id)
     {
-        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.Inventory>(InventoryQueries.GetInventory,
+        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.Inventory>(InventoryQueries.GetInventoryById,
             new { Id = id });
+    }
+
+    public async Task<DomainModels.Inventory?> GetInventoryByProductAndSupplierAsync(long productId, long supplierId)
+    {
+        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.Inventory>(InventoryQueries.GetInventoryByProductAndSupplier,
+            new { ProductId = productId, SupplierId = supplierId });
     }
 
     public async Task UpdateInventoryAsync(DomainModels.Inventory inventory)

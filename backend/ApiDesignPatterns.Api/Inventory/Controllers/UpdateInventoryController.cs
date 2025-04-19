@@ -3,7 +3,7 @@
 
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
-using backend.Inventory.ApplicationLayer.Queries.GetInventory;
+using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;

@@ -6,6 +6,7 @@ namespace backend.Inventory.InfrastructureLayer.Database.Inventory;
 public interface IInventoryRepository
 {
     Task CreateInventoryAsync(DomainModels.Inventory inventory);
-    Task<DomainModels.Inventory?> GetInventoryAsync(long id);
+    Task<DomainModels.Inventory?> GetInventoryByIdAsync(long id);
     Task UpdateInventoryAsync(DomainModels.Inventory inventory);
+    Task<DomainModels.Inventory?> GetInventoryByProductAndSupplierAsync(long productId, long supplierId);
 }

@@ -3,7 +3,7 @@
 
 using backend.Shared.QueryHandler;
 
-namespace backend.Inventory.ApplicationLayer.Queries.GetInventory;
+namespace backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 
 public record GetInventoryQuery : IQuery<DomainModels.Inventory?>
 {

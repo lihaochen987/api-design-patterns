@@ -17,7 +17,7 @@ public class InventoryRepositoryFake : Collection<DomainModels.Inventory>, IInve
         return Task.CompletedTask;
     }
 
-    public Task<DomainModels.Inventory?> GetInventoryAsync(long id)
+    public Task<DomainModels.Inventory?> GetInventoryByIdAsync(long id)
     {
         DomainModels.Inventory? inventory = this.FirstOrDefault(r => r.Id == id);
         return Task.FromResult(inventory);
@@ -31,6 +31,13 @@ public class InventoryRepositoryFake : Collection<DomainModels.Inventory>, IInve
         IsDirty = true;
 
         return Task.CompletedTask;
+    }
+
+    public Task<DomainModels.Inventory?> GetInventoryByProductAndSupplierAsync(long productId, long supplierId)
+    {
+        DomainModels.Inventory? inventory =
+            this.FirstOrDefault(r => r.ProductId == productId && r.SupplierId == supplierId);
+        return Task.FromResult(inventory);
     }
 
     // public Task<DomainModels.Review?> GetReviewAsync(long id)
