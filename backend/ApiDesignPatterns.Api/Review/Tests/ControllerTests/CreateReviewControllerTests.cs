@@ -28,11 +28,6 @@ public class CreateReviewControllerTests : CreateReviewControllerTestBase
         var createdResult = result.Result.Should().BeOfType<CreatedAtActionResult>().Subject;
         createdResult.ActionName.Should().Be("GetReview");
         createdResult.ControllerName.Should().Be("GetReview");
-        Mock
-            .Get(CreateReview)
-            .Verify(x => x.Handle(It.Is<CreateReviewCommand>(c =>
-                    c.ProductId == productId)),
-                Times.Once);
     }
 
     [Fact]

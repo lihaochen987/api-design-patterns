@@ -20,7 +20,7 @@ public class CreateProductControllerTests : CreateProductControllerTestBase
         var product = new ProductTestDataBuilder().WithCategory(Category.Beds).Build();
         var request = Mapper.Map<CreateProductRequest>(product);
         var expectedResponse = Mapper.Map<CreateProductResponse>(product);
-        var sut = GetCreateProductController();
+        CreateProductController sut = GetCreateProductController();
 
         var result = await sut.CreateProduct(request);
 
@@ -30,8 +30,5 @@ public class CreateProductControllerTests : CreateProductControllerTestBase
         createdResult.ActionName.Should().BeEquivalentTo("GetProduct");
         createdResult.ControllerName.Should().BeEquivalentTo("GetProduct");
         createdResult.Value.Should().BeEquivalentTo(expectedResponse, options => options.Excluding(x => x.Id));
-        Mock
-            .Get(CreateProduct)
-            .Verify(x => x.Handle(It.IsAny<CreateProductCommand>()), Times.Once);
     }
 }

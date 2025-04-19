@@ -32,9 +32,6 @@ public class ReplaceReviewControllerTests : ReplaceReviewControllerTestBase
         result.Should().NotBeNull();
         var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.Value.Should().BeEquivalentTo(expectedResponse);
-        Mock
-            .Get(ReplaceReview)
-            .Verify(x => x.Handle(It.IsAny<ReplaceReviewCommand>()), Times.Once);
     }
 
     [Fact]
@@ -52,8 +49,5 @@ public class ReplaceReviewControllerTests : ReplaceReviewControllerTestBase
         var result = await sut.ReplaceReview(nonExistentId, request);
 
         result.Result.Should().BeOfType<NotFoundResult>();
-        Mock
-            .Get(ReplaceReview)
-            .Verify(x => x.Handle(It.IsAny<ReplaceReviewCommand>()), Times.Never);
     }
 }

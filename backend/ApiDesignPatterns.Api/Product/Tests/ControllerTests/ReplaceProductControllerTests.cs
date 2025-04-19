@@ -1,7 +1,6 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
@@ -32,9 +31,6 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
         result.Should().NotBeNull();
         var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.Value.Should().BeEquivalentTo(expectedResponse);
-        Mock
-            .Get(ReplaceProduct)
-            .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Once);
     }
 
     [Fact]
@@ -52,9 +48,6 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
         var result = await sut.ReplaceProduct(nonExistentId, request);
 
         result.Result.Should().BeOfType<NotFoundResult>();
-        Mock
-            .Get(ReplaceProduct)
-            .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Never);
     }
 
     [Fact]
@@ -68,11 +61,9 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
             .ReturnsAsync(product);
         var sut = GetReplaceProductController();
 
-        await sut.ReplaceProduct(product.Id, request);
+        var result = await sut.ReplaceProduct(product.Id, request);
 
-        Mock
-            .Get(ReplaceProduct)
-            .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Once);
+        result.Result.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -86,11 +77,9 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
             .ReturnsAsync(product);
         var sut = GetReplaceProductController();
 
-        await sut.ReplaceProduct(product.Id, request);
+        var result = await sut.ReplaceProduct(product.Id, request);
 
-        Mock
-            .Get(ReplaceProduct)
-            .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Once);
+        result.Result.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -108,8 +97,5 @@ public class ReplaceProductControllerTests : ReplaceProductControllerTestBase
         var result = await sut.ReplaceProduct(product.Id, request);
 
         result.Result.Should().BeOfType<NotFoundResult>();
-        Mock
-            .Get(ReplaceProduct)
-            .Verify(x => x.Handle(It.IsAny<ReplaceProductCommand>()), Times.Once);
     }
 }

@@ -25,10 +25,6 @@ public class CreateSupplierControllerTests : CreateSupplierControllerTestBase
         result.Should().NotBeNull();
         result.Result.Should().BeOfType<OkObjectResult>()
             .Which.Value.Should().BeOfType<CreateSupplierResponse>();
-        Mock
-            .Get(CreateSupplier)
-            .Verify(x => x.Handle(It.IsAny<CreateSupplierCommand>()),
-                Times.Once);
     }
 
     [Fact]

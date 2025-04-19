@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
+using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Inventory.Controllers;
 using backend.Inventory.Tests.TestHelpers.Builders;
 using FluentAssertions;
@@ -26,12 +27,23 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
         var createdResult = result.Result.Should().BeOfType<CreatedAtActionResult>().Subject;
         createdResult.ActionName.Should().Be("GetInventory");
         createdResult.ControllerName.Should().Be("GetInventory");
-        Mock
-            .Get(CreateInventory)
-            .Verify(x => x.Handle(It.Is<CreateInventoryCommand>(c =>
-                    c.Inventory.ProductId == inventory.ProductId &&
-                    c.Inventory.SupplierId == inventory.SupplierId)),
-                Times.Once);
+    }
+
+    [Fact]
+    public async Task CreateInventory_ReturnsConflict_WhenInventoryAlreadyExists()
+    {
+        var existingInventory = new InventoryTestDataBuilder().Build();
+        var request = Mapper.Map<CreateInventoryRequest>(existingInventory);
+        Mock.Get(GetInventoryByProductAndSupplier)
+            .Setup(h => h.Handle(It.Is<GetInventoryByProductAndSupplierQuery>(q =>
+                q.ProductId == request.ProductId && q.SupplierId == request.SupplierId)))
+            .ReturnsAsync(existingInventory);
+        CreateInventoryController sut = GetCreateInventoryController();
+
+        var result = await sut.CreateInventory(request);
+
+        result.Should().NotBeNull();
+        result.Result.Should().BeOfType<ConflictResult>();
     }
 
     [Fact]

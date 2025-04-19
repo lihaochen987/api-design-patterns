@@ -59,7 +59,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
             .Get(MockGetProductPricing)
             .Setup(service => service.Handle(It.Is<GetProductPricingQuery>(q => q.Id == product.Id)))
             .ReturnsAsync(product);
-        var sut = ProductPricingController();
+        GetProductPricingController sut = ProductPricingController();
 
         ActionResult<GetProductPricingResponse> result = await sut.GetProductPricing(product.Id, request);
 
@@ -81,7 +81,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
             .Get(MockGetProductPricing)
             .Setup(service => service.Handle(It.Is<GetProductPricingQuery>(q => q.Id == product.Id)))
             .ReturnsAsync(product);
-        var sut = ProductPricingController();
+        GetProductPricingController sut = ProductPricingController();
 
         ActionResult<GetProductPricingResponse> result = await sut.GetProductPricing(product.Id, request);
 
@@ -105,7 +105,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
             .Get(MockGetProductPricing)
             .Setup(service => service.Handle(It.Is<GetProductPricingQuery>(q => q.Id == product.Id)))
             .ReturnsAsync(product);
-        var sut = ProductPricingController();
+        GetProductPricingController sut = ProductPricingController();
 
         ActionResult<GetProductPricingResponse> result = await sut.GetProductPricing(product.Id, request);
 

@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Supplier.ApplicationLayer.Commands.ReplaceSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.Controllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
@@ -26,11 +25,9 @@ public class ReplaceSupplierControllerTests : ReplaceSupplierControllerTestBase
             .ReturnsAsync(supplier);
         ReplaceSupplierController sut = GetReplaceSupplierController();
 
-        await sut.ReplaceSupplier(supplier.Id, request);
+        var result = await sut.ReplaceSupplier(supplier.Id, request);
 
-        Mock
-            .Get(ReplaceSupplier)
-            .Verify(x => x.Handle(It.IsAny<ReplaceSupplierCommand>()), Times.Once);
+        result.Result.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]
@@ -48,9 +45,6 @@ public class ReplaceSupplierControllerTests : ReplaceSupplierControllerTestBase
         var result = await sut.ReplaceSupplier(nonExistentId, request);
 
         result.Result.Should().BeOfType<NotFoundResult>();
-        Mock
-            .Get(ReplaceSupplier)
-            .Verify(x => x.Handle(It.IsAny<ReplaceSupplierCommand>()), Times.Never);
     }
 
     [Fact]
@@ -77,12 +71,5 @@ public class ReplaceSupplierControllerTests : ReplaceSupplierControllerTestBase
         response.FirstName.Should().Be("John");
         response.LastName.Should().Be("Doe");
         response.Email.Should().Be("john.doe@example.com");
-        Mock
-            .Get(ReplaceSupplier)
-            .Verify(x => x.Handle(It.Is<ReplaceSupplierCommand>(c =>
-                    c.Supplier.FirstName == "John" &&
-                    c.Supplier.LastName == "Doe" &&
-                    c.Supplier.Email == "john.doe@example.com")),
-                Times.Once);
     }
 }

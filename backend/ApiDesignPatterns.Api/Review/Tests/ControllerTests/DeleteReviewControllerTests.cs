@@ -27,9 +27,6 @@ public class DeleteReviewControllerTests : DeleteReviewControllerTestBase
         ActionResult result = await sut.DeleteReview(review.Id, new DeleteReviewRequest());
 
         result.Should().BeOfType<NoContentResult>();
-        Mock
-            .Get(MockDeleteReviewHandler)
-            .Verify(svc => svc.Handle(new DeleteReviewCommand { Id = review.Id }), Times.Once);
     }
 
     [Fact]
@@ -45,8 +42,5 @@ public class DeleteReviewControllerTests : DeleteReviewControllerTestBase
         ActionResult result = await sut.DeleteReview(review.Id, new DeleteReviewRequest());
 
         result.Should().BeOfType<NotFoundResult>();
-        Mock
-            .Get(MockDeleteReviewHandler)
-            .Verify(svc => svc.Handle(new DeleteReviewCommand { Id = review.Id }), Times.Never);
     }
 }

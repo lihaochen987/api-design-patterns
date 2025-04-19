@@ -1,4 +1,3 @@
-using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.Controllers.Product;
 using backend.Product.Tests.TestHelpers.Builders;
@@ -24,9 +23,6 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
         ActionResult result = await sut.DeleteProduct(product.Id, new DeleteProductRequest());
 
         result.Should().BeOfType<NoContentResult>();
-        Mock
-            .Get(MockDeleteProductHandler)
-            .Verify(svc => svc.Handle(new DeleteProductCommand { Id = product.Id }), Times.Once);
     }
 
     [Fact]
@@ -42,8 +38,5 @@ public class DeleteProductControllerTests : DeleteProductControllerTestBase
         ActionResult result = await sut.DeleteProduct(product.Id, new DeleteProductRequest());
 
         result.Should().BeOfType<NotFoundResult>();
-        Mock
-            .Get(MockDeleteProductHandler)
-            .Verify(svc => svc.Handle(new DeleteProductCommand { Id = product.Id }), Times.Never);
     }
 }

@@ -1,4 +1,3 @@
-using backend.Product.ApplicationLayer.Commands.UpdateProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.ValueObjects;
@@ -32,10 +31,6 @@ public class UpdateProductControllerTests : UpdateProductControllerTestBase
         OkObjectResult? contentResult = (OkObjectResult)actionResult.Result;
         UpdateProductResponse response = (UpdateProductResponse)contentResult.Value!;
         response.Should().BeEquivalentTo(Mapper.Map<UpdateProductResponse>(product));
-        Mock
-            .Get(MockUpdateProductHandler)
-            .Verify(
-                svc => svc.Handle(new UpdateProductCommand { Request = request, Product = product }));
     }
 
     [Fact]

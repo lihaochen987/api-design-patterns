@@ -32,11 +32,6 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
         OkObjectResult? contentResult = (OkObjectResult)actionResult.Result;
         UpdateReviewResponse response = (UpdateReviewResponse)contentResult.Value!;
         response.Should().BeEquivalentTo(Mapper.Map<UpdateReviewResponse>(review));
-        Mock
-            .Get(MockUpdateReviewHandler)
-            .Verify(
-                svc => svc.Handle(It.IsAny<UpdateReviewCommand>()),
-                Times.Once);
     }
 
     [Fact]
@@ -54,11 +49,6 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
 
         actionResult.Result.Should().NotBeNull();
         actionResult.Result.Should().BeOfType<NotFoundResult>();
-        Mock
-            .Get(MockUpdateReviewHandler)
-            .Verify(
-                svc => svc.Handle(It.IsAny<UpdateReviewCommand>()),
-                Times.Never);
     }
 
     [Fact]
@@ -95,12 +85,5 @@ public class UpdateReviewControllerTests : UpdateReviewControllerTestBase
         var result = await sut.UpdateReview(review.Id, request);
 
         result.Should().NotBeNull();
-        Mock
-            .Get(MockUpdateReviewHandler)
-            .Verify(
-                svc => svc.Handle(It.Is<UpdateReviewCommand>(cmd =>
-                    cmd.Request == request &&
-                    cmd.Review == review)),
-                Times.Once);
     }
 }

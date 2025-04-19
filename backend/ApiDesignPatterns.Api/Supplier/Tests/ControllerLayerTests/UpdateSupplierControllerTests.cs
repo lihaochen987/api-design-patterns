@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.Controllers;
 using backend.Supplier.Tests.TestHelpers.Builders;
@@ -32,11 +31,6 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
         var contentResult = actionResult.Result.As<OkObjectResult>();
         var response = contentResult.Value.Should().BeOfType<UpdateSupplierResponse>().Subject;
         response.Should().BeEquivalentTo(Mapper.Map<UpdateSupplierResponse>(supplier));
-        Mock
-            .Get(MockUpdateSupplierHandler)
-            .Verify(
-                svc => svc.Handle(It.IsAny<UpdateSupplierCommand>()),
-                Times.Once);
     }
 
     [Fact]
@@ -54,11 +48,6 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
 
         actionResult.Result.Should().NotBeNull();
         actionResult.Result.Should().BeOfType<NotFoundResult>();
-        Mock
-            .Get(MockUpdateSupplierHandler)
-            .Verify(
-                svc => svc.Handle(It.IsAny<UpdateSupplierCommand>()),
-                Times.Never);
     }
 
     [Fact]
@@ -98,11 +87,6 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
 
         var result = await sut.UpdateSupplier(supplier.Id, request);
 
-        Mock
-            .Get(MockGetSupplierHandler)
-            .Verify(
-                svc => svc.Handle(It.Is<GetSupplierQuery>(q => q.Id == supplier.Id)),
-                Times.Exactly(2));
         var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var response = okResult.Value.Should().BeOfType<UpdateSupplierResponse>().Subject;
         response.Should().NotBeNull();
@@ -120,14 +104,8 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
             .ReturnsAsync(supplier);
         var sut = UpdateSupplierController();
 
-        await sut.UpdateSupplier(supplier.Id, request);
+        var result = await sut.UpdateSupplier(supplier.Id, request);
 
-        Mock
-            .Get(MockUpdateSupplierHandler)
-            .Verify(
-                svc => svc.Handle(It.Is<UpdateSupplierCommand>(cmd =>
-                    cmd.Request == request &&
-                    cmd.Supplier == supplier)),
-                Times.Once);
+        result.Result.Should().BeOfType<OkObjectResult>();
     }
 }

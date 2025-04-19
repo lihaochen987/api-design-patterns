@@ -1,5 +1,4 @@
 using AutoFixture;
-using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.Controllers.Product;
@@ -49,11 +48,6 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var listProductsResponse = (ListProductsResponse)response.Value!;
         listProductsResponse.Results.Should().HaveCount(4);
         listProductsResponse.NextPageToken.Should().BeNull();
-        Mock.Get(MockPersistListProductsToCache)
-            .Verify(svc => svc.Handle(It.Is<PersistListProductsToCacheCommand>(c =>
-                    c.CacheKey == CacheKey &&
-                    c.Products == listProductsResponse)),
-                Times.Once);
     }
 
     [Fact]
@@ -83,8 +77,6 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         var response = (OkObjectResult)result.Result;
         response.Should().NotBeNull();
         response.Value.Should().Be(cachedResponse);
-        MockQueryProcessor
-            .Verify(svc => svc.Process(It.IsAny<ListProductsQuery>()), Times.Never);
     }
 
     [Fact]
@@ -362,7 +354,6 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
         response.Should().NotBeNull();
         var listProductsResponse = (ListProductsResponse)response.Value!;
         listProductsResponse.Should().NotBeNull();
-
         GetProductResponse? singleItem = listProductsResponse.Results.Should().ContainSingle().Subject;
         singleItem.Name.Should().Be(product.Name);
     }

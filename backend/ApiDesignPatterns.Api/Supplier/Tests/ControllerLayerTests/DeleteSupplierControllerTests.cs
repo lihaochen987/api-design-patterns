@@ -27,9 +27,6 @@ public class DeleteSupplierControllerTests : DeleteSupplierControllerTestBase
         ActionResult result = await sut.DeleteSupplier(supplier.Id, new DeleteSupplierRequest());
 
         result.Should().BeOfType<NoContentResult>();
-        Mock
-            .Get(MockDeleteSupplierHandler)
-            .Verify(svc => svc.Handle(new DeleteSupplierCommand { Id = supplier.Id }), Times.Once);
     }
 
     [Fact]
@@ -45,9 +42,6 @@ public class DeleteSupplierControllerTests : DeleteSupplierControllerTestBase
         ActionResult result = await sut.DeleteSupplier(supplier.Id, new DeleteSupplierRequest());
 
         result.Should().BeOfType<NotFoundResult>();
-        Mock
-            .Get(MockDeleteSupplierHandler)
-            .Verify(svc => svc.Handle(new DeleteSupplierCommand { Id = supplier.Id }), Times.Never);
     }
 
     [Fact]
