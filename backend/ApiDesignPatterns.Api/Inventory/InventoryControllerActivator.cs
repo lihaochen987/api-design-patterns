@@ -8,6 +8,7 @@ using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
+using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
 using backend.Inventory.InfrastructureLayer.Database.Inventory;
@@ -24,6 +25,8 @@ namespace backend.Inventory;
 
 public class InventoryControllerActivator : BaseControllerActivator
 {
+    private readonly PaginateService<InventoryView> _inventoryViewPaginateService;
+    private readonly SqlFilterBuilder _inventorySqlFilterBuilder;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly IMapper _mapper;
     private readonly ILoggerFactory _loggerFactory;
@@ -40,6 +43,11 @@ public class InventoryControllerActivator : BaseControllerActivator
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(inventoryFieldPaths.ValidPaths);
 
         _loggerFactory = loggerFactory;
+
+        _inventoryViewPaginateService = new PaginateService<InventoryView>();
+
+        InventoryColumnMapper inventoryColumnMapper = new();
+        _inventorySqlFilterBuilder = new SqlFilterBuilder(inventoryColumnMapper);
     }
 
     public override object? Create(ControllerContext context)
@@ -91,7 +99,10 @@ public class InventoryControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new InventoryViewRepository(dbConnection);
+            var repository = new InventoryViewRepository(
+                dbConnection,
+                _inventorySqlFilterBuilder,
+                _inventoryViewPaginateService);
 
             // GetInventoryView handler
             var getInventoryViewHandler = new QueryDecoratorBuilder<GetInventoryViewQuery, InventoryView?>(
@@ -190,6 +201,34 @@ public class InventoryControllerActivator : BaseControllerActivator
             return new DeleteInventoryController(
                 getInventoryByIdHandler,
                 deleteInventoryHandler);
+        }
+
+        if (type == typeof(ListInventoryController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new InventoryViewRepository(
+                dbConnection,
+                _inventorySqlFilterBuilder,
+                _inventoryViewPaginateService);
+
+            // ListInventory handler
+            var listInventoryHandler = new QueryDecoratorBuilder<ListInventoryQuery, PagedInventory>(
+                    new ListInventoryHandler(repository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.InventoryRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            return new ListInventoryController(
+                listInventoryHandler,
+                _mapper);
         }
 
         return null;

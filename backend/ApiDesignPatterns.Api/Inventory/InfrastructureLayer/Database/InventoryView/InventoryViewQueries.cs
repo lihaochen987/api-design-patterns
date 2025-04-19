@@ -15,4 +15,15 @@ public static class InventoryViewQueries
                                         FROM inventory_view
                                         WHERE inventory_id = @Id;
                                         """;
+
+    public const string ListInventoryBase = """
+                                            SELECT
+                                                inventory_id AS Id,
+                                                supplier_id AS SupplierId,
+                                                product_id AS ProductId,
+                                                inventory_quantity AS Quantity,
+                                                inventory_restock_date AS RestockDate
+                                            FROM inventory_view
+                                            WHERE 1=1
+                                            """;
 }

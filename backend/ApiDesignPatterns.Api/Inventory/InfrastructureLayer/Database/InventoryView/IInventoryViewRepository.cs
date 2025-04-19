@@ -6,4 +6,9 @@ namespace backend.Inventory.InfrastructureLayer.Database.InventoryView;
 public interface IInventoryViewRepository
 {
     Task<DomainModels.InventoryView?> GetInventoryView(long id);
+
+    Task<(List<DomainModels.InventoryView>, string?)> ListInventoryAsync(
+        string? pageToken,
+        string? filter,
+        int maxPageSize);
 }

@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Review.Controllers;
-using backend.Review.DomainModels;
 using backend.Shared.QueryHandler;
 
 namespace backend.Review.ApplicationLayer.Queries.ListReviews;
