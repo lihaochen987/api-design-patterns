@@ -499,6 +499,12 @@
     <Compile Update="Inventory\Tests\ApplicationLayerTests\GetInventoryByProductAndSupplierHandlerTestBase.cs">
       <DependentUpon>GetInventoryByProductAndSupplierHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Inventory\Controllers\DeleteInventoryRequest.cs">
+      <DependentUpon>DeleteInventoryController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\Controllers\DeleteInventoryResponse.cs">
+      <DependentUpon>DeleteInventoryController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

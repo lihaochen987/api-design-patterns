@@ -9,4 +9,5 @@ public interface IInventoryRepository
     Task<DomainModels.Inventory?> GetInventoryByIdAsync(long id);
     Task UpdateInventoryAsync(DomainModels.Inventory inventory);
     Task<DomainModels.Inventory?> GetInventoryByProductAndSupplierAsync(long productId, long supplierId);
+    Task DeleteInventoryAsync(long id);
 }

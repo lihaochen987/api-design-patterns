@@ -3,6 +3,7 @@
 
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
+using backend.Inventory.ApplicationLayer.Commands.DeleteInventory;
 using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
@@ -66,18 +67,19 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .Build();
 
             // GetByProductAndSupplier handler
-            var getInventoryByProductAndSupplier = new QueryDecoratorBuilder<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>(
-                    new GetInventoryByProductAndSupplierHandler(repository),
-                    _loggerFactory,
-                    dbConnection)
-                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
-                .WithHandshaking()
-                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.InventoryRead)
-                .WithLogging()
-                .WithValidation()
-                .WithTransaction()
-                .Build();
+            var getInventoryByProductAndSupplier =
+                new QueryDecoratorBuilder<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>(
+                        new GetInventoryByProductAndSupplierHandler(repository),
+                        _loggerFactory,
+                        dbConnection)
+                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                    .WithHandshaking()
+                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                    .WithBulkhead(BulkheadPolicies.InventoryRead)
+                    .WithLogging()
+                    .WithValidation()
+                    .WithTransaction()
+                    .Build();
 
             return new CreateInventoryController(
                 createInventoryHandler,
@@ -149,6 +151,45 @@ public class InventoryControllerActivator : BaseControllerActivator
                 getInventoryByIdHandler,
                 updateInventoryHandler,
                 _mapper);
+        }
+
+        if (type == typeof(DeleteInventoryController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new InventoryRepository(dbConnection);
+
+            // GetByIdInventory handler
+            var getInventoryByIdHandler = new QueryDecoratorBuilder<GetInventoryByIdQuery, DomainModels.Inventory?>(
+                    new GetInventoryByIdByIdHandler(repository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.InventoryRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            // DeleteInventory handler
+            var deleteInventoryHandler = new CommandDecoratorBuilder<DeleteInventoryCommand>(
+                    new DeleteInventoryCommandHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.InventoryWrite)
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
+                .Build();
+
+            return new DeleteInventoryController(
+                getInventoryByIdHandler,
+                deleteInventoryHandler);
         }
 
         return null;

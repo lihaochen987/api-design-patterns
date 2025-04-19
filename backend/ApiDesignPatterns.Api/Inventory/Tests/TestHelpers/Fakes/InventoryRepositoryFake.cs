@@ -40,35 +40,16 @@ public class InventoryRepositoryFake : Collection<DomainModels.Inventory>, IInve
         return Task.FromResult(inventory);
     }
 
-    // public Task<DomainModels.Review?> GetReviewAsync(long id)
-    // {
-    //     IncrementCallCount(nameof(GetReviewAsync));
-    //     DomainModels.Review? review = this.FirstOrDefault(r => r.Id == id);
-    //     return Task.FromResult(review);
-    // }
-    //
-    // public Task DeleteReviewAsync(long id)
-    // {
-    //     IncrementCallCount(nameof(DeleteReviewAsync));
-    //     var review = this.FirstOrDefault(r => r.Id == id);
-    //     if (review == null)
-    //     {
-    //         return Task.CompletedTask;
-    //     }
-    //
-    //     Remove(review);
-    //     IsDirty = true;
-    //     return Task.CompletedTask;
-    // }
-    //
-    // public Task UpdateReviewAsync(DomainModels.Review review)
-    // {
-    //     IncrementCallCount(nameof(UpdateReviewAsync));
-    //     int index = IndexOf(this.FirstOrDefault(r => r.Id == review.Id) ??
-    //                         throw new InvalidOperationException());
-    //     this[index] = review;
-    //     IsDirty = true;
-    //
-    //     return Task.CompletedTask;
-    // }
+    public Task DeleteInventoryAsync(long id)
+    {
+        var review = this.FirstOrDefault(r => r.Id == id);
+        if (review == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        Remove(review);
+        IsDirty = true;
+        return Task.CompletedTask;
+    }
 }

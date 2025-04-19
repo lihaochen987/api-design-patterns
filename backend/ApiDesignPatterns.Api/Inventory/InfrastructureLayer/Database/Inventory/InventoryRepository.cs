@@ -31,4 +31,10 @@ public class InventoryRepository(IDbConnection dbConnection) : IInventoryReposit
         await dbConnection.ExecuteAsync(InventoryQueries.UpdateInventory,
             new { inventory.Id, inventory.Quantity, inventory.RestockDate });
     }
+
+    public async Task DeleteInventoryAsync(long id)
+    {
+        await dbConnection.ExecuteAsync(InventoryQueries.DeleteInventory,
+            new { Id = id});
+    }
 }
