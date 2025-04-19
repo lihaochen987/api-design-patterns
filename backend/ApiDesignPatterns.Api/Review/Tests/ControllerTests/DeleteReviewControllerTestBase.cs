@@ -15,11 +15,11 @@ public abstract class DeleteReviewControllerTestBase
     protected readonly IQueryHandler<GetReviewQuery, DomainModels.Review?> MockGetReviewHandler =
         Mock.Of<IQueryHandler<GetReviewQuery, DomainModels.Review?>>();
 
-    protected readonly ICommandHandler<DeleteReviewCommand> MockDeleteReviewHandler =
+    private readonly ICommandHandler<DeleteReviewCommand> _mockDeleteReviewHandler =
         Mock.Of<ICommandHandler<DeleteReviewCommand>>();
 
     protected DeleteReviewController DeleteReviewController()
     {
-        return new DeleteReviewController(MockGetReviewHandler, MockDeleteReviewHandler);
+        return new DeleteReviewController(MockGetReviewHandler, _mockDeleteReviewHandler);
     }
 }

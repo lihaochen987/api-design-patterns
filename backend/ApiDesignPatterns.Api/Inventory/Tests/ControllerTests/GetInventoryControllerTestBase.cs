@@ -20,7 +20,7 @@ public abstract class GetInventoryControllerTestBase
     protected readonly IQueryHandler<GetInventoryViewQuery, InventoryView?> MockGetInventoryView =
         Mock.Of<IQueryHandler<GetInventoryViewQuery, InventoryView?>>();
 
-    protected readonly IMapper Mapper;
+    private readonly IMapper _mapper;
 
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory =
         new FieldMaskConverterFactory(new InventoryFieldPaths().ValidPaths);
@@ -28,7 +28,7 @@ public abstract class GetInventoryControllerTestBase
     protected GetInventoryControllerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
-        Mapper = mapperConfiguration.CreateMapper();
+        _mapper = mapperConfiguration.CreateMapper();
     }
 
     protected GetInventoryController GetInventoryController()
@@ -36,6 +36,6 @@ public abstract class GetInventoryControllerTestBase
         return new GetInventoryController(
             MockGetInventoryView,
             _fieldMaskConverterFactory,
-            Mapper);
+            _mapper);
     }
 }
