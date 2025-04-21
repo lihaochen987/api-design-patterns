@@ -5,7 +5,7 @@ using backend.Shared;
 
 namespace backend.Supplier.DomainModels;
 
-public class SupplierView : Identifier
+public record SupplierView : Identifier
 {
     public required string FullName { get; init; }
     public required string Email { get; init; }

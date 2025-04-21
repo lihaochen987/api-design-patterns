@@ -4,7 +4,7 @@ using backend.Shared;
 
 namespace backend.Product.DomainModels.Views;
 
-public class ProductView : Identifier
+public record ProductView : Identifier
 {
     public required string Name { get; set; }
     public decimal Price { get; set; }

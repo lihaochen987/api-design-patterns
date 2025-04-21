@@ -55,6 +55,11 @@ public class InventoryViewTestDataBuilder
         return this;
     }
 
+    public IEnumerable<InventoryView> CreateMany(int count)
+    {
+        return Enumerable.Range(0, count).Select(_ => new InventoryViewTestDataBuilder().Build());
+    }
+
     public InventoryView Build()
     {
         return new InventoryView

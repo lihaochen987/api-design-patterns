@@ -5,7 +5,7 @@ using backend.Shared;
 
 namespace backend.Inventory.DomainModels;
 
-public class InventoryView : Identifier
+public record InventoryView : Identifier
 {
     public long SupplierId { get; init; }
     public long ProductId { get; init; }

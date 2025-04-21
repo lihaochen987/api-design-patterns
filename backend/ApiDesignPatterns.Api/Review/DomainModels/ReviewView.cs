@@ -5,7 +5,7 @@ using backend.Shared;
 
 namespace backend.Review.DomainModels;
 
-public class ReviewView : Identifier
+public record ReviewView : Identifier
 {
     public required long ProductId { get; init; }
     public required decimal Rating { get; init; }

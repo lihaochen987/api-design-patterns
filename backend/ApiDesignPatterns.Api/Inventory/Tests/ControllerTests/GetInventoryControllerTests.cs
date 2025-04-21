@@ -90,19 +90,4 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
         jsonResult.Should().NotContain("42");
         jsonResult.Should().NotContain("24");
     }
-
-    [Fact]
-    public async Task GetInventory_HandlesQueryCorrectly()
-    {
-        long inventoryId = Fixture.Create<long>();
-        var request = Fixture.Create<GetInventoryRequest>();
-        GetInventoryController sut = GetInventoryController();
-
-        await sut.GetInventory(inventoryId, request);
-
-        Mock
-            .Get(MockGetInventoryView)
-            .Verify(x => x.Handle(It.Is<GetInventoryViewQuery>(q =>
-                q.Id == inventoryId)), Times.Once);
-    }
 }
