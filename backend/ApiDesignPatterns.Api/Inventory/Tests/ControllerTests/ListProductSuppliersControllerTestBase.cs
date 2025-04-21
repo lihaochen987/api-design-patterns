@@ -3,6 +3,7 @@
 
 using AutoFixture;
 using AutoMapper;
+using backend.Inventory.ApplicationLayer.Queries.GetSuppliersFromInventory;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
 using backend.Inventory.Services;
@@ -17,12 +18,14 @@ public abstract class ListProductSuppliersControllerTestBase
 {
     protected readonly IAsyncQueryHandler<ListInventoryQuery, PagedInventory> MockListInventory;
     protected readonly IAsyncQueryHandler<GetSupplierViewQuery, SupplierView?> MockGetSupplierView;
+    protected readonly ISyncQueryHandler<GetSuppliersFromInventoryQuery, List<SupplierView?>> GetSuppliersFromInventory;
     private readonly IMapper _mapper;
     protected const int DefaultMaxPageSize = 10;
     protected readonly Fixture Fixture = new();
 
     protected ListProductSuppliersControllerTestBase()
     {
+        GetSuppliersFromInventory = new GetSuppliersFromInventoryHandler();
         MockListInventory = Mock.Of<IAsyncQueryHandler<ListInventoryQuery, PagedInventory>>();
         MockGetSupplierView = Mock.Of<IAsyncQueryHandler<GetSupplierViewQuery, SupplierView?>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
@@ -31,6 +34,10 @@ public abstract class ListProductSuppliersControllerTestBase
 
     protected ListProductSuppliersController ListProductSuppliersController()
     {
-        return new ListProductSuppliersController(MockListInventory, MockGetSupplierView, _mapper);
+        return new ListProductSuppliersController(
+            MockListInventory,
+            MockGetSupplierView,
+            GetSuppliersFromInventory,
+            _mapper);
     }
 }

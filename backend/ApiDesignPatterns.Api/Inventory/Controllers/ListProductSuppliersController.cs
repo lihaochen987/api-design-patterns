@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Inventory.ApplicationLayer.Queries.GetSuppliersFromInventory;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
@@ -17,6 +18,7 @@ namespace backend.Inventory.Controllers;
 public class ListProductSuppliersController(
     IAsyncQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
     IAsyncQueryHandler<GetSupplierViewQuery, SupplierView?> getSupplierView,
+    ISyncQueryHandler<GetSuppliersFromInventoryQuery, List<SupplierView?>> getSuppliersFromInventory,
     IMapper mapper)
     : ControllerBase
 {
@@ -37,10 +39,8 @@ public class ListProductSuppliersController(
 
         await Task.WhenAll(supplierTasks);
 
-        List<SupplierView?> result = supplierTasks
-            .Select(task => task.Result)
-            .Where(supplier => supplier != null)
-            .ToList();
+        var result =
+            getSuppliersFromInventory.Handle(new GetSuppliersFromInventoryQuery { SupplierTasks = supplierTasks });
 
         ListProductSuppliersResponse response = new()
         {

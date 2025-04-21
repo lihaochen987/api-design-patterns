@@ -34,7 +34,6 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedInventory(inventoryViews, null));
         SetupSupplierViewMocks(supplierViews);
-
         ListProductSuppliersController sut = ListProductSuppliersController();
 
         var result = await sut.ListInventory(request, productId);
@@ -64,7 +63,6 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedInventory(inventoryViews, null));
         SetupSupplierViewMocks(supplierViews);
-
         ListProductSuppliersController sut = ListProductSuppliersController();
 
         var result = await sut.ListInventory(request, productId);
@@ -94,7 +92,6 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedInventory(inventoryViews, "2"));
         SetupSupplierViewMocks(supplierViews);
-
         ListProductSuppliersController sut = ListProductSuppliersController();
 
         var result = await sut.ListInventory(request, productId);
@@ -124,7 +121,6 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
                 q.PageToken == request.PageToken)))
             .ReturnsAsync(new PagedInventory(inventoryViews, DefaultMaxPageSize.ToString()));
         SetupSupplierViewMocks(supplierViews);
-
         ListProductSuppliersController sut = ListProductSuppliersController();
 
         var result = await sut.ListInventory(request, productId);
@@ -160,48 +156,6 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
         response.Should().NotBeNull();
         var listSuppliersResponse = (ListProductSuppliersResponse)response.Value!;
         listSuppliersResponse.Results.Should().BeEmpty();
-        listSuppliersResponse.NextPageToken.Should().BeNull();
-    }
-
-    [Fact]
-    public async Task ListInventory_ShouldFilterOutNullSuppliers()
-    {
-        decimal productId = Fixture.Create<decimal>();
-        List<InventoryView> inventoryViews = new InventoryViewTestDataBuilder().CreateMany(3).ToList();
-        List<SupplierView> supplierViews = new SupplierViewTestDataBuilder().CreateMany(2).ToList();
-        inventoryViews[0] = inventoryViews[0] with { SupplierId = supplierViews[0].Id };
-        inventoryViews[1] = inventoryViews[1] with { SupplierId = supplierViews[1].Id };
-        inventoryViews[2] = inventoryViews[2] with { SupplierId = Fixture.Create<long>() };
-        ListProductSuppliersRequest request = new() { MaxPageSize = 3 };
-        Mock
-            .Get(MockListInventory)
-            .Setup(svc => svc.Handle(It.Is<ListInventoryQuery>(q =>
-                q.Filter == $"ProductId == {productId}" &&
-                q.MaxPageSize == request.MaxPageSize &&
-                q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedInventory(inventoryViews, null));
-        Mock
-            .Get(MockGetSupplierView)
-            .Setup(svc => svc.Handle(It.Is<GetSupplierViewQuery>(q => q.Id == supplierViews[0].Id)))
-            .ReturnsAsync(supplierViews[0]);
-        Mock
-            .Get(MockGetSupplierView)
-            .Setup(svc => svc.Handle(It.Is<GetSupplierViewQuery>(q => q.Id == supplierViews[1].Id)))
-            .ReturnsAsync(supplierViews[1]);
-        Mock
-            .Get(MockGetSupplierView)
-            .Setup(svc => svc.Handle(It.Is<GetSupplierViewQuery>(q => q.Id == inventoryViews[2].SupplierId)))
-            .ReturnsAsync((SupplierView?)null);
-        ListProductSuppliersController sut = ListProductSuppliersController();
-
-        var result = await sut.ListInventory(request, productId);
-
-        result.Result.Should().NotBeNull();
-        result.Result.Should().BeOfType<OkObjectResult>();
-        var response = (OkObjectResult)result.Result;
-        response.Should().NotBeNull();
-        var listSuppliersResponse = (ListProductSuppliersResponse)response.Value!;
-        listSuppliersResponse.Results.Count().Should().Be(2);
         listSuppliersResponse.NextPageToken.Should().BeNull();
     }
 

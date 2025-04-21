@@ -532,6 +532,9 @@
     <Compile Update="Inventory\Tests\ControllerTests\ListProductSuppliersControllerTestBase.cs">
       <DependentUpon>ListProductSuppliersControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Inventory\Tests\ApplicationLayerTests\GetSuppliersFromInventoryHandlerTestBase.cs">
+      <DependentUpon>GetSuppliersFromInventoryHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

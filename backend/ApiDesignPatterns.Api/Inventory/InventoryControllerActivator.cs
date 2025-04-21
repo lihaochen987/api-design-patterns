@@ -8,6 +8,7 @@ using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
+using backend.Inventory.ApplicationLayer.Queries.GetSuppliersFromInventory;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
@@ -281,9 +282,13 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
+            // GetSuppliersFromInventory handler
+            var getSuppliersFromInventory = new GetSuppliersFromInventoryHandler();
+
             return new ListProductSuppliersController(
                 listInventoryHandler,
                 getSupplierViewHandler,
+                getSuppliersFromInventory,
                 _mapper);
         }
 
