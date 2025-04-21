@@ -13,9 +13,9 @@ public class ListInventoryHandler(IInventoryViewRepository repository)
     public async Task<PagedInventory> Handle(ListInventoryQuery query)
     {
         (List<InventoryView> inventory, string? nextPageToken) = await repository.ListInventoryAsync(
-            query.Request.PageToken,
-            query.Request.Filter,
-            query.Request.MaxPageSize);
+            query.PageToken,
+            query.Filter,
+            query.MaxPageSize);
         return new PagedInventory(inventory, nextPageToken);
     }
 }

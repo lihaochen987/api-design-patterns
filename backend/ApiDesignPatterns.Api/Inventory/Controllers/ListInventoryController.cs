@@ -23,7 +23,10 @@ public class ListInventoryController(
         [FromQuery] ListInventoryRequest request)
     {
         PagedInventory result =
-            await listInventory.Handle(new ListInventoryQuery { Request = request });
+            await listInventory.Handle(new ListInventoryQuery
+            {
+                Filter = request.Filter, PageToken = request.PageToken, MaxPageSize = request.MaxPageSize
+            });
 
         ListInventoryResponse response = new()
         {

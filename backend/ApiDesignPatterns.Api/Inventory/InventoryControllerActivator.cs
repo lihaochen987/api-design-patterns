@@ -19,12 +19,18 @@ using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
+using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
+using backend.Supplier.DomainModels;
+using backend.Supplier.InfrastructureLayer.Database.SupplierView;
+using backend.Supplier.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Inventory;
 
 public class InventoryControllerActivator : BaseControllerActivator
 {
+    private readonly PaginateService<SupplierView> _supplierPaginateService;
+    private readonly SqlFilterBuilder _supplierSqlFilterBuilder;
     private readonly PaginateService<InventoryView> _inventoryViewPaginateService;
     private readonly SqlFilterBuilder _inventorySqlFilterBuilder;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
@@ -48,6 +54,11 @@ public class InventoryControllerActivator : BaseControllerActivator
 
         InventoryColumnMapper inventoryColumnMapper = new();
         _inventorySqlFilterBuilder = new SqlFilterBuilder(inventoryColumnMapper);
+
+        _supplierPaginateService = new PaginateService<SupplierView>();
+
+        SupplierColumnMapper supplierColumnMapper = new();
+        _supplierSqlFilterBuilder = new SqlFilterBuilder(supplierColumnMapper);
     }
 
     public override object? Create(ControllerContext context)
@@ -228,6 +239,51 @@ public class InventoryControllerActivator : BaseControllerActivator
 
             return new ListInventoryController(
                 listInventoryHandler,
+                _mapper);
+        }
+
+        if (type == typeof(ListProductSuppliersController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var inventoryViewRepository = new InventoryViewRepository(
+                dbConnection,
+                _inventorySqlFilterBuilder,
+                _inventoryViewPaginateService);
+            var supplierViewRepository =
+                new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierPaginateService);
+
+            // ListInventory handler
+            var listInventoryHandler = new QueryDecoratorBuilder<ListInventoryQuery, PagedInventory>(
+                    new ListInventoryHandler(inventoryViewRepository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.InventoryRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            // GetSupplierView handler
+            var getSupplierViewHandler = new QueryDecoratorBuilder<GetSupplierViewQuery, SupplierView?>(
+                    new GetSupplierViewHandler(supplierViewRepository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.SupplierRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            return new ListProductSuppliersController(
+                listInventoryHandler,
+                getSupplierViewHandler,
                 _mapper);
         }
 
