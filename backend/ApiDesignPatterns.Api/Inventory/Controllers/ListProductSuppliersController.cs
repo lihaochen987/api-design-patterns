@@ -3,7 +3,6 @@
 
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
-using backend.Inventory.DomainModels;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 using backend.Supplier.Controllers;
@@ -32,15 +31,16 @@ public class ListProductSuppliersController(
             Filter = $"ProductId == {productId}", PageToken = request.PageToken, MaxPageSize = request.MaxPageSize
         });
 
-        List<SupplierView> result = [];
-        foreach (InventoryView inventoryView in inventoryResult.Inventory)
-        {
-            var temp = await getSupplierView.Handle(new GetSupplierViewQuery { Id = inventoryView.SupplierId });
-            if (temp != null)
-            {
-                result.Add(temp);
-            }
-        }
+        Task<SupplierView?>[] supplierTasks = inventoryResult.Inventory
+            .Select(inventoryView => getSupplierView.Handle(new GetSupplierViewQuery { Id = inventoryView.SupplierId }))
+            .ToArray();
+
+        await Task.WhenAll(supplierTasks);
+
+        List<SupplierView?> result = supplierTasks
+            .Select(task => task.Result)
+            .Where(supplier => supplier != null)
+            .ToList();
 
         ListProductSuppliersResponse response = new()
         {
