@@ -16,13 +16,13 @@ namespace backend.Supplier.Tests.ControllerLayerTests;
 public abstract class UpdateSupplierControllerTestBase
 {
     protected readonly IMapper Mapper;
-    protected readonly IQueryHandler<GetSupplierQuery, DomainModels.Supplier?> MockGetSupplierHandler;
+    protected readonly IAsyncQueryHandler<GetSupplierQuery, DomainModels.Supplier?> MockGetSupplierHandler;
     protected readonly ICommandHandler<UpdateSupplierCommand> MockUpdateSupplierHandler;
     protected readonly Fixture Fixture = new();
 
     protected UpdateSupplierControllerTestBase()
     {
-        MockGetSupplierHandler = Mock.Of<IQueryHandler<GetSupplierQuery, DomainModels.Supplier?>>();
+        MockGetSupplierHandler = Mock.Of<IAsyncQueryHandler<GetSupplierQuery, DomainModels.Supplier?>>();
         MockUpdateSupplierHandler = Mock.Of<ICommandHandler<UpdateSupplierCommand>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<SupplierMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();

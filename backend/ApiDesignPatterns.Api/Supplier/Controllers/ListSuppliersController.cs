@@ -9,7 +9,7 @@ namespace backend.Supplier.Controllers;
 [Route("suppliers")]
 [ApiController]
 public class ListSuppliersController(
-    IQueryHandler<ListSuppliersQuery, PagedSuppliers> listSuppliers,
+    IAsyncQueryHandler<ListSuppliersQuery, PagedSuppliers> listSuppliers,
     IMapper mapper)
     : ControllerBase
 {

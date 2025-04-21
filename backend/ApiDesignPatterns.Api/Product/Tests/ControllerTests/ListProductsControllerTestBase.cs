@@ -36,14 +36,14 @@ public abstract class ListProductsControllerTestBase
         _cacheStalenessOptions = Fixture.Create<CacheStalenessOptions>();
 
         // ListProductsQuery
-        Mock<IQueryHandler<ListProductsQuery, PagedProducts>> listProducts = new();
+        Mock<IAsyncQueryHandler<ListProductsQuery, PagedProducts>> listProducts = new();
         MockQueryProcessor
             .Setup(qp => qp.Process(It.IsAny<ListProductsQuery>()))
             .Returns<ListProductsQuery>(query =>
                 Task.FromResult(listProducts.Object.Handle(query).Result));
 
         // GetListProductsFromCacheQuery
-        Mock<IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>> getListProductsFromCacheHandler = new();
+        Mock<IAsyncQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>> getListProductsFromCacheHandler = new();
         MockQueryProcessor
             .Setup(qp => qp.Process(It.IsAny<GetListProductsFromCacheQuery>()))
             .Returns<GetListProductsFromCacheQuery>(query =>
@@ -52,12 +52,12 @@ public abstract class ListProductsControllerTestBase
         // MapListProductsResponseQuery
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         IMapper mapper = mapperConfiguration.CreateMapper();
-        IQueryHandler<MapListProductsResponseQuery, ListProductsResponse> mapListProductsResponseHandler =
+        ISyncQueryHandler<MapListProductsResponseQuery, ListProductsResponse> mapListProductsResponseHandler =
             new MapListProductsResponseHandler(mapper);
         MockQueryProcessor
             .Setup(qp => qp.Process(It.IsAny<MapListProductsResponseQuery>()))
             .Returns<MapListProductsResponseQuery>(query =>
-                Task.FromResult(mapListProductsResponseHandler.Handle(query).Result));
+                Task.FromResult(mapListProductsResponseHandler.Handle(query)));
     }
 
     protected ListProductsController ListProductsController()

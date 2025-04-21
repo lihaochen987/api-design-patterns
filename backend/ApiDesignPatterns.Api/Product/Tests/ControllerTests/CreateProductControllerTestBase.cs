@@ -18,8 +18,8 @@ public abstract class CreateProductControllerTestBase
     protected readonly ICommandHandler<CreateProductCommand> CreateProduct =
         Mock.Of<ICommandHandler<CreateProductCommand>>();
 
-    protected readonly IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> CreateProductResponse;
-    protected readonly IQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> CreateProductRequest;
+    protected readonly ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> CreateProductResponse;
+    protected readonly ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> CreateProductRequest;
 
     protected readonly IMapper Mapper;
 

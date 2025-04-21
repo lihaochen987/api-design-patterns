@@ -7,11 +7,11 @@ using Polly.CircuitBreaker;
 namespace backend.Shared.QueryHandler;
 
 public class CircuitBreakerQueryHandlerDecorator<TQuery, TResult>(
-    IQueryHandler<TQuery, TResult> queryHandler,
+    IAsyncQueryHandler<TQuery, TResult> queryHandler,
     ILogger<CircuitBreakerQueryHandlerDecorator<TQuery, TResult>> logger,
     TimeSpan durationOfBreak,
     int exceptionsAllowedBeforeBreaking)
-    : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
+    : IAsyncQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {
     private readonly AsyncCircuitBreakerPolicy _circuitBreakerPolicy = Policy
         .Handle<Exception>()

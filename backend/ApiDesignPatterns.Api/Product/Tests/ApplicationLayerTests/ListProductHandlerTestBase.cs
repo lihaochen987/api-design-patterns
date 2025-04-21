@@ -13,7 +13,7 @@ public abstract class ListProductHandlerTestBase
 {
     protected readonly ProductViewRepositoryFake Repository = new(new PaginateService<ProductView>());
 
-    protected IQueryHandler<ListProductsQuery, PagedProducts> ListProductsViewHandler()
+    protected IAsyncQueryHandler<ListProductsQuery, PagedProducts> ListProductsViewHandler()
     {
         return new ListProductsHandler(Repository);
     }

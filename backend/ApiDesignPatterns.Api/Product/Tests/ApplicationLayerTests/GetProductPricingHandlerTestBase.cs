@@ -12,7 +12,7 @@ public abstract class GetProductPricingHandlerTestBase
 {
     protected readonly ProductPricingRepositoryFake Repository = [];
 
-    protected IQueryHandler<GetProductPricingQuery, ProductPricingView?> GetProductPricingHandler()
+    protected IAsyncQueryHandler<GetProductPricingQuery, ProductPricingView?> GetProductPricingHandler()
     {
         return new GetProductPricingHandler(Repository);
     }

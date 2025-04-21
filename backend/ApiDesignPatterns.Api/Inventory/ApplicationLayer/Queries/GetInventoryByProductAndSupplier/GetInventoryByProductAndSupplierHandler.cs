@@ -7,7 +7,7 @@ using backend.Shared.QueryHandler;
 namespace backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 
 public class GetInventoryByProductAndSupplierHandler(IInventoryRepository repository)
-    : IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>
+    : IAsyncQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>
 {
     public Task<DomainModels.Inventory?> Handle(GetInventoryByProductAndSupplierQuery query)
     {

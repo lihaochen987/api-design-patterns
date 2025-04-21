@@ -7,10 +7,10 @@ using Dapper;
 namespace backend.Shared.QueryHandler;
 
 public class HandshakingQueryHandlerDecorator<TQuery, TResult>(
-    IQueryHandler<TQuery, TResult> queryHandler,
+    IAsyncQueryHandler<TQuery, TResult> queryHandler,
     IDbConnection dbConnection,
     ILogger<HandshakingQueryHandlerDecorator<TQuery, TResult>> logger)
-    : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
+    : IAsyncQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {
     private const string HealthCheckQuery =
         "SELECT " +

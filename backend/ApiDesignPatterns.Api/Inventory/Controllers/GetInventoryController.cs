@@ -16,7 +16,7 @@ namespace backend.Inventory.Controllers;
 [ApiController]
 [Route("inventory")]
 public class GetInventoryController(
-    IQueryHandler<GetInventoryViewQuery, InventoryView?> getInventoryView,
+    IAsyncQueryHandler<GetInventoryViewQuery, InventoryView?> getInventoryView,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase

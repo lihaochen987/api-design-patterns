@@ -15,16 +15,16 @@ namespace backend.Inventory.Tests.ControllerTests;
 
 public abstract class ListProductSuppliersControllerTestBase
 {
-    protected readonly IQueryHandler<ListInventoryQuery, PagedInventory> MockListInventory;
-    protected readonly IQueryHandler<GetSupplierViewQuery, SupplierView?> MockGetSupplierView;
+    protected readonly IAsyncQueryHandler<ListInventoryQuery, PagedInventory> MockListInventory;
+    protected readonly IAsyncQueryHandler<GetSupplierViewQuery, SupplierView?> MockGetSupplierView;
     private readonly IMapper _mapper;
     protected const int DefaultMaxPageSize = 10;
     protected readonly Fixture Fixture = new();
 
     protected ListProductSuppliersControllerTestBase()
     {
-        MockListInventory = Mock.Of<IQueryHandler<ListInventoryQuery, PagedInventory>>();
-        MockGetSupplierView = Mock.Of<IQueryHandler<GetSupplierViewQuery, SupplierView?>>();
+        MockListInventory = Mock.Of<IAsyncQueryHandler<ListInventoryQuery, PagedInventory>>();
+        MockGetSupplierView = Mock.Of<IAsyncQueryHandler<GetSupplierViewQuery, SupplierView?>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
     }

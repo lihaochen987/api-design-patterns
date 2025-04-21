@@ -13,7 +13,7 @@ public abstract class GetInventoryViewHandlerTestBase
 {
     protected readonly InventoryViewRepositoryFake Repository = new(new PaginateService<InventoryView>());
 
-    protected IQueryHandler<GetInventoryViewQuery, InventoryView?> GetInventoryViewHandler()
+    protected IAsyncQueryHandler<GetInventoryViewQuery, InventoryView?> GetInventoryViewHandler()
     {
         return new GetInventoryViewHandler(Repository);
     }

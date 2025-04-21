@@ -13,7 +13,7 @@ namespace backend.Review.Controllers;
 [ApiController]
 [Route("review")]
 public class DeleteReviewController(
-    IQueryHandler<GetReviewQuery, DomainModels.Review?> getReview,
+    IAsyncQueryHandler<GetReviewQuery, DomainModels.Review?> getReview,
     ICommandHandler<DeleteReviewCommand> deleteReview)
     : ControllerBase
 {

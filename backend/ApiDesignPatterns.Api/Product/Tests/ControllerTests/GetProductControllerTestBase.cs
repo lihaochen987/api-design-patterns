@@ -15,8 +15,8 @@ public abstract class GetProductControllerTestBase
 {
     protected readonly Fixture Fixture = new();
 
-    protected readonly IQueryHandler<GetProductResponseQuery, GetProductResponse?> MockGetProductResponse =
-        Mock.Of<IQueryHandler<GetProductResponseQuery, GetProductResponse?>>();
+    protected readonly IAsyncQueryHandler<GetProductResponseQuery, GetProductResponse?> MockGetProductResponse =
+        Mock.Of<IAsyncQueryHandler<GetProductResponseQuery, GetProductResponse?>>();
 
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory =
         new FieldMaskConverterFactory(new ProductFieldPaths().ValidPaths);

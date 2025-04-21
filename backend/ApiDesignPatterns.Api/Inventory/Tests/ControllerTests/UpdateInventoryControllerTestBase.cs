@@ -16,13 +16,13 @@ namespace backend.Inventory.Tests.ControllerTests;
 public abstract class UpdateInventoryControllerTestBase
 {
     protected readonly IMapper Mapper;
-    protected readonly IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> MockGetInventoryHandler;
+    protected readonly IAsyncQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> MockGetInventoryHandler;
     protected readonly ICommandHandler<UpdateInventoryCommand> MockUpdateInventoryHandler;
     protected readonly Fixture Fixture = new();
 
     protected UpdateInventoryControllerTestBase()
     {
-        MockGetInventoryHandler = Mock.Of<IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?>>();
+        MockGetInventoryHandler = Mock.Of<IAsyncQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?>>();
         MockUpdateInventoryHandler = Mock.Of<ICommandHandler<UpdateInventoryCommand>>();
         var mapperConfiguration = new MapperConfiguration(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();

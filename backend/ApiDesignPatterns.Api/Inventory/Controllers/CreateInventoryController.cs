@@ -15,7 +15,7 @@ namespace backend.Inventory.Controllers;
 [Route("inventory")]
 public class CreateInventoryController(
     ICommandHandler<CreateInventoryCommand> createInventory,
-    IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?> getInventoryByProductAndSupplier,
+    IAsyncQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?> getInventoryByProductAndSupplier,
     IMapper mapper)
     : ControllerBase
 {

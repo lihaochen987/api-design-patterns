@@ -11,7 +11,7 @@ public abstract class GetInventoryByIdHandlerTestBase
 {
     protected readonly InventoryRepositoryFake Repository = [];
 
-    protected IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> GetInventoryHandler()
+    protected IAsyncQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> GetInventoryHandler()
     {
         return new GetInventoryByIdByIdHandler(Repository);
     }

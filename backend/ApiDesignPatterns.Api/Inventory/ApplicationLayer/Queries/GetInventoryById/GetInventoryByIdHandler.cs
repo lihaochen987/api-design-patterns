@@ -6,7 +6,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 
-public class GetInventoryByIdByIdHandler(IInventoryRepository repository) : IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?>
+public class GetInventoryByIdByIdHandler(IInventoryRepository repository) : IAsyncQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?>
 {
     public async Task<DomainModels.Inventory?> Handle(GetInventoryByIdQuery byIdQuery)
     {

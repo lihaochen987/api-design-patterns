@@ -11,7 +11,7 @@ namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 
 public class GetListProductsFromCacheHandler(
     IListProductsCache cache)
-    : IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>
+    : IAsyncQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>
 {
     public async Task<CacheQueryResult> Handle(GetListProductsFromCacheQuery query)
     {

@@ -12,13 +12,13 @@ namespace backend.Supplier.Tests.ControllerLayerTests;
 
 public abstract class ListSuppliersControllerTestBase
 {
-    protected readonly IQueryHandler<ListSuppliersQuery, PagedSuppliers> MockListSuppliers;
+    protected readonly IAsyncQueryHandler<ListSuppliersQuery, PagedSuppliers> MockListSuppliers;
     private readonly IMapper _mapper;
     protected const int DefaultMaxPageSize = 10;
 
     protected ListSuppliersControllerTestBase()
     {
-        MockListSuppliers = Mock.Of<IQueryHandler<ListSuppliersQuery, PagedSuppliers>>();
+        MockListSuppliers = Mock.Of<IAsyncQueryHandler<ListSuppliersQuery, PagedSuppliers>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<SupplierMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
     }

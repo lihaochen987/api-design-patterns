@@ -15,8 +15,8 @@ public abstract class DeleteProductControllerTestBase
     protected readonly ICommandHandler<DeleteProductCommand> MockDeleteProductHandler =
         Mock.Of<ICommandHandler<DeleteProductCommand>>();
 
-    protected readonly IQueryHandler<GetProductQuery, DomainModels.Product?> MockGetProductHandler =
-        Mock.Of<IQueryHandler<GetProductQuery, DomainModels.Product?>>();
+    protected readonly IAsyncQueryHandler<GetProductQuery, DomainModels.Product?> MockGetProductHandler =
+        Mock.Of<IAsyncQueryHandler<GetProductQuery, DomainModels.Product?>>();
 
     protected DeleteProductController DeleteProductController()
     {

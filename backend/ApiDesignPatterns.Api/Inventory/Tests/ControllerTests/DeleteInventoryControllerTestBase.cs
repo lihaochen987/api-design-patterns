@@ -15,8 +15,8 @@ public abstract class DeleteInventoryControllerTestBase
 {
     protected readonly Fixture Fixture = new();
 
-    protected readonly IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> MockGetInventoryByIdHandler =
-        Mock.Of<IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?>>();
+    protected readonly IAsyncQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> MockGetInventoryByIdHandler =
+        Mock.Of<IAsyncQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?>>();
 
     protected readonly ICommandHandler<DeleteInventoryCommand> MockDeleteInventoryHandler =
         Mock.Of<ICommandHandler<DeleteInventoryCommand>>();

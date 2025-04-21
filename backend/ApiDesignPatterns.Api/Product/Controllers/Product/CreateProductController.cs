@@ -12,8 +12,8 @@ namespace backend.Product.Controllers.Product;
 [Route("product")]
 public class CreateProductController(
     ICommandHandler<CreateProductCommand> createProduct,
-    IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> createProductResponse,
-    IQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> mapProductRequest)
+    ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> createProductResponse,
+    ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> mapProductRequest)
     : ControllerBase
 {
     [HttpPost]
@@ -22,11 +22,11 @@ public class CreateProductController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
-        var product = await mapProductRequest.Handle(new MapCreateProductRequestQuery { Request = request });
+        var product = mapProductRequest.Handle(new MapCreateProductRequestQuery { Request = request });
 
         await createProduct.Handle(new CreateProductCommand { Product = product });
 
-        var response = await createProductResponse.Handle(new MapCreateProductResponseQuery { Product = product });
+        var response = createProductResponse.Handle(new MapCreateProductResponseQuery { Product = product });
 
         return CreatedAtAction(
             "GetProduct",

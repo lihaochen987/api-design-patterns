@@ -7,10 +7,10 @@ using Polly.Timeout;
 namespace backend.Shared.QueryHandler;
 
 public class TimeoutQueryHandlerDecorator<TQuery, TResult>(
-    IQueryHandler<TQuery, TResult> queryHandler,
+    IAsyncQueryHandler<TQuery, TResult> queryHandler,
     ILogger<TimeoutQueryHandlerDecorator<TQuery, TResult>> logger,
     TimeSpan timeout)
-    : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
+    : IAsyncQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {
     private readonly AsyncTimeoutPolicy _timeoutPolicy = Policy
         .TimeoutAsync(timeout, onTimeoutAsync: (_, timespan, _) =>

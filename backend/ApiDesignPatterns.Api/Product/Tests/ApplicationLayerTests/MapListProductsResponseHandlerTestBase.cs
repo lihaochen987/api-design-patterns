@@ -20,7 +20,7 @@ public abstract class MapListProductsResponseHandlerTestBase
         Mapper = mapperConfiguration.CreateMapper();
     }
 
-    protected IQueryHandler<MapListProductsResponseQuery, ListProductsResponse>
+    protected ISyncQueryHandler<MapListProductsResponseQuery, ListProductsResponse>
         GetListProductsResponseHandler()
     {
         return new MapListProductsResponseHandler(Mapper);

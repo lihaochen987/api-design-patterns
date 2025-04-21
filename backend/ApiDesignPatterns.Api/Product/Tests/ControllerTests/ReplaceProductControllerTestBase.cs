@@ -15,13 +15,13 @@ namespace backend.Product.Tests.ControllerTests;
 
 public abstract class ReplaceProductControllerTestBase
 {
-    protected readonly IQueryHandler<GetProductQuery, DomainModels.Product?> GetProduct =
-        Mock.Of<IQueryHandler<GetProductQuery, DomainModels.Product?>>();
+    protected readonly IAsyncQueryHandler<GetProductQuery, DomainModels.Product?> GetProduct =
+        Mock.Of<IAsyncQueryHandler<GetProductQuery, DomainModels.Product?>>();
 
     protected readonly ICommandHandler<ReplaceProductCommand> ReplaceProduct =
         Mock.Of<ICommandHandler<ReplaceProductCommand>>();
 
-    protected readonly IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> MapReplaceProductResponse;
+    protected readonly ISyncQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> MapReplaceProductResponse;
 
     protected readonly IMapper Mapper;
 

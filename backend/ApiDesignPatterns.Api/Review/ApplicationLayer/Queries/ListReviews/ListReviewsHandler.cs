@@ -8,7 +8,7 @@ using backend.Shared.QueryHandler;
 namespace backend.Review.ApplicationLayer.Queries.ListReviews;
 
 public class ListReviewsHandler(IReviewViewRepository repository)
-    : IQueryHandler<ListReviewsQuery, PagedReviews>
+    : IAsyncQueryHandler<ListReviewsQuery, PagedReviews>
 {
     public async Task<PagedReviews> Handle(ListReviewsQuery query)
     {

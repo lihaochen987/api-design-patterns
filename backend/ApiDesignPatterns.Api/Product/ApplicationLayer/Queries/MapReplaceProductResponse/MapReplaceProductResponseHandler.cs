@@ -9,9 +9,9 @@ using backend.Shared.QueryHandler;
 namespace backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 
 public class MapReplaceProductResponseHandler(IMapper mapper)
-    : IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse>
+    : ISyncQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse>
 {
-    public Task<ReplaceProductResponse> Handle(MapReplaceProductResponseQuery query)
+    public ReplaceProductResponse Handle(MapReplaceProductResponseQuery query)
     {
         ReplaceProductResponse response = query.Product.Category switch
         {
@@ -19,6 +19,6 @@ public class MapReplaceProductResponseHandler(IMapper mapper)
             Category.GroomingAndHygiene => mapper.Map<ReplaceGroomingAndHygieneResponse>(query.Product),
             _ => mapper.Map<ReplaceProductResponse>(query.Product)
         };
-        return Task.FromResult(response)!;
+        return response;
     }
 }

@@ -7,12 +7,12 @@ using Polly.Bulkhead;
 namespace backend.Shared.QueryHandler;
 
 public class QueryDecoratorBuilder<TQuery, TResult>(
-    IQueryHandler<TQuery, TResult> handler,
+    IAsyncQueryHandler<TQuery, TResult> handler,
     ILoggerFactory loggerFactory,
     IDbConnection? dbConnection)
     where TQuery : IQuery<TResult>
 {
-    private IQueryHandler<TQuery, TResult> _handler = handler;
+    private IAsyncQueryHandler<TQuery, TResult> _handler = handler;
     private bool _useTransaction;
     private bool _useValidation;
     private bool _useLogging;
@@ -78,7 +78,7 @@ public class QueryDecoratorBuilder<TQuery, TResult>(
         return this;
     }
 
-    public IQueryHandler<TQuery, TResult> Build()
+    public IAsyncQueryHandler<TQuery, TResult> Build()
     {
         if (_useLogging)
         {

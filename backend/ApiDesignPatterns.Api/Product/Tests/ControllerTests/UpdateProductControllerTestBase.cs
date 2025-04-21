@@ -16,12 +16,12 @@ namespace backend.Product.Tests.ControllerTests;
 public abstract class UpdateProductControllerTestBase
 {
     protected readonly IMapper Mapper;
-    protected readonly IQueryHandler<GetProductQuery, DomainModels.Product?> MockGetProductHandler;
+    protected readonly IAsyncQueryHandler<GetProductQuery, DomainModels.Product?> MockGetProductHandler;
     protected readonly ICommandHandler<UpdateProductCommand> MockUpdateProductHandler;
 
     protected UpdateProductControllerTestBase()
     {
-        MockGetProductHandler = Mock.Of<IQueryHandler<GetProductQuery, DomainModels.Product?>>();
+        MockGetProductHandler = Mock.Of<IAsyncQueryHandler<GetProductQuery, DomainModels.Product?>>();
         MockUpdateProductHandler = Mock.Of<ICommandHandler<UpdateProductCommand>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();

@@ -19,8 +19,8 @@ public abstract class UpdateProductPricingControllerTestBase
     protected readonly IMapper Mapper;
     protected readonly Fixture Fixture = new();
 
-    protected readonly IQueryHandler<GetProductQuery, DomainModels.Product?> MockGetProductHandler =
-        Mock.Of<IQueryHandler<GetProductQuery, DomainModels.Product?>>();
+    protected readonly IAsyncQueryHandler<GetProductQuery, DomainModels.Product?> MockGetProductHandler =
+        Mock.Of<IAsyncQueryHandler<GetProductQuery, DomainModels.Product?>>();
 
     private readonly ICommandHandler<UpdateProductPricingCommand> _mockUpdateProductPricingHandler =
         Mock.Of<ICommandHandler<UpdateProductPricingCommand>>();

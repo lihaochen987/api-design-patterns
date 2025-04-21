@@ -15,8 +15,8 @@ namespace backend.Supplier.Tests.ControllerLayerTests;
 
 public abstract class ReplaceSupplierControllerTestBase
 {
-    protected readonly IQueryHandler<GetSupplierQuery, DomainModels.Supplier?> GetSupplier =
-        Mock.Of<IQueryHandler<GetSupplierQuery, DomainModels.Supplier?>>();
+    protected readonly IAsyncQueryHandler<GetSupplierQuery, DomainModels.Supplier?> GetSupplier =
+        Mock.Of<IAsyncQueryHandler<GetSupplierQuery, DomainModels.Supplier?>>();
 
     protected readonly ICommandHandler<ReplaceSupplierCommand> ReplaceSupplier =
         Mock.Of<ICommandHandler<ReplaceSupplierCommand>>();

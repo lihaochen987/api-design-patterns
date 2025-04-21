@@ -14,14 +14,14 @@ namespace backend.Review.Tests.ControllerTests;
 
 public abstract class ListReviewsControllerTestBase
 {
-    protected readonly IQueryHandler<ListReviewsQuery, PagedReviews> MockListReviews;
+    protected readonly IAsyncQueryHandler<ListReviewsQuery, PagedReviews> MockListReviews;
     private readonly IMapper _mapper;
     protected const int DefaultMaxPageSize = 10;
     protected readonly Fixture Fixture = new();
 
     protected ListReviewsControllerTestBase()
     {
-        MockListReviews = Mock.Of<IQueryHandler<ListReviewsQuery, PagedReviews>>();
+        MockListReviews = Mock.Of<IAsyncQueryHandler<ListReviewsQuery, PagedReviews>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ReviewMappingProfile>(); });
         _mapper = mapperConfiguration.CreateMapper();
     }

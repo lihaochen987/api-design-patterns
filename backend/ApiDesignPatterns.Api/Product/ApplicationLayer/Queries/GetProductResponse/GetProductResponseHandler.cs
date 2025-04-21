@@ -13,7 +13,7 @@ namespace backend.Product.ApplicationLayer.Queries.GetProductResponse;
 public class GetProductResponseHandler(
     IProductViewRepository repository,
     IMapper mapper)
-    : IQueryHandler<GetProductResponseQuery, Controllers.Product.GetProductResponse?>
+    : IAsyncQueryHandler<GetProductResponseQuery, Controllers.Product.GetProductResponse?>
 {
     public async Task<Controllers.Product.GetProductResponse?> Handle(GetProductResponseQuery query)
     {

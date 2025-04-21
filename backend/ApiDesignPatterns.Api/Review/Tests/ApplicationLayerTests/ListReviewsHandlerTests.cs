@@ -19,7 +19,7 @@ public class ListReviewsHandlerTests : ListReviewsHandlerTestBase
         var request = new ListReviewsRequest { Filter = "Rating >= 4", MaxPageSize = 5 };
         Repository.AddReviewView(productId, 5);
         Repository.AddReviewView(productId, 4);
-        IQueryHandler<ListReviewsQuery, PagedReviews> sut = ListReviewsViewHandler();
+        var sut = ListReviewsViewHandler();
 
         var result = await sut.Handle(new ListReviewsQuery { Request = request, ParentId = productId.ToString() });
 
@@ -35,7 +35,7 @@ public class ListReviewsHandlerTests : ListReviewsHandlerTestBase
     {
         long productId = Fixture.Create<long>();
         var request = new ListReviewsRequest();
-        IQueryHandler<ListReviewsQuery, PagedReviews> sut = ListReviewsViewHandler();
+        var sut = ListReviewsViewHandler();
 
         var result = await sut.Handle(new ListReviewsQuery { Request = request, ParentId = productId.ToString() });
 
@@ -51,7 +51,7 @@ public class ListReviewsHandlerTests : ListReviewsHandlerTestBase
         var request = new ListReviewsRequest { MaxPageSize = 5 };
         Repository.AddReviewView(productId);
         Repository.AddReviewView(Fixture.Create<long>());
-        IQueryHandler<ListReviewsQuery, PagedReviews> sut = ListReviewsViewHandler();
+        var sut = ListReviewsViewHandler();
 
         var result = await sut.Handle(new ListReviewsQuery { Request = request, ParentId = productId.ToString() });
 
@@ -69,7 +69,7 @@ public class ListReviewsHandlerTests : ListReviewsHandlerTestBase
         {
             PageToken = "1", Filter = "InvalidFilter == \"SomeValue\"", MaxPageSize = 5
         };
-        IQueryHandler<ListReviewsQuery, PagedReviews> sut = ListReviewsViewHandler();
+        var sut = ListReviewsViewHandler();
 
         await FluentActions.Invoking(() =>
             sut.Handle(new ListReviewsQuery { Request = request, ParentId = productId.ToString() })

@@ -10,7 +10,7 @@ namespace backend.Product.Controllers.Product;
 [ApiController]
 [Route("product")]
 public class GetProductController(
-    IQueryHandler<GetProductResponseQuery, GetProductResponse?> getProductResponse,
+    IAsyncQueryHandler<GetProductResponseQuery, GetProductResponse?> getProductResponse,
     IFieldMaskConverterFactory fieldMaskConverterFactory)
     : ControllerBase
 {

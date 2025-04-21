@@ -16,13 +16,13 @@ namespace backend.Review.Tests.ControllerTests;
 public abstract class UpdateReviewControllerTestBase
 {
     protected readonly IMapper Mapper;
-    protected readonly IQueryHandler<GetReviewQuery, DomainModels.Review?> MockGetReviewHandler;
+    protected readonly IAsyncQueryHandler<GetReviewQuery, DomainModels.Review?> MockGetReviewHandler;
     private readonly ICommandHandler<UpdateReviewCommand> _mockUpdateReviewHandler;
     protected readonly Fixture Fixture = new();
 
     protected UpdateReviewControllerTestBase()
     {
-        MockGetReviewHandler = Mock.Of<IQueryHandler<GetReviewQuery, DomainModels.Review?>>();
+        MockGetReviewHandler = Mock.Of<IAsyncQueryHandler<GetReviewQuery, DomainModels.Review?>>();
         _mockUpdateReviewHandler = Mock.Of<ICommandHandler<UpdateReviewCommand>>();
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ReviewMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();

@@ -11,7 +11,7 @@ internal sealed class QueryProcessor(IServiceProvider serviceProvider) : IQueryP
     [DebuggerStepThrough]
     public Task<TResult> Process<TResult>(IQuery<TResult> query)
     {
-        var handlerType = typeof(IQueryHandler<,>)
+        var handlerType = typeof(IAsyncQueryHandler<,>)
             .MakeGenericType(query.GetType(), typeof(TResult));
 
         dynamic? handler = serviceProvider.GetService(handlerType);

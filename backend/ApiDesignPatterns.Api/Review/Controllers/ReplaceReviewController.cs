@@ -12,7 +12,7 @@ namespace backend.Review.Controllers;
 [ApiController]
 [Route("review")]
 public class ReplaceReviewController(
-    IQueryHandler<GetReviewQuery, DomainModels.Review?> getReview,
+    IAsyncQueryHandler<GetReviewQuery, DomainModels.Review?> getReview,
     ICommandHandler<ReplaceReviewCommand> replaceReview,
     IMapper mapper)
     : ControllerBase

@@ -9,7 +9,7 @@ namespace backend.Review.Controllers;
 [Route("{parentId}/reviews")]
 [ApiController]
 public class ListReviewsController(
-    IQueryHandler<ListReviewsQuery, PagedReviews> listReviews,
+    IAsyncQueryHandler<ListReviewsQuery, PagedReviews> listReviews,
     IMapper mapper)
     : ControllerBase
 {

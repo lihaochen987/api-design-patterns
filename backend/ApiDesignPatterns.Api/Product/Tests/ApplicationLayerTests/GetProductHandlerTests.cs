@@ -4,7 +4,6 @@
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.DomainModels.Enums;
 using backend.Product.Tests.TestHelpers.Builders;
-using backend.Shared.QueryHandler;
 using FluentAssertions;
 using Xunit;
 
@@ -17,7 +16,7 @@ public class GetProductHandlerTests : GetProductHandlerTestBase
     {
         DomainModels.Product expectedProduct = new ProductTestDataBuilder().Build();
         Repository.Add(expectedProduct);
-        IQueryHandler<GetProductQuery, DomainModels.Product?> sut = GetProductHandler();
+        var sut = GetProductHandler();
 
         DomainModels.Product? result = await sut.Handle(new GetProductQuery { Id = expectedProduct.Id });
 
@@ -29,7 +28,7 @@ public class GetProductHandlerTests : GetProductHandlerTestBase
     public async Task GetProductAsync_ReturnsNull_WhenProductDoesNotExist()
     {
         DomainModels.Product expectedProduct = new ProductTestDataBuilder().Build();
-        IQueryHandler<GetProductQuery, DomainModels.Product?> sut = GetProductHandler();
+        var sut = GetProductHandler();
 
         DomainModels.Product? result = await sut.Handle(new GetProductQuery { Id = expectedProduct.Id });
 
@@ -43,7 +42,7 @@ public class GetProductHandlerTests : GetProductHandlerTestBase
             .WithCategory(Category.PetFood)
             .Build();
         Repository.Add(petFoodProduct);
-        IQueryHandler<GetProductQuery, DomainModels.Product?> sut = GetProductHandler();
+        var sut = GetProductHandler();
 
         DomainModels.Product? result = await sut.Handle(new GetProductQuery { Id = petFoodProduct.Id });
 
@@ -58,7 +57,7 @@ public class GetProductHandlerTests : GetProductHandlerTestBase
             .WithCategory(Category.GroomingAndHygiene)
             .Build();
         Repository.Add(groomingProduct);
-        IQueryHandler<GetProductQuery, DomainModels.Product?> sut = GetProductHandler();
+        var sut = GetProductHandler();
 
         DomainModels.Product? result = await sut.Handle(new GetProductQuery { Id = groomingProduct.Id });
 

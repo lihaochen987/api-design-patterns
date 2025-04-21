@@ -8,7 +8,7 @@ using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 namespace backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
 
 public class ListSuppliersHandler(ISupplierViewRepository repository)
-    : IQueryHandler<ListSuppliersQuery, PagedSuppliers>
+    : IAsyncQueryHandler<ListSuppliersQuery, PagedSuppliers>
 {
     public async Task<PagedSuppliers> Handle(ListSuppliersQuery query)
     {

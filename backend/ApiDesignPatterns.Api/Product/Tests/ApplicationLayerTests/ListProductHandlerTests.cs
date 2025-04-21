@@ -18,7 +18,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
         var request = new ListProductsRequest { Filter = "Category == \"Toys\"", MaxPageSize = 5 };
         Repository.AddProductView(1, Category.Toys);
         Repository.AddProductView(2, Category.Toys);
-        IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
+        var sut = ListProductsViewHandler();
 
         PagedProducts result =
             await sut.Handle(
@@ -36,7 +36,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
     public async Task ListProductsAsync_ShouldReturnEmptyList_WhenNoProductsExist()
     {
         var request = new ListProductsRequest();
-        IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
+        var sut = ListProductsViewHandler();
 
         PagedProducts result = await sut.Handle(new ListProductsQuery
         {
@@ -54,7 +54,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
         {
             PageToken = "1", Filter = "InvalidFilter == \"SomeValue\"", MaxPageSize = 5
         };
-        IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
+        var sut = ListProductsViewHandler();
 
         Func<Task> act = async () => await sut.Handle(new ListProductsQuery
         {
@@ -69,7 +69,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
     {
         var request = new ListProductsRequest { Filter = "Category == \"Toys\"", MaxPageSize = 2 };
         SetupToyProducts(5);
-        IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
+        var sut = ListProductsViewHandler();
 
         PagedProducts result = await sut.Handle(
             new ListProductsQuery { Filter = request.Filter, MaxPageSize = request.MaxPageSize, PageToken = null });
@@ -84,7 +84,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
     {
         var request = new ListProductsRequest { Filter = "Category == \"Toys\"", MaxPageSize = 2 };
         SetupToyProducts(5);
-        IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
+        var sut = ListProductsViewHandler();
         string secondPageToken = await GetPageTokenForPage(sut, request.Filter, request.MaxPageSize, 1);
 
         PagedProducts result = await sut.Handle(
@@ -103,7 +103,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
     {
         var request = new ListProductsRequest { Filter = "Category == \"Toys\"", MaxPageSize = 2 };
         SetupToyProducts(5);
-        IQueryHandler<ListProductsQuery, PagedProducts> sut = ListProductsViewHandler();
+        var sut = ListProductsViewHandler();
         string lastPageToken = await GetPageTokenForPage(sut, request.Filter, request.MaxPageSize, 2);
 
         PagedProducts result = await sut.Handle(
@@ -126,7 +126,7 @@ public class ListProductHandlerTests : ListProductHandlerTestBase
     }
 
     private static async Task<string> GetPageTokenForPage(
-        IQueryHandler<ListProductsQuery, PagedProducts> handler,
+        IAsyncQueryHandler<ListProductsQuery, PagedProducts> handler,
         string filter,
         int maxPageSize,
         int targetPage)

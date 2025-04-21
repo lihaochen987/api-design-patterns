@@ -6,9 +6,9 @@ using System.Data;
 namespace backend.Shared.QueryHandler;
 
 public class TransactionQueryHandlerDecorator<TQuery, TResult>(
-    IQueryHandler<TQuery, TResult> queryHandler,
+    IAsyncQueryHandler<TQuery, TResult> queryHandler,
     IDbConnection dbConnection)
-    : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
+    : IAsyncQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {
     public async Task<TResult> Handle(TQuery query)
     {

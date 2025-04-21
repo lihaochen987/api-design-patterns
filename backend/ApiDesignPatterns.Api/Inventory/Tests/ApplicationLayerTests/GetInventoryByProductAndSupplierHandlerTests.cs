@@ -4,7 +4,6 @@
 using AutoFixture;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Inventory.Tests.TestHelpers.Builders;
-using backend.Shared.QueryHandler;
 using FluentAssertions;
 using Xunit;
 
@@ -17,7 +16,7 @@ public class GetInventoryByProductAndSupplierHandlerTests : GetInventoryByProduc
     {
         var expectedInventory = new InventoryTestDataBuilder().Build();
         Repository.Add(expectedInventory);
-        IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?> sut = GetHandler();
+        var sut = GetHandler();
         var query = new GetInventoryByProductAndSupplierQuery
         {
             ProductId = expectedInventory.ProductId, SupplierId = expectedInventory.SupplierId
@@ -34,7 +33,7 @@ public class GetInventoryByProductAndSupplierHandlerTests : GetInventoryByProduc
     {
         var otherInventory = new InventoryTestDataBuilder().Build();
         Repository.Add(otherInventory);
-        IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?> sut = GetHandler();
+        var sut = GetHandler();
         var query = new GetInventoryByProductAndSupplierQuery
         {
             ProductId = Fixture.Create<long>(), SupplierId = Fixture.Create<long>()
@@ -50,7 +49,7 @@ public class GetInventoryByProductAndSupplierHandlerTests : GetInventoryByProduc
     {
         var existingInventory = new InventoryTestDataBuilder().Build();
         Repository.Add(existingInventory);
-        IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?> sut = GetHandler();
+        var sut = GetHandler();
         var query = new GetInventoryByProductAndSupplierQuery
         {
             ProductId = existingInventory.ProductId, SupplierId = Fixture.Create<long>()
@@ -66,7 +65,7 @@ public class GetInventoryByProductAndSupplierHandlerTests : GetInventoryByProduc
     {
         var existingInventory = new InventoryTestDataBuilder().Build();
         Repository.Add(existingInventory);
-        IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?> sut = GetHandler();
+        var sut = GetHandler();
         var query = new GetInventoryByProductAndSupplierQuery
         {
             ProductId = Fixture.Create<long>(), SupplierId = existingInventory.SupplierId

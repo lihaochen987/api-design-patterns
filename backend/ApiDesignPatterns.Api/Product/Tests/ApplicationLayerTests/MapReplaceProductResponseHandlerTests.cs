@@ -5,7 +5,6 @@ using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
 using backend.Product.Tests.TestHelpers.Builders;
-using backend.Shared.QueryHandler;
 using FluentAssertions;
 using Xunit;
 
@@ -14,7 +13,7 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public class MapReplaceProductResponseHandlerTests : MapReplaceProductResponseHandlerTestBase
 {
     [Fact]
-    public async Task Handle_ReturnsPetFoodResponse_WhenCategoryIsPetFood()
+    public void Handle_ReturnsPetFoodResponse_WhenCategoryIsPetFood()
     {
         var product = new ProductTestDataBuilder()
             .WithCategory(Category.PetFood)
@@ -22,9 +21,9 @@ public class MapReplaceProductResponseHandlerTests : MapReplaceProductResponseHa
 
         var expectedResponse = Mapper.Map<ReplacePetFoodResponse>(product);
         var query = new MapReplaceProductResponseQuery { Product = product };
-        IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
+        var sut = GetReplaceProductResponseHandler();
 
-        ReplaceProductResponse result = await sut.Handle(query);
+        ReplaceProductResponse result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Should().BeOfType<ReplacePetFoodResponse>();
@@ -32,16 +31,16 @@ public class MapReplaceProductResponseHandlerTests : MapReplaceProductResponseHa
     }
 
     [Fact]
-    public async Task Handle_ReturnsGroomingResponse_WhenCategoryIsGroomingAndHygiene()
+    public void Handle_ReturnsGroomingResponse_WhenCategoryIsGroomingAndHygiene()
     {
         var product = new ProductTestDataBuilder()
             .WithCategory(Category.GroomingAndHygiene)
             .Build();
         var expectedResponse = Mapper.Map<ReplaceGroomingAndHygieneResponse>(product);
         var query = new MapReplaceProductResponseQuery { Product = product };
-        IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
+        var sut = GetReplaceProductResponseHandler();
 
-        ReplaceProductResponse result = await sut.Handle(query);
+        ReplaceProductResponse result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Should().BeOfType<ReplaceGroomingAndHygieneResponse>();
@@ -49,16 +48,16 @@ public class MapReplaceProductResponseHandlerTests : MapReplaceProductResponseHa
     }
 
     [Fact]
-    public async Task Handle_ReturnsBaseResponse_WhenCategoryIsNotSpecialized()
+    public void Handle_ReturnsBaseResponse_WhenCategoryIsNotSpecialized()
     {
         var product = new ProductTestDataBuilder()
             .WithCategory(Category.Beds)
             .Build();
         var expectedResponse = Mapper.Map<ReplaceProductResponse>(product);
         var query = new MapReplaceProductResponseQuery { Product = product };
-        IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> sut = GetReplaceProductResponseHandler();
+        var sut = GetReplaceProductResponseHandler();
 
-        ReplaceProductResponse result = await sut.Handle(query);
+        ReplaceProductResponse result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Should().BeOfType<ReplaceProductResponse>();

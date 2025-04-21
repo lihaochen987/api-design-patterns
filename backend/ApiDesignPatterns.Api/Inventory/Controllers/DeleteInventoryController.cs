@@ -13,7 +13,7 @@ namespace backend.Inventory.Controllers;
 [ApiController]
 [Route("inventory")]
 public class DeleteInventoryController(
-    IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> getInventoryById,
+    IAsyncQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> getInventoryById,
     ICommandHandler<DeleteInventoryCommand> deleteInventory)
     : ControllerBase
 {

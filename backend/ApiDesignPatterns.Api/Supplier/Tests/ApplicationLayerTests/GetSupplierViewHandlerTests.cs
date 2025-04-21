@@ -16,7 +16,7 @@ public class GetSupplierViewHandlerTests : GetSupplierViewHandlerTestBase
     public async Task Handle_ReturnsNull_WhenSupplierDoesNotExist()
     {
         SupplierView expectedSupplier = new SupplierViewTestDataBuilder().Build();
-        IQueryHandler<GetSupplierViewQuery, SupplierView?> sut = GetSupplierViewHandler();
+        var sut = GetSupplierViewHandler();
 
         SupplierView? result = await sut.Handle(new GetSupplierViewQuery { Id = expectedSupplier.Id });
 
@@ -28,7 +28,7 @@ public class GetSupplierViewHandlerTests : GetSupplierViewHandlerTestBase
     {
         SupplierView expectedSupplier = new SupplierViewTestDataBuilder().Build();
         Repository.Add(expectedSupplier);
-        IQueryHandler<GetSupplierViewQuery, SupplierView?> sut = GetSupplierViewHandler();
+        var sut = GetSupplierViewHandler();
 
         SupplierView? result = await sut.Handle(new GetSupplierViewQuery { Id = expectedSupplier.Id });
 

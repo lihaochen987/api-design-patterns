@@ -11,7 +11,7 @@ namespace backend.Product.Controllers.ProductPricing;
 [ApiController]
 [Route("product")]
 public class UpdateProductPricingController(
-    IQueryHandler<GetProductQuery, DomainModels.Product?> getProduct,
+    IAsyncQueryHandler<GetProductQuery, DomainModels.Product?> getProduct,
     ICommandHandler<UpdateProductPricingCommand> updateProductPricing,
     IMapper mapper)
     : ControllerBase

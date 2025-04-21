@@ -10,9 +10,9 @@ namespace backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 
 public class MapCreateProductResponseHandler(
     IMapper mapper)
-    : IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse>
+    : ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse>
 {
-    public Task<CreateProductResponse> Handle(MapCreateProductResponseQuery query)
+    public CreateProductResponse Handle(MapCreateProductResponseQuery query)
     {
         CreateProductResponse response = query.Product.Category switch
         {
@@ -20,6 +20,6 @@ public class MapCreateProductResponseHandler(
             Category.GroomingAndHygiene => mapper.Map<CreateGroomingAndHygieneResponse>(query.Product),
             _ => mapper.Map<CreateProductResponse>(query.Product)
         };
-        return Task.FromResult(response);
+        return response;
     }
 }

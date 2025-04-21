@@ -19,9 +19,9 @@ public abstract class CreateInventoryControllerTestBase
     protected readonly ICommandHandler<CreateInventoryCommand> CreateInventory =
         Mock.Of<ICommandHandler<CreateInventoryCommand>>();
 
-    protected readonly IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>
+    protected readonly IAsyncQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>
         GetInventoryByProductAndSupplier =
-            Mock.Of<IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>>();
+            Mock.Of<IAsyncQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>>();
 
     protected CreateInventoryControllerTestBase()
     {

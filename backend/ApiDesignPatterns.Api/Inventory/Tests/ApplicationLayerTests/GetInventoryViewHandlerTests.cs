@@ -4,7 +4,6 @@
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
 using backend.Inventory.DomainModels;
 using backend.Inventory.Tests.TestHelpers.Builders;
-using backend.Shared.QueryHandler;
 using FluentAssertions;
 using Xunit;
 
@@ -17,7 +16,7 @@ public class GetInventoryViewHandlerTests : GetInventoryViewHandlerTestBase
     {
         InventoryView expectedInventory = new InventoryViewTestDataBuilder().Build();
         Repository.Add(expectedInventory);
-        IQueryHandler<GetInventoryViewQuery, InventoryView?> sut = GetInventoryViewHandler();
+        var sut = GetInventoryViewHandler();
 
         InventoryView? result = await sut.Handle(new GetInventoryViewQuery { Id = expectedInventory.Id });
 
@@ -29,7 +28,7 @@ public class GetInventoryViewHandlerTests : GetInventoryViewHandlerTestBase
     public async Task Handle_ReturnsNull_WhenInventoryDoesNotExist()
     {
         InventoryView nonExistentInventory = new InventoryViewTestDataBuilder().Build();
-        IQueryHandler<GetInventoryViewQuery, InventoryView?> sut = GetInventoryViewHandler();
+        var sut = GetInventoryViewHandler();
 
         InventoryView? result = await sut.Handle(new GetInventoryViewQuery { Id = nonExistentInventory.Id });
 

@@ -7,7 +7,7 @@ using backend.Shared.QueryHandler;
 namespace backend.Product.ApplicationLayer.Queries.ListProducts;
 
 public class ListProductsHandler(IProductViewRepository repository)
-    : IQueryHandler<ListProductsQuery, PagedProducts>
+    : IAsyncQueryHandler<ListProductsQuery, PagedProducts>
 {
     public async Task<PagedProducts> Handle(ListProductsQuery query)
     {

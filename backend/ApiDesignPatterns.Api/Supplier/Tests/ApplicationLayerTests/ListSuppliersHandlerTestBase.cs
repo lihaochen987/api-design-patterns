@@ -13,7 +13,7 @@ public abstract class ListSuppliersHandlerTestBase
 {
     protected readonly SupplierViewRepositoryFake Repository = new(new PaginateService<SupplierView>());
 
-    protected IQueryHandler<ListSuppliersQuery, PagedSuppliers> ListSuppliersViewHandler()
+    protected IAsyncQueryHandler<ListSuppliersQuery, PagedSuppliers> ListSuppliersViewHandler()
     {
         return new ListSuppliersHandler(Repository);
     }

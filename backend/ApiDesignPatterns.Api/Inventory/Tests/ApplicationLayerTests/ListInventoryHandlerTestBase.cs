@@ -16,7 +16,7 @@ public abstract class ListInventoryHandlerTestBase
 
     protected readonly Fixture Fixture = new();
 
-    protected IQueryHandler<ListInventoryQuery, PagedInventory> ListInventoryViewHandler()
+    protected IAsyncQueryHandler<ListInventoryQuery, PagedInventory> ListInventoryViewHandler()
     {
         return new ListInventoryHandler(Repository);
     }

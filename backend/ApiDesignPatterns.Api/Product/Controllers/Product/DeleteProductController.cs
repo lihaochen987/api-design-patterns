@@ -11,7 +11,7 @@ namespace backend.Product.Controllers.Product;
 [Route("product")]
 public class DeleteProductController(
     ICommandHandler<DeleteProductCommand> deleteProduct,
-    IQueryHandler<GetProductQuery, DomainModels.Product?> getProduct)
+    IAsyncQueryHandler<GetProductQuery, DomainModels.Product?> getProduct)
     : ControllerBase
 {
     [HttpDelete("{id:long}")]

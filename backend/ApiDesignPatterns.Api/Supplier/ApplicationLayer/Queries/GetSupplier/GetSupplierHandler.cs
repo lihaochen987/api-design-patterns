@@ -6,7 +6,7 @@ using backend.Supplier.InfrastructureLayer.Database.Supplier;
 
 namespace backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 
-public class GetSupplierHandler(ISupplierRepository repository) : IQueryHandler<GetSupplierQuery, DomainModels.Supplier?>
+public class GetSupplierHandler(ISupplierRepository repository) : IAsyncQueryHandler<GetSupplierQuery, DomainModels.Supplier?>
 {
     public async Task<DomainModels.Supplier?> Handle(GetSupplierQuery query)
     {

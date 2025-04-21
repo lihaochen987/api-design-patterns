@@ -9,9 +9,9 @@ using backend.Shared.QueryHandler;
 namespace backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 
 public class MapCreateProductRequestHandler(IMapper mapper)
-    : IQueryHandler<MapCreateProductRequestQuery, DomainModels.Product>
+    : ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product>
 {
-    public Task<DomainModels.Product> Handle(MapCreateProductRequestQuery query)
+    public DomainModels.Product Handle(MapCreateProductRequestQuery query)
     {
         DomainModels.Product product = query.Request.Category switch
         {
@@ -20,6 +20,6 @@ public class MapCreateProductRequestHandler(IMapper mapper)
             _ => mapper.Map<DomainModels.Product>(query.Request)
         };
 
-        return Task.FromResult(product);
+        return product;
     }
 }

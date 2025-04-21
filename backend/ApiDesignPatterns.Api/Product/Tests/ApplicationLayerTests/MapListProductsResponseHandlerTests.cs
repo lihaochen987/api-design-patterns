@@ -15,7 +15,7 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public class MapListProductsResponseHandlerTests : MapListProductsResponseHandlerTestBase
 {
     [Fact]
-    public async Task Handle_ReturnsPetFoodResponses_WhenCategoryIsPetFood()
+    public void Handle_ReturnsPetFoodResponses_WhenCategoryIsPetFood()
     {
         var productView = new ProductViewTestDataBuilder()
             .WithCategory(Category.PetFood)
@@ -23,9 +23,9 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
         var pagedProducts = new PagedProducts([productView], null, 10);
         var expectedProductResponse = Mapper.Map<GetPetFoodResponse>(productView);
         var query = new MapListProductsResponseQuery { PagedProducts = pagedProducts };
-        IQueryHandler<MapListProductsResponseQuery, ListProductsResponse> sut = GetListProductsResponseHandler();
+        var sut = GetListProductsResponseHandler();
 
-        ListProductsResponse result = await sut.Handle(query);
+        ListProductsResponse result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Results.Should().NotBeNull();
@@ -35,7 +35,7 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
     }
 
     [Fact]
-    public async Task Handle_ReturnsGroomingResponses_WhenCategoryIsGroomingAndHygiene()
+    public void Handle_ReturnsGroomingResponses_WhenCategoryIsGroomingAndHygiene()
     {
         var productView = new ProductViewTestDataBuilder()
             .WithCategory(Category.GroomingAndHygiene)
@@ -43,9 +43,9 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
         var pagedProducts = new PagedProducts([productView], null, 10);
         var expectedProductResponse = Mapper.Map<GetGroomingAndHygieneResponse>(productView);
         var query = new MapListProductsResponseQuery { PagedProducts = pagedProducts };
-        IQueryHandler<MapListProductsResponseQuery, ListProductsResponse> sut = GetListProductsResponseHandler();
+        var sut = GetListProductsResponseHandler();
 
-        ListProductsResponse result = await sut.Handle(query);
+        ListProductsResponse result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Results.Should().NotBeNull();
@@ -55,7 +55,7 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
     }
 
     [Fact]
-    public async Task Handle_ReturnsBaseResponses_WhenCategoryIsNotSpecialized()
+    public void Handle_ReturnsBaseResponses_WhenCategoryIsNotSpecialized()
     {
         var productView = new ProductViewTestDataBuilder()
             .WithCategory(Category.Toys)
@@ -63,9 +63,9 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
         var pagedProducts = new PagedProducts([productView], null, 10);
         var expectedProductResponse = Mapper.Map<GetProductResponse>(productView);
         var query = new MapListProductsResponseQuery { PagedProducts = pagedProducts };
-        IQueryHandler<MapListProductsResponseQuery, ListProductsResponse> sut = GetListProductsResponseHandler();
+        var sut = GetListProductsResponseHandler();
 
-        ListProductsResponse result = await sut.Handle(query);
+        ListProductsResponse result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Results.Should().NotBeNull();
@@ -75,7 +75,7 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
     }
 
     [Fact]
-    public async Task Handle_ReturnsMultipleProductResponses_WhenMultipleProductsExist()
+    public void Handle_ReturnsMultipleProductResponses_WhenMultipleProductsExist()
     {
         var petFoodProduct = new ProductViewTestDataBuilder()
             .WithCategory(Category.PetFood)
@@ -88,9 +88,9 @@ public class MapListProductsResponseHandlerTests : MapListProductsResponseHandle
             .Build();
         var pagedProducts = new PagedProducts([petFoodProduct, groomingProduct, bedProduct], "4", 10);
         var query = new MapListProductsResponseQuery { PagedProducts = pagedProducts };
-        IQueryHandler<MapListProductsResponseQuery, ListProductsResponse> sut = GetListProductsResponseHandler();
+        var sut = GetListProductsResponseHandler();
 
-        ListProductsResponse result = await sut.Handle(query);
+        ListProductsResponse result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Results.Should().NotBeNull();

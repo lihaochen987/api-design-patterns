@@ -13,7 +13,7 @@ public abstract class GetReviewViewHandlerTestBase
 {
     protected readonly ReviewViewRepositoryFake Repository = new(new PaginateService<ReviewView>());
 
-    protected IQueryHandler<GetReviewViewQuery, ReviewView?> GetReviewViewHandler()
+    protected IAsyncQueryHandler<GetReviewViewQuery, ReviewView?> GetReviewViewHandler()
     {
         return new GetReviewViewHandler(Repository);
     }

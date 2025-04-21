@@ -14,7 +14,7 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public class MapCreateProductResponseHandlerTests : MapCreateProductResponseHandlerTestBase
 {
     [Fact]
-    public async Task Handle_ReturnsPetFoodResponse_WhenCategoryIsPetFood()
+    public void Handle_ReturnsPetFoodResponse_WhenCategoryIsPetFood()
     {
         var product = new ProductTestDataBuilder()
             .WithCategory(Category.PetFood)
@@ -22,9 +22,9 @@ public class MapCreateProductResponseHandlerTests : MapCreateProductResponseHand
 
         var expectedResponse = Mapper.Map<CreatePetFoodResponse>(product);
         var query = new MapCreateProductResponseQuery { Product = product };
-        IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
+        var sut = GetCreateProductResponseHandler();
 
-        CreateProductResponse result = await sut.Handle(query);
+        CreateProductResponse result =  sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Should().BeOfType<CreatePetFoodResponse>();
@@ -32,16 +32,16 @@ public class MapCreateProductResponseHandlerTests : MapCreateProductResponseHand
     }
 
     [Fact]
-    public async Task Handle_ReturnsGroomingResponse_WhenCategoryIsGroomingAndHygiene()
+    public void Handle_ReturnsGroomingResponse_WhenCategoryIsGroomingAndHygiene()
     {
         var product = new ProductTestDataBuilder()
             .WithCategory(Category.GroomingAndHygiene)
             .Build();
         var expectedResponse = Mapper.Map<CreateGroomingAndHygieneResponse>(product);
         var query = new MapCreateProductResponseQuery { Product = product };
-        IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
+        var sut = GetCreateProductResponseHandler();
 
-        CreateProductResponse result = await sut.Handle(query);
+        CreateProductResponse result =  sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Should().BeOfType<CreateGroomingAndHygieneResponse>();
@@ -49,16 +49,16 @@ public class MapCreateProductResponseHandlerTests : MapCreateProductResponseHand
     }
 
     [Fact]
-    public async Task Handle_ReturnsBaseResponse_WhenCategoryIsNotSpecialized()
+    public void Handle_ReturnsBaseResponse_WhenCategoryIsNotSpecialized()
     {
         var product = new ProductTestDataBuilder()
             .WithCategory(Category.Beds)
             .Build();
         var expectedResponse = Mapper.Map<CreateProductResponse>(product);
         var query = new MapCreateProductResponseQuery { Product = product };
-        IQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> sut = GetCreateProductResponseHandler();
+        var sut = GetCreateProductResponseHandler();
 
-        CreateProductResponse result = await sut.Handle(query);
+        CreateProductResponse result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Should().BeOfType<CreateProductResponse>();

@@ -9,12 +9,12 @@ using backend.Shared.QueryHandler;
 namespace backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 
 public class MapListProductsResponseHandler(IMapper mapper)
-    : IQueryHandler<MapListProductsResponseQuery, ListProductsResponse>
+    : ISyncQueryHandler<MapListProductsResponseQuery, ListProductsResponse>
 {
-    public Task<ListProductsResponse> Handle(MapListProductsResponseQuery query)
+    public ListProductsResponse Handle(MapListProductsResponseQuery query)
     {
-        IEnumerable<Controllers.Product.GetProductResponse> productResponses = query.PagedProducts.Products.Select(
-            product =>
+        IEnumerable<Controllers.Product.GetProductResponse> productResponses = query.PagedProducts.Products
+            .Select(product =>
                 Enum.Parse<Category>(product.Category) switch
                 {
                     Category.PetFood => mapper.Map<GetPetFoodResponse>(product),
@@ -28,6 +28,6 @@ public class MapListProductsResponseHandler(IMapper mapper)
                 NextPageToken = query.PagedProducts.NextPageToken,
                 TotalCount = query.PagedProducts.TotalCount
             };
-        return Task.FromResult(response)!;
+        return response;
     }
 }

@@ -7,7 +7,16 @@ public interface IQuery<TResult>
 {
 }
 
-public interface IQueryHandler<in TQuery, TResult> where TQuery : IQuery<TResult>
+public interface IBaseQueryHandler<in TQuery, TResult> where TQuery : IQuery<TResult>;
+
+public interface IAsyncQueryHandler<in TQuery, TResult> : IBaseQueryHandler<TQuery, TResult>
+    where TQuery : IQuery<TResult>
 {
     Task<TResult> Handle(TQuery query);
+}
+
+public interface ISyncQueryHandler<in TQuery, TResult> : IBaseQueryHandler<TQuery, TResult>
+    where TQuery : IQuery<TResult>
+{
+    TResult Handle(TQuery query);
 }

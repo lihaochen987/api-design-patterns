@@ -74,14 +74,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductRepository(dbConnection);
 
             // CreateProductRequest handler
-            var createProductRequestHandler =
-                new QueryDecoratorBuilder<MapCreateProductRequestQuery, DomainModels.Product>(
-                        new MapCreateProductRequestHandler(_mapper),
-                        _loggerFactory,
-                        null)
-                    .WithLogging()
-                    .WithValidation()
-                    .Build();
+            var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
 
             // CreateProduct handler
             var createProductHandler = new CommandDecoratorBuilder<CreateProductCommand>(
@@ -98,14 +91,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // CreateProductResponse handler
-            var createProductResponseHandler =
-                new QueryDecoratorBuilder<MapCreateProductResponseQuery, CreateProductResponse>(
-                        new MapCreateProductResponseHandler(_mapper),
-                        _loggerFactory,
-                        null)
-                    .WithLogging()
-                    .WithValidation()
-                    .Build();
+            var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
 
             return new CreateProductController(
                 createProductHandler,
@@ -199,7 +185,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithLogging()
                 .WithTransaction()
                 .Build();
-            services[typeof(IQueryHandler<ListProductsQuery, PagedProducts>)] = listProductsHandler;
+            services[typeof(IAsyncQueryHandler<ListProductsQuery, PagedProducts>)] = listProductsHandler;
 
             // GetListProductsFromCache handler
             var getListProductsFromCacheHandler =
@@ -211,7 +197,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     .WithBulkhead(BulkheadPolicies.RedisRead)
                     .WithLogging()
                     .Build();
-            services[typeof(IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>)] = getListProductsFromCacheHandler;
+            services[typeof(IAsyncQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>)] = getListProductsFromCacheHandler;
 
             // persistListProductsToCacheHandler handler
             var persistListProductsToCacheHandler = new CommandDecoratorBuilder<PersistListProductsToCacheCommand>(
@@ -224,15 +210,8 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // MapListProductsResponse handler
-            var mapListProductsResponseHandler =
-                new QueryDecoratorBuilder<MapListProductsResponseQuery, ListProductsResponse>(
-                        new MapListProductsResponseHandler(_mapper),
-                        _loggerFactory,
-                        null)
-                    .WithLogging()
-                    .WithValidation()
-                    .Build();
-            services[typeof(IQueryHandler<MapListProductsResponseQuery, ListProductsResponse>)] = mapListProductsResponseHandler;
+            var mapListProductsResponseHandler = new MapListProductsResponseHandler(_mapper);
+            services[typeof(ISyncQueryHandler<MapListProductsResponseQuery, ListProductsResponse>)] = mapListProductsResponseHandler;
 
             // UpdateListProductsStaleness handler
             var updateListProductStalenessHandler = new CommandDecoratorBuilder<UpdateListProductStalenessCommand>(
@@ -290,14 +269,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // MapReplaceProductResponse handler
-            var mapReplaceProductResponseHandler =
-                new QueryDecoratorBuilder<MapReplaceProductResponseQuery, ReplaceProductResponse>(
-                        new MapReplaceProductResponseHandler(_mapper),
-                        _loggerFactory,
-                        null)
-                    .WithLogging()
-                    .WithValidation()
-                    .Build();
+            var mapReplaceProductResponseHandler = new MapReplaceProductResponseHandler(_mapper);
 
             return new ReplaceProductController(
                 getProductHandler,

@@ -15,8 +15,8 @@ namespace backend.Inventory.Controllers;
 [Route("{productId:decimal}/inventory")]
 [ApiController]
 public class ListProductSuppliersController(
-    IQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
-    IQueryHandler<GetSupplierViewQuery, SupplierView?> getSupplierView,
+    IAsyncQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
+    IAsyncQueryHandler<GetSupplierViewQuery, SupplierView?> getSupplierView,
     IMapper mapper)
     : ControllerBase
 {

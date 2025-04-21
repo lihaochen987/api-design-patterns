@@ -15,16 +15,16 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public class MapCreateProductRequestHandlerTests : MapCreateProductRequestHandlerTestBase
 {
     [Fact]
-    public async Task Handle_ReturnsPetFood_WhenCategoryIsPetFood()
+    public void Handle_ReturnsPetFood_WhenCategoryIsPetFood()
     {
         var product = new ProductTestDataBuilder()
             .WithCategory(Category.PetFood)
             .Build();
         var request = Mapper.Map<CreateProductRequest>(product);
         var query = new MapCreateProductRequestQuery { Request = request };
-        IQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> sut = GetMapCreateProductRequestHandler();
+        var sut = GetMapCreateProductRequestHandler();
 
-        DomainModels.Product result = await sut.Handle(query);
+        DomainModels.Product result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Should().BeOfType<PetFood>();
@@ -32,16 +32,16 @@ public class MapCreateProductRequestHandlerTests : MapCreateProductRequestHandle
     }
 
     [Fact]
-    public async Task Handle_ReturnsGroomingAndHygiene_WhenCategoryIsGroomingAndHygiene()
+    public void Handle_ReturnsGroomingAndHygiene_WhenCategoryIsGroomingAndHygiene()
     {
         var product = new ProductTestDataBuilder()
             .WithCategory(Category.GroomingAndHygiene)
             .Build();
         var request = Mapper.Map<CreateProductRequest>(product);
         var query = new MapCreateProductRequestQuery { Request = request };
-        IQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> sut = GetMapCreateProductRequestHandler();
+        var sut = GetMapCreateProductRequestHandler();
 
-        DomainModels.Product result = await sut.Handle(query);
+        DomainModels.Product result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Should().BeOfType<GroomingAndHygiene>();
@@ -49,16 +49,16 @@ public class MapCreateProductRequestHandlerTests : MapCreateProductRequestHandle
     }
 
     [Fact]
-    public async Task Handle_ReturnsBaseProduct_WhenCategoryIsNotSpecialized()
+    public void Handle_ReturnsBaseProduct_WhenCategoryIsNotSpecialized()
     {
         var product = new ProductTestDataBuilder()
             .WithCategory(Category.Beds)
             .Build();
         var request = Mapper.Map<CreateProductRequest>(product);
         var query = new MapCreateProductRequestQuery { Request = request };
-        IQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> sut = GetMapCreateProductRequestHandler();
+        var sut = GetMapCreateProductRequestHandler();
 
-        DomainModels.Product result = await sut.Handle(query);
+        DomainModels.Product result = sut.Handle(query);
 
         result.Should().NotBeNull();
         result.Should().BeOfType<DomainModels.Product>();

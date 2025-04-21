@@ -11,7 +11,7 @@ public abstract class GetReviewHandlerTestBase
 {
     protected readonly ReviewRepositoryFake Repository = [];
 
-    protected IQueryHandler<GetReviewQuery, DomainModels.Review?> GetReviewHandler()
+    protected IAsyncQueryHandler<GetReviewQuery, DomainModels.Review?> GetReviewHandler()
     {
         return new GetReviewHandler(Repository);
     }

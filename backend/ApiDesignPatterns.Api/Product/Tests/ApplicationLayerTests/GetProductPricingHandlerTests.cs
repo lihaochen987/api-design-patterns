@@ -4,7 +4,6 @@
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.DomainModels.Views;
 using backend.Product.Tests.TestHelpers.Builders;
-using backend.Shared.QueryHandler;
 using FluentAssertions;
 using Xunit;
 
@@ -17,7 +16,7 @@ public class GetProductPricingHandlerTests : GetProductPricingHandlerTestBase
     {
         ProductPricingView expectedPricing = new ProductPricingViewTestDataBuilder().Build();
         Repository.Add(expectedPricing);
-        IQueryHandler<GetProductPricingQuery, ProductPricingView?> sut = GetProductPricingHandler();
+        var sut = GetProductPricingHandler();
 
         ProductPricingView? result = await sut.Handle(new GetProductPricingQuery { Id = expectedPricing.Id });
 
@@ -29,7 +28,7 @@ public class GetProductPricingHandlerTests : GetProductPricingHandlerTestBase
     public async Task Handle_ReturnsNull_WhenProductPricingDoesNotExist()
     {
         ProductPricingView expectedPricing = new ProductPricingViewTestDataBuilder().Build();
-        IQueryHandler<GetProductPricingQuery, ProductPricingView?> sut = GetProductPricingHandler();
+        var sut = GetProductPricingHandler();
 
         ProductPricingView? result = await sut.Handle(new GetProductPricingQuery { Id = expectedPricing.Id });
 

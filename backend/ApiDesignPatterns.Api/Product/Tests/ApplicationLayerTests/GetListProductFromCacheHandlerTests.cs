@@ -6,7 +6,6 @@ using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.Controllers.Product;
 using backend.Shared;
 using backend.Shared.Caching;
-using backend.Shared.QueryHandler;
 using FluentAssertions;
 using Xunit;
 
@@ -28,7 +27,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
             Item = expectedResults, Timestamp = DateTime.UtcNow + TimeSpan.FromMinutes(10)
         };
         await Cache.SetAsync("products:maxsize:10", expectedResponse, TimeSpan.FromMinutes(10));
-        IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
+        var sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult result = await sut.Handle(query);
 
@@ -44,7 +43,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
     {
         var request = new ListProductsRequest { MaxPageSize = 10 };
         var query = new GetListProductsFromCacheQuery { Request = request, CheckRate = 5 };
-        IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
+        var sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult result = await sut.Handle(query);
 
@@ -58,7 +57,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
     {
         var request = new ListProductsRequest { MaxPageSize = 10 };
         var query = new GetListProductsFromCacheQuery { Request = request, CheckRate = 5 };
-        IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetExceptionThrowingHandler();
+        var sut = GetExceptionThrowingHandler();
         ThrowingCache.SetKeyToThrowOn("products:maxsize:10");
 
         CacheQueryResult result = await sut.Handle(query);
@@ -73,7 +72,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
     {
         var request = new ListProductsRequest { MaxPageSize = 10, PageToken = "token123" };
         var query = new GetListProductsFromCacheQuery { Request = request, CheckRate = 5 };
-        IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
+        var sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult result = await sut.Handle(query);
 
@@ -86,7 +85,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
     {
         var request = new ListProductsRequest { MaxPageSize = 10, Filter = "Category == \"Toys\"" };
         var query = new GetListProductsFromCacheQuery { Request = request, CheckRate = 5 };
-        IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
+        var sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult result = await sut.Handle(query);
 
@@ -102,7 +101,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
             MaxPageSize = 10, PageToken = "token123", Filter = "Category == \"Toys\""
         };
         var query = new GetListProductsFromCacheQuery { Request = request, CheckRate = 5 };
-        IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
+        var sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult result = await sut.Handle(query);
 
@@ -127,7 +126,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         };
         await Cache.SetAsync("products:maxsize:10", expectedResponse, TimeSpan.FromMinutes(10));
         RandomUtility.CheckProbability(0);
-        IQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> sut = GetListProductsFromCacheHandler();
+        var sut = GetListProductsFromCacheHandler();
 
         CacheQueryResult result = await sut.Handle(query);
 

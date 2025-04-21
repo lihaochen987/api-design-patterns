@@ -12,7 +12,7 @@ namespace backend.Inventory.Controllers;
 [Route("inventory")]
 [ApiController]
 public class ListInventoryController(
-    IQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
+    IAsyncQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
     IMapper mapper)
     : ControllerBase
 {

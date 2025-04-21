@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 namespace backend.Shared.QueryHandler;
 
 public class LoggingQueryHandlerDecorator<TQuery, TResult>(
-    IQueryHandler<TQuery, TResult> queryHandler,
+    IAsyncQueryHandler<TQuery, TResult> queryHandler,
     ILogger<LoggingQueryHandlerDecorator<TQuery, TResult>> logger)
-    : IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
+    : IAsyncQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
 {
     public async Task<TResult> Handle(TQuery query)
     {

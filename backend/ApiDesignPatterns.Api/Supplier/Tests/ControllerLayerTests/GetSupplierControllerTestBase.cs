@@ -17,8 +17,8 @@ public abstract class GetSupplierControllerTestBase
 {
     protected readonly Fixture Fixture = new();
 
-    protected readonly IQueryHandler<GetSupplierViewQuery, SupplierView?> MockGetSupplierView =
-        Mock.Of<IQueryHandler<GetSupplierViewQuery, SupplierView?>>();
+    protected readonly IAsyncQueryHandler<GetSupplierViewQuery, SupplierView?> MockGetSupplierView =
+        Mock.Of<IAsyncQueryHandler<GetSupplierViewQuery, SupplierView?>>();
 
     protected readonly IMapper Mapper;
 

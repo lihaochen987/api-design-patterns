@@ -12,8 +12,8 @@ namespace backend.Review.Tests.ControllerTests;
 
 public abstract class DeleteReviewControllerTestBase
 {
-    protected readonly IQueryHandler<GetReviewQuery, DomainModels.Review?> MockGetReviewHandler =
-        Mock.Of<IQueryHandler<GetReviewQuery, DomainModels.Review?>>();
+    protected readonly IAsyncQueryHandler<GetReviewQuery, DomainModels.Review?> MockGetReviewHandler =
+        Mock.Of<IAsyncQueryHandler<GetReviewQuery, DomainModels.Review?>>();
 
     private readonly ICommandHandler<DeleteReviewCommand> _mockDeleteReviewHandler =
         Mock.Of<ICommandHandler<DeleteReviewCommand>>();

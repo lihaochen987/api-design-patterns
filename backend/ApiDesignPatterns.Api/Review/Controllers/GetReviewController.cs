@@ -16,7 +16,7 @@ namespace backend.Review.Controllers;
 [ApiController]
 [Route("review")]
 public class GetReviewController(
-    IQueryHandler<GetReviewViewQuery, ReviewView?> getReviewView,
+    IAsyncQueryHandler<GetReviewViewQuery, ReviewView?> getReviewView,
     IFieldMaskConverterFactory fieldMaskConverterFactory,
     IMapper mapper)
     : ControllerBase

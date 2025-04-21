@@ -6,8 +6,8 @@ using System.ComponentModel.DataAnnotations;
 namespace backend.Shared.QueryHandler;
 
 public class ValidationQueryHandlerDecorator<TQuery, TResult>(
-    IQueryHandler<TQuery, TResult> queryHandler)
-    : IQueryHandler<TQuery, TResult>
+    IAsyncQueryHandler<TQuery, TResult> queryHandler)
+    : IAsyncQueryHandler<TQuery, TResult>
     where TQuery : IQuery<TResult>
 {
     public async Task<TResult> Handle(TQuery query)

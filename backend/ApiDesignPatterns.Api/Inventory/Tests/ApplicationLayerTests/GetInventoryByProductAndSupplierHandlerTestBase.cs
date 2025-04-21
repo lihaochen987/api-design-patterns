@@ -13,7 +13,7 @@ public abstract class GetInventoryByProductAndSupplierHandlerTestBase
     protected readonly InventoryRepositoryFake Repository = [];
     protected readonly Fixture Fixture = new();
 
-    protected IQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?> GetHandler()
+    protected IAsyncQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?> GetHandler()
     {
         return new GetInventoryByProductAndSupplierHandler(Repository);
     }

@@ -14,7 +14,7 @@ namespace backend.Inventory.Controllers;
 [ApiController]
 [Route("inventory")]
 public class UpdateInventoryController(
-    IQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> getInventory,
+    IAsyncQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> getInventory,
     ICommandHandler<UpdateInventoryCommand> updateInventory,
     IMapper mapper)
     : ControllerBase

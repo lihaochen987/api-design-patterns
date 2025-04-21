@@ -17,7 +17,7 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
         var request = new ListSuppliersRequest { Filter = "Email.endsWith(@example.com)", MaxPageSize = 5 };
         Repository.AddSupplierView("John", "Doe", "john@example.com");
         Repository.AddSupplierView("Jane", "Smith", "jane@example.com");
-        IQueryHandler<ListSuppliersQuery, PagedSuppliers> sut = ListSuppliersViewHandler();
+        var sut = ListSuppliersViewHandler();
 
         PagedSuppliers result = await sut.Handle(new ListSuppliersQuery { Request = request });
 
@@ -32,7 +32,7 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
     public async Task Handle_ShouldReturnEmptyList_WhenNoSuppliersExist()
     {
         var request = new ListSuppliersRequest();
-        IQueryHandler<ListSuppliersQuery, PagedSuppliers> sut = ListSuppliersViewHandler();
+        var sut = ListSuppliersViewHandler();
 
         PagedSuppliers result = await sut.Handle(new ListSuppliersQuery { Request = request });
 
@@ -46,7 +46,7 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
         var request = new ListSuppliersRequest { Filter = "FullName == \"John Doe\"", MaxPageSize = 5 };
         Repository.AddSupplierView("John", "Doe", "john@example.com");
         Repository.AddSupplierView("Jane", "Smith", "jane@example.com");
-        IQueryHandler<ListSuppliersQuery, PagedSuppliers> sut = ListSuppliersViewHandler();
+        var sut = ListSuppliersViewHandler();
 
         PagedSuppliers result = await sut.Handle(new ListSuppliersQuery { Request = request });
 
@@ -62,7 +62,7 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
         Repository.AddSupplierView("John", "Doe", "john@example.com");
         Repository.AddSupplierView("Jane", "Smith", "jane@example.com");
         Repository.AddSupplierView("Bob", "Johnson", "bob@example.com");
-        IQueryHandler<ListSuppliersQuery, PagedSuppliers> sut = ListSuppliersViewHandler();
+        var sut = ListSuppliersViewHandler();
 
         PagedSuppliers result = await sut.Handle(new ListSuppliersQuery { Request = request });
 
@@ -74,7 +74,7 @@ public class ListSuppliersHandlerTests : ListSuppliersHandlerTestBase
     public async Task Handle_ShouldThrowArgumentException_WhenRepositoryFails()
     {
         var request = new ListSuppliersRequest { Filter = "InvalidFilter == \"SomeValue\"", MaxPageSize = 5 };
-        IQueryHandler<ListSuppliersQuery, PagedSuppliers> sut = ListSuppliersViewHandler();
+        var sut = ListSuppliersViewHandler();
 
         Func<Task> act = async () => await sut.Handle(new ListSuppliersQuery { Request = request });
 

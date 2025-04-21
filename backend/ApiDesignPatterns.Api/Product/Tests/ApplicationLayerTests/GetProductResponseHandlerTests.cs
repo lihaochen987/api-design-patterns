@@ -6,7 +6,6 @@ using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 using backend.Product.Tests.TestHelpers.Builders;
-using backend.Shared.QueryHandler;
 using FluentAssertions;
 using Xunit;
 
@@ -18,7 +17,7 @@ public class GetProductResponseHandlerTests : GetProductResponseHandlerTestBase
     public async Task Handle_ReturnsNull_WhenProductDoesNotExist()
     {
         ProductView expectedProduct = new ProductViewTestDataBuilder().Build();
-        IQueryHandler<GetProductResponseQuery, GetProductResponse?> sut = GetProductResponseHandler();
+        var sut = GetProductResponseHandler();
 
         GetProductResponse? result =
             await sut.Handle(new GetProductResponseQuery { Id = expectedProduct.Id });
@@ -33,7 +32,7 @@ public class GetProductResponseHandlerTests : GetProductResponseHandlerTestBase
             .WithCategory(Category.PetFood)
             .Build();
         Repository.Add(productView);
-        IQueryHandler<GetProductResponseQuery, GetProductResponse?> sut = GetProductResponseHandler();
+        var sut = GetProductResponseHandler();
         GetPetFoodResponse expectedResponse = Mapper.Map<GetPetFoodResponse>(productView);
 
         GetProductResponse? result =
@@ -52,7 +51,7 @@ public class GetProductResponseHandlerTests : GetProductResponseHandlerTestBase
             .Build();
         GetGroomingAndHygieneResponse expectedResponse = Mapper.Map<GetGroomingAndHygieneResponse>(productView);
         Repository.Add(productView);
-        IQueryHandler<GetProductResponseQuery, GetProductResponse?> sut = GetProductResponseHandler();
+        var sut = GetProductResponseHandler();
 
         GetProductResponse? result =
             await sut.Handle(new GetProductResponseQuery { Id = productView.Id });
@@ -70,7 +69,7 @@ public class GetProductResponseHandlerTests : GetProductResponseHandlerTestBase
             .Build();
         GetProductResponse expectedResponse = Mapper.Map<GetProductResponse>(productView);
         Repository.Add(productView);
-        IQueryHandler<GetProductResponseQuery, GetProductResponse?> sut = GetProductResponseHandler();
+        var sut = GetProductResponseHandler();
 
         GetProductResponse? result =
             await sut.Handle(new GetProductResponseQuery { Id = productView.Id });

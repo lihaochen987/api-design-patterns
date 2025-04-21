@@ -18,7 +18,7 @@ public abstract class MapCreateProductRequestHandlerTestBase
         Mapper = mapperConfiguration.CreateMapper();
     }
 
-    protected IQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> GetMapCreateProductRequestHandler()
+    protected ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> GetMapCreateProductRequestHandler()
     {
         return new MapCreateProductRequestHandler(Mapper);
     }

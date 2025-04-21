@@ -11,9 +11,9 @@ namespace backend.Product.Controllers.Product;
 [ApiController]
 [Route("product")]
 public class ReplaceProductController(
-    IQueryHandler<GetProductQuery, DomainModels.Product?> getProduct,
+    IAsyncQueryHandler<GetProductQuery, DomainModels.Product?> getProduct,
     ICommandHandler<ReplaceProductCommand> replaceProduct,
-    IQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> replaceProductResponse)
+    ISyncQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse> replaceProductResponse)
     : ControllerBase
 {
     [HttpPut("{id:long}")]
@@ -40,8 +40,7 @@ public class ReplaceProductController(
             return NotFound();
         }
 
-        var response =
-            await replaceProductResponse.Handle(new MapReplaceProductResponseQuery { Product = replacedProduct });
+        var response = replaceProductResponse.Handle(new MapReplaceProductResponseQuery { Product = replacedProduct });
 
         return Ok(response);
     }
