@@ -11,7 +11,6 @@ public class GetSuppliersFromInventoryHandler : ISyncQueryHandler<GetSuppliersFr
     public List<SupplierView?> Handle(GetSuppliersFromInventoryQuery query)
     {
         List<SupplierView?> result = query.SupplierTasks
-            .Select(task => task.Result)
             .Where(supplier => supplier != null)
             .ToList();
         return result;

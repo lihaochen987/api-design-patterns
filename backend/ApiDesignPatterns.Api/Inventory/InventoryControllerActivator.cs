@@ -8,6 +8,7 @@ using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
+using backend.Inventory.ApplicationLayer.Queries.GetProductsFromInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetSuppliersFromInventory;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
@@ -15,6 +16,11 @@ using backend.Inventory.DomainModels;
 using backend.Inventory.InfrastructureLayer.Database.Inventory;
 using backend.Inventory.InfrastructureLayer.Database.InventoryView;
 using backend.Inventory.Services;
+using backend.Product.ApplicationLayer.Queries.GetProductResponse;
+using backend.Product.Controllers.Product;
+using backend.Product.InfrastructureLayer.Database.ProductView;
+using backend.Product.Services;
+using backend.Product.Services.Mappers;
 using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
@@ -35,17 +41,14 @@ public class InventoryControllerActivator : BaseControllerActivator
     private readonly PaginateService<InventoryView> _inventoryViewPaginateService;
     private readonly SqlFilterBuilder _inventorySqlFilterBuilder;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
-    private readonly IMapper _mapper;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly SqlFilterBuilder _productSqlFilterBuilder;
 
     public InventoryControllerActivator(
         IConfiguration configuration,
         ILoggerFactory loggerFactory)
         : base(configuration)
     {
-        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
-        _mapper = mapperConfig.CreateMapper();
-
         InventoryFieldPaths inventoryFieldPaths = new();
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(inventoryFieldPaths.ValidPaths);
 
@@ -60,6 +63,9 @@ public class InventoryControllerActivator : BaseControllerActivator
 
         SupplierColumnMapper supplierColumnMapper = new();
         _supplierSqlFilterBuilder = new SqlFilterBuilder(supplierColumnMapper);
+
+        ProductColumnMapper productColumnMapper = new();
+        _productSqlFilterBuilder = new SqlFilterBuilder(productColumnMapper);
     }
 
     public override object? Create(ControllerContext context)
@@ -68,6 +74,9 @@ public class InventoryControllerActivator : BaseControllerActivator
 
         if (type == typeof(CreateInventoryController))
         {
+            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
+            var mapper = mapperConfig.CreateMapper();
+
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new InventoryRepository(dbConnection);
@@ -104,11 +113,14 @@ public class InventoryControllerActivator : BaseControllerActivator
             return new CreateInventoryController(
                 createInventoryHandler,
                 getInventoryByProductAndSupplier,
-                _mapper);
+                mapper);
         }
 
         if (type == typeof(GetInventoryController))
         {
+            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
+            var mapper = mapperConfig.CreateMapper();
+
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new InventoryViewRepository(
@@ -133,11 +145,14 @@ public class InventoryControllerActivator : BaseControllerActivator
             return new GetInventoryController(
                 getInventoryViewHandler,
                 _fieldMaskConverterFactory,
-                _mapper);
+                mapper);
         }
 
         if (type == typeof(UpdateInventoryController))
         {
+            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
+            var mapper = mapperConfig.CreateMapper();
+
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new InventoryRepository(dbConnection);
@@ -173,7 +188,7 @@ public class InventoryControllerActivator : BaseControllerActivator
             return new UpdateInventoryController(
                 getInventoryByIdHandler,
                 updateInventoryHandler,
-                _mapper);
+                mapper);
         }
 
         if (type == typeof(DeleteInventoryController))
@@ -217,6 +232,9 @@ public class InventoryControllerActivator : BaseControllerActivator
 
         if (type == typeof(ListInventoryController))
         {
+            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
+            var mapper = mapperConfig.CreateMapper();
+
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new InventoryViewRepository(
@@ -240,11 +258,18 @@ public class InventoryControllerActivator : BaseControllerActivator
 
             return new ListInventoryController(
                 listInventoryHandler,
-                _mapper);
+                mapper);
         }
 
         if (type == typeof(ListProductSuppliersController))
         {
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<InventoryMappingProfile>();
+                cfg.AddProfile<SupplierMappingProfile>();
+            });
+            var mapper = mapperConfig.CreateMapper();
+
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var inventoryViewRepository = new InventoryViewRepository(
@@ -289,7 +314,62 @@ public class InventoryControllerActivator : BaseControllerActivator
                 listInventoryHandler,
                 getSupplierViewHandler,
                 getSuppliersFromInventory,
-                _mapper);
+                mapper);
+        }
+
+        if (type == typeof(ListSupplierProductsController))
+        {
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<InventoryMappingProfile>();
+                cfg.AddProfile<ProductMappingProfile>();
+            });
+            var mapper = mapperConfig.CreateMapper();
+
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var inventoryViewRepository = new InventoryViewRepository(
+                dbConnection,
+                _inventorySqlFilterBuilder,
+                _inventoryViewPaginateService);
+            var productViewRepository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
+
+            // ListInventory handler
+            var listInventoryHandler = new QueryDecoratorBuilder<ListInventoryQuery, PagedInventory>(
+                    new ListInventoryHandler(inventoryViewRepository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.InventoryRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            // GetProductResponse handler
+            var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
+                    new GetProductResponseHandler(productViewRepository, mapper),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.ProductRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            // GetProductsFromInventory handler
+            var getProductsFromInventory = new GetProductsFromInventoryHandler();
+
+            return new ListSupplierProductsController(
+                listInventoryHandler,
+                getProductResponseHandler,
+                getProductsFromInventory,
+                mapper);
         }
 
         return null;

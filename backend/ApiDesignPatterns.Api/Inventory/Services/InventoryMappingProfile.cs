@@ -4,6 +4,8 @@
 using AutoMapper;
 using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
+using backend.Product.Controllers.Product;
+using backend.Product.DomainModels.Views;
 using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
 
@@ -19,7 +21,14 @@ public class InventoryMappingProfile : Profile
         CreateMap<DomainModels.Inventory, CreateInventoryRequest>();
         CreateMap<DomainModels.Inventory, UpdateInventoryResponse>();
 
-        // From other domains
+        // From Supplier domain
         CreateMap<SupplierView, GetSupplierResponse>();
+
+        // From Product domain
+        CreateMap<ProductView, GetProductResponse>();
+        CreateMap<ProductView, GetPetFoodResponse>()
+            .IncludeBase<ProductView, GetProductResponse>();
+        CreateMap<ProductView, GetGroomingAndHygieneResponse>()
+            .IncludeBase<ProductView, GetProductResponse>();
     }
 }

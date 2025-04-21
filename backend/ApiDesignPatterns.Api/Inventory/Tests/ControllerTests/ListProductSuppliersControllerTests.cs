@@ -36,7 +36,7 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
         SetupSupplierViewMocks(supplierViews);
         ListProductSuppliersController sut = ListProductSuppliersController();
 
-        var result = await sut.ListInventory(request, productId);
+        var result = await sut.ListProductSuppliers(request, productId);
 
         result.Result.Should().NotBeNull();
         result.Result.Should().BeOfType<OkObjectResult>();
@@ -65,7 +65,7 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
         SetupSupplierViewMocks(supplierViews);
         ListProductSuppliersController sut = ListProductSuppliersController();
 
-        var result = await sut.ListInventory(request, productId);
+        var result = await sut.ListProductSuppliers(request, productId);
 
         result.Result.Should().NotBeNull();
         result.Result.Should().BeOfType<OkObjectResult>();
@@ -94,7 +94,7 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
         SetupSupplierViewMocks(supplierViews);
         ListProductSuppliersController sut = ListProductSuppliersController();
 
-        var result = await sut.ListInventory(request, productId);
+        var result = await sut.ListProductSuppliers(request, productId);
 
         result.Result.Should().NotBeNull();
         result.Result.Should().BeOfType<OkObjectResult>();
@@ -123,7 +123,7 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
         SetupSupplierViewMocks(supplierViews);
         ListProductSuppliersController sut = ListProductSuppliersController();
 
-        var result = await sut.ListInventory(request, productId);
+        var result = await sut.ListProductSuppliers(request, productId);
 
         result.Result.Should().NotBeNull();
         result.Result.Should().BeOfType<OkObjectResult>();
@@ -148,7 +148,7 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
             .ReturnsAsync(new PagedInventory([], null));
         ListProductSuppliersController sut = ListProductSuppliersController();
 
-        var result = await sut.ListInventory(request, productId);
+        var result = await sut.ListProductSuppliers(request, productId);
 
         result.Result.Should().NotBeNull();
         result.Result.Should().BeOfType<OkObjectResult>();

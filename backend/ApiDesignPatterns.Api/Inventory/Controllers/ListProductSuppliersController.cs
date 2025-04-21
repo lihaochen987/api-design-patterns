@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Inventory.Controllers;
 
-[Route("{productId:decimal}/inventory")]
+[Route("{productId:decimal}/suppliers")]
 [ApiController]
 public class ListProductSuppliersController(
     IAsyncQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
@@ -25,7 +25,7 @@ public class ListProductSuppliersController(
     [HttpGet]
     [SwaggerOperation(Summary = "List suppliers for a given product", Tags = ["Inventory"])]
     [ProducesResponseType(typeof(ListProductSuppliersResponse), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<ListProductSuppliersResponse>>> ListInventory(
+    public async Task<ActionResult<IEnumerable<ListProductSuppliersResponse>>> ListProductSuppliers(
         [FromQuery] ListProductSuppliersRequest request, decimal productId)
     {
         var inventoryResult = await listInventory.Handle(new ListInventoryQuery
@@ -37,10 +37,10 @@ public class ListProductSuppliersController(
             .Select(inventoryView => getSupplierView.Handle(new GetSupplierViewQuery { Id = inventoryView.SupplierId }))
             .ToArray();
 
-        await Task.WhenAll(supplierTasks);
+        var resolvedSupplierTasks = (await Task.WhenAll(supplierTasks)).ToList();
 
         var result =
-            getSuppliersFromInventory.Handle(new GetSuppliersFromInventoryQuery { SupplierTasks = supplierTasks });
+            getSuppliersFromInventory.Handle(new GetSuppliersFromInventoryQuery { SupplierTasks = resolvedSupplierTasks });
 
         ListProductSuppliersResponse response = new()
         {

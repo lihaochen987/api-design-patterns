@@ -8,5 +8,5 @@ namespace backend.Inventory.ApplicationLayer.Queries.GetSuppliersFromInventory;
 
 public class GetSuppliersFromInventoryQuery : IQuery<List<SupplierView?>>
 {
-    public required Task<SupplierView?>[] SupplierTasks { get; set; }
+    public required List<SupplierView?> SupplierTasks { get; set; }
 }
