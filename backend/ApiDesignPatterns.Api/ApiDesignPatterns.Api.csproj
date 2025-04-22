@@ -538,6 +538,9 @@
     <Compile Update="Inventory\Tests\ApplicationLayerTests\GetSuppliersByIdsHandlerTestBase.cs">
       <DependentUpon>GetSuppliersByIdsHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Inventory\Tests\ApplicationLayerTests\GetProductByIdsHandlerTestBase.cs">
+      <DependentUpon>GetProductByIdsHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
