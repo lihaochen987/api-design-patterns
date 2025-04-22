@@ -8,7 +8,7 @@ using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
-using backend.Inventory.ApplicationLayer.Queries.GetProductsFromInventory;
+using backend.Inventory.ApplicationLayer.Queries.GetProductsByIds;
 using backend.Inventory.ApplicationLayer.Queries.GetSuppliersFromInventory;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
@@ -16,8 +16,7 @@ using backend.Inventory.DomainModels;
 using backend.Inventory.InfrastructureLayer.Database.Inventory;
 using backend.Inventory.InfrastructureLayer.Database.InventoryView;
 using backend.Inventory.Services;
-using backend.Product.ApplicationLayer.Queries.GetProductResponse;
-using backend.Product.Controllers.Product;
+using backend.Product.DomainModels.Views;
 using backend.Product.InfrastructureLayer.Database.ProductView;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
@@ -326,19 +325,22 @@ public class InventoryControllerActivator : BaseControllerActivator
             });
             var mapper = mapperConfig.CreateMapper();
 
-            var dbConnection = CreateDbConnection();
-            TrackDisposable(context, dbConnection);
+            var inventoryConnection = CreateDbConnection();
+            TrackDisposable(context, inventoryConnection);
             var inventoryViewRepository = new InventoryViewRepository(
-                dbConnection,
+                inventoryConnection,
                 _inventorySqlFilterBuilder,
                 _inventoryViewPaginateService);
-            var productViewRepository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
+
+            var productConnection = CreateDbConnection();
+            TrackDisposable(context, productConnection);
+            var productViewRepository = new ProductViewRepository(productConnection, _productSqlFilterBuilder);
 
             // ListInventory handler
             var listInventoryHandler = new QueryDecoratorBuilder<ListInventoryQuery, PagedInventory>(
                     new ListInventoryHandler(inventoryViewRepository),
                     _loggerFactory,
-                    dbConnection)
+                    inventoryConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -348,27 +350,23 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            // GetProductResponse handler
-            var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
-                    new GetProductResponseHandler(productViewRepository, mapper),
+            // GetProductsByIds handler
+            var getProductsByIdsHandler = new QueryDecoratorBuilder<GetProductsByIdsQuery, List<ProductView>>(
+                    new GetProductsByIdsHandler(productViewRepository),
                     _loggerFactory,
-                    dbConnection)
+                    productConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
-                .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithHandshaking()
                 .WithBulkhead(BulkheadPolicies.ProductRead)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
                 .Build();
 
-            // GetProductsFromInventory handler
-            var getProductsFromInventory = new GetProductsFromInventoryHandler();
-
             return new ListSupplierProductsController(
                 listInventoryHandler,
-                getProductResponseHandler,
-                getProductsFromInventory,
+                getProductsByIdsHandler,
                 mapper);
         }
 

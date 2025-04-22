@@ -59,4 +59,10 @@ public class ProductViewRepositoryFake(
 
         return Task.FromResult(new PagedProducts(paginatedProducts, nextPageToken, Count));
     }
+
+    public Task<List<ProductView>> GetProductsByIds(List<long> productIds)
+    {
+        var productViews = this.Where(x => productIds.Contains(x.Id)).ToList();
+        return Task.FromResult(productViews);
+    }
 }

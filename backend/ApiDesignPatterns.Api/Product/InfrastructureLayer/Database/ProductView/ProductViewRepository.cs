@@ -1,5 +1,6 @@
 using System.Data;
 using System.Text;
+using backend.Inventory.ApplicationLayer.Queries.GetProductsByIds;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Shared;
@@ -28,6 +29,20 @@ public class ProductViewRepository(
             );
 
         return product.SingleOrDefault();
+    }
+
+    public async Task<List<DomainModels.Views.ProductView>> GetProductsByIds(List<long> productIds)
+    {
+        if (productIds.Count == 0)
+        {
+            return [];
+        }
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@ProductIds", productIds);
+        var results = await dbConnection.QueryAsync<DomainModels.Views.ProductView>(ProductViewQueries.GetProductsByIds,
+            new { ProductIds = productIds });
+        return results.ToList();
     }
 
     // Todo: Refactor this

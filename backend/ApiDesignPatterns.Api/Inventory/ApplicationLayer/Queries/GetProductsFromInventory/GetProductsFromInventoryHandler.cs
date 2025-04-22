@@ -7,13 +7,13 @@ using backend.Supplier.DomainModels;
 
 namespace backend.Inventory.ApplicationLayer.Queries.GetProductsFromInventory;
 
-public class GetProductsFromInventoryHandler : ISyncQueryHandler<GetProductsFromInventoryQuery, List<GetProductResponse?>>
-{
-    public List<GetProductResponse?> Handle(GetProductsFromInventoryQuery query)
-    {
-        var result = query.Products
-            .Where(supplier => supplier != null)
-            .ToList();
-        return result;
-    }
-}
+// public class GetProductsFromInventoryHandler : ISyncQueryHandler<GetProductsFromInventoryQuery, List<GetProductResponse?>>
+// {
+//     public List<GetProductResponse?> Handle(GetProductsFromInventoryQuery query)
+//     {
+//         var result = query.Products
+//             .Where(supplier => supplier != null)
+//             .ToList();
+//         return result;
+//     }
+// }

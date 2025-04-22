@@ -5,10 +5,12 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Inventory.ApplicationLayer.Queries.GetProductsByIds;
 using backend.Inventory.ApplicationLayer.Queries.GetProductsFromInventory;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.Controllers.Product;
+using backend.Product.DomainModels.Views;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -19,8 +21,7 @@ namespace backend.Inventory.Controllers;
 [ApiController]
 public class ListSupplierProductsController(
     IAsyncQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
-    IAsyncQueryHandler<GetProductResponseQuery, GetProductResponse?> getProductResponse,
-    ISyncQueryHandler<GetProductsFromInventoryQuery, List<GetProductResponse?>> getProductsFromInventory,
+    IAsyncQueryHandler<GetProductsByIdsQuery, List<ProductView>> getProductsByIds,
     IMapper mapper)
     : ControllerBase
 {
@@ -35,19 +36,12 @@ public class ListSupplierProductsController(
             Filter = $"SupplierId == {supplierId}", PageToken = request.PageToken, MaxPageSize = request.MaxPageSize
         });
 
-        var productTasks = inventoryResult.Inventory
-            .Select(inventoryView =>
-                getProductResponse.Handle(new GetProductResponseQuery { Id = inventoryView.ProductId }))
-            .ToArray();
-
-        var products = (await Task.WhenAll(productTasks)).ToList();
-
-        var result =
-            getProductsFromInventory.Handle(new GetProductsFromInventoryQuery { Products = products });
+        var productIds = inventoryResult.Inventory.Select(x => x.ProductId).ToList();
+        var products = getProductsByIds.Handle(new GetProductsByIdsQuery { ProductIds = productIds });
 
         ListSupplierProductsResponse response = new()
         {
-            Results = mapper.Map<List<GetProductResponse>>(result), NextPageToken = inventoryResult.NextPageToken
+            Results = mapper.Map<List<GetProductResponse>>(products), NextPageToken = inventoryResult.NextPageToken
         };
 
         return Ok(response);
