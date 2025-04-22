@@ -11,4 +11,6 @@ public interface ISupplierViewRepository
         string? pageToken,
         string? filter,
         int maxPageSize);
+
+    Task<List<DomainModels.SupplierView>> GetSuppliersByIds(List<long> supplierIds);
 }

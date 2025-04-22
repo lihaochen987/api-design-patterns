@@ -529,9 +529,6 @@
     <Compile Update="Inventory\Controllers\ListProductSuppliersResponse.cs">
       <DependentUpon>ListProductSuppliersController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Inventory\Tests\ControllerTests\ListProductSuppliersControllerTestBase.cs">
-      <DependentUpon>ListProductSuppliersControllerTests.cs</DependentUpon>
-    </Compile>
     <Compile Update="Inventory\Controllers\ListSupplierProductsRequest.cs">
       <DependentUpon>ListSupplierProductsController.cs</DependentUpon>
     </Compile>

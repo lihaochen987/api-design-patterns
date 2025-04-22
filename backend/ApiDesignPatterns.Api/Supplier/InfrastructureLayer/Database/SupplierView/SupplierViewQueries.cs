@@ -34,4 +34,19 @@ public static class SupplierViewQueries
                                             FROM suppliers_view
                                             WHERE 1=1
                                             """;
+
+    public const string GetSuppliersByIds = """
+                                            SELECT
+                                                supplier_id AS Id,
+                                                supplier_fullname AS FullName,
+                                                supplier_email AS Email,
+                                                supplier_created_at AS CreatedAt,
+                                                supplier_address_street AS Street,
+                                                supplier_address_city AS City,
+                                                supplier_address_postal_code AS PostalCode,
+                                                supplier_address_country AS Country,
+                                                supplier_phone_number AS PhoneNumber
+                                            FROM suppliers_view
+                                            WHERE supplier_id = ANY(@SupplierIds);
+                                            """;
 }

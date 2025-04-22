@@ -9,7 +9,7 @@ using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
 using backend.Inventory.ApplicationLayer.Queries.GetProductsByIds;
-using backend.Inventory.ApplicationLayer.Queries.GetSuppliersFromInventory;
+using backend.Inventory.ApplicationLayer.Queries.GetSuppliersByIds;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
@@ -25,7 +25,6 @@ using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
-using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 using backend.Supplier.Services;
@@ -292,9 +291,9 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            // GetSupplierView handler
-            var getSupplierViewHandler = new QueryDecoratorBuilder<GetSupplierViewQuery, SupplierView?>(
-                    new GetSupplierViewHandler(supplierViewRepository),
+            // GetSuppliersByIds handler
+            var getSuppliersByIds = new QueryDecoratorBuilder<GetSuppliersByIdsQuery, List<SupplierView>>(
+                    new GetSuppliersByIdsHandler(supplierViewRepository),
                     _loggerFactory,
                     dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -306,13 +305,9 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            // GetSuppliersFromInventory handler
-            var getSuppliersFromInventory = new GetSuppliersFromInventoryHandler();
-
             return new ListProductSuppliersController(
                 listInventoryHandler,
-                getSupplierViewHandler,
-                getSuppliersFromInventory,
+                getSuppliersByIds,
                 mapper);
         }
 
@@ -325,18 +320,19 @@ public class InventoryControllerActivator : BaseControllerActivator
             });
             var mapper = mapperConfig.CreateMapper();
 
-            var inventoryConnection = CreateDbConnection();
-            TrackDisposable(context, inventoryConnection);
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
             var inventoryViewRepository = new InventoryViewRepository(
-                inventoryConnection,
+                dbConnection,
                 _inventorySqlFilterBuilder,
                 _inventoryViewPaginateService);
+            var productViewRepository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
 
             // ListInventory handler
             var listInventoryHandler = new QueryDecoratorBuilder<ListInventoryQuery, PagedInventory>(
                     new ListInventoryHandler(inventoryViewRepository),
                     _loggerFactory,
-                    inventoryConnection)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -346,14 +342,11 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            var productConnection = CreateDbConnection();
-            TrackDisposable(context, productConnection);
-            var productViewRepository = new ProductViewRepository(productConnection, _productSqlFilterBuilder);
             // GetProductsByIds handler
             var getProductsByIdsHandler = new QueryDecoratorBuilder<GetProductsByIdsQuery, List<ProductView>>(
                     new GetProductsByIdsHandler(productViewRepository),
                     _loggerFactory,
-                    productConnection)
+                    dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithHandshaking()

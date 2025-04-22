@@ -3,6 +3,7 @@
 
 using System.Data;
 using System.Text;
+using backend.Product.InfrastructureLayer.Database.ProductView;
 using backend.Shared;
 using Dapper;
 using SqlFilterBuilder = backend.Shared.SqlFilterBuilder;
@@ -17,8 +18,23 @@ public class SupplierViewRepository(
 {
     public async Task<DomainModels.SupplierView?> GetSupplierView(long id)
     {
-        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.SupplierView>(SupplierViewQueries.GetSupplierView,
+        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.SupplierView>(
+            SupplierViewQueries.GetSupplierView,
             new { Id = id });
+    }
+
+    public async Task<List<DomainModels.SupplierView>> GetSuppliersByIds(List<long> supplierIds)
+    {
+        if (supplierIds.Count == 0)
+        {
+            return [];
+        }
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@SupplierIds", supplierIds);
+        var results = await dbConnection.QueryAsync<DomainModels.SupplierView>(SupplierViewQueries.GetSuppliersByIds,
+            new { SupplierIds = supplierIds });
+        return results.ToList();
     }
 
     public async Task<(List<DomainModels.SupplierView>, string?)> ListSuppliersAsync(

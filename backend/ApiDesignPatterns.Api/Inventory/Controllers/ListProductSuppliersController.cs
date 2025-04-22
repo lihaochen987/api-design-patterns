@@ -2,10 +2,9 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Inventory.ApplicationLayer.Queries.GetSuppliersFromInventory;
+using backend.Inventory.ApplicationLayer.Queries.GetSuppliersByIds;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Shared.QueryHandler;
-using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +16,7 @@ namespace backend.Inventory.Controllers;
 [ApiController]
 public class ListProductSuppliersController(
     IAsyncQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
-    IAsyncQueryHandler<GetSupplierViewQuery, SupplierView?> getSupplierView,
-    ISyncQueryHandler<GetSuppliersFromInventoryQuery, List<SupplierView?>> getSuppliersFromInventory,
+    IAsyncQueryHandler<GetSuppliersByIdsQuery, List<SupplierView>> getSuppliersByIds,
     IMapper mapper)
     : ControllerBase
 {
@@ -32,19 +30,13 @@ public class ListProductSuppliersController(
         {
             Filter = $"ProductId == {productId}", PageToken = request.PageToken, MaxPageSize = request.MaxPageSize
         });
-
-        Task<SupplierView?>[] supplierTasks = inventoryResult.Inventory
-            .Select(inventoryView => getSupplierView.Handle(new GetSupplierViewQuery { Id = inventoryView.SupplierId }))
-            .ToArray();
-
-        var suppliers = (await Task.WhenAll(supplierTasks)).ToList();
-
-        var result =
-            getSuppliersFromInventory.Handle(new GetSuppliersFromInventoryQuery { Suppliers = suppliers });
+        var supplierIds = inventoryResult.Inventory.Select(x => x.SupplierId).ToList();
+        var suppliers = await getSuppliersByIds.Handle(new GetSuppliersByIdsQuery { SupplierIds = supplierIds });
 
         ListProductSuppliersResponse response = new()
         {
-            Results = mapper.Map<List<GetSupplierResponse>>(result), NextPageToken = inventoryResult.NextPageToken
+            Results = mapper.Map<List<GetSupplierResponse>>(suppliers),
+            NextPageToken = inventoryResult.NextPageToken
         };
 
         return Ok(response);
