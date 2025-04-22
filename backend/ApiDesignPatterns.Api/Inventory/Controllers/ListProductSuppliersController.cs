@@ -37,10 +37,10 @@ public class ListProductSuppliersController(
             .Select(inventoryView => getSupplierView.Handle(new GetSupplierViewQuery { Id = inventoryView.SupplierId }))
             .ToArray();
 
-        var resolvedSupplierTasks = (await Task.WhenAll(supplierTasks)).ToList();
+        var suppliers = (await Task.WhenAll(supplierTasks)).ToList();
 
         var result =
-            getSuppliersFromInventory.Handle(new GetSuppliersFromInventoryQuery { SupplierTasks = resolvedSupplierTasks });
+            getSuppliersFromInventory.Handle(new GetSuppliersFromInventoryQuery { Suppliers = suppliers });
 
         ListProductSuppliersResponse response = new()
         {

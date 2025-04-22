@@ -40,10 +40,10 @@ public class ListSupplierProductsController(
                 getProductResponse.Handle(new GetProductResponseQuery { Id = inventoryView.ProductId }))
             .ToArray();
 
-        var resolvedProductTasks = (await Task.WhenAll(productTasks)).ToList();
+        var products = (await Task.WhenAll(productTasks)).ToList();
 
         var result =
-            getProductsFromInventory.Handle(new GetProductsFromInventoryQuery { Products = resolvedProductTasks });
+            getProductsFromInventory.Handle(new GetProductsFromInventoryQuery { Products = products });
 
         ListSupplierProductsResponse response = new()
         {
