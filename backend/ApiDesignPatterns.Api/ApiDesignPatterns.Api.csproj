@@ -535,6 +535,9 @@
     <Compile Update="Inventory\Controllers\ListSupplierProductsResponse.cs">
       <DependentUpon>ListSupplierProductsController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Inventory\Tests\ApplicationLayerTests\GetSuppliersByIdsHandlerTestBase.cs">
+      <DependentUpon>GetSuppliersByIdsHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
