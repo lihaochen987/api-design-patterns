@@ -6,9 +6,7 @@
 
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Queries.GetProductsByIds;
-using backend.Inventory.ApplicationLayer.Queries.GetProductsFromInventory;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
-using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Views;
 using backend.Shared.QueryHandler;
@@ -37,7 +35,7 @@ public class ListSupplierProductsController(
         });
 
         var productIds = inventoryResult.Inventory.Select(x => x.ProductId).ToList();
-        var products = getProductsByIds.Handle(new GetProductsByIdsQuery { ProductIds = productIds });
+        var products = await getProductsByIds.Handle(new GetProductsByIdsQuery { ProductIds = productIds });
 
         ListSupplierProductsResponse response = new()
         {

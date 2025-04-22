@@ -332,10 +332,6 @@ public class InventoryControllerActivator : BaseControllerActivator
                 _inventorySqlFilterBuilder,
                 _inventoryViewPaginateService);
 
-            var productConnection = CreateDbConnection();
-            TrackDisposable(context, productConnection);
-            var productViewRepository = new ProductViewRepository(productConnection, _productSqlFilterBuilder);
-
             // ListInventory handler
             var listInventoryHandler = new QueryDecoratorBuilder<ListInventoryQuery, PagedInventory>(
                     new ListInventoryHandler(inventoryViewRepository),
@@ -350,6 +346,9 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
+            var productConnection = CreateDbConnection();
+            TrackDisposable(context, productConnection);
+            var productViewRepository = new ProductViewRepository(productConnection, _productSqlFilterBuilder);
             // GetProductsByIds handler
             var getProductsByIdsHandler = new QueryDecoratorBuilder<GetProductsByIdsQuery, List<ProductView>>(
                     new GetProductsByIdsHandler(productViewRepository),
