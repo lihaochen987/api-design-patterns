@@ -1,9 +1,7 @@
 using System.Data;
 using System.Text;
-using backend.Inventory.ApplicationLayer.Queries.GetProductsByIds;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.DomainModels.ValueObjects;
-using backend.Shared;
 using Dapper;
 using SqlFilterBuilder = backend.Shared.SqlFilterBuilder;
 

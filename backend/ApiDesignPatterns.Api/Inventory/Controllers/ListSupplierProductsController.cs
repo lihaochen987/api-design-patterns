@@ -5,10 +5,9 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
-using backend.Inventory.ApplicationLayer.Queries.GetProductsByIds;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
+using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
 using backend.Product.Controllers.Product;
-using backend.Product.DomainModels.Views;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -19,7 +18,7 @@ namespace backend.Inventory.Controllers;
 [ApiController]
 public class ListSupplierProductsController(
     IAsyncQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
-    IAsyncQueryHandler<GetProductsByIdsQuery, List<ProductView>> getProductsByIds,
+    IAsyncQueryHandler<BatchGetProductsQuery, List<GetProductResponse>> batchGetProducts,
     IMapper mapper)
     : ControllerBase
 {
@@ -35,7 +34,7 @@ public class ListSupplierProductsController(
         });
 
         var productIds = inventoryResult.Inventory.Select(x => x.ProductId).ToList();
-        var products = await getProductsByIds.Handle(new GetProductsByIdsQuery { ProductIds = productIds });
+        var products = await batchGetProducts.Handle(new BatchGetProductsQuery { ProductIds = productIds });
 
         ListSupplierProductsResponse response = new()
         {

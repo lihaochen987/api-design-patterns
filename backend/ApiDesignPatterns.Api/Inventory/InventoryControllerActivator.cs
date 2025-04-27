@@ -8,7 +8,6 @@ using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
-using backend.Inventory.ApplicationLayer.Queries.GetProductsByIds;
 using backend.Inventory.ApplicationLayer.Queries.GetSuppliersByIds;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
@@ -16,7 +15,8 @@ using backend.Inventory.DomainModels;
 using backend.Inventory.InfrastructureLayer.Database.Inventory;
 using backend.Inventory.InfrastructureLayer.Database.InventoryView;
 using backend.Inventory.Services;
-using backend.Product.DomainModels.Views;
+using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
+using backend.Product.Controllers.Product;
 using backend.Product.InfrastructureLayer.Database.ProductView;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
@@ -342,14 +342,14 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            // GetProductsByIds handler
-            var getProductsByIdsHandler = new QueryDecoratorBuilder<GetProductsByIdsQuery, List<ProductView>>(
-                    new GetProductsByIdsHandler(productViewRepository),
+            // BatchGetProducts handler
+            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, List<GetProductResponse>>(
+                    new BatchGetProductsHandler(productViewRepository, mapper),
                     _loggerFactory,
                     dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
-                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
                 .WithBulkhead(BulkheadPolicies.ProductRead)
                 .WithLogging()
                 .WithValidation()
@@ -358,7 +358,7 @@ public class InventoryControllerActivator : BaseControllerActivator
 
             return new ListSupplierProductsController(
                 listInventoryHandler,
-                getProductsByIdsHandler,
+                batchGetProductsHandler,
                 mapper);
         }
 
