@@ -31,7 +31,7 @@ public class UpdateInventoryHandlerTests : UpdateInventoryHandlerTestBase
         await sut.Handle(new UpdateInventoryCommand { Inventory = inventory, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().Quantity.Should().Be(150m);
+        Repository.First().Quantity.Value.Should().Be(150m);
         Repository.First().RestockDate.Should().Be(restockDate);
     }
 
@@ -55,7 +55,7 @@ public class UpdateInventoryHandlerTests : UpdateInventoryHandlerTestBase
         await sut.Handle(new UpdateInventoryCommand { Inventory = inventory, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().Quantity.Should().Be(150m);
+        Repository.First().Quantity.Value.Should().Be(150m);
         Repository.First().RestockDate.Should().Be(restockDate);
     }
 
@@ -95,7 +95,7 @@ public class UpdateInventoryHandlerTests : UpdateInventoryHandlerTestBase
         await sut.Handle(new UpdateInventoryCommand { Inventory = inventory, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().Quantity.Should().Be(150m);
+        Repository.First().Quantity.Value.Should().Be(150m);
         Repository.First().RestockDate.Should().Be(restockDate);
     }
 }

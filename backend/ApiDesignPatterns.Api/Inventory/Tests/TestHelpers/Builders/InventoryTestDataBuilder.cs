@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
+using backend.Inventory.DomainModels.ValueObjects;
 
 namespace backend.Inventory.Tests.TestHelpers.Builders;
 
@@ -10,7 +11,7 @@ public class InventoryTestDataBuilder
     private long _id;
     private long _supplierId;
     private long _productId;
-    private decimal _quantity;
+    private Quantity _quantity;
     private DateTimeOffset? _restockDate;
 
     public InventoryTestDataBuilder()
@@ -20,7 +21,7 @@ public class InventoryTestDataBuilder
         _id = fixture.Create<long>();
         _supplierId = fixture.Create<long>();
         _productId = fixture.Create<long>();
-        _quantity = fixture.Create<decimal>();
+        _quantity = fixture.Create<Quantity>();
         _restockDate = fixture.Create<DateTimeOffset?>();
     }
 
@@ -42,7 +43,7 @@ public class InventoryTestDataBuilder
         return this;
     }
 
-    public InventoryTestDataBuilder WithQuantity(decimal quantity)
+    public InventoryTestDataBuilder WithQuantity(Quantity quantity)
     {
         _quantity = quantity;
         return this;

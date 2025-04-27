@@ -18,7 +18,13 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
     public async Task CreateInventory_ReturnsCreatedResponse_WhenInventoryCreatedSuccessfully()
     {
         var inventory = new InventoryTestDataBuilder().Build();
-        var request = Mapper.Map<CreateInventoryRequest>(inventory);
+        var request = new CreateInventoryRequest
+        {
+            SupplierId = inventory.SupplierId,
+            ProductId = inventory.ProductId,
+            Quantity = inventory.Quantity.Value,
+            RestockDate = inventory.RestockDate
+        };
         CreateInventoryController sut = GetCreateInventoryController();
 
         var result = await sut.CreateInventory(request);
@@ -33,7 +39,13 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
     public async Task CreateInventory_ReturnsConflict_WhenInventoryAlreadyExists()
     {
         var existingInventory = new InventoryTestDataBuilder().Build();
-        var request = Mapper.Map<CreateInventoryRequest>(existingInventory);
+        var request = new CreateInventoryRequest
+        {
+            SupplierId = existingInventory.SupplierId,
+            ProductId = existingInventory.ProductId,
+            Quantity = existingInventory.Quantity.Value,
+            RestockDate = existingInventory.RestockDate
+        };
         Mock.Get(GetInventoryByProductAndSupplier)
             .Setup(h => h.Handle(It.Is<GetInventoryByProductAndSupplierQuery>(q =>
                 q.ProductId == request.ProductId && q.SupplierId == request.SupplierId)))
@@ -50,7 +62,13 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
     public async Task CreateInventory_HandlesCommandFailure_WhenCreateInventoryFails()
     {
         var inventory = new InventoryTestDataBuilder().Build();
-        var request = Mapper.Map<CreateInventoryRequest>(inventory);
+        var request = new CreateInventoryRequest
+        {
+            SupplierId = inventory.SupplierId,
+            ProductId = inventory.ProductId,
+            Quantity = inventory.Quantity.Value,
+            RestockDate = inventory.RestockDate
+        };
         Mock
             .Get(CreateInventory)
             .Setup(x => x.Handle(It.IsAny<CreateInventoryCommand>()))

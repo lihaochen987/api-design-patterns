@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Inventory.Controllers;
+using backend.Inventory.DomainModels.ValueObjects;
 using backend.Inventory.InfrastructureLayer.Database.Inventory;
 using backend.Shared.CommandHandler;
 
@@ -11,22 +12,20 @@ public class UpdateInventoryHandler(IInventoryRepository repository) : ICommandH
 {
     public async Task Handle(UpdateInventoryCommand command)
     {
-        (decimal quantity, DateTimeOffset? restockDate) = GetUpdatedInventoryValues(command.Request, command.Inventory);
+        (Quantity quantity, DateTimeOffset? restockDate) =
+            GetUpdatedInventoryValues(command.Request, command.Inventory);
         var inventory = command.Inventory with { Quantity = quantity, RestockDate = restockDate };
         await repository.UpdateInventoryAsync(inventory);
     }
 
     private static (
-        decimal quantity,
+        Quantity quantity,
         DateTimeOffset? restockDate)
         GetUpdatedInventoryValues(
             UpdateInventoryRequest request,
             DomainModels.Inventory inventory)
     {
-        decimal quantity = request.FieldMask.Contains("quantity", StringComparer.OrdinalIgnoreCase)
-                           && request.Quantity != null
-            ? request.Quantity ?? inventory.Quantity
-            : inventory.Quantity;
+        Quantity quantity = GetUpdatedQuantity(request, inventory.Quantity.Value);
 
         DateTimeOffset? restockDate =
             request.FieldMask.Contains("restockdate", StringComparer.OrdinalIgnoreCase) && request.RestockDate != null
@@ -34,5 +33,17 @@ public class UpdateInventoryHandler(IInventoryRepository repository) : ICommandH
                 : inventory.RestockDate;
 
         return (quantity, restockDate);
+    }
+
+    private static Quantity GetUpdatedQuantity(
+        UpdateInventoryRequest request,
+        decimal currentQuantity)
+    {
+        decimal value = request.FieldMask.Contains("quantity", StringComparer.OrdinalIgnoreCase)
+                        && request.Quantity != null
+            ? request.Quantity ?? currentQuantity
+            : currentQuantity;
+
+        return new Quantity(value);
     }
 }
