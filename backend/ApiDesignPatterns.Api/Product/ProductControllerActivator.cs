@@ -8,6 +8,7 @@ using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
+using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
@@ -197,7 +198,8 @@ public class ProductControllerActivator : BaseControllerActivator
                     .WithBulkhead(BulkheadPolicies.RedisRead)
                     .WithLogging()
                     .Build();
-            services[typeof(IAsyncQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>)] = getListProductsFromCacheHandler;
+            services[typeof(IAsyncQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>)] =
+                getListProductsFromCacheHandler;
 
             // persistListProductsToCacheHandler handler
             var persistListProductsToCacheHandler = new CommandDecoratorBuilder<PersistListProductsToCacheCommand>(
@@ -211,7 +213,8 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // MapListProductsResponse handler
             var mapListProductsResponseHandler = new MapListProductsResponseHandler(_mapper);
-            services[typeof(ISyncQueryHandler<MapListProductsResponseQuery, ListProductsResponse>)] = mapListProductsResponseHandler;
+            services[typeof(ISyncQueryHandler<MapListProductsResponseQuery, ListProductsResponse>)] =
+                mapListProductsResponseHandler;
 
             // UpdateListProductsStaleness handler
             var updateListProductStalenessHandler = new CommandDecoratorBuilder<UpdateListProductStalenessCommand>(
@@ -337,6 +340,30 @@ public class ProductControllerActivator : BaseControllerActivator
             return new GetProductController(
                 getProductResponseHandler,
                 _fieldMaskConverterFactory);
+        }
+
+        if (type == typeof(BatchGetProductsController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
+
+            // BatchGetProducts handler
+            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, List<GetProductResponse>>(
+                    new BatchGetProductsHandler(repository, _mapper),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.ProductRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            return new BatchGetProductsController(
+                batchGetProductsHandler);
         }
 
         return null;
