@@ -553,6 +553,27 @@
     <Compile Update="Product\Controllers\Product\BatchGetProductsResponse.cs">
       <DependentUpon>BatchGetProductsController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\DomainModels\ValueObjects\IngredientsTypeHandler.cs">
+      <DependentUpon>Ingredients.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\DomainModels\ValueObjects\NameTypeHandler.cs">
+      <DependentUpon>Name.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\DomainModels\ValueObjects\SafetyWarningsTypeHandler.cs">
+      <DependentUpon>SafetyWarnings.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\DomainModels\ValueObjects\StorageInstructionsTypeHandler.cs">
+      <DependentUpon>StorageInstructions.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\DomainModels\ValueObjects\UsageInstructionsTypeHandler.cs">
+      <DependentUpon>UsageInstructions.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\DomainModels\ValueObjects\WeightTypeHandler.cs">
+      <DependentUpon>Weight.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\DomainModels\ValueObjects\QuantityTypeHandler.cs">
+      <DependentUpon>Quantity.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
