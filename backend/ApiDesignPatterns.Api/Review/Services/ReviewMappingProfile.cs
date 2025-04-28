@@ -4,6 +4,7 @@
 using AutoMapper;
 using backend.Review.Controllers;
 using backend.Review.DomainModels;
+using backend.Review.DomainModels.ValueObjects;
 
 namespace backend.Review.Services;
 
@@ -20,5 +21,8 @@ public class ReviewMappingProfile : Profile
 
         CreateMap<DomainModels.Review, CreateReviewRequest>();
         CreateMap<DomainModels.Review, ReplaceReviewRequest>();
+
+        CreateMap<Rating, decimal>().ConvertUsing(src => src.Value);
+        CreateMap<decimal, Rating>().ConvertUsing(src => new Rating(src));
     }
 }

@@ -20,7 +20,7 @@ public class ProductMappingProfile : Profile
         CreateMap<ProductPricingRequest, Pricing>().ReverseMap();
         CreateMap<DimensionsRequest, Dimensions>().ReverseMap();
 
-        CreateMap<Name, string>().ConvertUsing(src => src.Value ?? string.Empty);
+        CreateMap<Name, string>().ConvertUsing(src => src.Value);
         CreateMap<string, Name>().ConvertUsing(src => new Name(src));
 
         CreateMap<Weight, decimal>().ConvertUsing(src => src.Value);

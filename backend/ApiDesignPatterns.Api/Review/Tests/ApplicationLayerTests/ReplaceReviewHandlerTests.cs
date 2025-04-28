@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Review.ApplicationLayer.Commands.ReplaceReview;
+using backend.Review.DomainModels.ValueObjects;
 using backend.Review.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
 using FluentAssertions;
@@ -15,13 +16,13 @@ public class ReplaceReviewHandlerTests : ReplaceReviewHandlerTestBase
     public async Task Handle_UpdatesReview_WhenValidReviewIsProvided()
     {
         var existingReview = new ReviewTestDataBuilder()
-            .WithRating(3.5m)
-            .WithText("Original review")
+            .WithRating(new Rating(3.5m))
+            .WithText(new Text("Original review"))
             .Build();
         var replacementReview = new ReviewTestDataBuilder()
             .WithId(existingReview.Id)
-            .WithRating(4.0m)
-            .WithText("Updated review")
+            .WithRating(new Rating(4.0m))
+            .WithText(new Text("Updated review"))
             .Build();
         Repository.Add(existingReview);
         var command = new ReplaceReviewCommand { Review = replacementReview };

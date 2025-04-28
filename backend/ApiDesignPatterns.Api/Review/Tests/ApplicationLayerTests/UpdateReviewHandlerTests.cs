@@ -3,6 +3,7 @@
 
 using backend.Review.ApplicationLayer.Commands.UpdateReview;
 using backend.Review.Controllers;
+using backend.Review.DomainModels.ValueObjects;
 using backend.Review.Tests.TestHelpers.Builders;
 using backend.Shared.CommandHandler;
 using FluentAssertions;
@@ -18,8 +19,8 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
         DomainModels.Review review = new ReviewTestDataBuilder()
             .WithId(3)
             .WithProductId(42)
-            .WithRating(3.5m)
-            .WithText("Original review text")
+            .WithRating(new Rating(3.5m))
+            .WithText(new Text("Original review text"))
             .Build();
         Repository.Add(review);
         Repository.IsDirty = false;
@@ -36,8 +37,8 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
 
         Repository.IsDirty.Should().BeTrue();
         Repository.First().ProductId.Should().Be(55);
-        Repository.First().Rating.Should().Be(4.5m);
-        Repository.First().Text.Should().Be("Updated review text");
+        Repository.First().Rating.Value.Should().Be(4.5m);
+        Repository.First().Text.Value.Should().Be("Updated review text");
         Repository.First().UpdatedAt.Should().NotBeNull();
     }
 
@@ -47,8 +48,8 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
         DomainModels.Review review = new ReviewTestDataBuilder()
             .WithId(5)
             .WithProductId(42)
-            .WithRating(3.5m)
-            .WithText("Original review text")
+            .WithRating(new Rating(3.5m))
+            .WithText(new Text("Original review text"))
             .Build();
         Repository.Add(review);
         Repository.IsDirty = false;
@@ -62,8 +63,8 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
 
         Repository.IsDirty.Should().BeTrue();
         Repository.First().ProductId.Should().Be(42);
-        Repository.First().Rating.Should().Be(4.5m);
-        Repository.First().Text.Should().Be("Original review text");
+        Repository.First().Rating.Value.Should().Be(4.5m);
+        Repository.First().Text.Value.Should().Be("Original review text");
         Repository.First().UpdatedAt.Should().NotBeNull();
     }
 
@@ -73,8 +74,8 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
         DomainModels.Review review = new ReviewTestDataBuilder()
             .WithId(7)
             .WithProductId(42)
-            .WithRating(3.5m)
-            .WithText("Original review text")
+            .WithRating(new Rating(3.5m))
+            .WithText(new Text("Original review text"))
             .Build();
         Repository.Add(review);
         Repository.IsDirty = false;
@@ -88,8 +89,8 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
 
         Repository.IsDirty.Should().BeTrue();
         Repository.First().ProductId.Should().Be(42);
-        Repository.First().Rating.Should().Be(3.5m);
-        Repository.First().Text.Should().Be("Original review text");
+        Repository.First().Rating.Value.Should().Be(3.5m);
+        Repository.First().Text.Value.Should().Be("Original review text");
         Repository.First().UpdatedAt.Should().NotBeNull();
     }
 
@@ -98,8 +99,8 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
     {
         DomainModels.Review review = new ReviewTestDataBuilder()
             .WithId(9)
-            .WithRating(3.5m)
-            .WithText("Original review text")
+            .WithRating(new Rating(3.5m))
+            .WithText(new Text("Original review text"))
             .Build();
         Repository.Add(review);
         Repository.IsDirty = false;
@@ -112,8 +113,8 @@ public class UpdateReviewHandlerTests : UpdateReviewHandlerTestBase
         await sut.Handle(new UpdateReviewCommand { Review = review, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().Rating.Should().Be(4.5m);
-        Repository.First().Text.Should().Be("Updated review text");
+        Repository.First().Rating.Value.Should().Be(4.5m);
+        Repository.First().Text.Value.Should().Be("Updated review text");
         Repository.First().UpdatedAt.Should().NotBeNull();
     }
 }

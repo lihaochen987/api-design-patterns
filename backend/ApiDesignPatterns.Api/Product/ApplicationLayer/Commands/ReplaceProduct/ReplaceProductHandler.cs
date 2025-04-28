@@ -16,19 +16,12 @@ public class ReplaceProductHandler(
 {
     public async Task Handle(ReplaceProductCommand command)
     {
-        DomainModels.Product replacedProduct;
-        if (command.Request.Category == Category.PetFood.ToString())
+        DomainModels.Product replacedProduct = command.Request.Category switch
         {
-            replacedProduct = mapper.Map<PetFood>(command.Request);
-        }
-        else if (command.Request.Category == Category.GroomingAndHygiene.ToString())
-        {
-            replacedProduct = mapper.Map<GroomingAndHygiene>(command.Request);
-        }
-        else
-        {
-            replacedProduct = mapper.Map<DomainModels.Product>(command.Request);
-        }
+            nameof(Category.PetFood) => mapper.Map<PetFood>(command.Request),
+            nameof(Category.GroomingAndHygiene) => mapper.Map<GroomingAndHygiene>(command.Request),
+            _ => mapper.Map<DomainModels.Product>(command.Request)
+        };
 
         var replacedProductWithId = replacedProduct with { Id = command.ExistingProductId };
         await repository.UpdateProductAsync(replacedProductWithId);

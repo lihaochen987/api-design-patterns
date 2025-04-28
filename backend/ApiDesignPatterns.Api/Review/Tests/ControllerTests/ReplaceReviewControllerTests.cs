@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Review.ApplicationLayer.Commands.ReplaceReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Review.Controllers;
 using backend.Review.Tests.TestHelpers.Builders;

@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Review.Controllers;
+using backend.Review.DomainModels.ValueObjects;
 using backend.Review.InfrastructureLayer.Database.Review;
 using backend.Shared.CommandHandler;
 
@@ -11,7 +12,7 @@ public class UpdateReviewHandler(IReviewRepository repository) : ICommandHandler
 {
     public async Task Handle(UpdateReviewCommand command)
     {
-        (long productId, decimal rating, string text) = GetUpdatedReviewValues(command.Request, command.Review);
+        (long productId, Rating rating, Text text) = GetUpdatedReviewValues(command.Request, command.Review);
         var review = new DomainModels.Review
         {
             Id = command.Review.Id,
@@ -26,8 +27,8 @@ public class UpdateReviewHandler(IReviewRepository repository) : ICommandHandler
 
     private static (
         long productId,
-        decimal rating,
-        string text)
+        Rating rating,
+        Text text)
         GetUpdatedReviewValues(
             UpdateReviewRequest request,
             DomainModels.Review review)
@@ -36,14 +37,14 @@ public class UpdateReviewHandler(IReviewRepository repository) : ICommandHandler
             ? long.Parse(request.ProductId)
             : review.ProductId;
 
-        decimal rating = request.FieldMask.Contains("rating", StringComparer.OrdinalIgnoreCase)
+        Rating rating = request.FieldMask.Contains("rating", StringComparer.OrdinalIgnoreCase)
                          && request.Rating != null
-            ? request.Rating ?? review.Rating
+            ? new Rating(request.Rating.Value)
             : review.Rating;
 
-        string text = request.FieldMask.Contains("text", StringComparer.OrdinalIgnoreCase)
+        Text text = request.FieldMask.Contains("text", StringComparer.OrdinalIgnoreCase)
                       && !string.IsNullOrEmpty(request.Text)
-            ? request.Text
+            ? new Text(request.Text)
             : review.Text;
 
         return (productId, rating, text);
