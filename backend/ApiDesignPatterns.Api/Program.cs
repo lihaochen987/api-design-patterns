@@ -2,6 +2,7 @@ using System.Data;
 using System.Text.Json.Serialization;
 using backend;
 using backend.Inventory;
+using backend.Inventory.InfrastructureLayer.Mappers;
 using backend.Product;
 using backend.Product.InfrastructureLayer.Mappers;
 using backend.Review;
@@ -67,12 +68,16 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IDbConnection>(_ =>
     new NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Product
 SqlMapper.AddTypeHandler(new NameTypeHandler());
 SqlMapper.AddTypeHandler(new IngredientsTypeHandler());
 SqlMapper.AddTypeHandler(new StorageInstructionsTypeHandler());
 SqlMapper.AddTypeHandler(new WeightTypeHandler());
 SqlMapper.AddTypeHandler(new UsageInstructionsTypeHandler());
 SqlMapper.AddTypeHandler(new SafetyWarningsTypeHandler());
+
+// Review
+SqlMapper.AddTypeHandler(new QuantityTypeHandler());
 
 WebApplication app = builder.Build();
 

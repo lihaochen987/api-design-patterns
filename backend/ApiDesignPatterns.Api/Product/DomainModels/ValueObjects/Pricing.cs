@@ -1,11 +1,9 @@
-using backend.Shared;
-
 namespace backend.Product.DomainModels.ValueObjects;
 
 /// <summary>
 /// Represents product pricing information including base price, discount percentage, and tax rate.
 /// </summary>
-public class Pricing : ValueObject<Pricing>
+public record Pricing
 {
     /// <summary>
     /// Private constructor for JSON deserialization and object mapping.
@@ -70,10 +68,5 @@ public class Pricing : ValueObject<Pricing>
         }
 
         return taxRate is >= 0 and <= 100;
-    }
-
-    protected override IEnumerable<object> GetAttributesToIncludeInEqualityCheck()
-    {
-        return new List<object> { BasePrice, DiscountPercentage, TaxRate };
     }
 }

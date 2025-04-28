@@ -1,11 +1,9 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Shared;
-
 namespace backend.Product.DomainModels.ValueObjects;
 
-public class Ingredients : ValueObject<Ingredients>
+public record Ingredients
 {
     private Ingredients()
     {
@@ -32,10 +30,5 @@ public class Ingredients : ValueObject<Ingredients>
     public override string ToString()
     {
         return Value;
-    }
-
-    protected override IEnumerable<object> GetAttributesToIncludeInEqualityCheck()
-    {
-        return new List<object> { Value };
     }
 }

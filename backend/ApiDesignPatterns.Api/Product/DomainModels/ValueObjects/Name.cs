@@ -1,11 +1,9 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Shared;
-
 namespace backend.Product.DomainModels.ValueObjects;
 
-public class Name : ValueObject<Name>
+public record Name
 {
     private Name()
     {
@@ -32,10 +30,5 @@ public class Name : ValueObject<Name>
         }
 
         return value.All(c => char.IsLetter(c) || c == ' ' || c == '-' || c == '\'');
-    }
-
-    protected override IEnumerable<object> GetAttributesToIncludeInEqualityCheck()
-    {
-        return new List<object> { Value };
     }
 }

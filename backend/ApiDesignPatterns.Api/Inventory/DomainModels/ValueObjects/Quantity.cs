@@ -1,9 +1,11 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
+using System.Globalization;
+
 namespace backend.Inventory.DomainModels.ValueObjects;
 
-public record Quantity
+public class Quantity
 {
     private Quantity()
     {
@@ -24,5 +26,10 @@ public record Quantity
     private static bool IsValid(decimal value)
     {
         return value >= 0;
+    }
+
+    public override string ToString()
+    {
+        return Value.ToString(CultureInfo.InvariantCulture);
     }
 }

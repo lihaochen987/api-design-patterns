@@ -1,11 +1,9 @@
-using backend.Shared;
-
 namespace backend.Product.DomainModels.ValueObjects;
 
 /// <summary>
 /// Represents the physical dimensions of a product with validation rules for length, width, and height.
 /// </summary>
-public class Dimensions : ValueObject<Dimensions>
+public record Dimensions
 {
     /// <summary>
     /// Private constructor for JSON deserialization and object mapping.
@@ -75,10 +73,5 @@ public class Dimensions : ValueObject<Dimensions>
         }
 
         return length * width * height <= 110000;
-    }
-
-    protected override IEnumerable<object> GetAttributesToIncludeInEqualityCheck()
-    {
-        return new List<object> { Length, Width, Height };
     }
 }

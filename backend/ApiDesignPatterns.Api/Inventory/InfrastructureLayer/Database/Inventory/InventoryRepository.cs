@@ -11,7 +11,13 @@ public class InventoryRepository(IDbConnection dbConnection) : IInventoryReposit
     public async Task CreateInventoryAsync(DomainModels.Inventory inventory)
     {
         await dbConnection.ExecuteAsync(InventoryQueries.CreateInventory,
-            new { inventory.SupplierId, inventory.ProductId, inventory.Quantity, inventory.RestockDate });
+            new
+            {
+                inventory.SupplierId,
+                inventory.ProductId,
+                Quantity = inventory.Quantity.Value,
+                inventory.RestockDate
+            });
     }
 
     public async Task<DomainModels.Inventory?> GetInventoryByIdAsync(long id)
@@ -22,19 +28,20 @@ public class InventoryRepository(IDbConnection dbConnection) : IInventoryReposit
 
     public async Task<DomainModels.Inventory?> GetInventoryByProductAndSupplierAsync(long productId, long supplierId)
     {
-        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.Inventory>(InventoryQueries.GetInventoryByProductAndSupplier,
+        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.Inventory>(
+            InventoryQueries.GetInventoryByProductAndSupplier,
             new { ProductId = productId, SupplierId = supplierId });
     }
 
     public async Task UpdateInventoryAsync(DomainModels.Inventory inventory)
     {
         await dbConnection.ExecuteAsync(InventoryQueries.UpdateInventory,
-            new { inventory.Id, inventory.Quantity, inventory.RestockDate });
+            new { inventory.Id, Quantity = inventory.Quantity.Value, inventory.RestockDate });
     }
 
     public async Task DeleteInventoryAsync(long id)
     {
         await dbConnection.ExecuteAsync(InventoryQueries.DeleteInventory,
-            new { Id = id});
+            new { Id = id });
     }
 }

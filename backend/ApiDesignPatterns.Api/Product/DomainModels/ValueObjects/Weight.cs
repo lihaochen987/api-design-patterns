@@ -2,11 +2,10 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using System.Globalization;
-using backend.Shared;
 
 namespace backend.Product.DomainModels.ValueObjects;
 
-public class Weight : ValueObject<Weight>
+public record Weight
 {
     private Weight()
     {
@@ -36,10 +35,5 @@ public class Weight : ValueObject<Weight>
     public override string ToString()
     {
         return Value.ToString(CultureInfo.InvariantCulture);
-    }
-
-    protected override IEnumerable<object> GetAttributesToIncludeInEqualityCheck()
-    {
-        return new List<object> { Value };
     }
 }
