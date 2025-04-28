@@ -1,9 +1,9 @@
 using AutoFixture.Kernel;
 using backend.Product.DomainModels.ValueObjects;
 
-namespace backend.Product.Tests.TestHelpers.Builders;
+namespace backend.Product.Tests.TestHelpers.SpecimenBuilders;
 
-public class ProductPricingBuilder : ISpecimenBuilder
+public class ProductPricingSpecimenBuilder : ISpecimenBuilder
 {
     public object Create(object request, ISpecimenContext context)
     {

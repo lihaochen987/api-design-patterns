@@ -6,6 +6,7 @@ using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
 using backend.Product.Services;
 using backend.Product.Services.Mappers;
+using backend.Product.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Product.Tests.TestHelpers.Builders;
 
@@ -29,8 +30,8 @@ public class ProductViewTestDataBuilder
     {
         // Fixture configuration
         _fixture = new Fixture();
-        _fixture.Customizations.Add(new ProductPricingBuilder());
-        _fixture.Customizations.Add(new ProductDimensionsBuilder());
+        _fixture.Customizations.Add(new ProductPricingSpecimenBuilder());
+        _fixture.Customizations.Add(new DimensionsSpecimenBuilder());
 
         // Mapper configuration
         var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });

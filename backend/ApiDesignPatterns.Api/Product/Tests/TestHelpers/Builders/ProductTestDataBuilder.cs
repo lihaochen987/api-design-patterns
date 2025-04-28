@@ -2,6 +2,7 @@ using AutoFixture;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
+using backend.Product.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Product.Tests.TestHelpers.Builders;
 
@@ -27,8 +28,8 @@ public class ProductTestDataBuilder
     public ProductTestDataBuilder()
     {
         Fixture fixture = new();
-        fixture.Customizations.Add(new ProductPricingBuilder());
-        fixture.Customizations.Add(new ProductDimensionsBuilder());
+        fixture.Customizations.Add(new ProductPricingSpecimenBuilder());
+        fixture.Customizations.Add(new DimensionsSpecimenBuilder());
         fixture.Customizations.Add(new NameSpecimenBuilder());
 
         _id = fixture.Create<long>();

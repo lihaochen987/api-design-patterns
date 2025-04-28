@@ -1,12 +1,11 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-namespace backend.Product.Tests.TestHelpers.Builders;
-
-using AutoFixture.Kernel;
-using DomainModels.ValueObjects;
-using System;
 using System.Text;
+using AutoFixture.Kernel;
+using backend.Product.DomainModels.ValueObjects;
+
+namespace backend.Product.Tests.TestHelpers.SpecimenBuilders;
 
 public class NameSpecimenBuilder : ISpecimenBuilder
 {

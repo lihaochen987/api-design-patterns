@@ -1,6 +1,7 @@
 using AutoFixture;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
+using backend.Product.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Product.Tests.TestHelpers.Builders;
 
@@ -12,7 +13,7 @@ public class ProductPricingViewTestDataBuilder
     public ProductPricingViewTestDataBuilder()
     {
         Fixture fixture = new();
-        fixture.Customizations.Add(new ProductPricingBuilder());
+        fixture.Customizations.Add(new ProductPricingSpecimenBuilder());
 
         _id = fixture.Create<int>();
         _pricing = fixture.Create<Pricing>();
