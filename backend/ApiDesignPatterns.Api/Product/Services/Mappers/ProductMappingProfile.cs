@@ -23,6 +23,9 @@ public class ProductMappingProfile : Profile
         CreateMap<Name, string>().ConvertUsing(src => src.Value ?? string.Empty);
         CreateMap<string, Name>().ConvertUsing(src => new Name(src));
 
+        CreateMap<Weight, decimal>().ConvertUsing(src => src.Value);
+        CreateMap<decimal, Weight>().ConvertUsing(src => new Weight(src));
+
         // CreateProductController
         CreateMap<DomainModels.Product, CreateProductResponse>();
         CreateMap<PetFood, CreatePetFoodResponse>()

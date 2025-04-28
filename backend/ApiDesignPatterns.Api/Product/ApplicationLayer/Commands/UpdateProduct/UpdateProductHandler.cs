@@ -73,7 +73,7 @@ public class UpdateProductHandler(
         PetFood petFood)
     {
         (AgeGroup ageGroup, BreedSize breedSize, string ingredients, Dictionary<string, object> nutritionalInfo,
-                string storageInstructions, decimal weightKg) =
+                string storageInstructions, Weight weightKg) =
             GetUpdatedPetFoodValues(request, petFood);
 
         var updatedPetFood = petFood with
@@ -242,7 +242,7 @@ public class UpdateProductHandler(
         string ingredients,
         Dictionary<string, object> nutritionalInfo,
         string storageInstructions,
-        decimal weightKg)
+        Weight weightKg)
         GetUpdatedPetFoodValues(
             UpdateProductRequest request,
             PetFood petFood)
@@ -277,9 +277,9 @@ public class UpdateProductHandler(
                 ? request.StorageInstructions
                 : petFood.StorageInstructions;
 
-        decimal weight = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase)
-                        && request.WeightKg != null
-            ? request.WeightKg ?? petFood.WeightKg
+        Weight weight = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase)
+                        && request.WeightKg.HasValue
+            ? new Weight(request.WeightKg.Value)
             : petFood.WeightKg;
 
         return (ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions, weight);
