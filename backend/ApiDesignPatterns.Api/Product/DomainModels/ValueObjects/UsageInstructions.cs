@@ -26,4 +26,9 @@ public record UsageInstructions
     {
         return !string.IsNullOrWhiteSpace(value) && value.Length <= 500;
     }
+
+    public override string ToString()
+    {
+        return Value;
+    }
 }

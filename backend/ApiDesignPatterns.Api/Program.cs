@@ -3,10 +3,12 @@ using System.Text.Json.Serialization;
 using backend;
 using backend.Inventory;
 using backend.Product;
+using backend.Product.InfrastructureLayer.Mappers;
 using backend.Review;
 using backend.Shared;
 using backend.Shared.ControllerActivators;
 using backend.Supplier;
+using Dapper;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Npgsql;
 
@@ -64,6 +66,13 @@ builder.Services.AddSwaggerGen(c =>
 // Register Dapper stuff
 builder.Services.AddScoped<IDbConnection>(_ =>
     new NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+SqlMapper.AddTypeHandler(new NameTypeHandler());
+SqlMapper.AddTypeHandler(new IngredientsTypeHandler());
+SqlMapper.AddTypeHandler(new StorageInstructionsTypeHandler());
+SqlMapper.AddTypeHandler(new WeightTypeHandler());
+SqlMapper.AddTypeHandler(new UsageInstructionsTypeHandler());
+SqlMapper.AddTypeHandler(new SafetyWarningsTypeHandler());
 
 WebApplication app = builder.Build();
 

@@ -121,7 +121,7 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
             new
             {
                 product.Id,
-                product.Name,
+                Name = product.Name.Value,
                 product.Category,
                 product.Dimensions.Width,
                 product.Dimensions.Height,
@@ -142,9 +142,9 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                 product.Id,
                 product.AgeGroup,
                 product.BreedSize,
-                product.Ingredients,
-                product.StorageInstructions,
-                product.WeightKg
+                Ingredients = product.Ingredients.Value,
+                StorageInstructions = product.StorageInstructions.Value,
+                WeightKg = product.WeightKg.Value
             }
         );
     }
@@ -158,9 +158,9 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                 product.Id,
                 product.IsNatural,
                 product.IsHypoallergenic,
-                product.UsageInstructions,
+                UsageInstructions = product.UsageInstructions.Value,
                 product.IsCrueltyFree,
-                product.SafetyWarnings
+                SafetyWarnings = product.SafetyWarnings.Value
             }
         );
     }

@@ -26,4 +26,9 @@ public record Ingredients
     {
         return !string.IsNullOrWhiteSpace(value) && value.Length <= 500;
     }
+
+    public override string ToString()
+    {
+        return Value;
+    }
 }

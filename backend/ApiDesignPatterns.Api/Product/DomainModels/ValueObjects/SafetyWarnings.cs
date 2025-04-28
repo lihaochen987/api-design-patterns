@@ -26,4 +26,9 @@ public record SafetyWarnings
     {
         return !string.IsNullOrWhiteSpace(value) && value.Length <= 300;
     }
+
+    public override string ToString()
+    {
+        return Value;
+    }
 }
