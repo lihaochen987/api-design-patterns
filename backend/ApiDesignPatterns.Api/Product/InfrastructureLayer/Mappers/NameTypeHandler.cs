@@ -9,5 +9,5 @@ namespace backend.Product.InfrastructureLayer.Mappers;
 public class NameTypeHandler : StringValueObjectTypeHandler<Name>
 {
     protected override Name Create(string value) => new(value);
-    protected override string GetStringValue(Name value) => value.ToString();
+    protected override string GetStringValue(Name value) => value.ToString() ?? throw new InvalidOperationException();
 }

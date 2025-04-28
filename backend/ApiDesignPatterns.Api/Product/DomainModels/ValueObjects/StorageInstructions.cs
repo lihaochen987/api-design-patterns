@@ -1,9 +1,11 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
+using backend.Shared;
+
 namespace backend.Product.DomainModels.ValueObjects;
 
-public record StorageInstructions
+public class StorageInstructions:ValueObject<StorageInstructions>
 {
     private StorageInstructions()
     {
@@ -30,5 +32,10 @@ public record StorageInstructions
     public override string ToString()
     {
         return Value;
+    }
+
+    protected override IEnumerable<object> GetAttributesToIncludeInEqualityCheck()
+    {
+        return new List<object> { Value };
     }
 }
