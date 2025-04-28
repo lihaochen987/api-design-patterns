@@ -6,6 +6,7 @@ using backend.Inventory.DomainModels.ValueObjects;
 using backend.Product;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Review;
+using backend.Review.DomainModels.ValueObjects;
 using backend.Shared;
 using backend.Shared.ControllerActivators;
 using backend.Supplier;
@@ -76,8 +77,12 @@ SqlMapper.AddTypeHandler(new WeightTypeHandler());
 SqlMapper.AddTypeHandler(new UsageInstructionsTypeHandler());
 SqlMapper.AddTypeHandler(new SafetyWarningsTypeHandler());
 
-// Review
+// Inventory
 SqlMapper.AddTypeHandler(new QuantityTypeHandler());
+
+// Review
+SqlMapper.AddTypeHandler(new RatingTypeHandler());
+SqlMapper.AddTypeHandler(new TextTypeHandler());
 
 WebApplication app = builder.Build();
 

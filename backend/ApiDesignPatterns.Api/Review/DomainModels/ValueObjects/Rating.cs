@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Globalization;
+
 namespace backend.Review.DomainModels.ValueObjects;
 
 public record Rating
@@ -24,5 +26,10 @@ public record Rating
     private static bool IsValid(decimal value)
     {
         return value is >= 1 and <= 5;
+    }
+
+    public override string ToString()
+    {
+        return Value.ToString(CultureInfo.InvariantCulture);
     }
 }

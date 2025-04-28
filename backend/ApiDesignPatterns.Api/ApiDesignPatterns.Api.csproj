@@ -574,6 +574,12 @@
     <Compile Update="Inventory\DomainModels\ValueObjects\QuantityTypeHandler.cs">
       <DependentUpon>Quantity.cs</DependentUpon>
     </Compile>
+    <Compile Update="Review\DomainModels\ValueObjects\RatingTypeHandler.cs">
+      <DependentUpon>Rating.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Review\DomainModels\ValueObjects\TextTypeHandler.cs">
+      <DependentUpon>Text.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
