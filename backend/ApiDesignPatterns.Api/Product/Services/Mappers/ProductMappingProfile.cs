@@ -20,6 +20,9 @@ public class ProductMappingProfile : Profile
         CreateMap<ProductPricingRequest, Pricing>().ReverseMap();
         CreateMap<DimensionsRequest, Dimensions>().ReverseMap();
 
+        CreateMap<Name, string>().ConvertUsing(src => src.Value ?? string.Empty);
+        CreateMap<string, Name>().ConvertUsing(src => new Name(src));
+
         // CreateProductController
         CreateMap<DomainModels.Product, CreateProductResponse>();
         CreateMap<PetFood, CreatePetFoodResponse>()

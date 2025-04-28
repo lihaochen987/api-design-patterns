@@ -18,7 +18,7 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
     [Fact]
     public async Task UpdateProductAsync_WithMultipleFieldsInFieldMask_ShouldUpdateOnlySpecifiedFields()
     {
-        DomainModels.Product product = new ProductTestDataBuilder().WithId(3).WithName("Original Name")
+        DomainModels.Product product = new ProductTestDataBuilder().WithId(3).WithName(new Name("Original Name"))
             .WithPricing(new Pricing(20.99m, 5m, 3m))
             .WithCategory(Category.Feeders).Build();
         Repository.Add(product);
@@ -35,7 +35,7 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().Name.Should().Be(request.Name);
+        Repository.First().Name.Value.Should().Be(request.Name);
         Repository.First().Category.Should().Be((Category)Enum.Parse(typeof(Category), request.Category));
         Repository.First().Pricing.DiscountPercentage.Should().Be(request.Pricing.DiscountPercentage);
         Repository.First().Pricing.TaxRate.Should().Be(request.Pricing.TaxRate);
@@ -78,7 +78,7 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         await sut.Handle(new UpdateProductCommand { Product = product, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().Name.Should().Be(request.Name);
+        Repository.First().Name.Value.Should().Be(request.Name);
     }
 
     [Fact]

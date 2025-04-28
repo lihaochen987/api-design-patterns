@@ -7,7 +7,7 @@ public record Product
 {
     public required long Id { get; init; }
 
-    public required string Name { get; init; }
+    public required Name Name { get; init; }
 
     public Category Category { get; init; }
 

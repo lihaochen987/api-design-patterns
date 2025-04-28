@@ -13,7 +13,7 @@ public class ProductTestDataBuilder
     private Dimensions _dimensions;
     private long _id;
     private readonly string _ingredients;
-    private string _name;
+    private Name _name;
     private readonly Dictionary<string, object> _nutritionalInfo;
     private Pricing _pricing;
     private readonly string _storageInstructions;
@@ -29,9 +29,10 @@ public class ProductTestDataBuilder
         Fixture fixture = new();
         fixture.Customizations.Add(new ProductPricingBuilder());
         fixture.Customizations.Add(new ProductDimensionsBuilder());
+        fixture.Customizations.Add(new NameSpecimenBuilder());
 
         _id = fixture.Create<long>();
-        _name = fixture.Create<string>();
+        _name = fixture.Create<Name>();
         _category = fixture.Create<Category>();
         _dimensions = fixture.Create<Dimensions>();
         _pricing = fixture.Create<Pricing>();
@@ -56,7 +57,7 @@ public class ProductTestDataBuilder
         return this;
     }
 
-    public ProductTestDataBuilder WithName(string name)
+    public ProductTestDataBuilder WithName(Name name)
     {
         _name = name;
         return this;

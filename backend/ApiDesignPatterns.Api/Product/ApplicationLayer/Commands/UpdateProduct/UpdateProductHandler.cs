@@ -52,7 +52,7 @@ public class UpdateProductHandler(
         UpdateProductRequest request,
         DomainModels.Product product)
     {
-        (string name, Pricing pricing, Category category, Dimensions dimensions) =
+        (Name name, Pricing pricing, Category category, Dimensions dimensions) =
             GetUpdatedProductValues(request, product);
 
         // Use the 'with' expression on the original product to maintain its type
@@ -118,14 +118,14 @@ public class UpdateProductHandler(
     /// <summary>
     /// Returns updated base product values based on field mask.
     /// </summary>
-    private static (string name, Pricing pricing, Category category, Dimensions dimensions)
+    private static (Name name, Pricing pricing, Category category, Dimensions dimensions)
         GetUpdatedProductValues(
             UpdateProductRequest request,
             DomainModels.Product baseProduct)
     {
-        string name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
+        Name name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
                       && !string.IsNullOrEmpty(request.Name)
-            ? request.Name
+            ? new Name(request.Name)
             : baseProduct.Name;
 
         Category category = request.FieldMask.Contains("category", StringComparer.OrdinalIgnoreCase)
