@@ -73,7 +73,7 @@ public class ReplaceProductHandlerTests : ReplaceProductHandlerTestBase
         await sut.Handle(command);
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.Should().Contain(replacedProduct);
+        Repository.Should().ContainEquivalentOf(replacedProduct);
     }
 
     [Fact]

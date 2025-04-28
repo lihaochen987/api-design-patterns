@@ -13,17 +13,17 @@ public class ProductTestDataBuilder
     private Category _category;
     private Dimensions _dimensions;
     private long _id;
-    private readonly string _ingredients;
+    private readonly Ingredients _ingredients;
     private Name _name;
     private readonly Dictionary<string, object> _nutritionalInfo;
     private Pricing _pricing;
-    private readonly string _storageInstructions;
+    private readonly StorageInstructions _storageInstructions;
     private readonly Weight _weightKg;
     private readonly bool _isNatural;
     private readonly bool _isHypoAllergenic;
-    private readonly string _usageInstructions;
+    private readonly UsageInstructions _usageInstructions;
     private readonly bool _isCrueltyFree;
-    private readonly string _safetyWarnings;
+    private readonly SafetyWarnings _safetyWarnings;
 
     public ProductTestDataBuilder()
     {
@@ -40,16 +40,16 @@ public class ProductTestDataBuilder
 
         _ageGroup = fixture.Create<AgeGroup>();
         _breedSize = fixture.Create<BreedSize>();
-        _ingredients = fixture.Create<string>();
+        _ingredients = fixture.Create<Ingredients>();
         _nutritionalInfo = fixture.Create<Dictionary<string, object>>();
-        _storageInstructions = fixture.Create<string>();
+        _storageInstructions = fixture.Create<StorageInstructions>();
         _weightKg = fixture.Create<Weight>();
 
         _isNatural = fixture.Create<bool>();
         _isHypoAllergenic = fixture.Create<bool>();
-        _usageInstructions = fixture.Create<string>();
+        _usageInstructions = fixture.Create<UsageInstructions>();
         _isCrueltyFree = fixture.Create<bool>();
-        _safetyWarnings = fixture.Create<string>();
+        _safetyWarnings = fixture.Create<SafetyWarnings>();
     }
 
     public ProductTestDataBuilder WithId(long id)

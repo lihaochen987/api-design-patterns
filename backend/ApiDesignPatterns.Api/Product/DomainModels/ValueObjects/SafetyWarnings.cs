@@ -3,20 +3,20 @@
 
 namespace backend.Product.DomainModels.ValueObjects;
 
-public record Name
+public record SafetyWarnings
 {
-    private Name()
+    private SafetyWarnings()
     {
         Value = string.Empty;
     }
 
     public string Value { get; init; }
 
-    public Name(string value)
+    public SafetyWarnings(string value)
     {
         if (!IsValid(value))
         {
-            throw new ArgumentException("Invalid value for name");
+            throw new ArgumentException("Invalid value for safety warnings");
         }
 
         Value = value;
@@ -24,11 +24,6 @@ public record Name
 
     private static bool IsValid(string value)
     {
-        if (string.IsNullOrWhiteSpace(value) || value.Length > 50)
-        {
-            return false;
-        }
-
-        return value.All(c => char.IsLetter(c) || c == ' ' || c == '-' || c == '\'');
+        return !string.IsNullOrWhiteSpace(value) && value.Length <= 300;
     }
 }

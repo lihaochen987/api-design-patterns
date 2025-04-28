@@ -72,8 +72,8 @@ public class UpdateProductHandler(
         UpdateProductRequest request,
         PetFood petFood)
     {
-        (AgeGroup ageGroup, BreedSize breedSize, string ingredients, Dictionary<string, object> nutritionalInfo,
-                string storageInstructions, Weight weightKg) =
+        (AgeGroup ageGroup, BreedSize breedSize, Ingredients ingredients, Dictionary<string, object> nutritionalInfo,
+                StorageInstructions storageInstructions, Weight weightKg) =
             GetUpdatedPetFoodValues(request, petFood);
 
         var updatedPetFood = petFood with
@@ -98,8 +98,8 @@ public class UpdateProductHandler(
         UpdateProductRequest request,
         GroomingAndHygiene groomingAndHygiene)
     {
-        (bool isNatural, bool isHypoAllergenic, string usageInstructions, bool isCrueltyFree,
-                string safetyWarnings) =
+        (bool isNatural, bool isHypoAllergenic, UsageInstructions usageInstructions, bool isCrueltyFree,
+                SafetyWarnings safetyWarnings) =
             GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
 
         var updatedGroomingAndHygiene = groomingAndHygiene with
@@ -124,7 +124,7 @@ public class UpdateProductHandler(
             DomainModels.Product baseProduct)
     {
         Name name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
-                      && !string.IsNullOrEmpty(request.Name)
+                    && !string.IsNullOrEmpty(request.Name)
             ? new Name(request.Name)
             : baseProduct.Name;
 
@@ -148,7 +148,7 @@ public class UpdateProductHandler(
             Pricing product)
     {
         decimal basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase) &&
-                             request.Pricing is { BasePrice: not null }
+                            request.Pricing is { BasePrice: not null }
             ? request.Pricing.BasePrice ?? product.BasePrice
             : product.BasePrice;
 
@@ -174,17 +174,17 @@ public class UpdateProductHandler(
         Dimensions currentDimensions)
     {
         decimal length = request.FieldMask.Contains("dimensions.length", StringComparer.OrdinalIgnoreCase)
-                         && request.Dimensions is {Length: not null}
+                         && request.Dimensions is { Length: not null }
             ? request.Dimensions.Length ?? currentDimensions.Length
             : currentDimensions.Length;
 
         decimal width = request.FieldMask.Contains("dimensions.width", StringComparer.OrdinalIgnoreCase)
-                        && request.Dimensions is {Width: not null}
+                        && request.Dimensions is { Width: not null }
             ? request.Dimensions.Width ?? currentDimensions.Width
             : currentDimensions.Width;
 
         decimal height = request.FieldMask.Contains("dimensions.height", StringComparer.OrdinalIgnoreCase)
-                         && request.Dimensions is {Height: not null}
+                         && request.Dimensions is { Height: not null }
             ? request.Dimensions.Height ?? currentDimensions.Height
             : currentDimensions.Height;
 
@@ -197,9 +197,9 @@ public class UpdateProductHandler(
     private static (
         bool isNatural,
         bool isHypoAllergenic,
-        string usageInstructions,
+        UsageInstructions usageInstructions,
         bool isCrueltyFree,
-        string safetyWarnings
+        SafetyWarnings safetyWarnings
         ) GetUpdatedGroomingAndHygieneValues(
             UpdateProductRequest request,
             GroomingAndHygiene groomingAndHygiene)
@@ -214,9 +214,9 @@ public class UpdateProductHandler(
             ? request.IsHypoAllergenic.Value
             : groomingAndHygiene.IsHypoallergenic;
 
-        string? usageInstructions = request.FieldMask.Contains("usageinstructions", StringComparer.OrdinalIgnoreCase)
+        UsageInstructions usageInstructions = request.FieldMask.Contains("usageinstructions", StringComparer.OrdinalIgnoreCase)
                                     && !string.IsNullOrEmpty(request.UsageInstructions)
-            ? request.UsageInstructions
+            ? new UsageInstructions(request.UsageInstructions)
             : groomingAndHygiene.UsageInstructions;
 
         bool isCrueltyFree = request.FieldMask.Contains("iscrueltyfree", StringComparer.OrdinalIgnoreCase) &&
@@ -224,9 +224,9 @@ public class UpdateProductHandler(
             ? request.IsCrueltyFree.Value
             : groomingAndHygiene.IsCrueltyFree;
 
-        string? safetyWarnings = request.FieldMask.Contains("safetywarnings", StringComparer.OrdinalIgnoreCase)
+        SafetyWarnings safetyWarnings = request.FieldMask.Contains("safetywarnings", StringComparer.OrdinalIgnoreCase)
                                  && !string.IsNullOrEmpty(request.SafetyWarnings)
-            ? request.SafetyWarnings
+            ? new SafetyWarnings(request.SafetyWarnings)
             : groomingAndHygiene.SafetyWarnings;
 
         return (isNatural, isHypoAllergenic, usageInstructions, isCrueltyFree, safetyWarnings);
@@ -239,9 +239,9 @@ public class UpdateProductHandler(
     private static (
         AgeGroup ageGroup,
         BreedSize breedSize,
-        string ingredients,
+        Ingredients ingredients,
         Dictionary<string, object> nutritionalInfo,
-        string storageInstructions,
+        StorageInstructions storageInstructions,
         Weight weightKg)
         GetUpdatedPetFoodValues(
             UpdateProductRequest request,
@@ -259,10 +259,10 @@ public class UpdateProductHandler(
                 ? parsedBreedSize
                 : petFood.BreedSize;
 
-        string? ingredients =
+        Ingredients ingredients =
             request.FieldMask.Contains("ingredients", StringComparer.OrdinalIgnoreCase) &&
             !string.IsNullOrEmpty(request.Ingredients)
-                ? request.Ingredients
+                ? new Ingredients(request.Ingredients)
                 : petFood.Ingredients;
 
         Dictionary<string, object> nutritionalInfo =
@@ -271,10 +271,10 @@ public class UpdateProductHandler(
                 ? parsedNutritionalInfo
                 : petFood.NutritionalInfo;
 
-        string? storageInstructions =
+        StorageInstructions storageInstructions =
             request.FieldMask.Contains("storageinstructions", StringComparer.OrdinalIgnoreCase) &&
             !string.IsNullOrEmpty(request.StorageInstructions)
-                ? request.StorageInstructions
+                ? new StorageInstructions(request.StorageInstructions)
                 : petFood.StorageInstructions;
 
         Weight weight = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase)

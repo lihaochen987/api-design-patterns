@@ -102,10 +102,10 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
 
         Repository.IsDirty.Should().BeTrue();
         var groomingAndHygiene = (GroomingAndHygiene)Repository.First();
-        groomingAndHygiene.UsageInstructions.Should().Be(request.UsageInstructions);
+        groomingAndHygiene.UsageInstructions.Value.Should().Be(request.UsageInstructions);
         groomingAndHygiene.IsNatural.Should().Be((bool)request.IsNatural);
         groomingAndHygiene.IsHypoallergenic.Should().Be((bool)request.IsHypoAllergenic);
-        groomingAndHygiene.SafetyWarnings.Should().Be(request.SafetyWarnings);
+        groomingAndHygiene.SafetyWarnings.Value.Should().Be(request.SafetyWarnings);
         groomingAndHygiene.IsCrueltyFree.Should().Be((bool)request.IsCrueltyFree);
     }
 }

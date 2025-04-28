@@ -3,20 +3,20 @@
 
 namespace backend.Product.DomainModels.ValueObjects;
 
-public record Name
+public record StorageInstructions
 {
-    private Name()
+    private StorageInstructions()
     {
         Value = string.Empty;
     }
 
     public string Value { get; init; }
 
-    public Name(string value)
+    public StorageInstructions(string value)
     {
         if (!IsValid(value))
         {
-            throw new ArgumentException("Invalid value for name");
+            throw new ArgumentException("Invalid value for storage instructions");
         }
 
         Value = value;
@@ -24,11 +24,6 @@ public record Name
 
     private static bool IsValid(string value)
     {
-        if (string.IsNullOrWhiteSpace(value) || value.Length > 50)
-        {
-            return false;
-        }
-
-        return value.All(c => char.IsLetter(c) || c == ' ' || c == '-' || c == '\'');
+        return !string.IsNullOrWhiteSpace(value) && value.Length <= 200;
     }
 }
