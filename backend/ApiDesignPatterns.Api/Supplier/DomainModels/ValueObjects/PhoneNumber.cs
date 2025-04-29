@@ -5,7 +5,7 @@ namespace backend.Supplier.DomainModels.ValueObjects;
 
 public record PhoneNumber
 {
-    public required string CountryCode { get; init; }
-    public required string AreaCode { get; init; }
-    public long Number { get; init; }
+    public required CountryCode CountryCode { get; init; }
+    public required AreaCode AreaCode { get; init; }
+    public required PhoneDigits Number { get; init; }
 }

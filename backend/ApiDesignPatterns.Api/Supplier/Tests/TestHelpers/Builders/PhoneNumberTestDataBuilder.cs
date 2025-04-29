@@ -2,39 +2,42 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Supplier.DomainModels;
 using backend.Supplier.DomainModels.ValueObjects;
+using backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Supplier.Tests.TestHelpers.Builders;
 
 public class PhoneNumberTestDataBuilder
 {
-    private string _countryCode;
-    private string _areaCode;
-    private long _number;
+    private CountryCode _countryCode;
+    private AreaCode _areaCode;
+    private PhoneDigits _number;
 
     public PhoneNumberTestDataBuilder()
     {
         Fixture fixture = new();
+        fixture.Customizations.Add(new CountryCodeSpecimenBuilder());
+        fixture.Customizations.Add(new AreaCodeSpecimenBuilder());
+        fixture.Customizations.Add(new PhoneDigitsSpecimenBuilder());
 
-        _countryCode = fixture.Create<string>();
-        _areaCode = fixture.Create<string>();
-        _number = fixture.Create<long>();
+        _countryCode = fixture.Create<CountryCode>();
+        _areaCode = fixture.Create<AreaCode>();
+        _number = fixture.Create<PhoneDigits>();
     }
 
-    public PhoneNumberTestDataBuilder WithCountryCode(string countryCode)
+    public PhoneNumberTestDataBuilder WithCountryCode(CountryCode countryCode)
     {
         _countryCode = countryCode;
         return this;
     }
 
-    public PhoneNumberTestDataBuilder WithAreaCode(string areaCode)
+    public PhoneNumberTestDataBuilder WithAreaCode(AreaCode areaCode)
     {
         _areaCode = areaCode;
         return this;
     }
 
-    public PhoneNumberTestDataBuilder WithNumber(long number)
+    public PhoneNumberTestDataBuilder WithNumber(PhoneDigits number)
     {
         _number = number;
         return this;

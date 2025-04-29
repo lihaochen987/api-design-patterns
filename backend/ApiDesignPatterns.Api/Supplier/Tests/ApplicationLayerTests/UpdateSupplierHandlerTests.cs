@@ -4,7 +4,6 @@
 using backend.Shared.CommandHandler;
 using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.Controllers;
-using backend.Supplier.DomainModels;
 using backend.Supplier.DomainModels.ValueObjects;
 using backend.Supplier.Tests.TestHelpers.Builders;
 using FluentAssertions;
@@ -68,14 +67,19 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
     public async Task UpdateSupplierAsync_WithPhoneNumberFieldsInFieldMask_ShouldUpdateOnlySpecifiedFields()
     {
         var supplier = new SupplierTestDataBuilder()
-            .WithPhoneNumber(new PhoneNumber { CountryCode = "1", AreaCode = "555", Number = 1234567 })
+            .WithPhoneNumber(new PhoneNumber
+            {
+                CountryCode = new CountryCode("+1"),
+                AreaCode = new AreaCode("555"),
+                Number = new PhoneDigits(1234567)
+            })
             .Build();
         Repository.Add(supplier);
         Repository.IsDirty = false;
 
         var request = new UpdateSupplierRequest
         {
-            PhoneNumber = new PhoneNumberRequest { CountryCode = "44", AreaCode = "777", Number = "9876543" },
+            PhoneNumber = new PhoneNumberRequest { CountryCode = "+44", AreaCode = "777", Number = 9876543 },
             FieldMask = ["countrycode", "number"]
         };
         ICommandHandler<UpdateSupplierCommand> sut = UpdateSupplierHandler();
@@ -83,8 +87,8 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
         await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().PhoneNumber.CountryCode.Should().BeEquivalentTo(request.PhoneNumber.CountryCode);
-        Repository.First().PhoneNumber.AreaCode.Should().BeEquivalentTo(supplier.PhoneNumber.AreaCode);
-        Repository.First().PhoneNumber.Number.Should().Be(long.Parse(request.PhoneNumber.Number));
+        Repository.First().PhoneNumber.CountryCode.Value.Should().BeEquivalentTo(request.PhoneNumber.CountryCode);
+        Repository.First().PhoneNumber.AreaCode.Value.Should().BeEquivalentTo(supplier.PhoneNumber.AreaCode.ToString());
+        Repository.First().PhoneNumber.Number.Value.Should().Be(request.PhoneNumber.Number);
     }
 }

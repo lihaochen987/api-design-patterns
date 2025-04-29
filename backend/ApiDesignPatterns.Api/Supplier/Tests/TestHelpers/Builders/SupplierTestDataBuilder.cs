@@ -4,6 +4,7 @@
 using AutoFixture;
 using backend.Supplier.DomainModels;
 using backend.Supplier.DomainModels.ValueObjects;
+using backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Supplier.Tests.TestHelpers.Builders;
 
@@ -20,7 +21,6 @@ public class SupplierTestDataBuilder
     public SupplierTestDataBuilder()
     {
         Fixture fixture = new();
-
         _id = fixture.Create<long>();
         _firstName = fixture.Create<string>();
         _lastName = fixture.Create<string>();

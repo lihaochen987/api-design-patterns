@@ -7,5 +7,5 @@ public record PhoneNumberRequest
 {
     public string? CountryCode { get; init; }
     public string? AreaCode { get; init; }
-    public string? Number { get; init; }
+    public long? Number { get; init; }
 }

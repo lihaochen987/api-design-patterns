@@ -63,9 +63,9 @@ public class SupplierRepository(
             new
             {
                 SupplierId = supplier.Id,
-                supplier.PhoneNumber.CountryCode,
-                supplier.PhoneNumber.AreaCode,
-                supplier.PhoneNumber.Number
+                CountryCode = supplier.PhoneNumber.CountryCode.Value,
+                AreaCode = supplier.PhoneNumber.AreaCode.Value,
+                Number = supplier.PhoneNumber.Number.Value
             }
         );
     }
@@ -78,9 +78,9 @@ public class SupplierRepository(
             new
             {
                 SupplierId = supplier.Id,
-                supplier.PhoneNumber.CountryCode,
-                supplier.PhoneNumber.AreaCode,
-                supplier.PhoneNumber.Number
+                CountryCode = supplier.PhoneNumber.CountryCode.Value,
+                AreaCode = supplier.PhoneNumber.AreaCode.Value,
+                Number = supplier.PhoneNumber.Number.Value
             });
     }
 

@@ -3,7 +3,6 @@
 
 using backend.Shared.CommandHandler;
 using backend.Supplier.Controllers;
-using backend.Supplier.DomainModels;
 using backend.Supplier.DomainModels.ValueObjects;
 using backend.Supplier.InfrastructureLayer.Database.Supplier;
 
@@ -74,28 +73,30 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
                 ? request.Address.PostalCode
                 : supplier.Address.PostalCode;
 
-        string country = request.FieldMask.Contains("address.country") && !string.IsNullOrEmpty(request.Address?.Country)
+        string country = request.FieldMask.Contains("address.country") &&
+                         !string.IsNullOrEmpty(request.Address?.Country)
             ? request.Address.Country
             : supplier.Address.Country;
 
         return new Address { Street = street, City = city, PostalCode = postalCode, Country = country };
     }
 
-    private static PhoneNumber GetUpdateSupplierPhoneNumberValues(UpdateSupplierRequest request,
+    private static PhoneNumber GetUpdateSupplierPhoneNumberValues(
+        UpdateSupplierRequest request,
         DomainModels.Supplier supplier)
     {
-        string countryCode = request.FieldMask.Contains("countrycode") &&
-                             !string.IsNullOrEmpty(request.PhoneNumber?.CountryCode)
-            ? request.PhoneNumber.CountryCode
+        CountryCode countryCode = request.FieldMask.Contains("countrycode") &&
+                                  !string.IsNullOrEmpty(request.PhoneNumber?.CountryCode)
+            ? new CountryCode(request.PhoneNumber.CountryCode)
             : supplier.PhoneNumber.CountryCode;
 
-        string areaCode = request.FieldMask.Contains("areacode") &&
-                          !string.IsNullOrEmpty(request.PhoneNumber?.AreaCode)
-            ? request.PhoneNumber.AreaCode
+        AreaCode areaCode = request.FieldMask.Contains("areacode") &&
+                            !string.IsNullOrEmpty(request.PhoneNumber?.AreaCode)
+            ? new AreaCode(request.PhoneNumber.AreaCode)
             : supplier.PhoneNumber.AreaCode;
 
-        long number = request.FieldMask.Contains("number") && !string.IsNullOrEmpty(request.PhoneNumber?.Number)
-            ? long.Parse(request.PhoneNumber.Number)
+        PhoneDigits number = request.FieldMask.Contains("number") && request.PhoneNumber is { Number: not null }
+            ? new PhoneDigits((long)request.PhoneNumber.Number)
             : supplier.PhoneNumber.Number;
 
         return new PhoneNumber { CountryCode = countryCode, AreaCode = areaCode, Number = number };

@@ -580,6 +580,15 @@
     <Compile Update="Supplier\DomainModels\ValueObjects\PhoneNumberResponse.cs">
       <DependentUpon>PhoneNumber.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\AreaCodeTypeHandler.cs">
+      <DependentUpon>AreaCode.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\CountryCodeTypeHandler.cs">
+      <DependentUpon>CountryCode.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\PhoneDigitsTypeHandler.cs">
+      <DependentUpon>PhoneDigits.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
