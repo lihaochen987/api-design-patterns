@@ -21,25 +21,17 @@ public class HandshakingQueryHandlerDecorator<TQuery, TResult>(
     {
         logger.LogDebug("Performing database health check before executing query");
 
-        try
+        bool isReady = await dbConnection.QueryFirstOrDefaultAsync<bool>(HealthCheckQuery);
+
+        if (!isReady)
         {
-            bool isReady = await dbConnection.QueryFirstOrDefaultAsync<bool>(HealthCheckQuery);
-
-            if (!isReady)
-            {
-                logger.LogWarning("Database rejected query - server at capacity");
-                throw new DatabaseNotAvailableException("Database is at capacity and cannot accept more connections");
-            }
-
-            logger.LogDebug("Health check successful, proceeding with query");
-
-            TResult result = await queryHandler.Handle(query);
-            return result;
+            logger.LogWarning("Database rejected query - server at capacity");
+            throw new DatabaseNotAvailableException("Database is at capacity and cannot accept more connections");
         }
-        catch (Exception ex) when (ex is not DatabaseNotAvailableException)
-        {
-            logger.LogError("Database health check failed with error: {Error}", ex.Message);
-            throw new DatabaseNotAvailableException("Database health check failed: " + ex.Message);
-        }
+
+        logger.LogDebug("Health check successful, proceeding with query");
+
+        TResult result = await queryHandler.Handle(query);
+        return result;
     }
 }
