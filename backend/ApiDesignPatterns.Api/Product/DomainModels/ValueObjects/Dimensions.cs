@@ -5,6 +5,11 @@ namespace backend.Product.DomainModels.ValueObjects;
 /// </summary>
 public record Dimensions
 {
+    private const decimal MaxLength = 100m;
+    private const decimal MaxWidth = 50m;
+    private const decimal MaxHeight = 50m;
+    private const decimal MaxVolume = 110000m;
+
     /// <summary>
     /// Private constructor for JSON deserialization and object mapping.
     /// </summary>
@@ -36,12 +41,11 @@ public record Dimensions
     /// <param name="length">The length in cm.</param>
     /// <param name="width">The width in cm.</param>
     /// <param name="height">The height in cm.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when any dimension is negative or exceeds maximum allowed value.</exception>
+    /// <exception cref="ArgumentException">Thrown when the total volume exceeds maximum allowed volume.</exception>
     public Dimensions(decimal length, decimal width, decimal height)
     {
-        if (!IsValid(length, width, height))
-        {
-            throw new ArgumentException("Invalid value for dimensions");
-        }
+        ValidateDimensions(length, width, height);
 
         Length = length;
         Width = width;
@@ -54,24 +58,40 @@ public record Dimensions
     /// <param name="length">The length to validate.</param>
     /// <param name="width">The width to validate.</param>
     /// <param name="height">The height to validate.</param>
-    /// <returns>True if all dimensions are within valid ranges and volume is acceptable; otherwise false.</returns>
-    private static bool IsValid(decimal length, decimal width, decimal height)
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when any dimension is negative or exceeds maximum allowed value.</exception>
+    /// <exception cref="ArgumentException">Thrown when the total volume exceeds maximum allowed volume.</exception>
+    private static void ValidateDimensions(decimal length, decimal width, decimal height)
     {
-        if (length is < 0 or > 100)
+        switch (length)
         {
-            return false;
+            case < 0:
+                throw new ArgumentOutOfRangeException(nameof(length), length, "Length cannot be negative.");
+            case > MaxLength:
+                throw new ArgumentOutOfRangeException(nameof(length), length, $"Length cannot exceed {MaxLength} cm.");
         }
 
-        if (width is < 0 or > 50)
+        switch (width)
         {
-            return false;
+            case < 0:
+                throw new ArgumentOutOfRangeException(nameof(width), width, "Width cannot be negative.");
+            case > MaxWidth:
+                throw new ArgumentOutOfRangeException(nameof(width), width, $"Width cannot exceed {MaxWidth} cm.");
         }
 
-        if (height is < 0 or > 50)
+        switch (height)
         {
-            return false;
+            case < 0:
+                throw new ArgumentOutOfRangeException(nameof(height), height, "Height cannot be negative.");
+            case > MaxHeight:
+                throw new ArgumentOutOfRangeException(nameof(height), height, $"Height cannot exceed {MaxHeight} cm.");
         }
 
-        return length * width * height <= 110000;
+        decimal volume = length * width * height;
+        if (volume > MaxVolume)
+        {
+            throw new ArgumentException(
+                $"Total volume ({volume} cm³) exceeds maximum allowed volume of {MaxVolume} cm³.",
+                $"{nameof(length)}, {nameof(width)}, {nameof(height)}");
+        }
     }
 }
