@@ -52,9 +52,11 @@ public class PricingTests
     }
 
     [Theory]
-    [InlineData(1, 0, 0)]
-    [InlineData(1, 100, 0)]
-    [InlineData(1, 0, 100)]
+    [InlineData(10, 0, 0)]      // Zero discount, zero tax
+    [InlineData(10, 20, 0)]     // Moderate discount, zero tax
+    [InlineData(10, 0, 20)]     // Zero discount, with tax
+    [InlineData(100, 15, 10)]   // Standard case
+    [InlineData(2000, 10, 10)]  // High-value item
     public void Constructor_ValidBoundaryValues_ShouldCreatePricingObject(
         decimal basePrice,
         decimal discountPercentage,
@@ -66,5 +68,31 @@ public class PricingTests
         pricing.BasePrice.Should().Be(basePrice);
         pricing.DiscountPercentage.Should().Be(discountPercentage);
         pricing.TaxRate.Should().Be(taxRate);
+    }
+
+    [Fact]
+    public void Constructor_HighValueItemWithExcessiveDiscounting_ShouldThrowArgumentException()
+    {
+        const decimal basePrice = 2000m;
+        const decimal discountPercentage = 40m;
+        const decimal taxRate = 5m;
+
+        Action act = () => _ = new Pricing(basePrice, discountPercentage, taxRate);
+
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Excessive effective discount: 37.00%. Maximum allowed: 30.00%");
+    }
+
+    [Fact]
+    public void Constructor_LowPriceItemWithInsufficientMargin_ShouldThrowArgumentException()
+    {
+        const decimal basePrice = 500m;
+        const decimal discountPercentage = 30m;
+        const decimal taxRate = 10m;
+
+        Action act = () => _ = new Pricing(basePrice, discountPercentage, taxRate);
+
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Insufficient profit margin: 14.29%. Minimum required: 15.00%");
     }
 }

@@ -26,7 +26,7 @@ public class UpdateProductHandlerTests : UpdateProductHandlerTestBase
         UpdateProductRequest request = new()
         {
             Name = "Updated Name",
-            Pricing = new ProductPricingRequest { BasePrice = 25.50m, DiscountPercentage = 50, TaxRate = 15 },
+            Pricing = new ProductPricingRequest { BasePrice = 25.50m, DiscountPercentage = 20, TaxRate = 15 },
             Category = "Toys",
             FieldMask = ["name", "category", "discountpercentage", "taxrate"]
         };
