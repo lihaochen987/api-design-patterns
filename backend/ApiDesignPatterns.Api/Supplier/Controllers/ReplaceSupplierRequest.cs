@@ -3,6 +3,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using backend.Supplier.DomainModels;
+using backend.Supplier.DomainModels.ValueObjects;
 
 namespace backend.Supplier.Controllers;
 

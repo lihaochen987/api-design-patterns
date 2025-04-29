@@ -4,6 +4,7 @@
 using AutoMapper;
 using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
+using backend.Supplier.DomainModels.ValueObjects;
 
 namespace backend.Supplier.Services;
 

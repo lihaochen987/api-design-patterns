@@ -188,18 +188,6 @@
     <Compile Update="Supplier\SupplierControllers\GetSupplierResponse.cs">
       <DependentUpon>GetSupplierController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Supplier\DomainModels\AddressRequest.cs">
-      <DependentUpon>Address.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\AddressResponse.cs">
-      <DependentUpon>Address.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\PhoneNumberRequest.cs">
-      <DependentUpon>PhoneNumber.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\PhoneNumberResponse.cs">
-      <DependentUpon>PhoneNumber.cs</DependentUpon>
-    </Compile>
     <Compile Update="Supplier\SupplierControllers\UpdateSupplierRequest.cs">
       <DependentUpon>UpdateSupplierController.cs</DependentUpon>
     </Compile>
@@ -579,6 +567,18 @@
     </Compile>
     <Compile Update="Review\DomainModels\ValueObjects\TextTypeHandler.cs">
       <DependentUpon>Text.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\AddressRequest.cs">
+      <DependentUpon>Address.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\AddressResponse.cs">
+      <DependentUpon>Address.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\PhoneNumberRequest.cs">
+      <DependentUpon>PhoneNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\PhoneNumberResponse.cs">
+      <DependentUpon>PhoneNumber.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

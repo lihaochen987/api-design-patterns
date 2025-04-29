@@ -3,7 +3,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace backend.Supplier.DomainModels;
+namespace backend.Supplier.DomainModels.ValueObjects;
 
 public record PhoneNumberResponse
 {

@@ -4,6 +4,7 @@
 using backend.Shared.CommandHandler;
 using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
+using backend.Supplier.DomainModels.ValueObjects;
 using backend.Supplier.InfrastructureLayer.Database.Supplier;
 
 namespace backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;

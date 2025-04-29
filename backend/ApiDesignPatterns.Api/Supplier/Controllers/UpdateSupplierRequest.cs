@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Supplier.DomainModels;
+using backend.Supplier.DomainModels.ValueObjects;
 
 namespace backend.Supplier.Controllers;
 
