@@ -607,6 +607,12 @@
     <Compile Update="Product\Controllers\Product\BatchCreateProductsResponse.cs">
       <DependentUpon>BatchCreateProductsController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Inventory\Tests\ControllerTests\ListInventoryControllerTestBase.cs">
+      <DependentUpon>ListInventoryControllerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Inventory\Tests\ControllerTests\ListProductSuppliersControllerTestBase.cs">
+      <DependentUpon>ListProductSuppliersControllerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

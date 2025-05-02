@@ -23,7 +23,7 @@ public class ListProductSuppliersController(
     [HttpGet]
     [SwaggerOperation(Summary = "List suppliers for a given product", Tags = ["Inventory"])]
     [ProducesResponseType(typeof(ListProductSuppliersResponse), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<ListProductSuppliersResponse>>> ListProductSuppliers(
+    public async Task<ActionResult<ListProductSuppliersResponse>> ListProductSuppliers(
         [FromQuery] ListProductSuppliersRequest request, decimal productId)
     {
         var inventoryResult = await listInventory.Handle(new ListInventoryQuery

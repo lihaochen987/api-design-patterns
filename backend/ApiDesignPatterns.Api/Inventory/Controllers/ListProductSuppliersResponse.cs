@@ -8,6 +8,6 @@ namespace backend.Inventory.Controllers;
 
 public class ListProductSuppliersResponse
 {
-    [Required] public required IEnumerable<GetSupplierResponse?> Results { get; init; } = [];
+    [Required] public required List<GetSupplierResponse> Results { get; init; } = [];
     public string? NextPageToken { get; init; }
 }
