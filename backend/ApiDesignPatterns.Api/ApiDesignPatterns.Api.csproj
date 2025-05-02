@@ -589,6 +589,18 @@
     <Compile Update="Supplier\DomainModels\ValueObjects\PhoneDigitsTypeHandler.cs">
       <DependentUpon>PhoneDigits.cs</DependentUpon>
     </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\StreetTypeHandler.cs">
+      <DependentUpon>Street.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\CityTypeHandler.cs">
+      <DependentUpon>City.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\PostalCodeTypeHandler.cs">
+      <DependentUpon>PostalCode.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\CountryTypeHandler.cs">
+      <DependentUpon>Country.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

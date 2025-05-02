@@ -57,9 +57,9 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
         await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().Address.Street.Should().BeEquivalentTo(request.Address.Street);
+        Repository.First().Address.Street.Value.Should().BeEquivalentTo(request.Address.Street);
         Repository.First().Address.City.Should().BeEquivalentTo(supplier.Address.City);
-        Repository.First().Address.PostalCode.Should().BeEquivalentTo(request.Address.PostalCode);
+        Repository.First().Address.PostalCode.Value.Should().BeEquivalentTo(request.Address.PostalCode);
         Repository.First().Address.Country.Should().BeEquivalentTo(supplier.Address.Country);
     }
 

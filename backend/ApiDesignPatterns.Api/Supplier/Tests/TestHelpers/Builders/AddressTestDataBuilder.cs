@@ -2,47 +2,51 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Supplier.DomainModels;
 using backend.Supplier.DomainModels.ValueObjects;
+using backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Supplier.Tests.TestHelpers.Builders;
 
 public class AddressTestDataBuilder
 {
-    private string _street;
-    private string _city;
-    private string _postalCode;
-    private string _country;
+    private Street _street;
+    private City _city;
+    private PostalCode _postalCode;
+    private Country _country;
 
     public AddressTestDataBuilder()
     {
         Fixture fixture = new();
 
-        _street = fixture.Create<string>();
-        _city = fixture.Create<string>();
-        _postalCode = fixture.Create<string>();
-        _country = fixture.Create<string>();
+        fixture.Customizations.Add(new CitySpecimenBuilder());
+        fixture.Customizations.Add(new PostalCodeSpecimenBuilder());
+        fixture.Customizations.Add(new CountrySpecimenBuilder());
+
+        _street = fixture.Create<Street>();
+        _city = fixture.Create<City>();
+        _postalCode = fixture.Create<PostalCode>();
+        _country = fixture.Create<Country>();
     }
 
-    public AddressTestDataBuilder WithStreet(string street)
+    public AddressTestDataBuilder WithStreet(Street street)
     {
         _street = street;
         return this;
     }
 
-    public AddressTestDataBuilder WithCity(string city)
+    public AddressTestDataBuilder WithCity(City city)
     {
         _city = city;
         return this;
     }
 
-    public AddressTestDataBuilder WithPostalCode(string postalCode)
+    public AddressTestDataBuilder WithPostalCode(PostalCode postalCode)
     {
         _postalCode = postalCode;
         return this;
     }
 
-    public AddressTestDataBuilder WithCountry(string country)
+    public AddressTestDataBuilder WithCountry(Country country)
     {
         _country = country;
         return this;

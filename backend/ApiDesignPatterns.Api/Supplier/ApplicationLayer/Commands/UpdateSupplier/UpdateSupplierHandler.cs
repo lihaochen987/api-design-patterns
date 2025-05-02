@@ -60,22 +60,22 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
     private static Address GetUpdatedSupplierAddressValues(
         UpdateSupplierRequest request, DomainModels.Supplier supplier)
     {
-        string street = request.FieldMask.Contains("address.street") && !string.IsNullOrEmpty(request.Address?.Street)
-            ? request.Address.Street
+        Street street = request.FieldMask.Contains("address.street") && !string.IsNullOrEmpty(request.Address?.Street)
+            ? new Street(request.Address.Street)
             : supplier.Address.Street;
 
-        string city = request.FieldMask.Contains("address.city") && !string.IsNullOrEmpty(request.Address?.City)
-            ? request.Address.City
+        City city = request.FieldMask.Contains("address.city") && !string.IsNullOrEmpty(request.Address?.City)
+            ? new City(request.Address.City)
             : supplier.Address.City;
 
-        string postalCode =
+        PostalCode postalCode =
             request.FieldMask.Contains("address.postalcode") && !string.IsNullOrEmpty(request.Address?.PostalCode)
-                ? request.Address.PostalCode
+                ? new PostalCode(request.Address.PostalCode)
                 : supplier.Address.PostalCode;
 
-        string country = request.FieldMask.Contains("address.country") &&
+        Country country = request.FieldMask.Contains("address.country") &&
                          !string.IsNullOrEmpty(request.Address?.Country)
-            ? request.Address.Country
+            ? new Country(request.Address.Country)
             : supplier.Address.Country;
 
         return new Address { Street = street, City = city, PostalCode = postalCode, Country = country };

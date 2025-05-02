@@ -5,8 +5,8 @@ namespace backend.Supplier.DomainModels.ValueObjects;
 
 public record Address
 {
-    public required string Street { get; init; }
-    public required string City { get; init; }
-    public required string PostalCode { get; init; }
-    public required string Country { get; init; }
+    public required Street Street { get; init; }
+    public required City City { get; init; }
+    public required PostalCode PostalCode { get; init; }
+    public required Country Country { get; init; }
 }

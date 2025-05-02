@@ -89,6 +89,10 @@ SqlMapper.AddTypeHandler(new TextTypeHandler());
 SqlMapper.AddTypeHandler(new AreaCodeTypeHandler());
 SqlMapper.AddTypeHandler(new CountryCodeTypeHandler());
 SqlMapper.AddTypeHandler(new PhoneDigitsTypeHandler());
+SqlMapper.AddTypeHandler(new StreetTypeHandler());
+SqlMapper.AddTypeHandler(new CityTypeHandler());
+SqlMapper.AddTypeHandler(new PostalCodeTypeHandler());
+SqlMapper.AddTypeHandler(new CountryTypeHandler());
 
 WebApplication app = builder.Build();
 
