@@ -36,11 +36,19 @@ public class ProductViewRepository(
             return [];
         }
 
-        var parameters = new DynamicParameters();
-        parameters.Add("@ProductIds", productIds);
-        var results = await dbConnection.QueryAsync<DomainModels.Views.ProductView>(ProductViewQueries.GetProductsByIds,
-            new { ProductIds = productIds });
-        return results.ToList();
+        var products = await dbConnection
+            .QueryAsync<DomainModels.Views.ProductView, Dimensions, DomainModels.Views.ProductView>(
+                ProductViewQueries.GetProductsByIds,
+                (product, dimensions) =>
+                {
+                    product.Dimensions = dimensions;
+                    return product;
+                },
+                new { ProductIds = productIds.ToArray() },
+                splitOn: "Length"
+            );
+
+        return products.ToList();
     }
 
     // Todo: Refactor this
