@@ -30,14 +30,14 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
     {
         IsDirty = true;
         Add(product);
-        return Task.FromResult(product.Id);
+        return Task.CompletedTask;
     }
 
     public Task CreateGroomingAndHygieneProductAsync(GroomingAndHygiene product)
     {
         IsDirty = true;
         Add(product);
-        return Task.FromResult(product.Id);
+        return Task.CompletedTask;
     }
 
     public Task<long> CreateProductAsync(DomainModels.Product product)
@@ -88,5 +88,41 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
         IsDirty = true;
 
         return Task.FromResult(product.Id);
+    }
+
+    public Task<IEnumerable<long>> CreateProductsAsync(IEnumerable<DomainModels.Product> products)
+    {
+        IsDirty = true;
+        IEnumerable<DomainModels.Product> productList = products.ToList();
+        foreach (var product in productList)
+        {
+            Add(product);
+        }
+
+        return Task.FromResult(productList.Select(x => x.Id));
+    }
+
+    public Task CreatePetFoodProductsAsync(IEnumerable<PetFood> petFoodProducts)
+    {
+        IsDirty = true;
+        IEnumerable<DomainModels.Product> productList = petFoodProducts.ToList();
+        foreach (var product in productList)
+        {
+            Add(product);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public Task CreateGroomingAndHygieneProductsAsync(IEnumerable<GroomingAndHygiene> groomingProducts)
+    {
+        IsDirty = true;
+        IEnumerable<DomainModels.Product> productList = groomingProducts.ToList();
+        foreach (var product in productList)
+        {
+            Add(product);
+        }
+
+        return Task.CompletedTask;
     }
 }

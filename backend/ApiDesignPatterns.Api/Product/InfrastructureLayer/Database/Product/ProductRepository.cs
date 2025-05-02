@@ -164,4 +164,66 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
             }
         );
     }
+
+    public async Task<IEnumerable<long>> CreateProductsAsync(IEnumerable<DomainModels.Product> products)
+    {
+        var results = new List<long>();
+
+        foreach (var product in products)
+        {
+            long id = await dbConnection.ExecuteScalarAsync<long>(
+                ProductQueries.CreateProduct,
+                new
+                {
+                    product.Name,
+                    product.Dimensions.Length,
+                    product.Dimensions.Width,
+                    product.Dimensions.Height,
+                    product.Category,
+                    product.Pricing.BasePrice,
+                    product.Pricing.DiscountPercentage,
+                    product.Pricing.TaxRate
+                }
+            );
+            results.Add(id);
+        }
+
+        return results;
+    }
+
+    public async Task CreatePetFoodProductsAsync(IEnumerable<PetFood> petFoodProducts)
+    {
+        var parametersList = petFoodProducts.Select(product => new
+        {
+            product.Id,
+            product.AgeGroup,
+            product.BreedSize,
+            Ingredients = product.Ingredients.Value,
+            StorageInstructions = product.StorageInstructions.Value,
+            WeightKg = product.WeightKg.Value
+        }).ToList();
+
+        await dbConnection.ExecuteAsync(
+            ProductQueries.CreatePetFoodProduct,
+            parametersList
+        );
+    }
+
+    public async Task CreateGroomingAndHygieneProductsAsync(IEnumerable<GroomingAndHygiene> groomingProducts)
+    {
+        var parametersList = groomingProducts.Select(product => new
+        {
+            product.Id,
+            product.IsNatural,
+            product.IsHypoallergenic,
+            UsageInstructions = product.UsageInstructions.Value,
+            product.IsCrueltyFree,
+            SafetyWarnings = product.SafetyWarnings.Value
+        }).ToList();
+
+        await dbConnection.ExecuteAsync(
+            ProductQueries.CreateGroomingAndHygieneProduct,
+            parametersList
+        );
+    }
 }

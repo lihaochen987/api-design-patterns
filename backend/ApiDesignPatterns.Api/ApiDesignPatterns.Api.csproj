@@ -601,6 +601,12 @@
     <Compile Update="Supplier\DomainModels\ValueObjects\CountryTypeHandler.cs">
       <DependentUpon>Country.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Controllers\Product\BatchCreateProductsRequest.cs">
+      <DependentUpon>BatchCreateProductsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\BatchCreateProductsResponse.cs">
+      <DependentUpon>BatchCreateProductsController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

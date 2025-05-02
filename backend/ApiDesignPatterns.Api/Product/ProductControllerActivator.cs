@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Product.ApplicationLayer.Commands.BatchCreateProducts;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
@@ -364,6 +365,38 @@ public class ProductControllerActivator : BaseControllerActivator
 
             return new BatchGetProductsController(
                 batchGetProductsHandler);
+        }
+
+        if (type == typeof(BatchCreateProductsController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new ProductRepository(dbConnection);
+
+            // BatchCreateProducts handler
+            var batchCreateProducts = new CommandDecoratorBuilder<BatchCreateProductsCommand>(
+                    new BatchCreateProductsHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
+                .Build();
+
+            // CreateProductRequest handler
+            var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
+
+            // CreateProductResponse handler
+            var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
+
+            return new BatchCreateProductsController(
+                batchCreateProducts,
+                createProductRequestHandler,
+                createProductResponseHandler);
         }
 
         return null;

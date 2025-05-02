@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using backend.Product.DomainModels.ValueObjects;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -7,6 +8,9 @@ namespace backend.Product.Controllers.Product;
 [SwaggerDiscriminator("category")]
 [SwaggerSubType(typeof(CreatePetFoodResponse))]
 [SwaggerSubType(typeof(CreateGroomingAndHygieneResponse))]
+[JsonDerivedType(typeof(CreateProductResponse), typeDiscriminator: "Product")]
+[JsonDerivedType(typeof(CreatePetFoodResponse), typeDiscriminator: "PetFood")]
+[JsonDerivedType(typeof(CreateGroomingAndHygieneResponse), typeDiscriminator: "GroomingAndHygiene")]
 public record CreateProductResponse
 {
     [Required] public required string Id { get; init; }

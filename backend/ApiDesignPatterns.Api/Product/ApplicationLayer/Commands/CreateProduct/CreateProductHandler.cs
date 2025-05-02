@@ -13,12 +13,12 @@ public class CreateProductHandler(IProductRepository repository) : ICommandHandl
     public async Task Handle(CreateProductCommand command)
     {
         long id = await repository.CreateProductAsync(command.Product);
-        var updatedProduct = command.Product with { Id = id };
+        var createdProduct = command.Product with { Id = id };
 
-        switch (updatedProduct.Category)
+        switch (createdProduct.Category)
         {
-            case Category.PetFood when updatedProduct is not PetFood:
-            case Category.GroomingAndHygiene when updatedProduct is not GroomingAndHygiene:
+            case Category.PetFood when createdProduct is not PetFood:
+            case Category.GroomingAndHygiene when createdProduct is not GroomingAndHygiene:
                 throw new InvalidOperationException();
             case Category.Toys:
             case Category.CollarsAndLeashes:
@@ -28,7 +28,7 @@ public class CreateProductHandler(IProductRepository repository) : ICommandHandl
             case Category.Clothing:
                 break;
             default:
-                switch (updatedProduct)
+                switch (createdProduct)
                 {
                     case PetFood petFood:
                         await repository.CreatePetFoodProductAsync(petFood);

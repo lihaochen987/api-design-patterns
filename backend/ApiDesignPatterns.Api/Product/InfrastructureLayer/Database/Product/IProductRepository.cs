@@ -14,4 +14,7 @@ public interface IProductRepository
     Task<long> UpdateProductAsync(DomainModels.Product product);
     Task UpdatePetFoodProductAsync(PetFood product);
     Task UpdateGroomingAndHygieneProductAsync(GroomingAndHygiene product);
+    Task<IEnumerable<long>> CreateProductsAsync(IEnumerable<DomainModels.Product> products);
+    Task CreatePetFoodProductsAsync(IEnumerable<PetFood> petFoodProducts);
+    Task CreateGroomingAndHygieneProductsAsync(IEnumerable<GroomingAndHygiene> groomingProducts);
 }
