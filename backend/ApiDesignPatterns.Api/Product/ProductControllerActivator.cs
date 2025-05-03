@@ -79,9 +79,12 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductRepository(dbConnection);
             IDatabase redisDatabase = new RedisService(_configuration).GetDatabase();
             var redisCache = new CreateProductCache(redisDatabase);
+            var services = new Dictionary<Type, object>();
 
             // CreateProductRequest handler
             var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
+            services[typeof(ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product>)] =
+                createProductRequestHandler;
 
             // CreateProduct handler
             var createProductHandler = new CommandDecoratorBuilder<CreateProductCommand>(
@@ -99,6 +102,8 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // CreateProductResponse handler
             var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
+            services[typeof(ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse>)] =
+                createProductResponseHandler;
 
             // GetCreateProductFromCache handler
             var getCreateProductFromCacheHandler =
@@ -114,6 +119,8 @@ public class ProductControllerActivator : BaseControllerActivator
                     .WithValidation()
                     .WithTransaction()
                     .Build();
+            services[typeof(IAsyncQueryHandler<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult>)] =
+                getCreateProductFromCacheHandler;
 
             // CacheCreateProductResponseHandler
             var cacheCreateProductResponseHandler = new CommandDecoratorBuilder<CacheCreateProductResponseCommand>(
@@ -129,11 +136,13 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
+            // Queries Processor
+            IServiceProvider serviceProvider = new DictionaryServiceProvider(services);
+            var queryProcessor = new QueryProcessor(serviceProvider);
+
             return new CreateProductController(
+                queryProcessor,
                 createProductHandler,
-                createProductResponseHandler,
-                createProductRequestHandler,
-                getCreateProductFromCacheHandler,
                 cacheCreateProductResponseHandler);
         }
 

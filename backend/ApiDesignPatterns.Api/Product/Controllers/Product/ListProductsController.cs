@@ -42,7 +42,7 @@ public class ListProductsController(
         PagedProducts result = await queries.Process(listProductsQuery);
 
         var mapListProductsResponseQuery = new MapListProductsResponseQuery { PagedProducts = result };
-        ListProductsResponse response = await queries.Process(mapListProductsResponseQuery);
+        ListProductsResponse response = queries.Process(mapListProductsResponseQuery).Result;
 
         if (cachedResult is { SelectedForStalenessCheck: true, ProductsResponse: not null })
         {

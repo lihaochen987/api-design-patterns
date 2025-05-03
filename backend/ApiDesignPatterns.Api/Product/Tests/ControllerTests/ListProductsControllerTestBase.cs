@@ -43,7 +43,8 @@ public abstract class ListProductsControllerTestBase
                 Task.FromResult(listProducts.Object.Handle(query).Result));
 
         // GetListProductsFromCacheQuery
-        Mock<IAsyncQueryHandler<GetListProductsFromCacheQuery, GetListProductsFromCacheResult>> getListProductsFromCacheHandler = new();
+        Mock<IAsyncQueryHandler<GetListProductsFromCacheQuery, GetListProductsFromCacheResult>>
+            getListProductsFromCacheHandler = new();
         MockQueryProcessor
             .Setup(qp => qp.Process(It.IsAny<GetListProductsFromCacheQuery>()))
             .Returns<GetListProductsFromCacheQuery>(query =>

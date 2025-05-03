@@ -21,11 +21,10 @@ public class CreateProductControllerTests : CreateProductControllerTestBase
         var request = Mapper.Map<CreateProductRequest>(product);
         var expectedResponse = Mapper.Map<CreateProductResponse>(product);
         CreateProductController sut = GetCreateProductController();
-        Mock
-            .Get(GetCreateProductFromCache)
-            .Setup(svc => svc.Handle(It.Is<GetCreateProductFromCacheQuery>(q => q.RequestId == request.RequestId)))
+        MockQueryProcessor
+            .Setup(svc => svc.Process(It.Is<GetCreateProductFromCacheQuery>(q =>
+                q.RequestId == request.RequestId)))
             .ReturnsAsync(new GetCreateProductFromCacheResult { CreateProductResponse = null, Hash = null });
-
         var result = await sut.CreateProduct(request);
 
         result.Should().NotBe(null);
