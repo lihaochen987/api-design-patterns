@@ -8,6 +8,7 @@ using AutoMapper;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
 using backend.Product.Controllers.Product;
+using backend.Shared;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -18,7 +19,7 @@ namespace backend.Inventory.Controllers;
 [ApiController]
 public class ListSupplierProductsController(
     IAsyncQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
-    IAsyncQueryHandler<BatchGetProductsQuery, List<GetProductResponse>> batchGetProducts,
+    IAsyncQueryHandler<BatchGetProductsQuery, Result<List<GetProductResponse>>> batchGetProducts,
     IMapper mapper)
     : ControllerBase
 {
@@ -38,7 +39,7 @@ public class ListSupplierProductsController(
 
         ListSupplierProductsResponse response = new()
         {
-            Results = mapper.Map<List<GetProductResponse>>(products), NextPageToken = inventoryResult.NextPageToken
+            Results = mapper.Map<List<GetProductResponse>>(products.Value), NextPageToken = inventoryResult.NextPageToken
         };
 
         return Ok(response);

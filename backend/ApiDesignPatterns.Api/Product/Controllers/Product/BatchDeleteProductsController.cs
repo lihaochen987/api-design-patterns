@@ -3,6 +3,7 @@
 
 using backend.Product.ApplicationLayer.Commands.BatchDeleteProducts;
 using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
+using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ namespace backend.Product.Controllers.Product;
 [Route("product")]
 public class BatchDeleteProductsController(
     ICommandHandler<BatchDeleteProductsCommand> batchDeleteProducts,
-    IAsyncQueryHandler<BatchGetProductsQuery, List<GetProductResponse>> batchGetProducts)
+    IAsyncQueryHandler<BatchGetProductsQuery, Result<List<GetProductResponse>>> batchGetProducts)
     : ControllerBase
 {
     [HttpDelete(":batchDelete")]
@@ -25,9 +26,13 @@ public class BatchDeleteProductsController(
     {
         var products = await batchGetProducts.Handle(new BatchGetProductsQuery { ProductIds = request.Ids });
 
+        if (!products.IsSuccess || products.Value == null)
+        {
+            return BadRequest(products.Error);
+        }
 
-        await batchDeleteProducts.Handle(new BatchDeleteProductsCommand() { ProductIds = request.Ids });
-        var response = new BatchGetProductsResponse { Results = products };
+        await batchDeleteProducts.Handle(new BatchDeleteProductsCommand { ProductIds = request.Ids });
+        var response = new BatchGetProductsResponse { Results = products.Value };
         return Ok(response);
     }
 }

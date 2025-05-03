@@ -351,7 +351,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
 
             // BatchGetProducts handler
-            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, List<GetProductResponse>>(
+            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<GetProductResponse>>>(
                     new BatchGetProductsHandler(repository, _mapper),
                     _loggerFactory,
                     dbConnection)
@@ -390,7 +390,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // BatchGetProducts handler
-            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, List<GetProductResponse>>(
+            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<GetProductResponse>>>(
                     new BatchGetProductsHandler(viewRepository, _mapper),
                     _loggerFactory,
                     dbConnection)

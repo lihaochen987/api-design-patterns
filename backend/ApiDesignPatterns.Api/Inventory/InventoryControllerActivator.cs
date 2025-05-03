@@ -343,7 +343,7 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .Build();
 
             // BatchGetProducts handler
-            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, List<GetProductResponse>>(
+            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<GetProductResponse>>>(
                     new BatchGetProductsHandler(productViewRepository, mapper),
                     _loggerFactory,
                     dbConnection)
