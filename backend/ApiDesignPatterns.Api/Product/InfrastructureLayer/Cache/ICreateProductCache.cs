@@ -9,4 +9,5 @@ namespace backend.Product.InfrastructureLayer.Cache;
 public interface ICreateProductCache
 {
     Task<CachedItem<CreateProductResponse>?> GetAsync(string key);
+    Task SetAsync(string key, CachedItem<CreateProductResponse> value, TimeSpan expiry);
 }

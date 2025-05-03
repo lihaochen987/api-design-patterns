@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Product.ApplicationLayer.Commands.CacheCreateProductResponse;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
@@ -23,6 +24,9 @@ public abstract class CreateProductControllerTestBase
         GetCreateProductFromCache =
             Mock.Of<IAsyncQueryHandler<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult>>();
 
+    protected readonly ICommandHandler<CacheCreateProductResponseCommand> CacheCreateProductResponse =
+        Mock.Of<ICommandHandler<CacheCreateProductResponseCommand>>();
+
     protected readonly ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> CreateProductResponse;
     protected readonly ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> CreateProductRequest;
 
@@ -42,6 +46,7 @@ public abstract class CreateProductControllerTestBase
             CreateProduct,
             CreateProductResponse,
             CreateProductRequest,
-            GetCreateProductFromCache);
+            GetCreateProductFromCache,
+            CacheCreateProductResponse);
     }
 }

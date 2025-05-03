@@ -4,6 +4,7 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.BatchCreateProducts;
 using backend.Product.ApplicationLayer.Commands.BatchDeleteProducts;
+using backend.Product.ApplicationLayer.Commands.CacheCreateProductResponse;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Commands.DeleteProduct;
 using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
@@ -100,16 +101,31 @@ public class ProductControllerActivator : BaseControllerActivator
             var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
 
             // GetCreateProductFromCache handler
-            var getCreateProductFromCacheHandler = new QueryDecoratorBuilder<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult>(
-                    new GetCreateProductFromCacheHandler(redisCache),
-                    _loggerFactory,
-                    dbConnection)
+            var getCreateProductFromCacheHandler =
+                new QueryDecoratorBuilder<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult>(
+                        new GetCreateProductFromCacheHandler(redisCache),
+                        _loggerFactory,
+                        dbConnection)
+                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                    .WithHandshaking()
+                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                    .WithBulkhead(BulkheadPolicies.ProductRead)
+                    .WithLogging()
+                    .WithValidation()
+                    .WithTransaction()
+                    .Build();
+
+            // CacheCreateProductResponseHandler
+            var cacheCreateProductResponseHandler = new CommandDecoratorBuilder<CacheCreateProductResponseCommand>(
+                    new CacheCreateProductResponseHandler(redisCache),
+                    dbConnection,
+                    _loggerFactory)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.ProductRead)
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
                 .WithLogging()
-                .WithValidation()
+                .WithAudit()
                 .WithTransaction()
                 .Build();
 
@@ -117,7 +133,8 @@ public class ProductControllerActivator : BaseControllerActivator
                 createProductHandler,
                 createProductResponseHandler,
                 createProductRequestHandler,
-                getCreateProductFromCacheHandler);
+                getCreateProductFromCacheHandler,
+                cacheCreateProductResponseHandler);
         }
 
         if (type == typeof(DeleteProductController))
@@ -369,18 +386,19 @@ public class ProductControllerActivator : BaseControllerActivator
             var repository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
 
             // BatchGetProducts handler
-            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<GetProductResponse>>>(
-                    new BatchGetProductsHandler(repository, _mapper),
-                    _loggerFactory,
-                    dbConnection)
-                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
-                .WithHandshaking()
-                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.ProductRead)
-                .WithLogging()
-                .WithValidation()
-                .WithTransaction()
-                .Build();
+            var batchGetProductsHandler =
+                new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<GetProductResponse>>>(
+                        new BatchGetProductsHandler(repository, _mapper),
+                        _loggerFactory,
+                        dbConnection)
+                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                    .WithHandshaking()
+                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                    .WithBulkhead(BulkheadPolicies.ProductRead)
+                    .WithLogging()
+                    .WithValidation()
+                    .WithTransaction()
+                    .Build();
 
             return new BatchGetProductsController(
                 batchGetProductsHandler);
@@ -408,18 +426,19 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // BatchGetProducts handler
-            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<GetProductResponse>>>(
-                    new BatchGetProductsHandler(viewRepository, _mapper),
-                    _loggerFactory,
-                    dbConnection)
-                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
-                .WithHandshaking()
-                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.ProductRead)
-                .WithLogging()
-                .WithValidation()
-                .WithTransaction()
-                .Build();
+            var batchGetProductsHandler =
+                new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<GetProductResponse>>>(
+                        new BatchGetProductsHandler(viewRepository, _mapper),
+                        _loggerFactory,
+                        dbConnection)
+                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                    .WithHandshaking()
+                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                    .WithBulkhead(BulkheadPolicies.ProductRead)
+                    .WithLogging()
+                    .WithValidation()
+                    .WithTransaction()
+                    .Build();
 
             return new BatchDeleteProductsController(
                 batchDeleteProductsHandler,

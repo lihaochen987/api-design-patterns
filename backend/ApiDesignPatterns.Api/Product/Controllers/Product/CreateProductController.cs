@@ -1,3 +1,4 @@
+using backend.Product.ApplicationLayer.Commands.CacheCreateProductResponse;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
@@ -15,7 +16,8 @@ public class CreateProductController(
     ICommandHandler<CreateProductCommand> createProduct,
     ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> createProductResponse,
     ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> mapProductRequest,
-    IAsyncQueryHandler<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult> getCreateProductFromCache)
+    IAsyncQueryHandler<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult> getCreateProductFromCache,
+    ICommandHandler<CacheCreateProductResponseCommand> cacheCreateProductResponse)
     : ControllerBase
 {
     [HttpPost]
@@ -26,7 +28,7 @@ public class CreateProductController(
     {
         var cachedProduct =
             await getCreateProductFromCache.Handle(
-                new GetCreateProductFromCacheQuery { RequestId = request.RequestId });
+                new GetCreateProductFromCacheQuery { RequestId = request.RequestId, CreateProductRequest = request });
 
         if (cachedProduct.CreateProductResponse != null)
         {
@@ -38,10 +40,16 @@ public class CreateProductController(
         }
 
         var product = mapProductRequest.Handle(new MapCreateProductRequestQuery { Request = request });
-
         await createProduct.Handle(new CreateProductCommand { Product = product });
-
         var response = createProductResponse.Handle(new MapCreateProductResponseQuery { Product = product });
+
+        if (request.RequestId != null)
+        {
+            await cacheCreateProductResponse.Handle(new CacheCreateProductResponseCommand
+            {
+                RequestId = request.RequestId, CreateProductRequest = request, CreateProductResponse = response
+            });
+        }
 
         return CreatedAtAction(
             "GetProduct",

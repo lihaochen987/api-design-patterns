@@ -10,14 +10,28 @@ public class GetCreateProductFromCacheHandler(ICreateProductCache cache)
 {
     public async Task<GetCreateProductFromCacheResult> Handle(GetCreateProductFromCacheQuery query)
     {
+        string hash = GenerateHash(query.CreateProductRequest);
+
         if (query.RequestId == null)
         {
             return new GetCreateProductFromCacheResult { CreateProductResponse = null, Hash = null };
         }
 
         CachedItem<CreateProductResponse>? cachedData = await cache.GetAsync(query.RequestId);
-        return cachedData == null
-            ? new GetCreateProductFromCacheResult { CreateProductResponse = null, Hash = null }
-            : new GetCreateProductFromCacheResult { CreateProductResponse = cachedData.Item, Hash = cachedData.Hash };
+
+        if (cachedData == null || cachedData.Hash != hash)
+        {
+            return new GetCreateProductFromCacheResult { CreateProductResponse = null, Hash = null };
+        }
+
+        return new GetCreateProductFromCacheResult { CreateProductResponse = cachedData.Item, Hash = cachedData.Hash };
+    }
+
+    private static string GenerateHash<T>(T obj)
+    {
+        string json = System.Text.Json.JsonSerializer.Serialize(obj);
+        byte[] hashBytes = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(json));
+
+        return Convert.ToBase64String(hashBytes);
     }
 }
