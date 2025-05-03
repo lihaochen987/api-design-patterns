@@ -10,12 +10,11 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace backend.Product.Controllers.Product;
 
 [ApiController]
-[Route("product")]
 public class BatchGetProductsController(
     IAsyncQueryHandler<BatchGetProductsQuery, Result<List<GetProductResponse>>> batchGetProducts)
     : ControllerBase
 {
-    [HttpGet(":batchGet")]
+    [HttpGet("product:batchGet")]
     [SwaggerOperation(Summary = "Get a batch of products", Tags = ["Products"])]
     [ProducesResponseType(typeof(BatchGetProductsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

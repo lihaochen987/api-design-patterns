@@ -12,14 +12,13 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace backend.Product.Controllers.Product;
 
 [ApiController]
-[Route("product")]
 public class BatchDeleteProductsController(
     ICommandHandler<BatchDeleteProductsCommand> batchDeleteProducts,
     IAsyncQueryHandler<BatchGetProductsQuery, Result<List<GetProductResponse>>> batchGetProducts)
     : ControllerBase
 {
-    [HttpDelete(":batchDelete")]
-    [SwaggerOperation(Summary = "Delete a batch of products based on id", Tags = ["Products"])]
+    [HttpDelete("product:batchDelete")]
+    [SwaggerOperation(Summary = "Delete a batch of products", Tags = ["Products"])]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> GetBatchProducts(
         [FromBody] BatchDeleteProductsRequest request)

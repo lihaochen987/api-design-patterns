@@ -9,14 +9,13 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace backend.Product.Controllers.Product;
 
 [ApiController]
-[Route("product")]
 public class BatchCreateProductsController(
     ICommandHandler<BatchCreateProductsCommand> batchCreateProducts,
     ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> mapCreateProductRequest,
     ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> mapCreateProductResponse)
     : ControllerBase
 {
-    [HttpPost(":batchCreate")]
+    [HttpPost("product:batchCreate")]
     [SwaggerOperation(Summary = "Create a batch of products", Tags = ["Products"])]
     [ProducesResponseType(typeof(BatchCreateProductsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
