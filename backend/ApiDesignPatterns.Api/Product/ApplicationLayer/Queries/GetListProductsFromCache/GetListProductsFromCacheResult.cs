@@ -5,7 +5,7 @@ using backend.Product.Controllers.Product;
 
 namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 
-public record CacheQueryResult
+public record GetListProductsFromCacheResult
 {
     public ListProductsResponse? ProductsResponse { get; init; }
     public required string CacheKey { get; init; }

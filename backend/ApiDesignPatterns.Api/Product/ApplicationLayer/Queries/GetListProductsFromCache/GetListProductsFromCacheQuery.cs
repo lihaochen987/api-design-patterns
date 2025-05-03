@@ -7,7 +7,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 
-public record GetListProductsFromCacheQuery : IQuery<CacheQueryResult>
+public record GetListProductsFromCacheQuery : IQuery<GetListProductsFromCacheResult>
 {
     public required ListProductsRequest Request { get; init; }
 

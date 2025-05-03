@@ -16,12 +16,12 @@ public abstract class GetListProductsFromCacheHandlerTestBase
     protected readonly ListProductsExceptionThrowingCacheFake ThrowingCache = new();
     protected readonly Fixture Fixture = new();
 
-    protected IAsyncQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> GetListProductsFromCacheHandler()
+    protected IAsyncQueryHandler<GetListProductsFromCacheQuery, GetListProductsFromCacheResult> GetListProductsFromCacheHandler()
     {
         return new GetListProductsFromCacheHandler(Cache);
     }
 
-    protected IAsyncQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult> GetExceptionThrowingHandler()
+    protected IAsyncQueryHandler<GetListProductsFromCacheQuery, GetListProductsFromCacheResult> GetExceptionThrowingHandler()
     {
         return new GetListProductsFromCacheHandler(ThrowingCache);
     }

@@ -1,4 +1,5 @@
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
+using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Shared.CommandHandler;
@@ -13,7 +14,8 @@ namespace backend.Product.Controllers.Product;
 public class CreateProductController(
     ICommandHandler<CreateProductCommand> createProduct,
     ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> createProductResponse,
-    ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> mapProductRequest)
+    ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> mapProductRequest,
+    IAsyncQueryHandler<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult> getCreateProductFromCache)
     : ControllerBase
 {
     [HttpPost]
@@ -22,6 +24,19 @@ public class CreateProductController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
+        var cachedProduct =
+            await getCreateProductFromCache.Handle(
+                new GetCreateProductFromCacheQuery { RequestId = request.RequestId });
+
+        if (cachedProduct.CreateProductResponse != null)
+        {
+            return CreatedAtAction(
+                "GetProduct",
+                "GetProduct",
+                new { id = cachedProduct.CreateProductResponse.Id },
+                cachedProduct);
+        }
+
         var product = mapProductRequest.Handle(new MapCreateProductRequestQuery { Request = request });
 
         await createProduct.Handle(new CreateProductCommand { Product = product });

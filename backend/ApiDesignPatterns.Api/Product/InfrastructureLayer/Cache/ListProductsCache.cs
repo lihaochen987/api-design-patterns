@@ -23,11 +23,6 @@ public class ListProductsCache(IDatabase redisDatabase) : IListProductsCache
         await redisDatabase.StringSetAsync(key, serializedValue, expiry);
     }
 
-    public IBatch CreateBatch()
-    {
-        return redisDatabase.CreateBatch();
-    }
-
     public Task<HashEntry[]> HashGetAllAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
     {
         return redisDatabase.HashGetAllAsync(key, flags);

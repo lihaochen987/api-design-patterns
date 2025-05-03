@@ -7,4 +7,5 @@ public record CachedItem<T>
 {
     public T? Item { get; init; }
     public DateTime Timestamp { get; init; }
+    public string? Hash { get; init; }
 }

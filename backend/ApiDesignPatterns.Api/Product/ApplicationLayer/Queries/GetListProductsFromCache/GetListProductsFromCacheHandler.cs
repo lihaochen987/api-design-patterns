@@ -11,9 +11,9 @@ namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 
 public class GetListProductsFromCacheHandler(
     IListProductsCache cache)
-    : IAsyncQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>
+    : IAsyncQueryHandler<GetListProductsFromCacheQuery, GetListProductsFromCacheResult>
 {
-    public async Task<CacheQueryResult> Handle(GetListProductsFromCacheQuery query)
+    public async Task<GetListProductsFromCacheResult> Handle(GetListProductsFromCacheQuery query)
     {
         string cacheKey = GenerateCacheKey(query.Request);
         try
@@ -22,20 +22,20 @@ public class GetListProductsFromCacheHandler(
 
             if (ShouldCheckStaleness(query.CheckRate))
             {
-                return new CacheQueryResult
+                return new GetListProductsFromCacheResult
                 {
                     ProductsResponse = cachedData?.Item, CacheKey = cacheKey, SelectedForStalenessCheck = true
                 };
             }
 
-            return new CacheQueryResult
+            return new GetListProductsFromCacheResult
             {
                 ProductsResponse = cachedData?.Item, CacheKey = cacheKey, SelectedForStalenessCheck = false
             };
         }
         catch
         {
-            return new CacheQueryResult { ProductsResponse = null, CacheKey = cacheKey };
+            return new GetListProductsFromCacheResult { ProductsResponse = null, CacheKey = cacheKey };
         }
     }
 

@@ -1,7 +1,7 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Product.ApplicationLayer.Commands.CreateProduct;
+using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
 using backend.Product.Tests.TestHelpers.Builders;
@@ -21,6 +21,10 @@ public class CreateProductControllerTests : CreateProductControllerTestBase
         var request = Mapper.Map<CreateProductRequest>(product);
         var expectedResponse = Mapper.Map<CreateProductResponse>(product);
         CreateProductController sut = GetCreateProductController();
+        Mock
+            .Get(GetCreateProductFromCache)
+            .Setup(svc => svc.Handle(It.Is<GetCreateProductFromCacheQuery>(q => q.RequestId == request.RequestId)))
+            .ReturnsAsync(new GetCreateProductFromCacheResult { CreateProductResponse = null, Hash = null });
 
         var result = await sut.CreateProduct(request);
 

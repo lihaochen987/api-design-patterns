@@ -28,7 +28,7 @@ public class ListProductsController(
     {
         var getListProductsFromCacheQuery =
             new GetListProductsFromCacheQuery { Request = request, CheckRate = stalenessOptions.CheckRate };
-        CacheQueryResult cachedResult = await queries.Process(getListProductsFromCacheQuery);
+        GetListProductsFromCacheResult cachedResult = await queries.Process(getListProductsFromCacheQuery);
 
         if (cachedResult is { ProductsResponse: not null, SelectedForStalenessCheck: false })
         {

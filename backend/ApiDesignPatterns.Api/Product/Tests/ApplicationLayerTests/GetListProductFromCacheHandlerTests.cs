@@ -29,7 +29,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         await Cache.SetAsync("products:maxsize:10", expectedResponse, TimeSpan.FromMinutes(10));
         var sut = GetListProductsFromCacheHandler();
 
-        CacheQueryResult result = await sut.Handle(query);
+        GetListProductsFromCacheResult result = await sut.Handle(query);
 
         result.Should().NotBeNull();
         result.ProductsResponse.Should().NotBeNull();
@@ -45,7 +45,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         var query = new GetListProductsFromCacheQuery { Request = request, CheckRate = 5 };
         var sut = GetListProductsFromCacheHandler();
 
-        CacheQueryResult result = await sut.Handle(query);
+        GetListProductsFromCacheResult result = await sut.Handle(query);
 
         result.Should().NotBeNull();
         result.ProductsResponse.Should().BeNull();
@@ -60,7 +60,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         var sut = GetExceptionThrowingHandler();
         ThrowingCache.SetKeyToThrowOn("products:maxsize:10");
 
-        CacheQueryResult result = await sut.Handle(query);
+        GetListProductsFromCacheResult result = await sut.Handle(query);
 
         result.Should().NotBeNull();
         result.ProductsResponse.Should().BeNull();
@@ -74,7 +74,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         var query = new GetListProductsFromCacheQuery { Request = request, CheckRate = 5 };
         var sut = GetListProductsFromCacheHandler();
 
-        CacheQueryResult result = await sut.Handle(query);
+        GetListProductsFromCacheResult result = await sut.Handle(query);
 
         result.Should().NotBeNull();
         result.CacheKey.Should().Be("products:maxsize:10:page-token:token123");
@@ -87,7 +87,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         var query = new GetListProductsFromCacheQuery { Request = request, CheckRate = 5 };
         var sut = GetListProductsFromCacheHandler();
 
-        CacheQueryResult result = await sut.Handle(query);
+        GetListProductsFromCacheResult result = await sut.Handle(query);
 
         result.Should().NotBeNull();
         result.CacheKey.Should().Be("products:maxsize:10:filter:category == \"toys\"");
@@ -103,7 +103,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         var query = new GetListProductsFromCacheQuery { Request = request, CheckRate = 5 };
         var sut = GetListProductsFromCacheHandler();
 
-        CacheQueryResult result = await sut.Handle(query);
+        GetListProductsFromCacheResult result = await sut.Handle(query);
 
         result.Should().NotBeNull();
         result.CacheKey.Should().Be("products:maxsize:10:page-token:token123:filter:category == \"toys\"");
@@ -128,7 +128,7 @@ public class GetListProductsFromCacheHandlerTests : GetListProductsFromCacheHand
         RandomUtility.CheckProbability(0);
         var sut = GetListProductsFromCacheHandler();
 
-        CacheQueryResult result = await sut.Handle(query);
+        GetListProductsFromCacheResult result = await sut.Handle(query);
 
         result.Should().NotBeNull();
         result.ProductsResponse.Should().NotBeNull();

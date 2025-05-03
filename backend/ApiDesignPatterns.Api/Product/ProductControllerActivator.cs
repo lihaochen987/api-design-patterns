@@ -11,6 +11,7 @@ using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
 using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
+using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
@@ -75,6 +76,8 @@ public class ProductControllerActivator : BaseControllerActivator
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new ProductRepository(dbConnection);
+            IDatabase redisDatabase = new RedisService(_configuration).GetDatabase();
+            var redisCache = new CreateProductCache(redisDatabase);
 
             // CreateProductRequest handler
             var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
@@ -96,10 +99,25 @@ public class ProductControllerActivator : BaseControllerActivator
             // CreateProductResponse handler
             var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
 
+            // GetCreateProductFromCache handler
+            var getCreateProductFromCacheHandler = new QueryDecoratorBuilder<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult>(
+                    new GetCreateProductFromCacheHandler(redisCache),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.ProductRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
             return new CreateProductController(
                 createProductHandler,
                 createProductResponseHandler,
-                createProductRequestHandler);
+                createProductRequestHandler,
+                getCreateProductFromCacheHandler);
         }
 
         if (type == typeof(DeleteProductController))
@@ -192,7 +210,7 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // GetListProductsFromCache handler
             var getListProductsFromCacheHandler =
-                new QueryDecoratorBuilder<GetListProductsFromCacheQuery, CacheQueryResult>(
+                new QueryDecoratorBuilder<GetListProductsFromCacheQuery, GetListProductsFromCacheResult>(
                         new GetListProductsFromCacheHandler(redisCache),
                         _loggerFactory,
                         null)
@@ -200,7 +218,7 @@ public class ProductControllerActivator : BaseControllerActivator
                     .WithBulkhead(BulkheadPolicies.RedisRead)
                     .WithLogging()
                     .Build();
-            services[typeof(IAsyncQueryHandler<GetListProductsFromCacheQuery, CacheQueryResult>)] =
+            services[typeof(IAsyncQueryHandler<GetListProductsFromCacheQuery, GetListProductsFromCacheResult>)] =
                 getListProductsFromCacheHandler;
 
             // persistListProductsToCacheHandler handler

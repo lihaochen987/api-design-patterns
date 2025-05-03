@@ -3,6 +3,7 @@
 
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
+using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.Controllers.Product;
@@ -18,6 +19,10 @@ public abstract class CreateProductControllerTestBase
     protected readonly ICommandHandler<CreateProductCommand> CreateProduct =
         Mock.Of<ICommandHandler<CreateProductCommand>>();
 
+    protected readonly IAsyncQueryHandler<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult>
+        GetCreateProductFromCache =
+            Mock.Of<IAsyncQueryHandler<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult>>();
+
     protected readonly ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> CreateProductResponse;
     protected readonly ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> CreateProductRequest;
 
@@ -29,7 +34,6 @@ public abstract class CreateProductControllerTestBase
         Mapper = mapperConfiguration.CreateMapper();
         CreateProductResponse = new MapCreateProductResponseHandler(Mapper);
         CreateProductRequest = new MapCreateProductRequestHandler(Mapper);
-
     }
 
     protected CreateProductController GetCreateProductController()
@@ -37,6 +41,7 @@ public abstract class CreateProductControllerTestBase
         return new CreateProductController(
             CreateProduct,
             CreateProductResponse,
-            CreateProductRequest);
+            CreateProductRequest,
+            GetCreateProductFromCache);
     }
 }

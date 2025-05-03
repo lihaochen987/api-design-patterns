@@ -34,7 +34,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -63,7 +63,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = cachedResponse, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -96,7 +96,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -130,7 +130,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -164,7 +164,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -196,7 +196,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -230,7 +230,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -265,7 +265,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -305,7 +305,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -342,7 +342,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -376,7 +376,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
@@ -411,7 +411,7 @@ public class ListProductsControllerTests : ListProductsControllerTestBase
                 q.Request.MaxPageSize == request.MaxPageSize &&
                 q.Request.PageToken == request.PageToken &&
                 q.Request.Filter == request.Filter)))
-            .ReturnsAsync(new CacheQueryResult
+            .ReturnsAsync(new GetListProductsFromCacheResult
             {
                 ProductsResponse = null, SelectedForStalenessCheck = false, CacheKey = CacheKey
             });
