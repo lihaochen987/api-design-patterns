@@ -12,7 +12,13 @@ public class ProductViewRepositoryFake(
     PaginateService<ProductView> paginateService)
     : Collection<ProductView>, IProductViewRepository
 {
-    public void AddProductView(int id, Category category)
+    public void AddProductView(long id)
+    {
+        var productView = new ProductViewTestDataBuilder().WithId(id).Build();
+        Add(productView);
+    }
+
+    public void AddProductView(long id, Category category)
     {
         var productView = new ProductViewTestDataBuilder().WithId(id).WithCategory(category).Build();
         Add(productView);
