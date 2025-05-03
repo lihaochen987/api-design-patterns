@@ -11,6 +11,7 @@ public interface IProductRepository
     Task CreatePetFoodProductAsync(PetFood product);
     Task CreateGroomingAndHygieneProductAsync(GroomingAndHygiene product);
     Task DeleteProductAsync(long id);
+    Task DeleteProductsAsync(IEnumerable<long> ids);
     Task<long> UpdateProductAsync(DomainModels.Product product);
     Task UpdatePetFoodProductAsync(PetFood product);
     Task UpdateGroomingAndHygieneProductAsync(GroomingAndHygiene product);

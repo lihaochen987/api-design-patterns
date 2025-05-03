@@ -60,6 +60,23 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
         return Task.CompletedTask;
     }
 
+    public Task DeleteProductsAsync(IEnumerable<long> ids)
+    {
+        foreach (long id in ids)
+        {
+            var product = this.FirstOrDefault(p => p.Id == id);
+            if (product == null)
+            {
+                continue;
+            }
+
+            Remove(product);
+        }
+
+        IsDirty = true;
+        return Task.CompletedTask;
+    }
+
     public Task<long> UpdateProductAsync(DomainModels.Product product)
     {
         int index = IndexOf(this.FirstOrDefault(p => p.Id == product.Id) ??

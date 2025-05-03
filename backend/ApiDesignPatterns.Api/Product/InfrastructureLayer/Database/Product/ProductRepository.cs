@@ -114,6 +114,11 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
         await dbConnection.ExecuteAsync(ProductQueries.DeleteProduct, new { Id = id });
     }
 
+    public async Task DeleteProductsAsync(IEnumerable<long> ids)
+    {
+        await dbConnection.ExecuteAsync(ProductQueries.DeleteProducts, new { Ids = ids });
+    }
+
     public async Task<long> UpdateProductAsync(DomainModels.Product product)
     {
         return await dbConnection.ExecuteScalarAsync<long>(

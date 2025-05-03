@@ -154,6 +154,11 @@ public static class ProductQueries
                                         WHERE product_id = @Id;
                                         """;
 
+    public const string DeleteProducts = """
+                                        DELETE FROM products
+                                        WHERE product_id = ANY(@Ids)
+                                        """;
+
     public const string UpdateProduct = """
                                         UPDATE products
                                         SET
