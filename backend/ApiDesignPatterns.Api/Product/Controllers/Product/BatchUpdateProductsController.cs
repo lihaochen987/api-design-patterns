@@ -4,6 +4,7 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
 using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
+using backend.Product.ApplicationLayer.Queries.MatchProductToUpdateRequest;
 using backend.Product.DomainModels;
 using backend.Shared;
 using backend.Shared.CommandHandler;
@@ -16,8 +17,10 @@ namespace backend.Product.Controllers.Product;
 [ApiController]
 public class BatchUpdateProductsController(
     IAsyncQueryHandler<BatchGetProductsQuery, Result<List<DomainModels.Product>>> batchGetProducts,
+    ISyncQueryHandler<MatchProductToUpdateRequestQuery, MatchProductToUpdateRequestResult> matchProductToUpdateRequest,
     ICommandHandler<UpdateProductCommand> updateProduct,
-    IMapper mapper) : ControllerBase
+    IMapper mapper)
+    : ControllerBase
 {
     [HttpPatch("product:batchUpdate")]
     [SwaggerOperation(Summary = "Update a batch of products", Tags = ["Products"])]
@@ -42,18 +45,12 @@ public class BatchUpdateProductsController(
             return BadRequest(productsResult.Error);
         }
 
-        var productsToUpdate = productsResult.Value
-            .Join<DomainModels.Product, UpdateProductRequestWithId, long,
-                (DomainModels.Product ExistingProduct, UpdateProductRequestWithId RequestProduct)>(
-                request.Products,
-                existingProduct => existingProduct.Id,
-                requestProduct => requestProduct.Id,
-                (existingProduct, requestProduct) =>
-                    new ValueTuple<DomainModels.Product, UpdateProductRequestWithId>(existingProduct, requestProduct)
-            )
-            .ToList();
+        var productsToUpdate = matchProductToUpdateRequest.Handle(new MatchProductToUpdateRequestQuery
+        {
+            ExistingProducts = productsResult.Value, UpdateProductRequests = request.Products
+        });
 
-        var updateTasks = productsToUpdate.Select(products =>
+        var updateTasks = productsToUpdate.MatchedPairs.Select(products =>
             updateProduct.Handle(new UpdateProductCommand
             {
                 Request = products.RequestProduct, Product = products.ExistingProduct

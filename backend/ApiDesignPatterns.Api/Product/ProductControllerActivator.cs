@@ -22,6 +22,7 @@ using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
+using backend.Product.ApplicationLayer.Queries.MatchProductToUpdateRequest;
 using backend.Product.Controllers.Product;
 using backend.Product.Controllers.ProductPricing;
 using backend.Product.InfrastructureLayer.Cache;
@@ -388,7 +389,14 @@ public class ProductControllerActivator : BaseControllerActivator
             // Transient UpdateCommandHandler
             var transientUpdateHandler = new TransientCommandHandler<UpdateProductCommand>(UpdateHandlerFactory);
 
-            return new BatchUpdateProductsController(batchGetProductsHandler, transientUpdateHandler, _mapper);
+            // MatchProductToUpdateRequestHandler
+            var matchProductToUpdateRequestHandler = new MatchProductToUpdateRequestHandler();
+
+            return new BatchUpdateProductsController(
+                batchGetProductsHandler,
+                matchProductToUpdateRequestHandler,
+                transientUpdateHandler,
+                _mapper);
 
             ICommandHandler<UpdateProductCommand> UpdateHandlerFactory()
             {
