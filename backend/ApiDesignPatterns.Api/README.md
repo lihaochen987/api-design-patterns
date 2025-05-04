@@ -19,6 +19,7 @@ which this repository places in action. These include:
 - **Polymorphic resources** : evident from endpoints in the `Product` folder which adds additional fields based on the
   `Category`
 - **Cross-References**: evident from endpoints in the `Review` folder which references a `Product`
+- **Batch operations** : evident from the batch operations under the `Product` folder.
 
 The other patterns mentioned, but not yet implemented from the book include:
 
@@ -27,7 +28,6 @@ The other patterns mentioned, but not yet implemented from the book include:
 - **Association resources**
 - **Add and remove custom methods**
 - **Copy and move**
-- **Batch operations**
 - **Criteria-based deletion**
 - **Anonymous writes**
 - **Importing and Exporting**
