@@ -465,7 +465,7 @@ public class ProductControllerActivator : BaseControllerActivator
             // BatchGetProducts handler
             var batchGetProductsHandler =
                 new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductResponsesHandler(repository, _mapper),
+                        new ApplicationLayer.Queries.BatchGetProductResponses.BatchGetProductResponsesHandler(repository, _mapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -505,7 +505,7 @@ public class ProductControllerActivator : BaseControllerActivator
             // BatchGetProducts handler
             var batchGetProductsHandler =
                 new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductResponsesHandler(viewRepository, _mapper),
+                        new ApplicationLayer.Queries.BatchGetProductResponses.BatchGetProductResponsesHandler(viewRepository, _mapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)

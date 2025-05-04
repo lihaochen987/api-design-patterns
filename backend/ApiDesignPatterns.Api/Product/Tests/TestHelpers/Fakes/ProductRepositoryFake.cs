@@ -1,12 +1,26 @@
 using System.Collections.ObjectModel;
 using backend.Product.DomainModels;
+using backend.Product.DomainModels.Enums;
 using backend.Product.InfrastructureLayer.Database.Product;
+using backend.Product.Tests.TestHelpers.Builders;
 
 namespace backend.Product.Tests.TestHelpers.Fakes;
 
 public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductRepository
 {
     public bool IsDirty { get; set; }
+
+    public void AddProduct(long id)
+    {
+        var product = new ProductTestDataBuilder().WithId(id).Build();
+        Add(product);
+    }
+
+    public void AddProduct(long id, Category category)
+    {
+        var product = new ProductTestDataBuilder().WithId(id).WithCategory(category).Build();
+        Add(product);
+    }
 
     public Task<DomainModels.Product?> GetProductAsync(long id)
     {

@@ -616,7 +616,7 @@
     <Compile Update="Product\Controllers\Product\BatchDeleteProductsRequest.cs">
       <DependentUpon>BatchDeleteProductsController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\BatchGetProductsHandlerTestBase.cs">
+    <Compile Update="Product\Tests\ApplicationLayerTests\BatchGetProductResponsesHandlerTestBase.cs">
       <DependentUpon>BatchGetProductsHandlerTests.cs</DependentUpon>
     </Compile>
     <Compile Update="Product\Controllers\Product\BatchUpdateProductsRequest.cs">
@@ -627,6 +627,9 @@
     </Compile>
     <Compile Update="Product\Tests\ApplicationLayerTests\MatchProductToUpdateRequestTestBase.cs">
       <DependentUpon>MatchProductToUpdateRequestHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\BatchGetProductsHandlerTestBase.cs">
+      <DependentUpon>BatchGetProductsHandlerTests.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 
