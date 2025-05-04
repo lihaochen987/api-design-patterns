@@ -53,13 +53,14 @@ public class BatchUpdateProductsController(
             )
             .ToList();
 
-        foreach (var products in productsToUpdate)
-        {
-            await updateProduct.Handle(new UpdateProductCommand
+        var updateTasks = productsToUpdate.Select(products =>
+            updateProduct.Handle(new UpdateProductCommand
             {
                 Request = products.RequestProduct, Product = products.ExistingProduct
-            });
-        }
+            })
+        ).ToArray();
+
+        await Task.WhenAll(updateTasks);
 
         var updatedProducts =
             await batchGetProducts.Handle(new BatchGetProductsQuery

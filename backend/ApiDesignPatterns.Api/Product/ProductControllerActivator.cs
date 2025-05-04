@@ -366,16 +366,16 @@ public class ProductControllerActivator : BaseControllerActivator
 
         if (type == typeof(BatchUpdateProductsController))
         {
-            var dbConnection = CreateDbConnection();
-            TrackDisposable(context, dbConnection);
-            var repository = new ProductRepository(dbConnection);
+            var getDbConnection = CreateDbConnection();
+            TrackDisposable(context, getDbConnection);
+            var getRepository = new ProductRepository(getDbConnection);
 
             // BatchGetProducts handler
             var batchGetProductsHandler =
                 new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<DomainModels.Product>>>(
-                        new BatchGetProductsHandler(repository),
+                        new BatchGetProductsHandler(getRepository),
                         _loggerFactory,
-                        dbConnection)
+                        getDbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                     .WithHandshaking()
                     .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
@@ -385,21 +385,30 @@ public class ProductControllerActivator : BaseControllerActivator
                     .WithTransaction()
                     .Build();
 
-            // UpdateProduct handler
-            var updateProductHandler = new CommandDecoratorBuilder<UpdateProductCommand>(
-                    new UpdateProductHandler(repository),
-                    dbConnection,
-                    _loggerFactory)
-                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
-                .WithHandshaking()
-                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.ProductWrite)
-                .WithLogging()
-                .WithAudit()
-                .WithTransaction()
-                .Build();
+            // Transient UpdateCommandHandler
+            var transientUpdateHandler = new TransientCommandHandler<UpdateProductCommand>(UpdateHandlerFactory);
 
-            return new BatchUpdateProductsController(batchGetProductsHandler, updateProductHandler, _mapper);
+            return new BatchUpdateProductsController(batchGetProductsHandler, transientUpdateHandler, _mapper);
+
+            ICommandHandler<UpdateProductCommand> UpdateHandlerFactory()
+            {
+                var updateDbConnection = CreateDbConnection();
+                TrackDisposable(context, updateDbConnection);
+
+                var updateRepository = new ProductRepository(updateDbConnection);
+
+                return new CommandDecoratorBuilder<UpdateProductCommand>(
+                        new UpdateProductHandler(updateRepository),
+                        updateDbConnection, _loggerFactory)
+                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                    .WithHandshaking()
+                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                    .WithBulkhead(BulkheadPolicies.ProductWrite)
+                    .WithLogging()
+                    .WithAudit()
+                    .WithTransaction()
+                    .Build();
+            }
         }
 
         if (type == typeof(GetProductPricingController))
