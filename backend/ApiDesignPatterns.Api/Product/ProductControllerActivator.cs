@@ -369,22 +369,11 @@ public class ProductControllerActivator : BaseControllerActivator
         {
             var getDbConnection = CreateDbConnection();
             TrackDisposable(context, getDbConnection);
-            var getRepository = new ProductRepository(getDbConnection);
 
-            // BatchGetProducts handler
+            // Transient BatchGetProductsHandler
             var batchGetProductsHandler =
-                new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<DomainModels.Product>>>(
-                        new BatchGetProductsHandler(getRepository),
-                        _loggerFactory,
-                        getDbConnection)
-                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
-                    .WithHandshaking()
-                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                    .WithBulkhead(BulkheadPolicies.ProductRead)
-                    .WithLogging()
-                    .WithValidation()
-                    .WithTransaction()
-                    .Build();
+                new TransientQueryHandler<BatchGetProductsQuery, Result<List<DomainModels.Product>>>(
+                    BatchGetProductsHandlerFactory);
 
             // Transient UpdateCommandHandler
             var transientUpdateHandler = new TransientCommandHandler<UpdateProductCommand>(UpdateHandlerFactory);
@@ -397,6 +386,29 @@ public class ProductControllerActivator : BaseControllerActivator
                 matchProductToUpdateRequestHandler,
                 transientUpdateHandler,
                 _mapper);
+
+            IAsyncQueryHandler<BatchGetProductsQuery, Result<List<DomainModels.Product>>>
+                BatchGetProductsHandlerFactory()
+            {
+                var batchGetDbConnection = CreateDbConnection();
+                TrackDisposable(context, batchGetDbConnection);
+
+                var batchGetRepository = new ProductRepository(batchGetDbConnection);
+
+                return
+                    new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<DomainModels.Product>>>(
+                            new BatchGetProductsHandler(batchGetRepository),
+                            _loggerFactory,
+                            batchGetDbConnection)
+                        .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                        .WithHandshaking()
+                        .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                        .WithBulkhead(BulkheadPolicies.ProductRead)
+                        .WithLogging()
+                        .WithValidation()
+                        .WithTransaction()
+                        .Build();
+            }
 
             ICommandHandler<UpdateProductCommand> UpdateHandlerFactory()
             {
