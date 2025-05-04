@@ -4,7 +4,6 @@ using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Shared.CommandHandler;
-using backend.Shared.QueryHandler;
 using backend.Shared.QueryProcessor;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -25,11 +24,37 @@ public class CreateProductController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
+        string hash = GenerateHash(request);
+
         var getCreateProductFromCacheQuery =
             new GetCreateProductFromCacheQuery { RequestId = request.RequestId, CreateProductRequest = request };
         var cachedProduct = await queries.Process(getCreateProductFromCacheQuery);
 
-        if (cachedProduct.CreateProductResponse != null)
+        if (cachedProduct.CreateProductResponse == null)
+        {
+            var mapCreateProductRequestQuery = new MapCreateProductRequestQuery { Request = request };
+            var product = queries.Process(mapCreateProductRequestQuery).Result;
+            await createProduct.Handle(new CreateProductCommand { Product = product });
+
+            var mapCreateProductResponseQuery = new MapCreateProductResponseQuery { Product = product };
+            var response = queries.Process(mapCreateProductResponseQuery).Result;
+
+            if (request.RequestId != null)
+            {
+                await cacheCreateProductResponse.Handle(new CacheCreateProductResponseCommand
+                {
+                    RequestId = request.RequestId, CreateProductRequest = request, CreateProductResponse = response
+                });
+            }
+
+            return CreatedAtAction(
+                "GetProduct",
+                "GetProduct",
+                new { id = product.Id },
+                response);
+        }
+
+        if (hash == cachedProduct.Hash)
         {
             return CreatedAtAction(
                 "GetProduct",
@@ -38,25 +63,14 @@ public class CreateProductController(
                 cachedProduct);
         }
 
-        var mapCreateProductRequestQuery = new MapCreateProductRequestQuery { Request = request };
-        var product = queries.Process(mapCreateProductRequestQuery).Result;
-        await createProduct.Handle(new CreateProductCommand { Product = product });
+        return Conflict();
+    }
 
-        var mapCreateProductResponseQuery = new MapCreateProductResponseQuery { Product = product };
-        var response = queries.Process(mapCreateProductResponseQuery).Result;
+    private static string GenerateHash<T>(T obj)
+    {
+        string json = System.Text.Json.JsonSerializer.Serialize(obj);
+        byte[] hashBytes = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(json));
 
-        if (request.RequestId != null)
-        {
-            await cacheCreateProductResponse.Handle(new CacheCreateProductResponseCommand
-            {
-                RequestId = request.RequestId, CreateProductRequest = request, CreateProductResponse = response
-            });
-        }
-
-        return CreatedAtAction(
-            "GetProduct",
-            "GetProduct",
-            new { id = product.Id },
-            response);
+        return Convert.ToBase64String(hashBytes);
     }
 }

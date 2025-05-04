@@ -1,4 +1,5 @@
 ﻿using backend.Product.ApplicationLayer.Commands.BatchCreateProducts;
+using backend.Product.ApplicationLayer.Commands.CacheCreateProductResponses;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Shared.CommandHandler;
@@ -11,6 +12,7 @@ namespace backend.Product.Controllers.Product;
 [ApiController]
 public class BatchCreateProductsController(
     ICommandHandler<BatchCreateProductsCommand> batchCreateProducts,
+    ICommandHandler<CacheCreateProductResponsesCommand> cacheCreateProductResponses,
     ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> mapCreateProductRequest,
     ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> mapCreateProductResponse)
     : ControllerBase
@@ -22,7 +24,7 @@ public class BatchCreateProductsController(
     public async Task<ActionResult<BatchCreateProductsResponse>> GetBatchProducts(
         [FromBody] BatchCreateProductsRequest request)
     {
-        if (request.Products == null || !request.Products.Any())
+        if (!request.Products.Any())
         {
             return BadRequest("No products provided for batch creation");
         }
@@ -38,6 +40,16 @@ public class BatchCreateProductsController(
             .Select(product =>
                 mapCreateProductResponse.Handle(new MapCreateProductResponseQuery { Product = product }))
             .ToList();
+
+        if (request.RequestId != null)
+        {
+            await cacheCreateProductResponses.Handle(new CacheCreateProductResponsesCommand
+            {
+                RequestId = request.RequestId,
+                CreateProductRequests = request.Products,
+                CreateProductResponses = productResponses
+            });
+        }
 
         var response = new BatchCreateProductsResponse { Results = productResponses };
 

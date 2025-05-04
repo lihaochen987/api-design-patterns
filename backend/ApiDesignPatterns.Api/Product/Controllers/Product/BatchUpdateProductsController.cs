@@ -22,7 +22,7 @@ public class BatchUpdateProductsController(
     IMapper mapper)
     : ControllerBase
 {
-    [HttpPatch("product:batchUpdate")]
+    [HttpPost("product:batchUpdate")]
     [SwaggerOperation(Summary = "Update a batch of products", Tags = ["Products"])]
     [ProducesResponseType(typeof(BatchUpdateProductsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

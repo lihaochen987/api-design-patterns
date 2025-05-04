@@ -5,5 +5,6 @@ namespace backend.Product.Controllers.Product;
 
 public class BatchCreateProductsRequest
 {
-    public IEnumerable<CreateProductRequest>? Products { get; set; }
+    public string? RequestId { get; init; }
+    public IEnumerable<CreateProductRequest> Products { get; set; } = [];
 }
