@@ -5,5 +5,5 @@ namespace backend.Product.ApplicationLayer.Commands.BatchCreateProducts;
 
 public class BatchCreateProductsCommand
 {
-    public required List<DomainModels.Product> Products { get; set; }
+    public required List<DomainModels.Product> Products { get; init; }
 }

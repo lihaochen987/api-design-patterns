@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using backend.Product.DomainModels.ValueObjects;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace backend.Product.Controllers.Product;
 
 [SwaggerDiscriminator("category")]
-[SwaggerSubType(typeof(UpdatePetFoodResponse))]
-[SwaggerSubType(typeof(UpdateGroomingAndHygieneResponse))]
+[JsonDerivedType(typeof(UpdatePetFoodResponse), "PetFood")]
+[JsonDerivedType(typeof(UpdateGroomingAndHygieneResponse), "GroomingAndHygiene")]
 public record UpdateProductResponse
 {
     [Required] public required string Id { get; init; }

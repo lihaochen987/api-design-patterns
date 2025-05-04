@@ -11,6 +11,7 @@ using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 using backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
+using backend.Product.ApplicationLayer.Queries.BatchGetProductResponses;
 using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
 using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
@@ -363,6 +364,44 @@ public class ProductControllerActivator : BaseControllerActivator
             return new UpdateProductController(getProductHandler, updateProductHandler, _mapper);
         }
 
+        if (type == typeof(BatchUpdateProductsController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new ProductRepository(dbConnection);
+
+            // BatchGetProducts handler
+            var batchGetProductsHandler =
+                new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<DomainModels.Product>>>(
+                        new BatchGetProductsHandler(repository),
+                        _loggerFactory,
+                        dbConnection)
+                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                    .WithHandshaking()
+                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                    .WithBulkhead(BulkheadPolicies.ProductRead)
+                    .WithLogging()
+                    .WithValidation()
+                    .WithTransaction()
+                    .Build();
+
+            // UpdateProduct handler
+            var updateProductHandler = new CommandDecoratorBuilder<UpdateProductCommand>(
+                    new UpdateProductHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.ProductWrite)
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
+                .Build();
+
+            return new BatchUpdateProductsController(batchGetProductsHandler, updateProductHandler, _mapper);
+        }
+
         if (type == typeof(GetProductPricingController))
         {
             var dbConnection = CreateDbConnection();
@@ -396,8 +435,8 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // BatchGetProducts handler
             var batchGetProductsHandler =
-                new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductsHandler(repository, _mapper),
+                new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
+                        new BatchGetProductResponsesHandler(repository, _mapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -436,8 +475,8 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // BatchGetProducts handler
             var batchGetProductsHandler =
-                new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductsHandler(viewRepository, _mapper),
+                new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
+                        new BatchGetProductResponsesHandler(viewRepository, _mapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)

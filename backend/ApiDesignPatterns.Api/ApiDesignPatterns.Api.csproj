@@ -619,6 +619,12 @@
     <Compile Update="Product\Tests\ApplicationLayerTests\BatchGetProductsHandlerTestBase.cs">
       <DependentUpon>BatchGetProductsHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Controllers\Product\BatchUpdateProductsRequest.cs">
+      <DependentUpon>BatchUpdateProductsController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Product\Controllers\Product\BatchUpdateProductsResponse.cs">
+      <DependentUpon>BatchUpdateProductsController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

@@ -20,6 +20,21 @@ public static class ProductQueries
                                      WHERE product_id = @Id;
                                      """;
 
+    public const string GetProductsByIds = """
+                                           SELECT
+                                           product_id AS Id,
+                                           product_name AS Name,
+                                           product_category AS Category,
+                                           product_dimensions_length_cm AS Length,
+                                           product_dimensions_width_cm AS Width,
+                                           product_dimensions_height_cm AS Height,
+                                           product_base_price AS BasePrice,
+                                           product_discount_percentage AS DiscountPercentage,
+                                           product_tax_rate AS TaxRate
+                                           FROM products
+                                           WHERE product_id = ANY(@ProductIds)
+                                           """;
+
     public const string GetPetFoodProduct = """
                                             SELECT
                                                 p.product_id AS Id,
@@ -155,9 +170,9 @@ public static class ProductQueries
                                         """;
 
     public const string DeleteProducts = """
-                                        DELETE FROM products
-                                        WHERE product_id = ANY(@Ids)
-                                        """;
+                                         DELETE FROM products
+                                         WHERE product_id = ANY(@Ids)
+                                         """;
 
     public const string UpdateProduct = """
                                         UPDATE products

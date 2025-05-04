@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.ApplicationLayer.Commands.BatchDeleteProducts;
-using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
+using backend.Product.ApplicationLayer.Queries.BatchGetProductResponses;
 using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
@@ -14,7 +14,7 @@ namespace backend.Product.Controllers.Product;
 [ApiController]
 public class BatchDeleteProductsController(
     ICommandHandler<BatchDeleteProductsCommand> batchDeleteProducts,
-    IAsyncQueryHandler<BatchGetProductsQuery, Result<List<GetProductResponse>>> batchGetProducts)
+    IAsyncQueryHandler<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>> batchGetProducts)
     : ControllerBase
 {
     [HttpDelete("product:batchDelete")]
@@ -23,7 +23,7 @@ public class BatchDeleteProductsController(
     public async Task<ActionResult> GetBatchProducts(
         [FromBody] BatchDeleteProductsRequest request)
     {
-        var products = await batchGetProducts.Handle(new BatchGetProductsQuery { ProductIds = request.Ids });
+        var products = await batchGetProducts.Handle(new BatchGetProductResponsesQuery { ProductIds = request.Ids });
 
         if (!products.IsSuccess || products.Value == null)
         {

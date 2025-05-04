@@ -3,7 +3,7 @@
 
 using AutoFixture;
 using AutoMapper;
-using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
+using backend.Product.ApplicationLayer.Queries.BatchGetProductResponses;
 using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Views;
 using backend.Product.Services.Mappers;
@@ -26,8 +26,8 @@ public abstract class BatchGetProductsHandlerTestBase
         Mapper = new Mapper(mapperConfiguration);
     }
 
-    protected IAsyncQueryHandler<BatchGetProductsQuery, Result<List<GetProductResponse>>> GetBatchGetProductsHandler()
+    protected IAsyncQueryHandler<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>> GetBatchGetProductsHandler()
     {
-        return new BatchGetProductsHandler(Repository, Mapper);
+        return new BatchGetProductResponsesHandler(Repository, Mapper);
     }
 }

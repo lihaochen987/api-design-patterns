@@ -14,6 +14,12 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
         return Task.FromResult(product);
     }
 
+    public Task<List<DomainModels.Product>> GetProductsByIds(List<long> productIds)
+    {
+        var products = this.Where(x => productIds.Contains(x.Id)).ToList();
+        return Task.FromResult(products);
+    }
+
     public Task<PetFood?> GetPetFoodProductAsync(long id)
     {
         PetFood? product = (PetFood?)this.FirstOrDefault(p => p.Id == id);

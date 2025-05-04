@@ -4,9 +4,9 @@
 using backend.Shared;
 using backend.Shared.QueryHandler;
 
-namespace backend.Product.ApplicationLayer.Queries.BatchGetProducts;
+namespace backend.Product.ApplicationLayer.Queries.BatchGetProductResponses;
 
-public record BatchGetProductsQuery : IQuery<Result<List<DomainModels.Product>>>
+public record BatchGetProductResponsesQuery : IQuery<Result<List<Controllers.Product.GetProductResponse>>>
 {
     public required List<long> ProductIds { get; init; }
 }

@@ -15,7 +15,7 @@ using backend.Inventory.DomainModels;
 using backend.Inventory.InfrastructureLayer.Database.Inventory;
 using backend.Inventory.InfrastructureLayer.Database.InventoryView;
 using backend.Inventory.Services;
-using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
+using backend.Product.ApplicationLayer.Queries.BatchGetProductResponses;
 using backend.Product.Controllers.Product;
 using backend.Product.InfrastructureLayer.Database.ProductView;
 using backend.Product.Services;
@@ -343,8 +343,8 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .Build();
 
             // BatchGetProducts handler
-            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductsQuery, Result<List<GetProductResponse>>>(
-                    new BatchGetProductsHandler(productViewRepository, mapper),
+            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
+                    new BatchGetProductResponsesHandler(productViewRepository, mapper),
                     _loggerFactory,
                     dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)

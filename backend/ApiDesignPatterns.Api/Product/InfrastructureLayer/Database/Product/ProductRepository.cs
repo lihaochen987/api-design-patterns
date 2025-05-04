@@ -29,6 +29,33 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
         return product.SingleOrDefault();
     }
 
+    public async Task<List<DomainModels.Product>> GetProductsByIds(List<long> productIds)
+    {
+        if (productIds.Count == 0)
+        {
+            return [];
+        }
+
+        var products = await dbConnection.QueryAsync<DomainModels.Product, Dimensions, Pricing, DomainModels.Product>(
+            ProductQueries.GetProductsByIds,
+            (product, dimensions, pricing) =>
+            {
+                var productResult = new DomainModels.Product
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Category = product.Category,
+                    Pricing = pricing,
+                    Dimensions = dimensions
+                };
+                return productResult;
+            },
+            new { ProductIds = productIds },
+            splitOn: "Length,BasePrice");
+
+        return products.ToList();
+    }
+
     public async Task<PetFood?> GetPetFoodProductAsync(long id)
     {
         var product = await dbConnection.QueryAsync<PetFood, Dimensions, Pricing, PetFood>(

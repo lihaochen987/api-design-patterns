@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
+using backend.Product.ApplicationLayer.Queries.BatchGetProductResponses;
 using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
 using FluentAssertions;
@@ -18,7 +18,7 @@ public class BatchGetProductsHandlerTests : BatchGetProductsHandlerTestBase
         (long productId1, long productId2) = (Fixture.Create<long>(), Fixture.Create<long>());
         Repository.AddProductView(productId1);
         Repository.AddProductView(productId2);
-        var query = new BatchGetProductsQuery { ProductIds = [productId1, productId2] };
+        var query = new BatchGetProductResponsesQuery { ProductIds = [productId1, productId2] };
         var sut = GetBatchGetProductsHandler();
 
         var result = await sut.Handle(query);
@@ -32,7 +32,7 @@ public class BatchGetProductsHandlerTests : BatchGetProductsHandlerTestBase
     {
         (long productId1, long productId2) = (Fixture.Create<long>(), Fixture.Create<long>());
         Repository.AddProductView(productId1);
-        var query = new BatchGetProductsQuery { ProductIds = [productId1, productId2] };
+        var query = new BatchGetProductResponsesQuery { ProductIds = [productId1, productId2] };
         var sut = GetBatchGetProductsHandler();
 
         var result = await sut.Handle(query);
@@ -49,7 +49,7 @@ public class BatchGetProductsHandlerTests : BatchGetProductsHandlerTestBase
     {
         long productId = Fixture.Create<long>();
         Repository.AddProductView(productId, category);
-        var query = new BatchGetProductsQuery { ProductIds = [productId] };
+        var query = new BatchGetProductResponsesQuery { ProductIds = [productId] };
         var sut = GetBatchGetProductsHandler();
 
         var result = await sut.Handle(query);

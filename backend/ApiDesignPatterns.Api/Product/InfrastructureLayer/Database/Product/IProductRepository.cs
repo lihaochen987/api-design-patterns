@@ -5,6 +5,7 @@ namespace backend.Product.InfrastructureLayer.Database.Product;
 public interface IProductRepository
 {
     Task<DomainModels.Product?> GetProductAsync(long id);
+    Task<List<DomainModels.Product>> GetProductsByIds(List<long> productIds);
     Task<PetFood?> GetPetFoodProductAsync(long id);
     Task<GroomingAndHygiene?> GetGroomingAndHygieneProductAsync(long id);
     Task<long> CreateProductAsync(DomainModels.Product product);

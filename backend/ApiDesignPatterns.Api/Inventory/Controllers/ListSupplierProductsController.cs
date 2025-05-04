@@ -6,7 +6,7 @@
 
 using AutoMapper;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
-using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
+using backend.Product.ApplicationLayer.Queries.BatchGetProductResponses;
 using backend.Product.Controllers.Product;
 using backend.Shared;
 using backend.Shared.QueryHandler;
@@ -19,7 +19,7 @@ namespace backend.Inventory.Controllers;
 [ApiController]
 public class ListSupplierProductsController(
     IAsyncQueryHandler<ListInventoryQuery, PagedInventory> listInventory,
-    IAsyncQueryHandler<BatchGetProductsQuery, Result<List<GetProductResponse>>> batchGetProducts,
+    IAsyncQueryHandler<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>> batchGetProducts,
     IMapper mapper)
     : ControllerBase
 {
@@ -35,7 +35,7 @@ public class ListSupplierProductsController(
         });
 
         var productIds = inventoryResult.Inventory.Select(x => x.ProductId).ToList();
-        var products = await batchGetProducts.Handle(new BatchGetProductsQuery { ProductIds = productIds });
+        var products = await batchGetProducts.Handle(new BatchGetProductResponsesQuery { ProductIds = productIds });
 
         ListSupplierProductsResponse response = new()
         {
