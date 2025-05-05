@@ -11,15 +11,17 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public abstract class MapCreateProductRequestHandlerTestBase
 {
     protected readonly IMapper Mapper;
+    protected readonly IProductTypeMapper ProductTypeMapper;
 
     protected MapCreateProductRequestHandlerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
+        ProductTypeMapper = new ProductTypeMapper(Mapper);
     }
 
     protected ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> GetMapCreateProductRequestHandler()
     {
-        return new MapCreateProductRequestHandler(Mapper);
+        return new MapCreateProductRequestHandler(ProductTypeMapper);
     }
 }

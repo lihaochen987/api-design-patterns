@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoMapper;
+using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
 
@@ -77,5 +78,50 @@ public class ProductTypeMapper(IMapper mapper) : IProductTypeMapper
 
         object specificResponse = mapper.Map(productView, productView.GetType(), specificType);
         return mapper.Map<TResponse>(specificResponse);
+    }
+
+    public DomainModels.Product MapFromRequest<TRequest>(TRequest request)
+    {
+        Type requestType = typeof(TRequest);
+
+        var categoryProperty = requestType.GetProperty("Category");
+        if (categoryProperty == null)
+        {
+            return mapper.Map<DomainModels.Product>(request);
+        }
+
+        object? categoryValue = categoryProperty.GetValue(request);
+        if (categoryValue == null)
+        {
+            return mapper.Map<DomainModels.Product>(request);
+        }
+
+        Category category;
+        switch (categoryValue)
+        {
+            case string categoryString:
+            {
+                if (!Enum.TryParse(categoryString, out category))
+                {
+                    return mapper.Map<DomainModels.Product>(request);
+                }
+
+                break;
+            }
+            case Category categoryEnum:
+                category = categoryEnum;
+                break;
+            default:
+                return mapper.Map<DomainModels.Product>(request);
+        }
+
+        Type targetType = category switch
+        {
+            Category.PetFood => typeof(PetFood),
+            Category.GroomingAndHygiene => typeof(GroomingAndHygiene),
+            _ => typeof(DomainModels.Product)
+        };
+
+        return (DomainModels.Product)mapper.Map(request, requestType, targetType);
     }
 }

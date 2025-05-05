@@ -88,7 +88,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var services = new Dictionary<Type, object>();
 
             // CreateProductRequest handler
-            var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
+            var createProductRequestHandler = new MapCreateProductRequestHandler(_productTypeMapper);
             services[typeof(ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product>)] =
                 createProductRequestHandler;
 
@@ -539,7 +539,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 new TransientCommandHandler<BatchCreateProductsCommand>(BatchCreateProductsFactory);
 
             // CreateProductRequest handler
-            var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
+            var createProductRequestHandler = new MapCreateProductRequestHandler(_productTypeMapper);
 
             // CreateProductResponse handler
             var createProductResponseHandler = new MapCreateProductResponseHandler(_productTypeMapper);

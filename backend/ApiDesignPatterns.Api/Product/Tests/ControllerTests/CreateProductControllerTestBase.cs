@@ -45,7 +45,7 @@ public abstract class CreateProductControllerTestBase
             .Returns<MapCreateProductResponseQuery>(query => Task.FromResult(createProductResponse.Handle(query)));
 
         // CreateProductRequest
-        var createProductRequest = new MapCreateProductRequestHandler(Mapper);
+        var createProductRequest = new MapCreateProductRequestHandler(ProductTypeMapper);
         MockQueryProcessor
             .Setup(qp => qp.Process(It.IsAny<MapCreateProductRequestQuery>()))
             .Returns<MapCreateProductRequestQuery>(query => Task.FromResult(createProductRequest.Handle(query)));
