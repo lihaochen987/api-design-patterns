@@ -4,7 +4,6 @@
 using AutoMapper;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.Controllers.Product;
-using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared.QueryHandler;
 
@@ -13,16 +12,18 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public abstract class MapReplaceProductResponseHandlerTestBase
 {
     protected readonly IMapper Mapper;
+    protected readonly IProductTypeMapper ProductTypeMapper;
 
     protected MapReplaceProductResponseHandlerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
+        ProductTypeMapper = new ProductTypeMapper(Mapper);
     }
 
     protected ISyncQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse>
         GetReplaceProductResponseHandler()
     {
-        return new MapReplaceProductResponseHandler(Mapper);
+        return new MapReplaceProductResponseHandler(ProductTypeMapper);
     }
 }

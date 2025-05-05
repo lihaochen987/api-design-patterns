@@ -1,16 +1,14 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoMapper;
-using backend.Product.Controllers.Product;
-using backend.Product.DomainModels.Enums;
 using backend.Product.InfrastructureLayer.Database.ProductView;
+using backend.Product.Services.Mappers;
 using backend.Shared;
 using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.BatchGetProductResponses;
 
-public class BatchGetProductResponsesHandler(IProductViewRepository repository, IMapper mapper)
+public class BatchGetProductResponsesHandler(IProductViewRepository repository, IProductTypeMapper mapper)
     : IAsyncQueryHandler<BatchGetProductResponsesQuery, Result<List<Controllers.Product.GetProductResponse>>>
 {
     public async Task<Result<List<Controllers.Product.GetProductResponse>>> Handle(BatchGetProductResponsesQuery query)
@@ -27,12 +25,8 @@ public class BatchGetProductResponsesHandler(IProductViewRepository repository, 
                 $"Products not found: {string.Join(", ", missingProductIds)}");
         }
 
-        var mappedProducts = products.Select(productView => Enum.Parse<Category>(productView.Category) switch
-            {
-                Category.PetFood => mapper.Map<GetPetFoodResponse>(productView),
-                Category.GroomingAndHygiene => mapper.Map<GetGroomingAndHygieneResponse>(productView),
-                _ => mapper.Map<Controllers.Product.GetProductResponse>(productView)
-            })
+        var mappedProducts = products
+            .Select(mapper.MapToResponse<Controllers.Product.GetProductResponse>)
             .ToList();
 
         return Result.Success(mappedProducts);

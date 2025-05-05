@@ -7,7 +7,6 @@ using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
-using backend.Product.ApplicationLayer.Services.ProductTypeMapper;
 using backend.Product.Controllers.Product;
 using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;

@@ -19,15 +19,18 @@ public abstract class BatchGetProductResponsesHandlerTestBase
     protected readonly ProductViewRepositoryFake Repository = new(new PaginateService<ProductView>());
     protected readonly IMapper Mapper;
     protected readonly Fixture Fixture = new();
+    protected readonly IProductTypeMapper ProductTypeMapper;
 
     protected BatchGetProductResponsesHandlerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = new Mapper(mapperConfiguration);
+        ProductTypeMapper = new ProductTypeMapper(Mapper);
     }
 
-    protected IAsyncQueryHandler<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>> GetBatchGetProductsHandler()
+    protected IAsyncQueryHandler<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>
+        GetBatchGetProductsHandler()
     {
-        return new BatchGetProductResponsesHandler(Repository, Mapper);
+        return new BatchGetProductResponsesHandler(Repository, ProductTypeMapper);
     }
 }

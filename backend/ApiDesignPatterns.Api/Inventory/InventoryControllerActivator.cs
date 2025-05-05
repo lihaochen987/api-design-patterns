@@ -41,6 +41,8 @@ public class InventoryControllerActivator : BaseControllerActivator
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly ILoggerFactory _loggerFactory;
     private readonly SqlFilterBuilder _productSqlFilterBuilder;
+    private readonly IMapper _mapper;
+    private readonly IProductTypeMapper _productTypeMapper;
 
     public InventoryControllerActivator(
         IConfiguration configuration,
@@ -64,6 +66,15 @@ public class InventoryControllerActivator : BaseControllerActivator
 
         ProductColumnMapper productColumnMapper = new();
         _productSqlFilterBuilder = new SqlFilterBuilder(productColumnMapper);
+
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<InventoryMappingProfile>();
+            cfg.AddProfile<ProductMappingProfile>();
+            cfg.AddProfile<SupplierMappingProfile>();
+        });
+        _mapper = mapperConfig.CreateMapper();
+        _productTypeMapper = new ProductTypeMapper(_mapper);
     }
 
     public override object? Create(ControllerContext context)
@@ -72,9 +83,6 @@ public class InventoryControllerActivator : BaseControllerActivator
 
         if (type == typeof(CreateInventoryController))
         {
-            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
-            var mapper = mapperConfig.CreateMapper();
-
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new InventoryRepository(dbConnection);
@@ -111,14 +119,11 @@ public class InventoryControllerActivator : BaseControllerActivator
             return new CreateInventoryController(
                 createInventoryHandler,
                 getInventoryByProductAndSupplier,
-                mapper);
+                _mapper);
         }
 
         if (type == typeof(GetInventoryController))
         {
-            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
-            var mapper = mapperConfig.CreateMapper();
-
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new InventoryViewRepository(
@@ -143,14 +148,11 @@ public class InventoryControllerActivator : BaseControllerActivator
             return new GetInventoryController(
                 getInventoryViewHandler,
                 _fieldMaskConverterFactory,
-                mapper);
+                _mapper);
         }
 
         if (type == typeof(UpdateInventoryController))
         {
-            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
-            var mapper = mapperConfig.CreateMapper();
-
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new InventoryRepository(dbConnection);
@@ -186,7 +188,7 @@ public class InventoryControllerActivator : BaseControllerActivator
             return new UpdateInventoryController(
                 getInventoryByIdHandler,
                 updateInventoryHandler,
-                mapper);
+                _mapper);
         }
 
         if (type == typeof(DeleteInventoryController))
@@ -230,9 +232,6 @@ public class InventoryControllerActivator : BaseControllerActivator
 
         if (type == typeof(ListInventoryController))
         {
-            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<InventoryMappingProfile>(); });
-            var mapper = mapperConfig.CreateMapper();
-
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new InventoryViewRepository(
@@ -256,18 +255,11 @@ public class InventoryControllerActivator : BaseControllerActivator
 
             return new ListInventoryController(
                 listInventoryHandler,
-                mapper);
+                _mapper);
         }
 
         if (type == typeof(ListProductSuppliersController))
         {
-            var mapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<InventoryMappingProfile>();
-                cfg.AddProfile<SupplierMappingProfile>();
-            });
-            var mapper = mapperConfig.CreateMapper();
-
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var inventoryViewRepository = new InventoryViewRepository(
@@ -308,18 +300,11 @@ public class InventoryControllerActivator : BaseControllerActivator
             return new ListProductSuppliersController(
                 listInventoryHandler,
                 getSuppliersByIds,
-                mapper);
+                _mapper);
         }
 
         if (type == typeof(ListSupplierProductsController))
         {
-            var mapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<InventoryMappingProfile>();
-                cfg.AddProfile<ProductMappingProfile>();
-            });
-            var mapper = mapperConfig.CreateMapper();
-
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var inventoryViewRepository = new InventoryViewRepository(
@@ -343,23 +328,24 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .Build();
 
             // BatchGetProducts handler
-            var batchGetProductsHandler = new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
-                    new BatchGetProductResponsesHandler(productViewRepository, mapper),
-                    _loggerFactory,
-                    dbConnection)
-                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
-                .WithHandshaking()
-                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.ProductRead)
-                .WithLogging()
-                .WithValidation()
-                .WithTransaction()
-                .Build();
+            var batchGetProductsHandler =
+                new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
+                        new BatchGetProductResponsesHandler(productViewRepository, _productTypeMapper),
+                        _loggerFactory,
+                        dbConnection)
+                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                    .WithHandshaking()
+                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                    .WithBulkhead(BulkheadPolicies.ProductRead)
+                    .WithLogging()
+                    .WithValidation()
+                    .WithTransaction()
+                    .Build();
 
             return new ListSupplierProductsController(
                 listInventoryHandler,
                 batchGetProductsHandler,
-                mapper);
+                _mapper);
         }
 
         return null;

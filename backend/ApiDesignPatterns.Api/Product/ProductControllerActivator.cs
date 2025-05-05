@@ -24,7 +24,6 @@ using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.ApplicationLayer.Queries.MatchProductToUpdateRequest;
-using backend.Product.ApplicationLayer.Services.ProductTypeMapper;
 using backend.Product.Controllers.Product;
 using backend.Product.Controllers.ProductPricing;
 using backend.Product.InfrastructureLayer.Cache;
@@ -325,7 +324,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // MapReplaceProductResponse handler
-            var mapReplaceProductResponseHandler = new MapReplaceProductResponseHandler(_mapper);
+            var mapReplaceProductResponseHandler = new MapReplaceProductResponseHandler(_productTypeMapper);
 
             return new ReplaceProductController(
                 getProductHandler,
@@ -470,7 +469,7 @@ public class ProductControllerActivator : BaseControllerActivator
             // BatchGetProducts handler
             var batchGetProductsHandler =
                 new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductResponsesHandler(repository, _mapper),
+                        new BatchGetProductResponsesHandler(repository, _productTypeMapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -510,7 +509,7 @@ public class ProductControllerActivator : BaseControllerActivator
             // BatchGetProducts handler
             var batchGetProductsHandler =
                 new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductResponsesHandler(viewRepository, _mapper),
+                        new BatchGetProductResponsesHandler(viewRepository, _productTypeMapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)

@@ -25,11 +25,14 @@ public abstract class ReplaceProductControllerTestBase
 
     protected readonly IMapper Mapper;
 
+    protected readonly IProductTypeMapper ProductTypeMapper;
+
     protected ReplaceProductControllerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
-        MapReplaceProductResponse = new MapReplaceProductResponseHandler(Mapper);
+        ProductTypeMapper = new ProductTypeMapper(Mapper);
+        MapReplaceProductResponse = new MapReplaceProductResponseHandler(ProductTypeMapper);
     }
 
     protected ReplaceProductController GetReplaceProductController()
