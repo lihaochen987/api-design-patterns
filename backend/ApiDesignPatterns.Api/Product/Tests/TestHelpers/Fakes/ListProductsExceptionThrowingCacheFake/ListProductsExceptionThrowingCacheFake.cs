@@ -37,16 +37,6 @@ public class ListProductsExceptionThrowingCacheFake : IListProductsCache
         return Task.FromResult(Array.Empty<HashEntry>());
     }
 
-    public Task<long> HashIncrementAsync(string key, string field)
-    {
-        if (KeysToThrowOn.Contains(key))
-        {
-            throw new Exception($"Simulated cache error for key: {key}");
-        }
-
-        return Task.FromResult(1L);
-    }
-
     public Task<BatchResult> ExecuteBatchAsync(Action<IBatchOperations> batchAction)
     {
         var operations = new ExceptionThrowingBatchOperations(this);
