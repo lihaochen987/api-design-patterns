@@ -197,7 +197,7 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
-                    new GetProductResponseHandler(repository, _mapper),
+                    new GetProductResponseHandler(repository, _productTypeMapper),
                     _loggerFactory,
                     dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -443,7 +443,7 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
-                    new GetProductResponseHandler(repository, _mapper),
+                    new GetProductResponseHandler(repository, _productTypeMapper),
                     _loggerFactory,
                     dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)

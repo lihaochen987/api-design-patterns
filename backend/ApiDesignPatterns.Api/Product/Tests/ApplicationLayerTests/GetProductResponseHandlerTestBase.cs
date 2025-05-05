@@ -17,15 +17,17 @@ public abstract class GetProductResponseHandlerTestBase
 {
     protected readonly ProductViewRepositoryFake Repository = new(new PaginateService<ProductView>());
     protected readonly IMapper Mapper;
+    protected readonly IProductTypeMapper ProductTypeMapper;
 
     protected GetProductResponseHandlerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
+        ProductTypeMapper = new ProductTypeMapper(Mapper);
     }
 
     protected IAsyncQueryHandler<GetProductResponseQuery, GetProductResponse?> GetProductResponseHandler()
     {
-        return new GetProductResponseHandler(Repository, Mapper);
+        return new GetProductResponseHandler(Repository, ProductTypeMapper);
     }
 }
