@@ -24,6 +24,7 @@ using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.ApplicationLayer.Queries.MatchProductToUpdateRequest;
+using backend.Product.ApplicationLayer.Services.ProductTypeMapper;
 using backend.Product.Controllers.Product;
 using backend.Product.Controllers.ProductPricing;
 using backend.Product.InfrastructureLayer.Cache;
@@ -51,6 +52,7 @@ public class ProductControllerActivator : BaseControllerActivator
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IConfiguration _configuration;
+    private readonly IProductTypeMapper _productTypeMapper;
 
     public ProductControllerActivator(
         IConfiguration configuration,
@@ -69,6 +71,8 @@ public class ProductControllerActivator : BaseControllerActivator
         _loggerFactory = loggerFactory;
 
         _configuration = configuration;
+
+        _productTypeMapper = new ProductTypeMapper(_mapper);
     }
 
     public override object? Create(ControllerContext context)
@@ -104,7 +108,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // CreateProductResponse handler
-            var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
+            var createProductResponseHandler = new MapCreateProductResponseHandler(_productTypeMapper);
             services[typeof(ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse>)] =
                 createProductResponseHandler;
 
@@ -532,13 +536,14 @@ public class ProductControllerActivator : BaseControllerActivator
             var redisCache = new BatchCreateProductsCache(redisDatabase);
 
             // Transient BatchCreateProducts handler
-            var transientBatchCreateProducts = new TransientCommandHandler<BatchCreateProductsCommand>(BatchCreateProductsFactory);
+            var transientBatchCreateProducts =
+                new TransientCommandHandler<BatchCreateProductsCommand>(BatchCreateProductsFactory);
 
             // CreateProductRequest handler
             var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
 
             // CreateProductResponse handler
-            var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
+            var createProductResponseHandler = new MapCreateProductResponseHandler(_productTypeMapper);
 
             // CacheCreateProductResponsesHandler
             var cacheCreateProductResponseHandler = new CommandDecoratorBuilder<CacheCreateProductResponsesCommand>(

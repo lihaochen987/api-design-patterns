@@ -3,6 +3,7 @@
 
 using AutoMapper;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
+using backend.Product.ApplicationLayer.Services.ProductTypeMapper;
 using backend.Product.Controllers.Product;
 using backend.Product.Services.Mappers;
 using backend.Shared.QueryHandler;
@@ -12,15 +13,17 @@ namespace backend.Product.Tests.ApplicationLayerTests;
 public abstract class MapCreateProductResponseHandlerTestBase
 {
     protected readonly IMapper Mapper;
+    protected readonly IProductTypeMapper ProductTypeMapper;
 
     protected MapCreateProductResponseHandlerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = mapperConfiguration.CreateMapper();
+        ProductTypeMapper = new ProductTypeMapper(Mapper);
     }
 
     protected ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> GetCreateProductResponseHandler()
     {
-        return new MapCreateProductResponseHandler(Mapper);
+        return new MapCreateProductResponseHandler(ProductTypeMapper);
     }
 }

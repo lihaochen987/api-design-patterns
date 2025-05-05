@@ -648,10 +648,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Product\ApplicationLayer\"/>
-  </ItemGroup>
-
-  <ItemGroup>
     <_ContentIncludedByDefault Remove="Product\Tests\Helpers\Json\BaseProductManualTest.json"/>
     <_ContentIncludedByDefault Remove="Product\Tests\Helpers\Json\GroomingAndHygieneManualTest.json"/>
     <_ContentIncludedByDefault Remove="Product\Tests\Helpers\Json\PetFoodManualTest.json"/>

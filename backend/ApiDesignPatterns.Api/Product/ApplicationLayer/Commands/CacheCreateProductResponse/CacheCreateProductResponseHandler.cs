@@ -6,7 +6,6 @@ using backend.Product.InfrastructureLayer.Cache;
 using backend.Shared;
 using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
-using StackExchange.Redis;
 
 namespace backend.Product.ApplicationLayer.Commands.CacheCreateProductResponse;
 
