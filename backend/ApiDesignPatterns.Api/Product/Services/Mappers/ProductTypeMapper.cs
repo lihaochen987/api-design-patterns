@@ -10,16 +10,23 @@ namespace backend.Product.Services.Mappers;
 
 public class ProductTypeMapper(IMapper mapper) : IProductTypeMapper
 {
+    private static readonly Dictionary<Category, string> s_categoryToResponseSuffix = new()
+    {
+        { Category.PetFood, "PetFood" },
+        { Category.GroomingAndHygiene, "GroomingAndHygiene" }
+    };
+
+    private static string GetResponseTypeName(Category category, string methodName)
+    {
+        string suffix = s_categoryToResponseSuffix.GetValueOrDefault(category, "Product");
+
+        return $"{methodName}{suffix}Response";
+    }
+
     public TResponse MapToResponse<TResponse>(DomainModels.Product product, ProductControllerMethod method)
     {
         string methodName = method.ToString();
-
-        string responseTypeName = product.Category switch
-        {
-            Category.PetFood => $"{methodName}PetFoodResponse",
-            Category.GroomingAndHygiene => $"{methodName}GroomingAndHygieneResponse",
-            _ => $"{methodName}ProductResponse"
-        };
+        string responseTypeName = GetResponseTypeName(product.Category, methodName);
 
         Type responseType = AppDomain.CurrentDomain.GetAssemblies()
                                 .SelectMany(a => a.GetTypes())
@@ -38,14 +45,8 @@ public class ProductTypeMapper(IMapper mapper) : IProductTypeMapper
         string methodName = method.ToString();
         Category category = Enum.Parse<Category>(productView.Category);
 
-        string responseTypeName = category switch
-        {
-            Category.PetFood => $"{methodName}PetFoodResponse",
-            Category.GroomingAndHygiene => $"{methodName}GroomingAndHygieneResponse",
-            _ => $"{methodName}ProductResponse"
-        };
+        string responseTypeName = GetResponseTypeName(category, methodName);
 
-        // Search for the type across all loaded assemblies
         Type responseType = AppDomain.CurrentDomain.GetAssemblies()
                                 .SelectMany(a => a.GetTypes())
                                 .FirstOrDefault(t => t.Name == responseTypeName)
