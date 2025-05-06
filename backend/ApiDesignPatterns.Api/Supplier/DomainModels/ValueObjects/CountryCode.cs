@@ -6,19 +6,11 @@ namespace backend.Supplier.DomainModels.ValueObjects;
 /// <summary>
 /// Represents a telephone country code with validation rules.
 /// </summary>
-public record CountryCode
+public readonly record struct CountryCode
 {
     private const int MinDigits = 1;
     private const int MaxDigits = 3;
     private const char PrefixChar = '+';
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private CountryCode()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the country code value.

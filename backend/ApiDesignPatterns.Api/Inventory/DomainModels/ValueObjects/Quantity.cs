@@ -8,17 +8,10 @@ namespace backend.Inventory.DomainModels.ValueObjects;
 /// <summary>
 /// Represents the quantity of an inventory item with validation rules.
 /// </summary>
-public class Quantity
+public readonly record struct Quantity
 {
     // Constant for validation rule
     private const decimal MinQuantity = 0m;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private Quantity()
-    {
-    }
 
     /// <summary>
     /// Gets the quantity value.

@@ -6,9 +6,10 @@ using Dapper;
 
 namespace backend.Shared.SqlMappers;
 
-public abstract class StringValueObjectTypeHandler<T> : SqlMapper.TypeHandler<T> where T : class
+public abstract class StringValueObjectTypeHandler<T> : SqlMapper.TypeHandler<T> where T : struct
 {
     protected abstract T Create(string value);
+
     protected abstract string GetStringValue(T value);
 
     public override T Parse(object value)
@@ -16,8 +17,8 @@ public abstract class StringValueObjectTypeHandler<T> : SqlMapper.TypeHandler<T>
         return Create((string)value);
     }
 
-    public override void SetValue(IDbDataParameter parameter, T? value)
+    public override void SetValue(IDbDataParameter parameter, T value)
     {
-        parameter.Value = value == null ? null : GetStringValue(value);
+        parameter.Value = GetStringValue(value);
     }
 }

@@ -5,19 +5,12 @@ namespace backend.Product.DomainModels.ValueObjects;
 /// <summary>
 /// Represents product pricing information including base price, discount percentage, and tax rate.
 /// </summary>
-public record Pricing
+public readonly record struct Pricing
 {
     private const decimal HighValueThreshold = 1000m;
     private const decimal MaxEffectiveDiscountPercent = 30m;
     private const decimal MinProfitMarginPercent = 15m;
     private const decimal EstimatedCostRatio = 0.6m;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private Pricing()
-    {
-    }
 
     /// <summary>
     /// Gets the base price of the product before discounts and taxes.

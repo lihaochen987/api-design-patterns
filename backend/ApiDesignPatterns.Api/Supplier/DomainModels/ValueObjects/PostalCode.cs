@@ -6,18 +6,10 @@ namespace backend.Supplier.DomainModels.ValueObjects;
 /// <summary>
 /// Represents a postal code with validation rules.
 /// </summary>
-public record PostalCode
+public readonly record struct PostalCode
 {
     private const int MinLength = 3;
     private const int MaxLength = 12;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private PostalCode()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the postal code value.

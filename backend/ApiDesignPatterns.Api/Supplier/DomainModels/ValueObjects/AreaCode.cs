@@ -6,18 +6,10 @@ namespace backend.Supplier.DomainModels.ValueObjects;
 /// <summary>
 /// Represents a telephone area code with validation rules.
 /// </summary>
-public record AreaCode
+public readonly record struct AreaCode
 {
     private const int MinLength = 2;
     private const int MaxLength = 5;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private AreaCode()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the area code value.

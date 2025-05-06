@@ -6,18 +6,10 @@ namespace backend.Supplier.DomainModels.ValueObjects;
 /// <summary>
 /// Represents a street address with validation rules.
 /// </summary>
-public record Street
+public readonly record struct Street
 {
     private const int MinLength = 3;
     private const int MaxLength = 100;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private Street()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the street value.

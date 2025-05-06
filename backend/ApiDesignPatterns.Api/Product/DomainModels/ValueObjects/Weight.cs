@@ -8,17 +8,10 @@ namespace backend.Product.DomainModels.ValueObjects;
 /// <summary>
 /// Represents the weight of a product with validation rules.
 /// </summary>
-public record Weight
+public readonly record struct Weight
 {
     private const decimal MinWeight = 0m;
     private const decimal MaxWeight = 1000m;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private Weight()
-    {
-    }
 
     /// <summary>
     /// Gets the weight value.

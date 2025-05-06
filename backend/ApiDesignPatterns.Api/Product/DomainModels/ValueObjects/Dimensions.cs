@@ -3,19 +3,12 @@ namespace backend.Product.DomainModels.ValueObjects;
 /// <summary>
 /// Represents the physical dimensions of a product with validation rules for length, width, and height.
 /// </summary>
-public record Dimensions
+public readonly record struct Dimensions
 {
     private const decimal MaxLength = 100m;
     private const decimal MaxWidth = 50m;
     private const decimal MaxHeight = 50m;
     private const decimal MaxVolume = 110000m;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private Dimensions()
-    {
-    }
 
     /// <summary>
     /// Gets the length of the product.

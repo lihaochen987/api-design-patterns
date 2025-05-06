@@ -6,18 +6,10 @@ namespace backend.Review.DomainModels.ValueObjects;
 /// <summary>
 /// Represents the text content of a review with validation rules.
 /// </summary>
-public record Text
+public readonly record struct Text
 {
     // Constant for validation rule
     private const int MaxLength = 2000;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private Text()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the text content.

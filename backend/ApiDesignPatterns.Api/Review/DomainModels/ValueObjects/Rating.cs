@@ -8,18 +8,11 @@ namespace backend.Review.DomainModels.ValueObjects;
 /// <summary>
 /// Represents a product rating with validation rules for acceptable values.
 /// </summary>
-public record Rating
+public readonly record struct Rating
 {
     // Constants for validation rules
     private const decimal MinRating = 1m;
     private const decimal MaxRating = 5m;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private Rating()
-    {
-    }
 
     /// <summary>
     /// Gets the rating value.

@@ -6,18 +6,10 @@ namespace backend.Product.DomainModels.ValueObjects;
 /// <summary>
 /// Represents a validated product name with specific formatting rules.
 /// </summary>
-public record Name
+public readonly record struct Name
 {
     private const int MaxLength = 50;
     private const string ValidSpecialChars = " -'";
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private Name()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the name value.

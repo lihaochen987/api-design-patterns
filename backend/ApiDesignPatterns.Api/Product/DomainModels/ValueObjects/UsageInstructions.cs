@@ -6,18 +6,10 @@ namespace backend.Product.DomainModels.ValueObjects;
 /// <summary>
 /// Represents usage instructions for a product with validation rules.
 /// </summary>
-public record UsageInstructions
+public readonly record struct UsageInstructions
 {
     // Constant for validation rule
     private const int MaxLength = 500;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private UsageInstructions()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the usage instructions text.

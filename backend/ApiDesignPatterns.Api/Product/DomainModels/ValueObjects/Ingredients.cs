@@ -6,17 +6,9 @@ namespace backend.Product.DomainModels.ValueObjects;
 /// <summary>
 /// Represents the ingredients of a product with validation rules.
 /// </summary>
-public record Ingredients
+public readonly record struct Ingredients
 {
     private const int MaxLength = 500;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private Ingredients()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the ingredients description.

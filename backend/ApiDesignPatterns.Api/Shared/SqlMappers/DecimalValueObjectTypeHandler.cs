@@ -6,7 +6,7 @@ using Dapper;
 
 namespace backend.Shared.SqlMappers;
 
-public abstract class DecimalValueObjectTypeHandler<T> : SqlMapper.TypeHandler<T> where T : class
+public abstract class DecimalValueObjectTypeHandler<T> : SqlMapper.TypeHandler<T> where T : struct
 {
     protected abstract T Create(decimal value);
     protected abstract decimal GetDecimalValue(T value);
@@ -22,8 +22,8 @@ public abstract class DecimalValueObjectTypeHandler<T> : SqlMapper.TypeHandler<T
         throw new InvalidCastException($"Cannot convert {value.GetType()} to {typeof(T)}");
     }
 
-    public override void SetValue(IDbDataParameter parameter, T? value)
+    public override void SetValue(IDbDataParameter parameter, T value)
     {
-        parameter.Value = value == null ? DBNull.Value : GetDecimalValue(value);
+        parameter.Value = GetDecimalValue(value);
     }
 }

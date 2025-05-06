@@ -6,17 +6,9 @@ namespace backend.Product.DomainModels.ValueObjects;
 /// <summary>
 /// Represents storage instructions for a product with validation rules.
 /// </summary>
-public record StorageInstructions
+public readonly record struct StorageInstructions
 {
     private const int MaxLength = 200;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private StorageInstructions()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the storage instructions text.

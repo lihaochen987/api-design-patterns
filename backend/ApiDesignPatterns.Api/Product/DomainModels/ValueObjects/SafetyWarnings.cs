@@ -6,17 +6,9 @@ namespace backend.Product.DomainModels.ValueObjects;
 /// <summary>
 /// Represents the safety warnings for a product with validation rules.
 /// </summary>
-public record SafetyWarnings
+public readonly record struct SafetyWarnings
 {
     private const int MaxLength = 300;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private SafetyWarnings()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the safety warnings text.

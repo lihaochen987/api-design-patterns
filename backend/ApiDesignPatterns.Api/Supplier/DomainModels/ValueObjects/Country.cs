@@ -6,18 +6,10 @@ namespace backend.Supplier.DomainModels.ValueObjects;
 /// <summary>
 /// Represents a country with validation rules.
 /// </summary>
-public record Country
+public readonly record struct Country
 {
     private const int MinLength = 2;
     private const int MaxLength = 60;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private Country()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the country value.
@@ -67,7 +59,8 @@ public record Country
             return;
         }
 
-        char[] invalidChars = value.Where(c => !char.IsLetter(c) && !allowedSpecialChars.Contains(c)).Distinct().ToArray();
+        char[] invalidChars = value.Where(c => !char.IsLetter(c) && !allowedSpecialChars.Contains(c)).Distinct()
+            .ToArray();
         string invalidCharsString = new(invalidChars);
         throw new ArgumentException(
             $"Country contains invalid characters: '{invalidCharsString}'. Only letters and certain special characters are allowed.",

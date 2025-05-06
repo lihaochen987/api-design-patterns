@@ -6,18 +6,10 @@ namespace backend.Supplier.DomainModels.ValueObjects;
 /// <summary>
 /// Represents a city name with validation rules.
 /// </summary>
-public record City
+public readonly record struct City
 {
     private const int MinLength = 2;
     private const int MaxLength = 50;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private City()
-    {
-        Value = string.Empty;
-    }
 
     /// <summary>
     /// Gets the city name value.
