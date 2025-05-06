@@ -2,11 +2,12 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using AutoMapper;
 using backend.Review.ApplicationLayer.Commands.CreateReview;
 using backend.Review.Controllers;
 using backend.Review.Services;
 using backend.Shared.CommandHandler;
+using Mapster;
+using MapsterMapper;
 using Moq;
 
 namespace backend.Review.Tests.ControllerTests;
@@ -22,8 +23,9 @@ public abstract class CreateReviewControllerTestBase
 
     protected CreateReviewControllerTestBase()
     {
-        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ReviewMappingProfile>(); });
-        Mapper = mapperConfiguration.CreateMapper();
+        var config = new TypeAdapterConfig();
+        ReviewMappingConfig.RegisterReviewMappings(config);
+        Mapper = new Mapper(config);
     }
 
     protected CreateReviewController GetCreateReviewController()

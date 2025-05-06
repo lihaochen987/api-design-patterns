@@ -2,11 +2,11 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 
-using AutoMapper;
 using backend.Review.ApplicationLayer.Commands.UpdateReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -38,6 +38,11 @@ public class UpdateReviewController(
         await updateReview.Handle(new UpdateReviewCommand { Request = request, Review = existingReview });
 
         var updatedReview = await getReview.Handle(new GetReviewQuery { Id = id });
+
+        if (updatedReview == null)
+        {
+            return BadRequest();
+        }
 
         var response = mapper.Map<UpdateReviewResponse>(updatedReview);
         return Ok(response);

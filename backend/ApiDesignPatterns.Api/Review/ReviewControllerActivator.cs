@@ -1,7 +1,7 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoMapper;
+
 using backend.Review.ApplicationLayer.Commands.CreateReview;
 using backend.Review.ApplicationLayer.Commands.DeleteReview;
 using backend.Review.ApplicationLayer.Commands.ReplaceReview;
@@ -11,6 +11,7 @@ using backend.Review.ApplicationLayer.Queries.GetReviewView;
 using backend.Review.ApplicationLayer.Queries.ListReviews;
 using backend.Review.Controllers;
 using backend.Review.DomainModels;
+using backend.Review.DomainModels.ValueObjects;
 using backend.Review.InfrastructureLayer.Database.Review;
 using backend.Review.InfrastructureLayer.Database.ReviewView;
 using backend.Review.Services;
@@ -19,7 +20,10 @@ using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using IMapper = MapsterMapper.IMapper;
 
 namespace backend.Review;
 
@@ -43,8 +47,9 @@ public class ReviewControllerActivator : BaseControllerActivator
         ReviewFieldPaths reviewFieldPaths = new();
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(reviewFieldPaths.ValidPaths);
 
-        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ReviewMappingProfile>(); });
-        _mapper = mapperConfig.CreateMapper();
+        var config = new TypeAdapterConfig();
+        ReviewMappingConfig.RegisterReviewMappings(config);
+        _mapper = new Mapper(config);
     }
 
     public override object? Create(ControllerContext context)

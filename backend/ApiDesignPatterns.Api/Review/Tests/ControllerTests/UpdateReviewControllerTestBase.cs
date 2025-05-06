@@ -2,13 +2,14 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using AutoMapper;
 using backend.Review.ApplicationLayer.Commands.UpdateReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Review.Controllers;
 using backend.Review.Services;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
+using Mapster;
+using MapsterMapper;
 using Moq;
 
 namespace backend.Review.Tests.ControllerTests;
@@ -24,8 +25,9 @@ public abstract class UpdateReviewControllerTestBase
     {
         MockGetReviewHandler = Mock.Of<IAsyncQueryHandler<GetReviewQuery, DomainModels.Review?>>();
         _mockUpdateReviewHandler = Mock.Of<ICommandHandler<UpdateReviewCommand>>();
-        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ReviewMappingProfile>(); });
-        Mapper = mapperConfiguration.CreateMapper();
+        var config = new TypeAdapterConfig();
+        ReviewMappingConfig.RegisterReviewMappings(config);
+        Mapper = new Mapper(config);
     }
 
     protected UpdateReviewController UpdateReviewController()

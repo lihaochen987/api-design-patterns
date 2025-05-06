@@ -1,9 +1,9 @@
-using AutoMapper;
 using backend.Product.Controllers.Product;
 using backend.Review.ApplicationLayer.Commands.ReplaceReview;
 using backend.Review.ApplicationLayer.Queries.GetReview;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

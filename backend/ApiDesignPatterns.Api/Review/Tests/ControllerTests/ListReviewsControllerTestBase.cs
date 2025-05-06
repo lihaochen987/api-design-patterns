@@ -2,12 +2,12 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using AutoMapper;
 using backend.Review.ApplicationLayer.Queries.ListReviews;
 using backend.Review.Controllers;
-using backend.Review.DomainModels;
 using backend.Review.Services;
 using backend.Shared.QueryHandler;
+using Mapster;
+using MapsterMapper;
 using Moq;
 
 namespace backend.Review.Tests.ControllerTests;
@@ -22,8 +22,9 @@ public abstract class ListReviewsControllerTestBase
     protected ListReviewsControllerTestBase()
     {
         MockListReviews = Mock.Of<IAsyncQueryHandler<ListReviewsQuery, PagedReviews>>();
-        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ReviewMappingProfile>(); });
-        _mapper = mapperConfiguration.CreateMapper();
+        var config = new TypeAdapterConfig();
+        ReviewMappingConfig.RegisterReviewMappings(config);
+        _mapper = new Mapper(config);
     }
 
     protected ListReviewsController ListReviewsController()

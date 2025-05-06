@@ -1,6 +1,6 @@
-using AutoMapper;
 using backend.Review.ApplicationLayer.Queries.ListReviews;
 using backend.Shared.QueryHandler;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

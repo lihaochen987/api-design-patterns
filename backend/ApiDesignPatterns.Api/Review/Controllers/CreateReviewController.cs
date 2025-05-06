@@ -1,9 +1,9 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoMapper;
 using backend.Review.ApplicationLayer.Commands.CreateReview;
 using backend.Shared.CommandHandler;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

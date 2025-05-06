@@ -1,28 +1,31 @@
-// Licensed to the.NET Foundation under one or more agreements.
-// The.NET Foundation licenses this file to you under the MIT license.
-
-using AutoMapper;
 using backend.Review.Controllers;
 using backend.Review.DomainModels;
 using backend.Review.DomainModels.ValueObjects;
+using Mapster;
 
 namespace backend.Review.Services;
 
-public class ReviewMappingProfile : Profile
+public static class ReviewMappingConfig
 {
-    public ReviewMappingProfile()
+    public static void RegisterReviewMappings(TypeAdapterConfig config)
     {
-        CreateMap<DomainModels.Review, CreateReviewResponse>();
-        CreateMap<ReviewView, GetReviewResponse>();
-        CreateMap<DomainModels.Review, ReplaceReviewResponse>();
-        CreateMap<ReplaceReviewRequest, DomainModels.Review>();
-        CreateMap<DomainModels.Review, UpdateReviewResponse>();
-        CreateMap<CreateReviewRequest, DomainModels.Review>();
+        config.NewConfig<DomainModels.Review, CreateReviewResponse>();
+        config.NewConfig<ReviewView, GetReviewResponse>();
+        config.NewConfig<DomainModels.Review, ReplaceReviewResponse>();
+        config.NewConfig<ReplaceReviewRequest, DomainModels.Review>();
+        config.NewConfig<DomainModels.Review, UpdateReviewResponse>();
+        config.NewConfig<CreateReviewRequest, DomainModels.Review>();
 
-        CreateMap<DomainModels.Review, CreateReviewRequest>();
-        CreateMap<DomainModels.Review, ReplaceReviewRequest>();
+        config.NewConfig<DomainModels.Review, CreateReviewRequest>();
+        config.NewConfig<DomainModels.Review, ReplaceReviewRequest>();
 
-        CreateMap<Rating, decimal>().ConvertUsing(src => src.Value);
-        CreateMap<decimal, Rating>().ConvertUsing(src => new Rating(src));
+        config.NewConfig<Rating, decimal>()
+            .MapWith(src => src.Value);
+        config.NewConfig<decimal, Rating>()
+            .MapWith(src => new Rating(src));
+        config.NewConfig<string, Text>()
+            .MapWith(src => new Text(src));
+        config.NewConfig<Text, string>()
+            .MapWith(src => src.Value);
     }
 }
