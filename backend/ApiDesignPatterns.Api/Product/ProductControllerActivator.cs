@@ -54,6 +54,7 @@ public class ProductControllerActivator : BaseControllerActivator
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IConfiguration _configuration;
+    private readonly IProductTypeMapper _productTypeMapper;
 
     public ProductControllerActivator(
         IConfiguration configuration,
@@ -73,6 +74,8 @@ public class ProductControllerActivator : BaseControllerActivator
         _loggerFactory = loggerFactory;
 
         _configuration = configuration;
+
+        _productTypeMapper = new ProductTypeMapper(_mapper);
     }
 
     public override object? Create(ControllerContext context)
@@ -198,7 +201,7 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
-                    new GetProductResponseHandler(repository, _mapper),
+                    new GetProductResponseHandler(repository, _productTypeMapper),
                     _loggerFactory,
                     dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -444,7 +447,7 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
-                    new GetProductResponseHandler(repository, _mapper),
+                    new GetProductResponseHandler(repository, _productTypeMapper),
                     _loggerFactory,
                     dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)

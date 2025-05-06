@@ -31,7 +31,6 @@ public record GetPetFoodResponse : GetProductResponse
     [Required] public required string AgeGroup { get; init; }
     [Required] public required string BreedSize { get; init; }
     [Required] public required string Ingredients { get; init; }
-    [Required] public required Dictionary<string, string> NutritionalInfo { get; init; } = new();
     [Required] public required string StorageInstructions { get; init; }
     [Required] public required string WeightKg { get; init; }
 }
