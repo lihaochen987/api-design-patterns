@@ -17,12 +17,9 @@ namespace backend.Shared.FieldMask;
 /// }
 /// </example>
 public class FieldMaskConverter(
-    IList<string> fieldMask,
-    HashSet<string> allFieldPaths)
+    HashSet<string> expandedFieldMasks)
     : JsonConverter
 {
-    private readonly HashSet<string> _expandedFieldMask = Expand(fieldMask, allFieldPaths);
-
     /// <summary>
     /// Checks if type can be converted.
     /// </summary>
@@ -43,7 +40,7 @@ public class FieldMaskConverter(
 
             foreach (PropertyInfo property in properties)
             {
-                AddPropertyToJObject(jObject, property, value, serializer, _expandedFieldMask);
+                AddPropertyToJObject(jObject, property, value, serializer);
             }
         }
 
@@ -63,16 +60,15 @@ public class FieldMaskConverter(
     /// <summary>
     /// Adds property to JSON object if included in field mask.
     /// </summary>
-    private static void AddPropertyToJObject(
+    private void AddPropertyToJObject(
         JObject jObject,
         PropertyInfo property,
         object value,
-        JsonSerializer serializer,
-        HashSet<string> expandedFieldMask)
+        JsonSerializer serializer)
     {
         string propertyPath = property.Name.ToLowerInvariant();
 
-        if (expandedFieldMask.Contains(propertyPath))
+        if (expandedFieldMasks.Contains(propertyPath))
         {
             object? propValue = property.GetValue(value);
             if (propValue != null)
@@ -82,7 +78,7 @@ public class FieldMaskConverter(
         }
         else if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
         {
-            JObject nestedObject = Build(property, value, serializer, expandedFieldMask);
+            JObject nestedObject = Build(property, value, serializer);
             if (nestedObject.HasValues)
             {
                 jObject.Add(property.Name, nestedObject);
@@ -93,11 +89,10 @@ public class FieldMaskConverter(
     /// <summary>
     /// Builds JSON object for nested properties.
     /// </summary>
-    private static JObject Build(
+    private JObject Build(
         PropertyInfo property,
         object instance,
-        JsonSerializer serializer,
-        HashSet<string> expandedFieldMask)
+        JsonSerializer serializer)
     {
         JObject jObject = new();
         object? nestedInstance = property.GetValue(instance);
@@ -113,7 +108,7 @@ public class FieldMaskConverter(
         foreach (PropertyInfo nestedProperty in nestedProperties)
         {
             string nestedPath = $"{property.Name.ToLowerInvariant()}.{nestedProperty.Name.ToLowerInvariant()}";
-            if (!expandedFieldMask.Contains(nestedPath))
+            if (!expandedFieldMasks.Contains(nestedPath))
             {
                 continue;
             }
@@ -126,38 +121,5 @@ public class FieldMaskConverter(
         }
 
         return jObject;
-    }
-
-
-    /// <summary>
-    /// Expands field masks with wildcards into explicit paths.
-    /// </summary>
-    /// <example>
-    /// ["user.*"] expands to ["user.id", "user.name", "user.email"]
-    /// </example>
-    private static HashSet<string> Expand(IList<string> fieldMask, HashSet<string> allFieldPaths)
-    {
-        HashSet<string> expandedFields = new(StringComparer.OrdinalIgnoreCase);
-
-        if (fieldMask.Contains("*") || !fieldMask.Any())
-        {
-            return allFieldPaths;
-        }
-
-        foreach (string field in fieldMask.Select(f => f.ToLowerInvariant()))
-        {
-            if (field.EndsWith(".*"))
-            {
-                // The prefix would remove the .* at the end of the property
-                string prefix = field[..^2];
-                expandedFields.UnionWith(allFieldPaths.Where(p => p.StartsWith(prefix + ".")));
-            }
-            else if (allFieldPaths.Contains(field))
-            {
-                expandedFields.Add(field);
-            }
-        }
-
-        return expandedFields.Count == 0 ? allFieldPaths : expandedFields;
     }
 }
