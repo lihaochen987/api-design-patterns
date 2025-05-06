@@ -7,7 +7,7 @@ namespace backend.Review.Services;
 
 public static class ReviewMappingConfig
 {
-    public static void RegisterReviewMappings(TypeAdapterConfig config)
+    public static void RegisterReviewMappings(this TypeAdapterConfig config)
     {
         config.NewConfig<DomainModels.Review, CreateReviewResponse>();
         config.NewConfig<ReviewView, GetReviewResponse>();

@@ -1,12 +1,12 @@
 using AutoFixture;
-using AutoMapper;
 using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Product.DomainModels.Views;
-using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Product.Tests.TestHelpers.SpecimenBuilders;
+using Mapster;
+using MapsterMapper;
 
 namespace backend.Product.Tests.TestHelpers.Builders;
 
@@ -34,8 +34,9 @@ public class ProductViewTestDataBuilder
         _fixture.Customizations.Add(new DimensionsSpecimenBuilder());
 
         // Mapper configuration
-        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
-        _mapper = mapperConfig.CreateMapper();
+        var config = new TypeAdapterConfig();
+        config.RegisterProductMappings();
+        _mapper = new Mapper(config);
 
         _name = _fixture.Create<string>();
         _category = _fixture.Create<Category>().ToString();

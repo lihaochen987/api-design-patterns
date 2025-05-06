@@ -31,10 +31,10 @@ public record Weight
     /// </summary>
     /// <param name="value">The weight in kilograms.</param>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the weight is less than or equal to zero or exceeds maximum allowed value.</exception>
-    public Weight(decimal value)
+    public Weight(decimal? value)
     {
         ValidateWeight(value);
-        Value = value;
+        Value = (decimal)value!;
     }
 
     /// <summary>
@@ -42,10 +42,12 @@ public record Weight
     /// </summary>
     /// <param name="value">The weight to validate.</param>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the weight is less than or equal to zero or exceeds maximum allowed value.</exception>
-    private static void ValidateWeight(decimal value)
+    private static void ValidateWeight(decimal? value)
     {
         switch (value)
         {
+            case null:
+                throw new NullReferenceException("Value cannot be null");
             case <= MinWeight:
                 throw new ArgumentOutOfRangeException(nameof(value), value,
                     $"Weight must be greater than {MinWeight} kg.");

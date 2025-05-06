@@ -1,7 +1,6 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
 using backend.Product.ApplicationLayer.Queries.BatchGetProducts;
 using backend.Product.ApplicationLayer.Queries.MatchProductToUpdateRequest;
@@ -9,6 +8,7 @@ using backend.Product.DomainModels;
 using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

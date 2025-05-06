@@ -39,8 +39,11 @@ using backend.Shared.FieldMask;
 using backend.Shared.Infrastructure;
 using backend.Shared.QueryHandler;
 using backend.Shared.QueryProcessor;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
+using IMapper = MapsterMapper.IMapper;
+using Mapper = MapsterMapper.Mapper;
 
 namespace backend.Product;
 
@@ -51,7 +54,6 @@ public class ProductControllerActivator : BaseControllerActivator
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IConfiguration _configuration;
-    private readonly IProductTypeMapper _productTypeMapper;
 
     public ProductControllerActivator(
         IConfiguration configuration,
@@ -61,8 +63,9 @@ public class ProductControllerActivator : BaseControllerActivator
         ProductColumnMapper productColumnMapper = new();
         _productSqlFilterBuilder = new SqlFilterBuilder(productColumnMapper);
 
-        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
-        _mapper = mapperConfig.CreateMapper();
+        var config = new TypeAdapterConfig();
+        config.RegisterProductMappings();
+        _mapper = new Mapper(config);
 
         ProductFieldPaths productFieldPaths = new();
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(productFieldPaths.ValidPaths);
@@ -70,8 +73,6 @@ public class ProductControllerActivator : BaseControllerActivator
         _loggerFactory = loggerFactory;
 
         _configuration = configuration;
-
-        _productTypeMapper = new ProductTypeMapper(_mapper);
     }
 
     public override object? Create(ControllerContext context)
@@ -88,7 +89,7 @@ public class ProductControllerActivator : BaseControllerActivator
             var services = new Dictionary<Type, object>();
 
             // CreateProductRequest handler
-            var createProductRequestHandler = new MapCreateProductRequestHandler(_productTypeMapper);
+            var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
             services[typeof(ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product>)] =
                 createProductRequestHandler;
 
@@ -107,7 +108,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // CreateProductResponse handler
-            var createProductResponseHandler = new MapCreateProductResponseHandler(_productTypeMapper);
+            var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
             services[typeof(ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse>)] =
                 createProductResponseHandler;
 
@@ -197,7 +198,7 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
-                    new GetProductResponseHandler(repository, _productTypeMapper),
+                    new GetProductResponseHandler(repository, _mapper),
                     _loggerFactory,
                     dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -324,7 +325,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 .Build();
 
             // MapReplaceProductResponse handler
-            var mapReplaceProductResponseHandler = new MapReplaceProductResponseHandler(_productTypeMapper);
+            var mapReplaceProductResponseHandler = new MapReplaceProductResponseHandler(_mapper);
 
             return new ReplaceProductController(
                 getProductHandler,
@@ -443,7 +444,7 @@ public class ProductControllerActivator : BaseControllerActivator
 
             // GetProductResponse handler
             var getProductResponseHandler = new QueryDecoratorBuilder<GetProductResponseQuery, GetProductResponse?>(
-                    new GetProductResponseHandler(repository, _productTypeMapper),
+                    new GetProductResponseHandler(repository, _mapper),
                     _loggerFactory,
                     dbConnection)
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -462,6 +463,9 @@ public class ProductControllerActivator : BaseControllerActivator
 
         if (type == typeof(BatchGetProductsController))
         {
+            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
+            var mapper = mapperConfig.CreateMapper();
+
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
@@ -469,7 +473,7 @@ public class ProductControllerActivator : BaseControllerActivator
             // BatchGetProducts handler
             var batchGetProductsHandler =
                 new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductResponsesHandler(repository, _productTypeMapper),
+                        new BatchGetProductResponsesHandler(repository, mapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -491,6 +495,8 @@ public class ProductControllerActivator : BaseControllerActivator
             TrackDisposable(context, dbConnection);
             var repository = new ProductRepository(dbConnection);
             var viewRepository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
+            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
+            var mapper = mapperConfig.CreateMapper();
 
             // BatchDeleteProducts handler
             var batchDeleteProductsHandler = new CommandDecoratorBuilder<BatchDeleteProductsCommand>(
@@ -509,7 +515,7 @@ public class ProductControllerActivator : BaseControllerActivator
             // BatchGetProducts handler
             var batchGetProductsHandler =
                 new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductResponsesHandler(viewRepository, _productTypeMapper),
+                        new BatchGetProductResponsesHandler(viewRepository, mapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -539,10 +545,10 @@ public class ProductControllerActivator : BaseControllerActivator
                 new TransientCommandHandler<BatchCreateProductsCommand>(BatchCreateProductsFactory);
 
             // CreateProductRequest handler
-            var createProductRequestHandler = new MapCreateProductRequestHandler(_productTypeMapper);
+            var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
 
             // CreateProductResponse handler
-            var createProductResponseHandler = new MapCreateProductResponseHandler(_productTypeMapper);
+            var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
 
             // CacheCreateProductResponsesHandler
             var cacheCreateProductResponseHandler = new CommandDecoratorBuilder<CacheCreateProductResponsesCommand>(

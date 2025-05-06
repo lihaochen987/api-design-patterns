@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.PersistListProductsToCache;
 using backend.Product.ApplicationLayer.Commands.UpdateListProductsStaleness;
 using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
@@ -14,6 +13,8 @@ using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using backend.Shared.QueryProcessor;
+using Mapster;
+using MapsterMapper;
 using Moq;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -51,8 +52,9 @@ public abstract class ListProductsControllerTestBase
                 Task.FromResult(getListProductsFromCacheHandler.Object.Handle(query).Result));
 
         // MapListProductsResponseQuery
-        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
-        IMapper mapper = mapperConfiguration.CreateMapper();
+        var config = new TypeAdapterConfig();
+        config.RegisterProductMappings();
+        var mapper = new Mapper(config);
         ISyncQueryHandler<MapListProductsResponseQuery, ListProductsResponse> mapListProductsResponseHandler =
             new MapListProductsResponseHandler(mapper);
         MockQueryProcessor

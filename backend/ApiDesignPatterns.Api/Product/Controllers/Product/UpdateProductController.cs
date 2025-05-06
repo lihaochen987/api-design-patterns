@@ -1,9 +1,9 @@
-using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.UpdateProduct;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.DomainModels;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -36,6 +36,11 @@ public class UpdateProductController(
         await updateProduct.Handle(new UpdateProductCommand { Request = request, Product = product });
 
         DomainModels.Product? updatedProduct = await getProduct.Handle(new GetProductQuery { Id = id });
+
+        if (updatedProduct == null)
+        {
+            return BadRequest();
+        }
 
         return updatedProduct switch
         {

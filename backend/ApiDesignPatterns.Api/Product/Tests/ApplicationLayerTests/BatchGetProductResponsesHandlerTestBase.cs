@@ -10,7 +10,6 @@ using backend.Product.Services.Mappers;
 using backend.Product.Tests.TestHelpers.Fakes;
 using backend.Shared;
 using backend.Shared.QueryHandler;
-using Moq;
 
 namespace backend.Product.Tests.ApplicationLayerTests;
 
@@ -19,18 +18,16 @@ public abstract class BatchGetProductResponsesHandlerTestBase
     protected readonly ProductViewRepositoryFake Repository = new(new PaginateService<ProductView>());
     protected readonly IMapper Mapper;
     protected readonly Fixture Fixture = new();
-    protected readonly IProductTypeMapper ProductTypeMapper;
 
     protected BatchGetProductResponsesHandlerTestBase()
     {
         MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
         Mapper = new Mapper(mapperConfiguration);
-        ProductTypeMapper = new ProductTypeMapper(Mapper);
     }
 
     protected IAsyncQueryHandler<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>
         GetBatchGetProductsHandler()
     {
-        return new BatchGetProductResponsesHandler(Repository, ProductTypeMapper);
+        return new BatchGetProductResponsesHandler(Repository, Mapper);
     }
 }

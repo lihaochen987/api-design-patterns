@@ -2,17 +2,23 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Product.Controllers.Product;
-using backend.Product.Services.Mappers;
+using backend.Product.DomainModels.Enums;
 using backend.Shared.QueryHandler;
+using MapsterMapper;
 
 namespace backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 
-public class MapReplaceProductResponseHandler(IProductTypeMapper mapper)
+public class MapReplaceProductResponseHandler(IMapper mapper)
     : ISyncQueryHandler<MapReplaceProductResponseQuery, ReplaceProductResponse>
 {
     public ReplaceProductResponse Handle(MapReplaceProductResponseQuery query)
     {
-        var response = mapper.MapToResponse<ReplaceProductResponse>(query.Product);
+        ReplaceProductResponse response = query.Product.Category switch
+        {
+            Category.PetFood => mapper.Map<ReplacePetFoodResponse>(query.Product),
+            Category.GroomingAndHygiene => mapper.Map<ReplaceGroomingAndHygieneResponse>(query.Product),
+            _ => mapper.Map<ReplaceProductResponse>(query.Product)
+        };
         return response;
     }
 }

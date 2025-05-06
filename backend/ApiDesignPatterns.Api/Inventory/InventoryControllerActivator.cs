@@ -42,7 +42,6 @@ public class InventoryControllerActivator : BaseControllerActivator
     private readonly ILoggerFactory _loggerFactory;
     private readonly SqlFilterBuilder _productSqlFilterBuilder;
     private readonly IMapper _mapper;
-    private readonly IProductTypeMapper _productTypeMapper;
 
     public InventoryControllerActivator(
         IConfiguration configuration,
@@ -74,7 +73,6 @@ public class InventoryControllerActivator : BaseControllerActivator
             cfg.AddProfile<SupplierMappingProfile>();
         });
         _mapper = mapperConfig.CreateMapper();
-        _productTypeMapper = new ProductTypeMapper(_mapper);
     }
 
     public override object? Create(ControllerContext context)
@@ -330,7 +328,7 @@ public class InventoryControllerActivator : BaseControllerActivator
             // BatchGetProducts handler
             var batchGetProductsHandler =
                 new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductResponsesHandler(productViewRepository, _productTypeMapper),
+                        new BatchGetProductResponsesHandler(productViewRepository, _mapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
