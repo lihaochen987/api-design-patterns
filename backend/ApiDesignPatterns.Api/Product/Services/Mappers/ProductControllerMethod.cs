@@ -6,5 +6,6 @@ namespace backend.Product.Services.Mappers;
 public enum ProductControllerMethod
 {
     Get,
-    Replace
+    Replace,
+    Create
 }

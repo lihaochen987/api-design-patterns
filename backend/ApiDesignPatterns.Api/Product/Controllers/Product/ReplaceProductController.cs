@@ -30,6 +30,11 @@ public class ReplaceProductController(
             return NotFound();
         }
 
+        if (existingProduct.Category.ToString() != request.Category)
+        {
+            return BadRequest();
+        }
+
         await replaceProduct.Handle(new ReplaceProductCommand
         {
             ExistingProductId = existingProduct.Id, Request = request

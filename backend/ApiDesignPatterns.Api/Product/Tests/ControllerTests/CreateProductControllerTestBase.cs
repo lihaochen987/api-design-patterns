@@ -5,7 +5,6 @@ using backend.Product.ApplicationLayer.Commands.CacheCreateProductResponse;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
-using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.Controllers.Product;
 using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;
@@ -29,18 +28,15 @@ public abstract class CreateProductControllerTestBase
 
     protected readonly IMapper Mapper;
 
+    protected readonly IProductTypeMapper ProductTypeMapper;
+
     protected CreateProductControllerTestBase()
     {
         MockQueryProcessor = new Mock<IQueryProcessor>();
         var config = new TypeAdapterConfig();
         config.RegisterProductMappings();
         Mapper = new Mapper(config);
-
-        // CreateProductResponse
-        var createProductResponse = new MapCreateProductResponseHandler(Mapper);
-        MockQueryProcessor
-            .Setup(qp => qp.Process(It.IsAny<MapCreateProductResponseQuery>()))
-            .Returns<MapCreateProductResponseQuery>(query => Task.FromResult(createProductResponse.Handle(query)));
+        ProductTypeMapper = new ProductTypeMapper(Mapper);
 
         // CreateProductRequest
         var createProductRequest = new MapCreateProductRequestHandler(Mapper);
@@ -62,6 +58,7 @@ public abstract class CreateProductControllerTestBase
         return new CreateProductController(
             MockQueryProcessor.Object,
             CreateProduct,
-            CacheCreateProductResponse);
+            CacheCreateProductResponse,
+            ProductTypeMapper);
     }
 }

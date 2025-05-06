@@ -1,7 +1,7 @@
 ﻿using backend.Product.ApplicationLayer.Commands.BatchCreateProducts;
 using backend.Product.ApplicationLayer.Commands.CacheCreateProductResponses;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
-using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
+using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ public class BatchCreateProductsController(
     ICommandHandler<BatchCreateProductsCommand> batchCreateProducts,
     ICommandHandler<CacheCreateProductResponsesCommand> cacheCreateProductResponses,
     ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product> mapCreateProductRequest,
-    ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse> mapCreateProductResponse)
+    IProductTypeMapper productTypeMapper)
     : ControllerBase
 {
     [HttpPost("product:batchCreate")]
@@ -38,7 +38,7 @@ public class BatchCreateProductsController(
 
         var productResponses = products
             .Select(product =>
-                mapCreateProductResponse.Handle(new MapCreateProductResponseQuery { Product = product }))
+                productTypeMapper.MapToResponse<CreateProductResponse>(product, ProductControllerMethod.Create))
             .ToList();
 
         if (request.RequestId != null)

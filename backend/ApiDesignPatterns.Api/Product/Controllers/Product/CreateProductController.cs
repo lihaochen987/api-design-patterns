@@ -2,7 +2,7 @@ using backend.Product.ApplicationLayer.Commands.CacheCreateProductResponse;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
-using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
+using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryProcessor;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +15,8 @@ namespace backend.Product.Controllers.Product;
 public class CreateProductController(
     IQueryProcessor queries,
     ICommandHandler<CreateProductCommand> createProduct,
-    ICommandHandler<CacheCreateProductResponseCommand> cacheCreateProductResponse)
+    ICommandHandler<CacheCreateProductResponseCommand> cacheCreateProductResponse,
+    IProductTypeMapper productTypeMapper)
     : ControllerBase
 {
     [HttpPost]
@@ -36,8 +37,8 @@ public class CreateProductController(
             var product = queries.Process(mapCreateProductRequestQuery).Result;
             await createProduct.Handle(new CreateProductCommand { Product = product });
 
-            var mapCreateProductResponseQuery = new MapCreateProductResponseQuery { Product = product };
-            var response = queries.Process(mapCreateProductResponseQuery).Result;
+            var response =
+                productTypeMapper.MapToResponse<CreateProductResponse>(product, ProductControllerMethod.Create);
 
             if (request.RequestId != null)
             {

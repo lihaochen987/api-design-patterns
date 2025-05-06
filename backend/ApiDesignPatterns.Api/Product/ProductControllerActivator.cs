@@ -20,7 +20,6 @@ using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
-using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Product.ApplicationLayer.Queries.MatchProductToUpdateRequest;
 using backend.Product.Controllers.Product;
@@ -109,11 +108,6 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            // CreateProductResponse handler
-            var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
-            services[typeof(ISyncQueryHandler<MapCreateProductResponseQuery, CreateProductResponse>)] =
-                createProductResponseHandler;
-
             // GetCreateProductFromCache handler
             var getCreateProductFromCacheHandler =
                 new QueryDecoratorBuilder<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult>(
@@ -152,7 +146,8 @@ public class ProductControllerActivator : BaseControllerActivator
             return new CreateProductController(
                 queryProcessor,
                 createProductHandler,
-                cacheCreateProductResponseHandler);
+                cacheCreateProductResponseHandler,
+                _productTypeMapper);
         }
 
         if (type == typeof(DeleteProductController))
@@ -546,9 +541,6 @@ public class ProductControllerActivator : BaseControllerActivator
             // CreateProductRequest handler
             var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
 
-            // CreateProductResponse handler
-            var createProductResponseHandler = new MapCreateProductResponseHandler(_mapper);
-
             // CacheCreateProductResponsesHandler
             var cacheCreateProductResponseHandler = new CommandDecoratorBuilder<CacheCreateProductResponsesCommand>(
                     new CacheCreateProductResponsesHandler(redisCache),
@@ -567,7 +559,7 @@ public class ProductControllerActivator : BaseControllerActivator
                 transientBatchCreateProducts,
                 cacheCreateProductResponseHandler,
                 createProductRequestHandler,
-                createProductResponseHandler);
+                _productTypeMapper);
 
             ICommandHandler<BatchCreateProductsCommand> BatchCreateProductsFactory()
             {
