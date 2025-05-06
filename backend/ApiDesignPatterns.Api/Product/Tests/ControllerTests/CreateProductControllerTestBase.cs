@@ -4,7 +4,6 @@
 using backend.Product.ApplicationLayer.Commands.CacheCreateProductResponse;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
-using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.Controllers.Product;
 using backend.Product.Services.Mappers;
 using backend.Shared.CommandHandler;
@@ -37,12 +36,6 @@ public abstract class CreateProductControllerTestBase
         config.RegisterProductMappings();
         Mapper = new Mapper(config);
         ProductTypeMapper = new ProductTypeMapper(Mapper);
-
-        // CreateProductRequest
-        var createProductRequest = new MapCreateProductRequestHandler(Mapper);
-        MockQueryProcessor
-            .Setup(qp => qp.Process(It.IsAny<MapCreateProductRequestQuery>()))
-            .Returns<MapCreateProductRequestQuery>(query => Task.FromResult(createProductRequest.Handle(query)));
 
         // GetCreateProductFromCache
         Mock<IAsyncQueryHandler<GetCreateProductFromCacheQuery, GetCreateProductFromCacheResult>>

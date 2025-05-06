@@ -1,5 +1,6 @@
 ﻿using backend.Product.Controllers.Product;
 using backend.Product.InfrastructureLayer.Cache;
+using backend.Shared;
 using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
 
@@ -10,7 +11,7 @@ public class CacheCreateProductResponsesHandler(IBatchCreateProductsCache cache)
 {
     public async Task Handle(CacheCreateProductResponsesCommand command)
     {
-        string hash = GenerateHash(command.CreateProductRequests);
+        string hash = ObjectHasher.ComputeHash(command.CreateProductRequests);
         var cachedItem = new CachedItem<IEnumerable<CreateProductResponse>>
         {
             Hash = hash,
@@ -19,13 +20,5 @@ public class CacheCreateProductResponsesHandler(IBatchCreateProductsCache cache)
         };
 
         await cache.SetAsync(command.RequestId, cachedItem, TimeSpan.FromSeconds(5));
-    }
-
-    private static string GenerateHash<T>(T obj)
-    {
-        string json = System.Text.Json.JsonSerializer.Serialize(obj);
-        byte[] hashBytes = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(json));
-
-        return Convert.ToBase64String(hashBytes);
     }
 }

@@ -19,7 +19,6 @@ using backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductResponse;
 using backend.Product.ApplicationLayer.Queries.ListProducts;
-using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
 using backend.Product.ApplicationLayer.Queries.MatchProductToUpdateRequest;
 using backend.Product.Controllers.Product;
@@ -88,11 +87,6 @@ public class ProductControllerActivator : BaseControllerActivator
             IDatabase redisDatabase = new RedisService(_configuration).GetDatabase();
             var redisCache = new CreateProductCache(redisDatabase);
             var services = new Dictionary<Type, object>();
-
-            // CreateProductRequest handler
-            var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
-            services[typeof(ISyncQueryHandler<MapCreateProductRequestQuery, DomainModels.Product>)] =
-                createProductRequestHandler;
 
             // CreateProduct handler
             var createProductHandler = new CommandDecoratorBuilder<CreateProductCommand>(
@@ -538,9 +532,6 @@ public class ProductControllerActivator : BaseControllerActivator
             var transientBatchCreateProducts =
                 new TransientCommandHandler<BatchCreateProductsCommand>(BatchCreateProductsFactory);
 
-            // CreateProductRequest handler
-            var createProductRequestHandler = new MapCreateProductRequestHandler(_mapper);
-
             // CacheCreateProductResponsesHandler
             var cacheCreateProductResponseHandler = new CommandDecoratorBuilder<CacheCreateProductResponsesCommand>(
                     new CacheCreateProductResponsesHandler(redisCache),
@@ -558,7 +549,6 @@ public class ProductControllerActivator : BaseControllerActivator
             return new BatchCreateProductsController(
                 transientBatchCreateProducts,
                 cacheCreateProductResponseHandler,
-                createProductRequestHandler,
                 _productTypeMapper);
 
             ICommandHandler<BatchCreateProductsCommand> BatchCreateProductsFactory()

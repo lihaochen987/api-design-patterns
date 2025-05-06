@@ -9,5 +9,5 @@ public interface IProductTypeMapper
 {
     TResponse MapToResponse<TResponse>(DomainModels.Product product, ProductControllerMethod method);
     TResponse MapToResponse<TResponse>(ProductView product, ProductControllerMethod method);
-
+    DomainModels.Product MapFromRequest<TRequest>(TRequest request);
 }

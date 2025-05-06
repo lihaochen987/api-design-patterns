@@ -1,8 +1,8 @@
 using backend.Product.ApplicationLayer.Commands.CacheCreateProductResponse;
 using backend.Product.ApplicationLayer.Commands.CreateProduct;
 using backend.Product.ApplicationLayer.Queries.GetCreateProductFromCache;
-using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.Services.Mappers;
+using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryProcessor;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +25,7 @@ public class CreateProductController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CreateProductResponse>> CreateProduct([FromBody] CreateProductRequest request)
     {
-        string hash = GenerateHash(request);
+        string hash = ObjectHasher.ComputeHash(request);
 
         var getCreateProductFromCacheQuery =
             new GetCreateProductFromCacheQuery { RequestId = request.RequestId, CreateProductRequest = request };
@@ -33,8 +33,7 @@ public class CreateProductController(
 
         if (cachedProduct.CreateProductResponse == null)
         {
-            var mapCreateProductRequestQuery = new MapCreateProductRequestQuery { Request = request };
-            var product = queries.Process(mapCreateProductRequestQuery).Result;
+            var product = productTypeMapper.MapFromRequest(request);
             await createProduct.Handle(new CreateProductCommand { Product = product });
 
             var response =
@@ -65,13 +64,5 @@ public class CreateProductController(
         }
 
         return Conflict();
-    }
-
-    private static string GenerateHash<T>(T obj)
-    {
-        string json = System.Text.Json.JsonSerializer.Serialize(obj);
-        byte[] hashBytes = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(json));
-
-        return Convert.ToBase64String(hashBytes);
     }
 }
