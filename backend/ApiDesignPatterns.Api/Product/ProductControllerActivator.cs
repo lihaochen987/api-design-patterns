@@ -22,7 +22,6 @@ using backend.Product.ApplicationLayer.Queries.ListProducts;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductRequest;
 using backend.Product.ApplicationLayer.Queries.MapCreateProductResponse;
 using backend.Product.ApplicationLayer.Queries.MapListProductsResponse;
-using backend.Product.ApplicationLayer.Queries.MapReplaceProductResponse;
 using backend.Product.ApplicationLayer.Queries.MatchProductToUpdateRequest;
 using backend.Product.Controllers.Product;
 using backend.Product.Controllers.ProductPricing;
@@ -327,13 +326,10 @@ public class ProductControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            // MapReplaceProductResponse handler
-            var mapReplaceProductResponseHandler = new MapReplaceProductResponseHandler(_mapper);
-
             return new ReplaceProductController(
                 getProductHandler,
                 replaceProductHandler,
-                mapReplaceProductResponseHandler);
+                _productTypeMapper);
         }
 
         if (type == typeof(UpdateProductController))

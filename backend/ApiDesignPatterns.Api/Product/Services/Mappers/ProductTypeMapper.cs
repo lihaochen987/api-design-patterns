@@ -20,14 +20,14 @@ public class ProductTypeMapper(IMapper mapper) : IProductTypeMapper
             _ => $"{methodName}ProductResponse"
         };
 
-        // Search for the type across all loaded assemblies
         Type responseType = AppDomain.CurrentDomain.GetAssemblies()
                                 .SelectMany(a => a.GetTypes())
                                 .FirstOrDefault(t => t.Name == responseTypeName)
                             ?? throw new InvalidOperationException(
                                 $"Response type {responseTypeName} not found in any loaded assembly");
 
-        TResponse response = (TResponse)mapper.Map(product, typeof(ProductView), responseType);
+        Type sourceType = product.GetType();
+        TResponse response = (TResponse)mapper.Map(product, sourceType, responseType);
 
         return response;
     }

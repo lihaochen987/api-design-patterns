@@ -234,9 +234,6 @@
     <Compile Update="Product\Tests\ControllerTests\CreateProductControllerTestBase.cs">
       <DependentUpon>CreateProductControllerTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\MapReplaceProductResponseHandlerTestBase.cs">
-      <DependentUpon>MapReplaceProductResponseHandlerTests.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\Tests\ControllerTests\ReplaceProductControllerTestBase.cs">
       <DependentUpon>ReplaceProductControllerTests.cs</DependentUpon>
     </Compile>
