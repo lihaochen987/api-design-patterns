@@ -18,36 +18,38 @@ public class SupplierViewRepository(
 {
     public async Task<DomainModels.SupplierView?> GetSupplierView(long id)
     {
-        await using var multi = await dbConnection.QueryMultipleAsync(
-            $"{SupplierViewQueries.GetSupplierView} {SupplierViewQueries.GetSupplierAddresses} {SupplierViewQueries.GetSupplierPhoneNumbers}",
+        var supplier = await dbConnection.QuerySingleOrDefaultAsync<DomainModels.SupplierView>(
+            SupplierViewQueries.GetSupplierView,
             new { Id = id });
-
-        var supplier = await multi.ReadSingleOrDefaultAsync<DomainModels.SupplierView>();
 
         if (supplier == null)
             return null;
 
-        var addresses = await multi.ReadAsync<Address>();
-        var phoneNumbers = await multi.ReadAsync<PhoneNumber>();
+        var addresses = await GetSupplierAddresses(id);
+        var phoneNumbers = await GetSupplierPhoneNumbers(id);
 
-        supplier = supplier with { Addresses = addresses.ToList() };
-        supplier = supplier with { PhoneNumbers = phoneNumbers.ToList() };
+        supplier = supplier with { Addresses = addresses };
+        supplier = supplier with { PhoneNumbers = phoneNumbers };
 
         return supplier;
     }
 
-    public async Task<List<DomainModels.SupplierView>> GetSuppliersByIds(List<long> supplierIds)
+    private async Task<List<Address>> GetSupplierAddresses(long id)
     {
-        if (supplierIds.Count == 0)
-        {
-            return [];
-        }
+        var addresses = await dbConnection.QueryAsync<Address>(
+            SupplierViewQueries.GetSupplierAddresses,
+            new { Id = id });
 
-        var parameters = new DynamicParameters();
-        parameters.Add("@SupplierIds", supplierIds);
-        var results = await dbConnection.QueryAsync<DomainModels.SupplierView>(SupplierViewQueries.GetSuppliersByIds,
-            new { SupplierIds = supplierIds });
-        return results.ToList();
+        return addresses.ToList();
+    }
+
+    private async Task<List<PhoneNumber>> GetSupplierPhoneNumbers(long id)
+    {
+        var phoneNumbers = await dbConnection.QueryAsync<PhoneNumber>(
+            SupplierViewQueries.GetSupplierPhoneNumbers,
+            new { Id = id });
+
+        return phoneNumbers.ToList();
     }
 
     public async Task<(List<DomainModels.SupplierView>, string?)> ListSuppliersAsync(

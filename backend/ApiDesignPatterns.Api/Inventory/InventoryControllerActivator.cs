@@ -264,8 +264,6 @@ public class InventoryControllerActivator : BaseControllerActivator
                 dbConnection,
                 _inventorySqlFilterBuilder,
                 _inventoryViewPaginateService);
-            var supplierViewRepository =
-                new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierPaginateService);
 
             // ListInventory handler
             var listInventoryHandler = new QueryDecoratorBuilder<ListInventoryQuery, PagedInventory>(
@@ -281,24 +279,38 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            // GetSuppliersByIds handler
-            var getSuppliersByIds = new QueryDecoratorBuilder<GetSuppliersByIdsQuery, List<SupplierView>>(
-                    new GetSuppliersByIdsHandler(supplierViewRepository),
-                    _loggerFactory,
-                    dbConnection)
-                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
-                .WithHandshaking()
-                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.SupplierRead)
-                .WithLogging()
-                .WithValidation()
-                .WithTransaction()
-                .Build();
+            // Transient BatchGetSuppliersByIdsHandler
+            var getSuppliersByIds =
+                new TransientQueryHandler<GetSuppliersByIdsQuery, List<SupplierView>>(
+                    BatchGetSuppliersByIdsFactory);
 
             return new ListProductSuppliersController(
                 listInventoryHandler,
                 getSuppliersByIds,
                 _mapper);
+
+            IAsyncQueryHandler<GetSuppliersByIdsQuery, List<SupplierView>>
+                BatchGetSuppliersByIdsFactory()
+            {
+                var batchGetDbConnection = CreateDbConnection();
+                TrackDisposable(context, batchGetDbConnection);
+
+                var batchGetRepository =
+                    new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierPaginateService);
+
+                return new QueryDecoratorBuilder<GetSuppliersByIdsQuery, List<SupplierView>>(
+                        new GetSuppliersByIdsHandler(batchGetRepository),
+                        _loggerFactory,
+                        batchGetDbConnection)
+                    .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                    .WithHandshaking()
+                    .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                    .WithBulkhead(BulkheadPolicies.SupplierRead)
+                    .WithLogging()
+                    .WithValidation()
+                    .WithTransaction()
+                    .Build();
+            }
         }
 
         if (type == typeof(ListSupplierProductsController))

@@ -7,11 +7,15 @@ using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 
 namespace backend.Inventory.ApplicationLayer.Queries.GetSuppliersByIds;
 
-public class GetSuppliersByIdsHandler (ISupplierViewRepository repository) : IAsyncQueryHandler<GetSuppliersByIdsQuery, List<SupplierView>>
+public class GetSuppliersByIdsHandler(ISupplierViewRepository repository)
+    : IAsyncQueryHandler<GetSuppliersByIdsQuery, List<SupplierView>>
 {
     public async Task<List<SupplierView>> Handle(GetSuppliersByIdsQuery query)
     {
-        var suppliers = await repository.GetSuppliersByIds(query.SupplierIds);
-        return suppliers;
+        var tasks = query.SupplierIds.Select(repository.GetSupplierView).ToList();
+
+        var suppliers = (await Task.WhenAll(tasks)).Where(x => x != null).ToList();
+
+        return suppliers!;
     }
 }
