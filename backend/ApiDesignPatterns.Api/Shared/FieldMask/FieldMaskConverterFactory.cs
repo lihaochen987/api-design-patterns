@@ -1,6 +1,8 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
+using Newtonsoft.Json;
+
 namespace backend.Shared.FieldMask;
 
 public class FieldMaskConverterFactory(HashSet<string> allFieldPaths) : IFieldMaskConverterFactory
@@ -8,7 +10,8 @@ public class FieldMaskConverterFactory(HashSet<string> allFieldPaths) : IFieldMa
     public FieldMaskConverter Create(IList<string> fieldMask)
     {
         var expandedFieldMasks = Expand(fieldMask, allFieldPaths);
-        return new FieldMaskConverter(expandedFieldMasks);
+        var jsonSerializer = new JsonSerializer();
+        return new FieldMaskConverter(expandedFieldMasks, jsonSerializer);
     }
 
     /// <summary>

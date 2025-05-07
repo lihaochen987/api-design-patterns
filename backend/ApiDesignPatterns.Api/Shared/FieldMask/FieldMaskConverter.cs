@@ -22,7 +22,8 @@ namespace backend.Shared.FieldMask;
 /// }
 /// </example>
 public class FieldMaskConverter(
-    HashSet<string> expandedFieldMasks)
+    HashSet<string> expandedFieldMasks,
+    JsonSerializer jsonSerializer)
     : JsonConverter
 {
     /// <summary>
@@ -50,18 +51,7 @@ public class FieldMaskConverter(
             writer.WriteStartArray();
             foreach (object? item in collection)
             {
-                if (item == null)
-                {
-                    writer.WriteNull();
-                }
-                else if (item.GetType().IsClass && item.GetType() != typeof(string))
-                {
-                    WriteComplexObject(writer, item, "", serializer);
-                }
-                else
-                {
-                    JToken.FromObject(item, serializer).WriteTo(writer);
-                }
+                WriteCollectionTypeObject(item, writer);
             }
 
             writer.WriteEndArray();
@@ -69,7 +59,23 @@ public class FieldMaskConverter(
         else
         {
             // Handle regular objects
-            WriteComplexObject(writer, value, "", serializer);
+            WriteComplexObject(writer, value, "");
+        }
+    }
+
+    private void WriteCollectionTypeObject(object? item, JsonWriter writer)
+    {
+        if (item == null)
+        {
+            writer.WriteNull();
+        }
+        else if (item.GetType().IsClass && item.GetType() != typeof(string))
+        {
+            WriteComplexObject(writer, item, "");
+        }
+        else
+        {
+            JToken.FromObject(item, jsonSerializer).WriteTo(writer);
         }
     }
 
@@ -79,15 +85,14 @@ public class FieldMaskConverter(
     private void WriteComplexObject(
         JsonWriter writer,
         object value,
-        string parentPath,
-        JsonSerializer serializer)
+        string parentPath)
     {
         JObject jObject = new();
         PropertyInfo[] properties = value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
         foreach (PropertyInfo property in properties)
         {
-            AddPropertyToJObject(jObject, property, value, parentPath, serializer);
+            AddPropertyToJObject(jObject, property, value, parentPath);
         }
 
         jObject.WriteTo(writer);
@@ -120,8 +125,7 @@ public class FieldMaskConverter(
         JObject jObject,
         PropertyInfo property,
         object value,
-        string parentPath,
-        JsonSerializer serializer)
+        string parentPath)
     {
         string propertyName = property.Name;
         string currentPath = string.IsNullOrEmpty(parentPath)
@@ -137,7 +141,7 @@ public class FieldMaskConverter(
         // Direct property match
         if (expandedFieldMasks.Contains(currentPath))
         {
-            jObject.Add(propertyName, JToken.FromObject(propValue, serializer));
+            jObject.Add(propertyName, JToken.FromObject(propValue, jsonSerializer));
             return;
         }
 
@@ -164,7 +168,7 @@ public class FieldMaskConverter(
                 else if (item.GetType().IsClass && item.GetType() != typeof(string))
                 {
                     // Process complex items in the collection
-                    JObject itemObject = ProcessCollectionItem(item, currentPath, serializer);
+                    JObject itemObject = ProcessCollectionItem(item, currentPath);
                     if (itemObject.HasValues)
                     {
                         jArray.Add(itemObject);
@@ -173,7 +177,7 @@ public class FieldMaskConverter(
                 else
                 {
                     // For primitive items
-                    jArray.Add(JToken.FromObject(item, serializer));
+                    jArray.Add(JToken.FromObject(item, jsonSerializer));
                 }
             }
 
@@ -185,7 +189,7 @@ public class FieldMaskConverter(
         // Handle nested objects
         else if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
         {
-            JObject nestedObject = BuildNestedObject(propValue, currentPath, serializer);
+            JObject nestedObject = BuildNestedObject(propValue, currentPath);
             if (nestedObject.HasValues)
             {
                 jObject.Add(propertyName, nestedObject);
@@ -198,8 +202,7 @@ public class FieldMaskConverter(
     /// </summary>
     private JObject ProcessCollectionItem(
         object item,
-        string collectionPath,
-        JsonSerializer serializer)
+        string collectionPath)
     {
         JObject itemObject = new();
         string collectionWildcardPath = $"{collectionPath}.";
@@ -215,7 +218,7 @@ public class FieldMaskConverter(
                 object? itemPropValue = itemProperty.GetValue(item);
                 if (itemPropValue != null)
                 {
-                    itemObject.Add(itemProperty.Name, JToken.FromObject(itemPropValue, serializer));
+                    itemObject.Add(itemProperty.Name, JToken.FromObject(itemPropValue, jsonSerializer));
                 }
             }
             else if (itemProperty.PropertyType.IsClass && itemProperty.PropertyType != typeof(string))
@@ -227,7 +230,7 @@ public class FieldMaskConverter(
                 }
 
                 string nestedItemPath = $"{collectionWildcardPath}{itemProperty.Name.ToLowerInvariant()}";
-                JObject nestedObject = BuildNestedObject(nestedItemValue, nestedItemPath, serializer);
+                JObject nestedObject = BuildNestedObject(nestedItemValue, nestedItemPath);
                 if (nestedObject.HasValues)
                 {
                     itemObject.Add(itemProperty.Name, nestedObject);
@@ -243,8 +246,7 @@ public class FieldMaskConverter(
     /// </summary>
     private JObject BuildNestedObject(
         object instance,
-        string parentPath,
-        JsonSerializer serializer)
+        string parentPath)
     {
         JObject jObject = new();
 
@@ -260,7 +262,7 @@ public class FieldMaskConverter(
                 object? nestedValue = nestedProperty.GetValue(instance);
                 if (nestedValue != null)
                 {
-                    jObject.Add(nestedProperty.Name, JToken.FromObject(nestedValue, serializer));
+                    jObject.Add(nestedProperty.Name, JToken.FromObject(nestedValue, jsonSerializer));
                 }
             }
             // Check if it's a collection
@@ -290,7 +292,7 @@ public class FieldMaskConverter(
                     }
                     else if (item.GetType().IsClass && item.GetType() != typeof(string))
                     {
-                        JObject itemObject = ProcessCollectionItem(item, nestedPath, serializer);
+                        JObject itemObject = ProcessCollectionItem(item, nestedPath);
                         if (itemObject.HasValues)
                         {
                             jArray.Add(itemObject);
@@ -298,7 +300,7 @@ public class FieldMaskConverter(
                     }
                     else
                     {
-                        jArray.Add(JToken.FromObject(item, serializer));
+                        jArray.Add(JToken.FromObject(item, jsonSerializer));
                     }
                 }
 
@@ -316,7 +318,7 @@ public class FieldMaskConverter(
                     continue;
                 }
 
-                JObject deepNestedObject = BuildNestedObject(deepNestedInstance, nestedPath, serializer);
+                JObject deepNestedObject = BuildNestedObject(deepNestedInstance, nestedPath);
                 if (deepNestedObject.HasValues)
                 {
                     jObject.Add(nestedProperty.Name, deepNestedObject);
