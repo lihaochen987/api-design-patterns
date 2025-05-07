@@ -1,6 +1,7 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Immutable;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.Views;
@@ -10,10 +11,11 @@ namespace backend.Product.Services.Mappers;
 
 public class ProductTypeMapper(IMapper mapper) : IProductTypeMapper
 {
+    private static ImmutableDictionary<string, Type> s_typeCache = ImmutableDictionary<string, Type>.Empty;
+
     private static readonly Dictionary<Category, string> s_categoryToResponseSuffix = new()
     {
-        { Category.PetFood, "PetFood" },
-        { Category.GroomingAndHygiene, "GroomingAndHygiene" }
+        { Category.PetFood, "PetFood" }, { Category.GroomingAndHygiene, "GroomingAndHygiene" }
     };
 
     private static string GetResponseTypeName(Category category, string methodName)
@@ -27,6 +29,12 @@ public class ProductTypeMapper(IMapper mapper) : IProductTypeMapper
     {
         string methodName = method.ToString();
         string responseTypeName = GetResponseTypeName(product.Category, methodName);
+        Type sourceType = product.GetType();
+
+        if (s_typeCache.TryGetValue(responseTypeName, out Type? cachedResponseType))
+        {
+            return (TResponse)mapper.Map(product, sourceType, cachedResponseType);
+        }
 
         Type responseType = AppDomain.CurrentDomain.GetAssemblies()
                                 .SelectMany(a => a.GetTypes())
@@ -34,7 +42,8 @@ public class ProductTypeMapper(IMapper mapper) : IProductTypeMapper
                             ?? throw new InvalidOperationException(
                                 $"Response type {responseTypeName} not found in any loaded assembly");
 
-        Type sourceType = product.GetType();
+        s_typeCache = s_typeCache.Add(responseTypeName, responseType);
+
         TResponse response = (TResponse)mapper.Map(product, sourceType, responseType);
 
         return response;
@@ -44,8 +53,13 @@ public class ProductTypeMapper(IMapper mapper) : IProductTypeMapper
     {
         string methodName = method.ToString();
         Category category = Enum.Parse<Category>(productView.Category);
-
         string responseTypeName = GetResponseTypeName(category, methodName);
+        Type sourceType = productView.GetType();
+
+        if (s_typeCache.TryGetValue(responseTypeName, out Type? cachedResponseType))
+        {
+            return (TResponse)mapper.Map(productView, sourceType, cachedResponseType);
+        }
 
         Type responseType = AppDomain.CurrentDomain.GetAssemblies()
                                 .SelectMany(a => a.GetTypes())
