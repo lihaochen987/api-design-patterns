@@ -1,9 +1,9 @@
-using AutoMapper;
 using backend.Product.Controllers.Product;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Commands.ReplaceSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

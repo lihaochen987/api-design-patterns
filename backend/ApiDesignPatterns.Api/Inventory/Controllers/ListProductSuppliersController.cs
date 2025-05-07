@@ -1,12 +1,12 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoMapper;
 using backend.Inventory.ApplicationLayer.Queries.GetSuppliersByIds;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Shared.QueryHandler;
 using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

@@ -2,13 +2,14 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using AutoMapper;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplierView;
 using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
 using backend.Supplier.Services;
+using Mapster;
+using MapsterMapper;
 using Moq;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;
@@ -27,8 +28,9 @@ public abstract class GetSupplierControllerTestBase
 
     protected GetSupplierControllerTestBase()
     {
-        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<SupplierMappingProfile>(); });
-        Mapper = mapperConfiguration.CreateMapper();
+        var config = new TypeAdapterConfig();
+        config.RegisterSupplierMappings();
+        Mapper = new Mapper(config);
     }
 
     protected GetSupplierController GetSupplierController()

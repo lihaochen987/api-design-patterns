@@ -2,13 +2,14 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using AutoMapper;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.Controllers;
 using backend.Supplier.Services;
+using Mapster;
+using MapsterMapper;
 using Moq;
 
 namespace backend.Supplier.Tests.ControllerLayerTests;
@@ -24,8 +25,9 @@ public abstract class UpdateSupplierControllerTestBase
     {
         MockGetSupplierHandler = Mock.Of<IAsyncQueryHandler<GetSupplierQuery, DomainModels.Supplier?>>();
         MockUpdateSupplierHandler = Mock.Of<ICommandHandler<UpdateSupplierCommand>>();
-        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<SupplierMappingProfile>(); });
-        Mapper = mapperConfiguration.CreateMapper();
+        var config = new TypeAdapterConfig();
+        config.RegisterSupplierMappings();
+        Mapper = new Mapper(config);
     }
 
     protected UpdateSupplierController UpdateSupplierController()

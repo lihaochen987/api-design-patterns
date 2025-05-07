@@ -1,7 +1,6 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoMapper;
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
 using backend.Inventory.ApplicationLayer.Commands.DeleteInventory;
 using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
@@ -28,7 +27,10 @@ using backend.Shared.QueryHandler;
 using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 using backend.Supplier.Services;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using IMapper = MapsterMapper.IMapper;
+using Mapper = MapsterMapper.Mapper;
 
 namespace backend.Inventory;
 
@@ -66,13 +68,11 @@ public class InventoryControllerActivator : BaseControllerActivator
         ProductColumnMapper productColumnMapper = new();
         _productSqlFilterBuilder = new SqlFilterBuilder(productColumnMapper);
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<InventoryMappingProfile>();
-            cfg.AddProfile<ProductMappingProfile>();
-            cfg.AddProfile<SupplierMappingProfile>();
-        });
-        _mapper = mapperConfig.CreateMapper();
+        var config = new TypeAdapterConfig();
+        config.RegisterProductMappings();
+        config.RegisterSupplierMappings();
+        config.RegisterInventoryMappings();
+        _mapper = new Mapper(config);
     }
 
     public override object? Create(ControllerContext context)

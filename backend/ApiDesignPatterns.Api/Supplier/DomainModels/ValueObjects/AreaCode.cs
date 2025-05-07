@@ -23,10 +23,10 @@ public readonly record struct AreaCode
     /// <exception cref="ArgumentNullException">Thrown when the value is null, empty, or whitespace.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the value length is outside the allowed range.</exception>
     /// <exception cref="ArgumentException">Thrown when the value contains non-digit characters.</exception>
-    public AreaCode(string value)
+    public AreaCode(string? value)
     {
         ValidateAreaCode(value);
-        Value = value;
+        Value = value!;
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public readonly record struct AreaCode
     /// <exception cref="ArgumentNullException">Thrown when the value is null, empty, or whitespace.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the value length is outside the allowed range.</exception>
     /// <exception cref="ArgumentException">Thrown when the value contains non-digit characters.</exception>
-    private static void ValidateAreaCode(string value)
+    private static void ValidateAreaCode(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {

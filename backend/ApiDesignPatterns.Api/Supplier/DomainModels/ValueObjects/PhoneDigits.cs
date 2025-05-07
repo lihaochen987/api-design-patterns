@@ -6,19 +6,11 @@ namespace backend.Supplier.DomainModels.ValueObjects;
 /// <summary>
 /// Represents the local digits portion of a phone number with validation rules.
 /// </summary>
-public record PhoneDigits
+public readonly record struct PhoneDigits
 {
     // Constants for validation rules
     private const int MinDigitCount = 4;
     private const int MaxDigitCount = 10;
-
-    /// <summary>
-    /// Private constructor for JSON deserialization and object mapping.
-    /// </summary>
-    private PhoneDigits()
-    {
-        Value = 0;
-    }
 
     /// <summary>
     /// Gets the phone digits value.
@@ -30,10 +22,10 @@ public record PhoneDigits
     /// </summary>
     /// <param name="value">The phone number digits.</param>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the value is non-positive or has an invalid number of digits.</exception>
-    public PhoneDigits(long value)
+    public PhoneDigits(long? value)
     {
         ValidatePhoneDigits(value);
-        Value = value;
+        Value = value!.Value;
     }
 
     /// <summary>
@@ -41,14 +33,19 @@ public record PhoneDigits
     /// </summary>
     /// <param name="value">The phone digits to validate.</param>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the value is non-positive or has an invalid number of digits.</exception>
-    private static void ValidatePhoneDigits(long value)
+    private static void ValidatePhoneDigits(long? value)
     {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value), "Phone digits cannot be null.");
+        }
+
         if (value <= 0)
         {
             throw new ArgumentOutOfRangeException(nameof(value), value, "Phone digits must be a positive number.");
         }
 
-        string digits = value.ToString();
+        string digits = value.Value.ToString();
 
         switch (digits.Length)
         {

@@ -2,11 +2,11 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 
-using AutoMapper;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -38,6 +38,11 @@ public class UpdateSupplierController(
         await updateSupplier.Handle(new UpdateSupplierCommand { Request = request, Supplier = existingSupplier });
 
         var updatedSupplier = await getSupplier.Handle(new GetSupplierQuery { Id = id });
+
+        if (updatedSupplier == null)
+        {
+            return BadRequest();
+        }
 
         var response = mapper.Map<UpdateSupplierResponse>(updatedSupplier);
         return Ok(response);

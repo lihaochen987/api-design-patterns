@@ -1,6 +1,6 @@
-using AutoMapper;
 using backend.Shared.QueryHandler;
 using backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

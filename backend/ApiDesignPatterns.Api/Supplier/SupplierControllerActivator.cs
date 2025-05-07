@@ -1,7 +1,6 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoMapper;
 using backend.Shared;
 using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
@@ -19,6 +18,8 @@ using backend.Supplier.DomainModels;
 using backend.Supplier.InfrastructureLayer.Database.Supplier;
 using backend.Supplier.InfrastructureLayer.Database.SupplierView;
 using backend.Supplier.Services;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Supplier;
@@ -43,8 +44,9 @@ public class SupplierControllerActivator : BaseControllerActivator
         SupplierFieldPaths supplierFieldPaths = new();
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(supplierFieldPaths.ValidPaths);
 
-        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<SupplierMappingProfile>(); });
-        _mapper = mapperConfig.CreateMapper();
+        var config = new TypeAdapterConfig();
+        config.RegisterSupplierMappings();
+        _mapper = new Mapper(config);
     }
 
     public override object? Create(ControllerContext context)

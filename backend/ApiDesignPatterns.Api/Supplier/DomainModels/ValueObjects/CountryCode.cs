@@ -24,10 +24,10 @@ public readonly record struct CountryCode
     /// <exception cref="ArgumentNullException">Thrown when the value is null, empty, or whitespace.</exception>
     /// <exception cref="ArgumentException">Thrown when the value doesn't start with '+' or contains non-digit characters after the prefix.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the number of digits is outside the allowed range.</exception>
-    public CountryCode(string value)
+    public CountryCode(string? value)
     {
         ValidateCountryCode(value);
-        Value = value;
+        Value = value!;
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public readonly record struct CountryCode
     /// <exception cref="ArgumentNullException">Thrown when the value is null, empty, or whitespace.</exception>
     /// <exception cref="ArgumentException">Thrown when the value doesn't start with '+' or contains non-digit characters after the prefix.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the number of digits is outside the allowed range.</exception>
-    private static void ValidateCountryCode(string value)
+    private static void ValidateCountryCode(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {

@@ -1,11 +1,11 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoMapper;
 using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -37,6 +37,11 @@ public class UpdateInventoryController(
         await updateInventory.Handle(new UpdateInventoryCommand { Request = request, Inventory = existingInventory });
 
         var updatedInventory = await getInventory.Handle(new GetInventoryByIdQuery { Id = id });
+
+        if (updatedInventory == null)
+        {
+            return BadRequest();
+        }
 
         var response = mapper.Map<UpdateInventoryResponse>(updatedInventory);
         return Ok(response);

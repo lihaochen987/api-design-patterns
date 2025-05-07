@@ -2,14 +2,16 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using AutoMapper;
 using backend.Inventory.ApplicationLayer.Queries.GetSuppliersByIds;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
 using backend.Inventory.Services;
+using backend.Product.Services.Mappers;
 using backend.Shared.QueryHandler;
 using backend.Supplier.DomainModels;
 using backend.Supplier.Services;
+using Mapster;
+using MapsterMapper;
 using Moq;
 
 namespace backend.Inventory.Tests.ControllerTests;
@@ -27,12 +29,10 @@ public abstract class ListProductSuppliersControllerTestBase
 
     protected ListProductSuppliersControllerTestBase()
     {
-        MapperConfiguration mapperConfiguration = new(cfg =>
-        {
-            cfg.AddProfile<InventoryMappingProfile>();
-            cfg.AddProfile<SupplierMappingProfile>();
-        });
-        Mapper = mapperConfiguration.CreateMapper();
+        var config = new TypeAdapterConfig();
+        config.RegisterSupplierMappings();
+        config.RegisterInventoryMappings();
+        Mapper = new Mapper(config);
     }
 
     protected ListProductSuppliersController ListProductSuppliersController()

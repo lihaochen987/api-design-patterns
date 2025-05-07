@@ -1,7 +1,6 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.BatchCreateProducts;
 using backend.Product.ApplicationLayer.Commands.BatchDeleteProducts;
 using backend.Product.ApplicationLayer.Commands.CacheCreateProductResponse;
@@ -451,9 +450,6 @@ public class ProductControllerActivator : BaseControllerActivator
 
         if (type == typeof(BatchGetProductsController))
         {
-            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
-            var mapper = mapperConfig.CreateMapper();
-
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
             var repository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
@@ -461,7 +457,7 @@ public class ProductControllerActivator : BaseControllerActivator
             // BatchGetProducts handler
             var batchGetProductsHandler =
                 new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductResponsesHandler(repository, mapper),
+                        new BatchGetProductResponsesHandler(repository, _mapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -483,8 +479,6 @@ public class ProductControllerActivator : BaseControllerActivator
             TrackDisposable(context, dbConnection);
             var repository = new ProductRepository(dbConnection);
             var viewRepository = new ProductViewRepository(dbConnection, _productSqlFilterBuilder);
-            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductMappingProfile>(); });
-            var mapper = mapperConfig.CreateMapper();
 
             // BatchDeleteProducts handler
             var batchDeleteProductsHandler = new CommandDecoratorBuilder<BatchDeleteProductsCommand>(
@@ -503,7 +497,7 @@ public class ProductControllerActivator : BaseControllerActivator
             // BatchGetProducts handler
             var batchGetProductsHandler =
                 new QueryDecoratorBuilder<BatchGetProductResponsesQuery, Result<List<GetProductResponse>>>(
-                        new BatchGetProductResponsesHandler(viewRepository, mapper),
+                        new BatchGetProductResponsesHandler(viewRepository, _mapper),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
