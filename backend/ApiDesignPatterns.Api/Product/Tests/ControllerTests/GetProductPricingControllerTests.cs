@@ -34,7 +34,7 @@ public class GetProductPricingControllerTests : GetProductPricingControllerTestB
         OkObjectResult? contentResult = (OkObjectResult)actionResult.Result;
         GetProductPricingResponse response =
             JsonConvert.DeserializeObject<GetProductPricingResponse>(contentResult.Value!.ToString()!)!;
-        response.pricing.Should().BeEquivalentTo(Mapper.Map<ProductPricingResponse>(product.Pricing));
+        response.Pricing.Should().BeEquivalentTo(Mapper.Map<ProductPricingResponse>(product.Pricing));
     }
 
     [Fact]

@@ -1,8 +1,8 @@
-using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

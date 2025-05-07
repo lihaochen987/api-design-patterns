@@ -1,7 +1,6 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoMapper;
 using backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
 using backend.Product.ApplicationLayer.Queries.GetProduct;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
@@ -16,6 +15,8 @@ using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Product;
@@ -31,8 +32,9 @@ public class ProductPricingControllerActivator : BaseControllerActivator
         ILoggerFactory loggerFactory)
         : base(configuration)
     {
-        var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile<ProductPricingMappingProfile>(); });
-        _mapper = mapperConfig.CreateMapper();
+        var config = new TypeAdapterConfig();
+        config.RegisterProductPricingMappings();
+        _mapper = new Mapper(config);
 
         ProductPricingFieldPaths productPricingFieldPaths = new();
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(productPricingFieldPaths.ValidPaths);

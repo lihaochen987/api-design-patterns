@@ -1,8 +1,8 @@
-using AutoMapper;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.DomainModels.Views;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;

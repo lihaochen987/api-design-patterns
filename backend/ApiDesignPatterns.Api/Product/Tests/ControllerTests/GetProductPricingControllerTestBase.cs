@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using AutoMapper;
 using backend.Product.ApplicationLayer.Queries.GetProductPricing;
 using backend.Product.Controllers.ProductPricing;
 using backend.Product.DomainModels.Views;
@@ -10,6 +9,8 @@ using backend.Product.Services;
 using backend.Product.Services.Mappers;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
+using Mapster;
+using MapsterMapper;
 using Moq;
 
 namespace backend.Product.Tests.ControllerTests;
@@ -27,8 +28,9 @@ public abstract class GetProductPricingControllerTestBase
 
     protected GetProductPricingControllerTestBase()
     {
-        MapperConfiguration mapperConfiguration = new(cfg => { cfg.AddProfile<ProductPricingMappingProfile>(); });
-        Mapper = mapperConfiguration.CreateMapper();
+        var config = new TypeAdapterConfig();
+        config.RegisterProductPricingMappings();
+        Mapper = new Mapper(config);
     }
 
     protected GetProductPricingController ProductPricingController()
