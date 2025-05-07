@@ -13,7 +13,7 @@ public record ReplaceSupplierResponse
     [Required] public required string FirstName { get; init; }
     [Required] public required string LastName { get; init; }
     [Required] public required string Email { get; init; }
-    [Required] public required AddressResponse Address { get; init; }
+    [Required] public required List<AddressResponse> Addresses { get; init; }
     [Required] public required string CreatedAt { get; init; }
-    [Required] public required PhoneNumberResponse PhoneNumber { get; init; }
+    [Required] public required List<PhoneNumberResponse> PhoneNumbers { get; init; }
 }

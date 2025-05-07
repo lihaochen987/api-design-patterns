@@ -2,9 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Supplier.DomainModels;
 using backend.Supplier.DomainModels.ValueObjects;
-using backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Supplier.Tests.TestHelpers.Builders;
 
@@ -14,9 +12,9 @@ public class SupplierTestDataBuilder
     private string _firstName;
     private string _lastName;
     private string _email;
-    private Address _address;
+    private List<Address> _addresses;
     private DateTimeOffset _createdAt;
-    private PhoneNumber _phoneNumber;
+    private List<PhoneNumber> _phoneNumbers;
 
     public SupplierTestDataBuilder()
     {
@@ -26,8 +24,8 @@ public class SupplierTestDataBuilder
         _lastName = fixture.Create<string>();
         _email = fixture.Create<string>();
         _createdAt = fixture.Create<DateTimeOffset>();
-        _address = new AddressTestDataBuilder().Build();
-        _phoneNumber = new PhoneNumberTestDataBuilder().Build();
+        _addresses = new AddressTestDataBuilder().BuildMany(3);
+        _phoneNumbers = new PhoneNumberTestDataBuilder().BuildMany(3);
     }
 
     public SupplierTestDataBuilder WithId(long id)
@@ -54,9 +52,9 @@ public class SupplierTestDataBuilder
         return this;
     }
 
-    public SupplierTestDataBuilder WithAddress(Address address)
+    public SupplierTestDataBuilder WithAddresses(List<Address> addresses)
     {
-        _address = address;
+        _addresses = addresses;
         return this;
     }
 
@@ -66,9 +64,9 @@ public class SupplierTestDataBuilder
         return this;
     }
 
-    public SupplierTestDataBuilder WithPhoneNumber(PhoneNumber phoneNumber)
+    public SupplierTestDataBuilder WithPhoneNumbers(List<PhoneNumber> phoneNumbers)
     {
-        _phoneNumber = phoneNumber;
+        _phoneNumbers = phoneNumbers;
         return this;
     }
 
@@ -80,9 +78,9 @@ public class SupplierTestDataBuilder
             FirstName = _firstName,
             LastName = _lastName,
             Email = _email,
-            Address = _address,
+            Addresses = _addresses,
             CreatedAt = _createdAt,
-            PhoneNumber = _phoneNumber
+            PhoneNumbers = _phoneNumbers
         };
     }
 }

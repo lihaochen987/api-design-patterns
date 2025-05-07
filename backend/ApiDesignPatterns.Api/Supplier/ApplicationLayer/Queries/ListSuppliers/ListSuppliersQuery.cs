@@ -3,7 +3,6 @@
 
 using backend.Shared.QueryHandler;
 using backend.Supplier.Controllers;
-using backend.Supplier.DomainModels;
 
 namespace backend.Supplier.ApplicationLayer.Queries.ListSuppliers;
 

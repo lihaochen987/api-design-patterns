@@ -19,12 +19,7 @@ public class ListSuppliersController(
     public async Task<ActionResult<IEnumerable<ListSuppliersResponse>>> ListSuppliers(
         [FromQuery] ListSuppliersRequest request)
     {
-        PagedSuppliers? result = await listSuppliers.Handle(new ListSuppliersQuery { Request = request });
-
-        if (result == null)
-        {
-            return NotFound();
-        }
+        PagedSuppliers result = await listSuppliers.Handle(new ListSuppliersQuery { Request = request });
 
         ListSuppliersResponse response = new()
         {

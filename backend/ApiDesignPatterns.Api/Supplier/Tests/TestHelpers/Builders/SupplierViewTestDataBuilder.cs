@@ -3,6 +3,7 @@
 
 using AutoFixture;
 using backend.Supplier.DomainModels;
+using backend.Supplier.DomainModels.ValueObjects;
 
 namespace backend.Supplier.Tests.TestHelpers.Builders;
 
@@ -11,12 +12,9 @@ public class SupplierViewTestDataBuilder
     private long _id;
     private string _fullName;
     private string _email;
-    private DateTimeOffset _createdAt;
-    private string _street;
-    private string _city;
-    private string _postalCode;
-    private string _country;
-    private string _phoneNumber;
+    private readonly DateTimeOffset _createdAt;
+    private readonly List<Address> _addresses;
+    private readonly List<PhoneNumber> _phoneNumbers;
 
     public SupplierViewTestDataBuilder()
     {
@@ -26,11 +24,8 @@ public class SupplierViewTestDataBuilder
         _fullName = $"{fixture.Create<string>()} {fixture.Create<string>()}";
         _email = fixture.Create<string>();
         _createdAt = fixture.Create<DateTimeOffset>();
-        _street = fixture.Create<string>();
-        _city = fixture.Create<string>();
-        _postalCode = fixture.Create<string>();
-        _country = fixture.Create<string>();
-        _phoneNumber = $"+{fixture.Create<int>()}-{fixture.Create<int>()}-{fixture.Create<long>()}";
+        _addresses = new AddressTestDataBuilder().BuildMany(3);
+        _phoneNumbers = new PhoneNumberTestDataBuilder().BuildMany(3);
     }
 
     public SupplierViewTestDataBuilder WithId(long id)
@@ -51,42 +46,6 @@ public class SupplierViewTestDataBuilder
         return this;
     }
 
-    public SupplierViewTestDataBuilder WithCreatedAt(DateTimeOffset createdAt)
-    {
-        _createdAt = createdAt;
-        return this;
-    }
-
-    public SupplierViewTestDataBuilder WithStreet(string street)
-    {
-        _street = street;
-        return this;
-    }
-
-    public SupplierViewTestDataBuilder WithCity(string city)
-    {
-        _city = city;
-        return this;
-    }
-
-    public SupplierViewTestDataBuilder WithPostalCode(string postalCode)
-    {
-        _postalCode = postalCode;
-        return this;
-    }
-
-    public SupplierViewTestDataBuilder WithCountry(string country)
-    {
-        _country = country;
-        return this;
-    }
-
-    public SupplierViewTestDataBuilder WithPhoneNumber(string phoneNumber)
-    {
-        _phoneNumber = phoneNumber;
-        return this;
-    }
-
     public SupplierView Build()
     {
         return new SupplierView
@@ -95,11 +54,8 @@ public class SupplierViewTestDataBuilder
             FullName = _fullName,
             Email = _email,
             CreatedAt = _createdAt,
-            Street = _street,
-            City = _city,
-            PostalCode = _postalCode,
-            Country = _country,
-            PhoneNumber = _phoneNumber
+            Addresses = _addresses,
+            PhoneNumbers = _phoneNumbers,
         };
     }
 

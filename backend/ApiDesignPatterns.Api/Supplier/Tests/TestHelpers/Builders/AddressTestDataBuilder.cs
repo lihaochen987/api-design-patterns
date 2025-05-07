@@ -9,6 +9,7 @@ namespace backend.Supplier.Tests.TestHelpers.Builders;
 
 public class AddressTestDataBuilder
 {
+    private readonly Fixture _fixture = new();
     private Street _street;
     private City _city;
     private PostalCode _postalCode;
@@ -16,16 +17,14 @@ public class AddressTestDataBuilder
 
     public AddressTestDataBuilder()
     {
-        Fixture fixture = new();
+        _fixture.Customizations.Add(new CitySpecimenBuilder());
+        _fixture.Customizations.Add(new PostalCodeSpecimenBuilder());
+        _fixture.Customizations.Add(new CountrySpecimenBuilder());
 
-        fixture.Customizations.Add(new CitySpecimenBuilder());
-        fixture.Customizations.Add(new PostalCodeSpecimenBuilder());
-        fixture.Customizations.Add(new CountrySpecimenBuilder());
-
-        _street = fixture.Create<Street>();
-        _city = fixture.Create<City>();
-        _postalCode = fixture.Create<PostalCode>();
-        _country = fixture.Create<Country>();
+        _street = _fixture.Create<Street>();
+        _city = _fixture.Create<City>();
+        _postalCode = _fixture.Create<PostalCode>();
+        _country = _fixture.Create<Country>();
     }
 
     public AddressTestDataBuilder WithStreet(Street street)
@@ -55,5 +54,23 @@ public class AddressTestDataBuilder
     public Address Build()
     {
         return new Address { Street = _street, City = _city, PostalCode = _postalCode, Country = _country };
+    }
+
+    public List<Address> BuildMany(int count)
+    {
+        var addresses = new List<Address>();
+
+        for (int i = 0; i < count; i++)
+        {
+            addresses.Add(new Address
+            {
+                Street = _fixture.Create<Street>(),
+                City = _fixture.Create<City>(),
+                PostalCode = _fixture.Create<PostalCode>(),
+                Country = _fixture.Create<Country>()
+            });
+        }
+
+        return addresses;
     }
 }

@@ -44,51 +44,53 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
         var supplier = new SupplierTestDataBuilder().Build();
         Repository.Add(supplier);
         Repository.IsDirty = false;
+        var addressRequest = new AddressRequest
+        {
+            Street = "New Street", City = "New City", PostalCode = "New Code", Country = "New Country"
+        };
         var request = new UpdateSupplierRequest
         {
-            Address = new AddressRequest
-            {
-                Street = "New Street", City = "New City", PostalCode = "New Code", Country = "New Country"
-            },
-            FieldMask = ["address.street", "address.postalcode"]
+            Addresses = [addressRequest], FieldMask = ["address.street", "address.postalcode"]
         };
         ICommandHandler<UpdateSupplierCommand> sut = UpdateSupplierHandler();
 
         await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().Address.Street.Value.Should().BeEquivalentTo(request.Address.Street);
-        Repository.First().Address.City.Should().BeEquivalentTo(supplier.Address.City);
-        Repository.First().Address.PostalCode.Value.Should().BeEquivalentTo(request.Address.PostalCode);
-        Repository.First().Address.Country.Should().BeEquivalentTo(supplier.Address.Country);
+        Repository.First().Addresses.First().Street.Value.Should()
+            .BeEquivalentTo(supplier.Addresses.First().Street.Value);
+        Repository.First().Addresses.First().City.Should().BeEquivalentTo(supplier.Addresses.First().City);
+        Repository.First().Addresses.First().PostalCode.Value.Should()
+            .BeEquivalentTo(supplier.Addresses.First().PostalCode.Value);
+        Repository.First().Addresses.First().Country.Should().BeEquivalentTo(supplier.Addresses.First().Country);
     }
 
     [Fact]
     public async Task UpdateSupplierAsync_WithPhoneNumberFieldsInFieldMask_ShouldUpdateOnlySpecifiedFields()
     {
         var supplier = new SupplierTestDataBuilder()
-            .WithPhoneNumber(new PhoneNumber
-            {
-                CountryCode = new CountryCode("+1"),
-                AreaCode = new AreaCode("555"),
-                Number = new PhoneDigits(1234567)
-            })
+            .WithPhoneNumbers([
+                new PhoneNumber
+                {
+                    CountryCode = new CountryCode("+1"),
+                    AreaCode = new AreaCode("555"),
+                    Number = new PhoneDigits(1234567)
+                }
+            ])
             .Build();
         Repository.Add(supplier);
         Repository.IsDirty = false;
-
-        var request = new UpdateSupplierRequest
-        {
-            PhoneNumber = new PhoneNumberRequest { CountryCode = "+44", AreaCode = "777", Number = 9876543 },
-            FieldMask = ["countrycode", "number"]
-        };
+        var phoneNumber = new PhoneNumberRequest { CountryCode = "+44", AreaCode = "777", Number = 9876543 };
+        var request = new UpdateSupplierRequest { PhoneNumbers = [phoneNumber], FieldMask = ["countrycode", "number"] };
         ICommandHandler<UpdateSupplierCommand> sut = UpdateSupplierHandler();
 
         await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().PhoneNumber.CountryCode.Value.Should().BeEquivalentTo(request.PhoneNumber.CountryCode);
-        Repository.First().PhoneNumber.AreaCode.Value.Should().BeEquivalentTo(supplier.PhoneNumber.AreaCode.ToString());
-        Repository.First().PhoneNumber.Number.Value.Should().Be(request.PhoneNumber.Number);
+        Repository.First().PhoneNumbers.First().CountryCode.Value.Should()
+            .BeEquivalentTo(supplier.PhoneNumbers.First().CountryCode.Value);
+        Repository.First().PhoneNumbers.First().AreaCode.Value.Should()
+            .BeEquivalentTo(supplier.PhoneNumbers.First().AreaCode.ToString());
+        Repository.First().PhoneNumbers.First().Number.Value.Should().Be(supplier.PhoneNumbers.First().Number.Value);
     }
 }

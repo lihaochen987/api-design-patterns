@@ -12,7 +12,7 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
 {
     public async Task Handle(UpdateSupplierCommand command)
     {
-        (string firstName, string lastName, string email, Address address, PhoneNumber phoneNumber) =
+        (string firstName, string lastName, string email, List<Address> addresses, List<PhoneNumber> phoneNumbers) =
             GetUpdatedSupplierValues(command.Request, command.Supplier);
         var supplier = new DomainModels.Supplier
         {
@@ -20,9 +20,9 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
             FirstName = firstName,
             LastName = lastName,
             Email = email,
-            Address = address,
+            Addresses = addresses,
             CreatedAt = command.Supplier.CreatedAt,
-            PhoneNumber = phoneNumber
+            PhoneNumbers = phoneNumbers
         };
         await repository.UpdateSupplierAsync(supplier);
         await repository.UpdateSupplierAddressAsync(supplier);
@@ -33,8 +33,8 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
         string firstName,
         string lastName,
         string email,
-        Address address,
-        PhoneNumber phoneNumber)
+        List<Address> addresses,
+        List<PhoneNumber> phoneNumbers)
         GetUpdatedSupplierValues(
             UpdateSupplierRequest request,
             DomainModels.Supplier supplier)
@@ -51,54 +51,47 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
             ? request.Email
             : supplier.Email;
 
-        Address address = GetUpdatedSupplierAddressValues(request, supplier);
-        PhoneNumber phoneNumber = GetUpdateSupplierPhoneNumberValues(request, supplier);
+        List<Address> addresses = GetUpdatedSupplierAddresses(request, supplier);
 
-        return (firstname, lastName, email, address, phoneNumber);
+        List<PhoneNumber> phoneNumbers = GetUpdatedSupplierPhoneNumbers(request, supplier);
+
+        return (firstname, lastName, email, addresses, phoneNumbers);
     }
 
-    private static Address GetUpdatedSupplierAddressValues(
-        UpdateSupplierRequest request, DomainModels.Supplier supplier)
-    {
-        Street street = request.FieldMask.Contains("address.street") && !string.IsNullOrEmpty(request.Address?.Street)
-            ? new Street(request.Address.Street)
-            : supplier.Address.Street;
-
-        City city = request.FieldMask.Contains("address.city") && !string.IsNullOrEmpty(request.Address?.City)
-            ? new City(request.Address.City)
-            : supplier.Address.City;
-
-        PostalCode postalCode =
-            request.FieldMask.Contains("address.postalcode") && !string.IsNullOrEmpty(request.Address?.PostalCode)
-                ? new PostalCode(request.Address.PostalCode)
-                : supplier.Address.PostalCode;
-
-        Country country = request.FieldMask.Contains("address.country") &&
-                         !string.IsNullOrEmpty(request.Address?.Country)
-            ? new Country(request.Address.Country)
-            : supplier.Address.Country;
-
-        return new Address { Street = street, City = city, PostalCode = postalCode, Country = country };
-    }
-
-    private static PhoneNumber GetUpdateSupplierPhoneNumberValues(
+    private static List<Address> GetUpdatedSupplierAddresses(
         UpdateSupplierRequest request,
         DomainModels.Supplier supplier)
     {
-        CountryCode countryCode = request.FieldMask.Contains("countrycode") &&
-                                  !string.IsNullOrEmpty(request.PhoneNumber?.CountryCode)
-            ? new CountryCode(request.PhoneNumber.CountryCode)
-            : supplier.PhoneNumber.CountryCode;
+        if (request.FieldMask.Contains("addresses") && request.Addresses != null && request.Addresses.Count != 0)
+        {
+            return request.Addresses.Select(a => new Address
+            {
+                Street = !string.IsNullOrEmpty(a.Street) ? new Street(a.Street) : new Street(""),
+                City = !string.IsNullOrEmpty(a.City) ? new City(a.City) : new City(""),
+                PostalCode =
+                    !string.IsNullOrEmpty(a.PostalCode) ? new PostalCode(a.PostalCode) : new PostalCode(""),
+                Country = !string.IsNullOrEmpty(a.Country) ? new Country(a.Country) : new Country("")
+            }).ToList();
+        }
 
-        AreaCode areaCode = request.FieldMask.Contains("areacode") &&
-                            !string.IsNullOrEmpty(request.PhoneNumber?.AreaCode)
-            ? new AreaCode(request.PhoneNumber.AreaCode)
-            : supplier.PhoneNumber.AreaCode;
+        return supplier.Addresses.ToList();
+    }
 
-        PhoneDigits number = request.FieldMask.Contains("number") && request.PhoneNumber is { Number: not null }
-            ? new PhoneDigits((long)request.PhoneNumber.Number)
-            : supplier.PhoneNumber.Number;
+    private static List<PhoneNumber> GetUpdatedSupplierPhoneNumbers(
+        UpdateSupplierRequest request,
+        DomainModels.Supplier supplier)
+    {
+        if (request.FieldMask.Contains("phonenumbers") && request.PhoneNumbers != null && request.PhoneNumbers.Any())
+        {
+            return request.PhoneNumbers.Select(p => new PhoneNumber
+            {
+                CountryCode =
+                    !string.IsNullOrEmpty(p.CountryCode) ? new CountryCode(p.CountryCode) : new CountryCode(""),
+                AreaCode = !string.IsNullOrEmpty(p.AreaCode) ? new AreaCode(p.AreaCode) : new AreaCode(""),
+                Number = p.Number.HasValue ? new PhoneDigits(p.Number.Value) : new PhoneDigits(0)
+            }).ToList();
+        }
 
-        return new PhoneNumber { CountryCode = countryCode, AreaCode = areaCode, Number = number };
+        return supplier.PhoneNumbers.ToList();
     }
 }

@@ -42,61 +42,60 @@ public class SupplierRepository(
     public async Task CreateSupplierAddressAsync(DomainModels.Supplier supplier)
     {
         const string insertAddressQuery = SupplierQueries.CreateSupplierAddress;
-        await dbConnection.ExecuteAsync(
-            insertAddressQuery,
-            new
-            {
-                SupplierId = supplier.Id,
-                supplier.Address.Street,
-                supplier.Address.City,
-                supplier.Address.PostalCode,
-                supplier.Address.Country
-            }
-        );
+
+        var addressParameters = supplier.Addresses.Select(address => new
+        {
+            SupplierId = supplier.Id,
+            address.Street,
+            address.City,
+            address.PostalCode,
+            address.Country
+        }).ToList();
+
+        await dbConnection.ExecuteAsync(insertAddressQuery, addressParameters);
     }
 
     public async Task CreateSupplierPhoneNumberAsync(DomainModels.Supplier supplier)
     {
         const string insertPhoneNumberQuery = SupplierQueries.CreateSupplierPhoneNumber;
-        await dbConnection.ExecuteAsync(
-            insertPhoneNumberQuery,
-            new
-            {
-                SupplierId = supplier.Id,
-                CountryCode = supplier.PhoneNumber.CountryCode.Value,
-                AreaCode = supplier.PhoneNumber.AreaCode.Value,
-                Number = supplier.PhoneNumber.Number.Value
-            }
-        );
+
+        var phoneParameters = supplier.PhoneNumbers.Select(phone => new
+        {
+            SupplierId = supplier.Id,
+            CountryCode = phone.CountryCode.Value,
+            AreaCode = phone.AreaCode.Value,
+            Number = phone.Number.Value
+        }).ToList();
+
+        await dbConnection.ExecuteAsync(insertPhoneNumberQuery, phoneParameters);
     }
 
     public async Task UpdateSupplierPhoneNumberAsync(DomainModels.Supplier supplier)
     {
         const string updatePhoneNumberQuery = SupplierQueries.UpdateSupplierPhoneNumber;
-        await dbConnection.ExecuteAsync(
-            updatePhoneNumberQuery,
-            new
-            {
-                SupplierId = supplier.Id,
-                CountryCode = supplier.PhoneNumber.CountryCode.Value,
-                AreaCode = supplier.PhoneNumber.AreaCode.Value,
-                Number = supplier.PhoneNumber.Number.Value
-            });
+        var phoneParameters = supplier.PhoneNumbers.Select(phone => new
+        {
+            SupplierId = supplier.Id,
+            CountryCode = phone.CountryCode.Value,
+            AreaCode = phone.AreaCode.Value,
+            Number = phone.Number.Value
+        }).ToList();
+
+        await dbConnection.ExecuteAsync(updatePhoneNumberQuery, phoneParameters);
     }
 
     public async Task UpdateSupplierAddressAsync(DomainModels.Supplier supplier)
     {
         const string updateAddressQuery = SupplierQueries.UpdateSupplierAddress;
-        await dbConnection.ExecuteAsync(
-            updateAddressQuery,
-            new
-            {
-                SupplierId = supplier.Id,
-                supplier.Address.Street,
-                supplier.Address.City,
-                supplier.Address.PostalCode,
-                supplier.Address.Country
-            }
-        );
+        var addressParameters = supplier.Addresses.Select(address => new
+        {
+            SupplierId = supplier.Id,
+            address.Street,
+            address.City,
+            address.PostalCode,
+            address.Country
+        }).ToList();
+
+        await dbConnection.ExecuteAsync(updateAddressQuery, addressParameters);
     }
 }

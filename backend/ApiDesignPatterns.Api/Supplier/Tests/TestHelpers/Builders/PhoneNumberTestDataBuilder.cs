@@ -9,20 +9,20 @@ namespace backend.Supplier.Tests.TestHelpers.Builders;
 
 public class PhoneNumberTestDataBuilder
 {
+    private readonly Fixture _fixture = new();
     private CountryCode _countryCode;
     private AreaCode _areaCode;
     private PhoneDigits _number;
 
     public PhoneNumberTestDataBuilder()
     {
-        Fixture fixture = new();
-        fixture.Customizations.Add(new CountryCodeSpecimenBuilder());
-        fixture.Customizations.Add(new AreaCodeSpecimenBuilder());
-        fixture.Customizations.Add(new PhoneDigitsSpecimenBuilder());
+        _fixture.Customizations.Add(new CountryCodeSpecimenBuilder());
+        _fixture.Customizations.Add(new AreaCodeSpecimenBuilder());
+        _fixture.Customizations.Add(new PhoneDigitsSpecimenBuilder());
 
-        _countryCode = fixture.Create<CountryCode>();
-        _areaCode = fixture.Create<AreaCode>();
-        _number = fixture.Create<PhoneDigits>();
+        _countryCode = _fixture.Create<CountryCode>();
+        _areaCode = _fixture.Create<AreaCode>();
+        _number = _fixture.Create<PhoneDigits>();
     }
 
     public PhoneNumberTestDataBuilder WithCountryCode(CountryCode countryCode)
@@ -46,5 +46,22 @@ public class PhoneNumberTestDataBuilder
     public PhoneNumber Build()
     {
         return new PhoneNumber { CountryCode = _countryCode, AreaCode = _areaCode, Number = _number };
+    }
+
+    public List<PhoneNumber> BuildMany(int count)
+    {
+        var phoneNumbers = new List<PhoneNumber>();
+
+        for (int i = 0; i < count; i++)
+        {
+            phoneNumbers.Add(new PhoneNumber
+            {
+                CountryCode = _fixture.Create<CountryCode>(),
+                AreaCode = _fixture.Create<AreaCode>(),
+                Number = _fixture.Create<PhoneDigits>(),
+            });
+        }
+
+        return phoneNumbers;
     }
 }

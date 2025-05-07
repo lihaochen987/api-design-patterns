@@ -85,7 +85,6 @@ public static class SupplierMappingConfig
         config.NewConfig<ReplaceSupplierRequest, DomainModels.Supplier>();
         config.NewConfig<DomainModels.Supplier, UpdateSupplierResponse>();
         config.NewConfig<SupplierView, GetSupplierResponse>();
-
         config.NewConfig<DomainModels.Supplier, CreateSupplierRequest>();
         config.NewConfig<DomainModels.Supplier, ReplaceSupplierRequest>();
     }

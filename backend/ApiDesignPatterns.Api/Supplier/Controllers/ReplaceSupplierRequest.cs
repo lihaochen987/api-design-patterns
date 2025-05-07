@@ -12,6 +12,6 @@ public record ReplaceSupplierRequest
     [Required] public required string FirstName { get; init; }
     [Required] public required string LastName { get; init; }
     [Required] public required string Email { get; init; }
-    [Required] public required AddressRequest Address { get; init; }
-    [Required] public required PhoneNumberRequest PhoneNumber { get; init; }
+    [Required] public required List<AddressRequest> Addresses { get; init; }
+    [Required] public required List<PhoneNumberRequest> PhoneNumbers { get; init; }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -5,15 +6,19 @@ using Newtonsoft.Json.Linq;
 namespace backend.Shared.FieldMask;
 
 /// <summary>
-/// JSON converter that filters object properties using field masks. Supports nested paths and wildcards.
+/// JSON converter that filters object properties using field masks. Supports nested paths, wildcards, and lists.
 /// </summary>
 /// <example>
-/// Field mask ["name", "pricing.basePrice"]:
+/// Field mask ["name", "pricing.basePrice", "variants[].color"]:
 /// {
 ///   "name": "Premium Dog Food",
 ///   "pricing": {
 ///     "basePrice": 29.99
-///   }
+///   },
+///   "variants": [
+///     { "color": "brown" },
+///     { "color": "black" }
+///   ]
 /// }
 /// </example>
 public class FieldMaskConverter(
@@ -33,15 +38,56 @@ public class FieldMaskConverter(
         object? value,
         JsonSerializer serializer)
     {
-        JObject jObject = new();
-        if (value != null)
+        if (value == null)
         {
-            PropertyInfo[] properties = value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            writer.WriteNull();
+            return;
+        }
 
-            foreach (PropertyInfo property in properties)
+        // Handle collections (lists, arrays, etc.)
+        if (IsCollection(value.GetType()) && value is IEnumerable collection)
+        {
+            writer.WriteStartArray();
+            foreach (object? item in collection)
             {
-                AddPropertyToJObject(jObject, property, value, serializer);
+                if (item == null)
+                {
+                    writer.WriteNull();
+                }
+                else if (item.GetType().IsClass && item.GetType() != typeof(string))
+                {
+                    WriteComplexObject(writer, item, "", serializer);
+                }
+                else
+                {
+                    JToken.FromObject(item, serializer).WriteTo(writer);
+                }
             }
+
+            writer.WriteEndArray();
+        }
+        else
+        {
+            // Handle regular objects
+            WriteComplexObject(writer, value, "", serializer);
+        }
+    }
+
+    /// <summary>
+    /// Writes a complex object as JSON with field masking applied.
+    /// </summary>
+    private void WriteComplexObject(
+        JsonWriter writer,
+        object value,
+        string parentPath,
+        JsonSerializer serializer)
+    {
+        JObject jObject = new();
+        PropertyInfo[] properties = value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach (PropertyInfo property in properties)
+        {
+            AddPropertyToJObject(jObject, property, value, parentPath, serializer);
         }
 
         jObject.WriteTo(writer);
@@ -58,65 +104,223 @@ public class FieldMaskConverter(
         throw new NotImplementedException();
 
     /// <summary>
+    /// Checks if a type is a collection type.
+    /// </summary>
+    private static bool IsCollection(Type type)
+    {
+        // Check if it's a collection but not a string
+        return typeof(IEnumerable).IsAssignableFrom(type)
+               && type != typeof(string);
+    }
+
+    /// <summary>
     /// Adds property to JSON object if included in field mask.
     /// </summary>
     private void AddPropertyToJObject(
         JObject jObject,
         PropertyInfo property,
         object value,
+        string parentPath,
         JsonSerializer serializer)
     {
-        string propertyPath = property.Name.ToLowerInvariant();
+        string propertyName = property.Name;
+        string currentPath = string.IsNullOrEmpty(parentPath)
+            ? propertyName.ToLowerInvariant()
+            : $"{parentPath}.{propertyName.ToLowerInvariant()}";
 
-        if (expandedFieldMasks.Contains(propertyPath))
+        object? propValue = property.GetValue(value);
+        if (propValue == null)
         {
-            object? propValue = property.GetValue(value);
-            if (propValue != null)
+            return;
+        }
+
+        // Direct property match
+        if (expandedFieldMasks.Contains(currentPath))
+        {
+            jObject.Add(propertyName, JToken.FromObject(propValue, serializer));
+            return;
+        }
+
+        // Handle collections
+        if (IsCollection(property.PropertyType) && propValue is IEnumerable collection)
+        {
+            // Check if collection has any field masks like "items[].property"
+            string collectionWildcardPath = $"{currentPath}.";
+            bool hasCollectionMasks = expandedFieldMasks.Any(mask => mask.StartsWith(collectionWildcardPath));
+
+            if (!hasCollectionMasks)
             {
-                jObject.Add(property.Name, JToken.FromObject(propValue, serializer));
+                return;
+            }
+
+            JArray jArray = [];
+
+            foreach (object? item in collection)
+            {
+                if (item == null)
+                {
+                    jArray.Add(JValue.CreateNull());
+                }
+                else if (item.GetType().IsClass && item.GetType() != typeof(string))
+                {
+                    // Process complex items in the collection
+                    JObject itemObject = ProcessCollectionItem(item, currentPath, serializer);
+                    if (itemObject.HasValues)
+                    {
+                        jArray.Add(itemObject);
+                    }
+                }
+                else
+                {
+                    // For primitive items
+                    jArray.Add(JToken.FromObject(item, serializer));
+                }
+            }
+
+            if (jArray.Count > 0)
+            {
+                jObject.Add(propertyName, jArray);
             }
         }
+        // Handle nested objects
         else if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
         {
-            JObject nestedObject = Build(property, value, serializer);
+            JObject nestedObject = BuildNestedObject(propValue, currentPath, serializer);
             if (nestedObject.HasValues)
             {
-                jObject.Add(property.Name, nestedObject);
+                jObject.Add(propertyName, nestedObject);
             }
         }
     }
 
     /// <summary>
+    /// Process a single item in a collection.
+    /// </summary>
+    private JObject ProcessCollectionItem(
+        object item,
+        string collectionPath,
+        JsonSerializer serializer)
+    {
+        JObject itemObject = new();
+        string collectionWildcardPath = $"{collectionPath}.";
+
+        PropertyInfo[] itemProperties = item.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach (var itemProperty in itemProperties)
+        {
+            string itemPropertyPath = $"{collectionWildcardPath}{itemProperty.Name.ToLowerInvariant()}";
+
+            if (expandedFieldMasks.Contains(itemPropertyPath))
+            {
+                object? itemPropValue = itemProperty.GetValue(item);
+                if (itemPropValue != null)
+                {
+                    itemObject.Add(itemProperty.Name, JToken.FromObject(itemPropValue, serializer));
+                }
+            }
+            else if (itemProperty.PropertyType.IsClass && itemProperty.PropertyType != typeof(string))
+            {
+                object? nestedItemValue = itemProperty.GetValue(item);
+                if (nestedItemValue == null)
+                {
+                    continue;
+                }
+
+                string nestedItemPath = $"{collectionWildcardPath}{itemProperty.Name.ToLowerInvariant()}";
+                JObject nestedObject = BuildNestedObject(nestedItemValue, nestedItemPath, serializer);
+                if (nestedObject.HasValues)
+                {
+                    itemObject.Add(itemProperty.Name, nestedObject);
+                }
+            }
+        }
+
+        return itemObject;
+    }
+
+    /// <summary>
     /// Builds JSON object for nested properties.
     /// </summary>
-    private JObject Build(
-        PropertyInfo property,
+    private JObject BuildNestedObject(
         object instance,
+        string parentPath,
         JsonSerializer serializer)
     {
         JObject jObject = new();
-        object? nestedInstance = property.GetValue(instance);
 
-        if (nestedInstance == null)
-        {
-            return jObject;
-        }
-
-        PropertyInfo[] nestedProperties =
-            property.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        PropertyInfo[] nestedProperties = instance.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
         foreach (PropertyInfo nestedProperty in nestedProperties)
         {
-            string nestedPath = $"{property.Name.ToLowerInvariant()}.{nestedProperty.Name.ToLowerInvariant()}";
-            if (!expandedFieldMasks.Contains(nestedPath))
-            {
-                continue;
-            }
+            string nestedPath = $"{parentPath}.{nestedProperty.Name.ToLowerInvariant()}";
 
-            object? nestedValue = nestedProperty.GetValue(nestedInstance);
-            if (nestedValue != null)
+            // Direct property match
+            if (expandedFieldMasks.Contains(nestedPath))
             {
-                jObject.Add(nestedProperty.Name, JToken.FromObject(nestedValue, serializer));
+                object? nestedValue = nestedProperty.GetValue(instance);
+                if (nestedValue != null)
+                {
+                    jObject.Add(nestedProperty.Name, JToken.FromObject(nestedValue, serializer));
+                }
+            }
+            // Check if it's a collection
+            else if (IsCollection(nestedProperty.PropertyType))
+            {
+                object? nestedValue = nestedProperty.GetValue(instance);
+                if (nestedValue is not IEnumerable collection)
+                {
+                    continue;
+                }
+
+                string collectionWildcardPath = $"{nestedPath}[].";
+                bool hasCollectionMasks = expandedFieldMasks.Any(mask => mask.StartsWith(collectionWildcardPath));
+
+                if (!hasCollectionMasks)
+                {
+                    continue;
+                }
+
+                JArray jArray = [];
+
+                foreach (object? item in collection)
+                {
+                    if (item == null)
+                    {
+                        jArray.Add(JValue.CreateNull());
+                    }
+                    else if (item.GetType().IsClass && item.GetType() != typeof(string))
+                    {
+                        JObject itemObject = ProcessCollectionItem(item, nestedPath, serializer);
+                        if (itemObject.HasValues)
+                        {
+                            jArray.Add(itemObject);
+                        }
+                    }
+                    else
+                    {
+                        jArray.Add(JToken.FromObject(item, serializer));
+                    }
+                }
+
+                if (jArray.Count > 0)
+                {
+                    jObject.Add(nestedProperty.Name, jArray);
+                }
+            }
+            // Check for nested objects
+            else if (nestedProperty.PropertyType.IsClass && nestedProperty.PropertyType != typeof(string))
+            {
+                object? deepNestedInstance = nestedProperty.GetValue(instance);
+                if (deepNestedInstance == null)
+                {
+                    continue;
+                }
+
+                JObject deepNestedObject = BuildNestedObject(deepNestedInstance, nestedPath, serializer);
+                if (deepNestedObject.HasValues)
+                {
+                    jObject.Add(nestedProperty.Name, deepNestedObject);
+                }
             }
         }
 

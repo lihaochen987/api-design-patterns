@@ -11,7 +11,7 @@ public record Supplier
     public required string FirstName { get; init; }
     public required string LastName { get; init; }
     public required string Email { get; init; }
-    public required Address Address { get; init; }
+    public required ICollection<Address> Addresses { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
-    public required PhoneNumber PhoneNumber { get; init; }
+    public required ICollection<PhoneNumber> PhoneNumbers { get; init; }
 }
