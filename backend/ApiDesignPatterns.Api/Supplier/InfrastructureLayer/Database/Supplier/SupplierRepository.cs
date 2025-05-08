@@ -47,6 +47,8 @@ public class SupplierRepository(
             new { newSupplier.Id, newSupplier.FirstName, newSupplier.LastName, newSupplier.Email }
         );
         await UpdateSupplierPhoneNumberIds(newSupplier.PhoneNumberIds, oldSupplier.PhoneNumberIds, supplierId);
+        await UpdateSupplierAddressIds(newSupplier.AddressIds, oldSupplier.AddressIds, supplierId);
+
         return supplierId;
     }
 
@@ -62,7 +64,7 @@ public class SupplierRepository(
 
     private async Task UpdateSupplierPhoneNumberIds(
         ICollection<long> newPhoneNumberIds,
-        ICollection<long>? oldPhoneNumberIds,
+        ICollection<long> oldPhoneNumberIds,
         long supplierId)
     {
         await dbConnection.ExecuteAsync(
@@ -77,6 +79,25 @@ public class SupplierRepository(
         }).ToList();
 
         await dbConnection.ExecuteAsync(updatePhoneNumberQuery, phoneParameters);
+    }
+
+    private async Task UpdateSupplierAddressIds(
+        ICollection<long> newAddressIds,
+        ICollection<long> oldAddressIds,
+        long supplierId)
+    {
+        await dbConnection.ExecuteAsync(
+            SupplierQueries.UpdateOldSupplierAddressId,
+            new { AddressIds = oldAddressIds }
+        );
+
+        const string updateAddressQuery = SupplierQueries.UpdateSupplierAddressId;
+        var addressParameters = newAddressIds.Select(addressId => new
+        {
+            AddressId = addressId, SupplierId = supplierId,
+        }).ToList();
+
+        await dbConnection.ExecuteAsync(updateAddressQuery, addressParameters);
     }
 
     private async Task<List<long>> GetSupplierPhoneNumberIds(long supplierId)

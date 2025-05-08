@@ -110,4 +110,18 @@ public static class SupplierQueries
                                                              supplier_id = NULL
                                                          WHERE phone_number_id = ANY(@PhoneNumberIds);
                                                          """;
+
+    public const string UpdateSupplierAddressId = """
+                                                      UPDATE addresses
+                                                      SET
+                                                          supplier_id = @SupplierId
+                                                      WHERE address_id = @AddressId;
+                                                      """;
+
+    public const string UpdateOldSupplierAddressId = """
+                                                         UPDATE addresses
+                                                         SET
+                                                             supplier_id = NULL
+                                                         WHERE address_id = ANY(@AddressIds);
+                                                         """;
 }
