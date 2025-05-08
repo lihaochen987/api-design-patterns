@@ -13,7 +13,7 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
     {
         (string firstName, string lastName, string email, List<long> addressIds, List<long> phoneNumberIds) =
             GetUpdatedSupplierValues(command.Request, command.Supplier);
-        var supplier = new DomainModels.Supplier
+        var newSupplier = new DomainModels.Supplier
         {
             Id = command.Supplier.Id,
             FirstName = firstName,
@@ -23,7 +23,7 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
             CreatedAt = command.Supplier.CreatedAt,
             PhoneNumberIds = phoneNumberIds
         };
-        await repository.UpdateSupplierAsync(supplier);
+        await repository.UpdateSupplierAsync(newSupplier, command.Supplier);
     }
 
     private static (string firstName, string lastName, string email, List<long> addressIds, List<long> phoneNumberIds)
@@ -53,7 +53,7 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
         UpdateSupplierRequest request,
         DomainModels.Supplier supplier)
     {
-        if (request.FieldMask.Contains("addresses") && request.AddressIds != null && request.AddressIds.Count != 0)
+        if (request.FieldMask.Contains("addressids") && request.AddressIds != null && request.AddressIds.Count != 0)
         {
             return request.AddressIds.Select(p => p).ToList();
         }

@@ -39,14 +39,14 @@ public class SupplierRepository(
         );
     }
 
-    public async Task<long> UpdateSupplierAsync(DomainModels.Supplier supplier)
+    public async Task<long> UpdateSupplierAsync(DomainModels.Supplier newSupplier, DomainModels.Supplier oldSupplier)
     {
         const string updateSupplierQuery = SupplierQueries.UpdateSupplier;
         long supplierId = await dbConnection.ExecuteScalarAsync<long>(
             updateSupplierQuery,
-            new { supplier.Id, supplier.FirstName, supplier.LastName, supplier.Email }
+            new { newSupplier.Id, newSupplier.FirstName, newSupplier.LastName, newSupplier.Email }
         );
-        await UpdateSupplierPhoneNumberIds(supplier.PhoneNumberIds, supplierId);
+        await UpdateSupplierPhoneNumberIds(newSupplier.PhoneNumberIds, oldSupplier.PhoneNumberIds, supplierId);
         return supplierId;
     }
 
@@ -60,10 +60,18 @@ public class SupplierRepository(
         return supplierId;
     }
 
-    private async Task UpdateSupplierPhoneNumberIds(ICollection<long> phoneNumberIds, long supplierId)
+    private async Task UpdateSupplierPhoneNumberIds(
+        ICollection<long> newPhoneNumberIds,
+        ICollection<long>? oldPhoneNumberIds,
+        long supplierId)
     {
+        await dbConnection.ExecuteAsync(
+            SupplierQueries.UpdateOldSupplierPhoneNumberId,
+            new { PhoneNumberIds = oldPhoneNumberIds }
+        );
+
         const string updatePhoneNumberQuery = SupplierQueries.UpdateSupplierPhoneNumberId;
-        var phoneParameters = phoneNumberIds.Select(phoneNumberId => new
+        var phoneParameters = newPhoneNumberIds.Select(phoneNumberId => new
         {
             PhoneNumberId = phoneNumberId, SupplierId = supplierId,
         }).ToList();

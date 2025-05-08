@@ -24,11 +24,11 @@ public static class SupplierQueries
                                                     """;
 
     public const string GetSupplierAddressIds = """
-                                                    SELECT
-                                                        address_id
-                                                    FROM addresses
-                                                    WHERE supplier_id = @SupplierId;
-                                                    """;
+                                                SELECT
+                                                    address_id
+                                                FROM addresses
+                                                WHERE supplier_id = @SupplierId;
+                                                """;
 
     public const string DeleteSupplier = """
                                                  DELETE FROM suppliers
@@ -103,4 +103,11 @@ public static class SupplierQueries
                                                           supplier_id = @SupplierId
                                                       WHERE phone_number_id = @PhoneNumberId;
                                                       """;
+
+    public const string UpdateOldSupplierPhoneNumberId = """
+                                                         UPDATE phone_numbers
+                                                         SET
+                                                             supplier_id = NULL
+                                                         WHERE phone_number_id = ANY(@PhoneNumberIds);
+                                                         """;
 }

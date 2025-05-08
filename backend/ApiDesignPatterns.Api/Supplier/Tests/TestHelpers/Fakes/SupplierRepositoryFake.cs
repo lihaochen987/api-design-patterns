@@ -36,14 +36,14 @@ public class SupplierRepositoryFake : Collection<DomainModels.Supplier>, ISuppli
         return Task.FromResult(supplier.Id);
     }
 
-    public Task<long> UpdateSupplierAsync(DomainModels.Supplier supplier)
+    public Task<long> UpdateSupplierAsync(DomainModels.Supplier newSupplier, DomainModels.Supplier oldSupplier)
     {
-        int index = IndexOf(this.FirstOrDefault(r => r.Id == supplier.Id) ??
+        int index = IndexOf(this.FirstOrDefault(r => r.Id == newSupplier.Id) ??
                             throw new InvalidOperationException());
-        this[index] = supplier;
+        this[index] = newSupplier;
         IsDirty = true;
 
-        return Task.FromResult(supplier.Id);
+        return Task.FromResult(newSupplier.Id);
     }
 
     public Task<long> ReplaceSupplierAsync(DomainModels.Supplier supplier)
