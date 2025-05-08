@@ -10,6 +10,4 @@ public record CreateSupplierRequest
     [Required] public required string FirstName { get; init; }
     [Required] public required string LastName { get; init; }
     [Required] public required string Email { get; init; }
-    [Required] public required List<long> AddressIds { get; init; }
-    [Required] public required List<long> PhoneNumberIds { get; init; }
 }
