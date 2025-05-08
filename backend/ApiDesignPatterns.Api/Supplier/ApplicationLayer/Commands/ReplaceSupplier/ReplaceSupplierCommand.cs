@@ -6,4 +6,5 @@ namespace backend.Supplier.ApplicationLayer.Commands.ReplaceSupplier;
 public record ReplaceSupplierCommand
 {
     public required DomainModels.Supplier Supplier { get; init; }
+    public required long SupplierId { get; init; }
 }

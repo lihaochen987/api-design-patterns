@@ -9,4 +9,5 @@ public interface ISupplierRepository
     Task DeleteSupplierAsync(long id);
     Task<long> CreateSupplierAsync(DomainModels.Supplier supplier);
     Task<long> UpdateSupplierAsync(DomainModels.Supplier supplier);
+    Task<long> ReplaceSupplierAsync(DomainModels.Supplier supplier);
 }

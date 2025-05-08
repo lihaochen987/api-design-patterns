@@ -23,6 +23,13 @@ public static class SupplierQueries
                                                     WHERE supplier_id = @SupplierId;
                                                     """;
 
+    public const string GetSupplierAddressIds = """
+                                                    SELECT
+                                                        address_id
+                                                    FROM addresses
+                                                    WHERE supplier_id = @SupplierId;
+                                                    """;
+
     public const string DeleteSupplier = """
                                                  DELETE FROM suppliers
                                                  WHERE supplier_id = @Id;

@@ -46,6 +46,16 @@ public class SupplierRepositoryFake : Collection<DomainModels.Supplier>, ISuppli
         return Task.FromResult(supplier.Id);
     }
 
+    public Task<long> ReplaceSupplierAsync(DomainModels.Supplier supplier)
+    {
+        int index = IndexOf(this.FirstOrDefault(r => r.Id == supplier.Id) ??
+                            throw new InvalidOperationException());
+        this[index] = supplier;
+        IsDirty = true;
+
+        return Task.FromResult(supplier.Id);
+    }
+
     public Task CreateSupplierAddressAsync(DomainModels.Supplier supplier)
     {
         IsDirty = true;

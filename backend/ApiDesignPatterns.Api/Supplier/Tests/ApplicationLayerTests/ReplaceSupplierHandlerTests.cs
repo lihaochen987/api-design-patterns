@@ -17,7 +17,7 @@ public class ReplaceSupplierHandlerTests : ReplaceSupplierHandlerTestBase
         var existingSupplier = new SupplierTestDataBuilder().Build();
         var replacedSupplier = new SupplierTestDataBuilder().WithId(existingSupplier.Id).Build();
         Repository.Add(existingSupplier);
-        var command = new ReplaceSupplierCommand { Supplier = replacedSupplier };
+        var command = new ReplaceSupplierCommand { Supplier = replacedSupplier, SupplierId = existingSupplier.Id };
         ICommandHandler<ReplaceSupplierCommand> sut = ReplaceSupplierHandler();
         Repository.IsDirty = false;
 

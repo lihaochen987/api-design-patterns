@@ -31,9 +31,16 @@ public class ReplaceSupplierController(
             return NotFound();
         }
 
-        var replacedSupplier = mapper.Map<DomainModels.Supplier>(request);
+        var mappedSupplier = mapper.Map<DomainModels.Supplier>(request);
 
-        await replaceSupplier.Handle(new ReplaceSupplierCommand { Supplier = replacedSupplier });
+        await replaceSupplier.Handle(new ReplaceSupplierCommand { Supplier = mappedSupplier, SupplierId = id });
+
+        var replacedSupplier = await getSupplier.Handle(new GetSupplierQuery { Id = id });
+        if (replacedSupplier == null)
+        {
+            return BadRequest();
+        }
+
         var response = mapper.Map<ReplaceSupplierResponse>(replacedSupplier);
         return Ok(response);
     }

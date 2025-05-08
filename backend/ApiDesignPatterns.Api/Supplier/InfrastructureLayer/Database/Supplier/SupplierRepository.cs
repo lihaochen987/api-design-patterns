@@ -20,7 +20,8 @@ public class SupplierRepository(
         }
 
         var phoneNumberIds = await GetSupplierPhoneNumberIds(id);
-        var hydratedSupplier = supplier with { PhoneNumberIds = phoneNumberIds };
+        var addressIds = await GetSupplierAddressIds(id);
+        var hydratedSupplier = supplier with { PhoneNumberIds = phoneNumberIds, AddressIds = addressIds };
         return hydratedSupplier;
     }
 
@@ -49,6 +50,16 @@ public class SupplierRepository(
         return supplierId;
     }
 
+    public async Task<long> ReplaceSupplierAsync(DomainModels.Supplier supplier)
+    {
+        const string updateSupplierQuery = SupplierQueries.UpdateSupplier;
+        long supplierId = await dbConnection.ExecuteScalarAsync<long>(
+            updateSupplierQuery,
+            new { supplier.Id, supplier.FirstName, supplier.LastName, supplier.Email }
+        );
+        return supplierId;
+    }
+
     private async Task UpdateSupplierPhoneNumberIds(ICollection<long> phoneNumberIds, long supplierId)
     {
         const string updatePhoneNumberQuery = SupplierQueries.UpdateSupplierPhoneNumberId;
@@ -66,6 +77,14 @@ public class SupplierRepository(
             SupplierQueries.GetSupplierPhoneNumberIds,
             new { SupplierId = supplierId });
         return phoneNumberIds.ToList();
+    }
+
+    private async Task<List<long>> GetSupplierAddressIds(long supplierId)
+    {
+        var addressIds = await dbConnection.QueryAsync<long>(
+            SupplierQueries.GetSupplierAddressIds,
+            new { SupplierId = supplierId });
+        return addressIds.ToList();
     }
 
     // public async Task CreateSupplierAddressAsync(DomainModels.Supplier supplier)

@@ -10,6 +10,7 @@ public class ReplaceSupplierHandler(ISupplierRepository repository) : ICommandHa
 {
     public async Task Handle(ReplaceSupplierCommand command)
     {
-        await repository.UpdateSupplierAsync(command.Supplier);
+        var replacedSupplier = command.Supplier with { Id = command.SupplierId, CreatedAt = DateTimeOffset.UtcNow };
+        await repository.ReplaceSupplierAsync(replacedSupplier);
     }
 }
