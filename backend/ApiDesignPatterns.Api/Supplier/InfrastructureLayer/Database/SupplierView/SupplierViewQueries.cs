@@ -15,6 +15,7 @@ public static class SupplierViewQueries
                                           WHERE supplier_id = @Id;
                                           """;
 
+
     public const string GetSupplierAddresses = """
                                                SELECT
                                                    supplier_id AS SupplierId,
@@ -41,22 +42,24 @@ public static class SupplierViewQueries
 
     public const string GetSupplierPhoneNumbersByIds = """
                                                        SELECT
+                                                           phone_number_id AS Id,
                                                            supplier_id AS SupplierId,
-                                                           supplier_phone_country_code AS CountryCode,
-                                                           supplier_phone_area_code AS AreaCode,
-                                                           supplier_phone_number AS Number
-                                                       FROM supplier_phone_numbers
+                                                           phone_number_country_code AS CountryCode,
+                                                           phone_number_area_code AS AreaCode,
+                                                           phone_number_digits AS Number
+                                                       FROM phone_numbers
                                                        WHERE supplier_id = ANY(@SupplierIds)
                                                        ORDER BY supplier_id;
                                                        """;
 
     public const string GetSupplierPhoneNumbers = """
                                                   SELECT
+                                                      phone_number_id AS Id,
                                                       supplier_id AS SupplierId,
-                                                      supplier_phone_country_code AS CountryCode,
-                                                      supplier_phone_area_code AS AreaCode,
-                                                      supplier_phone_number AS Number
-                                                  FROM supplier_phone_numbers
+                                                      phone_number_country_code AS CountryCode,
+                                                      phone_number_area_code AS AreaCode,
+                                                      phone_number_digits AS Number
+                                                      FROM phone_numbers
                                                   WHERE supplier_id = @Id;
                                                   """;
 
