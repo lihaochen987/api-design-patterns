@@ -22,10 +22,10 @@ public static class SupplierViewQueries
                                           """;
 
     public const string GetAddresses = """
-                                          SELECT address_id
-                                          FROM addresses_view av
-                                          WHERE av.supplier_id = @Id;
-                                          """;
+                                       SELECT address_id
+                                       FROM addresses_view av
+                                       WHERE av.supplier_id = @Id;
+                                       """;
 
     public const string ListSuppliersBase = """
                                             SELECT
@@ -44,4 +44,12 @@ public static class SupplierViewQueries
                                                               FROM phone_numbers_view
                                                               WHERE supplier_id = ANY(@SupplierIds)
                                                               """;
+
+    public const string GetAddressesForMultipleSuppliers = """
+                                                           SELECT
+                                                               supplier_id,
+                                                               address_id
+                                                           FROM addresses_view
+                                                           WHERE supplier_id = ANY(@SupplierIds)
+                                                           """;
 }

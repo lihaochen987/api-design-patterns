@@ -27,7 +27,7 @@ public class SupplierViewRepository(
         var phoneNumbers = await GetPhoneNumberIds(id);
         var addresses = await GetAddressIds(id);
 
-        supplier = supplier with { PhoneNumberIds = phoneNumbers , AddressIds = addresses };
+        supplier = supplier with { PhoneNumberIds = phoneNumbers, AddressIds = addresses };
 
         return supplier;
     }
@@ -83,13 +83,17 @@ public class SupplierViewRepository(
 
         var supplierIds = paginatedSuppliers.Select(s => s.Id).ToList();
         var phoneNumbersBySupplier = await GetPhoneNumberIdsForSuppliers(supplierIds);
+        var addressesBySupplier = await GetAddressIdsForSuppliers(supplierIds);
 
         paginatedSuppliers = paginatedSuppliers
             .Select(supplier => supplier with
             {
-                PhoneNumberIds = phoneNumbersBySupplier.TryGetValue(supplier.Id, out var phoneNumbers)
-                    ? phoneNumbers
-                    : []
+                PhoneNumberIds = phoneNumbersBySupplier.TryGetValue(supplier.Id, out var phoneNumberIds)
+                    ? phoneNumberIds
+                    : [],
+                AddressIds = addressesBySupplier.TryGetValue(supplier.Id, out var addressIds)
+                    ? addressIds
+                    : [],
             })
             .ToList();
 
@@ -111,5 +115,21 @@ public class SupplierViewRepository(
             .ToDictionary(
                 g => g.Key,
                 g => g.Select(r => r.PhoneNumberId).ToList());
+    }
+
+    private async Task<Dictionary<long, List<long>>> GetAddressIdsForSuppliers(List<long> supplierIds)
+    {
+        if (supplierIds.Count == 0)
+            return new Dictionary<long, List<long>>();
+
+        var results = await dbConnection.QueryAsync<(long SupplierId, long AddressId)>(
+            SupplierViewQueries.GetAddressesForMultipleSuppliers,
+            new { SupplierIds = supplierIds });
+
+        return results
+            .GroupBy(r => r.SupplierId)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(r => r.AddressId).ToList());
     }
 }
