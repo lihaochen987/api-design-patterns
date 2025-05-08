@@ -3,7 +3,6 @@
 
 using AutoFixture;
 using backend.Supplier.DomainModels;
-using backend.Supplier.DomainModels.ValueObjects;
 
 namespace backend.Supplier.Tests.TestHelpers.Builders;
 
@@ -13,7 +12,7 @@ public class SupplierViewTestDataBuilder
     private string _fullName;
     private string _email;
     private readonly DateTimeOffset _createdAt;
-    private readonly List<Address> _addresses;
+    private readonly List<long> _addressIds;
     private readonly List<long> _phoneNumberIds;
 
     public SupplierViewTestDataBuilder()
@@ -24,7 +23,7 @@ public class SupplierViewTestDataBuilder
         _fullName = $"{fixture.Create<string>()} {fixture.Create<string>()}";
         _email = fixture.Create<string>();
         _createdAt = fixture.Create<DateTimeOffset>();
-        _addresses = new AddressTestDataBuilder().BuildMany(3);
+        _addressIds = fixture.Create<List<long>>();
         _phoneNumberIds = fixture.Create<List<long>>();
     }
 
@@ -54,7 +53,7 @@ public class SupplierViewTestDataBuilder
             FullName = _fullName,
             Email = _email,
             CreatedAt = _createdAt,
-            Addresses = _addresses,
+            AddressIds = _addressIds,
             PhoneNumberIds = _phoneNumberIds,
         };
     }

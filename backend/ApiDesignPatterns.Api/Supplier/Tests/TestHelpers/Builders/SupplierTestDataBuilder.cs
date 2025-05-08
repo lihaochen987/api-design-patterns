@@ -2,7 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Supplier.DomainModels.ValueObjects;
 
 namespace backend.Supplier.Tests.TestHelpers.Builders;
 
@@ -12,9 +11,9 @@ public class SupplierTestDataBuilder
     private string _firstName;
     private string _lastName;
     private string _email;
-    private List<Address> _addresses;
+    private List<long> _addressIds;
     private DateTimeOffset _createdAt;
-    private List<DomainModels.ValueObjects.PhoneNumber> _phoneNumbers;
+    private List<long> _phoneNumberIds;
 
     public SupplierTestDataBuilder()
     {
@@ -24,8 +23,8 @@ public class SupplierTestDataBuilder
         _lastName = fixture.Create<string>();
         _email = fixture.Create<string>();
         _createdAt = fixture.Create<DateTimeOffset>();
-        _addresses = new AddressTestDataBuilder().BuildMany(3);
-        _phoneNumbers = new PhoneNumberTestDataBuilder().BuildMany(3);
+        _addressIds = fixture.Create<List<long>>();
+        _phoneNumberIds = fixture.Create<List<long>>();
     }
 
     public SupplierTestDataBuilder WithId(long id)
@@ -52,9 +51,9 @@ public class SupplierTestDataBuilder
         return this;
     }
 
-    public SupplierTestDataBuilder WithAddresses(List<Address> addresses)
+    public SupplierTestDataBuilder WithAddresses(List<long> addressIds)
     {
-        _addresses = addresses;
+        _addressIds = addressIds;
         return this;
     }
 
@@ -64,9 +63,9 @@ public class SupplierTestDataBuilder
         return this;
     }
 
-    public SupplierTestDataBuilder WithPhoneNumbers(List<DomainModels.ValueObjects.PhoneNumber> phoneNumbers)
+    public SupplierTestDataBuilder WithPhoneNumbers(List<long> phoneNumberIds)
     {
-        _phoneNumbers = phoneNumbers;
+        _phoneNumberIds = phoneNumberIds;
         return this;
     }
 
@@ -78,9 +77,9 @@ public class SupplierTestDataBuilder
             FirstName = _firstName,
             LastName = _lastName,
             Email = _email,
-            Addresses = _addresses,
+            AddressIds = _addressIds,
             CreatedAt = _createdAt,
-            PhoneNumbers = _phoneNumbers
+            PhoneNumberIds = _phoneNumberIds
         };
     }
 }

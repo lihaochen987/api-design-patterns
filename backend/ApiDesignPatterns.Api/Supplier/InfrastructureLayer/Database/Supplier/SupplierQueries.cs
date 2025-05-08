@@ -7,23 +7,21 @@ public static class SupplierQueries
 {
     public const string GetSupplier = """
                                       SELECT
-                                          suppliers.supplier_id AS Id,
+                                          supplier_id AS Id,
                                           supplier_firstname AS FirstName,
                                           supplier_lastname AS LastName,
                                           supplier_email AS Email,
-                                          supplier_created_at AS CreatedAt,
-                                          sa.supplier_address_street AS Street,
-                                          sa.supplier_address_city AS City,
-                                          sa.supplier_address_postal_code AS PostalCode,
-                                          sa.supplier_address_country AS Country,
-                                          spn.supplier_phone_country_code AS CountryCode,
-                                          spn.supplier_phone_area_code AS AreaCode,
-                                          spn.supplier_phone_number AS Number
+                                          supplier_created_at AS CreatedAt
                                       FROM suppliers
-                                      LEFT JOIN supplier_addresses sa ON suppliers.supplier_id = sa.supplier_id
-                                      LEFT JOIN supplier_phone_numbers spn ON suppliers.supplier_id = spn.supplier_id
-                                      WHERE suppliers.supplier_id = @Id;
+                                      WHERE supplier_id = @Id;
                                       """;
+
+    public const string GetSupplierPhoneNumberIds = """
+                                                    SELECT
+                                                        phone_number_id
+                                                    FROM phone_numbers
+                                                    WHERE supplier_id = @SupplierId;
+                                                    """;
 
     public const string DeleteSupplier = """
 
@@ -62,7 +60,7 @@ public static class SupplierQueries
                                                 """;
 
     public const string CreateSupplierPhoneNumber = """
-                                                    INSERT INTO supplier_phone_numbers(
+                                                    INSERT INTO phone_numbers(
                                                                                        supplier_id,
                                                                                        supplier_phone_country_code,
                                                                                        supplier_phone_area_code,
@@ -94,12 +92,10 @@ public static class SupplierQueries
                                                 WHERE supplier_id = @SupplierId;
                                                 """;
 
-    public const string UpdateSupplierPhoneNumber = """
-                                                    UPDATE supplier_phone_numbers
-                                                    SET
-                                                        supplier_phone_country_code = @CountryCode,
-                                                        supplier_phone_area_code = @AreaCode,
-                                                        supplier_phone_number = @Number
-                                                    WHERE supplier_id = @SupplierId;
-                                                    """;
+    public const string UpdateSupplierPhoneNumberId = """
+                                                      UPDATE phone_numbers
+                                                      SET
+                                                          supplier_id = @SupplierId
+                                                      WHERE phone_number_id = @PhoneNumberId;
+                                                      """;
 }

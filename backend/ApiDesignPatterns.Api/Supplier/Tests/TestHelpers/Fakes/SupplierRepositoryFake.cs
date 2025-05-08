@@ -79,7 +79,7 @@ public class SupplierRepositoryFake : Collection<DomainModels.Supplier>, ISuppli
         if (existingSupplier != null)
         {
             int index = IndexOf(existingSupplier);
-            this[index] = existingSupplier with { PhoneNumbers = supplier.PhoneNumbers };
+            this[index] = existingSupplier with { PhoneNumberIds = supplier.PhoneNumberIds };
         }
 
         return Task.CompletedTask;
@@ -92,7 +92,7 @@ public class SupplierRepositoryFake : Collection<DomainModels.Supplier>, ISuppli
         if (existingSupplier != null)
         {
             int index = IndexOf(existingSupplier);
-            this[index] = existingSupplier with { Addresses = supplier.Addresses };
+            this[index] = existingSupplier with { AddressIds = supplier.AddressIds };
         }
 
         return Task.CompletedTask;

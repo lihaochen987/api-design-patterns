@@ -11,7 +11,7 @@ public class UpdateSupplierRequest
     public string? FirstName { get; init; }
     public string? LastName { get; init; }
     public string? Email { get; init; }
-    public List<AddressRequest>? Addresses { get; init; }
-    public List<PhoneNumberRequest>? PhoneNumbers { get; init; }
+    public List<long>? AddressIds { get; init; }
+    public List<long>? PhoneNumberIds { get; init; }
     public List<string> FieldMask { get; init; } = ["*"];
 }

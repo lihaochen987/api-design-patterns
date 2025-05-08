@@ -10,9 +10,7 @@ public class CreateSupplierHandler(ISupplierRepository repository) : ICommandHan
 {
     public async Task Handle(CreateSupplierCommand command)
     {
-        long id = await repository.CreateSupplierAsync(command.Supplier);
-        var supplier = command.Supplier with { Id = id, CreatedAt = DateTimeOffset.UtcNow };
-        await repository.CreateSupplierAddressAsync(supplier);
-        await repository.CreateSupplierPhoneNumberAsync(supplier);
+        var supplier = command.Supplier with { CreatedAt = DateTimeOffset.UtcNow };
+        await repository.CreateSupplierAsync(supplier);
     }
 }

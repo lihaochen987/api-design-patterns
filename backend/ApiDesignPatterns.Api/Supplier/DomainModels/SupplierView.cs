@@ -11,6 +11,6 @@ public record SupplierView : Identifier
     public required string FullName { get; init; }
     public required string Email { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
-    public required List<Address> Addresses { get; init; }
+    public required List<long> AddressIds { get; init; }
     public required List<long> PhoneNumberIds { get; init; }
 }

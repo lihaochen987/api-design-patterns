@@ -25,8 +25,9 @@ public class SupplierViewRepository(
             return null;
 
         var phoneNumbers = await GetPhoneNumberIds(id);
+        var addresses = await GetAddressIds(id);
 
-        supplier = supplier with { PhoneNumberIds = phoneNumbers };
+        supplier = supplier with { PhoneNumberIds = phoneNumbers , AddressIds = addresses };
 
         return supplier;
     }
@@ -35,6 +36,15 @@ public class SupplierViewRepository(
     {
         var results = await dbConnection.QueryAsync<long>(
             SupplierViewQueries.GetPhoneNumbers,
+            new { Id = supplierId });
+
+        return results.Select(r => r).ToList();
+    }
+
+    private async Task<List<long>> GetAddressIds(long supplierId)
+    {
+        var results = await dbConnection.QueryAsync<long>(
+            SupplierViewQueries.GetAddresses,
             new { Id = supplierId });
 
         return results.Select(r => r).ToList();

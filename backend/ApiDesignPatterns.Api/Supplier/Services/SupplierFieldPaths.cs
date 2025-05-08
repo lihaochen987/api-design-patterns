@@ -14,10 +14,6 @@ public class SupplierFieldPaths
         "email",
         "createdat",
         "phonenumberids",
-        "addresses.*",
-        "addresses.street",
-        "addresses.city",
-        "addresses.postalcode",
-        "addresses.country"
+        "addressids"
     ];
 }

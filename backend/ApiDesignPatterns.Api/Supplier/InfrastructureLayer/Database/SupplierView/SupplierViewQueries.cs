@@ -21,6 +21,12 @@ public static class SupplierViewQueries
                                           WHERE spn.supplier_id = @Id;
                                           """;
 
+    public const string GetAddresses = """
+                                          SELECT address_id
+                                          FROM addresses_view av
+                                          WHERE av.supplier_id = @Id;
+                                          """;
+
     public const string ListSuppliersBase = """
                                             SELECT
                                                 supplier_id AS Id,
