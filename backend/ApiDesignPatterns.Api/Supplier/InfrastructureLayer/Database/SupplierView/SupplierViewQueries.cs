@@ -21,18 +21,6 @@ public static class SupplierViewQueries
                                           WHERE spn.supplier_id = @Id;
                                           """;
 
-
-    public const string GetSupplierAddresses = """
-                                               SELECT
-                                                   supplier_id AS SupplierId,
-                                                   supplier_address_street AS Street,
-                                                   supplier_address_city AS City,
-                                                   supplier_address_postal_code AS PostalCode,
-                                                   supplier_address_country AS Country
-                                               FROM supplier_addresses
-                                               WHERE supplier_id = @Id;
-                                               """;
-
     public const string ListSuppliersBase = """
                                             SELECT
                                                 supplier_id AS Id,
@@ -42,4 +30,12 @@ public static class SupplierViewQueries
                                             FROM suppliers_view
                                             WHERE 1=1
                                             """;
+
+    public const string GetPhoneNumbersForMultipleSuppliers = """
+                                                              SELECT
+                                                                  supplier_id,
+                                                                  phone_number_id
+                                                              FROM phone_numbers_view
+                                                              WHERE supplier_id = ANY(@SupplierIds)
+                                                              """;
 }

@@ -4,8 +4,6 @@
 using System.Data;
 using System.Text;
 using backend.Shared;
-using backend.Supplier.DomainModels.ValueObjects;
-using backend.Supplier.InfrastructureLayer.Database.Mapping;
 using Dapper;
 using SqlFilterBuilder = backend.Shared.SqlFilterBuilder;
 
@@ -26,10 +24,9 @@ public class SupplierViewRepository(
         if (supplier == null)
             return null;
 
-        var addresses = await GetSupplierAddresses(id);
         var phoneNumbers = await GetPhoneNumberIds(id);
 
-        supplier = supplier with { Addresses = addresses, PhoneNumberIds = phoneNumbers };
+        supplier = supplier with { PhoneNumberIds = phoneNumbers };
 
         return supplier;
     }
@@ -74,15 +71,35 @@ public class SupplierViewRepository(
         List<DomainModels.SupplierView> paginatedSuppliers =
             paginateService.Paginate(suppliers, maxPageSize, out string? nextPageToken);
 
+        var supplierIds = paginatedSuppliers.Select(s => s.Id).ToList();
+        var phoneNumbersBySupplier = await GetPhoneNumberIdsForSuppliers(supplierIds);
+
+        paginatedSuppliers = paginatedSuppliers
+            .Select(supplier => supplier with
+            {
+                PhoneNumberIds = phoneNumbersBySupplier.TryGetValue(supplier.Id, out var phoneNumbers)
+                    ? phoneNumbers
+                    : []
+            })
+            .ToList();
+
         return (paginatedSuppliers, nextPageToken);
     }
 
-    private async Task<List<Address>> GetSupplierAddresses(long id)
-    {
-        var addresses = await dbConnection.QueryAsync<Address>(
-            SupplierViewQueries.GetSupplierAddresses,
-            new { Id = id });
 
-        return addresses.ToList();
+    private async Task<Dictionary<long, List<long>>> GetPhoneNumberIdsForSuppliers(List<long> supplierIds)
+    {
+        if (supplierIds.Count == 0)
+            return new Dictionary<long, List<long>>();
+
+        var results = await dbConnection.QueryAsync<(long SupplierId, long PhoneNumberId)>(
+            SupplierViewQueries.GetPhoneNumbersForMultipleSuppliers,
+            new { SupplierIds = supplierIds });
+
+        return results
+            .GroupBy(r => r.SupplierId)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(r => r.PhoneNumberId).ToList());
     }
 }
