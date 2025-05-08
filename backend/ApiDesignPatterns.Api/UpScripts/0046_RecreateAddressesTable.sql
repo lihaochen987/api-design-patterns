@@ -9,7 +9,7 @@ $$
             supplier_id                  BIGINT
                 CONSTRAINT fk_supplier_id
                     REFERENCES suppliers (supplier_id)
-                    ON DELETE CASCADE,
+                    ON DELETE SET NULL,
             address_street      VARCHAR(255),
             address_city        VARCHAR(100),
             address_postal_code VARCHAR(20),

@@ -24,10 +24,8 @@ public static class SupplierQueries
                                                     """;
 
     public const string DeleteSupplier = """
-
                                                  DELETE FROM suppliers
                                                  WHERE supplier_id = @Id;
-
                                          """;
 
     public const string CreateSupplier = """
