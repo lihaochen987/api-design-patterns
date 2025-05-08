@@ -13,5 +13,5 @@ public record Supplier
     public required string Email { get; init; }
     public required ICollection<Address> Addresses { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
-    public required ICollection<PhoneNumber> PhoneNumbers { get; init; }
+    public required ICollection<ValueObjects.PhoneNumber> PhoneNumbers { get; init; }
 }

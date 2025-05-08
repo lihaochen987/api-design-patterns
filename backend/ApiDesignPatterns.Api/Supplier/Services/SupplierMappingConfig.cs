@@ -46,14 +46,14 @@ public static class SupplierMappingConfig
             .MapWith(src => new Country(src));
 
         // PhoneNumber
-        config.NewConfig<PhoneNumberRequest, PhoneNumber>()
-            .MapWith(src => new PhoneNumber(
+        config.NewConfig<PhoneNumberRequest, DomainModels.ValueObjects.PhoneNumber>()
+            .MapWith(src => new DomainModels.ValueObjects.PhoneNumber(
                 new CountryCode(src.CountryCode),
                 new AreaCode(src.AreaCode),
                 new PhoneDigits(src.Number)
             ));
 
-        config.NewConfig<PhoneNumber, PhoneNumberResponse>()
+        config.NewConfig<DomainModels.ValueObjects.PhoneNumber, PhoneNumberResponse>()
             .MapWith(src => new PhoneNumberResponse
             {
                 CountryCode = src.CountryCode.Value,
@@ -61,14 +61,14 @@ public static class SupplierMappingConfig
                 Number = src.Number.Value.ToString()
             });
 
-        config.NewConfig<PhoneNumber, PhoneNumberRequest>()
+        config.NewConfig<DomainModels.ValueObjects.PhoneNumber, PhoneNumberRequest>()
             .MapWith(src => new PhoneNumberRequest
             {
                 CountryCode = src.CountryCode.Value, AreaCode = src.AreaCode.Value, Number = src.Number.Value
             });
 
-        config.NewConfig<PhoneNumberResponse, PhoneNumber>()
-            .MapWith(src => new PhoneNumber(
+        config.NewConfig<PhoneNumberResponse, DomainModels.ValueObjects.PhoneNumber>()
+            .MapWith(src => new DomainModels.ValueObjects.PhoneNumber(
                 new CountryCode(src.CountryCode),
                 new AreaCode(src.AreaCode),
                 new PhoneDigits(long.Parse(src.Number))

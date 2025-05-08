@@ -43,18 +43,13 @@ public class PhoneNumberTestDataBuilder
         return this;
     }
 
-    public PhoneNumber Build()
+    public List<DomainModels.ValueObjects.PhoneNumber> BuildMany(int count)
     {
-        return new PhoneNumber { CountryCode = _countryCode, AreaCode = _areaCode, Number = _number };
-    }
-
-    public List<PhoneNumber> BuildMany(int count)
-    {
-        var phoneNumbers = new List<PhoneNumber>();
+        var phoneNumbers = new List<DomainModels.ValueObjects.PhoneNumber>();
 
         for (int i = 0; i < count; i++)
         {
-            phoneNumbers.Add(new PhoneNumber
+            phoneNumbers.Add(new DomainModels.ValueObjects.PhoneNumber
             {
                 CountryCode = _fixture.Create<CountryCode>(),
                 AreaCode = _fixture.Create<AreaCode>(),

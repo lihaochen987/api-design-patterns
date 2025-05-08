@@ -70,7 +70,7 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
     {
         var supplier = new SupplierTestDataBuilder()
             .WithPhoneNumbers([
-                new PhoneNumber
+                new DomainModels.ValueObjects.PhoneNumber
                 {
                     CountryCode = new CountryCode("+1"),
                     AreaCode = new AreaCode("555"),

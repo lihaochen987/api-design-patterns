@@ -54,7 +54,7 @@ public class ListProductSuppliersControllerTests : ListProductSuppliersControlle
         var response = (OkObjectResult)result.Result;
         response.Should().NotBeNull();
         var listProductSuppliersResponse = (ListProductSuppliersResponse)response.Value!;
-        listProductSuppliersResponse.Results.Count().Should().Be(4);
+        listProductSuppliersResponse.Results.Count.Should().Be(4);
         listProductSuppliersResponse.NextPageToken.Should().BeNull();
     }
 

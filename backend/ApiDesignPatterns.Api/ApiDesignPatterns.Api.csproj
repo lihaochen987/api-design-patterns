@@ -625,6 +625,12 @@
     <Compile Update="Product\Tests\ApplicationLayerTests\CacheCreateProductResponseHandlerTestBase.cs">
       <DependentUpon>CacheCreateProductResponseHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="PhoneNumber\Controllers\GetPhoneNumberRequest.cs">
+      <DependentUpon>GetPhoneNumberController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="PhoneNumber\Controllers\GetPhoneNumberResponse.cs">
+      <DependentUpon>GetPhoneNumberController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -743,6 +749,10 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove=".editorconfig"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PhoneNumber\DomainModels\ValueObjects\" />
   </ItemGroup>
 
 </Project>

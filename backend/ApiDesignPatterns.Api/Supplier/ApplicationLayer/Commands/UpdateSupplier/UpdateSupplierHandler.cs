@@ -12,7 +12,7 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
 {
     public async Task Handle(UpdateSupplierCommand command)
     {
-        (string firstName, string lastName, string email, List<Address> addresses, List<PhoneNumber> phoneNumbers) =
+        (string firstName, string lastName, string email, List<Address> addresses, List<DomainModels.ValueObjects.PhoneNumber> phoneNumbers) =
             GetUpdatedSupplierValues(command.Request, command.Supplier);
         var supplier = new DomainModels.Supplier
         {
@@ -34,7 +34,7 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
         string lastName,
         string email,
         List<Address> addresses,
-        List<PhoneNumber> phoneNumbers)
+        List<DomainModels.ValueObjects.PhoneNumber> phoneNumbers)
         GetUpdatedSupplierValues(
             UpdateSupplierRequest request,
             DomainModels.Supplier supplier)
@@ -53,7 +53,7 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
 
         List<Address> addresses = GetUpdatedSupplierAddresses(request, supplier);
 
-        List<PhoneNumber> phoneNumbers = GetUpdatedSupplierPhoneNumbers(request, supplier);
+        List<DomainModels.ValueObjects.PhoneNumber> phoneNumbers = GetUpdatedSupplierPhoneNumbers(request, supplier);
 
         return (firstname, lastName, email, addresses, phoneNumbers);
     }
@@ -77,13 +77,13 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
         return supplier.Addresses.ToList();
     }
 
-    private static List<PhoneNumber> GetUpdatedSupplierPhoneNumbers(
+    private static List<DomainModels.ValueObjects.PhoneNumber> GetUpdatedSupplierPhoneNumbers(
         UpdateSupplierRequest request,
         DomainModels.Supplier supplier)
     {
         if (request.FieldMask.Contains("phonenumbers") && request.PhoneNumbers != null && request.PhoneNumbers.Any())
         {
-            return request.PhoneNumbers.Select(p => new PhoneNumber
+            return request.PhoneNumbers.Select(p => new DomainModels.ValueObjects.PhoneNumber
             {
                 CountryCode =
                     !string.IsNullOrEmpty(p.CountryCode) ? new CountryCode(p.CountryCode) : new CountryCode(""),

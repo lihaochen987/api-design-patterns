@@ -14,7 +14,7 @@ public class SupplierTestDataBuilder
     private string _email;
     private List<Address> _addresses;
     private DateTimeOffset _createdAt;
-    private List<PhoneNumber> _phoneNumbers;
+    private List<DomainModels.ValueObjects.PhoneNumber> _phoneNumbers;
 
     public SupplierTestDataBuilder()
     {
@@ -64,7 +64,7 @@ public class SupplierTestDataBuilder
         return this;
     }
 
-    public SupplierTestDataBuilder WithPhoneNumbers(List<PhoneNumber> phoneNumbers)
+    public SupplierTestDataBuilder WithPhoneNumbers(List<DomainModels.ValueObjects.PhoneNumber> phoneNumbers)
     {
         _phoneNumbers = phoneNumbers;
         return this;

@@ -13,5 +13,5 @@ public record GetSupplierResponse
     [Required] public required string Email { get; init; }
     [Required] public required string CreatedAt { get; init; }
     [Required] public required List<AddressResponse> Addresses { get; init; }
-    [Required] public required List<PhoneNumberResponse> PhoneNumbers { get; init; }
+    [Required] public required List<string> PhoneNumbers { get; init; }
 }
