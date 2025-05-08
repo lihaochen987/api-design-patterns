@@ -14,7 +14,7 @@ public class SupplierViewTestDataBuilder
     private string _email;
     private readonly DateTimeOffset _createdAt;
     private readonly List<Address> _addresses;
-    private readonly List<string> _phoneNumbers;
+    private readonly List<long> _phoneNumberIds;
 
     public SupplierViewTestDataBuilder()
     {
@@ -25,7 +25,7 @@ public class SupplierViewTestDataBuilder
         _email = fixture.Create<string>();
         _createdAt = fixture.Create<DateTimeOffset>();
         _addresses = new AddressTestDataBuilder().BuildMany(3);
-        _phoneNumbers = fixture.Create<List<string>>();
+        _phoneNumberIds = fixture.Create<List<long>>();
     }
 
     public SupplierViewTestDataBuilder WithId(long id)
@@ -55,7 +55,7 @@ public class SupplierViewTestDataBuilder
             Email = _email,
             CreatedAt = _createdAt,
             Addresses = _addresses,
-            PhoneNumbers = _phoneNumbers,
+            PhoneNumberIds = _phoneNumberIds,
         };
     }
 

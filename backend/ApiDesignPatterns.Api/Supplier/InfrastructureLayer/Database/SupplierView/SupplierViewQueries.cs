@@ -16,7 +16,7 @@ public static class SupplierViewQueries
                                           """;
 
     public const string GetPhoneNumbers = """
-                                          SELECT phone_number AS PhoneNumber
+                                          SELECT phone_number_id
                                           FROM phone_numbers_view spn
                                           WHERE spn.supplier_id = @Id;
                                           """;
