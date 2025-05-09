@@ -24,6 +24,8 @@ public class ReplaceSupplierHandlerTests : ReplaceSupplierHandlerTestBase
         await sut.Handle(command);
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().Should().BeEquivalentTo(replacedSupplier);
+        Repository.First().Should().BeEquivalentTo(replacedSupplier,
+            options => options.Excluding(s => s.CreatedAt));
+        Repository.First().CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
     }
 }
