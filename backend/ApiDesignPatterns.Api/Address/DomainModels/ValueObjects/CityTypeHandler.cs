@@ -3,7 +3,7 @@
 
 using backend.Shared.SqlMappers;
 
-namespace backend.Supplier.DomainModels.ValueObjects;
+namespace backend.Address.DomainModels.ValueObjects;
 
 public class CityTypeHandler : StringValueObjectTypeHandler<City>
 {

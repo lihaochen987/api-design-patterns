@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture.Kernel;
-using backend.Supplier.DomainModels.ValueObjects;
+using backend.Address.DomainModels.ValueObjects;
 
 namespace backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
 

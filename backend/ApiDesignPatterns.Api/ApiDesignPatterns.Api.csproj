@@ -559,24 +559,6 @@
     <Compile Update="Review\DomainModels\ValueObjects\TextTypeHandler.cs">
       <DependentUpon>Text.cs</DependentUpon>
     </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\AddressRequest.cs">
-      <DependentUpon>Address.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\AddressResponse.cs">
-      <DependentUpon>Address.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\StreetTypeHandler.cs">
-      <DependentUpon>Street.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\CityTypeHandler.cs">
-      <DependentUpon>City.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\PostalCodeTypeHandler.cs">
-      <DependentUpon>PostalCode.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\CountryTypeHandler.cs">
-      <DependentUpon>Country.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\Controllers\Product\BatchCreateProductsRequest.cs">
       <DependentUpon>BatchCreateProductsController.cs</DependentUpon>
     </Compile>
@@ -633,6 +615,12 @@
     </Compile>
     <Compile Update="Product\Tests\ApplicationLayerTests\BatchDeleteProductHandlerTestBase.cs">
       <DependentUpon>BatchDeleteProductHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\Controllers\GetAddressRequest.cs">
+      <DependentUpon>GetAddressController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\Controllers\GetAddressResponse.cs">
+      <DependentUpon>GetAddressController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

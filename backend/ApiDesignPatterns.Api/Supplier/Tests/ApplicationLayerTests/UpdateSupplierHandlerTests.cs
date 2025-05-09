@@ -4,7 +4,6 @@
 using backend.Shared.CommandHandler;
 using backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
 using backend.Supplier.Controllers;
-using backend.Supplier.DomainModels.ValueObjects;
 using backend.Supplier.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Xunit;

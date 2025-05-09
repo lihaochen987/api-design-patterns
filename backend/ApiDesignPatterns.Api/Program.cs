@@ -1,6 +1,8 @@
 using System.Data;
 using System.Text.Json.Serialization;
 using backend;
+using backend.Address;
+using backend.Address.DomainModels.ValueObjects;
 using backend.Inventory;
 using backend.Inventory.DomainModels.ValueObjects;
 using backend.PhoneNumber;
@@ -12,7 +14,6 @@ using backend.Review.DomainModels.ValueObjects;
 using backend.Shared;
 using backend.Shared.ControllerActivators;
 using backend.Supplier;
-using backend.Supplier.DomainModels.ValueObjects;
 using Dapper;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Npgsql;
@@ -47,6 +48,8 @@ builder.Services.AddSingleton<BaseControllerActivator>(
     new InventoryControllerActivator(builder.Configuration, loggerFactory));
 builder.Services.AddSingleton<BaseControllerActivator>(
     new PhoneNumberControllerActivator(builder.Configuration, loggerFactory));
+builder.Services.AddSingleton<BaseControllerActivator>(
+    new AddressControllerActivator(builder.Configuration, loggerFactory));
 
 builder.Services.AddSingleton<IControllerActivator>(sp =>
 {

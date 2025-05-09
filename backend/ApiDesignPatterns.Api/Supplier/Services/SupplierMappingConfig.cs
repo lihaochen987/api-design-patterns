@@ -1,7 +1,7 @@
-﻿using backend.PhoneNumber.DomainModels.ValueObjects;
+﻿using backend.Address.DomainModels.ValueObjects;
+using backend.PhoneNumber.DomainModels.ValueObjects;
 using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
-using backend.Supplier.DomainModels.ValueObjects;
 using Mapster;
 
 namespace backend.Supplier.Services;
@@ -45,10 +45,6 @@ public static class SupplierMappingConfig
             .MapWith(src => src.Value);
         config.NewConfig<string, Country>()
             .MapWith(src => new Country(src));
-
-        // Address
-        config.NewConfig<AddressRequest, Address>().TwoWays();
-        config.NewConfig<Address, AddressResponse>().TwoWays();
 
         // Supplier mappings
         config.NewConfig<CreateSupplierRequest, DomainModels.Supplier>();

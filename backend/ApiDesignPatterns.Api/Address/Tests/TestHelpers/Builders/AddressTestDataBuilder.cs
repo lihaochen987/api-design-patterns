@@ -2,10 +2,10 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Supplier.DomainModels.ValueObjects;
+using backend.Address.DomainModels.ValueObjects;
 using backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
 
-namespace backend.Supplier.Tests.TestHelpers.Builders;
+namespace backend.Address.Tests.TestHelpers.Builders;
 
 public class AddressTestDataBuilder
 {
@@ -49,28 +49,5 @@ public class AddressTestDataBuilder
     {
         _country = country;
         return this;
-    }
-
-    public Address Build()
-    {
-        return new Address { Street = _street, City = _city, PostalCode = _postalCode, Country = _country };
-    }
-
-    public List<Address> BuildMany(int count)
-    {
-        var addresses = new List<Address>();
-
-        for (int i = 0; i < count; i++)
-        {
-            addresses.Add(new Address
-            {
-                Street = _fixture.Create<Street>(),
-                City = _fixture.Create<City>(),
-                PostalCode = _fixture.Create<PostalCode>(),
-                Country = _fixture.Create<Country>()
-            });
-        }
-
-        return addresses;
     }
 }

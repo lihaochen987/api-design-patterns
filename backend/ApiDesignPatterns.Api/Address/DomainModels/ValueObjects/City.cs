@@ -1,76 +1,76 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-namespace backend.Supplier.DomainModels.ValueObjects;
+namespace backend.Address.DomainModels.ValueObjects;
 
 /// <summary>
-/// Represents a street address with validation rules.
+/// Represents a city name with validation rules.
 /// </summary>
-public readonly record struct Street
+public readonly record struct City
 {
-    private const int MinLength = 3;
-    private const int MaxLength = 100;
+    private const int MinLength = 2;
+    private const int MaxLength = 50;
 
     /// <summary>
-    /// Gets the street value.
+    /// Gets the city name value.
     /// </summary>
     public string Value { get; init; }
 
     /// <summary>
-    /// Initializes a new instance of the Street record with validated value.
+    /// Initializes a new instance of the City record with validated value.
     /// </summary>
-    /// <param name="value">The street address.</param>
+    /// <param name="value">The city name.</param>
     /// <exception cref="ArgumentNullException">Thrown when the value is null, empty, or whitespace.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the value length is outside the allowed range.</exception>
     /// <exception cref="ArgumentException">Thrown when the value contains invalid characters.</exception>
-    public Street(string value)
+    public City(string value)
     {
-        ValidateStreet(value);
+        ValidateCity(value);
         Value = value;
     }
 
     /// <summary>
-    /// Validates the given street against constraints.
+    /// Validates the given city name against constraints.
     /// </summary>
-    /// <param name="value">The street to validate.</param>
+    /// <param name="value">The city name to validate.</param>
     /// <exception cref="ArgumentNullException">Thrown when the value is null, empty, or whitespace.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the value length is outside the allowed range.</exception>
     /// <exception cref="ArgumentException">Thrown when the value contains invalid characters.</exception>
-    private static void ValidateStreet(string value)
+    private static void ValidateCity(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new ArgumentNullException(nameof(value), "Street cannot be null, empty, or whitespace.");
+            throw new ArgumentNullException(nameof(value), "City name cannot be null, empty, or whitespace.");
         }
 
         switch (value.Length)
         {
             case < MinLength:
                 throw new ArgumentOutOfRangeException(nameof(value), value.Length,
-                    $"Street must be at least {MinLength} characters long.");
+                    $"City name must be at least {MinLength} characters long.");
             case > MaxLength:
                 throw new ArgumentOutOfRangeException(nameof(value), value.Length,
-                    $"Street cannot exceed {MaxLength} characters.");
+                    $"City name cannot exceed {MaxLength} characters.");
         }
 
-        const string allowedSpecialChars = " -/.,'#";
-        if (value.All(c => char.IsLetterOrDigit(c) || allowedSpecialChars.Contains(c)))
+        const string allowedSpecialChars = " -'.";
+        if (value.All(c => char.IsLetter(c) || allowedSpecialChars.Contains(c)))
         {
             return;
         }
 
-        char[] invalidChars = value.Where(c => !char.IsLetterOrDigit(c) && !allowedSpecialChars.Contains(c)).Distinct()
+        char[] invalidChars = value.Where(c => !char.IsLetter(c) && !allowedSpecialChars.Contains(c)).Distinct()
             .ToArray();
         string invalidCharsString = new(invalidChars);
         throw new ArgumentException(
-            $"Street contains invalid characters: '{invalidCharsString}'.",
+            $"City name contains invalid characters: '{invalidCharsString}'. Only letters and certain special characters are allowed.",
             nameof(value));
     }
 
     /// <summary>
-    /// Returns the string representation of the street.
+    /// Returns the string representation of the city name.
     /// </summary>
-    /// <returns>The street value.</returns>
+    /// <returns>The city name value.</returns>
     public override string ToString()
     {
         return Value;
