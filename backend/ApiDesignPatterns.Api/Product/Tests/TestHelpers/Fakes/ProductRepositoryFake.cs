@@ -10,6 +10,12 @@ public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductR
 {
     public bool IsDirty { get; set; }
 
+    public void AddProduct()
+    {
+        var product = new ProductTestDataBuilder().Build();
+        Add(product);
+    }
+
     public void AddProduct(long id)
     {
         var product = new ProductTestDataBuilder().WithId(id).Build();
