@@ -51,7 +51,7 @@ public class SupplierTestDataBuilder
         return this;
     }
 
-    public SupplierTestDataBuilder WithAddresses(List<long> addressIds)
+    public SupplierTestDataBuilder WithAddressIds(List<long> addressIds)
     {
         _addressIds = addressIds;
         return this;
@@ -63,7 +63,7 @@ public class SupplierTestDataBuilder
         return this;
     }
 
-    public SupplierTestDataBuilder WithPhoneNumbers(List<long> phoneNumberIds)
+    public SupplierTestDataBuilder WithPhoneNumberIds(List<long> phoneNumberIds)
     {
         _phoneNumberIds = phoneNumberIds;
         return this;

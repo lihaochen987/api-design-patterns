@@ -65,4 +65,22 @@ public class CreateSupplierControllerTests : CreateSupplierControllerTestBase
         response.LastName.Should().Be(lastName);
         response.Email.Should().Be(email);
     }
+
+    [Fact]
+    public async Task CreateSupplier_ValidatesMapping_WithDifferentReferenceSupplierData()
+    {
+        var supplier = new SupplierTestDataBuilder()
+            .WithAddressIds([1,2,3])
+            .WithPhoneNumberIds([4,5,6])
+            .Build();
+        var request = Mapper.Map<CreateSupplierRequest>(supplier);
+        CreateSupplierController sut = GetCreateSupplierController();
+
+        var result = await sut.CreateSupplier(request);
+
+        var response = result.Result.Should().BeOfType<OkObjectResult>()
+            .Which.Value.Should().BeOfType<CreateSupplierResponse>().Subject;
+        response.AddressIds.Should().BeEmpty();
+        response.PhoneNumberIds.Should().BeEmpty();
+    }
 }

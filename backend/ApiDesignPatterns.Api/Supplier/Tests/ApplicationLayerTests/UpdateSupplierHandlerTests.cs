@@ -25,7 +25,7 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
             FirstName = "Updated First",
             LastName = "Updated Last",
             Email = "new@email.com",
-            FieldMask = ["firstname", "email"]
+            FieldMask = ["firstname", "email", "lastname"]
         };
         ICommandHandler<UpdateSupplierCommand> sut = UpdateSupplierHandler();
 
@@ -33,7 +33,36 @@ public class UpdateSupplierHandlerTests : UpdateSupplierHandlerTestBase
 
         Repository.IsDirty.Should().BeTrue();
         Repository.First().FirstName.Should().BeEquivalentTo(request.FirstName);
-        Repository.First().LastName.Should().BeEquivalentTo(supplier.LastName);
+        Repository.First().LastName.Should().BeEquivalentTo(request.LastName);
         Repository.First().Email.Should().BeEquivalentTo(request.Email);
+    }
+
+    [Fact]
+    public async Task UpdateSupplierAsync_WithReferenceFieldMasks_ShouldUpdateOnlySpecifiedFields()
+    {
+        var supplier = new SupplierTestDataBuilder()
+            .WithId(3)
+            .Build();
+        Repository.Add(supplier);
+        Repository.IsDirty = false;
+        var request = new UpdateSupplierRequest
+        {
+            AddressIds = [1, 2, 3],
+            PhoneNumberIds = [4, 5, 6],
+            FirstName = "Updated First",
+            LastName = "Updated Last",
+            Email = "new@email.com",
+            FieldMask = ["addressids", "phonenumberids"]
+        };
+        ICommandHandler<UpdateSupplierCommand> sut = UpdateSupplierHandler();
+
+        await sut.Handle(new UpdateSupplierCommand { Supplier = supplier, Request = request });
+
+        Repository.IsDirty.Should().BeTrue();
+        Repository.First().AddressIds.Should().BeEquivalentTo(request.AddressIds);
+        Repository.First().PhoneNumberIds.Should().BeEquivalentTo(request.PhoneNumberIds);
+        Repository.First().FirstName.Should().BeEquivalentTo(supplier.FirstName);
+        Repository.First().LastName.Should().BeEquivalentTo(supplier.LastName);
+        Repository.First().Email.Should().BeEquivalentTo(supplier.Email);
     }
 }

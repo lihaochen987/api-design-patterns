@@ -1,30 +1,29 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using System.Reflection;
 using AutoFixture.Kernel;
 using backend.PhoneNumber.DomainModels.ValueObjects;
 
-namespace backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
+namespace backend.PhoneNumber.Tests.TestHelpers.SpecimenBuilders;
 
-public class CountryCodeSpecimenBuilder : ISpecimenBuilder
+public class PhoneDigitsSpecimenBuilder : ISpecimenBuilder
 {
     public object Create(object request, ISpecimenContext context)
     {
-        if (request is not Type type || type != typeof(CountryCode))
+        if (request is not Type type || type != typeof(PhoneDigits))
         {
             return new NoSpecimen();
         }
 
         var random = new Random();
-        int digitCount = random.Next(1, 4);
-        string code = "+";
+        int digitCount = random.Next(7, 9);
 
+        long number = 0;
         for (int i = 0; i < digitCount; i++)
         {
-            code += random.Next(0, 10).ToString();
+            number = number * 10 + random.Next(0, 10);
         }
 
-        return new CountryCode(code);
+        return new PhoneDigits(number);
     }
 }

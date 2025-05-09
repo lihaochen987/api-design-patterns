@@ -9,7 +9,7 @@ public record Supplier
     public required string FirstName { get; init; }
     public required string LastName { get; init; }
     public required string Email { get; init; }
-    public required ICollection<long> AddressIds { get; init; }
+    public required ICollection<long> AddressIds { get; init; } = [];
     public DateTimeOffset CreatedAt { get; init; }
-    public required ICollection<long> PhoneNumberIds { get; init; }
+    public required ICollection<long> PhoneNumberIds { get; init; } = [];
 }

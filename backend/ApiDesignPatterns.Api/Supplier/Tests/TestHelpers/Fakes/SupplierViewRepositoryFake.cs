@@ -68,10 +68,4 @@ public class SupplierViewRepositoryFake(
 
         return Task.FromResult((paginatedSuppliers, nextPageToken));
     }
-
-    public Task<List<SupplierView>> GetSuppliersByIds(List<long> supplierIds)
-    {
-        var suppliers = this.Where(x => supplierIds.Contains(x.Id)).ToList();
-        return Task.FromResult(suppliers);
-    }
 }
