@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using backend;
 using backend.Inventory;
 using backend.Inventory.DomainModels.ValueObjects;
+using backend.PhoneNumber;
 using backend.Product;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Review;
@@ -43,6 +44,8 @@ builder.Services.AddSingleton<BaseControllerActivator>(
     new SupplierControllerActivator(builder.Configuration, loggerFactory));
 builder.Services.AddSingleton<BaseControllerActivator>(
     new InventoryControllerActivator(builder.Configuration, loggerFactory));
+builder.Services.AddSingleton<BaseControllerActivator>(
+    new PhoneNumberControllerActivator(builder.Configuration, loggerFactory));
 
 builder.Services.AddSingleton<IControllerActivator>(sp =>
 {

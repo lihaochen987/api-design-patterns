@@ -6,12 +6,11 @@ namespace backend.PhoneNumber.InfrastructureLayer.Database.PhoneNumberView;
 public class PhoneNumberViewQueries
 {
     public const string GetPhoneNumberView = """
-                                          SELECT
-                                              supplier_id AS Id,
-                                              supplier_fullname AS FullName,
-                                              supplier_email AS Email,
-                                              supplier_created_at AS CreatedAt
-                                          FROM phone_numbers
-                                          WHERE supplier_id = @Id;
-                                          """;
+                                             SELECT
+                                                 phone_number_id AS Id,
+                                                 supplier_id AS SupplierId,
+                                                 phone_number AS PhoneNumber
+                                             FROM phone_numbers_view
+                                             WHERE phone_number_id = @Id;
+                                             """;
 }

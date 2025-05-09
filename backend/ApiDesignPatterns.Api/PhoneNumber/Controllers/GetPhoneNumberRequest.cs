@@ -3,7 +3,7 @@
 
 namespace backend.PhoneNumber.Controllers;
 
-public class GetPhoneNumberRequest
+public record GetPhoneNumberRequest
 {
     public List<string> FieldMask { get; set; } = ["*"];
 }

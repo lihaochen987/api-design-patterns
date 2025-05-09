@@ -3,7 +3,9 @@
 
 namespace backend.PhoneNumber.DomainModels;
 
-public class PhoneNumberView
+public record PhoneNumberView
 {
-    public required string PhoneNumber { get; set; }
+    public required long Id { get; init; }
+    public required long SupplierId { get; init; }
+    public required string PhoneNumber { get; init; }
 }
