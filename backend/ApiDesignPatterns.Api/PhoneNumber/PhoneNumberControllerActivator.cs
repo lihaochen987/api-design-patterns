@@ -1,12 +1,16 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
+using backend.PhoneNumber.ApplicationLayer.Commands.DeletePhoneNumber;
+using backend.PhoneNumber.ApplicationLayer.Queries.GetPhoneNumber;
 using backend.PhoneNumber.ApplicationLayer.Queries.GetPhoneNumberView;
 using backend.PhoneNumber.Controllers;
 using backend.PhoneNumber.DomainModels;
+using backend.PhoneNumber.InfrastructureLayer.Database.PhoneNumber;
 using backend.PhoneNumber.InfrastructureLayer.Database.PhoneNumberView;
 using backend.PhoneNumber.Services;
 using backend.Shared;
+using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
@@ -66,6 +70,45 @@ public class PhoneNumberControllerActivator : BaseControllerActivator
                 getPhoneNumberViewHandler,
                 _fieldMaskConverterFactory,
                 _mapper);
+        }
+
+        if (type == typeof(DeletePhoneNumberController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new PhoneNumberRepository(dbConnection);
+
+            // GetPhoneNumber handler
+            var getPhoneNumberHandler = new QueryDecoratorBuilder<GetPhoneNumberQuery, DomainModels.PhoneNumber?>(
+                    new GetPhoneNumberHandler(repository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.ProductRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            // DeletePhoneNumber handler
+            var deletePhoneNumberHandler = new CommandDecoratorBuilder<DeletePhoneNumberCommand>(
+                    new DeletePhoneNumberHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.SupplierWrite)
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
+                .Build();
+
+            return new DeletePhoneNumberController(
+                getPhoneNumberHandler,
+                deletePhoneNumberHandler);
         }
 
         return null;

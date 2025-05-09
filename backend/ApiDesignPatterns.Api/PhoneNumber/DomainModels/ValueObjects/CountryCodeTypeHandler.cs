@@ -3,7 +3,7 @@
 
 using backend.Shared.SqlMappers;
 
-namespace backend.Supplier.DomainModels.ValueObjects;
+namespace backend.PhoneNumber.DomainModels.ValueObjects;
 
 public class CountryCodeTypeHandler : StringValueObjectTypeHandler<CountryCode>
 {

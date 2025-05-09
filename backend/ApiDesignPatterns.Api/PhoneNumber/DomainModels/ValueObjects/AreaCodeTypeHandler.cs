@@ -1,6 +1,6 @@
 ﻿using backend.Shared.SqlMappers;
 
-namespace backend.Supplier.DomainModels.ValueObjects;
+namespace backend.PhoneNumber.DomainModels.ValueObjects;
 
 public class AreaCodeTypeHandler : StringValueObjectTypeHandler<AreaCode>
 {

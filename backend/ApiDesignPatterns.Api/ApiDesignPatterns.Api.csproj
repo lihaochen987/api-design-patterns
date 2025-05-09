@@ -565,21 +565,6 @@
     <Compile Update="Supplier\DomainModels\ValueObjects\AddressResponse.cs">
       <DependentUpon>Address.cs</DependentUpon>
     </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\PhoneNumberRequest.cs">
-      <DependentUpon>PhoneNumber.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\PhoneNumberResponse.cs">
-      <DependentUpon>PhoneNumber.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\AreaCodeTypeHandler.cs">
-      <DependentUpon>AreaCode.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\CountryCodeTypeHandler.cs">
-      <DependentUpon>CountryCode.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Supplier\DomainModels\ValueObjects\PhoneDigitsTypeHandler.cs">
-      <DependentUpon>PhoneDigits.cs</DependentUpon>
-    </Compile>
     <Compile Update="Supplier\DomainModels\ValueObjects\StreetTypeHandler.cs">
       <DependentUpon>Street.cs</DependentUpon>
     </Compile>
@@ -630,6 +615,18 @@
     </Compile>
     <Compile Update="PhoneNumber\Controllers\GetPhoneNumberResponse.cs">
       <DependentUpon>GetPhoneNumberController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="PhoneNumber\Controllers\DeletePhoneNumberRequest.cs">
+      <DependentUpon>DeletePhoneNumberController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="PhoneNumber\DomainModels\ValueObjects\AreaCodeTypeHandler.cs">
+      <DependentUpon>AreaCode.cs</DependentUpon>
+    </Compile>
+    <Compile Update="PhoneNumber\DomainModels\ValueObjects\CountryCodeTypeHandler.cs">
+      <DependentUpon>CountryCode.cs</DependentUpon>
+    </Compile>
+    <Compile Update="PhoneNumber\DomainModels\ValueObjects\PhoneDigitsTypeHandler.cs">
+      <DependentUpon>PhoneDigits.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -749,10 +746,6 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove=".editorconfig"/>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="PhoneNumber\DomainModels\ValueObjects\" />
   </ItemGroup>
 
 </Project>

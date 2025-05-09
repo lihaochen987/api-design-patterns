@@ -3,6 +3,7 @@
 
 using System.Reflection;
 using AutoFixture.Kernel;
+using backend.PhoneNumber.DomainModels.ValueObjects;
 using backend.Supplier.DomainModels.ValueObjects;
 
 namespace backend.Supplier.Tests.TestHelpers.SpecimenBuilders;

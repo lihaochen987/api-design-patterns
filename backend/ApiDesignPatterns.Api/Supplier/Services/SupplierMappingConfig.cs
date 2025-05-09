@@ -1,4 +1,5 @@
-﻿using backend.Supplier.Controllers;
+﻿using backend.PhoneNumber.DomainModels.ValueObjects;
+using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
 using backend.Supplier.DomainModels.ValueObjects;
 using Mapster;
@@ -44,35 +45,6 @@ public static class SupplierMappingConfig
             .MapWith(src => src.Value);
         config.NewConfig<string, Country>()
             .MapWith(src => new Country(src));
-
-        // PhoneNumber
-        config.NewConfig<PhoneNumberRequest, DomainModels.ValueObjects.PhoneNumber>()
-            .MapWith(src => new DomainModels.ValueObjects.PhoneNumber(
-                new CountryCode(src.CountryCode),
-                new AreaCode(src.AreaCode),
-                new PhoneDigits(src.Number)
-            ));
-
-        config.NewConfig<DomainModels.ValueObjects.PhoneNumber, PhoneNumberResponse>()
-            .MapWith(src => new PhoneNumberResponse
-            {
-                CountryCode = src.CountryCode.Value,
-                AreaCode = src.AreaCode.Value,
-                Number = src.Number.Value.ToString()
-            });
-
-        config.NewConfig<DomainModels.ValueObjects.PhoneNumber, PhoneNumberRequest>()
-            .MapWith(src => new PhoneNumberRequest
-            {
-                CountryCode = src.CountryCode.Value, AreaCode = src.AreaCode.Value, Number = src.Number.Value
-            });
-
-        config.NewConfig<PhoneNumberResponse, DomainModels.ValueObjects.PhoneNumber>()
-            .MapWith(src => new DomainModels.ValueObjects.PhoneNumber(
-                new CountryCode(src.CountryCode),
-                new AreaCode(src.AreaCode),
-                new PhoneDigits(long.Parse(src.Number))
-            ));
 
         // Address
         config.NewConfig<AddressRequest, Address>().TwoWays();

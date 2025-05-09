@@ -101,30 +101,6 @@ public static class ProductQueries
                                         RETURNING product_id;
                                         """;
 
-    public const string CreateProducts = """
-                                         INSERT INTO products (
-                                         product_name,
-                                         product_dimensions_length_cm,
-                                         product_dimensions_width_cm,
-                                         product_dimensions_height_cm,
-                                         product_category,
-                                         product_base_price,
-                                         product_discount_percentage,
-                                         product_tax_rate
-                                         )
-                                         VALUES (
-                                             @Name,
-                                             @Length,
-                                             @Width,
-                                             @Height,
-                                             @Category,
-                                             @BasePrice,
-                                             @DiscountPercentage,
-                                             @TaxRate
-                                             )
-                                         RETURNING product_id;
-                                         """;
-
     public const string CreatePetFoodProduct = """
                                                INSERT INTO product_pet_foods (
                                                product_id,

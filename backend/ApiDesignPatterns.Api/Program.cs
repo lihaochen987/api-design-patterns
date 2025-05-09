@@ -4,6 +4,7 @@ using backend;
 using backend.Inventory;
 using backend.Inventory.DomainModels.ValueObjects;
 using backend.PhoneNumber;
+using backend.PhoneNumber.DomainModels.ValueObjects;
 using backend.Product;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Review;
