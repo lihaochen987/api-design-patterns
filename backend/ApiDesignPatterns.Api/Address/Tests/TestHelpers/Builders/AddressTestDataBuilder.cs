@@ -3,6 +3,7 @@
 
 using AutoFixture;
 using backend.Address.DomainModels.ValueObjects;
+using backend.Address.Tests.TestHelpers.SpecimenBuilders;
 using backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Address.Tests.TestHelpers.Builders;

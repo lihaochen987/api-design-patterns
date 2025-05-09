@@ -625,6 +625,27 @@
     <Compile Update="Address\Controllers\DeleteAddressRequest.cs">
       <DependentUpon>DeleteAddressController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Address\DomainModels\ValueObjects\CityTypeHandler.cs">
+      <DependentUpon>City.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\DomainModels\ValueObjects\CountryTypeHandler.cs">
+      <DependentUpon>Country.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\DomainModels\ValueObjects\PostalCodeTypeHandler.cs">
+      <DependentUpon>PostalCode.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\DomainModels\ValueObjects\StreetTypeHandler.cs">
+      <DependentUpon>Street.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\FirstNameTypeHandler.cs">
+      <DependentUpon>FirstName.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\LastNameTypeHandler.cs">
+      <DependentUpon>LastName.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Supplier\DomainModels\ValueObjects\EmailTypeHandler.cs">
+      <DependentUpon>Email.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

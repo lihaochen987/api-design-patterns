@@ -3,6 +3,7 @@
 
 using backend.Shared.CommandHandler;
 using backend.Supplier.Controllers;
+using backend.Supplier.DomainModels.ValueObjects;
 using backend.Supplier.InfrastructureLayer.Database.Supplier;
 
 namespace backend.Supplier.ApplicationLayer.Commands.UpdateSupplier;
@@ -11,7 +12,7 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
 {
     public async Task Handle(UpdateSupplierCommand command)
     {
-        (string firstName, string lastName, string email, List<long> addressIds, List<long> phoneNumberIds) =
+        (FirstName firstName, LastName lastName, Email email, List<long> addressIds, List<long> phoneNumberIds) =
             GetUpdatedSupplierValues(command.Request, command.Supplier);
         var newSupplier = new DomainModels.Supplier
         {
@@ -26,21 +27,21 @@ public class UpdateSupplierHandler(ISupplierRepository repository) : ICommandHan
         await repository.UpdateSupplierAsync(newSupplier, command.Supplier);
     }
 
-    private static (string firstName, string lastName, string email, List<long> addressIds, List<long> phoneNumberIds)
+    private static (FirstName firstName, LastName lastName, Email email, List<long> addressIds, List<long> phoneNumberIds)
         GetUpdatedSupplierValues(
             UpdateSupplierRequest request,
             DomainModels.Supplier supplier)
     {
-        string firstname = request.FieldMask.Contains("firstname") && !string.IsNullOrEmpty(request.FirstName)
-            ? request.FirstName
+        FirstName firstname = request.FieldMask.Contains("firstname") && !string.IsNullOrEmpty(request.FirstName)
+            ? new FirstName(request.FirstName)
             : supplier.FirstName;
 
-        string lastName = request.FieldMask.Contains("lastname") && !string.IsNullOrEmpty(request.LastName)
-            ? request.LastName
+        LastName lastName = request.FieldMask.Contains("lastname") && !string.IsNullOrEmpty(request.LastName)
+            ? new LastName(request.LastName)
             : supplier.LastName;
 
-        string email = request.FieldMask.Contains("email") && !string.IsNullOrEmpty(request.Email)
-            ? request.Email
+        Email email = request.FieldMask.Contains("email") && !string.IsNullOrEmpty(request.Email)
+            ? new Email(request.Email)
             : supplier.Email;
 
         var addresses = GetUpdatedSupplierAddresses(request, supplier);

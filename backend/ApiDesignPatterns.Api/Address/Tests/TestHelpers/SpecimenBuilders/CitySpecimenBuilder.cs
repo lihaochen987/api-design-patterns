@@ -4,7 +4,7 @@
 using AutoFixture.Kernel;
 using backend.Address.DomainModels.ValueObjects;
 
-namespace backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
+namespace backend.Address.Tests.TestHelpers.SpecimenBuilders;
 
 public class CitySpecimenBuilder : ISpecimenBuilder
 {

@@ -3,6 +3,7 @@
 
 using backend.Supplier.ApplicationLayer.Commands.CreateSupplier;
 using backend.Supplier.Controllers;
+using backend.Supplier.DomainModels.ValueObjects;
 using backend.Supplier.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -50,9 +51,9 @@ public class CreateSupplierControllerTests : CreateSupplierControllerTestBase
         string firstName, string lastName, string email)
     {
         var supplier = new SupplierTestDataBuilder()
-            .WithFirstName(firstName)
-            .WithLastName(lastName)
-            .WithEmail(email)
+            .WithFirstName(new FirstName(firstName))
+            .WithLastName(new LastName(lastName))
+            .WithEmail(new Email(email))
             .Build();
         var request = Mapper.Map<CreateSupplierRequest>(supplier);
         CreateSupplierController sut = GetCreateSupplierController();
@@ -70,8 +71,8 @@ public class CreateSupplierControllerTests : CreateSupplierControllerTestBase
     public async Task CreateSupplier_ValidatesMapping_WithDifferentReferenceSupplierData()
     {
         var supplier = new SupplierTestDataBuilder()
-            .WithAddressIds([1,2,3])
-            .WithPhoneNumberIds([4,5,6])
+            .WithAddressIds([1, 2, 3])
+            .WithPhoneNumberIds([4, 5, 6])
             .Build();
         var request = Mapper.Map<CreateSupplierRequest>(supplier);
         CreateSupplierController sut = GetCreateSupplierController();

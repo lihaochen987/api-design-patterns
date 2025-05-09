@@ -4,6 +4,7 @@
 using AutoFixture;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.Controllers;
+using backend.Supplier.DomainModels.ValueObjects;
 using backend.Supplier.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -51,9 +52,9 @@ public class ReplaceSupplierControllerTests : ReplaceSupplierControllerTestBase
     public async Task ReplaceSupplier_HandlesMappingAndCommand_WithCorrectData()
     {
         var supplier = new SupplierTestDataBuilder()
-            .WithFirstName("John")
-            .WithLastName("Doe")
-            .WithEmail("john.doe@example.com")
+            .WithFirstName(new FirstName("John"))
+            .WithLastName(new LastName("Doe"))
+            .WithEmail(new Email("john.doe@example.com"))
             .Build();
         var request = Mapper.Map<ReplaceSupplierRequest>(supplier);
         Mock

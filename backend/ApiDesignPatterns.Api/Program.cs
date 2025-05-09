@@ -14,6 +14,7 @@ using backend.Review.DomainModels.ValueObjects;
 using backend.Shared;
 using backend.Shared.ControllerActivators;
 using backend.Supplier;
+using backend.Supplier.DomainModels.ValueObjects;
 using Dapper;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Npgsql;
@@ -94,9 +95,16 @@ SqlMapper.AddTypeHandler(new RatingTypeHandler());
 SqlMapper.AddTypeHandler(new TextTypeHandler());
 
 // Supplier
+SqlMapper.AddTypeHandler(new FirstNameTypeHandler());
+SqlMapper.AddTypeHandler(new LastNameTypeHandler());
+SqlMapper.AddTypeHandler(new EmailTypeHandler());
+
+// PhoneNumber
 SqlMapper.AddTypeHandler(new AreaCodeTypeHandler());
 SqlMapper.AddTypeHandler(new CountryCodeTypeHandler());
 SqlMapper.AddTypeHandler(new PhoneDigitsTypeHandler());
+
+// Address
 SqlMapper.AddTypeHandler(new StreetTypeHandler());
 SqlMapper.AddTypeHandler(new CityTypeHandler());
 SqlMapper.AddTypeHandler(new PostalCodeTypeHandler());

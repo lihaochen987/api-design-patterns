@@ -2,15 +2,17 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
+using backend.Supplier.DomainModels.ValueObjects;
+using backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Supplier.Tests.TestHelpers.Builders;
 
 public class SupplierTestDataBuilder
 {
     private long _id;
-    private string _firstName;
-    private string _lastName;
-    private string _email;
+    private FirstName _firstName;
+    private LastName _lastName;
+    private Email _email;
     private List<long> _addressIds;
     private DateTimeOffset _createdAt;
     private List<long> _phoneNumberIds;
@@ -18,10 +20,14 @@ public class SupplierTestDataBuilder
     public SupplierTestDataBuilder()
     {
         Fixture fixture = new();
+        fixture.Customizations.Add(new FirstNameSpecimenBuilder());
+        fixture.Customizations.Add(new LastNameSpecimenBuilder());
+        fixture.Customizations.Add(new EmailSpecimenBuilder());
+
         _id = fixture.Create<long>();
-        _firstName = fixture.Create<string>();
-        _lastName = fixture.Create<string>();
-        _email = fixture.Create<string>();
+        _firstName = fixture.Create<FirstName>();
+        _lastName = fixture.Create<LastName>();
+        _email = fixture.Create<Email>();
         _createdAt = fixture.Create<DateTimeOffset>();
         _addressIds = fixture.Create<List<long>>();
         _phoneNumberIds = fixture.Create<List<long>>();
@@ -33,19 +39,19 @@ public class SupplierTestDataBuilder
         return this;
     }
 
-    public SupplierTestDataBuilder WithFirstName(string firstName)
+    public SupplierTestDataBuilder WithFirstName(FirstName firstName)
     {
         _firstName = firstName;
         return this;
     }
 
-    public SupplierTestDataBuilder WithLastName(string lastName)
+    public SupplierTestDataBuilder WithLastName(LastName lastName)
     {
         _lastName = lastName;
         return this;
     }
 
-    public SupplierTestDataBuilder WithEmail(string email)
+    public SupplierTestDataBuilder WithEmail(Email email)
     {
         _email = email;
         return this;

@@ -2,6 +2,7 @@
 using backend.PhoneNumber.DomainModels.ValueObjects;
 using backend.Supplier.Controllers;
 using backend.Supplier.DomainModels;
+using backend.Supplier.DomainModels.ValueObjects;
 using Mapster;
 
 namespace backend.Supplier.Services;
@@ -11,40 +12,20 @@ public static class SupplierMappingConfig
     public static void RegisterSupplierMappings(this TypeAdapterConfig config)
     {
         // Value objects
-        config.NewConfig<CountryCode, string>()
+        config.NewConfig<FirstName, string>()
             .MapWith(src => src.Value);
-        config.NewConfig<string, CountryCode>()
-            .MapWith(src => new CountryCode(src));
+        config.NewConfig<string, FirstName>()
+            .MapWith(src => new FirstName(src));
 
-        config.NewConfig<AreaCode, string>()
+        config.NewConfig<LastName, string>()
             .MapWith(src => src.Value);
-        config.NewConfig<string, AreaCode>()
-            .MapWith(src => new AreaCode(src));
+        config.NewConfig<string, LastName>()
+            .MapWith(src => new LastName(src));
 
-        config.NewConfig<PhoneDigits, long>()
+        config.NewConfig<Email, string>()
             .MapWith(src => src.Value);
-        config.NewConfig<long, PhoneDigits>()
-            .MapWith(src => new PhoneDigits(src));
-
-        config.NewConfig<Street, string>()
-            .MapWith(src => src.Value);
-        config.NewConfig<string, Street>()
-            .MapWith(src => new Street(src));
-
-        config.NewConfig<City, string>()
-            .MapWith(src => src.Value);
-        config.NewConfig<string, City>()
-            .MapWith(src => new City(src));
-
-        config.NewConfig<PostalCode, string>()
-            .MapWith(src => src.Value);
-        config.NewConfig<string, PostalCode>()
-            .MapWith(src => new PostalCode(src));
-
-        config.NewConfig<Country, string>()
-            .MapWith(src => src.Value);
-        config.NewConfig<string, Country>()
-            .MapWith(src => new Country(src));
+        config.NewConfig<string, Email>()
+            .MapWith(src => new Email(src));
 
         // Supplier mappings
         config.NewConfig<CreateSupplierRequest, DomainModels.Supplier>();

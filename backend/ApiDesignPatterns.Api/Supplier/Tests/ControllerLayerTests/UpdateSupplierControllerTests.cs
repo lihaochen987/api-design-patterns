@@ -4,6 +4,7 @@
 using AutoFixture;
 using backend.Supplier.ApplicationLayer.Queries.GetSupplier;
 using backend.Supplier.Controllers;
+using backend.Supplier.DomainModels.ValueObjects;
 using backend.Supplier.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -75,7 +76,7 @@ public class UpdateSupplierControllerTests : UpdateSupplierControllerTestBase
         var supplier = new SupplierTestDataBuilder().Build();
         var updatedSupplier = new SupplierTestDataBuilder()
             .WithId(supplier.Id)
-            .WithFirstName("Updated")
+            .WithFirstName(new FirstName("Updated"))
             .Build();
         UpdateSupplierRequest request = new() { FirstName = "Updated" };
         Mock
