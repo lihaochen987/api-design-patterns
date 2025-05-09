@@ -622,6 +622,9 @@
     <Compile Update="Address\Controllers\GetAddressResponse.cs">
       <DependentUpon>GetAddressController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Address\Controllers\DeleteAddressRequest.cs">
+      <DependentUpon>DeleteAddressController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
