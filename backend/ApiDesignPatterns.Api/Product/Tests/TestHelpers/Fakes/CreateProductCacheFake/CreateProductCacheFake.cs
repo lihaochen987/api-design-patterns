@@ -10,7 +10,6 @@ namespace backend.Product.Tests.TestHelpers.Fakes.CreateProductCacheFake;
 public class CreateProductCacheFake : ICreateProductCache
 {
     private readonly Dictionary<string, CachedItem<CreateProductResponse>> _cache = new();
-    private readonly Dictionary<string, Dictionary<string, long>> _hashData = new();
 
     public Task SetAsync(string key, CachedItem<CreateProductResponse> value, TimeSpan expiry)
     {

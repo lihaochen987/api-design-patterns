@@ -628,6 +628,9 @@
     <Compile Update="PhoneNumber\DomainModels\ValueObjects\PhoneDigitsTypeHandler.cs">
       <DependentUpon>PhoneDigits.cs</DependentUpon>
     </Compile>
+    <Compile Update="Product\Tests\ApplicationLayerTests\CacheCreateProductResponsesHandlerTestBase.cs">
+      <DependentUpon>CacheCreateProductResponsesHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
