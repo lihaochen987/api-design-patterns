@@ -37,6 +37,12 @@ public class AddressTestDataBuilder
         return this;
     }
 
+    public AddressTestDataBuilder WithSupplierId(long supplierId)
+    {
+        _supplierId = supplierId;
+        return this;
+    }
+
     public AddressTestDataBuilder WithStreet(Street street)
     {
         _street = street;

@@ -676,6 +676,12 @@
     <Compile Update="Address\Tests\ApplicationLayerTests\ReplaceAddressHandlerTestBase.cs">
       <DependentUpon>ReplaceAddressHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Address\Tests\ApplicationLayerTests\UpdateAddressHandlerTestBase.cs">
+      <DependentUpon>UpdateAddressHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\Tests\ApplicationLayerTests\ListAddressHandlerTestBase.cs">
+      <DependentUpon>ListAddressHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

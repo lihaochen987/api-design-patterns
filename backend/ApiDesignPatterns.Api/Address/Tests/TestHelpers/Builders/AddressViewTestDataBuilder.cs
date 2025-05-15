@@ -20,6 +20,18 @@ public class AddressViewTestDataBuilder
         _fullAddress = _fixture.Create<string>();
     }
 
+    public AddressViewTestDataBuilder WithSupplierId(long supplierId)
+    {
+        _supplierId = supplierId;
+        return this;
+    }
+
+    public AddressViewTestDataBuilder WithFullAddress(string fullAddress)
+    {
+        _fullAddress = fullAddress;
+        return this;
+    }
+
     public AddressView Build()
     {
         return new AddressView { Id = _id, SupplierId = _supplierId, FullAddress = _fullAddress };
