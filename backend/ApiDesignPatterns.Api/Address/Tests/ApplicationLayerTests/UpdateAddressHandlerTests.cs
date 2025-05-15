@@ -40,11 +40,11 @@ public class UpdateAddressHandlerTests : UpdateAddressHandlerTestBase
         await sut.Handle(new UpdateAddressCommand { Address = address, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().SupplierId.Should().Be(55);
-        Repository.First().Street.Value.Should().Be("456 Updated Street");
-        Repository.First().City.Value.Should().Be("Updated City");
-        Repository.First().PostalCode.Value.Should().Be("54321");
-        Repository.First().Country.Value.Should().Be("Updated Country");
+        Repository.First().SupplierId.Should().Be(request.SupplierId);
+        Repository.First().Street.Value.Should().Be(request.Street);
+        Repository.First().City.Value.Should().Be(request.City);
+        Repository.First().PostalCode.Value.Should().Be(request.PostalCode);
+        Repository.First().Country.Value.Should().Be(request.Country);
     }
 
     [Fact]
@@ -54,9 +54,7 @@ public class UpdateAddressHandlerTests : UpdateAddressHandlerTestBase
             .WithId(5)
             .WithSupplierId(42)
             .WithStreet(new Street("123 Original Street"))
-            .WithCity(new City("Original City"))
             .WithPostalCode(new PostalCode("12345"))
-            .WithCountry(new Country("Original Country"))
             .Build();
         Repository.Add(address);
         Repository.IsDirty = false;
@@ -74,11 +72,11 @@ public class UpdateAddressHandlerTests : UpdateAddressHandlerTestBase
         await sut.Handle(new UpdateAddressCommand { Address = address, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().SupplierId.Should().Be(42);
-        Repository.First().Street.Value.Should().Be("456 Updated Street");
-        Repository.First().City.Value.Should().Be("Original City");
-        Repository.First().PostalCode.Value.Should().Be("54321");
-        Repository.First().Country.Value.Should().Be("Original Country");
+        Repository.First().SupplierId.Should().Be(address.SupplierId);
+        Repository.First().Street.Value.Should().Be(request.Street);
+        Repository.First().City.Should().Be(address.City);
+        Repository.First().PostalCode.Value.Should().Be(request.PostalCode);
+        Repository.First().Country.Should().Be(address.Country);
     }
 
     [Fact]

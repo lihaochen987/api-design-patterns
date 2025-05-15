@@ -1,6 +1,7 @@
 ﻿// Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
+using AutoFixture;
 using backend.Address.ApplicationLayer.Queries.ListAddress;
 using FluentAssertions;
 using Xunit;
@@ -14,8 +15,8 @@ public class ListAddressHandlerTests : ListAddressHandlerTestBase
     {
         const long supplierId = 123;
         var query = new ListAddressQuery { PageToken = null, Filter = "SupplierId == 123", MaxPageSize = 5 };
-        Repository.AddAddressView(supplierId, "123 Main St, New York, NY 10001");
-        Repository.AddAddressView(supplierId, "456 Oak Ave, New York, NY 10002");
+        Repository.AddAddressView(supplierId, Fixture.Create<string>());
+        Repository.AddAddressView(supplierId, Fixture.Create<string>());
         var sut = ListAddressHandler();
 
         var result = await sut.Handle(query);
@@ -47,7 +48,7 @@ public class ListAddressHandlerTests : ListAddressHandlerTestBase
             PageToken = null, Filter = "FullAddress.Contains('New York')", MaxPageSize = 5
         };
         Repository.AddAddressView(101, "123 Main St, New York, NY 10001");
-        Repository.AddAddressView(102, "456 Oak Ave, Los Angeles, CA 90001");
+        Repository.AddAddressView(102, Fixture.Create<string>());
         Repository.AddAddressView(103, "789 Pine Blvd, New York, NY 10002");
         var sut = ListAddressHandler();
 
@@ -62,10 +63,10 @@ public class ListAddressHandlerTests : ListAddressHandlerTestBase
     public async Task Handle_ShouldLimitResultsByMaxPageSize()
     {
         var query = new ListAddressQuery { PageToken = null, Filter = null, MaxPageSize = 2 };
-        Repository.AddAddressView(201, "Address 1");
-        Repository.AddAddressView(202, "Address 2");
-        Repository.AddAddressView(203, "Address 3");
-        Repository.AddAddressView(204, "Address 4");
+        Repository.AddAddressView(Fixture.Create<long>(), Fixture.Create<string>());
+        Repository.AddAddressView(Fixture.Create<long>(), Fixture.Create<string>());
+        Repository.AddAddressView(Fixture.Create<long>(), Fixture.Create<string>());
+        Repository.AddAddressView(Fixture.Create<long>(), Fixture.Create<string>());
         var sut = ListAddressHandler();
 
         var result = await sut.Handle(query);
