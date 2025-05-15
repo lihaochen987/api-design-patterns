@@ -32,5 +32,6 @@ public static class AddressMappingConfig
 
         // GetAddressController
         config.NewConfig<AddressView, GetAddressResponse>();
+        config.NewConfig<DomainModels.Address, UpdateAddressResponse>();
     }
 }

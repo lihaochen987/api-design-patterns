@@ -3,6 +3,7 @@
 
 using backend.Address.ApplicationLayer.Commands.DeleteAddress;
 using backend.Address.ApplicationLayer.Commands.ReplaceAddress;
+using backend.Address.ApplicationLayer.Commands.UpdateAddress;
 using backend.Address.ApplicationLayer.Queries.GetAddress;
 using backend.Address.ApplicationLayer.Queries.GetAddressView;
 using backend.Address.ApplicationLayer.Queries.ListAddress;
@@ -185,6 +186,46 @@ public class AddressControllerActivator : BaseControllerActivator
             return new ReplaceAddressController(
                 getAddressHandler,
                 replaceAddressHandler,
+                _mapper);
+        }
+
+        if (type == typeof(UpdateAddressController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new AddressRepository(dbConnection);
+
+            // GetAddress handler
+            var getAddressHandler = new QueryDecoratorBuilder<GetAddressQuery, DomainModels.Address?>(
+                    new GetAddressHandler(repository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.AddressRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            // UpdateAddress handler
+            var updateAddressHandler = new CommandDecoratorBuilder<UpdateAddressCommand>(
+                    new UpdateAddressHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.AddressWrite)
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
+                .Build();
+
+            return new UpdateAddressController(
+                getAddressHandler,
+                updateAddressHandler,
                 _mapper);
         }
 

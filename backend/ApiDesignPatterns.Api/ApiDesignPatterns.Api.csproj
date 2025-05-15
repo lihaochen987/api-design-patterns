@@ -658,6 +658,12 @@
     <Compile Update="Address\Controllers\ReplaceAddressResponse.cs">
       <DependentUpon>ReplaceAddressController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Address\Controllers\UpdateAddressRequest.cs">
+      <DependentUpon>UpdateAddressController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\Controllers\UpdateAddressResponse.cs">
+      <DependentUpon>UpdateAddressController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
