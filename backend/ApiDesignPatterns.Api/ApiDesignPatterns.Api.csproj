@@ -646,6 +646,12 @@
     <Compile Update="Supplier\DomainModels\ValueObjects\EmailTypeHandler.cs">
       <DependentUpon>Email.cs</DependentUpon>
     </Compile>
+    <Compile Update="Address\Controllers\ListAddressRequest.cs">
+      <DependentUpon>ListAddressController.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\Controllers\ListAddressResponse.cs">
+      <DependentUpon>ListAddressController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

@@ -49,5 +49,5 @@ The other patterns mentioned, but not yet implemented from the book include:
 6. MODIFY List, Get and Update standard methods along with field masks
 
 ## Notable areas
-- ColumnMappers are used to map between a property and the column name in the database, used for filtering in the List standard method.
+- ColumnMappers are used to map between a property and the column name in the database view, used for filtering in the List standard method.
 - FieldPaths are used for valid entries in the FieldMask, used for partial updates in the Get and Update standard methods.

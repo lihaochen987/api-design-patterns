@@ -4,6 +4,7 @@
 using backend.Address.ApplicationLayer.Commands.DeleteAddress;
 using backend.Address.ApplicationLayer.Queries.GetAddress;
 using backend.Address.ApplicationLayer.Queries.GetAddressView;
+using backend.Address.ApplicationLayer.Queries.ListAddress;
 using backend.Address.Controllers;
 using backend.Address.DomainModels;
 using backend.Address.InfrastructureLayer.Database.Address;
@@ -26,6 +27,8 @@ public class AddressControllerActivator : BaseControllerActivator
     private readonly IMapper _mapper;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly PaginateService<AddressView> _paginateService;
+    private readonly SqlFilterBuilder _sqlFilterBuilder;
 
     public AddressControllerActivator(
         IConfiguration configuration,
@@ -40,6 +43,11 @@ public class AddressControllerActivator : BaseControllerActivator
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(addressFieldPaths.ValidPaths);
 
         _loggerFactory = loggerFactory;
+
+        _paginateService = new PaginateService<AddressView>();
+
+        AddressColumnMapper addressColumnMapper = new();
+        _sqlFilterBuilder = new SqlFilterBuilder(addressColumnMapper);
     }
 
     public override object? Create(ControllerContext context)
@@ -50,7 +58,7 @@ public class AddressControllerActivator : BaseControllerActivator
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
-            var repository = new AddressViewRepository(dbConnection);
+            var repository = new AddressViewRepository(dbConnection, _sqlFilterBuilder, _paginateService);
 
             // GetAddressView handler
             var getAddressViewHandler = new QueryDecoratorBuilder<GetAddressViewQuery, AddressView?>(
@@ -60,7 +68,7 @@ public class AddressControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.ProductRead)
+                .WithBulkhead(BulkheadPolicies.AddressRead)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -86,7 +94,7 @@ public class AddressControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.ProductRead)
+                .WithBulkhead(BulkheadPolicies.AddressRead)
                 .WithLogging()
                 .WithValidation()
                 .WithTransaction()
@@ -100,7 +108,7 @@ public class AddressControllerActivator : BaseControllerActivator
                 .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                 .WithHandshaking()
                 .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                .WithBulkhead(BulkheadPolicies.SupplierWrite)
+                .WithBulkhead(BulkheadPolicies.AddressWrite)
                 .WithLogging()
                 .WithAudit()
                 .WithTransaction()
@@ -109,6 +117,34 @@ public class AddressControllerActivator : BaseControllerActivator
             return new DeleteAddressController(
                 getAddressHandler,
                 deleteAddressHandler);
+        }
+
+        if (type == typeof(ListAddressController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new AddressViewRepository(
+                dbConnection,
+                _sqlFilterBuilder,
+                _paginateService);
+
+            // ListAddressHandler
+            var listAddressHandler = new QueryDecoratorBuilder<ListAddressQuery, PagedAddress>(
+                    new ListAddressHandler(repository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.AddressRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            return new ListAddressController(
+                listAddressHandler,
+                _mapper);
         }
 
         return null;

@@ -6,4 +6,8 @@ namespace backend.Address.InfrastructureLayer.Database.AddressView;
 public interface IAddressViewRepository
 {
     Task<DomainModels.AddressView?> GetAddressViewAsync(long id);
+    Task<(List<DomainModels.AddressView>, string?)> ListAddressAsync(
+        string? pageToken,
+        string? filter,
+        int maxPageSize);
 }
