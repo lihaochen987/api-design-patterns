@@ -11,7 +11,6 @@ using backend.Review.ApplicationLayer.Queries.GetReviewView;
 using backend.Review.ApplicationLayer.Queries.ListReviews;
 using backend.Review.Controllers;
 using backend.Review.DomainModels;
-using backend.Review.DomainModels.ValueObjects;
 using backend.Review.InfrastructureLayer.Database.Review;
 using backend.Review.InfrastructureLayer.Database.ReviewView;
 using backend.Review.Services;
@@ -48,7 +47,7 @@ public class ReviewControllerActivator : BaseControllerActivator
         _fieldMaskConverterFactory = new FieldMaskConverterFactory(reviewFieldPaths.ValidPaths);
 
         var config = new TypeAdapterConfig();
-        ReviewMappingConfig.RegisterReviewMappings(config);
+        config.RegisterReviewMappings();
         _mapper = new Mapper(config);
     }
 

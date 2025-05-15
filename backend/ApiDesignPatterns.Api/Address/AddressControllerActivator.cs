@@ -2,6 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Address.ApplicationLayer.Commands.DeleteAddress;
+using backend.Address.ApplicationLayer.Commands.ReplaceAddress;
 using backend.Address.ApplicationLayer.Queries.GetAddress;
 using backend.Address.ApplicationLayer.Queries.GetAddressView;
 using backend.Address.ApplicationLayer.Queries.ListAddress;
@@ -144,6 +145,46 @@ public class AddressControllerActivator : BaseControllerActivator
 
             return new ListAddressController(
                 listAddressHandler,
+                _mapper);
+        }
+
+        if (type == typeof(ReplaceAddressController))
+        {
+            var dbConnection = CreateDbConnection();
+            TrackDisposable(context, dbConnection);
+            var repository = new AddressRepository(dbConnection);
+
+            // GetAddress handler
+            var getAddressHandler = new QueryDecoratorBuilder<GetAddressQuery, DomainModels.Address?>(
+                    new GetAddressHandler(repository),
+                    _loggerFactory,
+                    dbConnection)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.AddressRead)
+                .WithLogging()
+                .WithValidation()
+                .WithTransaction()
+                .Build();
+
+            // ReplaceAddress handler
+            var replaceAddressHandler = new CommandDecoratorBuilder<ReplaceAddressCommand>(
+                    new ReplaceAddressHandler(repository),
+                    dbConnection,
+                    _loggerFactory)
+                .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
+                .WithHandshaking()
+                .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
+                .WithBulkhead(BulkheadPolicies.AddressWrite)
+                .WithLogging()
+                .WithAudit()
+                .WithTransaction()
+                .Build();
+
+            return new ReplaceAddressController(
+                getAddressHandler,
+                replaceAddressHandler,
                 _mapper);
         }
 

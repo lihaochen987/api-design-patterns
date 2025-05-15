@@ -20,4 +20,18 @@ public class AddressRepository(IDbConnection dbConnection) : IAddressRepository
     {
         await dbConnection.ExecuteAsync(AddressQueries.DeleteAddress, new { Id = id });
     }
+
+    public async Task UpdateAddressAsync(DomainModels.Address address)
+    {
+        await dbConnection.ExecuteAsync(AddressQueries.UpdateAddress,
+            new
+            {
+                address.Id,
+                address.SupplierId,
+                address.Street,
+                address.City,
+                address.PostalCode,
+                address.Country,
+            });
+    }
 }

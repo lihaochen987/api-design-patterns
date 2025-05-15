@@ -21,4 +21,15 @@ public class AddressQueries
                                         DELETE FROM addresses
                                         WHERE address_id = @id
                                         """;
+
+    public const string UpdateAddress = """
+                                                UPDATE addresses
+                                                SET
+                                                    supplier_id = @SupplierId,
+                                                    address_street = @Street,
+                                                    address_city = @City,
+                                                    address_postal_code = @PostalCode,
+                                                    address_country = @Country
+                                                WHERE address_id = @Id;
+                                        """;
 }
