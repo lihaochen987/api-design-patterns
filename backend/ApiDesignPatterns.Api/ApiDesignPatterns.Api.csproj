@@ -664,6 +664,18 @@
     <Compile Update="Address\Controllers\UpdateAddressResponse.cs">
       <DependentUpon>UpdateAddressController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Address\Tests\ApplicationLayerTests\GetAddressHandlerTestBase.cs">
+      <DependentUpon>GetAddressHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\Tests\ApplicationLayerTests\GetAddressViewHandlerTestBase.cs">
+      <DependentUpon>GetAddressViewHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\Tests\ApplicationLayerTests\DeleteAddressHandlerTestBase.cs">
+      <DependentUpon>DeleteAddressHandlerTests.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Address\Tests\ApplicationLayerTests\ReplaceAddressHandlerTestBase.cs">
+      <DependentUpon>ReplaceAddressHandlerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

@@ -4,13 +4,14 @@
 using AutoFixture;
 using backend.Address.DomainModels.ValueObjects;
 using backend.Address.Tests.TestHelpers.SpecimenBuilders;
-using backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Address.Tests.TestHelpers.Builders;
 
 public class AddressTestDataBuilder
 {
     private readonly Fixture _fixture = new();
+    private long _id;
+    private long _supplierId;
     private Street _street;
     private City _city;
     private PostalCode _postalCode;
@@ -22,10 +23,18 @@ public class AddressTestDataBuilder
         _fixture.Customizations.Add(new PostalCodeSpecimenBuilder());
         _fixture.Customizations.Add(new CountrySpecimenBuilder());
 
+        _id = _fixture.Create<long>();
+        _supplierId = _fixture.Create<long>();
         _street = _fixture.Create<Street>();
         _city = _fixture.Create<City>();
         _postalCode = _fixture.Create<PostalCode>();
         _country = _fixture.Create<Country>();
+    }
+
+    public AddressTestDataBuilder WithId(long id)
+    {
+        _id = id;
+        return this;
     }
 
     public AddressTestDataBuilder WithStreet(Street street)
@@ -50,5 +59,18 @@ public class AddressTestDataBuilder
     {
         _country = country;
         return this;
+    }
+
+    public DomainModels.Address Build()
+    {
+        return new DomainModels.Address
+        {
+            Id = _id,
+            SupplierId = _supplierId,
+            Street = _street,
+            City = _city,
+            PostalCode = _postalCode,
+            Country = _country
+        };
     }
 }
