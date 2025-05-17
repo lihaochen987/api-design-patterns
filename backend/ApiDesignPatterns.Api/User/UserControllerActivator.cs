@@ -6,6 +6,7 @@ using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
+using backend.Shared.Utility;
 using backend.User.ApplicationLayer.Commands.CreateUser;
 using backend.User.ApplicationLayer.Commands.DeleteUser;
 using backend.User.ApplicationLayer.Commands.ReplaceUser;

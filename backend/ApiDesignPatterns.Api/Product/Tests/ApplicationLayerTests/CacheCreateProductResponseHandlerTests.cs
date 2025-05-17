@@ -7,6 +7,7 @@ using backend.Product.Controllers.Product;
 using backend.Shared;
 using backend.Shared.Caching;
 using backend.Shared.CommandHandler;
+using backend.Shared.Utility;
 using FluentAssertions;
 using Xunit;
 

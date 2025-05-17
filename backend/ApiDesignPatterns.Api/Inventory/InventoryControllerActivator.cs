@@ -24,6 +24,7 @@ using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
+using backend.Shared.Utility;
 using backend.User.DomainModels;
 using backend.User.InfrastructureLayer.Database.UserView;
 using backend.User.Services;

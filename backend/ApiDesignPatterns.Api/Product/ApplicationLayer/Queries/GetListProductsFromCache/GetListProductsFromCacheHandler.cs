@@ -6,6 +6,7 @@ using backend.Product.InfrastructureLayer.Cache;
 using backend.Shared;
 using backend.Shared.Caching;
 using backend.Shared.QueryHandler;
+using backend.Shared.Utility;
 
 namespace backend.Product.ApplicationLayer.Queries.GetListProductsFromCache;
 

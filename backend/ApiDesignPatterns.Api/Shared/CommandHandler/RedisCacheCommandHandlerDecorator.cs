@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using backend.Shared.Caching;
+using backend.Shared.Exceptions;
 using StackExchange.Redis;
 
 namespace backend.Shared.CommandHandler;

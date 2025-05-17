@@ -35,6 +35,7 @@ using backend.Shared.FieldMask;
 using backend.Shared.Infrastructure;
 using backend.Shared.QueryHandler;
 using backend.Shared.QueryProcessor;
+using backend.Shared.Utility;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
