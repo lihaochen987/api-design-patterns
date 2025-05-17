@@ -5,7 +5,7 @@ public class AddressViewQueries
     public const string GetAddressView = """
                                          SELECT
                                              address_id AS Id,
-                                             supplier_id AS SupplierId,
+                                             user_id AS UserId,
                                              full_address AS FullAddress
                                          FROM addresses_view
                                          WHERE address_id = @Id;
@@ -14,7 +14,7 @@ public class AddressViewQueries
     public const string ListAddressBase = """
                                             SELECT
                                                 address_id AS Id,
-                                                supplier_id AS SupplierId,
+                                                user_id AS UserId,
                                                 full_address AS FullAddress
                                             FROM addresses_view
                                             WHERE 1=1

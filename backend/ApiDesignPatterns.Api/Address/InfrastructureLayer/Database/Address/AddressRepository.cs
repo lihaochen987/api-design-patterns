@@ -27,7 +27,7 @@ public class AddressRepository(IDbConnection dbConnection) : IAddressRepository
             new
             {
                 address.Id,
-                address.SupplierId,
+                address.UserId,
                 address.Street,
                 address.City,
                 address.PostalCode,

@@ -8,7 +8,7 @@ namespace backend.Address.DomainModels;
 public record Address
 {
     public required long Id { get; init; }
-    public required long SupplierId { get; init; }
+    public required long UserId { get; init; }
     public required Street Street { get; init; }
     public required City City { get; init; }
     public required PostalCode PostalCode { get; init; }

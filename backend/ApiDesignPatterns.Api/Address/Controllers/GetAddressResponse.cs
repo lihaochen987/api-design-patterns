@@ -8,6 +8,6 @@ namespace backend.Address.Controllers;
 public class GetAddressResponse
 {
     [Required] public required string Id { get; init; }
-    [Required] public required string SupplierId { get; init; }
+    [Required] public required string UserId { get; init; }
     [Required] public required string FullAddress { get; init; }
 }

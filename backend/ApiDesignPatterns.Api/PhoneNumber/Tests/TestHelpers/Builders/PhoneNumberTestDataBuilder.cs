@@ -4,7 +4,6 @@
 using AutoFixture;
 using backend.PhoneNumber.DomainModels.ValueObjects;
 using backend.PhoneNumber.Tests.TestHelpers.SpecimenBuilders;
-using backend.Supplier.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.PhoneNumber.Tests.TestHelpers.Builders;
 

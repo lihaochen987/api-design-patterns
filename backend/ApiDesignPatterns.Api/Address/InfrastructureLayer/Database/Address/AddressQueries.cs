@@ -8,7 +8,7 @@ public class AddressQueries
     public const string GetAddress = """
                                      SELECT
                                          address_id as Id,
-                                         supplier_id as SupplierId,
+                                         user_id as UserId,
                                          address_street as Street,
                                          address_city as City,
                                          address_postal_code as PostalCode,
@@ -25,7 +25,7 @@ public class AddressQueries
     public const string UpdateAddress = """
                                                 UPDATE addresses
                                                 SET
-                                                    supplier_id = @SupplierId,
+                                                    user_id = @UserId,
                                                     address_street = @Street,
                                                     address_city = @City,
                                                     address_postal_code = @PostalCode,

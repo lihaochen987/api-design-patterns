@@ -13,8 +13,8 @@ using backend.Review;
 using backend.Review.DomainModels.ValueObjects;
 using backend.Shared;
 using backend.Shared.ControllerActivators;
-using backend.Supplier;
-using backend.Supplier.DomainModels.ValueObjects;
+using backend.User;
+using backend.User.DomainModels.ValueObjects;
 using Dapper;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Npgsql;
@@ -44,7 +44,7 @@ builder.Services.AddSingleton<BaseControllerActivator>(
 builder.Services.AddSingleton<BaseControllerActivator>(
     new ReviewControllerActivator(builder.Configuration, loggerFactory));
 builder.Services.AddSingleton<BaseControllerActivator>(
-    new SupplierControllerActivator(builder.Configuration, loggerFactory));
+    new UserControllerActivator(builder.Configuration, loggerFactory));
 builder.Services.AddSingleton<BaseControllerActivator>(
     new InventoryControllerActivator(builder.Configuration, loggerFactory));
 builder.Services.AddSingleton<BaseControllerActivator>(
@@ -94,7 +94,7 @@ SqlMapper.AddTypeHandler(new QuantityTypeHandler());
 SqlMapper.AddTypeHandler(new RatingTypeHandler());
 SqlMapper.AddTypeHandler(new TextTypeHandler());
 
-// Supplier
+// User
 SqlMapper.AddTypeHandler(new FirstNameTypeHandler());
 SqlMapper.AddTypeHandler(new LastNameTypeHandler());
 SqlMapper.AddTypeHandler(new EmailTypeHandler());

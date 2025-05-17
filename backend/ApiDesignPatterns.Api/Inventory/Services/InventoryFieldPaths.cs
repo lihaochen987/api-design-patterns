@@ -9,7 +9,7 @@ public class InventoryFieldPaths
     [
         "*",
         "id",
-        "supplierid",
+        "userid",
         "productid",
         "quantity",
         "restockdate"

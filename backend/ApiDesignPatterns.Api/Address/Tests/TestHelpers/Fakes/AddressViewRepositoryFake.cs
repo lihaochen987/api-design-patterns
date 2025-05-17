@@ -12,10 +12,10 @@ namespace backend.Address.Tests.TestHelpers.Fakes;
 public class AddressViewRepositoryFake(PaginateService<AddressView> paginateService)
     : Collection<AddressView>, IAddressViewRepository
 {
-    public void AddAddressView(long supplierId, string fullAddress)
+    public void AddAddressView(long userId, string fullAddress)
     {
         var addressView = new AddressViewTestDataBuilder()
-            .WithSupplierId(supplierId)
+            .WithUserId(userId)
             .WithFullAddress(fullAddress)
             .Build();
         Add(addressView);
@@ -40,10 +40,10 @@ public class AddressViewRepositoryFake(PaginateService<AddressView> paginateServ
         // Custom filter
         if (!string.IsNullOrEmpty(filter))
         {
-            if (filter.Contains("SupplierId =="))
+            if (filter.Contains("UserId =="))
             {
                 string value = filter.Split("==")[1].Trim();
-                query = query.Where(s => s.SupplierId == decimal.Parse(value));
+                query = query.Where(s => s.UserId == decimal.Parse(value));
             }
             else if (filter.Contains("FullAddress.Contains("))
             {

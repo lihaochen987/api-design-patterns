@@ -12,7 +12,7 @@ public class AddressColumnMapper : IColumnMapper
         return propertyName switch
         {
             "Id" => "address_id",
-            "SupplierId" => "supplier_id",
+            "UserId" => "user_id",
             "FullAddress" => "full_address",
             _ => throw new ArgumentException($"Invalid property name: {propertyName}")
         };

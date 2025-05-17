@@ -7,7 +7,7 @@ namespace backend.Inventory.Controllers;
 
 public class UpdateInventoryResponse
 {
-    [Required] public required string SupplierId { get; init; }
+    [Required] public required string UserId { get; init; }
     [Required] public required string ProductId { get; init; }
     [Required] public required string Quantity { get; init; }
     public string? RestockDate { get; init; }

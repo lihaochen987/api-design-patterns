@@ -6,7 +6,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace backend.Shared;
 
-public abstract class RequireNonNullablePropertiesSchemaFilter : ISchemaFilter
+public class RequireNonNullablePropertiesSchemaFilter : ISchemaFilter
 {
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)
     {

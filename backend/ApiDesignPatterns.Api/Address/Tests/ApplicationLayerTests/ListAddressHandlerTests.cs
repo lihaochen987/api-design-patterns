@@ -13,10 +13,10 @@ public class ListAddressHandlerTests : ListAddressHandlerTestBase
     [Fact]
     public async Task Handle_ShouldReturnAddressesAndNextPageToken()
     {
-        const long supplierId = 123;
-        var query = new ListAddressQuery { PageToken = null, Filter = "SupplierId == 123", MaxPageSize = 5 };
-        Repository.AddAddressView(supplierId, Fixture.Create<string>());
-        Repository.AddAddressView(supplierId, Fixture.Create<string>());
+        const long userId = 123;
+        var query = new ListAddressQuery { PageToken = null, Filter = "UserId == 123", MaxPageSize = 5 };
+        Repository.AddAddressView(userId, Fixture.Create<string>());
+        Repository.AddAddressView(userId, Fixture.Create<string>());
         var sut = ListAddressHandler();
 
         var result = await sut.Handle(query);
@@ -24,7 +24,7 @@ public class ListAddressHandlerTests : ListAddressHandlerTestBase
         result.Should().NotBeNull();
         result.Address.Should().HaveCount(2);
         result.NextPageToken.Should().BeNull();
-        result.Address.Should().OnlyContain(a => a.SupplierId == supplierId);
+        result.Address.Should().OnlyContain(a => a.UserId == userId);
     }
 
     [Fact]

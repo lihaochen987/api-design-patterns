@@ -8,7 +8,7 @@ namespace backend.Inventory.DomainModels;
 public record Inventory
 {
     public long Id { get; init; }
-    public long SupplierId { get; init; }
+    public long UserId { get; init; }
     public long ProductId { get; init; }
     public required Quantity Quantity { get; init; }
     public DateTimeOffset? RestockDate { get; init; }

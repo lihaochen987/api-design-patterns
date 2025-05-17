@@ -18,7 +18,7 @@ public class UpdateAddressHandlerTests : UpdateAddressHandlerTestBase
     {
         DomainModels.Address address = new AddressTestDataBuilder()
             .WithId(3)
-            .WithSupplierId(42)
+            .WithUserId(42)
             .WithStreet(new Street("123 Original Street"))
             .WithCity(new City("Original City"))
             .WithPostalCode(new PostalCode("12345"))
@@ -28,19 +28,19 @@ public class UpdateAddressHandlerTests : UpdateAddressHandlerTestBase
         Repository.IsDirty = false;
         UpdateAddressRequest request = new()
         {
-            SupplierId = 55,
+            UserId = 55,
             Street = "456 Updated Street",
             City = "Updated City",
             PostalCode = "54321",
             Country = "Updated Country",
-            FieldMask = ["supplierid", "street", "city", "postalcode", "country"]
+            FieldMask = ["userid", "street", "city", "postalcode", "country"]
         };
         ICommandHandler<UpdateAddressCommand> sut = UpdateAddressService();
 
         await sut.Handle(new UpdateAddressCommand { Address = address, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().SupplierId.Should().Be(request.SupplierId);
+        Repository.First().UserId.Should().Be(request.UserId);
         Repository.First().Street.Value.Should().Be(request.Street);
         Repository.First().City.Value.Should().Be(request.City);
         Repository.First().PostalCode.Value.Should().Be(request.PostalCode);
@@ -52,7 +52,7 @@ public class UpdateAddressHandlerTests : UpdateAddressHandlerTestBase
     {
         DomainModels.Address address = new AddressTestDataBuilder()
             .WithId(5)
-            .WithSupplierId(42)
+            .WithUserId(42)
             .WithStreet(new Street("123 Original Street"))
             .WithPostalCode(new PostalCode("12345"))
             .Build();
@@ -60,7 +60,7 @@ public class UpdateAddressHandlerTests : UpdateAddressHandlerTestBase
         Repository.IsDirty = false;
         UpdateAddressRequest request = new()
         {
-            SupplierId = 55,
+            UserId = 55,
             Street = "456 Updated Street",
             City = "Updated City",
             PostalCode = "54321",
@@ -72,7 +72,7 @@ public class UpdateAddressHandlerTests : UpdateAddressHandlerTestBase
         await sut.Handle(new UpdateAddressCommand { Address = address, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().SupplierId.Should().Be(address.SupplierId);
+        Repository.First().UserId.Should().Be(address.UserId);
         Repository.First().Street.Value.Should().Be(request.Street);
         Repository.First().City.Should().Be(address.City);
         Repository.First().PostalCode.Value.Should().Be(request.PostalCode);
@@ -84,7 +84,7 @@ public class UpdateAddressHandlerTests : UpdateAddressHandlerTestBase
     {
         DomainModels.Address address = new AddressTestDataBuilder()
             .WithId(7)
-            .WithSupplierId(42)
+            .WithUserId(42)
             .WithStreet(new Street("123 Original Street"))
             .WithCity(new City("Original City"))
             .WithPostalCode(new PostalCode("12345"))
@@ -94,19 +94,19 @@ public class UpdateAddressHandlerTests : UpdateAddressHandlerTestBase
         Repository.IsDirty = false;
         UpdateAddressRequest request = new()
         {
-            SupplierId = null,
+            UserId = null,
             Street = null,
             City = null,
             PostalCode = null,
             Country = null,
-            FieldMask = ["supplierid", "street", "city", "postalcode", "country"]
+            FieldMask = ["userid", "street", "city", "postalcode", "country"]
         };
         ICommandHandler<UpdateAddressCommand> sut = UpdateAddressService();
 
         await sut.Handle(new UpdateAddressCommand { Address = address, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().SupplierId.Should().Be(42);
+        Repository.First().UserId.Should().Be(42);
         Repository.First().Street.Value.Should().Be("123 Original Street");
         Repository.First().City.Value.Should().Be("Original City");
         Repository.First().PostalCode.Value.Should().Be("12345");

@@ -8,7 +8,7 @@ namespace backend.PhoneNumber.DomainModels;
 public record PhoneNumber
 {
     public required long Id { get; init; }
-    public long? SupplierId { get; init; }
+    public long? UserId { get; init; }
     public required CountryCode CountryCode { get; init; }
     public required AreaCode AreaCode { get; init; }
     public required PhoneDigits Number { get; init; }

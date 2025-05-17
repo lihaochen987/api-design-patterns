@@ -13,7 +13,7 @@ public class InventoryRepository(IDbConnection dbConnection) : IInventoryReposit
         await dbConnection.ExecuteAsync(InventoryQueries.CreateInventory,
             new
             {
-                inventory.SupplierId,
+                inventory.UserId,
                 inventory.ProductId,
                 Quantity = inventory.Quantity.Value,
                 inventory.RestockDate
@@ -26,11 +26,11 @@ public class InventoryRepository(IDbConnection dbConnection) : IInventoryReposit
             new { Id = id });
     }
 
-    public async Task<DomainModels.Inventory?> GetInventoryByProductAndSupplierAsync(long productId, long supplierId)
+    public async Task<DomainModels.Inventory?> GetInventoryByProductAndUserAsync(long productId, long userId)
     {
         return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.Inventory>(
-            InventoryQueries.GetInventoryByProductAndSupplier,
-            new { ProductId = productId, SupplierId = supplierId });
+            InventoryQueries.GetInventoryByProductAndUser,
+            new { ProductId = productId, UserId = userId });
     }
 
     public async Task UpdateInventoryAsync(DomainModels.Inventory inventory)

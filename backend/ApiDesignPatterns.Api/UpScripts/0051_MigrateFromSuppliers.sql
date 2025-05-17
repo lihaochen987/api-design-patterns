@@ -28,6 +28,16 @@ $$
         WHERE user_id IS NULL
           AND supplier_id IS NOT NULL;
 
+        UPDATE phone_numbers
+        SET user_id = supplier_id
+        WHERE user_id IS NULL
+          AND supplier_id IS NOT NULL;
+
+        UPDATE inventory
+        SET user_id = supplier_id
+        WHERE user_id IS NULL
+          AND supplier_id IS NOT NULL;
+
         PERFORM setval(
                    pg_get_serial_sequence('users', 'user_id'),
                    COALESCE((SELECT MAX(user_id) FROM users), 0) + 1,

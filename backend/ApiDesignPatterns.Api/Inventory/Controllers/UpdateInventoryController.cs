@@ -20,7 +20,7 @@ public class UpdateInventoryController(
     : ControllerBase
 {
     [HttpPatch("{id:long}")]
-    [SwaggerOperation(Summary = "Update Inventory association between a Supplier and a Product", Tags = ["Inventory"])]
+    [SwaggerOperation(Summary = "Update Inventory association between a User and a Product", Tags = ["Inventory"])]
     [ProducesResponseType(typeof(UpdateInventoryResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UpdateInventoryResponse>> UpdateInventory(

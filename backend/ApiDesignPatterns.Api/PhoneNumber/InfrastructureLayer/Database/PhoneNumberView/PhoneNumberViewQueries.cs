@@ -8,7 +8,7 @@ public class PhoneNumberViewQueries
     public const string GetPhoneNumberView = """
                                              SELECT
                                                  phone_number_id AS Id,
-                                                 supplier_id AS SupplierId,
+                                                 user_id AS UserId,
                                                  phone_number AS PhoneNumber
                                              FROM phone_numbers_view
                                              WHERE phone_number_id = @Id;

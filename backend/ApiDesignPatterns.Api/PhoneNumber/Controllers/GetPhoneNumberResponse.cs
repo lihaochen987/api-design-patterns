@@ -8,6 +8,6 @@ namespace backend.PhoneNumber.Controllers;
 public record GetPhoneNumberResponse
 {
     [Required] public required string Id { get; init; }
-    [Required] public required string SupplierId { get; init; }
+    [Required] public required string UserId { get; init; }
     [Required] public required string PhoneNumber { get; init; }
 }

@@ -8,7 +8,7 @@ public static class InventoryViewQueries
     public const string GetInventoryView = """
                                         SELECT
                                             inventory_id AS Id,
-                                            supplier_id AS SupplierId,
+                                            user_id AS UserId,
                                             product_id AS ProductId,
                                             inventory_quantity AS Quantity,
                                             inventory_restock_date AS RestockDate
@@ -19,7 +19,7 @@ public static class InventoryViewQueries
     public const string ListInventoryBase = """
                                             SELECT
                                                 inventory_id AS Id,
-                                                supplier_id AS SupplierId,
+                                                user_id AS UserId,
                                                 product_id AS ProductId,
                                                 inventory_quantity AS Quantity,
                                                 inventory_restock_date AS RestockDate

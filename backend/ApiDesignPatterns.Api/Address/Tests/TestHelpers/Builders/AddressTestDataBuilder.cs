@@ -11,7 +11,7 @@ public class AddressTestDataBuilder
 {
     private readonly Fixture _fixture = new();
     private long _id;
-    private long _supplierId;
+    private long _userId;
     private Street _street;
     private City _city;
     private PostalCode _postalCode;
@@ -24,7 +24,7 @@ public class AddressTestDataBuilder
         _fixture.Customizations.Add(new CountrySpecimenBuilder());
 
         _id = _fixture.Create<long>();
-        _supplierId = _fixture.Create<long>();
+        _userId = _fixture.Create<long>();
         _street = _fixture.Create<Street>();
         _city = _fixture.Create<City>();
         _postalCode = _fixture.Create<PostalCode>();
@@ -37,9 +37,9 @@ public class AddressTestDataBuilder
         return this;
     }
 
-    public AddressTestDataBuilder WithSupplierId(long supplierId)
+    public AddressTestDataBuilder WithUserId(long userId)
     {
-        _supplierId = supplierId;
+        _userId = userId;
         return this;
     }
 
@@ -72,7 +72,7 @@ public class AddressTestDataBuilder
         return new DomainModels.Address
         {
             Id = _id,
-            SupplierId = _supplierId,
+            UserId = _userId,
             Street = _street,
             City = _city,
             PostalCode = _postalCode,

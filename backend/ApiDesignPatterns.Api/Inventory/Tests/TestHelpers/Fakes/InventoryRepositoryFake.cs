@@ -33,10 +33,10 @@ public class InventoryRepositoryFake : Collection<DomainModels.Inventory>, IInve
         return Task.CompletedTask;
     }
 
-    public Task<DomainModels.Inventory?> GetInventoryByProductAndSupplierAsync(long productId, long supplierId)
+    public Task<DomainModels.Inventory?> GetInventoryByProductAndUserAsync(long productId, long userId)
     {
         DomainModels.Inventory? inventory =
-            this.FirstOrDefault(r => r.ProductId == productId && r.SupplierId == supplierId);
+            this.FirstOrDefault(r => r.ProductId == productId && r.UserId == userId);
         return Task.FromResult(inventory);
     }
 

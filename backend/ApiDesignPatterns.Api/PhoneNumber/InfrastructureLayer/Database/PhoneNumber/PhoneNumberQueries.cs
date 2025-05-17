@@ -8,7 +8,7 @@ public class PhoneNumberQueries
     public const string GetPhoneNumber = """
                                              SELECT
                                                  phone_number_id AS Id,
-                                                 supplier_id AS SupplierId,
+                                                 user_id AS UserId,
                                                  phone_number_country_code AS CountryCode,
                                                  phone_number_area_code AS AreaCode,
                                                  phone_number_digits AS Number

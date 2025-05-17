@@ -9,7 +9,7 @@ namespace backend.Inventory.Tests.TestHelpers.Builders;
 public class InventoryViewTestDataBuilder
 {
     private long _id;
-    private long _supplierId;
+    private long _userId;
     private long _productId;
     private decimal _quantity;
     private DateTimeOffset? _restockDate;
@@ -19,7 +19,7 @@ public class InventoryViewTestDataBuilder
         Fixture fixture = new();
 
         _id = fixture.Create<long>();
-        _supplierId = fixture.Create<long>();
+        _userId = fixture.Create<long>();
         _productId = fixture.Create<long>();
         _quantity = fixture.Create<decimal>();
         _restockDate = fixture.Create<DateTimeOffset?>();
@@ -31,9 +31,9 @@ public class InventoryViewTestDataBuilder
         return this;
     }
 
-    public InventoryViewTestDataBuilder WithSupplierId(long supplierId)
+    public InventoryViewTestDataBuilder WithUserId(long userId)
     {
-        _supplierId = supplierId;
+        _userId = userId;
         return this;
     }
 
@@ -65,7 +65,7 @@ public class InventoryViewTestDataBuilder
         return new InventoryView
         {
             Id = _id,
-            SupplierId = _supplierId,
+            UserId = _userId,
             ProductId = _productId,
             Quantity = _quantity,
             RestockDate = _restockDate

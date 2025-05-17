@@ -7,6 +7,6 @@ namespace backend.Address.DomainModels;
 
 public record AddressView : Identifier
 {
-    public long SupplierId { get; init; }
+    public long UserId { get; init; }
     public required string FullAddress { get; init; }
 }

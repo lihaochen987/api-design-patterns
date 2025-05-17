@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
-using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
+using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndUser;
 using backend.Inventory.Controllers;
 using backend.Inventory.Tests.TestHelpers.Builders;
 using FluentAssertions;
@@ -20,7 +20,7 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
         var inventory = new InventoryTestDataBuilder().Build();
         var request = new CreateInventoryRequest
         {
-            SupplierId = inventory.SupplierId,
+            UserId = inventory.UserId,
             ProductId = inventory.ProductId,
             Quantity = inventory.Quantity.Value,
             RestockDate = inventory.RestockDate
@@ -41,14 +41,14 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
         var existingInventory = new InventoryTestDataBuilder().Build();
         var request = new CreateInventoryRequest
         {
-            SupplierId = existingInventory.SupplierId,
+            UserId = existingInventory.UserId,
             ProductId = existingInventory.ProductId,
             Quantity = existingInventory.Quantity.Value,
             RestockDate = existingInventory.RestockDate
         };
-        Mock.Get(GetInventoryByProductAndSupplier)
-            .Setup(h => h.Handle(It.Is<GetInventoryByProductAndSupplierQuery>(q =>
-                q.ProductId == request.ProductId && q.SupplierId == request.SupplierId)))
+        Mock.Get(GetInventoryByProductAndUser)
+            .Setup(h => h.Handle(It.Is<GetInventoryByProductAndUserQuery>(q =>
+                q.ProductId == request.ProductId && q.UserId == request.UserId)))
             .ReturnsAsync(existingInventory);
         CreateInventoryController sut = GetCreateInventoryController();
 
@@ -64,7 +64,7 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
         var inventory = new InventoryTestDataBuilder().Build();
         var request = new CreateInventoryRequest
         {
-            SupplierId = inventory.SupplierId,
+            UserId = inventory.UserId,
             ProductId = inventory.ProductId,
             Quantity = inventory.Quantity.Value,
             RestockDate = inventory.RestockDate

@@ -12,12 +12,12 @@ public class UpdateAddressHandler(IAddressRepository repository) : ICommandHandl
 {
     public async Task Handle(UpdateAddressCommand command)
     {
-        (long supplierId, Street street, City city, PostalCode postalCode, Country country) =
+        (long userId, Street street, City city, PostalCode postalCode, Country country) =
             GetUpdatedAddressValues(command.Request, command.Address);
         var address = new DomainModels.Address
         {
             Id = command.Address.Id,
-            SupplierId = supplierId,
+            UserId = userId,
             Street = street,
             City = city,
             PostalCode = postalCode,
@@ -26,12 +26,12 @@ public class UpdateAddressHandler(IAddressRepository repository) : ICommandHandl
         await repository.UpdateAddressAsync(address);
     }
 
-    private static (long supplierId, Street street, City city, PostalCode postalCode, Country country)
+    private static (long userId, Street street, City city, PostalCode postalCode, Country country)
         GetUpdatedAddressValues(UpdateAddressRequest request, DomainModels.Address address)
     {
-        long supplierId = request.FieldMask.Contains("supplierid") && request.SupplierId != null
-            ? request.SupplierId.Value
-            : address.SupplierId;
+        long userId = request.FieldMask.Contains("userid") && request.UserId != null
+            ? request.UserId.Value
+            : address.UserId;
 
         Street street = request.FieldMask.Contains("street") && request.Street != null
             ? new Street(request.Street)
@@ -48,6 +48,6 @@ public class UpdateAddressHandler(IAddressRepository repository) : ICommandHandl
         Country country = request.FieldMask.Contains("country") && request.Country != null
             ? new Country(request.Country)
             : address.Country;
-        return (supplierId, street, city, postalCode, country);
+        return (userId, street, city, postalCode, country);
     }
 }

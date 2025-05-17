@@ -10,19 +10,19 @@ public class AddressViewTestDataBuilder
 {
     private readonly Fixture _fixture = new();
     private long _id;
-    private long _supplierId;
+    private long _userId;
     private string _fullAddress;
 
     public AddressViewTestDataBuilder()
     {
         _id = _fixture.Create<long>();
-        _supplierId = _fixture.Create<long>();
+        _userId = _fixture.Create<long>();
         _fullAddress = _fixture.Create<string>();
     }
 
-    public AddressViewTestDataBuilder WithSupplierId(long supplierId)
+    public AddressViewTestDataBuilder WithUserId(long userId)
     {
-        _supplierId = supplierId;
+        _userId = userId;
         return this;
     }
 
@@ -34,6 +34,6 @@ public class AddressViewTestDataBuilder
 
     public AddressView Build()
     {
-        return new AddressView { Id = _id, SupplierId = _supplierId, FullAddress = _fullAddress };
+        return new AddressView { Id = _id, UserId = _userId, FullAddress = _fullAddress };
     }
 }

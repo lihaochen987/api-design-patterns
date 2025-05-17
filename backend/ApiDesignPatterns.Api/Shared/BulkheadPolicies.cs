@@ -27,10 +27,10 @@ public static class BulkheadPolicies
     public static readonly AsyncBulkheadPolicy ReviewWrite = Policy
         .BulkheadAsync(maxParallelization: 4, maxQueuingActions: 20);
 
-    public static readonly AsyncBulkheadPolicy SupplierRead = Policy
+    public static readonly AsyncBulkheadPolicy UserRead = Policy
         .BulkheadAsync(maxParallelization: 12, maxQueuingActions: 60);
 
-    public static readonly AsyncBulkheadPolicy SupplierWrite = Policy
+    public static readonly AsyncBulkheadPolicy UserWrite = Policy
         .BulkheadAsync(maxParallelization: 4, maxQueuingActions: 20);
 
     public static readonly AsyncBulkheadPolicy PhoneNumberRead = Policy

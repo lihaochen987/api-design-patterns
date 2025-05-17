@@ -2,7 +2,7 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
-using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
+using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndUser;
 using backend.Inventory.Controllers;
 using backend.Inventory.Services;
 using backend.Shared.CommandHandler;
@@ -20,9 +20,9 @@ public abstract class CreateInventoryControllerTestBase
     protected readonly ICommandHandler<CreateInventoryCommand> CreateInventory =
         Mock.Of<ICommandHandler<CreateInventoryCommand>>();
 
-    protected readonly IAsyncQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>
-        GetInventoryByProductAndSupplier =
-            Mock.Of<IAsyncQueryHandler<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>>();
+    protected readonly IAsyncQueryHandler<GetInventoryByProductAndUserQuery, DomainModels.Inventory?>
+        GetInventoryByProductAndUser =
+            Mock.Of<IAsyncQueryHandler<GetInventoryByProductAndUserQuery, DomainModels.Inventory?>>();
 
     protected CreateInventoryControllerTestBase()
     {
@@ -33,6 +33,6 @@ public abstract class CreateInventoryControllerTestBase
 
     protected CreateInventoryController GetCreateInventoryController()
     {
-        return new CreateInventoryController(CreateInventory, GetInventoryByProductAndSupplier, Mapper);
+        return new CreateInventoryController(CreateInventory, GetInventoryByProductAndUser, Mapper);
     }
 }

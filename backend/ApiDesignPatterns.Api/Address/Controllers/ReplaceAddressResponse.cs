@@ -8,7 +8,7 @@ namespace backend.Address.Controllers;
 public class ReplaceAddressResponse
 {
     [Required] public required string Id { get; init; }
-    [Required] public required string SupplierId { get; init; }
+    [Required] public required string UserId { get; init; }
     [Required] public required string Street { get; init; }
     [Required] public required string City { get; init; }
     [Required] public required string PostalCode { get; init; }

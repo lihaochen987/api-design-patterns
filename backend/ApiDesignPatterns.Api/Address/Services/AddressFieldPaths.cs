@@ -9,7 +9,7 @@ public class AddressFieldPaths
     [
         "*",
         "id",
-        "supplierid",
+        "userid",
         "fulladdress"
     ];
 }

@@ -7,12 +7,12 @@ public class InventoryQueries
 {
     public const string CreateInventory = """
                                                   INSERT INTO inventory (
-                                                      supplier_id,
+                                                      user_id,
                                                       product_id,
                                                       inventory_quantity,
                                                       inventory_restock_date)
                                                   VALUES (
-                                                      @SupplierId,
+                                                      @UserId,
                                                       @ProductId,
                                                       @Quantity,
                                                       @RestockDate
@@ -28,7 +28,7 @@ public class InventoryQueries
     public const string GetInventoryById = """
                                            SELECT
                                                inventory_id AS Id,
-                                               supplier_id AS SupplierId,
+                                               user_id AS UserId,
                                                product_id AS ProductId,
                                                inventory_quantity AS Quantity,
                                                inventory_restock_date AS RestockDate
@@ -36,15 +36,15 @@ public class InventoryQueries
                                            WHERE inventory_id = @Id;
                                            """;
 
-    public const string GetInventoryByProductAndSupplier = """
+    public const string GetInventoryByProductAndUser = """
                                                            SELECT
                                                                inventory_id AS Id,
-                                                               supplier_id AS SupplierId,
+                                                               user_id AS UserId,
                                                                product_id AS ProductId,
                                                                inventory_quantity AS Quantity,
                                                                inventory_restock_date AS RestockDate
                                                            FROM inventory
-                                                           WHERE supplier_id = @SupplierId AND product_id = @ProductId;
+                                                           WHERE user_id = @UserId AND product_id = @ProductId;
                                                            """;
 
     public const string UpdateInventory = """

@@ -5,9 +5,9 @@ using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
 using backend.Inventory.ApplicationLayer.Commands.DeleteInventory;
 using backend.Inventory.ApplicationLayer.Commands.UpdateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
-using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndSupplier;
+using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndUser;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
-using backend.Inventory.ApplicationLayer.Queries.GetSuppliersByIds;
+using backend.Inventory.ApplicationLayer.Queries.GetUsersByIds;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
@@ -24,9 +24,9 @@ using backend.Shared.CommandHandler;
 using backend.Shared.ControllerActivators;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
-using backend.Supplier.DomainModels;
-using backend.Supplier.InfrastructureLayer.Database.SupplierView;
-using backend.Supplier.Services;
+using backend.User.DomainModels;
+using backend.User.InfrastructureLayer.Database.UserView;
+using backend.User.Services;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using IMapper = MapsterMapper.IMapper;
@@ -36,8 +36,8 @@ namespace backend.Inventory;
 
 public class InventoryControllerActivator : BaseControllerActivator
 {
-    private readonly PaginateService<SupplierView> _supplierPaginateService;
-    private readonly SqlFilterBuilder _supplierSqlFilterBuilder;
+    private readonly PaginateService<UserView> _userPaginateService;
+    private readonly SqlFilterBuilder _userSqlFilterBuilder;
     private readonly PaginateService<InventoryView> _inventoryViewPaginateService;
     private readonly SqlFilterBuilder _inventorySqlFilterBuilder;
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory;
@@ -60,17 +60,17 @@ public class InventoryControllerActivator : BaseControllerActivator
         InventoryColumnMapper inventoryColumnMapper = new();
         _inventorySqlFilterBuilder = new SqlFilterBuilder(inventoryColumnMapper);
 
-        _supplierPaginateService = new PaginateService<SupplierView>();
+        _userPaginateService = new PaginateService<UserView>();
 
-        SupplierColumnMapper supplierColumnMapper = new();
-        _supplierSqlFilterBuilder = new SqlFilterBuilder(supplierColumnMapper);
+        UserColumnMapper userColumnMapper = new();
+        _userSqlFilterBuilder = new SqlFilterBuilder(userColumnMapper);
 
         ProductColumnMapper productColumnMapper = new();
         _productSqlFilterBuilder = new SqlFilterBuilder(productColumnMapper);
 
         var config = new TypeAdapterConfig();
         config.RegisterProductMappings();
-        config.RegisterSupplierMappings();
+        config.RegisterUserMappings();
         config.RegisterInventoryMappings();
         _mapper = new Mapper(config);
     }
@@ -99,10 +99,10 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            // GetByProductAndSupplier handler
-            var getInventoryByProductAndSupplier =
-                new QueryDecoratorBuilder<GetInventoryByProductAndSupplierQuery, DomainModels.Inventory?>(
-                        new GetInventoryByProductAndSupplierHandler(repository),
+            // GetByProductAndUser handler
+            var getInventoryByProductAndUser =
+                new QueryDecoratorBuilder<GetInventoryByProductAndUserQuery, DomainModels.Inventory?>(
+                        new GetInventoryByProductAndUserHandler(repository),
                         _loggerFactory,
                         dbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
@@ -116,7 +116,7 @@ public class InventoryControllerActivator : BaseControllerActivator
 
             return new CreateInventoryController(
                 createInventoryHandler,
-                getInventoryByProductAndSupplier,
+                getInventoryByProductAndUser,
                 _mapper);
         }
 
@@ -256,7 +256,7 @@ public class InventoryControllerActivator : BaseControllerActivator
                 _mapper);
         }
 
-        if (type == typeof(ListProductSuppliersController))
+        if (type == typeof(ListProductUsersController))
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
@@ -279,33 +279,33 @@ public class InventoryControllerActivator : BaseControllerActivator
                 .WithTransaction()
                 .Build();
 
-            // Transient BatchGetSuppliersByIdsHandler
-            var getSuppliersByIds =
-                new TransientQueryHandler<GetSuppliersByIdsQuery, List<SupplierView>>(
-                    BatchGetSuppliersByIdsFactory);
+            // Transient BatchGetUsersByIdsHandler
+            var getUsersByIds =
+                new TransientQueryHandler<GetUsersByIdsQuery, List<UserView>>(
+                    BatchGetUsersByIdsFactory);
 
-            return new ListProductSuppliersController(
+            return new ListProductUsersController(
                 listInventoryHandler,
-                getSuppliersByIds,
+                getUsersByIds,
                 _mapper);
 
-            IAsyncQueryHandler<GetSuppliersByIdsQuery, List<SupplierView>>
-                BatchGetSuppliersByIdsFactory()
+            IAsyncQueryHandler<GetUsersByIdsQuery, List<UserView>>
+                BatchGetUsersByIdsFactory()
             {
                 var batchGetDbConnection = CreateDbConnection();
                 TrackDisposable(context, batchGetDbConnection);
 
                 var batchGetRepository =
-                    new SupplierViewRepository(dbConnection, _supplierSqlFilterBuilder, _supplierPaginateService);
+                    new UserViewRepository(dbConnection, _userSqlFilterBuilder, _userPaginateService);
 
-                return new QueryDecoratorBuilder<GetSuppliersByIdsQuery, List<SupplierView>>(
-                        new GetSuppliersByIdsHandler(batchGetRepository),
+                return new QueryDecoratorBuilder<GetUsersByIdsQuery, List<UserView>>(
+                        new GetUsersByIdsHandler(batchGetRepository),
                         _loggerFactory,
                         batchGetDbConnection)
                     .WithCircuitBreaker(JitterUtility.AddJitter(TimeSpan.FromSeconds(30)), 3)
                     .WithHandshaking()
                     .WithTimeout(JitterUtility.AddJitter(TimeSpan.FromSeconds(5)))
-                    .WithBulkhead(BulkheadPolicies.SupplierRead)
+                    .WithBulkhead(BulkheadPolicies.UserRead)
                     .WithLogging()
                     .WithValidation()
                     .WithTransaction()
@@ -313,7 +313,7 @@ public class InventoryControllerActivator : BaseControllerActivator
             }
         }
 
-        if (type == typeof(ListSupplierProductsController))
+        if (type == typeof(ListUserProductsController))
         {
             var dbConnection = CreateDbConnection();
             TrackDisposable(context, dbConnection);
@@ -352,7 +352,7 @@ public class InventoryControllerActivator : BaseControllerActivator
                     .WithTransaction()
                     .Build();
 
-            return new ListSupplierProductsController(
+            return new ListUserProductsController(
                 listInventoryHandler,
                 batchGetProductsHandler,
                 _mapper);

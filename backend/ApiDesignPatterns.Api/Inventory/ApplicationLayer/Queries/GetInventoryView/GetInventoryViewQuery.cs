@@ -3,7 +3,6 @@
 
 using backend.Inventory.DomainModels;
 using backend.Shared.QueryHandler;
-using backend.Supplier.DomainModels;
 
 namespace backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
 

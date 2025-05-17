@@ -12,7 +12,7 @@ public class InventoryColumnMapper : IColumnMapper
         return propertyName switch
         {
             "Id" => "inventory_id",
-            "SupplierId" => "supplier_id",
+            "UserId" => "user_id",
             "ProductId" => "product_id",
             "Quantity" => "inventory_quantity",
             "RestockDate" => "inventory_restock_date",

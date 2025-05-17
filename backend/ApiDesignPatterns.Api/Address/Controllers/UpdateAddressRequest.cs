@@ -5,7 +5,7 @@ namespace backend.Address.Controllers;
 
 public class UpdateAddressRequest
 {
-    public long? SupplierId { get; init; }
+    public long? UserId { get; init; }
     public string? Street { get; init; }
     public string? City { get; init; }
     public string? PostalCode { get; init; }

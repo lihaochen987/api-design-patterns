@@ -24,10 +24,10 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
         var inventoryView = new InventoryViewTestDataBuilder()
             .WithId(inventoryId)
             .WithQuantity(100)
-            .WithSupplierId(42)
+            .WithUserId(42)
             .Build();
         var request = Fixture.Build<GetInventoryRequest>()
-            .With(r => r.FieldMask, ["Quantity", "SupplierId"])
+            .With(r => r.FieldMask, ["Quantity", "UserId"])
             .Create();
         Mock
             .Get(MockGetInventoryView)
@@ -68,7 +68,7 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
         var inventoryView = new InventoryViewTestDataBuilder()
             .WithId(inventoryId)
             .WithQuantity(100)
-            .WithSupplierId(42)
+            .WithUserId(42)
             .WithProductId(24)
             .Build();
         var request = Fixture.Build<GetInventoryRequest>()
