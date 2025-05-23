@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-namespace backend.Inventory.Tests.ControllerTests;
+namespace backend.Inventory.Tests;
 
 public class DeleteInventoryControllerTests : DeleteInventoryControllerTestBase
 {
@@ -21,9 +21,7 @@ public class DeleteInventoryControllerTests : DeleteInventoryControllerTestBase
             new InventoryTestDataBuilder().WithId(123L)
                 .Build();
         var request = new DeleteInventoryRequest();
-        Mock.Get(MockGetInventoryByIdHandler)
-            .Setup(svc => svc.Handle(It.Is<GetInventoryByIdQuery>(q => q.Id == inventory.Id)))
-            .ReturnsAsync(inventory);
+        Repository.Add(inventory);
         DeleteInventoryController sut = DeleteInventoryController();
 
         ActionResult result = await sut.DeleteInventory(inventory.Id, request);
@@ -36,9 +34,6 @@ public class DeleteInventoryControllerTests : DeleteInventoryControllerTestBase
     {
         long nonExistentId = Fixture.Create<long>();
         var request = new DeleteInventoryRequest();
-        Mock.Get(MockGetInventoryByIdHandler)
-            .Setup(svc => svc.Handle(It.Is<GetInventoryByIdQuery>(q => q.Id == nonExistentId)))
-            .ReturnsAsync((DomainModels.Inventory?)null);
         DeleteInventoryController sut = DeleteInventoryController();
 
         ActionResult result = await sut.DeleteInventory(nonExistentId, request);

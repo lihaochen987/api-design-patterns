@@ -5,24 +5,23 @@ using AutoFixture;
 using backend.Inventory.ApplicationLayer.Commands.DeleteInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryById;
 using backend.Inventory.Controllers;
+using backend.Inventory.Tests.TestHelpers.Fakes;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Moq;
 
-namespace backend.Inventory.Tests.ControllerTests;
+namespace backend.Inventory.Tests;
 
 public abstract class DeleteInventoryControllerTestBase
 {
     protected readonly Fixture Fixture = new();
 
-    protected readonly IAsyncQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?> MockGetInventoryByIdHandler =
-        Mock.Of<IAsyncQueryHandler<GetInventoryByIdQuery, DomainModels.Inventory?>>();
-
-    protected readonly ICommandHandler<DeleteInventoryCommand> MockDeleteInventoryHandler =
-        Mock.Of<ICommandHandler<DeleteInventoryCommand>>();
+    protected readonly InventoryRepositoryFake Repository = [];
 
     protected DeleteInventoryController DeleteInventoryController()
     {
-        return new DeleteInventoryController(MockGetInventoryByIdHandler, MockDeleteInventoryHandler);
+        var getInventoryByIdHandler = new GetInventoryByIdByIdHandler(Repository);
+        var deleteInventoryHandler = new DeleteInventoryCommandHandler(Repository);
+        return new DeleteInventoryController(getInventoryByIdHandler, deleteInventoryHandler);
     }
 }

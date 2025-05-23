@@ -2,18 +2,16 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Inventory.ApplicationLayer.Queries.GetUsersByIds;
-using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
+using backend.Inventory.Tests.TestHelpers.Builders;
 using backend.User.DomainModels;
 using backend.User.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using Xunit;
 
-namespace backend.Inventory.Tests.ControllerTests;
+namespace backend.Inventory.Tests;
 
 public class ListProductUsersControllerTests : ListProductUsersControllerTestBase
 {
@@ -32,19 +30,8 @@ public class ListProductUsersControllerTests : ListProductUsersControllerTestBas
         }
 
         ListProductUsersRequest request = new() { MaxPageSize = 4 };
-        Mock
-            .Get(MockListInventory)
-            .Setup(svc => svc.Handle(It.Is<ListInventoryQuery>(q =>
-                q.Filter == $"ProductId == {productId}" &&
-                q.MaxPageSize == request.MaxPageSize &&
-                q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedInventory(inventoryViews, null));
-        var userIds = inventoryViews.Select(x => x.UserId).ToList();
-        Mock
-            .Get(MockGetUsersByIds)
-            .Setup(svc => svc.Handle(It.Is<GetUsersByIdsQuery>(q =>
-                q.UserIds.SequenceEqual(userIds))))
-            .ReturnsAsync(userViews);
+        InventoryViewRepository.AddInventoryViews(inventoryViews);
+        UserViewRepository.AddUserViews(userViews);
         ListProductUsersController sut = ListProductUsersController();
 
         var result = await sut.ListProductUsers(request, productId);
@@ -71,22 +58,9 @@ public class ListProductUsersControllerTests : ListProductUsersControllerTestBas
         {
             inventoryViews[i].UserId = userViews[i].Id;
         }
-
         ListProductUsersRequest request = new() { PageToken = "2", MaxPageSize = 2 };
-        Mock
-            .Get(MockListInventory)
-            .Setup(svc => svc.Handle(It.Is<ListInventoryQuery>(q =>
-                q.Filter == $"ProductId == {productId}" &&
-                q.MaxPageSize == request.MaxPageSize &&
-                q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedInventory(inventoryViews, null));
-
-        var userIds = inventoryViews.Select(x => x.UserId).ToList();
-        Mock
-            .Get(MockGetUsersByIds)
-            .Setup(svc => svc.Handle(It.Is<GetUsersByIdsQuery>(q =>
-                q.UserIds.SequenceEqual(userIds))))
-            .ReturnsAsync(userViews);
+        InventoryViewRepository.AddInventoryViews(inventoryViews);
+        UserViewRepository.AddUserViews(userViews);
 
         ListProductUsersController sut = ListProductUsersController();
 
@@ -105,8 +79,11 @@ public class ListProductUsersControllerTests : ListProductUsersControllerTestBas
     public async Task ListProductUsers_ShouldReturnNextPageToken_WhenMoreUsersExist()
     {
         long productId = Fixture.Create<long>();
-        List<InventoryView> inventoryViews =
-            Fixture.Build<InventoryView>().With(x => x.ProductId, productId).CreateMany(2).ToList();
+        var inventoryViews = new InventoryViewTestDataBuilder().CreateMany(2).ToList();
+        foreach (var inventoryView in inventoryViews)
+        {
+            inventoryView.ProductId = productId;
+        }
         List<UserView> userViews = new UserViewTestDataBuilder()
             .CreateMany(2)
             .ToList();
@@ -116,19 +93,8 @@ public class ListProductUsersControllerTests : ListProductUsersControllerTestBas
         }
 
         ListProductUsersRequest request = new() { MaxPageSize = 2 };
-        Mock
-            .Get(MockListInventory)
-            .Setup(svc => svc.Handle(It.Is<ListInventoryQuery>(q =>
-                q.Filter == $"ProductId == {productId}" &&
-                q.MaxPageSize == request.MaxPageSize &&
-                q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedInventory(inventoryViews, "2"));
-        var userIds = inventoryViews.Select(x => x.UserId).ToList();
-        Mock
-            .Get(MockGetUsersByIds)
-            .Setup(svc => svc.Handle(It.Is<GetUsersByIdsQuery>(q =>
-                q.UserIds.SequenceEqual(userIds))))
-            .ReturnsAsync(userViews);
+        InventoryViewRepository.AddInventoryViews(inventoryViews);
+        UserViewRepository.AddUserViews(userViews);
         ListProductUsersController sut = ListProductUsersController();
 
         var result = await sut.ListProductUsers(request, productId);
@@ -139,7 +105,7 @@ public class ListProductUsersControllerTests : ListProductUsersControllerTestBas
         response.Should().NotBeNull();
         var listProductUsersResponse = (ListProductUsersResponse)response.Value!;
         listProductUsersResponse.Results.Count.Should().Be(2);
-        listProductUsersResponse.NextPageToken.Should().BeEquivalentTo("2");
+        listProductUsersResponse.NextPageToken.Should().BeEquivalentTo(null);
     }
 
     [Fact]
@@ -149,19 +115,8 @@ public class ListProductUsersControllerTests : ListProductUsersControllerTestBas
         List<InventoryView> inventoryViews = [];
         List<UserView> userViews = [];
         ListProductUsersRequest request = new() { MaxPageSize = 2 };
-        Mock
-            .Get(MockListInventory)
-            .Setup(svc => svc.Handle(It.Is<ListInventoryQuery>(q =>
-                q.Filter == $"ProductId == {productId}" &&
-                q.MaxPageSize == request.MaxPageSize &&
-                q.PageToken == request.PageToken)))
-            .ReturnsAsync(new PagedInventory(inventoryViews, null));
-        var userIds = inventoryViews.Select(x => x.UserId).ToList();
-        Mock
-            .Get(MockGetUsersByIds)
-            .Setup(svc => svc.Handle(It.Is<GetUsersByIdsQuery>(q =>
-                q.UserIds.SequenceEqual(userIds))))
-            .ReturnsAsync(userViews);
+        InventoryViewRepository.AddInventoryViews(inventoryViews);
+        UserViewRepository.AddUserViews(userViews);
         ListProductUsersController sut = ListProductUsersController();
 
         var result = await sut.ListProductUsers(request, productId);

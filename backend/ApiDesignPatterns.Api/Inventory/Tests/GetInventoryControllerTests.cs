@@ -1,19 +1,19 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using AutoFixture;
 using System.Net;
+using AutoFixture;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
 using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
 using backend.Inventory.Tests.TestHelpers.Builders;
 using backend.Product.Controllers.Product;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using FluentAssertions;
 using Xunit;
 
-namespace backend.Inventory.Tests.ControllerTests;
+namespace backend.Inventory.Tests;
 
 public class GetInventoryControllerTests : GetInventoryControllerTestBase
 {
@@ -29,10 +29,7 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
         var request = Fixture.Build<GetInventoryRequest>()
             .With(r => r.FieldMask, ["Quantity", "UserId"])
             .Create();
-        Mock
-            .Get(MockGetInventoryView)
-            .Setup(service => service.Handle(It.Is<GetInventoryViewQuery>(q => q.Id == inventoryId)))
-            .ReturnsAsync(inventoryView);
+        Repository.Add(inventoryView);
         GetInventoryController sut = GetInventoryController();
 
         ActionResult<GetProductResponse> result = await sut.GetInventory(inventoryId, request);
@@ -50,10 +47,6 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
     {
         long inventoryId = Fixture.Create<long>();
         var request = Fixture.Create<GetInventoryRequest>();
-        Mock
-            .Get(MockGetInventoryView)
-            .Setup(service => service.Handle(It.Is<GetInventoryViewQuery>(q => q.Id == inventoryId)))
-            .ReturnsAsync((InventoryView?)null);
         GetInventoryController sut = GetInventoryController();
 
         ActionResult<GetProductResponse> result = await sut.GetInventory(inventoryId, request);
@@ -74,10 +67,7 @@ public class GetInventoryControllerTests : GetInventoryControllerTestBase
         var request = Fixture.Build<GetInventoryRequest>()
             .With(r => r.FieldMask, ["Quantity"])
             .Create();
-        Mock
-            .Get(MockGetInventoryView)
-            .Setup(service => service.Handle(It.Is<GetInventoryViewQuery>(q => q.Id == inventoryId)))
-            .ReturnsAsync(inventoryView);
+        Repository.Add(inventoryView);
         GetInventoryController sut = GetInventoryController();
 
         ActionResult<GetProductResponse> result = await sut.GetInventory(inventoryId, request);

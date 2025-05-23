@@ -8,7 +8,7 @@ namespace backend.Inventory.DomainModels;
 public record InventoryView : Identifier
 {
     public long UserId { get; set; }
-    public long ProductId { get; init; }
+    public long ProductId { get; set; }
     public decimal Quantity { get; init; }
     public DateTimeOffset? RestockDate { get; init; }
 }

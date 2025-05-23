@@ -2,17 +2,14 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Address.ApplicationLayer.Queries.GetAddressView;
 using backend.Address.Controllers;
-using backend.Address.DomainModels;
 using backend.Address.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace backend.Address.Tests.ControllerTests;
+namespace backend.Address.Tests;
 
 public class GetAddressControllerTests : GetAddressControllerTestBase
 {
@@ -21,9 +18,7 @@ public class GetAddressControllerTests : GetAddressControllerTestBase
     {
         var expectedAddressView = new AddressViewTestDataBuilder().Build();
         var expectedResponse = Mapper.Map<GetAddressResponse>(expectedAddressView);
-        Mock.Get(GetAddressViewHandler)
-            .Setup(h => h.Handle(It.Is<GetAddressViewQuery>(q => q.Id == expectedAddressView.Id)))
-            .ReturnsAsync(expectedAddressView);
+        Repository.Add(expectedAddressView);
         var sut = GetAddressController();
         var request = new GetAddressRequest();
 
@@ -43,9 +38,6 @@ public class GetAddressControllerTests : GetAddressControllerTestBase
     public async Task GetAddress_ReturnsNotFound_WhenAddressDoesNotExist()
     {
         long nonExistentId = Fixture.Create<long>();
-        Mock.Get(GetAddressViewHandler)
-            .Setup(h => h.Handle(It.Is<GetAddressViewQuery>(q => q.Id == nonExistentId)))
-            .ReturnsAsync((AddressView?)null);
         var sut = GetAddressController();
         var request = new GetAddressRequest();
 
@@ -58,8 +50,7 @@ public class GetAddressControllerTests : GetAddressControllerTestBase
     public async Task GetAddress_AppliesFieldMask_WhenFieldMaskIsProvided()
     {
         var addressView = new AddressViewTestDataBuilder().Build();
-        Mock.Get(GetAddressViewHandler).Setup(h => h.Handle(It.IsAny<GetAddressViewQuery>()))
-            .ReturnsAsync(addressView);
+        Repository.Add(addressView);
         var sut = GetAddressController();
         var request = new GetAddressRequest { FieldMask = ["street", "city"] };
 

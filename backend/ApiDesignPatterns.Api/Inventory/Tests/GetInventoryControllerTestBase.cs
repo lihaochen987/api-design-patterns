@@ -6,21 +6,21 @@ using backend.Inventory.ApplicationLayer.Queries.GetInventoryView;
 using backend.Inventory.Controllers;
 using backend.Inventory.DomainModels;
 using backend.Inventory.Services;
-using backend.Product.Services.Mappers;
+using backend.Inventory.Tests.TestHelpers.Fakes;
+using backend.Shared;
 using backend.Shared.FieldMask;
 using backend.Shared.QueryHandler;
 using Mapster;
 using MapsterMapper;
 using Moq;
 
-namespace backend.Inventory.Tests.ControllerTests;
+namespace backend.Inventory.Tests;
 
 public abstract class GetInventoryControllerTestBase
 {
     protected readonly Fixture Fixture = new();
 
-    protected readonly IAsyncQueryHandler<GetInventoryViewQuery, InventoryView?> MockGetInventoryView =
-        Mock.Of<IAsyncQueryHandler<GetInventoryViewQuery, InventoryView?>>();
+    protected readonly InventoryViewRepositoryFake Repository = new(new PaginateService<InventoryView>());
 
     private readonly IMapper _mapper;
 
@@ -36,8 +36,9 @@ public abstract class GetInventoryControllerTestBase
 
     protected GetInventoryController GetInventoryController()
     {
+        var getInventoryView = new GetInventoryViewHandler(Repository);
         return new GetInventoryController(
-            MockGetInventoryView,
+            getInventoryView,
             _fieldMaskConverterFactory,
             _mapper);
     }

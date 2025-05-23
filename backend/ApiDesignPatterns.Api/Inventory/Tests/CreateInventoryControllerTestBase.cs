@@ -5,24 +5,20 @@ using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
 using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndUser;
 using backend.Inventory.Controllers;
 using backend.Inventory.Services;
+using backend.Inventory.Tests.TestHelpers.Fakes;
 using backend.Shared.CommandHandler;
 using backend.Shared.QueryHandler;
 using Mapster;
 using MapsterMapper;
 using Moq;
 
-namespace backend.Inventory.Tests.ControllerTests;
+namespace backend.Inventory.Tests;
 
 public abstract class CreateInventoryControllerTestBase
 {
     protected readonly IMapper Mapper;
 
-    protected readonly ICommandHandler<CreateInventoryCommand> CreateInventory =
-        Mock.Of<ICommandHandler<CreateInventoryCommand>>();
-
-    protected readonly IAsyncQueryHandler<GetInventoryByProductAndUserQuery, DomainModels.Inventory?>
-        GetInventoryByProductAndUser =
-            Mock.Of<IAsyncQueryHandler<GetInventoryByProductAndUserQuery, DomainModels.Inventory?>>();
+    protected readonly InventoryRepositoryFake Repository = [];
 
     protected CreateInventoryControllerTestBase()
     {
@@ -33,6 +29,8 @@ public abstract class CreateInventoryControllerTestBase
 
     protected CreateInventoryController GetCreateInventoryController()
     {
-        return new CreateInventoryController(CreateInventory, GetInventoryByProductAndUser, Mapper);
+        var createInventory = new CreateInventoryHandler(Repository);
+        var getInventoryByProductAndUser = new GetInventoryByProductAndUserHandler(Repository);
+        return new CreateInventoryController(createInventory, getInventoryByProductAndUser, Mapper);
     }
 }

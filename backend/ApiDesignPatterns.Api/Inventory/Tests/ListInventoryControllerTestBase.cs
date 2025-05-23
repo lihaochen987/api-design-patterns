@@ -3,23 +3,25 @@
 
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
+using backend.Inventory.DomainModels;
 using backend.Inventory.Services;
+using backend.Inventory.Tests.TestHelpers.Fakes;
+using backend.Shared;
 using backend.Shared.QueryHandler;
 using Mapster;
 using MapsterMapper;
 using Moq;
 
-namespace backend.Inventory.Tests.ControllerTests;
+namespace backend.Inventory.Tests;
 
 public abstract class ListInventoryControllerTestBase
 {
-    protected readonly IAsyncQueryHandler<ListInventoryQuery, PagedInventory> MockListInventory;
+    protected readonly InventoryViewRepositoryFake Repository = new(new PaginateService<InventoryView>());
     private readonly IMapper _mapper;
     protected const int DefaultMaxPageSize = 10;
 
     protected ListInventoryControllerTestBase()
     {
-        MockListInventory = Mock.Of<IAsyncQueryHandler<ListInventoryQuery, PagedInventory>>();
         var config = new TypeAdapterConfig();
         config.RegisterInventoryMappings();
         _mapper = new Mapper(config);
@@ -27,6 +29,7 @@ public abstract class ListInventoryControllerTestBase
 
     protected ListInventoryController ListInventoryController()
     {
-        return new ListInventoryController(MockListInventory, _mapper);
+        var listInventory = new ListInventoryHandler(Repository);
+        return new ListInventoryController(listInventory, _mapper);
     }
 }

@@ -13,11 +13,10 @@ public class InventoryViewRepositoryFake(PaginateService<InventoryView> paginate
             Comparer<InventoryView>.Create((x, y) => ReferenceEquals(x, y) ? 0 : x.Id.CompareTo(y.Id))),
         IInventoryViewRepository
 {
-    public void AddInventoryView(int count)
+    public void AddInventoryViews(List<InventoryView> inventoryViews)
     {
-        for (int i = 0; i < count; i++)
+        foreach (var inventoryView in inventoryViews)
         {
-            var inventoryView = new InventoryViewTestDataBuilder().Build();
             Add(inventoryView);
         }
     }
@@ -33,10 +32,10 @@ public class InventoryViewRepositoryFake(PaginateService<InventoryView> paginate
     {
         var query = this.AsEnumerable();
 
-        // Pagination filter
-        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenReview))
+        // Pagination filter - fix the variable name to match real logic
+        if (!string.IsNullOrEmpty(pageToken) && long.TryParse(pageToken, out long lastSeenInventory))
         {
-            query = query.Where(r => r.Id > lastSeenReview);
+            query = query.Where(r => r.Id > lastSeenInventory);
         }
 
         // Custom filter
@@ -45,22 +44,23 @@ public class InventoryViewRepositoryFake(PaginateService<InventoryView> paginate
             if (filter.Contains("ProductId =="))
             {
                 string value = filter.Split("==")[1].Trim();
-                query = query.Where(s => s.ProductId == decimal.Parse(value));
+                query = query.Where(s => s.ProductId == long.Parse(value));
             }
-            else
+            if (filter.Contains("Quantity =="))
             {
-                throw new ArgumentException();
+                string value = filter.Split("==")[1].Trim();
+                query = query.Where(s => s.Quantity == decimal.Parse(value));
             }
         }
 
-        var reviews = query
+        var inventory = query
             .OrderBy(r => r.Id)
             .Take(maxPageSize + 1)
             .ToList();
 
-        List<InventoryView> paginatedReviews =
-            paginateService.Paginate(reviews, maxPageSize, out string? nextPageToken);
+        List<InventoryView> paginatedInventory =
+            paginateService.Paginate(inventory, maxPageSize, out string? nextPageToken);
 
-        return Task.FromResult((paginatedReviews, nextPageToken));
+        return Task.FromResult((paginatedInventory, nextPageToken));
     }
 }

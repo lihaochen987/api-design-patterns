@@ -326,20 +326,8 @@
     <Compile Update="Inventory\InventoryControllers\GetInventoryResponse.cs">
       <DependentUpon>GetInventoryController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Inventory\Tests\ApplicationLayerTests\CreateInventoryHandlerTestBase.cs">
-      <DependentUpon>CreateInventoryHandlerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ApplicationLayerTests\GetInventoryViewHandlerTestBase.cs">
-      <DependentUpon>GetInventoryViewHandlerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ControllerTests\CreateInventoryControllerTestBase.cs">
-      <DependentUpon>CreateInventoryControllerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ControllerTests\GetInventoryControllerTestBase.cs">
-      <DependentUpon>GetInventoryControllerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Remove="Shared\Resilience\ServiceResilienceSettings.cs"/>
-    <Compile Remove="Shared\Resilience\ResilienceProfile.cs"/>
+    <Compile Remove="Shared\Resilience\ServiceResilienceSettings.cs" />
+    <Compile Remove="Shared\Resilience\ResilienceProfile.cs" />
     <Compile Update="Product\Tests\ApplicationLayerTests\GetListProductFromCacheHandlerTestBase.cs">
       <DependentUpon>GetListProductFromCacheHandlerTests.cs</DependentUpon>
     </Compile>
@@ -363,12 +351,6 @@
     </Compile>
     <Compile Update="Inventory\Controllers\UpdateInventoryResponse.cs">
       <DependentUpon>UpdateInventoryController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ApplicationLayerTests\GetInventoryByIdHandlerTestBase.cs">
-      <DependentUpon>GetInventoryByIdHandlerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ApplicationLayerTests\UpdateInventoryHandlerTestBase.cs">
-      <DependentUpon>UpdateInventoryHandlerTests.cs</DependentUpon>
     </Compile>
     <Compile Update="Product\Controllers\Product\CreateProductRequest.cs">
       <DependentUpon>CreateProductController.cs</DependentUpon>
@@ -481,32 +463,17 @@
     <Compile Update="Supplier\Controllers\UpdateSupplierResponse.cs">
       <DependentUpon>UpdateSupplierController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Inventory\Tests\ApplicationLayerTests\GetInventoryByProductAndUserHandlerTestBase.cs">
-      <DependentUpon>GetInventoryByProductAndSupplierHandlerTests.cs</DependentUpon>
-    </Compile>
     <Compile Update="Inventory\Controllers\DeleteInventoryRequest.cs">
       <DependentUpon>DeleteInventoryController.cs</DependentUpon>
     </Compile>
     <Compile Update="Inventory\Controllers\DeleteInventoryResponse.cs">
       <DependentUpon>DeleteInventoryController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Inventory\Tests\ApplicationLayerTests\DeleteInventoryHandlerTestBase.cs">
-      <DependentUpon>DeleteInventoryHandlerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ControllerTests\DeleteInventoryControllerTestBase.cs">
-      <DependentUpon>DeleteInventoryControllerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ControllerTests\UpdateInventoryControllerTestBase.cs">
-      <DependentUpon>UpdateInventoryControllerTests.cs</DependentUpon>
-    </Compile>
     <Compile Update="Inventory\Controllers\ListInventoryRequest.cs">
       <DependentUpon>ListInventoryController.cs</DependentUpon>
     </Compile>
     <Compile Update="Inventory\Controllers\ListInventoryResponse.cs">
       <DependentUpon>ListInventoryController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ApplicationLayerTests\ListInventoryHandlerTestBase.cs">
-      <DependentUpon>ListInventoryHandlerTests.cs</DependentUpon>
     </Compile>
     <Compile Update="Inventory\Controllers\ListProductUsersRequest.cs">
       <DependentUpon>ListProductUsersController.cs</DependentUpon>
@@ -519,9 +486,6 @@
     </Compile>
     <Compile Update="Inventory\Controllers\ListUserProductsResponse.cs">
       <DependentUpon>ListUserProductsController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ApplicationLayerTests\GetUsersByIdsHandlerTestBase.cs">
-      <DependentUpon>GetUsersByIdsHandlerTests.cs</DependentUpon>
     </Compile>
     <Compile Update="Inventory\Tests\ApplicationLayerTests\GetProductByIdsHandlerTestBase.cs">
       <DependentUpon>GetProductByIdsHandlerTests.cs</DependentUpon>
@@ -564,12 +528,6 @@
     </Compile>
     <Compile Update="Product\Controllers\Product\BatchCreateProductsResponse.cs">
       <DependentUpon>BatchCreateProductsController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ControllerTests\ListInventoryControllerTestBase.cs">
-      <DependentUpon>ListInventoryControllerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Inventory\Tests\ControllerTests\ListProductUsersControllerTestBase.cs">
-      <DependentUpon>ListProductUsersControllerTests.cs</DependentUpon>
     </Compile>
     <Compile Update="Product\Controllers\Product\BatchDeleteProductsRequest.cs">
       <DependentUpon>BatchDeleteProductsController.cs</DependentUpon>
@@ -663,27 +621,6 @@
     </Compile>
     <Compile Update="Address\Controllers\UpdateAddressResponse.cs">
       <DependentUpon>UpdateAddressController.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Address\Tests\ApplicationLayerTests\GetAddressHandlerTestBase.cs">
-      <DependentUpon>GetAddressHandlerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Address\Tests\ApplicationLayerTests\GetAddressViewHandlerTestBase.cs">
-      <DependentUpon>GetAddressViewHandlerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Address\Tests\ApplicationLayerTests\DeleteAddressHandlerTestBase.cs">
-      <DependentUpon>DeleteAddressHandlerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Address\Tests\ApplicationLayerTests\ReplaceAddressHandlerTestBase.cs">
-      <DependentUpon>ReplaceAddressHandlerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Address\Tests\ApplicationLayerTests\UpdateAddressHandlerTestBase.cs">
-      <DependentUpon>UpdateAddressHandlerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Address\Tests\ApplicationLayerTests\ListAddressHandlerTestBase.cs">
-      <DependentUpon>ListAddressHandlerTests.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Address\Tests\ControllerTests\GetAddressControllerTestBase.cs">
-      <DependentUpon>GetAddressControllerTests.cs</DependentUpon>
     </Compile>
     <Compile Update="User\Controllers\CreateUserRequest.cs">
       <DependentUpon>CreateUserController.cs</DependentUpon>

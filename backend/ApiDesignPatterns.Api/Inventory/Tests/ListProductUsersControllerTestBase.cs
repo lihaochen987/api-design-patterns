@@ -5,24 +5,26 @@ using AutoFixture;
 using backend.Inventory.ApplicationLayer.Queries.GetUsersByIds;
 using backend.Inventory.ApplicationLayer.Queries.ListInventory;
 using backend.Inventory.Controllers;
+using backend.Inventory.DomainModels;
+using backend.Inventory.InfrastructureLayer.Database.Inventory;
 using backend.Inventory.Services;
-using backend.Product.Services.Mappers;
+using backend.Inventory.Tests.TestHelpers.Fakes;
+using backend.Shared;
 using backend.Shared.QueryHandler;
+using backend.User.ApplicationLayer.Queries.ListUsers;
 using backend.User.DomainModels;
 using backend.User.Services;
+using backend.User.Tests.TestHelpers.Fakes;
 using Mapster;
 using MapsterMapper;
 using Moq;
 
-namespace backend.Inventory.Tests.ControllerTests;
+namespace backend.Inventory.Tests;
 
 public abstract class ListProductUsersControllerTestBase
 {
-    protected readonly IAsyncQueryHandler<ListInventoryQuery, PagedInventory> MockListInventory =
-        Mock.Of<IAsyncQueryHandler<ListInventoryQuery, PagedInventory>>();
-
-    protected readonly IAsyncQueryHandler<GetUsersByIdsQuery, List<UserView>> MockGetUsersByIds =
-        Mock.Of<IAsyncQueryHandler<GetUsersByIdsQuery, List<UserView>>>();
+    protected readonly InventoryViewRepositoryFake InventoryViewRepository = new(new PaginateService<InventoryView>());
+    protected readonly UserViewRepositoryFake UserViewRepository = new(new PaginateService<UserView>());
 
     protected readonly IMapper Mapper;
     protected readonly Fixture Fixture = new();
@@ -37,6 +39,8 @@ public abstract class ListProductUsersControllerTestBase
 
     protected ListProductUsersController ListProductUsersController()
     {
-        return new ListProductUsersController(MockListInventory, MockGetUsersByIds, Mapper);
+        var listInventory = new ListInventoryHandler(InventoryViewRepository);
+        var getUsersByIds = new GetUsersByIdsHandler(UserViewRepository);
+        return new ListProductUsersController(listInventory, getUsersByIds, Mapper);
     }
 }

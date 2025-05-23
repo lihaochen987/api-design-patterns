@@ -6,25 +6,24 @@ using backend.Address.ApplicationLayer.Queries.GetAddressView;
 using backend.Address.Controllers;
 using backend.Address.DomainModels;
 using backend.Address.Services;
+using backend.Address.Tests.TestHelpers.Fakes;
+using backend.Shared;
 using backend.Shared.FieldMask;
-using backend.Shared.QueryHandler;
 using Mapster;
 using MapsterMapper;
-using Moq;
 
-namespace backend.Address.Tests.ControllerTests;
+namespace backend.Address.Tests;
 
 public abstract class GetAddressControllerTestBase
 {
-    protected readonly IAsyncQueryHandler<GetAddressViewQuery, AddressView?> GetAddressViewHandler =
-        Mock.Of<IAsyncQueryHandler<GetAddressViewQuery, AddressView?>>();
+    protected readonly AddressViewRepositoryFake Repository = new(new PaginateService<AddressView>());
 
     private readonly IFieldMaskConverterFactory _fieldMaskConverterFactory =
         new FieldMaskConverterFactory(new AddressFieldPaths().ValidPaths);
 
     protected readonly IMapper Mapper;
 
-    protected Fixture Fixture = new();
+    protected readonly Fixture Fixture = new();
 
     protected GetAddressControllerTestBase()
     {
@@ -35,8 +34,10 @@ public abstract class GetAddressControllerTestBase
 
     protected GetAddressController GetAddressController()
     {
+        var getAddressViewHandler = new GetAddressViewHandler(Repository);
+
         return new GetAddressController(
-            GetAddressViewHandler,
+            getAddressViewHandler,
             _fieldMaskConverterFactory,
             Mapper);
     }

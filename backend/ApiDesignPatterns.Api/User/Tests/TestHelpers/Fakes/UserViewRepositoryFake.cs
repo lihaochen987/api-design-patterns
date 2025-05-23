@@ -13,6 +13,14 @@ public class UserViewRepositoryFake(
     PaginateService<UserView> paginateService)
     : Collection<UserView>, IUserViewRepository
 {
+    public void AddUserViews(List<UserView> userViews)
+    {
+        foreach (var userView in userViews)
+        {
+            Add(userView);
+        }
+    }
+
     public void AddUserView(string firstName, string lastName, string email)
     {
         var userView = new UserViewTestDataBuilder()

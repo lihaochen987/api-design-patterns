@@ -60,6 +60,6 @@ public class UserViewTestDataBuilder
 
     public IEnumerable<UserView> CreateMany(int count)
     {
-        return Enumerable.Range(0, count).Select(_ => new UserViewTestDataBuilder().Build());
+        return Enumerable.Range(1, count).Select(_ => new UserViewTestDataBuilder().Build());
     }
 }
