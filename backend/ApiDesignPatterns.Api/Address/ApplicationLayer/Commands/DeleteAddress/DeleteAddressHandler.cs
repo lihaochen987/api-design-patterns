@@ -6,7 +6,7 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Address.ApplicationLayer.Commands.DeleteAddress;
 
-public class DeleteAddressHandler(IAddressRepository repository) : ICommandHandler<DeleteAddressCommand>
+public class DeleteAddressHandler(IDeleteAddress repository) : ICommandHandler<DeleteAddressCommand>
 {
     public async Task Handle(DeleteAddressCommand command)
     {

@@ -6,7 +6,7 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Address.ApplicationLayer.Commands.ReplaceAddress;
 
-public class ReplaceAddressHandler(IAddressRepository repository) : ICommandHandler<ReplaceAddressCommand>
+public class ReplaceAddressHandler(IUpdateAddress repository) : ICommandHandler<ReplaceAddressCommand>
 {
     public async Task Handle(ReplaceAddressCommand command)
     {

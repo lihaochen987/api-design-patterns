@@ -10,7 +10,7 @@ using backend.Shared;
 namespace backend.Address.Tests.TestHelpers.Fakes;
 
 public class AddressViewRepositoryFake(PaginateService<AddressView> paginateService)
-    : Collection<AddressView>, IAddressViewRepository
+    : Collection<AddressView>, IGetAddressView, IListAddressView
 {
     public void AddAddressView(long userId, string fullAddress)
     {

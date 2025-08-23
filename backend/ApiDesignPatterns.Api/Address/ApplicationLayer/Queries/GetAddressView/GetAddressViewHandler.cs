@@ -7,7 +7,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Address.ApplicationLayer.Queries.GetAddressView;
 
-public class GetAddressViewHandler(IAddressViewRepository viewRepository)
+public class GetAddressViewHandler(IGetAddressView viewRepository)
     : IAsyncQueryHandler<GetAddressViewQuery, AddressView?>
 {
     public async Task<AddressView?> Handle(GetAddressViewQuery query)

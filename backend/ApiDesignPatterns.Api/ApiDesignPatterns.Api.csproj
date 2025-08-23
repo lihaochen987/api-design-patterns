@@ -703,6 +703,9 @@
     <Compile Update="User\Tests\ApplicationLayerTests\UpdateUserHandlerTestBase.cs">
       <DependentUpon>UpdateUserHandlerTests.cs</DependentUpon>
     </Compile>
+    <Compile Update="Address\Tests\GetAddressControllerTestBase.cs">
+      <DependentUpon>GetAddressControllerTests.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

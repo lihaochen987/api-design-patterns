@@ -6,7 +6,7 @@ using backend.Address.InfrastructureLayer.Database.Address;
 
 namespace backend.Address.Tests.TestHelpers.Fakes;
 
-public class AddressRepositoryFake : Collection<DomainModels.Address>, IAddressRepository
+public class AddressRepositoryFake : Collection<DomainModels.Address>, IGetAddress, IDeleteAddress, IUpdateAddress
 {
     public bool IsDirty { get; set; }
 

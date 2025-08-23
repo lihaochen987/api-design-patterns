@@ -6,7 +6,7 @@ using Dapper;
 
 namespace backend.Address.InfrastructureLayer.Database.Address;
 
-public class AddressRepository(IDbConnection dbConnection) : IAddressRepository
+public class AddressRepository(IDbConnection dbConnection) : IGetAddress, IUpdateAddress, IDeleteAddress
 {
     public async Task<DomainModels.Address?> GetAddress(long id)
     {

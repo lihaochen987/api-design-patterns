@@ -6,7 +6,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Address.ApplicationLayer.Queries.GetAddress;
 
-public class GetAddressHandler(IAddressRepository repository)
+public class GetAddressHandler(IGetAddress repository)
     : IAsyncQueryHandler<GetAddressQuery, DomainModels.Address?>
 {
     public async Task<DomainModels.Address?> Handle(GetAddressQuery query)

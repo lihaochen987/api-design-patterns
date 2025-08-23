@@ -7,7 +7,7 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Address.ApplicationLayer.Queries.ListAddress;
 
-public class ListAddressHandler(IAddressViewRepository repository) : IAsyncQueryHandler<ListAddressQuery, PagedAddress>
+public class ListAddressHandler(IListAddressView repository) : IAsyncQueryHandler<ListAddressQuery, PagedAddress>
 {
     public async Task<PagedAddress> Handle(ListAddressQuery query)
     {

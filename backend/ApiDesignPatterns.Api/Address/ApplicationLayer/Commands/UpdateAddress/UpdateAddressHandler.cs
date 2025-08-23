@@ -8,7 +8,7 @@ using backend.Shared.CommandHandler;
 
 namespace backend.Address.ApplicationLayer.Commands.UpdateAddress;
 
-public class UpdateAddressHandler(IAddressRepository repository) : ICommandHandler<UpdateAddressCommand>
+public class UpdateAddressHandler(IUpdateAddress repository) : ICommandHandler<UpdateAddressCommand>
 {
     public async Task Handle(UpdateAddressCommand command)
     {

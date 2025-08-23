@@ -11,7 +11,7 @@ namespace backend.Address.InfrastructureLayer.Database.AddressView;
 public class AddressViewRepository(
     IDbConnection dbConnection,
     SqlFilterBuilder addressSqlFilterBuilder,
-    PaginateService<DomainModels.AddressView> paginateService) : IAddressViewRepository
+    PaginateService<DomainModels.AddressView> paginateService) : IGetAddressView, IListAddressView
 {
     public async Task<DomainModels.AddressView?> GetAddressViewAsync(long id)
     {
