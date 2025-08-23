@@ -1,32 +1,39 @@
 using System.Data;
 using backend.Product.DomainModels;
+using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
 using Dapper;
 
 namespace backend.Product.InfrastructureLayer.Database.Product;
 
-public class ProductRepository(IDbConnection dbConnection) : IProductRepository
+public class ProductRepository(IDbConnection dbConnection)
+    : IProductRepository, IGetProduct, ICreateProduct, IDeleteProduct, IUpdateProduct
 {
     public async Task<DomainModels.Product?> GetProductAsync(long id)
     {
-        var product = await dbConnection.QueryAsync<DomainModels.Product, Dimensions, Pricing, DomainModels.Product>(
-            ProductQueries.GetProduct,
-            (product, dimensions, pricing) =>
-            {
-                var productResult = new DomainModels.Product
+        var basicProduct =
+            await dbConnection.QueryAsync<DomainModels.Product, Dimensions, Pricing, DomainModels.Product>(
+                ProductQueries.GetProduct,
+                (product, dimensions, pricing) => new DomainModels.Product
                 {
                     Id = product.Id,
                     Name = product.Name,
                     Category = product.Category,
                     Pricing = pricing,
                     Dimensions = dimensions
-                };
-                return productResult;
-            },
-            new { Id = id },
-            splitOn: "Length,BasePrice");
+                },
+                new { Id = id },
+                splitOn: "Length,BasePrice");
 
-        return product.SingleOrDefault();
+        var baseProduct = basicProduct.SingleOrDefault();
+        if (baseProduct == null) return null;
+
+        return baseProduct.Category switch
+        {
+            Category.PetFood => await GetPetFoodProductAsync(id),
+            Category.GroomingAndHygiene => await GetGroomingAndHygieneProductAsync(id),
+            _ => baseProduct
+        };
     }
 
     public async Task<List<DomainModels.Product>> GetProductsByIds(List<long> productIds)
@@ -88,7 +95,7 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
 
     public async Task<long> CreateProductAsync(DomainModels.Product product)
     {
-        return await dbConnection.ExecuteScalarAsync<long>(
+        long productId = await dbConnection.ExecuteScalarAsync<long>(
             ProductQueries.CreateProduct,
             new
             {
@@ -102,6 +109,20 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                 product.Pricing.TaxRate
             }
         );
+
+        var productWithId = product with { Id = productId };
+
+        switch (productWithId)
+        {
+            case PetFood petFood:
+                await CreatePetFoodProductAsync(petFood);
+                break;
+            case GroomingAndHygiene groomingProduct:
+                await CreateGroomingAndHygieneProductAsync(groomingProduct);
+                break;
+        }
+
+        return productId;
     }
 
     public async Task CreatePetFoodProductAsync(PetFood product)
@@ -148,7 +169,7 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
 
     public async Task<long> UpdateProductAsync(DomainModels.Product product)
     {
-        return await dbConnection.ExecuteScalarAsync<long>(
+        long result = await dbConnection.ExecuteScalarAsync<long>(
             ProductQueries.UpdateProduct,
             new
             {
@@ -163,6 +184,18 @@ public class ProductRepository(IDbConnection dbConnection) : IProductRepository
                 product.Pricing.TaxRate,
             }
         );
+
+        switch (product)
+        {
+            case PetFood petFood:
+                await UpdatePetFoodProductAsync(petFood);
+                break;
+            case GroomingAndHygiene groomingProduct:
+                await UpdateGroomingAndHygieneProductAsync(groomingProduct);
+                break;
+        }
+
+        return result;
     }
 
     public async Task UpdatePetFoodProductAsync(PetFood product)

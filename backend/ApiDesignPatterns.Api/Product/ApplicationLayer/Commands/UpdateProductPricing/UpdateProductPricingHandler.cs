@@ -11,7 +11,7 @@ namespace backend.Product.ApplicationLayer.Commands.UpdateProductPricing;
 /// <summary>
 /// Updates product pricing using field masking for selective property updates.
 /// </summary>
-public class UpdateProductPricingHandler(IProductRepository repository) : ICommandHandler<UpdateProductPricingCommand>
+public class UpdateProductPricingHandler(IUpdateProduct repository) : ICommandHandler<UpdateProductPricingCommand>
 {
     /// <summary>
     /// Updates product pricing based on field mask.

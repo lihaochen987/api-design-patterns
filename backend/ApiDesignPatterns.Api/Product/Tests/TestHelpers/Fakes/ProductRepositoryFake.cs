@@ -6,7 +6,8 @@ using backend.Product.Tests.TestHelpers.Builders;
 
 namespace backend.Product.Tests.TestHelpers.Fakes;
 
-public class ProductRepositoryFake : Collection<DomainModels.Product>, IProductRepository
+public class ProductRepositoryFake :
+    Collection<DomainModels.Product>, IProductRepository, IGetProduct, ICreateProduct, IDeleteProduct, IUpdateProduct
 {
     public bool IsDirty { get; set; }
 

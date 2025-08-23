@@ -25,18 +25,20 @@ public class BatchGetProductsHandler(IProductRepository repository)
                 $"Products not found: {string.Join(", ", missingProductIds)}");
         }
 
-        var productTasks = basicProducts.Select(async product =>
-        {
-            return product.Category switch
-            {
-                Category.PetFood => await repository.GetPetFoodProductAsync(product.Id),
-                Category.GroomingAndHygiene => await repository.GetGroomingAndHygieneProductAsync(product.Id),
-                _ => product
-            };
-        });
+        throw new NotImplementedException();
 
-        var detailedProducts = await Task.WhenAll(productTasks);
-
-        return Result.Success(detailedProducts.Where(x => x != null).ToList())!;
+        // var productTasks = basicProducts.Select(async product =>
+        // {
+        //     return product.Category switch
+        //     {
+        //         Category.PetFood => await repository.GetPetFoodProductAsync(product.Id),
+        //         Category.GroomingAndHygiene => await repository.GetGroomingAndHygieneProductAsync(product.Id),
+        //         _ => product
+        //     };
+        // });
+        //
+        // var detailedProducts = await Task.WhenAll(productTasks);
+        //
+        // return Result.Success(detailedProducts.Where(x => x != null).ToList())!;
     }
 }

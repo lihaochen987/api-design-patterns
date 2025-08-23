@@ -22,7 +22,7 @@ namespace backend.Product.ApplicationLayer.Commands.UpdateProduct;
 /// }
 /// </example>
 public class UpdateProductHandler(
-    IProductRepository repository)
+    IUpdateProduct repository)
     : ICommandHandler<UpdateProductCommand>
 {
     /// <summary>
@@ -30,19 +30,28 @@ public class UpdateProductHandler(
     /// </summary>
     public async Task Handle(UpdateProductCommand command)
     {
-        var updatedBaseProduct = UpdateBaseProduct(command.Request, command.Product);
-        long id = await repository.UpdateProductAsync(updatedBaseProduct);
-        switch (updatedBaseProduct)
+        var updatedProduct = UpdateProduct(command.Request, command.Product);
+        await repository.UpdateProductAsync(updatedProduct);
+        // Remove the duplicate specific update calls - UpdateProductAsync now handles everything
+    }
+
+    /// <summary>
+    /// Updates product properties based on the product type and field mask.
+    /// </summary>
+    private static DomainModels.Product UpdateProduct(
+        UpdateProductRequest request,
+        DomainModels.Product product)
+    {
+        // First update the base product properties
+        var updatedBaseProduct = UpdateBaseProduct(request, product);
+
+        // Then update type-specific properties based on the actual product type
+        return updatedBaseProduct switch
         {
-            case PetFood petFood:
-                var updatedPetFood = UpdatePetFood(id, command.Request, petFood);
-                await repository.UpdatePetFoodProductAsync(updatedPetFood);
-                break;
-            case GroomingAndHygiene groomingAndHygiene:
-                var updatedGroomingAndHygiene = UpdateGroomingAndHygiene(id, command.Request, groomingAndHygiene);
-                await repository.UpdateGroomingAndHygieneProductAsync(updatedGroomingAndHygiene);
-                break;
-        }
+            PetFood petFood => UpdatePetFood(request, petFood),
+            GroomingAndHygiene groomingAndHygiene => UpdateGroomingAndHygiene(request, groomingAndHygiene),
+            _ => updatedBaseProduct // Base product - no additional properties to update
+        };
     }
 
     /// <summary>
@@ -68,7 +77,6 @@ public class UpdateProductHandler(
     /// Updates pet food specific properties if specified in field mask.
     /// </summary>
     private static PetFood UpdatePetFood(
-        long id,
         UpdateProductRequest request,
         PetFood petFood)
     {
@@ -78,7 +86,6 @@ public class UpdateProductHandler(
 
         var updatedPetFood = petFood with
         {
-            Id = id,
             AgeGroup = ageGroup,
             BreedSize = breedSize,
             Ingredients = ingredients,
@@ -91,10 +98,9 @@ public class UpdateProductHandler(
     }
 
     /// <summary>
-    /// Updates pet food specific properties if specified in field mask.
+    /// Updates grooming and hygiene specific properties if specified in field mask.
     /// </summary>
     private static GroomingAndHygiene UpdateGroomingAndHygiene(
-        long id,
         UpdateProductRequest request,
         GroomingAndHygiene groomingAndHygiene)
     {
@@ -104,7 +110,6 @@ public class UpdateProductHandler(
 
         var updatedGroomingAndHygiene = groomingAndHygiene with
         {
-            Id = id,
             IsNatural = isNatural,
             IsHypoallergenic = isHypoAllergenic,
             UsageInstructions = usageInstructions,
@@ -231,7 +236,6 @@ public class UpdateProductHandler(
 
         return (isNatural, isHypoAllergenic, usageInstructions, isCrueltyFree, safetyWarnings);
     }
-
 
     /// <summary>
     /// Returns updated pet food values based on field mask.

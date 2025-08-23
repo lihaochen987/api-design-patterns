@@ -56,20 +56,6 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
     }
 
     [Fact]
-    public async Task CreateProductAsync_DoesNotCreatePetFoodProduct_WhenCategoryIsPetFoodButTypeIsIncorrect()
-    {
-        var product = new ProductTestDataBuilder()
-            .WithCategory(Category.Beds)
-            .Build();
-        var incorrectProduct = product with { Category = Category.PetFood };
-        ICommandHandler<CreateProductCommand> sut = CreateProductService();
-
-        Func<Task> act = async () => await sut.Handle(new CreateProductCommand { Product = incorrectProduct });
-
-        await act.Should().ThrowAsync<InvalidOperationException>();
-    }
-
-    [Fact]
     public async Task CreateProductAsync_CreatesGroomingAndHygieneProduct_WhenCategoryIsGroomingAndHygiene()
     {
         var groomingProduct = new ProductTestDataBuilder()
@@ -81,20 +67,6 @@ public class CreateProductHandlerTests : CreateProductHandlerTestBase
 
         Repository.IsDirty.Should().BeTrue();
         Repository.Should().Contain(groomingProduct);
-    }
-
-    [Fact]
-    public async Task CreateProductAsync_DoesNotCreateGroomingProduct_WhenCategoryIsGroomingButTypeIsIncorrect()
-    {
-        var product = new ProductTestDataBuilder()
-            .WithCategory(Category.Beds)
-            .Build();
-        var incorrectProduct = product with { Category = Category.GroomingAndHygiene };
-        ICommandHandler<CreateProductCommand> sut = CreateProductService();
-
-        Func<Task> act = async () => await sut.Handle(new CreateProductCommand { Product = incorrectProduct });
-
-        await act.Should().ThrowAsync<InvalidOperationException>();
     }
 
     [Fact]

@@ -7,17 +7,11 @@ using backend.Shared.QueryHandler;
 
 namespace backend.Product.ApplicationLayer.Queries.GetProduct;
 
-public class GetProductHandler(IProductRepository repository) : IAsyncQueryHandler<GetProductQuery, DomainModels.Product?>
+public class GetProductHandler(IGetProduct repository) : IAsyncQueryHandler<GetProductQuery, DomainModels.Product?>
 {
     public async Task<DomainModels.Product?> Handle(GetProductQuery query)
     {
         var product = await repository.GetProductAsync(query.Id);
-
-        return product?.Category switch
-        {
-            Category.PetFood => await repository.GetPetFoodProductAsync(query.Id),
-            Category.GroomingAndHygiene => await repository.GetGroomingAndHygieneProductAsync(query.Id),
-            _ => product
-        };
+        return product;
     }
 }

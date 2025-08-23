@@ -10,7 +10,7 @@ using MapsterMapper;
 namespace backend.Product.ApplicationLayer.Commands.ReplaceProduct;
 
 public class ReplaceProductHandler(
-    IProductRepository repository,
+    IUpdateProduct repository,
     IMapper mapper)
     : ICommandHandler<ReplaceProductCommand>
 {
@@ -25,14 +25,5 @@ public class ReplaceProductHandler(
 
         var replacedProductWithId = replacedProduct with { Id = command.ExistingProductId };
         await repository.UpdateProductAsync(replacedProductWithId);
-        switch (replacedProductWithId)
-        {
-            case PetFood petFood:
-                await repository.UpdatePetFoodProductAsync(petFood);
-                break;
-            case GroomingAndHygiene groomingAndHygiene:
-                await repository.UpdateGroomingAndHygieneProductAsync(groomingAndHygiene);
-                break;
-        }
     }
 }
