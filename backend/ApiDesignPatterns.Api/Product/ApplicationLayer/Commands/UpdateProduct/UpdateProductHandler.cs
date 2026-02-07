@@ -80,7 +80,7 @@ public class UpdateProductHandler(
         UpdateProductRequest request,
         PetFood petFood)
     {
-        (AgeGroup ageGroup, BreedSize breedSize, Ingredients ingredients, Dictionary<string, object> nutritionalInfo,
+        (AgeGroup ageGroup, BreedSize breedSize, string ingredients, Dictionary<string, object> nutritionalInfo,
                 StorageInstructions storageInstructions, Weight weightKg) =
             GetUpdatedPetFoodValues(request, petFood);
 
@@ -243,7 +243,7 @@ public class UpdateProductHandler(
     private static (
         AgeGroup ageGroup,
         BreedSize breedSize,
-        Ingredients ingredients,
+        string ingredients,
         Dictionary<string, object> nutritionalInfo,
         StorageInstructions storageInstructions,
         Weight weightKg)
@@ -263,10 +263,10 @@ public class UpdateProductHandler(
                 ? parsedBreedSize
                 : petFood.BreedSize;
 
-        Ingredients ingredients =
+        string ingredients =
             request.FieldMask.Contains("ingredients", StringComparer.OrdinalIgnoreCase) &&
             !string.IsNullOrEmpty(request.Ingredients)
-                ? new Ingredients(request.Ingredients)
+                ? request.Ingredients
                 : petFood.Ingredients;
 
         Dictionary<string, object> nutritionalInfo =

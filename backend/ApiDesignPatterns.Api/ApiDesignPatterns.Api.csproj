@@ -494,9 +494,6 @@
     <Compile Update="Product\Controllers\Product\BatchGetProductsResponse.cs">
       <DependentUpon>BatchGetProductsController.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\DomainModels\ValueObjects\IngredientsTypeHandler.cs">
-      <DependentUpon>Ingredients.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\DomainModels\ValueObjects\SafetyWarningsTypeHandler.cs">
       <DependentUpon>SafetyWarnings.cs</DependentUpon>
     </Compile>

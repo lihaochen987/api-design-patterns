@@ -207,7 +207,7 @@ public class ProductRepository(IDbConnection dbConnection)
                 product.Id,
                 product.AgeGroup,
                 product.BreedSize,
-                Ingredients = product.Ingredients.Value,
+                product.Ingredients,
                 StorageInstructions = product.StorageInstructions.Value,
                 WeightKg = product.WeightKg.Value
             }
@@ -263,7 +263,7 @@ public class ProductRepository(IDbConnection dbConnection)
             product.Id,
             product.AgeGroup,
             product.BreedSize,
-            Ingredients = product.Ingredients.Value,
+            product.Ingredients,
             StorageInstructions = product.StorageInstructions.Value,
             WeightKg = product.WeightKg.Value
         }).ToList();

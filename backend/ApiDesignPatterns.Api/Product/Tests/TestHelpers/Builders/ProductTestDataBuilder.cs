@@ -13,7 +13,7 @@ public class ProductTestDataBuilder
     private Category _category;
     private Dimensions _dimensions;
     private long _id;
-    private readonly Ingredients _ingredients;
+    private readonly string _ingredients;
     private string _name;
     private readonly Dictionary<string, object> _nutritionalInfo;
     private Pricing _pricing;
@@ -39,7 +39,7 @@ public class ProductTestDataBuilder
 
         _ageGroup = fixture.Create<AgeGroup>();
         _breedSize = fixture.Create<BreedSize>();
-        _ingredients = fixture.Create<Ingredients>();
+        _ingredients = fixture.Create<string>();
         _nutritionalInfo = fixture.Create<Dictionary<string, object>>();
         _storageInstructions = fixture.Create<StorageInstructions>();
         _weightKg = fixture.Create<Weight>();
