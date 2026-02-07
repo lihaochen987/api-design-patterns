@@ -49,5 +49,30 @@ The other patterns mentioned, but not yet implemented from the book include:
 6. MODIFY List, Get and Update standard methods along with field masks
 
 ## Notable areas
-- ColumnMappers are used to map between a property and the column name in the database view, used for filtering in the List standard method.
-- FieldPaths are used for valid entries in the FieldMask, used for partial updates in the Get and Update standard methods.
+
+- ColumnMappers are used to map between a property and the column name in the database view, used for filtering in the
+  List standard method.
+- FieldPaths are used for valid entries in the FieldMask, used for partial updates in the Get and Update standard
+  methods.
+
+## Reflection as at 2026/02/08
+
+Things I like
+
+- I really like having handlers for your application layer, along with decorators to manage your cross-cutting
+  functionalities.
+- Pure dependency injection seems a bit more cumbersome over a DI container, but I've enjoyed it as it makes object
+  graphs more explicit.
+
+Things I don't like:
+
+- Encapsulating value objects with an abstract class to enforce its invariants seem overkill. I probably wouldn't use
+  this approach again.
+- Unit testing is a bit excessive since we use a lot of fakes / mocks. I think it's better to have integration tests for
+  these instead, to only write unit tests for pure functions, and to use mocks only to test the unhappy paths which the
+  integration tests can't handle.
+
+Things I'd like to try next:
+
+- The project was originally created using inheritance to model the relationship between `Product` and its subtypes. It
+  would be interesting to try using composition for this instead.
