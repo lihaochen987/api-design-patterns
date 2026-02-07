@@ -533,9 +533,6 @@
     <Compile Update="Product\Tests\ApplicationLayerTests\MatchProductToUpdateRequestTestBase.cs">
       <DependentUpon>MatchProductToUpdateRequestHandlerTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="Product\Tests\ApplicationLayerTests\BatchGetProductsHandlerTestBase.cs">
-      <DependentUpon>BatchGetProductsHandlerTests.cs</DependentUpon>
-    </Compile>
     <Compile Update="Product\Tests\ApplicationLayerTests\CacheCreateProductResponseHandlerTestBase.cs">
       <DependentUpon>CacheCreateProductResponseHandlerTests.cs</DependentUpon>
     </Compile>

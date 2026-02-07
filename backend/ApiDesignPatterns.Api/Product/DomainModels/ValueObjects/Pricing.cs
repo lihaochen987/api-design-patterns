@@ -1,3 +1,4 @@
+using backend.Product.Controllers.Product;
 using backend.Product.DomainModels.Exceptions;
 
 namespace backend.Product.DomainModels.ValueObjects;
@@ -145,5 +146,27 @@ public readonly record struct Pricing
         {
             throw new InsufficientMarginException(margin, MinProfitMarginPercent);
         }
+    }
+
+    public static Pricing ApplyUpdates(UpdateProductRequest request, Product product)
+    {
+        decimal basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase) &&
+                            request.Pricing is { BasePrice: not null }
+            ? request.Pricing.BasePrice ?? product.Pricing.BasePrice
+            : product.Pricing.BasePrice;
+
+        decimal discountPercentage =
+            request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase) &&
+            request.Pricing is { DiscountPercentage: not null }
+                ? request.Pricing.DiscountPercentage ?? product.Pricing.DiscountPercentage
+                : product.Pricing.DiscountPercentage;
+
+        decimal taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase) &&
+                          request.Pricing is { TaxRate: not null }
+            ? request.Pricing.TaxRate ?? product.Pricing.TaxRate
+            : product.Pricing.TaxRate;
+
+        var pricing = new Pricing(basePrice, discountPercentage, taxRate);
+        return pricing;
     }
 }

@@ -1,3 +1,5 @@
+using backend.Product.Controllers.Product;
+
 namespace backend.Product.DomainModels.ValueObjects;
 
 /// <summary>
@@ -86,5 +88,26 @@ public readonly record struct Dimensions
                 $"Total volume ({volume} cm³) exceeds maximum allowed volume of {MaxVolume} cm³.",
                 $"{nameof(length)}, {nameof(width)}, {nameof(height)}");
         }
+    }
+
+    public static Dimensions ApplyUpdates(UpdateProductRequest request, Product product)
+    {
+        decimal length = request.FieldMask.Contains("dimensions.length", StringComparer.OrdinalIgnoreCase)
+                         && request.Dimensions is { Length: not null }
+            ? request.Dimensions.Length ?? product.Dimensions.Length
+            : product.Dimensions.Length;
+
+        decimal width = request.FieldMask.Contains("dimensions.width", StringComparer.OrdinalIgnoreCase)
+                        && request.Dimensions is { Width: not null }
+            ? request.Dimensions.Width ?? product.Dimensions.Width
+            : product.Dimensions.Width;
+
+        decimal height = request.FieldMask.Contains("dimensions.height", StringComparer.OrdinalIgnoreCase)
+                         && request.Dimensions is { Height: not null }
+            ? request.Dimensions.Height ?? product.Dimensions.Height
+            : product.Dimensions.Height;
+
+        var dimensions = new Dimensions(length, width, height);
+        return dimensions;
     }
 }
