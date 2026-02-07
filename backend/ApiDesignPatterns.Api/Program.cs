@@ -72,7 +72,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
     c.UseOneOfForPolymorphism();
-    c.SchemaFilter<RequireNonNullablePropertiesSchemaFilter>();
 });
 
 // Register Dapper stuff
