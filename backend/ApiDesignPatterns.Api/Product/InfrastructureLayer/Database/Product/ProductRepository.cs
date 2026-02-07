@@ -30,8 +30,18 @@ public class ProductRepository(IDbConnection dbConnection)
 
         return baseProduct.Category switch
         {
-            Category.PetFood => await GetPetFoodProductAsync(id),
-            Category.GroomingAndHygiene => await GetGroomingAndHygieneProductAsync(id),
+            Category.PetFood => (await dbConnection.QueryAsync<PetFood, Dimensions, Pricing, PetFood>(
+                ProductQueries.GetPetFoodProduct,
+                (petFood, dimensions, pricing) => petFood with { Pricing = pricing, Dimensions = dimensions },
+                new { Id = id },
+                splitOn: "Length,BasePrice")).SingleOrDefault(),
+
+            Category.GroomingAndHygiene => (await dbConnection.QueryAsync<GroomingAndHygiene, Dimensions, Pricing, GroomingAndHygiene>(
+                ProductQueries.GetGroomingAndHygieneProduct,
+                (groomingAndHygiene, dimensions, pricing) => groomingAndHygiene with { Pricing = pricing, Dimensions = dimensions },
+                new { Id = id },
+                splitOn: "Length,BasePrice")).SingleOrDefault(),
+
             _ => baseProduct
         };
     }
@@ -63,36 +73,6 @@ public class ProductRepository(IDbConnection dbConnection)
         return products.ToList();
     }
 
-    public async Task<PetFood?> GetPetFoodProductAsync(long id)
-    {
-        var product = await dbConnection.QueryAsync<PetFood, Dimensions, Pricing, PetFood>(
-            ProductQueries.GetPetFoodProduct,
-            (petFood, dimensions, pricing) =>
-            {
-                var petFoodResult = petFood with { Pricing = pricing, Dimensions = dimensions };
-                return petFoodResult;
-            },
-            new { Id = id },
-            splitOn: "Length,BasePrice");
-
-        return product.SingleOrDefault();
-    }
-
-    public async Task<GroomingAndHygiene?> GetGroomingAndHygieneProductAsync(long id)
-    {
-        var product = await dbConnection.QueryAsync<GroomingAndHygiene, Dimensions, Pricing, GroomingAndHygiene>(
-            ProductQueries.GetGroomingAndHygieneProduct,
-            (groomingAndHygiene, dimensions, pricing) =>
-            {
-                var groomingAndHygieneResult = groomingAndHygiene with { Pricing = pricing, Dimensions = dimensions };
-                return groomingAndHygieneResult;
-            },
-            new { Id = id },
-            splitOn: "Length,BasePrice");
-
-        return product.SingleOrDefault();
-    }
-
     public async Task<long> CreateProductAsync(DomainModels.Product product)
     {
         long productId = await dbConnection.ExecuteScalarAsync<long>(
@@ -115,46 +95,36 @@ public class ProductRepository(IDbConnection dbConnection)
         switch (productWithId)
         {
             case PetFood petFood:
-                await CreatePetFoodProductAsync(petFood);
+                await dbConnection.ExecuteAsync(
+                    ProductQueries.CreatePetFoodProduct,
+                    new
+                    {
+                        petFood.Id,
+                        petFood.AgeGroup,
+                        petFood.BreedSize,
+                        petFood.Ingredients,
+                        petFood.StorageInstructions,
+                        petFood.WeightKg
+                    }
+                );
                 break;
             case GroomingAndHygiene groomingProduct:
-                await CreateGroomingAndHygieneProductAsync(groomingProduct);
+                await dbConnection.ExecuteAsync(
+                    ProductQueries.CreateGroomingAndHygieneProduct,
+                    new
+                    {
+                        groomingProduct.Id,
+                        groomingProduct.IsNatural,
+                        groomingProduct.IsHypoallergenic,
+                        groomingProduct.UsageInstructions,
+                        groomingProduct.IsCrueltyFree,
+                        groomingProduct.SafetyWarnings
+                    }
+                );
                 break;
         }
 
         return productId;
-    }
-
-    public async Task CreatePetFoodProductAsync(PetFood product)
-    {
-        await dbConnection.ExecuteAsync(
-            ProductQueries.CreatePetFoodProduct,
-            new
-            {
-                product.Id,
-                product.AgeGroup,
-                product.BreedSize,
-                product.Ingredients,
-                product.StorageInstructions,
-                product.WeightKg
-            }
-        );
-    }
-
-    public async Task CreateGroomingAndHygieneProductAsync(GroomingAndHygiene product)
-    {
-        await dbConnection.ExecuteAsync(
-            ProductQueries.CreateGroomingAndHygieneProduct,
-            new
-            {
-                product.Id,
-                product.IsNatural,
-                product.IsHypoallergenic,
-                product.UsageInstructions,
-                product.IsCrueltyFree,
-                product.SafetyWarnings
-            }
-        );
     }
 
     public async Task DeleteProductAsync(long id)
