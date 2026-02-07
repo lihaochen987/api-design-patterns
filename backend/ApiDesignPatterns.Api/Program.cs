@@ -98,7 +98,6 @@ builder.Services.AddScoped<IDbConnection>(_ =>
     new NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Product
-SqlMapper.AddTypeHandler(new StorageInstructionsTypeHandler());
 SqlMapper.AddTypeHandler(new WeightTypeHandler());
 SqlMapper.AddTypeHandler(new UsageInstructionsTypeHandler());
 

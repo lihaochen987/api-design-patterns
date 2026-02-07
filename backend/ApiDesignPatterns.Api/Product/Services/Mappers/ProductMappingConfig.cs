@@ -30,11 +30,6 @@ public static class ProductMappingConfig
         config.NewConfig<string, UsageInstructions>()
             .MapWith(src => new UsageInstructions(src));
 
-        config.NewConfig<StorageInstructions, string>()
-            .MapWith(src => src.Value);
-        config.NewConfig<string, StorageInstructions>()
-            .MapWith(src => new StorageInstructions(src));
-
         // CreateProductController
         config.NewConfig<DomainModels.Product, CreateProductResponse>();
         config.NewConfig<PetFood, CreatePetFoodResponse>()

@@ -196,7 +196,7 @@ public class ProductRepository(IDbConnection dbConnection)
                         petFood.AgeGroup,
                         petFood.BreedSize,
                         petFood.Ingredients,
-                        StorageInstructions = petFood.StorageInstructions.Value,
+                        petFood.StorageInstructions,
                         WeightKg = petFood.WeightKg.Value
                     }
                 );
@@ -254,7 +254,7 @@ public class ProductRepository(IDbConnection dbConnection)
             product.AgeGroup,
             product.BreedSize,
             product.Ingredients,
-            StorageInstructions = product.StorageInstructions.Value,
+            product.StorageInstructions,
             WeightKg = product.WeightKg.Value
         }).ToList();
 

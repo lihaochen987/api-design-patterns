@@ -17,7 +17,7 @@ public class ProductTestDataBuilder
     private string _name;
     private readonly Dictionary<string, object> _nutritionalInfo;
     private Pricing _pricing;
-    private readonly StorageInstructions _storageInstructions;
+    private readonly string _storageInstructions;
     private readonly Weight _weightKg;
     private readonly bool _isNatural;
     private readonly bool _isHypoAllergenic;
@@ -41,7 +41,7 @@ public class ProductTestDataBuilder
         _breedSize = fixture.Create<BreedSize>();
         _ingredients = fixture.Create<string>();
         _nutritionalInfo = fixture.Create<Dictionary<string, object>>();
-        _storageInstructions = fixture.Create<StorageInstructions>();
+        _storageInstructions = fixture.Create<string>();
         _weightKg = fixture.Create<Weight>();
 
         _isNatural = fixture.Create<bool>();

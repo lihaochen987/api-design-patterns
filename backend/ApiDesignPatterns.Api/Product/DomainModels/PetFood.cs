@@ -10,7 +10,7 @@ public record PetFood : Product
     public required BreedSize BreedSize { get; init; }
     public required string Ingredients { get; init; }
     public required Dictionary<string, object> NutritionalInfo { get; init; }
-    public required StorageInstructions StorageInstructions { get; init; }
+    public required string StorageInstructions { get; init; }
     public required Weight WeightKg { get; init; }
 
     public override Product ApplyUpdates(UpdateProductRequest request)
@@ -37,9 +37,9 @@ public record PetFood : Product
             ? parsedNutritionalInfo
             : NutritionalInfo;
 
-        var storageInstructions = request.FieldMask.Contains("storageinstructions", StringComparer.OrdinalIgnoreCase) &&
-                                  !string.IsNullOrEmpty(request.StorageInstructions)
-            ? new StorageInstructions(request.StorageInstructions)
+        string? storageInstructions = request.FieldMask.Contains("storageinstructions", StringComparer.OrdinalIgnoreCase) &&
+                                      !string.IsNullOrEmpty(request.StorageInstructions)
+            ? request.StorageInstructions
             : StorageInstructions;
 
         var weightKg = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase) &&
