@@ -188,46 +188,36 @@ public class ProductRepository(IDbConnection dbConnection)
         switch (product)
         {
             case PetFood petFood:
-                await UpdatePetFoodProductAsync(petFood);
+                await dbConnection.ExecuteAsync(
+                    ProductQueries.UpdatePetFoodProduct,
+                    new
+                    {
+                        petFood.Id,
+                        petFood.AgeGroup,
+                        petFood.BreedSize,
+                        petFood.Ingredients,
+                        StorageInstructions = petFood.StorageInstructions.Value,
+                        WeightKg = petFood.WeightKg.Value
+                    }
+                );
                 break;
             case GroomingAndHygiene groomingProduct:
-                await UpdateGroomingAndHygieneProductAsync(groomingProduct);
+                await dbConnection.ExecuteAsync(
+                    ProductQueries.UpdateGroomingAndHygieneProduct,
+                    new
+                    {
+                        groomingProduct.Id,
+                        groomingProduct.IsNatural,
+                        groomingProduct.IsHypoallergenic,
+                        UsageInstructions = groomingProduct.UsageInstructions.Value,
+                        groomingProduct.IsCrueltyFree,
+                        groomingProduct.SafetyWarnings
+                    }
+                );
                 break;
         }
 
         return result;
-    }
-
-    public async Task UpdatePetFoodProductAsync(PetFood product)
-    {
-        await dbConnection.ExecuteAsync(
-            ProductQueries.UpdatePetFoodProduct,
-            new
-            {
-                product.Id,
-                product.AgeGroup,
-                product.BreedSize,
-                product.Ingredients,
-                StorageInstructions = product.StorageInstructions.Value,
-                WeightKg = product.WeightKg.Value
-            }
-        );
-    }
-
-    public async Task UpdateGroomingAndHygieneProductAsync(GroomingAndHygiene product)
-    {
-        await dbConnection.ExecuteAsync(
-            ProductQueries.UpdateGroomingAndHygieneProduct,
-            new
-            {
-                product.Id,
-                product.IsNatural,
-                product.IsHypoallergenic,
-                UsageInstructions = product.UsageInstructions.Value,
-                product.IsCrueltyFree,
-                product.SafetyWarnings
-            }
-        );
     }
 
     public async Task<IEnumerable<long>> CreateProductsAsync(IEnumerable<DomainModels.Product> products)

@@ -1,7 +1,6 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Product.Controllers.Product;
 using backend.Product.DomainModels;
 using backend.Product.DomainModels.Enums;
 using backend.Product.DomainModels.ValueObjects;
@@ -30,262 +29,119 @@ public class UpdateProductHandler(
     /// </summary>
     public async Task Handle(UpdateProductCommand command)
     {
-        var updatedProduct = UpdateProduct(command.Request, command.Product);
-        await repository.UpdateProductAsync(updatedProduct);
-        // Remove the duplicate specific update calls - UpdateProductAsync now handles everything
-    }
+        // PURE
+        var request = command.Request;
+        var product = command.Product;
 
-    /// <summary>
-    /// Updates product properties based on the product type and field mask.
-    /// </summary>
-    private static DomainModels.Product UpdateProduct(
-        UpdateProductRequest request,
-        DomainModels.Product product)
-    {
-        // First update the base product properties
-        var updatedBaseProduct = UpdateBaseProduct(request, product);
-
-        // Then update type-specific properties based on the actual product type
-        return updatedBaseProduct switch
-        {
-            PetFood petFood => UpdatePetFood(request, petFood),
-            GroomingAndHygiene groomingAndHygiene => UpdateGroomingAndHygiene(request, groomingAndHygiene),
-            _ => updatedBaseProduct // Base product - no additional properties to update
-        };
-    }
-
-    /// <summary>
-    /// Updates base product properties if specified in field mask.
-    /// </summary>
-    private static DomainModels.Product UpdateBaseProduct(
-        UpdateProductRequest request,
-        DomainModels.Product product)
-    {
-        (string name, Pricing pricing, Category category, Dimensions dimensions) =
-            GetUpdatedProductValues(request, product);
-
-        // Use the 'with' expression on the original product to maintain its type
-        var updatedProduct = product with
-        {
-            Name = name, Category = category, Pricing = pricing, Dimensions = dimensions
-        };
-
-        return updatedProduct;
-    }
-
-    /// <summary>
-    /// Updates pet food specific properties if specified in field mask.
-    /// </summary>
-    private static PetFood UpdatePetFood(
-        UpdateProductRequest request,
-        PetFood petFood)
-    {
-        (AgeGroup ageGroup, BreedSize breedSize, string ingredients, Dictionary<string, object> nutritionalInfo,
-                StorageInstructions storageInstructions, Weight weightKg) =
-            GetUpdatedPetFoodValues(request, petFood);
-
-        var updatedPetFood = petFood with
-        {
-            AgeGroup = ageGroup,
-            BreedSize = breedSize,
-            Ingredients = ingredients,
-            NutritionalInfo = nutritionalInfo,
-            StorageInstructions = storageInstructions,
-            WeightKg = weightKg
-        };
-
-        return updatedPetFood;
-    }
-
-    /// <summary>
-    /// Updates grooming and hygiene specific properties if specified in field mask.
-    /// </summary>
-    private static GroomingAndHygiene UpdateGroomingAndHygiene(
-        UpdateProductRequest request,
-        GroomingAndHygiene groomingAndHygiene)
-    {
-        (bool isNatural, bool isHypoAllergenic, UsageInstructions usageInstructions, bool isCrueltyFree,
-                string safetyWarnings) =
-            GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
-
-        var updatedGroomingAndHygiene = groomingAndHygiene with
-        {
-            IsNatural = isNatural,
-            IsHypoallergenic = isHypoAllergenic,
-            UsageInstructions = usageInstructions,
-            IsCrueltyFree = isCrueltyFree,
-            SafetyWarnings = safetyWarnings
-        };
-
-        return updatedGroomingAndHygiene;
-    }
-
-    /// <summary>
-    /// Returns updated base product values based on field mask.
-    /// </summary>
-    private static (string name, Pricing pricing, Category category, Dimensions dimensions)
-        GetUpdatedProductValues(
-            UpdateProductRequest request,
-            DomainModels.Product baseProduct)
-    {
         string name = request.FieldMask.Contains("name", StringComparer.OrdinalIgnoreCase)
                     && !string.IsNullOrEmpty(request.Name)
             ? request.Name
-            : baseProduct.Name;
+            : product.Name;
 
         Category category = request.FieldMask.Contains("category", StringComparer.OrdinalIgnoreCase)
                             && Enum.TryParse(request.Category, true, out Category parsedCategory)
             ? parsedCategory
-            : baseProduct.Category;
+            : product.Category;
 
-        Dimensions dimensions = GetUpdatedDimensionValues(request, baseProduct.Dimensions);
-        Pricing pricing = GetUpdatedProductPricingValues(request, baseProduct.Pricing);
+        decimal length = request.FieldMask.Contains("dimensions.length", StringComparer.OrdinalIgnoreCase)
+                         && request.Dimensions is { Length: not null }
+            ? request.Dimensions.Length ?? product.Dimensions.Length
+            : product.Dimensions.Length;
 
-        return (name, pricing, category, dimensions);
-    }
+        decimal width = request.FieldMask.Contains("dimensions.width", StringComparer.OrdinalIgnoreCase)
+                        && request.Dimensions is { Width: not null }
+            ? request.Dimensions.Width ?? product.Dimensions.Width
+            : product.Dimensions.Width;
 
-    /// <summary>
-    /// Returns updated pricing values based on field mask.
-    /// </summary>
-    private static Pricing
-        GetUpdatedProductPricingValues(
-            UpdateProductRequest request,
-            Pricing product)
-    {
+        decimal height = request.FieldMask.Contains("dimensions.height", StringComparer.OrdinalIgnoreCase)
+                         && request.Dimensions is { Height: not null }
+            ? request.Dimensions.Height ?? product.Dimensions.Height
+            : product.Dimensions.Height;
+
+        var dimensions = new Dimensions(length, width, height);
+
         decimal basePrice = request.FieldMask.Contains("baseprice", StringComparer.OrdinalIgnoreCase) &&
                             request.Pricing is { BasePrice: not null }
-            ? request.Pricing.BasePrice ?? product.BasePrice
-            : product.BasePrice;
+            ? request.Pricing.BasePrice ?? product.Pricing.BasePrice
+            : product.Pricing.BasePrice;
 
         decimal discountPercentage =
             request.FieldMask.Contains("discountpercentage", StringComparer.OrdinalIgnoreCase) &&
             request.Pricing is { DiscountPercentage: not null }
-                ? request.Pricing.DiscountPercentage ?? product.DiscountPercentage
-                : product.DiscountPercentage;
+                ? request.Pricing.DiscountPercentage ?? product.Pricing.DiscountPercentage
+                : product.Pricing.DiscountPercentage;
 
         decimal taxRate = request.FieldMask.Contains("taxrate", StringComparer.OrdinalIgnoreCase) &&
                           request.Pricing is { TaxRate: not null }
-            ? request.Pricing.TaxRate ?? product.TaxRate
-            : product.TaxRate;
+            ? request.Pricing.TaxRate ?? product.Pricing.TaxRate
+            : product.Pricing.TaxRate;
 
-        return new Pricing(basePrice, discountPercentage, taxRate);
-    }
+        var pricing = new Pricing(basePrice, discountPercentage, taxRate);
 
-    /// <summary>
-    /// Returns updated dimension values based on field mask.
-    /// </summary>
-    private static Dimensions GetUpdatedDimensionValues(
-        UpdateProductRequest request,
-        Dimensions currentDimensions)
-    {
-        decimal length = request.FieldMask.Contains("dimensions.length", StringComparer.OrdinalIgnoreCase)
-                         && request.Dimensions is { Length: not null }
-            ? request.Dimensions.Length ?? currentDimensions.Length
-            : currentDimensions.Length;
+        var updatedBaseProduct = product with
+        {
+            Name = name,
+            Category = category,
+            Pricing = pricing,
+            Dimensions = dimensions
+        };
 
-        decimal width = request.FieldMask.Contains("dimensions.width", StringComparer.OrdinalIgnoreCase)
-                        && request.Dimensions is { Width: not null }
-            ? request.Dimensions.Width ?? currentDimensions.Width
-            : currentDimensions.Width;
+        DomainModels.Product updatedProduct = updatedBaseProduct switch
+        {
+            PetFood petFood => petFood with
+            {
+                AgeGroup = request.FieldMask.Contains("agegroup", StringComparer.OrdinalIgnoreCase) &&
+                           Enum.TryParse(request.AgeGroup, true, out AgeGroup parsedAgeGroup)
+                    ? parsedAgeGroup
+                    : petFood.AgeGroup,
+                BreedSize = request.FieldMask.Contains("breedsize", StringComparer.OrdinalIgnoreCase) &&
+                            Enum.TryParse(request.BreedSize, true, out BreedSize parsedBreedSize)
+                    ? parsedBreedSize
+                    : petFood.BreedSize,
+                Ingredients = request.FieldMask.Contains("ingredients", StringComparer.OrdinalIgnoreCase) &&
+                              !string.IsNullOrEmpty(request.Ingredients)
+                    ? request.Ingredients
+                    : petFood.Ingredients,
+                NutritionalInfo = request.FieldMask.Contains("nutritionalinfo", StringComparer.OrdinalIgnoreCase) &&
+                                  request.NutritionalInfo is { } parsedNutritionalInfo
+                    ? parsedNutritionalInfo
+                    : petFood.NutritionalInfo,
+                StorageInstructions = request.FieldMask.Contains("storageinstructions", StringComparer.OrdinalIgnoreCase) &&
+                                      !string.IsNullOrEmpty(request.StorageInstructions)
+                    ? new StorageInstructions(request.StorageInstructions)
+                    : petFood.StorageInstructions,
+                WeightKg = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase) &&
+                           request.WeightKg.HasValue
+                    ? new Weight(request.WeightKg.Value)
+                    : petFood.WeightKg
+            },
+            GroomingAndHygiene groomingAndHygiene => groomingAndHygiene with
+            {
+                IsNatural = request.FieldMask.Contains("isnatural", StringComparer.OrdinalIgnoreCase) &&
+                            request.IsNatural.HasValue
+                    ? request.IsNatural.Value
+                    : groomingAndHygiene.IsNatural,
+                IsHypoallergenic = request.FieldMask.Contains("ishypoallergenic", StringComparer.OrdinalIgnoreCase) &&
+                                   request.IsHypoAllergenic.HasValue
+                    ? request.IsHypoAllergenic.Value
+                    : groomingAndHygiene.IsHypoallergenic,
+                UsageInstructions = request.FieldMask.Contains("usageinstructions", StringComparer.OrdinalIgnoreCase) &&
+                                    !string.IsNullOrEmpty(request.UsageInstructions)
+                    ? new UsageInstructions(request.UsageInstructions)
+                    : groomingAndHygiene.UsageInstructions,
+                IsCrueltyFree = request.FieldMask.Contains("iscrueltyfree", StringComparer.OrdinalIgnoreCase) &&
+                                request.IsCrueltyFree.HasValue
+                    ? request.IsCrueltyFree.Value
+                    : groomingAndHygiene.IsCrueltyFree,
+                SafetyWarnings = request.FieldMask.Contains("safetywarnings", StringComparer.OrdinalIgnoreCase) &&
+                                 !string.IsNullOrEmpty(request.SafetyWarnings)
+                    ? request.SafetyWarnings
+                    : groomingAndHygiene.SafetyWarnings
+            },
+            _ => updatedBaseProduct
+        };
 
-        decimal height = request.FieldMask.Contains("dimensions.height", StringComparer.OrdinalIgnoreCase)
-                         && request.Dimensions is { Height: not null }
-            ? request.Dimensions.Height ?? currentDimensions.Height
-            : currentDimensions.Height;
-
-        return new Dimensions(length, width, height);
-    }
-
-    /// <summary>
-    /// Returns updated grooming and hygiene values based on field mask.
-    /// </summary>
-    private static (
-        bool isNatural,
-        bool isHypoAllergenic,
-        UsageInstructions usageInstructions,
-        bool isCrueltyFree,
-        string safetyWarnings
-        ) GetUpdatedGroomingAndHygieneValues(
-            UpdateProductRequest request,
-            GroomingAndHygiene groomingAndHygiene)
-    {
-        bool isNatural = request.FieldMask.Contains("isnatural", StringComparer.OrdinalIgnoreCase) &&
-                         request.IsNatural.HasValue
-            ? request.IsNatural.Value
-            : groomingAndHygiene.IsNatural;
-
-        bool isHypoAllergenic = request.FieldMask.Contains("ishypoallergenic", StringComparer.OrdinalIgnoreCase) &&
-                                request.IsHypoAllergenic.HasValue
-            ? request.IsHypoAllergenic.Value
-            : groomingAndHygiene.IsHypoallergenic;
-
-        UsageInstructions usageInstructions = request.FieldMask.Contains("usageinstructions", StringComparer.OrdinalIgnoreCase)
-                                    && !string.IsNullOrEmpty(request.UsageInstructions)
-            ? new UsageInstructions(request.UsageInstructions)
-            : groomingAndHygiene.UsageInstructions;
-
-        bool isCrueltyFree = request.FieldMask.Contains("iscrueltyfree", StringComparer.OrdinalIgnoreCase) &&
-                             request.IsCrueltyFree.HasValue
-            ? request.IsCrueltyFree.Value
-            : groomingAndHygiene.IsCrueltyFree;
-
-        string safetyWarnings = request.FieldMask.Contains("safetywarnings", StringComparer.OrdinalIgnoreCase)
-                                 && !string.IsNullOrEmpty(request.SafetyWarnings)
-            ? request.SafetyWarnings
-            : groomingAndHygiene.SafetyWarnings;
-
-        return (isNatural, isHypoAllergenic, usageInstructions, isCrueltyFree, safetyWarnings);
-    }
-
-    /// <summary>
-    /// Returns updated pet food values based on field mask.
-    /// </summary>
-    private static (
-        AgeGroup ageGroup,
-        BreedSize breedSize,
-        string ingredients,
-        Dictionary<string, object> nutritionalInfo,
-        StorageInstructions storageInstructions,
-        Weight weightKg)
-        GetUpdatedPetFoodValues(
-            UpdateProductRequest request,
-            PetFood petFood)
-    {
-        AgeGroup ageGroup =
-            request.FieldMask.Contains("agegroup", StringComparer.OrdinalIgnoreCase) &&
-            Enum.TryParse(request.AgeGroup, true, out AgeGroup parsedAgeGroup)
-                ? parsedAgeGroup
-                : petFood.AgeGroup;
-
-        BreedSize breedSize =
-            request.FieldMask.Contains("breedsize", StringComparer.OrdinalIgnoreCase) &&
-            Enum.TryParse(request.BreedSize, true, out BreedSize parsedBreedSize)
-                ? parsedBreedSize
-                : petFood.BreedSize;
-
-        string ingredients =
-            request.FieldMask.Contains("ingredients", StringComparer.OrdinalIgnoreCase) &&
-            !string.IsNullOrEmpty(request.Ingredients)
-                ? request.Ingredients
-                : petFood.Ingredients;
-
-        Dictionary<string, object> nutritionalInfo =
-            request.FieldMask.Contains("nutritionalinfo", StringComparer.OrdinalIgnoreCase) &&
-            request.NutritionalInfo is { } parsedNutritionalInfo
-                ? parsedNutritionalInfo
-                : petFood.NutritionalInfo;
-
-        StorageInstructions storageInstructions =
-            request.FieldMask.Contains("storageinstructions", StringComparer.OrdinalIgnoreCase) &&
-            !string.IsNullOrEmpty(request.StorageInstructions)
-                ? new StorageInstructions(request.StorageInstructions)
-                : petFood.StorageInstructions;
-
-        Weight weight = request.FieldMask.Contains("weightkg", StringComparer.OrdinalIgnoreCase)
-                        && request.WeightKg.HasValue
-            ? new Weight(request.WeightKg.Value)
-            : petFood.WeightKg;
-
-        return (ageGroup, breedSize, ingredients, nutritionalInfo, storageInstructions, weight);
+        // IMPURE
+        await repository.UpdateProductAsync(updatedProduct);
     }
 }
