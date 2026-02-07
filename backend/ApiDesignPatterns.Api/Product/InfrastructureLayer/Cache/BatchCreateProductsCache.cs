@@ -16,7 +16,7 @@ public class BatchCreateProductsCache(IDatabase redisDatabase) : IBatchCreatePro
 
         return cachedValue.IsNull
             ? null
-            : JsonSerializer.Deserialize<CachedItem<IEnumerable<CreateProductResponse>>>(cachedValue!);
+            : JsonSerializer.Deserialize<CachedItem<IEnumerable<CreateProductResponse>>>((string)cachedValue!);
     }
 
     public async Task SetAsync(string key, CachedItem<IEnumerable<CreateProductResponse>> value, TimeSpan expiry)

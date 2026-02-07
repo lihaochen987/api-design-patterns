@@ -11,7 +11,9 @@ public class CreateProductCache(IDatabase redisDatabase) : ICreateProductCache
     {
         RedisValue cachedValue = await redisDatabase.StringGetAsync(key);
 
-        return cachedValue.IsNull ? null : JsonSerializer.Deserialize<CachedItem<CreateProductResponse>>(cachedValue!);
+        return cachedValue.IsNull
+            ? null
+            : JsonSerializer.Deserialize<CachedItem<CreateProductResponse>>((string)cachedValue!);
     }
 
     public async Task SetAsync(string key, CachedItem<CreateProductResponse> value, TimeSpan expiry)

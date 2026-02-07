@@ -18,6 +18,7 @@ using backend.User.DomainModels.ValueObjects;
 using Dapper;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Npgsql;
+using Swashbuckle.AspNetCore.Annotations;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +73,25 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
     c.UseOneOfForPolymorphism();
+    c.TagActionsBy(api =>
+    {
+        if (api.ActionDescriptor is not ControllerActionDescriptor descriptor)
+        {
+            return [api.GroupName ?? "Default"];
+        }
+
+        var swaggerOperation = descriptor.MethodInfo
+            .GetCustomAttributes(true)
+            .OfType<SwaggerOperationAttribute>()
+            .FirstOrDefault();
+
+        if (swaggerOperation?.Tags != null && swaggerOperation.Tags.Length != 0)
+        {
+            return swaggerOperation.Tags;
+        }
+
+        return [api.GroupName ?? "Default"];
+    });
 });
 
 // Register Dapper stuff
