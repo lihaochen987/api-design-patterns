@@ -20,11 +20,6 @@ public static class ProductMappingConfig
         config.NewConfig<ProductPricingRequest, Pricing>().TwoWays();
         config.NewConfig<DimensionsRequest, Dimensions>().TwoWays();
 
-        config.NewConfig<Name, string>()
-            .MapWith(src => src.Value);
-        config.NewConfig<string, Name>()
-            .MapWith(src => new Name(src));
-
         config.NewConfig<Weight, decimal?>()
             .MapWith(src => src.Value);
         config.NewConfig<decimal?, Weight>()

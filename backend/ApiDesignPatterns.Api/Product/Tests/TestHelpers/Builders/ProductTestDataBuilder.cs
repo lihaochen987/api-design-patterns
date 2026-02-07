@@ -30,7 +30,6 @@ public class ProductTestDataBuilder
         Fixture fixture = new();
         fixture.Customizations.Add(new ProductPricingSpecimenBuilder());
         fixture.Customizations.Add(new DimensionsSpecimenBuilder());
-        fixture.Customizations.Add(new NameSpecimenBuilder());
 
         _id = fixture.Create<long>();
         _name = fixture.Create<string>();

@@ -11,7 +11,6 @@ using backend.Product;
 using backend.Product.DomainModels.ValueObjects;
 using backend.Review;
 using backend.Review.DomainModels.ValueObjects;
-using backend.Shared;
 using backend.Shared.ControllerActivators;
 using backend.User;
 using backend.User.DomainModels.ValueObjects;
@@ -99,7 +98,6 @@ builder.Services.AddScoped<IDbConnection>(_ =>
     new NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Product
-SqlMapper.AddTypeHandler(new NameTypeHandler());
 SqlMapper.AddTypeHandler(new IngredientsTypeHandler());
 SqlMapper.AddTypeHandler(new StorageInstructionsTypeHandler());
 SqlMapper.AddTypeHandler(new WeightTypeHandler());
