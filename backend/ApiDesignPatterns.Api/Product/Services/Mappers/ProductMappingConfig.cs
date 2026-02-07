@@ -30,11 +30,6 @@ public static class ProductMappingConfig
         config.NewConfig<string, UsageInstructions>()
             .MapWith(src => new UsageInstructions(src));
 
-        config.NewConfig<SafetyWarnings, string>()
-            .MapWith(src => src.Value);
-        config.NewConfig<string, SafetyWarnings>()
-            .MapWith(src => new SafetyWarnings(src));
-
         config.NewConfig<StorageInstructions, string>()
             .MapWith(src => src.Value);
         config.NewConfig<string, StorageInstructions>()

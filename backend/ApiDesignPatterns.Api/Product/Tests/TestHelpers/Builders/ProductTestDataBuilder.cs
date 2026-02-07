@@ -23,7 +23,7 @@ public class ProductTestDataBuilder
     private readonly bool _isHypoAllergenic;
     private readonly UsageInstructions _usageInstructions;
     private readonly bool _isCrueltyFree;
-    private readonly SafetyWarnings _safetyWarnings;
+    private readonly string _safetyWarnings;
 
     public ProductTestDataBuilder()
     {
@@ -48,7 +48,7 @@ public class ProductTestDataBuilder
         _isHypoAllergenic = fixture.Create<bool>();
         _usageInstructions = fixture.Create<UsageInstructions>();
         _isCrueltyFree = fixture.Create<bool>();
-        _safetyWarnings = fixture.Create<SafetyWarnings>();
+        _safetyWarnings = fixture.Create<string>();
     }
 
     public ProductTestDataBuilder WithId(long id)

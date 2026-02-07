@@ -225,7 +225,7 @@ public class ProductRepository(IDbConnection dbConnection)
                 product.IsHypoallergenic,
                 UsageInstructions = product.UsageInstructions.Value,
                 product.IsCrueltyFree,
-                SafetyWarnings = product.SafetyWarnings.Value
+                product.SafetyWarnings
             }
         );
     }
@@ -283,7 +283,7 @@ public class ProductRepository(IDbConnection dbConnection)
             product.IsHypoallergenic,
             UsageInstructions = product.UsageInstructions.Value,
             product.IsCrueltyFree,
-            SafetyWarnings = product.SafetyWarnings.Value
+             product.SafetyWarnings
         }).ToList();
 
         await dbConnection.ExecuteAsync(

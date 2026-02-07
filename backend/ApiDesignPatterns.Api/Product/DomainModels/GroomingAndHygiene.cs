@@ -8,5 +8,5 @@ public record GroomingAndHygiene : Product
     public required bool IsHypoallergenic { get; init; }
     public required UsageInstructions UsageInstructions { get; init; }
     public required bool IsCrueltyFree { get; init; }
-    public required SafetyWarnings SafetyWarnings { get; init; }
+    public required string SafetyWarnings { get; init; }
 }

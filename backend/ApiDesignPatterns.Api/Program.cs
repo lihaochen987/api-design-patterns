@@ -101,7 +101,6 @@ builder.Services.AddScoped<IDbConnection>(_ =>
 SqlMapper.AddTypeHandler(new StorageInstructionsTypeHandler());
 SqlMapper.AddTypeHandler(new WeightTypeHandler());
 SqlMapper.AddTypeHandler(new UsageInstructionsTypeHandler());
-SqlMapper.AddTypeHandler(new SafetyWarningsTypeHandler());
 
 // Inventory
 SqlMapper.AddTypeHandler(new QuantityTypeHandler());

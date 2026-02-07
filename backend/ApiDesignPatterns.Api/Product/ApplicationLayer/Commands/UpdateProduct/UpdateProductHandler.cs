@@ -105,7 +105,7 @@ public class UpdateProductHandler(
         GroomingAndHygiene groomingAndHygiene)
     {
         (bool isNatural, bool isHypoAllergenic, UsageInstructions usageInstructions, bool isCrueltyFree,
-                SafetyWarnings safetyWarnings) =
+                string safetyWarnings) =
             GetUpdatedGroomingAndHygieneValues(request, groomingAndHygiene);
 
         var updatedGroomingAndHygiene = groomingAndHygiene with
@@ -204,7 +204,7 @@ public class UpdateProductHandler(
         bool isHypoAllergenic,
         UsageInstructions usageInstructions,
         bool isCrueltyFree,
-        SafetyWarnings safetyWarnings
+        string safetyWarnings
         ) GetUpdatedGroomingAndHygieneValues(
             UpdateProductRequest request,
             GroomingAndHygiene groomingAndHygiene)
@@ -229,9 +229,9 @@ public class UpdateProductHandler(
             ? request.IsCrueltyFree.Value
             : groomingAndHygiene.IsCrueltyFree;
 
-        SafetyWarnings safetyWarnings = request.FieldMask.Contains("safetywarnings", StringComparer.OrdinalIgnoreCase)
+        string safetyWarnings = request.FieldMask.Contains("safetywarnings", StringComparer.OrdinalIgnoreCase)
                                  && !string.IsNullOrEmpty(request.SafetyWarnings)
-            ? new SafetyWarnings(request.SafetyWarnings)
+            ? request.SafetyWarnings
             : groomingAndHygiene.SafetyWarnings;
 
         return (isNatural, isHypoAllergenic, usageInstructions, isCrueltyFree, safetyWarnings);
