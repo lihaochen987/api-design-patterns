@@ -85,7 +85,7 @@ public class MatchProductToUpdateRequestHandlerTests : MatchProductToUpdateReque
     {
         var product = new ProductTestDataBuilder()
             .WithId(1)
-            .WithName(new Name("Original Product"))
+            .WithName("Original Product")
             .Build();
         var existingProducts = new List<DomainModels.Product> { product };
         var updateRequest = new UpdateProductRequestWithId { Id = 1, Name = "Updated Product" };
@@ -102,7 +102,7 @@ public class MatchProductToUpdateRequestHandlerTests : MatchProductToUpdateReque
         result.MatchedPairs.Should().HaveCount(1);
         var pair = result.MatchedPairs.First();
         pair.ExistingProduct.Should().Be(product);
-        pair.ExistingProduct.Name.Value.Should().Be("Original Product");
+        pair.ExistingProduct.Name.Should().Be("Original Product");
         pair.RequestProduct.Should().Be(updateRequest);
         pair.RequestProduct.Name.Should().Be("Updated Product");
     }

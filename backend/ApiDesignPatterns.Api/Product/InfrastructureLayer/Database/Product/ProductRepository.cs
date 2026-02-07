@@ -174,7 +174,7 @@ public class ProductRepository(IDbConnection dbConnection)
             new
             {
                 product.Id,
-                Name = product.Name.Value,
+                product.Name,
                 product.Category,
                 product.Dimensions.Width,
                 product.Dimensions.Height,
