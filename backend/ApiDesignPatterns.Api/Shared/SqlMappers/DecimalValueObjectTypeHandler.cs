@@ -16,10 +16,9 @@ public abstract class DecimalValueObjectTypeHandler<T> : SqlMapper.TypeHandler<T
         if (value is decimal decimalValue)
             return Create(decimalValue);
 
-        if (decimal.TryParse(value.ToString(), out decimal parsedValue))
-            return Create(parsedValue);
-
-        throw new InvalidCastException($"Cannot convert {value.GetType()} to {typeof(T)}");
+        return decimal.TryParse(value.ToString(), out decimal parsedValue)
+            ? Create(parsedValue)
+            : throw new InvalidCastException($"Cannot convert {value.GetType()} to {typeof(T)}");
     }
 
     public override void SetValue(IDbDataParameter parameter, T value)

@@ -16,10 +16,9 @@ public abstract class LongValueObjectTypeHandler<T> : SqlMapper.TypeHandler<T> w
         if (value is long decimalValue)
             return Create(decimalValue);
 
-        if (long.TryParse(value.ToString(), out long parsedValue))
-            return Create(parsedValue);
-
-        throw new InvalidCastException($"Cannot convert {value.GetType()} to {typeof(T)}");
+        return long.TryParse(value.ToString(), out long parsedValue)
+            ? Create(parsedValue)
+            : throw new InvalidCastException($"Cannot convert {value.GetType()} to {typeof(T)}");
     }
 
     public override void SetValue(IDbDataParameter parameter, T value)
@@ -27,4 +26,3 @@ public abstract class LongValueObjectTypeHandler<T> : SqlMapper.TypeHandler<T> w
         parameter.Value = GetDecimalValue(value);
     }
 }
-
