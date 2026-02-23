@@ -22,8 +22,8 @@ public class ReviewRepository(
             new
             {
                 review.ProductId,
-                Rating = review.Rating.Value,
-                Text = review.Text.Value,
+                review.Rating,
+                review.Text,
                 review.CreatedAt,
                 review.UpdatedAt
             });
@@ -41,8 +41,8 @@ public class ReviewRepository(
             {
                 review.Id,
                 review.ProductId,
-                Rating = review.Rating.Value,
-                Text = review.Text.Value,
+                review.Rating,
+                review.Text,
                 review.CreatedAt,
                 review.UpdatedAt
             });

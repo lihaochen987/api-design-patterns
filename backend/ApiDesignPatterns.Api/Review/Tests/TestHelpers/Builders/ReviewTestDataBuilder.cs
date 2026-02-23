@@ -2,8 +2,6 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.Review.DomainModels.ValueObjects;
-using backend.Review.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.Review.Tests.TestHelpers.Builders;
 
@@ -11,8 +9,8 @@ public class ReviewTestDataBuilder
 {
     private long _id;
     private long _productId;
-    private Rating _rating;
-    private Text _text;
+    private decimal _rating;
+    private string _text;
     private DateTimeOffset _createdAt;
     private DateTimeOffset? _updatedAt;
 
@@ -20,12 +18,10 @@ public class ReviewTestDataBuilder
     {
         Fixture fixture = new();
 
-        fixture.Customizations.Add(new RatingSpecimenBuilder());
-
         _id = fixture.Create<long>();
         _productId = fixture.Create<long>();
-        _rating = fixture.Create<Rating>();
-        _text = fixture.Create<Text>();
+        _rating = fixture.Create<decimal>();
+        _text = fixture.Create<string>();
         _createdAt = fixture.Create<DateTimeOffset>();
         _updatedAt = fixture.Create<DateTimeOffset?>();
     }
@@ -42,13 +38,13 @@ public class ReviewTestDataBuilder
         return this;
     }
 
-    public ReviewTestDataBuilder WithRating(Rating rating)
+    public ReviewTestDataBuilder WithRating(decimal rating)
     {
         _rating = rating;
         return this;
     }
 
-    public ReviewTestDataBuilder WithText(Text text)
+    public ReviewTestDataBuilder WithText(string text)
     {
         _text = text;
         return this;
