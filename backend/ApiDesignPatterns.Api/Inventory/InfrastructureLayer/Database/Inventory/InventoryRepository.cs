@@ -15,7 +15,7 @@ public class InventoryRepository(IDbConnection dbConnection) : IInventoryReposit
             {
                 inventory.UserId,
                 inventory.ProductId,
-                Quantity = inventory.Quantity.Value,
+                inventory.Quantity,
                 inventory.RestockDate
             });
     }
@@ -36,7 +36,7 @@ public class InventoryRepository(IDbConnection dbConnection) : IInventoryReposit
     public async Task UpdateInventoryAsync(DomainModels.Inventory inventory)
     {
         await dbConnection.ExecuteAsync(InventoryQueries.UpdateInventory,
-            new { inventory.Id, Quantity = inventory.Quantity.Value, inventory.RestockDate });
+            new { inventory.Id, inventory.Quantity, inventory.RestockDate });
     }
 
     public async Task DeleteInventoryAsync(long id)

@@ -1,13 +1,10 @@
 // Licensed to the.NET Foundation under one or more agreements.
 // The.NET Foundation licenses this file to you under the MIT license.
 
-using backend.Inventory.ApplicationLayer.Commands.CreateInventory;
-using backend.Inventory.ApplicationLayer.Queries.GetInventoryByProductAndUser;
 using backend.Inventory.Controllers;
 using backend.Inventory.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using Xunit;
 
 namespace backend.Inventory.Tests;
@@ -22,7 +19,7 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
         {
             UserId = inventory.UserId,
             ProductId = inventory.ProductId,
-            Quantity = inventory.Quantity.Value,
+            Quantity = inventory.Quantity,
             RestockDate = inventory.RestockDate
         };
         CreateInventoryController sut = GetCreateInventoryController();
@@ -44,7 +41,7 @@ public class CreateInventoryControllerTests : CreateInventoryControllerTestBase
         {
             UserId = existingInventory.UserId,
             ProductId = existingInventory.ProductId,
-            Quantity = existingInventory.Quantity.Value,
+            Quantity = existingInventory.Quantity,
             RestockDate = existingInventory.RestockDate
         };
         Repository.Add(existingInventory);

@@ -4,7 +4,6 @@
 using System.Globalization;
 using AutoFixture;
 using backend.Inventory.Controllers;
-using backend.Inventory.DomainModels.ValueObjects;
 using backend.Inventory.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +16,7 @@ public class UpdateInventoryControllerTests : UpdateInventoryControllerTestBase
     [Fact]
     public async Task UpdateInventory_WithExistingInventory_ShouldReturnOkWithUpdatedQuantity()
     {
-        var existingInventory = new InventoryTestDataBuilder().WithId(1).WithQuantity(new Quantity(100)).Build();
+        var existingInventory = new InventoryTestDataBuilder().WithId(1).WithQuantity(100).Build();
         var request = new UpdateInventoryRequest { Quantity = 200m, FieldMask = ["quantity"] };
         Repository.Add(existingInventory);
         var sut = UpdateInventoryController();
@@ -71,7 +70,7 @@ public class UpdateInventoryControllerTests : UpdateInventoryControllerTestBase
     [Fact]
     public async Task UpdateInventory_WithMultipleFields_ShouldUpdateAllSpecifiedFields()
     {
-        var existingInventory = new InventoryTestDataBuilder().WithId(1).WithQuantity(new Quantity(250)).Build();
+        var existingInventory = new InventoryTestDataBuilder().WithId(1).WithQuantity(250).Build();
         var newRestockDate = DateTimeOffset.Now.AddDays(15);
         var request = new UpdateInventoryRequest
         {
@@ -97,7 +96,7 @@ public class UpdateInventoryControllerTests : UpdateInventoryControllerTestBase
         var originalRestockDate = DateTimeOffset.Now.AddDays(10);
         var existingInventory = new InventoryTestDataBuilder()
             .WithId(1)
-            .WithQuantity(new Quantity(100m))
+            .WithQuantity(100m)
             .WithRestockDate(originalRestockDate)
             .Build();
         var request = new UpdateInventoryRequest
@@ -125,7 +124,7 @@ public class UpdateInventoryControllerTests : UpdateInventoryControllerTestBase
         var originalRestockDate = DateTimeOffset.Now.AddDays(5);
         var existingInventory = new InventoryTestDataBuilder()
             .WithId(1)
-            .WithQuantity(new Quantity(originalQuantity))
+            .WithQuantity(originalQuantity)
             .WithRestockDate(originalRestockDate)
             .Build();
         var request = new UpdateInventoryRequest

@@ -4,7 +4,6 @@ using backend;
 using backend.Address;
 using backend.Address.DomainModels.ValueObjects;
 using backend.Inventory;
-using backend.Inventory.DomainModels.ValueObjects;
 using backend.PhoneNumber;
 using backend.PhoneNumber.DomainModels.ValueObjects;
 using backend.Product;
@@ -94,9 +93,6 @@ builder.Services.AddSwaggerGen(c =>
 // Register Dapper stuff
 builder.Services.AddScoped<IDbConnection>(_ =>
     new NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Inventory
-SqlMapper.AddTypeHandler(new QuantityTypeHandler());
 
 // Review
 SqlMapper.AddTypeHandler(new RatingTypeHandler());
