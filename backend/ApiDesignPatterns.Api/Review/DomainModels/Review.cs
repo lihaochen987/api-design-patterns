@@ -5,10 +5,32 @@ namespace backend.Review.DomainModels;
 
 public record Review
 {
-    public required long Id { get; init; }
-    public required long ProductId { get; init; }
-    public required decimal Rating { get; init; }
-    public required string Text { get; init; }
-    public DateTimeOffset CreatedAt { get; init; }
-    public DateTimeOffset? UpdatedAt { get; init; }
+    public Review(
+        long id,
+        long productId,
+        decimal rating,
+        string text,
+        DateTimeOffset createdAt,
+        DateTimeOffset? updatedAt
+    )
+    {
+        if (rating is < 0 or > 5)
+        {
+            throw new ArgumentOutOfRangeException(nameof(rating));
+        }
+
+        Id = id;
+        ProductId = productId;
+        Rating = rating;
+        Text = text;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
+    }
+
+    public long Id { get; private set; }
+    public long ProductId { get; private set; }
+    public decimal Rating { get; private set; }
+    public string Text { get; private set; }
+    public DateTimeOffset CreatedAt { get; private set; }
+    public DateTimeOffset? UpdatedAt { get; private set; }
 }

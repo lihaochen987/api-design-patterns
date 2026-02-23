@@ -21,18 +21,14 @@ public class UpdateReviewHandler(IReviewRepository repository) : ICommandHandler
             ? req.Rating.Value
             : current.Rating;
 
-        string text = req.FieldMask.Contains("text", StringComparer.OrdinalIgnoreCase) && !string.IsNullOrEmpty(req.Text)
+        string text = req.FieldMask.Contains("text", StringComparer.OrdinalIgnoreCase) &&
+                      !string.IsNullOrEmpty(req.Text)
             ? req.Text
             : current.Text;
 
-        await repository.UpdateReviewAsync(new DomainModels.Review
-        {
-            Id = current.Id,
-            ProductId = productId,
-            Rating = rating,
-            Text = text,
-            CreatedAt = current.CreatedAt,
-            UpdatedAt = DateTimeOffset.Now
-        });
+        var updatedReview =
+            new DomainModels.Review(current.Id, productId, rating, text, current.CreatedAt, DateTimeOffset.Now);
+
+        await repository.UpdateReviewAsync(updatedReview);
     }
 }

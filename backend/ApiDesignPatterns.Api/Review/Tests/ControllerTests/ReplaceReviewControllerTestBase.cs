@@ -28,7 +28,7 @@ public abstract class ReplaceReviewControllerTestBase
     protected ReplaceReviewControllerTestBase()
     {
         var config = new TypeAdapterConfig();
-        ReviewMappingConfig.RegisterReviewMappings(config);
+        config.RegisterReviewMappings();
         Mapper = new Mapper(config);
     }
 

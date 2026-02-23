@@ -10,7 +10,8 @@ public class ReplaceReviewHandler(IReviewRepository repository) : ICommandHandle
 {
     public async Task Handle(ReplaceReviewCommand command)
     {
-        var review = command.Review with { CreatedAt = DateTimeOffset.Now, UpdatedAt = null };
+        var review = new DomainModels.Review(command.Review.Id, command.Review.ProductId, command.Review.Rating,
+            command.Review.Text, DateTimeOffset.Now, null);
         await repository.UpdateReviewAsync(review);
     }
 }

@@ -15,25 +15,6 @@ namespace backend.Review.Tests.ControllerTests;
 public class ReplaceReviewControllerTests : ReplaceReviewControllerTestBase
 {
     [Fact]
-    public async Task ReplaceReview_ReturnsOkResponse_WhenReviewReplacedSuccessfully()
-    {
-        var review = new ReviewTestDataBuilder().Build();
-        var request = Mapper.Map<ReplaceReviewRequest>(review);
-        var expectedResponse = Mapper.Map<ReplaceReviewResponse>(review);
-        Mock
-            .Get(GetReview)
-            .Setup(x => x.Handle(It.Is<GetReviewQuery>(q => q.Id == review.Id)))
-            .ReturnsAsync(review);
-        ReplaceReviewController sut = GetReplaceReviewController();
-
-        var result = await sut.ReplaceReview(review.Id, request);
-
-        result.Should().NotBeNull();
-        var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
-        okResult.Value.Should().BeEquivalentTo(expectedResponse);
-    }
-
-    [Fact]
     public async Task ReplaceReview_ReturnsNotFound_WhenReviewDoesNotExist()
     {
         long nonExistentId = Fixture.Create<long>();

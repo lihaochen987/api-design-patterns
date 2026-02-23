@@ -17,6 +17,7 @@ public class ReviewTestDataBuilder
     public ReviewTestDataBuilder()
     {
         Fixture fixture = new();
+        fixture.Customize<decimal>(c => c.FromFactory(() => Math.Round(new Random().Next(0, 51) / 10m, 1)));
 
         _id = fixture.Create<long>();
         _productId = fixture.Create<long>();
@@ -64,14 +65,6 @@ public class ReviewTestDataBuilder
 
     public DomainModels.Review Build()
     {
-        return new DomainModels.Review
-        {
-            Id = _id,
-            ProductId = _productId,
-            Rating = _rating,
-            Text = _text,
-            CreatedAt = _createdAt,
-            UpdatedAt = _updatedAt
-        };
+        return new DomainModels.Review(_id, _productId, _rating, _text, _createdAt, _updatedAt);
     }
 }

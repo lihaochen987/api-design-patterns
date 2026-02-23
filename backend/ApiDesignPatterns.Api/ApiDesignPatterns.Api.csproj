@@ -686,6 +686,9 @@
     <Compile Update="Product\Controllers\ProductPricing\UpdateProductPricingResponse.cs">
       <DependentUpon>UpdateProductPricingController.cs</DependentUpon>
     </Compile>
+    <Compile Update="Review\InfrastructureLayer\Database\Review\ReviewRow.cs">
+      <DependentUpon>ReviewRepository.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

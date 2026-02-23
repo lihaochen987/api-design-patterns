@@ -6,14 +6,17 @@ using Dapper;
 
 namespace backend.Review.InfrastructureLayer.Database.Review;
 
-public class ReviewRepository(
-    IDbConnection dbConnection)
-    : IReviewRepository
+public class ReviewRepository(IDbConnection dbConnection) : IReviewRepository
 {
     public async Task<DomainModels.Review?> GetReviewAsync(long id)
     {
-        return await dbConnection.QuerySingleOrDefaultAsync<DomainModels.Review>(ReviewQueries.GetReview,
-            new { Id = id });
+        var row = await dbConnection.QuerySingleOrDefaultAsync<ReviewRow>(
+            ReviewQueries.GetReview, new { Id = id });
+
+        return row is null
+            ? null
+            : new DomainModels.Review(
+                row.Id, row.ProductId, row.Rating, row.Text, row.CreatedAt, row.UpdatedAt);
     }
 
     public async Task CreateReviewAsync(DomainModels.Review review)
