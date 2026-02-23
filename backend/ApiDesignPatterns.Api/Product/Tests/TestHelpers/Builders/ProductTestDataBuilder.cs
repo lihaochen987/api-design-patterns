@@ -18,10 +18,10 @@ public class ProductTestDataBuilder
     private readonly Dictionary<string, object> _nutritionalInfo;
     private Pricing _pricing;
     private readonly string _storageInstructions;
-    private readonly Weight _weightKg;
+    private readonly decimal _weightKg;
     private readonly bool _isNatural;
     private readonly bool _isHypoAllergenic;
-    private readonly UsageInstructions _usageInstructions;
+    private readonly string _usageInstructions;
     private readonly bool _isCrueltyFree;
     private readonly string _safetyWarnings;
 
@@ -42,11 +42,11 @@ public class ProductTestDataBuilder
         _ingredients = fixture.Create<string>();
         _nutritionalInfo = fixture.Create<Dictionary<string, object>>();
         _storageInstructions = fixture.Create<string>();
-        _weightKg = fixture.Create<Weight>();
+        _weightKg = fixture.Create<decimal>();
 
         _isNatural = fixture.Create<bool>();
         _isHypoAllergenic = fixture.Create<bool>();
-        _usageInstructions = fixture.Create<UsageInstructions>();
+        _usageInstructions = fixture.Create<string>();
         _isCrueltyFree = fixture.Create<bool>();
         _safetyWarnings = fixture.Create<string>();
     }

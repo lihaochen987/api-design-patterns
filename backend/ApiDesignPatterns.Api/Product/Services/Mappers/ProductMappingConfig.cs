@@ -20,16 +20,6 @@ public static class ProductMappingConfig
         config.NewConfig<ProductPricingRequest, Pricing>().TwoWays();
         config.NewConfig<DimensionsRequest, Dimensions>().TwoWays();
 
-        config.NewConfig<Weight, decimal?>()
-            .MapWith(src => src.Value);
-        config.NewConfig<decimal?, Weight>()
-            .MapWith(src => new Weight(src));
-
-        config.NewConfig<UsageInstructions, string>()
-            .MapWith(src => src.Value);
-        config.NewConfig<string, UsageInstructions>()
-            .MapWith(src => new UsageInstructions(src));
-
         // CreateProductController
         config.NewConfig<DomainModels.Product, CreateProductResponse>();
         config.NewConfig<PetFood, CreatePetFoodResponse>()

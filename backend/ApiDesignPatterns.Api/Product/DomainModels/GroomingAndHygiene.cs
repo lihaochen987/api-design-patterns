@@ -7,7 +7,7 @@ public record GroomingAndHygiene : Product
 {
     public required bool IsNatural { get; init; }
     public required bool IsHypoallergenic { get; init; }
-    public required UsageInstructions UsageInstructions { get; init; }
+    public required string UsageInstructions { get; init; }
     public required bool IsCrueltyFree { get; init; }
     public required string SafetyWarnings { get; init; }
 
@@ -25,9 +25,9 @@ public record GroomingAndHygiene : Product
             ? request.IsHypoAllergenic.Value
             : IsHypoallergenic;
 
-        var usageInstructions = request.FieldMask.Contains("usageinstructions", StringComparer.OrdinalIgnoreCase) &&
-                                !string.IsNullOrEmpty(request.UsageInstructions)
-            ? new UsageInstructions(request.UsageInstructions)
+        string? usageInstructions = request.FieldMask.Contains("usageinstructions", StringComparer.OrdinalIgnoreCase) &&
+                                    !string.IsNullOrEmpty(request.UsageInstructions)
+            ? request.UsageInstructions
             : UsageInstructions;
 
         bool isCrueltyFree = request.FieldMask.Contains("iscrueltyfree", StringComparer.OrdinalIgnoreCase) &&

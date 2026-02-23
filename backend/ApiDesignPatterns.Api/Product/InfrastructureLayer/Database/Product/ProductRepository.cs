@@ -167,7 +167,7 @@ public class ProductRepository(IDbConnection dbConnection)
                         petFood.BreedSize,
                         petFood.Ingredients,
                         petFood.StorageInstructions,
-                        WeightKg = petFood.WeightKg.Value
+                        petFood.WeightKg
                     }
                 );
                 break;
@@ -179,7 +179,7 @@ public class ProductRepository(IDbConnection dbConnection)
                         groomingProduct.Id,
                         groomingProduct.IsNatural,
                         groomingProduct.IsHypoallergenic,
-                        UsageInstructions = groomingProduct.UsageInstructions.Value,
+                        groomingProduct.UsageInstructions,
                         groomingProduct.IsCrueltyFree,
                         groomingProduct.SafetyWarnings
                     }
@@ -225,7 +225,7 @@ public class ProductRepository(IDbConnection dbConnection)
             product.BreedSize,
             product.Ingredients,
             product.StorageInstructions,
-            WeightKg = product.WeightKg.Value
+            product.WeightKg
         }).ToList();
 
         await dbConnection.ExecuteAsync(
@@ -241,7 +241,7 @@ public class ProductRepository(IDbConnection dbConnection)
             product.Id,
             product.IsNatural,
             product.IsHypoallergenic,
-            UsageInstructions = product.UsageInstructions.Value,
+            product.UsageInstructions,
             product.IsCrueltyFree,
              product.SafetyWarnings
         }).ToList();
