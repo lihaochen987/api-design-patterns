@@ -4,7 +4,6 @@
 using AutoFixture;
 using backend.User.ApplicationLayer.Queries.GetUser;
 using backend.User.Controllers;
-using backend.User.DomainModels.ValueObjects;
 using backend.User.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -52,9 +51,9 @@ public class ReplaceUserControllerTests : ReplaceUserControllerTestBase
     public async Task ReplaceUser_HandlesMappingAndCommand_WithCorrectData()
     {
         var user = new UserTestDataBuilder()
-            .WithFirstName(new FirstName("John"))
-            .WithLastName(new LastName("Doe"))
-            .WithEmail(new Email("john.doe@example.com"))
+            .WithFirstName("John")
+            .WithLastName("Doe")
+            .WithEmail("john.doe@example.com")
             .Build();
         var request = Mapper.Map<ReplaceUserRequest>(user);
         Mock

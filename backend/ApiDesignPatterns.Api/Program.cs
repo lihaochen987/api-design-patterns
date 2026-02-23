@@ -13,7 +13,6 @@ using backend.Review;
 using backend.Review.DomainModels.ValueObjects;
 using backend.Shared.ControllerActivators;
 using backend.User;
-using backend.User.DomainModels.ValueObjects;
 using Dapper;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Npgsql;
@@ -107,11 +106,6 @@ SqlMapper.AddTypeHandler(new QuantityTypeHandler());
 // Review
 SqlMapper.AddTypeHandler(new RatingTypeHandler());
 SqlMapper.AddTypeHandler(new TextTypeHandler());
-
-// User
-SqlMapper.AddTypeHandler(new FirstNameTypeHandler());
-SqlMapper.AddTypeHandler(new LastNameTypeHandler());
-SqlMapper.AddTypeHandler(new EmailTypeHandler());
 
 // PhoneNumber
 SqlMapper.AddTypeHandler(new AreaCodeTypeHandler());

@@ -3,7 +3,6 @@
 
 using backend.Shared.CommandHandler;
 using backend.User.Controllers;
-using backend.User.DomainModels.ValueObjects;
 using backend.User.InfrastructureLayer.Database.User;
 
 namespace backend.User.ApplicationLayer.Commands.UpdateUser;
@@ -12,7 +11,7 @@ public class UpdateUserHandler(IUserRepository repository) : ICommandHandler<Upd
 {
     public async Task Handle(UpdateUserCommand command)
     {
-        (FirstName firstName, LastName lastName, Email email, List<long> addressIds, List<long> phoneNumberIds) =
+        (string firstName, string lastName, string email, List<long> addressIds, List<long> phoneNumberIds) =
             GetUpdatedUserValues(command.Request, command.User);
         var newUser = new DomainModels.User
         {
@@ -27,21 +26,21 @@ public class UpdateUserHandler(IUserRepository repository) : ICommandHandler<Upd
         await repository.UpdateUserAsync(newUser, command.User);
     }
 
-    private static (FirstName firstName, LastName lastName, Email email, List<long> addressIds, List<long> phoneNumberIds)
+    private static (string firstName, string lastName, string email, List<long> addressIds, List<long> phoneNumberIds)
         GetUpdatedUserValues(
             UpdateUserRequest request,
             DomainModels.User user)
     {
-        FirstName firstname = request.FieldMask.Contains("firstname") && !string.IsNullOrEmpty(request.FirstName)
-            ? new FirstName(request.FirstName)
+        string firstname = request.FieldMask.Contains("firstname") && !string.IsNullOrEmpty(request.FirstName)
+            ? request.FirstName
             : user.FirstName;
 
-        LastName lastName = request.FieldMask.Contains("lastname") && !string.IsNullOrEmpty(request.LastName)
-            ? new LastName(request.LastName)
+        string lastName = request.FieldMask.Contains("lastname") && !string.IsNullOrEmpty(request.LastName)
+            ? request.LastName
             : user.LastName;
 
-        Email email = request.FieldMask.Contains("email") && !string.IsNullOrEmpty(request.Email)
-            ? new Email(request.Email)
+        string email = request.FieldMask.Contains("email") && !string.IsNullOrEmpty(request.Email)
+            ? request.Email
             : user.Email;
 
         var addresses = GetUpdatedUserAddresses(request, user);

@@ -4,7 +4,6 @@
 using AutoFixture;
 using backend.User.ApplicationLayer.Queries.GetUser;
 using backend.User.Controllers;
-using backend.User.DomainModels.ValueObjects;
 using backend.User.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -76,7 +75,7 @@ public class UpdateUserControllerTests : UpdateUserControllerTestBase
         var user = new UserTestDataBuilder().Build();
         var updatedUser = new UserTestDataBuilder()
             .WithId(user.Id)
-            .WithFirstName(new FirstName("Updated"))
+            .WithFirstName("Updated")
             .Build();
         UpdateUserRequest request = new() { FirstName = "Updated" };
         Mock

@@ -32,9 +32,9 @@ public class UpdateUserHandlerTests : UpdateUserHandlerTestBase
         await sut.Handle(new UpdateUserCommand { User = user, Request = request });
 
         Repository.IsDirty.Should().BeTrue();
-        Repository.First().FirstName.Value.Should().BeEquivalentTo(request.FirstName);
-        Repository.First().LastName.Value.Should().BeEquivalentTo(request.LastName);
-        Repository.First().Email.Value.Should().BeEquivalentTo(request.Email);
+        Repository.First().FirstName.Should().BeEquivalentTo(request.FirstName);
+        Repository.First().LastName.Should().BeEquivalentTo(request.LastName);
+        Repository.First().Email.Should().BeEquivalentTo(request.Email);
     }
 
     [Fact]

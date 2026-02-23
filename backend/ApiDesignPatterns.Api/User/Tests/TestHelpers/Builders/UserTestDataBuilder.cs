@@ -2,17 +2,15 @@
 // The.NET Foundation licenses this file to you under the MIT license.
 
 using AutoFixture;
-using backend.User.DomainModels.ValueObjects;
-using backend.User.Tests.TestHelpers.SpecimenBuilders;
 
 namespace backend.User.Tests.TestHelpers.Builders;
 
 public class UserTestDataBuilder
 {
     private long _id;
-    private FirstName _firstName;
-    private LastName _lastName;
-    private Email _email;
+    private string _firstName;
+    private string _lastName;
+    private string _email;
     private List<long> _addressIds;
     private DateTimeOffset _createdAt;
     private List<long> _phoneNumberIds;
@@ -20,14 +18,11 @@ public class UserTestDataBuilder
     public UserTestDataBuilder()
     {
         Fixture fixture = new();
-        fixture.Customizations.Add(new FirstNameSpecimenBuilder());
-        fixture.Customizations.Add(new LastNameSpecimenBuilder());
-        fixture.Customizations.Add(new EmailSpecimenBuilder());
 
         _id = fixture.Create<long>();
-        _firstName = fixture.Create<FirstName>();
-        _lastName = fixture.Create<LastName>();
-        _email = fixture.Create<Email>();
+        _firstName = fixture.Create<string>();
+        _lastName = fixture.Create<string>();
+        _email = fixture.Create<string>();
         _createdAt = fixture.Create<DateTimeOffset>();
         _addressIds = fixture.Create<List<long>>();
         _phoneNumberIds = fixture.Create<List<long>>();
@@ -39,19 +34,19 @@ public class UserTestDataBuilder
         return this;
     }
 
-    public UserTestDataBuilder WithFirstName(FirstName firstName)
+    public UserTestDataBuilder WithFirstName(string firstName)
     {
         _firstName = firstName;
         return this;
     }
 
-    public UserTestDataBuilder WithLastName(LastName lastName)
+    public UserTestDataBuilder WithLastName(string lastName)
     {
         _lastName = lastName;
         return this;
     }
 
-    public UserTestDataBuilder WithEmail(Email email)
+    public UserTestDataBuilder WithEmail(string email)
     {
         _email = email;
         return this;

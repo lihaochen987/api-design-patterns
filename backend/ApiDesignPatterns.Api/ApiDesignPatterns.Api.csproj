@@ -656,9 +656,6 @@
     <Compile Update="User\Tests\ControllerLayerTests\UpdateUserControllerTestBase.cs">
       <DependentUpon>UpdateUserControllerTests.cs</DependentUpon>
     </Compile>
-    <Compile Update="User\DomainModels\ValueObjects\EmailTypeHandler.cs">
-      <DependentUpon>Email.cs</DependentUpon>
-    </Compile>
     <Compile Update="User\DomainModels\ValueObjects\FirstNameTypeHandler.cs">
       <DependentUpon>FirstName.cs</DependentUpon>
     </Compile>

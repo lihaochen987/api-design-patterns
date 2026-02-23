@@ -3,7 +3,6 @@
 
 using backend.User.ApplicationLayer.Commands.CreateUser;
 using backend.User.Controllers;
-using backend.User.DomainModels.ValueObjects;
 using backend.User.Tests.TestHelpers.Builders;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -51,9 +50,9 @@ public class CreateUserControllerTests : CreateUserControllerTestBase
         string firstName, string lastName, string email)
     {
         var user = new UserTestDataBuilder()
-            .WithFirstName(new FirstName(firstName))
-            .WithLastName(new LastName(lastName))
-            .WithEmail(new Email(email))
+            .WithFirstName(firstName)
+            .WithLastName(lastName)
+            .WithEmail(email)
             .Build();
         var request = Mapper.Map<CreateUserRequest>(user);
         CreateUserController sut = GetCreateUserController();
